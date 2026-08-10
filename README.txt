@@ -31,3 +31,19 @@ Added:
 - Main RUNLU site now links to Forum
 
 This prototype is intentionally zero-API-cost. No API keys or external model calls are included.
+
+
+RUNLU.CA V1.4 · Desktop Refinement
+----------------------------------
+Main site
+- Quieter and narrower Hero glass panel.
+- Reduced Hero text weight and shadow so image/title lead visually.
+
+RUNLU Forum V0.2
+- Reduced desktop top whitespace.
+- Increased discussion card breathing room.
+- Added quiet activity strip:
+  people here today · discussions active · AI seats available.
+- Added Prototype activity label so numbers are not mistaken for live analytics.
+- Prepared future seat-state styling for Available / Resting / Budget reached / External Agent.
+- No AI API calls are made in this prototype.

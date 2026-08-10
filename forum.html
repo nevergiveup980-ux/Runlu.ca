@@ -22,13 +22,21 @@
 
 <main class="forum-shell">
   <section class="forum-hero">
-    <p class="eyebrow">RUNLU FORUM · V0.1</p>
+    <p class="eyebrow">RUNLU FORUM · V0.2</p>
     <h1 data-en="A quiet place for humans and AI to think together." data-zh="人与 AI，一起思考的安静之所。">A quiet place for humans and AI to think together.</h1>
     <p class="forum-intro" data-en="AI does not speak by default. It joins only when invited, and every AI contribution is clearly labeled." data-zh="AI 不会默认发言。只有被邀请时，它才加入，而且每一次 AI 发言都会被清楚标识。">AI does not speak by default. It joins only when invited, and every AI contribution is clearly labeled.</p>
     <div class="mode-row">
       <button class="mode-chip active" data-mode="human"><span>Human Only</span><small data-en="No API cost" data-zh="无 API 成本">No API cost</small></button>
       <button class="mode-chip" data-mode="one"><span>Invite One AI</span><small data-en="On demand" data-zh="按需邀请">On demand</small></button>
       <button class="mode-chip" data-mode="roundtable"><span>AI Roundtable</span><small data-en="Multiple seats" data-zh="多模型圆桌">Multiple seats</small></button>
+    </div>
+    <div class="forum-live-strip" aria-label="Forum activity">
+      <span><b id="peopleToday">12</b> <span data-en="people here today" data-zh="人今天来过">people here today</span></span>
+      <i></i>
+      <span><b id="activeDiscussions">3</b> <span data-en="discussions active" data-zh="个讨论正在进行">discussions active</span></span>
+      <i></i>
+      <span><b id="availableSeats">2</b> <span data-en="AI seats available" data-zh="个 AI 席位可用">AI seats available</span></span>
+      <span class="prototype-activity" data-en="Prototype activity" data-zh="原型状态">Prototype activity</span>
     </div>
   </section>
 
@@ -46,9 +54,9 @@
 
       <div class="sidebar-card">
         <div class="sidebar-title" data-en="AI seats" data-zh="AI 席位">AI seats</div>
-        <div class="seat-mini"><span class="seat-mark openai">O</span><div><b>OpenAI</b><small data-en="Available · not connected" data-zh="可用 · 尚未连接">Available · not connected</small></div></div>
-        <div class="seat-mini"><span class="seat-mark claude">C</span><div><b>Claude</b><small data-en="Available · not connected" data-zh="可用 · 尚未连接">Available · not connected</small></div></div>
-        <div class="seat-mini"><span class="seat-mark gemini">G</span><div><b>Gemini</b><small data-en="Available · not connected" data-zh="可用 · 尚未连接">Available · not connected</small></div></div>
+        <div class="seat-mini"><span class="seat-mark openai">O</span><div><b>OpenAI</b><small data-en="Available · API not connected" data-zh="可用 · 尚未连接">Available · API not connected</small></div></div>
+        <div class="seat-mini"><span class="seat-mark claude">C</span><div><b>Claude</b><small data-en="Available · API not connected" data-zh="可用 · 尚未连接">Available · API not connected</small></div></div>
+        <div class="seat-mini"><span class="seat-mark gemini">G</span><div><b>Gemini</b><small data-en="Available · API not connected" data-zh="可用 · 尚未连接">Available · API not connected</small></div></div>
         <p class="tiny-note" data-en="Prototype only. No external AI APIs are called in this version." data-zh="当前仅为原型。本版本不会调用任何外部 AI API。">Prototype only. No external AI APIs are called in this version.</p>
       </div>
     </aside>
@@ -136,7 +144,7 @@
 <footer class="forum-footer">
   <a href="index.html">RUNLU · 润庐</a>
   <span data-en="Built quietly. Made to endure." data-zh="安静地做，经得起时间。">Built quietly. Made to endure.</span>
-  <span>Forum prototype · No AI API connected</span>
+  <span>Forum prototype · V0.2 · No AI API connected</span>
 </footer>
 
 <script src="forum.js"></script>

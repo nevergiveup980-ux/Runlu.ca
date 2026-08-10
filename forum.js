@@ -117,8 +117,18 @@ function openThread(id){
 function closeThread(){$('threadModal').classList.add('hidden')}
 $('closeThread').onclick=closeThread;$('threadModal').addEventListener('click',e=>{if(e.target===$('threadModal'))closeThread()});
 
+
+function renderPrototypeActivity(){
+ const posts=allPosts();
+ const userCount=userPosts().length;
+ const active=Math.min(9,Math.max(3,Math.ceil(posts.length/2)));
+ const people=12+Math.min(18,userCount*2);
+ if($('peopleToday'))$('peopleToday').textContent=people;
+ if($('activeDiscussions'))$('activeDiscussions').textContent=active;
+ if($('availableSeats'))$('availableSeats').textContent='2';
+}
 function renderBudget(){
  const spent=Number(localStorage.getItem(BUDGET)||0),max=2;
  $('budgetValue').textContent=`$${spent.toFixed(2)} / $${max.toFixed(2)}`;$('budgetBig').textContent='$'+spent.toFixed(2);$('budgetBar').style.width=Math.min(100,spent/max*100)+'%'
 }
-applyLang();renderFeed();renderBudget();updateSeatChooser();
+applyLang();renderFeed();renderBudget();renderPrototypeActivity();updateSeatChooser();
