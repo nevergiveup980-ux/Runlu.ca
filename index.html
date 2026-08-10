@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="RUNLU — A place to grow from within." />
-  <title>RUNLU | A Place to Grow From Within</title>
+  <meta name="description" content="RUNLU · 润庐 — A place to grow from within. We create things, spaces, and useful systems shaped by patience, restraint, and long-term use." />
+  <meta name="theme-color" content="#f7f4ed" />
+  <title>RUNLU · 润庐 | A Place to Grow From Within</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,16 +13,27 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="#top">RUNLU</a>
-    <nav class="desktop-nav">
-      <a href="#philosophy">Philosophy</a><a href="#studio">Studio</a><a href="#about">About</a><a href="#contact">Contact</a>
+    <a class="brand" href="#top" aria-label="RUNLU home">RUNLU</a>
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <a href="#philosophy" data-en="Philosophy" data-zh="哲学">Philosophy</a>
+      <a href="#what-we-do" data-en="What We Do" data-zh="我们所做之事">What We Do</a>
+      <a href="#studio" data-en="Studio" data-zh="作品">Studio</a>
+      <a href="#about" data-en="About" data-zh="关于">About</a>
+      <a href="#contact" data-en="Contact" data-zh="联系">Contact</a>
     </nav>
     <div class="header-actions">
-      <button id="languageToggle" class="lang-toggle">中文</button>
-      <button id="menuButton" class="menu-button" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
+      <button id="languageToggle" class="lang-toggle" type="button">中文</button>
+      <button id="menuButton" class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
     </div>
   </header>
-  <nav id="mobileMenu" class="mobile-menu"><a href="#philosophy">Philosophy</a><a href="#studio">Studio</a><a href="#about">About</a><a href="#contact">Contact</a></nav>
+
+  <nav id="mobileMenu" class="mobile-menu" aria-label="Mobile navigation">
+    <a href="#philosophy" data-en="Philosophy" data-zh="哲学">Philosophy</a>
+    <a href="#what-we-do" data-en="What We Do" data-zh="我们所做之事">What We Do</a>
+    <a href="#studio" data-en="Studio" data-zh="作品">Studio</a>
+    <a href="#about" data-en="About" data-zh="关于">About</a>
+    <a href="#contact" data-en="Contact" data-zh="联系">Contact</a>
+  </nav>
 
   <main id="top">
     <section class="hero">
@@ -34,7 +46,10 @@
           <p data-en="A place shaped by patience, where growth is allowed to rise from within." data-zh="我们相信，真正的成长，发生在被滋养、被尊重的空间里。">A place shaped by patience, where growth is allowed to rise from within.</p>
           <p data-en="We do not seek to change people, only to offer space — for life to unfold in its own time." data-zh="润庐不是为了改变你，而是提供一个可以安住的所在——让生命，在时间中自然生长。">We do not seek to change people, only to offer space — for life to unfold in its own time.</p>
         </div>
-        <div class="hero-actions"><a class="button primary" href="#philosophy" data-en="Our Philosophy" data-zh="润庐哲学">Our Philosophy</a><a class="button secondary" href="#studio" data-en="Explore Studio" data-zh="探索 Studio">Explore Studio</a></div>
+        <div class="hero-actions">
+          <a class="button primary" href="#philosophy" data-en="Our Philosophy" data-zh="润庐哲学">Our Philosophy</a>
+          <a class="button secondary" href="#studio" data-en="Selected Works" data-zh="查看作品">Selected Works</a>
+        </div>
       </div>
     </section>
 
@@ -51,37 +66,136 @@
       </div>
     </section>
 
-    <section id="about" class="section warm-section">
-      <div class="section-kicker" data-en="About RUNLU" data-zh="关于 RUNLU">About RUNLU</div>
-      <div class="content-grid">
-        <article class="content-card">
-          <h3 data-en="How We Work" data-zh="我们如何工作">How We Work</h3>
-          <p data-en="Every decision we make begins with the long term in mind. We do not chase speed or momentary trends, but choose what can endure over time." data-zh="我们做每一个决定，都从长期开始思考。不追逐速度，也不迎合短暂的偏好，而是选择那些能够经得起时间的方式。">Every decision we make begins with the long term in mind. We do not chase speed or momentary trends, but choose what can endure over time.</p>
-          <p data-en="We value detail without excess, structure without rigidity. Across design, making, and presentation, we choose restraint, patience, and authenticity." data-zh="我们重视细节，但不迷恋复杂；追求秩序，却为生命留下余地。在设计、制作与呈现之间，我们始终选择克制、耐心与真实。">We value detail without excess, structure without rigidity. Across design, making, and presentation, we choose restraint, patience, and authenticity.</p>
-          <p class="quote" data-en="What truly lasts is rarely the loudest — it is what is quietly sustained." data-zh="真正有力量的东西，往往不是被强调出来的，而是被安静地坚持下来的。">What truly lasts is rarely the loudest — it is what is quietly sustained.</p>
-        </article>
-        <article class="content-card">
-          <h3 data-en="Who RUNLU Is For" data-zh="我们为谁而存在">Who RUNLU Is For</h3>
-          <p data-en="RUNLU exists for those who choose to slow down. For people who value inner order, lasting meaning, and an honest sense of presence." data-zh="润庐，为那些愿意慢下来的人而存在。为重视内在秩序、长期价值与真实感受的人，也为正在寻找安住之所、却不愿被定义或催促的人。">RUNLU exists for those who choose to slow down. For people who value inner order, lasting meaning, and an honest sense of presence.</p>
-          <p data-en="We do not seek to appeal to everyone. We are here for those who understand that nourishment matters more than stimulation, and time matters more than speed." data-zh="我们不试图迎合所有人，只希望与少数同频的人相遇——那些理解滋养胜过刺激，理解时间胜过速度的人。">We do not seek to appeal to everyone. We are here for those who understand that nourishment matters more than stimulation, and time matters more than speed.</p>
-        </article>
+    <section id="what-we-do" class="section statement-section">
+      <div class="statement-grid">
+        <div class="statement-label">
+          <span class="section-kicker" data-en="What We Do" data-zh="我们所做之事">What We Do</span>
+          <span class="statement-index">01</span>
+        </div>
+        <div class="statement-copy">
+          <h2 data-en="We create things and spaces that nourish life." data-zh="我们创造可以滋养生命的事物与空间。">We create things and spaces that nourish life.</h2>
+          <div class="language-copy language-en">
+            <p>What we do is create things and spaces that nourish life.</p>
+            <p>From design to making, from form to experience,<br>we focus on what allows people to settle,<br>what endures over time,<br>and what offers quiet, genuine strength<br>through continued use and presence.</p>
+            <p>We do not rush outcomes<br>or seek instant stimulation.<br>Everything we create<br>is meant to allow growth to happen naturally.</p>
+          </div>
+          <div class="language-copy language-zh">
+            <p>我们所做的，是创造可以滋养生命的事物与空间。</p>
+            <p>从设计到制作，从形式到体验，<br>我们关注的是：<br>是否能让人安住，<br>是否经得起时间，<br>是否在使用与相处中，<br>持续产生温和而真实的力量。</p>
+            <p>我们不急于给结果，<br>也不追求即时的刺激。<br>我们所做的一切，<br>都是为了让成长在其中自然发生。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how-we-do-it" class="section statement-section statement-warm">
+      <div class="statement-grid">
+        <div class="statement-label">
+          <span class="section-kicker" data-en="How We Do It" data-zh="我们的方式">How We Do It</span>
+          <span class="statement-index">02</span>
+        </div>
+        <div class="statement-copy">
+          <h2 data-en="Restraint. Patience. Respect." data-zh="克制、耐心与尊重。">Restraint. Patience. Respect.</h2>
+          <div class="language-copy language-en">
+            <p>We work with restraint, patience, and respect.</p>
+            <p>We listen closely to materials, spaces, and people,<br>allowing design to follow their true nature<br>rather than imposing style.</p>
+            <p>Through careful refinement and quiet iteration,<br>we choose less — but more precisely —<br>so that form serves lasting use and experience.</p>
+            <p>We believe the best way of working<br>is not what draws attention,<br>but what stands the test of time.</p>
+          </div>
+          <div class="language-copy language-zh">
+            <p>我们以克制、耐心与尊重来完成每一件事。</p>
+            <p>我们倾听材料、空间与人的真实状态，<br>让设计顺其本质，而非强加风格。<br>在反复推敲与细微调整中，<br>我们选择少而准确，<br>让形式服务于长期的使用与感受。</p>
+            <p>我们相信，<br>真正好的方式，<br>不是被看见的技巧，<br>而是被时间验证的选择。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="principles" class="section principles-section">
+      <div class="section-heading narrow-heading">
+        <div class="section-kicker" data-en="Principles" data-zh="原则">Principles</div>
+        <h2 data-en="Less, but more precisely." data-zh="少，而准确。">Less, but more precisely.</h2>
+      </div>
+      <div class="principles-grid">
+        <article class="principle"><span>01</span><h3 data-en="Nourish, not stimulate." data-zh="滋养，而非刺激。">Nourish, not stimulate.</h3><p data-en="We look for what can quietly support life over time." data-zh="我们寻找那些能够在时间中，安静支持生命的事物。">We look for what can quietly support life over time.</p></article>
+        <article class="principle"><span>02</span><h3 data-en="Respect what is already there." data-zh="尊重本来的样子。">Respect what is already there.</h3><p data-en="Materials, people, and places are listened to before they are shaped." data-zh="在塑造之前，先倾听材料、人与空间本来的状态。">Materials, people, and places are listened to before they are shaped.</p></article>
+        <article class="principle"><span>03</span><h3 data-en="Build for continued use." data-zh="为长期使用而做。">Build for continued use.</h3><p data-en="The real test of form is not first impression, but life with it." data-zh="形式真正的考验，不是第一眼，而是长期相处。">The real test of form is not first impression, but life with it.</p></article>
+        <article class="principle"><span>04</span><h3 data-en="Let time verify the choice." data-zh="让时间验证选择。">Let time verify the choice.</h3><p data-en="What lasts matters more than what briefly attracts attention." data-zh="比起一时被看见，我们更在意什么能够留下来。">What lasts matters more than what briefly attracts attention.</p></article>
       </div>
     </section>
 
     <section id="studio" class="section studio-section">
-      <div class="section-heading"><div class="section-kicker">RUNLU STUDIO</div><h2 data-en="Ideas shaped through real use." data-zh="让想法，在真实使用中成形。">Ideas shaped through real use.</h2><p data-en="RUNLU Studio is where ideas become useful systems — built from real environments, refined through experience, and improved with patience." data-zh="RUNLU Studio 是理念变成实用系统的地方——从真实环境出发，在使用中被观察、修正，并被耐心地不断完善。">RUNLU Studio is where ideas become useful systems — built from real environments, refined through experience, and improved with patience.</p></div>
+      <div class="section-heading">
+        <div class="section-kicker">RUNLU STUDIO</div>
+        <h2 data-en="Ideas shaped through real use." data-zh="让想法，在真实使用中成形。">Ideas shaped through real use.</h2>
+        <p data-en="RUNLU Studio is where ideas become useful systems — built from real environments, refined through experience, and improved with patience." data-zh="RUNLU Studio 是理念变成实用系统的地方——从真实环境出发，在使用中被观察、修正，并被耐心地不断完善。">RUNLU Studio is where ideas become useful systems — built from real environments, refined through experience, and improved with patience.</p>
+      </div>
+
       <div class="project-grid">
-        <article class="project-card"><div class="project-number">01</div><h3>Warehouse OS</h3><p class="project-tagline" data-en="Built around the way a real warehouse works." data-zh="围绕真实仓库的工作方式而生。">Built around the way a real warehouse works.</p><p data-en="From receiving and inventory to transfers, cutting, shipping, mapping, AI scanning, and voice interaction — the system is designed to reduce friction and make daily work clearer." data-zh="从收货、库存、转移、切割、发货，到地图、AI 扫描与语音交互——系统围绕真实工作流程设计，让信息更清楚，让操作更自然。">From receiving and inventory to transfers, cutting, shipping, mapping, AI scanning, and voice interaction — the system is designed to reduce friction and make daily work clearer.</p><span class="project-status" data-en="In active development" data-zh="持续开发中">In active development</span></article>
-        <article class="project-card"><div class="project-number">02</div><h3>RUNLU Invoice</h3><p class="project-tagline" data-en="Simple invoicing, thoughtfully automated." data-zh="简单发票，细致自动化。">Simple invoicing, thoughtfully automated.</p><p data-en="A focused invoicing system designed to simplify repetitive work, preserve consistency, and turn routine billing into a calmer, more reliable process." data-zh="一个专注于自动化与一致性的发票系统，用更少的重复操作，让日常账单处理变得更清晰、更可靠。">A focused invoicing system designed to simplify repetitive work, preserve consistency, and turn routine billing into a calmer, more reliable process.</p><span class="project-status" data-en="In active development" data-zh="持续开发中">In active development</span></article>
+        <article class="project-card">
+          <div class="project-number">01</div>
+          <h3>Warehouse OS</h3>
+          <p class="project-tagline" data-en="A live operating system for real warehouse work." data-zh="为真实仓库工作而生的现场操作系统。">A live operating system for real warehouse work.</p>
+          <p data-en="Inventory, receiving, shipping, operations, scanning, voice intelligence, and live cloud data — brought into one practical working system." data-zh="库存、收货、发货、作业、扫描、语音智能与实时云端数据，被整合进一个真正用于日常工作的系统。">Inventory, receiving, shipping, operations, scanning, voice intelligence, and live cloud data — brought into one practical working system.</p>
+          <div class="project-meta"><span data-en="Active system" data-zh="持续运行中">Active system</span><span>warehouse.runlu.ca</span></div>
+        </article>
+
+        <article class="project-card">
+          <div class="project-number">02</div>
+          <h3>RUNLU Invoice</h3>
+          <p class="project-tagline" data-en="Simple invoicing, thoughtfully automated." data-zh="简单发票，细致自动化。">Simple invoicing, thoughtfully automated.</p>
+          <p data-en="A focused invoicing system designed to reduce repetition, preserve consistency, and make routine billing calmer and more reliable." data-zh="一个专注于减少重复、保持一致性的发票系统，让日常账单处理变得更清楚、更可靠。">A focused invoicing system designed to reduce repetition, preserve consistency, and make routine billing calmer and more reliable.</p>
+          <div class="project-meta"><span data-en="Universal edition in development" data-zh="通用版持续开发中">Universal edition in development</span><span>RUNLU Studio</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="section about-section">
+      <div class="section-kicker" data-en="About RUNLU" data-zh="关于 RUNLU">About RUNLU</div>
+      <div class="two-column">
+        <div><h2 data-en="A nourishing abode." data-zh="润庐，是一处滋养生命的所在。">A nourishing abode.</h2></div>
+        <div class="long-copy">
+          <p data-en="RUNLU is a nourishing abode. A place shaped by patience, where growth is allowed to rise from within." data-zh="RUNLU，润庐。我们相信，真正的成长，发生在被滋养、被尊重的空间里。">RUNLU is a nourishing abode. A place shaped by patience, where growth is allowed to rise from within.</p>
+          <p data-en="We do not seek to change people, only to offer space — for life to unfold in its own time." data-zh="润庐不是为了改变你，而是提供一个可以安住的所在——让生命，在时间中自然生长。">We do not seek to change people, only to offer space — for life to unfold in its own time.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="notes" class="section notes-section">
+      <div class="notes-panel">
+        <div>
+          <div class="section-kicker" data-en="RUNLU Notes" data-zh="RUNLU 笔记">RUNLU Notes</div>
+          <h2 data-en="Quiet notes on making, systems, space, and time." data-zh="关于制作、系统、空间与时间的安静记录。">Quiet notes on making, systems, space, and time.</h2>
+        </div>
+        <div class="notes-copy">
+          <p data-en="Not a news feed. A place for occasional thoughts that are worth keeping." data-zh="不是新闻流，而是一个偶尔留下值得保存之思考的地方。">Not a news feed. A place for occasional thoughts that are worth keeping.</p>
+          <span class="quiet-badge" data-en="Notes will grow slowly." data-zh="笔记会慢慢生长。">Notes will grow slowly.</span>
+        </div>
       </div>
     </section>
 
     <section id="contact" class="section contact-section">
-      <div><div class="section-kicker" data-en="Contact" data-zh="联系">Contact</div><h2 data-en="Built slowly. Built to last." data-zh="慢慢做，长久做。">Built slowly. Built to last.</h2></div>
-      <div><p data-en="RUNLU is growing one thoughtful project at a time." data-zh="RUNLU 正在以自己的节奏，一个项目、一个项目地生长。">RUNLU is growing one thoughtful project at a time.</p><a class="text-link" href="mailto:hello@runlu.ca">hello@runlu.ca</a></div>
+      <div>
+        <div class="section-kicker" data-en="Contact & Support" data-zh="联系与支持">Contact & Support</div>
+        <h2 data-en="Built quietly. Made to endure." data-zh="安静地做，经得起时间。">Built quietly. Made to endure.</h2>
+      </div>
+      <div class="contact-copy">
+        <p data-en="RUNLU is growing one thoughtful project at a time." data-zh="RUNLU 正在以自己的节奏，一个项目、一个项目地生长。">RUNLU is growing one thoughtful project at a time.</p>
+        <a class="text-link" href="mailto:hello@runlu.ca">hello@runlu.ca</a>
+        <div class="utility-links">
+          <a href="support.html" data-en="Support" data-zh="支持">Support</a>
+          <a href="privacy.html" data-en="Privacy" data-zh="隐私">Privacy</a>
+        </div>
+      </div>
     </section>
   </main>
-  <footer class="site-footer"><div>RUNLU · 润庐</div><div>© <span id="year"></span> RUNLU. All rights reserved.</div></footer>
+
+  <footer class="site-footer">
+    <div>RUNLU · 润庐</div>
+    <div data-en="Built quietly. Made to endure." data-zh="安静地做，经得起时间。">Built quietly. Made to endure.</div>
+    <div>© <span id="year"></span> RUNLU. All rights reserved.</div>
+  </footer>
+
   <script src="script.js"></script>
 </body>
 </html>

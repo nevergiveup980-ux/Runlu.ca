@@ -1,33 +1,18 @@
-RUNLU.CA V1.0
+RUNLU.CA V1.2 · Brand Structure
+================================
 
-Files:
-- index.html
-- styles.css
-- script.js
-- assets/runlu-hero.png
+Main changes
+- Added final What We Do / 我们所做之事 copy.
+- Added final How We Do It / 我们的方式 copy.
+- Added Principles section.
+- Reframed Studio as selected works.
+- Added RUNLU Notes placeholder.
+- Added Contact & Support structure.
+- Added privacy.html and support.html.
+- Language preference now persists locally.
+- Fixed V1.1 hero animation background so the image cannot disappear when .hero background is cleared.
 
-Preview:
-Open index.html in a browser.
-
-Recommended free/low-cost deployment:
-- GitHub Pages
-- Cloudflare Pages
-- Netlify
-
-The site is static and needs no server or database.
-English is the default language; use the top-right language switch for Chinese.
-
-
-RUNLU.CA V1.1 Animated
-----------------------
-Added:
-- Slow hero-image living motion
-- Staggered hero title / text / button entrance
-- Scroll-triggered section reveals
-- Gentle Studio project-card hover motion
-- Soft header refinement while scrolling
-- Reduced-motion accessibility support
-
-Deployment:
-Replace the existing GitHub Pages files with this V1.1 package and commit to main.
-GitHub Pages will redeploy automatically.
+Deployment
+- Upload all files/folders in this package to the Runlu.ca repository root.
+- Keep the assets folder intact.
+- If a CNAME file already exists in GitHub for runlu.ca, keep it.
