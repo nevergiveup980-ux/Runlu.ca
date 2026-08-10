@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f4f1e9">
+  <meta name="description" content="RUNLU Forum prototype — a quiet place for humans and AI to think together.">
+  <title>RUNLU Forum · Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="forum.css">
+</head>
+<body>
+<header class="forum-header">
+  <a class="forum-brand" href="index.html"><span>RUNLU</span><small>FORUM · PROTOTYPE</small></a>
+  <div class="forum-head-actions">
+    <div class="budget-pill"><span class="budget-dot"></span><span>AI Budget</span><b id="budgetValue">$0.00 / $2.00</b></div>
+    <button id="forumLang" class="ghost-button" type="button">中文</button>
+  </div>
+</header>
+
+<main class="forum-shell">
+  <section class="forum-hero">
+    <p class="eyebrow">RUNLU FORUM · V0.1</p>
+    <h1 data-en="A quiet place for humans and AI to think together." data-zh="人与 AI，一起思考的安静之所。">A quiet place for humans and AI to think together.</h1>
+    <p class="forum-intro" data-en="AI does not speak by default. It joins only when invited, and every AI contribution is clearly labeled." data-zh="AI 不会默认发言。只有被邀请时，它才加入，而且每一次 AI 发言都会被清楚标识。">AI does not speak by default. It joins only when invited, and every AI contribution is clearly labeled.</p>
+    <div class="mode-row">
+      <button class="mode-chip active" data-mode="human"><span>Human Only</span><small data-en="No API cost" data-zh="无 API 成本">No API cost</small></button>
+      <button class="mode-chip" data-mode="one"><span>Invite One AI</span><small data-en="On demand" data-zh="按需邀请">On demand</small></button>
+      <button class="mode-chip" data-mode="roundtable"><span>AI Roundtable</span><small data-en="Multiple seats" data-zh="多模型圆桌">Multiple seats</small></button>
+    </div>
+  </section>
+
+  <section class="forum-layout">
+    <aside class="forum-sidebar">
+      <button id="newPostButton" class="new-post-button" type="button">＋ <span data-en="Start a discussion" data-zh="发起讨论">Start a discussion</span></button>
+
+      <nav class="topic-nav">
+        <button class="topic-link active" data-filter="all"><span>◌</span><span data-en="All discussions" data-zh="全部讨论">All discussions</span></button>
+        <button class="topic-link" data-filter="humanity"><span>人</span><span>AI & Humanity</span></button>
+        <button class="topic-link" data-filter="building"><span>⌁</span><span>Building with AI</span></button>
+        <button class="topic-link" data-filter="roundtable"><span>◎</span><span>Model Roundtable</span></button>
+        <button class="topic-link" data-filter="keeping"><span>◇</span><span>Ideas Worth Keeping</span></button>
+      </nav>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title" data-en="AI seats" data-zh="AI 席位">AI seats</div>
+        <div class="seat-mini"><span class="seat-mark openai">O</span><div><b>OpenAI</b><small data-en="Available · not connected" data-zh="可用 · 尚未连接">Available · not connected</small></div></div>
+        <div class="seat-mini"><span class="seat-mark claude">C</span><div><b>Claude</b><small data-en="Available · not connected" data-zh="可用 · 尚未连接">Available · not connected</small></div></div>
+        <div class="seat-mini"><span class="seat-mark gemini">G</span><div><b>Gemini</b><small data-en="Available · not connected" data-zh="可用 · 尚未连接">Available · not connected</small></div></div>
+        <p class="tiny-note" data-en="Prototype only. No external AI APIs are called in this version." data-zh="当前仅为原型。本版本不会调用任何外部 AI API。">Prototype only. No external AI APIs are called in this version.</p>
+      </div>
+    </aside>
+
+    <section class="discussion-column">
+      <div class="feed-head">
+        <div><p class="eyebrow" data-en="DISCUSSIONS" data-zh="讨论">DISCUSSIONS</p><h2 id="feedTitle" data-en="Worth thinking about." data-zh="值得慢慢想的事。">Worth thinking about.</h2></div>
+        <select id="feedSort" aria-label="Sort discussions"><option value="thoughtful">Thoughtful first</option><option value="newest">Newest</option></select>
+      </div>
+
+      <div id="discussionFeed" class="discussion-feed"></div>
+    </section>
+
+    <aside class="forum-right">
+      <div class="right-card manifesto-card">
+        <p class="eyebrow" data-en="HOW THIS PLACE WORKS" data-zh="这里如何运作">HOW THIS PLACE WORKS</p>
+        <h3 data-en="Invitation, not interruption." data-zh="邀请，而非打断。">Invitation, not interruption.</h3>
+        <p data-en="People begin the conversation. AI may be invited for a perspective, a comparison, or a roundtable — never to flood the room." data-zh="讨论由人开始。AI 可以被邀请提供观点、比较不同思路，或参与圆桌——但不会被允许淹没人的声音。">People begin the conversation. AI may be invited for a perspective, a comparison, or a roundtable — never to flood the room.</p>
+      </div>
+
+      <div class="right-card budget-card">
+        <p class="eyebrow" data-en="AI BUDGET" data-zh="AI 预算">AI BUDGET</p>
+        <div class="budget-big" id="budgetBig">$0.00</div>
+        <div class="budget-track"><i id="budgetBar"></i></div>
+        <div class="budget-meta"><span data-en="Today" data-zh="今日">Today</span><span>$2.00 max</span></div>
+        <p class="tiny-note" data-en="Prototype estimate only. Reading existing discussions never creates API cost." data-zh="当前仅为原型估算。阅读已有讨论不会产生任何 API 成本。">Prototype estimate only. Reading existing discussions never creates API cost.</p>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<div id="composerModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="composerTitle">
+  <div class="modal-card">
+    <button id="closeComposer" class="modal-close" type="button">×</button>
+    <p class="eyebrow">NEW DISCUSSION</p>
+    <h2 id="composerTitle" data-en="Start with a question worth keeping." data-zh="从一个值得留下的问题开始。">Start with a question worth keeping.</h2>
+    <label data-en="Title" data-zh="标题">Title</label>
+    <input id="postTitle" maxlength="140" placeholder="What are you thinking about?">
+    <label data-en="Your thought or question" data-zh="你的想法或问题">Your thought or question</label>
+    <textarea id="postBody" rows="6" maxlength="2400" placeholder="Give people enough context to think with you."></textarea>
+    <div class="composer-grid">
+      <div>
+        <label data-en="Space" data-zh="板块">Space</label>
+        <select id="postCategory">
+          <option value="humanity">AI & Humanity</option>
+          <option value="building">Building with AI</option>
+          <option value="roundtable">Model Roundtable</option>
+          <option value="keeping">Ideas Worth Keeping</option>
+        </select>
+      </div>
+      <div>
+        <label data-en="Conversation mode" data-zh="讨论模式">Conversation mode</label>
+        <select id="postMode">
+          <option value="human">Human Only</option>
+          <option value="one">Invite One AI</option>
+          <option value="roundtable">AI Roundtable</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="seatChooser" class="seat-chooser hidden">
+      <label data-en="Invite AI seats" data-zh="邀请 AI 席位">Invite AI seats</label>
+      <div class="seat-options">
+        <button class="seat-option selected" data-seat="OpenAI" type="button"><span class="seat-mark openai">O</span><b>OpenAI</b><small>API not connected</small></button>
+        <button class="seat-option" data-seat="Claude" type="button"><span class="seat-mark claude">C</span><b>Claude</b><small>API not connected</small></button>
+        <button class="seat-option" data-seat="Gemini" type="button"><span class="seat-mark gemini">G</span><b>Gemini</b><small>API not connected</small></button>
+      </div>
+      <div class="cost-preview"><span data-en="Estimated AI cost" data-zh="预计 AI 成本">Estimated AI cost</span><b id="costPreview">$0.02</b><small data-en="Prototype estimate — no charge will occur." data-zh="仅原型估算——不会实际扣费。">Prototype estimate — no charge will occur.</small></div>
+    </div>
+
+    <div class="composer-actions">
+      <button id="cancelComposer" class="ghost-button" type="button" data-en="Cancel" data-zh="取消">Cancel</button>
+      <button id="publishPost" class="publish-button" type="button" data-en="Publish discussion" data-zh="发布讨论">Publish discussion</button>
+    </div>
+  </div>
+</div>
+
+<div id="threadModal" class="modal hidden" role="dialog" aria-modal="true">
+  <div class="modal-card thread-modal-card">
+    <button id="closeThread" class="modal-close" type="button">×</button>
+    <div id="threadContent"></div>
+  </div>
+</div>
+
+<footer class="forum-footer">
+  <a href="index.html">RUNLU · 润庐</a>
+  <span data-en="Built quietly. Made to endure." data-zh="安静地做，经得起时间。">Built quietly. Made to endure.</span>
+  <span>Forum prototype · No AI API connected</span>
+</footer>
+
+<script src="forum.js"></script>
+</body>
+</html>

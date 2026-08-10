@@ -16,3 +16,18 @@ Deployment
 - Upload all files/folders in this package to the Runlu.ca repository root.
 - Keep the assets folder intact.
 - If a CNAME file already exists in GitHub for runlu.ca, keep it.
+
+
+RUNLU Forum Prototype · V0.1
+----------------------------
+Added:
+- forum.html / forum.css / forum.js
+- Human Only / Invite One AI / AI Roundtable modes
+- AI seat placeholders for OpenAI, Claude, and Gemini
+- Prototype budget indicator
+- Local-only post creation using browser localStorage
+- Clear labeling that no AI API is connected
+- Sample roundtable transcripts are illustrative only and not model quotes
+- Main RUNLU site now links to Forum
+
+This prototype is intentionally zero-API-cost. No API keys or external model calls are included.
