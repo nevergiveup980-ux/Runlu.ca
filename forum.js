@@ -4,28 +4,28 @@ const BUDGET='runlu_forum_prototype_budget_v01';
 const categoryNames={humanity:'AI & Humanity',building:'Building with AI',roundtable:'Model Roundtable',keeping:'Ideas Worth Keeping'};
 const modeNames={human:'Human Only',one:'Invite One AI',roundtable:'AI Roundtable'};
 const samples=[
- {id:'sample-1',title:'Should AI assistants remember more about us — or less?',body:'Memory makes an assistant more useful, but it also changes the relationship between convenience, privacy, and autonomy. Where should the boundary be?',category:'humanity',mode:'roundtable',author:'Mira',created:'Prototype sample',comments:12,seats:['OpenAI','Claude','Gemini'],sample:true,
+ {id:'sample-1',title:'Should AI assistants remember more about us — or less?',body:'Memory makes an assistant more useful, but it also changes the relationship between convenience, privacy, and autonomy. Where should the boundary be?',category:'humanity',mode:'roundtable',author:'Demo participant',created:'Demo sample',comments:3,seats:['OpenAI','Claude','Gemini'],sample:true,
   replies:[
-   {who:'AI Seat A',badge:'Prototype',text:'One useful boundary is purpose-specific memory: remember only what clearly improves the user’s chosen workflow, make it visible, and let the user remove it easily.'},
-   {who:'AI Seat B',badge:'Prototype',text:'The harder question is not simply how much memory exists, but whether the user can understand when memory is being used and why it changed an answer.'},
-   {who:'Human reply',badge:'Member',text:'I would rather have less memory with excellent controls than a huge memory I cannot inspect.'}
+   {who:'Demo AI response',badge:'Demo',text:'One useful boundary is purpose-specific memory: remember only what clearly improves the user’s chosen workflow, make it visible, and let the user remove it easily.'},
+   {who:'Demo AI response',badge:'Demo',text:'The harder question is not simply how much memory exists, but whether the user can understand when memory is being used and why it changed an answer.'},
+   {who:'Demo human response',badge:'Demo',text:'I would rather have less memory with excellent controls than a huge memory I cannot inspect.'}
   ]},
- {id:'sample-2',title:'What makes an AI feature worth keeping after the novelty wears off?',body:'A lot of AI features are impressive for a week. Which qualities make one genuinely useful six months later?',category:'building',mode:'human',author:'Jon',created:'Prototype sample',comments:8,seats:[],sample:true,
-  replies:[{who:'Human reply',badge:'Member',text:'For me: fewer steps, fewer repeated decisions, and a result I can trust without babysitting it.'}]},
- {id:'sample-3',title:'Three models, one question: should AI ever interrupt a user proactively?',body:'Imagine a system that notices something important before the user asks. When is proactive help valuable, and when does it become noise?',category:'roundtable',mode:'roundtable',author:'RUNLU Forum',created:'Prototype sample',comments:19,seats:['OpenAI','Claude','Gemini'],sample:true,
+ {id:'sample-2',title:'What makes an AI feature worth keeping after the novelty wears off?',body:'A lot of AI features are impressive for a week. Which qualities make one genuinely useful six months later?',category:'building',mode:'human',author:'Demo participant',created:'Demo sample',comments:1,seats:[],sample:true,
+  replies:[{who:'Demo human response',badge:'Demo',text:'For me: fewer steps, fewer repeated decisions, and a result I can trust without babysitting it.'}]},
+ {id:'sample-3',title:'Three models, one question: should AI ever interrupt a user proactively?',body:'Imagine a system that notices something important before the user asks. When is proactive help valuable, and when does it become noise?',category:'roundtable',mode:'roundtable',author:'RUNLU Forum demo',created:'Demo sample',comments:2,seats:['OpenAI','Claude','Gemini'],sample:true,
   replies:[
-   {who:'AI Seat A',badge:'Prototype',text:'Proactive interruption should require a high-confidence benefit and a low cost of being wrong. Otherwise, the system should wait.'},
-   {who:'AI Seat B',badge:'Prototype',text:'The user should be able to define domains where interruption is welcome. Permission is part of usefulness.'}
+   {who:'Demo AI response',badge:'Demo',text:'Proactive interruption should require a high-confidence benefit and a low cost of being wrong. Otherwise, the system should wait.'},
+   {who:'Demo AI response',badge:'Demo',text:'The user should be able to define domains where interruption is welcome. Permission is part of usefulness.'}
   ]},
- {id:'sample-4',title:'A good tool should become quieter as you learn it.',body:'The best interfaces seem to disappear with familiarity. Does AI make software quieter — or does it risk making every product more talkative?',category:'keeping',mode:'human',author:'Lena',created:'Prototype sample',comments:6,seats:[],sample:true,
-  replies:[{who:'Human reply',badge:'Member',text:'A mature tool should require less explanation over time. AI should probably learn when not to speak.'}]}
+ {id:'sample-4',title:'A good tool should become quieter as you learn it.',body:'The best interfaces seem to disappear with familiarity. Does AI make software quieter — or does it risk making every product more talkative?',category:'keeping',mode:'human',author:'Demo participant',created:'Demo sample',comments:1,seats:[],sample:true,
+  replies:[{who:'Demo human response',badge:'Demo',text:'A mature tool should require less explanation over time. AI should probably learn when not to speak.'}]}
 ];
 let lang=localStorage.getItem('runlu_forum_lang')||'en',filter='all',selectedMode='human';
 
 function userPosts(){try{return JSON.parse(localStorage.getItem(STORAGE)||'[]')}catch{return[]}}
 function savePosts(rows){localStorage.setItem(STORAGE,JSON.stringify(rows))}
 function allPosts(){return [...userPosts(),...samples]}
-function formatTime(iso){if(!iso||iso.startsWith('Prototype'))return iso;const d=new Date(iso);return d.toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}
+function formatTime(iso){if(!iso||iso.startsWith('Prototype')||iso.startsWith('Demo'))return iso;const d=new Date(iso);return d.toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
 function applyLang(){
  document.documentElement.lang=lang==='zh'?'zh-CN':'en';
@@ -42,7 +42,7 @@ function renderFeed(){
     <div class="discussion-meta">
       <span class="category-pill">${esc(categoryNames[p.category]||p.category)}</span>
       <span class="mode-pill">${esc(modeNames[p.mode]||p.mode)}</span>
-      ${p.sample?'<span>Prototype sample</span>':''}
+      ${p.sample?'<span class="demo-label">Demo discussion</span>':''}
     </div>
     <h3>${esc(p.title)}</h3>
     <p>${esc(p.body)}</p>
@@ -109,7 +109,7 @@ function openThread(id){
  const seats=(p.seats||[]).length?p.seats.join(', '):'None';
  $('threadContent').innerHTML=`<div class="thread-head"><div class="discussion-meta"><span class="category-pill">${esc(categoryNames[p.category])}</span><span class="mode-pill">${esc(modeNames[p.mode])}</span></div><h2>${esc(p.title)}</h2><div class="discussion-meta">${esc(p.author||'You')} · ${esc(formatTime(p.created))}</div></div>
  <p class="thread-body">${esc(p.body)}</p>
- ${p.sample?'<div class="prototype-note">Prototype transcript · The AI-style replies below are illustrative interface content only. They were not generated by, or quoted from, the named commercial AI models.</div>':''}
+ ${p.sample?'<div class="prototype-note">Demo transcript · Every reply below is illustrative interface content only. No person or commercial AI model participated in this conversation.</div>':''}
  <div class="thread-divider"></div><p class="eyebrow">CONVERSATION</p>${replies||'<div class="empty-state">No replies yet. A real version would allow members to join this thread.</div>'}
  <div class="invite-panel"><h4>Invite AI</h4><p>Seats configured for this thread: ${esc(seats)}. This prototype does not call external APIs.</p><div class="invite-buttons"><button disabled>Invite OpenAI</button><button disabled>Invite Claude</button><button disabled>Invite Gemini</button><button disabled>Start Roundtable</button></div></div>`;
  $('threadModal').classList.remove('hidden')
@@ -118,17 +118,8 @@ function closeThread(){$('threadModal').classList.add('hidden')}
 $('closeThread').onclick=closeThread;$('threadModal').addEventListener('click',e=>{if(e.target===$('threadModal'))closeThread()});
 
 
-function renderPrototypeActivity(){
- const posts=allPosts();
- const userCount=userPosts().length;
- const active=Math.min(9,Math.max(3,Math.ceil(posts.length/2)));
- const people=12+Math.min(18,userCount*2);
- if($('peopleToday'))$('peopleToday').textContent=people;
- if($('activeDiscussions'))$('activeDiscussions').textContent=active;
- if($('availableSeats'))$('availableSeats').textContent='2';
-}
 function renderBudget(){
  const spent=Number(localStorage.getItem(BUDGET)||0),max=2;
  $('budgetValue').textContent=`$${spent.toFixed(2)} / $${max.toFixed(2)}`;$('budgetBig').textContent='$'+spent.toFixed(2);$('budgetBar').style.width=Math.min(100,spent/max*100)+'%'
 }
-applyLang();renderFeed();renderBudget();renderPrototypeActivity();updateSeatChooser();
+applyLang();renderFeed();renderBudget();updateSeatChooser();

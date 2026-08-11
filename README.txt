@@ -62,3 +62,22 @@ Important:
 - PrivacyInfo.xcprivacy remains an iOS/Xcode project file and should not be treated as a webpage.
 - App Store review notes and submission checklists are internal App Store Connect / release materials and are not published publicly.
 - Final App Store privacy answers must match the exact shipping app behavior.
+
+
+RUNLU.CA V1.6 · Honest Beta + Quiet Growth
+------------------------------------------
+Main site
+- Added Currently at RUNLU status section.
+- Added Warehouse OS public project page.
+- Expanded RUNLU Notes into a real landing page with first three note themes.
+- Forum homepage language updated from Prototype to Early Beta.
+- Added canonical/Open Graph metadata on homepage.
+- Added robots.txt, sitemap.xml, and 404.html.
+
+RUNLU Forum V0.3 · Honest Beta
+- Removed fabricated live activity counters.
+- Live activity now explicitly says no analytics are connected yet.
+- Demo people and replies are labeled Demo; no fake Member identity remains.
+- Demo AI replies no longer imply participation by named commercial models.
+- Local-only publishing warning added to composer.
+- No external AI APIs are called.

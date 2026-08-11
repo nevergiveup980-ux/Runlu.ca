@@ -75,3 +75,11 @@
 .release-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.release-links a{display:inline-block;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:#fafaf7}
 .legal-page{max-width:920px;margin:auto;padding:82px 24px 100px}.legal-page h1{font-size:clamp(3rem,6vw,5.7rem);line-height:.96;letter-spacing:-.055em;font-weight:500;margin:14px 0 26px}.legal-page h2{font-size:1.45rem;margin-top:38px}.legal-page p,.legal-page li{color:#515750}.legal-page .legal-note{padding:15px 17px;background:#f0eee7;border-radius:14px;font-size:.9rem}.legal-page .legal-actions{display:flex;gap:10px;flex-wrap:wrap;margin:28px 0}.legal-page .legal-actions a{padding:10px 13px;border:1px solid var(--line);border-radius:11px;background:#fff}
 @media(max-width:860px){.product-hero,.release-grid{grid-template-columns:1fr}.feature-grid{grid-template-columns:1fr}.product-hero{padding-top:62px}.product-topnav{display:none}}
+
+/* V1.6 · quiet growth */
+.current-section{background:#f5f2e9;border-top:1px solid var(--line)}
+.current-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:46px}
+.current-item{display:flex;flex-direction:column;justify-content:space-between;min-height:150px;padding:22px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.68);transition:transform .3s var(--ease-runlu),background .3s}
+.current-item:hover{transform:translateY(-2px);background:#fff}.current-item span{font-size:1.08rem;font-weight:600}.current-item b{font-size:.78rem;color:var(--muted);font-weight:500}
+@media(max-width:800px){.current-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.current-grid{grid-template-columns:1fr}}

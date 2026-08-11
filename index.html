@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="RUNLU · 润庐 — A place to grow from within. We create things, spaces, and useful systems shaped by patience, restraint, and long-term use." />
   <meta name="theme-color" content="#f7f4ed" />
+  <link rel="canonical" href="https://runlu.ca/" />
+  <meta property="og:title" content="RUNLU · 润庐 | A Place to Grow From Within" />
+  <meta property="og:description" content="Things, spaces, and useful systems shaped by patience, restraint, and long-term use." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://runlu.ca/" />
+  <meta property="og:image" content="https://runlu.ca/assets/runlu-hero.png" />
   <title>RUNLU · 润庐 | A Place to Grow From Within</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,6 +24,8 @@
       <a href="#philosophy" data-en="Philosophy" data-zh="哲学">Philosophy</a>
       <a href="#what-we-do" data-en="What We Do" data-zh="我们所做之事">What We Do</a>
       <a href="#studio" data-en="Studio" data-zh="作品">Studio</a>
+    <a href="#current" data-en="Now" data-zh="此刻">Now</a>
+      <a href="#current" data-en="Now" data-zh="此刻">Now</a>
       <a href="forum.html" data-en="Forum" data-zh="论坛">Forum</a>
       <a href="#about" data-en="About" data-zh="关于">About</a>
       <a href="#contact" data-en="Contact" data-zh="联系">Contact</a>
@@ -134,12 +142,13 @@
       </div>
 
       <div class="project-grid">
-        <article class="project-card">
+        <article class="project-card project-card-link">
+          <a class="project-card-hit" href="warehouse.html" aria-label="Warehouse OS"></a>
           <div class="project-number">01</div>
           <h3>Warehouse OS</h3>
           <p class="project-tagline" data-en="A live operating system for real warehouse work." data-zh="为真实仓库工作而生的现场操作系统。">A live operating system for real warehouse work.</p>
           <p data-en="Inventory, receiving, shipping, operations, scanning, voice intelligence, and live cloud data — brought into one practical working system." data-zh="库存、收货、发货、作业、扫描、语音智能与实时云端数据，被整合进一个真正用于日常工作的系统。">Inventory, receiving, shipping, operations, scanning, voice intelligence, and live cloud data — brought into one practical working system.</p>
-          <div class="project-meta"><span data-en="Active system" data-zh="持续运行中">Active system</span><span>warehouse.runlu.ca</span></div>
+          <div class="project-meta"><span data-en="Active system" data-zh="持续运行中">Active system</span><span data-en="View project →" data-zh="查看项目 →">View project →</span></div>
         </article>
 
         <article class="project-card project-card-link">
@@ -153,6 +162,18 @@
       </div>
     </section>
 
+    <section id="current" class="section current-section">
+      <div class="section-heading narrow-heading">
+        <div class="section-kicker" data-en="Currently at RUNLU" data-zh="此刻的润庐">Currently at RUNLU</div>
+        <h2 data-en="A few things, growing carefully." data-zh="几件事，认真地慢慢生长。">A few things, growing carefully.</h2>
+      </div>
+      <div class="current-grid">
+        <a class="current-item" href="warehouse.html"><span>Warehouse OS</span><b data-en="Active system" data-zh="持续运行中">Active system</b></a>
+        <a class="current-item" href="invoice.html"><span>Universal Invoice</span><b data-en="iOS release" data-zh="iOS 发布阶段">iOS release</b></a>
+        <a class="current-item" href="forum.html"><span>RUNLU Forum</span><b data-en="Early Beta" data-zh="早期测试">Early Beta</b></a>
+        <a class="current-item" href="notes.html"><span>RUNLU Notes</span><b data-en="Growing slowly" data-zh="缓慢生长中">Growing slowly</b></a>
+      </div>
+    </section>
 
     <section id="forum-preview" class="section forum-preview-section">
       <div class="forum-preview-grid">
@@ -165,7 +186,7 @@
           <div class="forum-modes">
             <span>Human Only</span><span>Invite One AI</span><span>AI Roundtable</span>
           </div>
-          <a class="button primary forum-enter" href="forum.html" data-en="Enter Forum Prototype" data-zh="进入论坛原型">Enter Forum Prototype</a>
+          <a class="button primary forum-enter" href="forum.html" data-en="Enter RUNLU Forum" data-zh="进入 RUNLU 论坛">Enter RUNLU Forum</a>
         </div>
       </div>
     </section>
@@ -189,7 +210,7 @@
         </div>
         <div class="notes-copy">
           <p data-en="Not a news feed. A place for occasional thoughts that are worth keeping." data-zh="不是新闻流，而是一个偶尔留下值得保存之思考的地方。">Not a news feed. A place for occasional thoughts that are worth keeping.</p>
-          <span class="quiet-badge" data-en="Notes will grow slowly." data-zh="笔记会慢慢生长。">Notes will grow slowly.</span>
+          <a class="quiet-badge" href="notes.html" data-en="Read RUNLU Notes →" data-zh="阅读 RUNLU 笔记 →">Read RUNLU Notes →</a>
         </div>
       </div>
     </section>
