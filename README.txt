@@ -47,3 +47,18 @@ RUNLU Forum V0.2
 - Added Prototype activity label so numbers are not mistaken for live analytics.
 - Prepared future seat-state styling for Available / Resting / Budget reached / External Agent.
 - No AI API calls are made in this prototype.
+
+
+RUNLU.CA V1.5 · App Release Support
+-----------------------------------
+Added public App Store-facing website content for RUNLU Universal Invoice:
+- invoice.html — product / release information
+- invoice-privacy.html — product-specific privacy policy
+- invoice-support.html — product-specific support page
+- Studio card now links to Universal Invoice product page
+- General RUNLU Privacy and Support pages link to the product-specific pages
+
+Important:
+- PrivacyInfo.xcprivacy remains an iOS/Xcode project file and should not be treated as a webpage.
+- App Store review notes and submission checklists are internal App Store Connect / release materials and are not published publicly.
+- Final App Store privacy answers must match the exact shipping app behavior.
