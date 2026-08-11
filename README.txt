@@ -81,3 +81,26 @@ RUNLU Forum V0.3 · Honest Beta
 - Demo AI replies no longer imply participation by named commercial models.
 - Local-only publishing warning added to composer.
 - No external AI APIs are called.
+
+
+RUNLU.CA V1.6.1 · Integrity & Consistency
+------------------------------------------
+Purpose
+- Preserve the V1.6 Honest Beta + Quiet Growth design while tightening truthfulness, metadata, navigation, and release consistency.
+
+Changes
+- Removed duplicate desktop “Now” navigation and added matching mobile “Now” navigation.
+- Standardized Universal Invoice public status to “iOS release candidate”.
+- Added canonical and Open Graph metadata to Forum, Warehouse OS, Universal Invoice, Notes, Privacy, and Support pages.
+- Added invoice privacy/support URLs to sitemap.xml.
+- Marked 404.html noindex,follow.
+- Preserved Forum Human Only as the default, clearly labeled demo content, local-only browser posting, and no external AI API connection.
+- Added repository maintenance guidance and pull-request checks.
+
+Recommended GitHub workflow
+- main = stable production branch.
+- release/* or feature/* = all changes under review.
+- Open a pull request into main for every release.
+- Run site integrity checks before merge.
+- Prefer squash merge for a clean release history.
+- Never commit credentials, API keys, private keys, or production secrets.
