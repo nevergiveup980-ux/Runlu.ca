@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="RUNLU LAB 001 — a transparent research notebook exploring whether quantum-entanglement-inspired coordination could improve safety among autonomous agents.">
+  <meta name="theme-color" content="#f7f4ed">
+  <link rel="canonical" href="https://runlu.ca/lab.html">
+  <meta property="og:title" content="RUNLU LAB 001 · Entanglement-Inspired Coordination">
+  <meta property="og:description" content="A research question, known evidence, testable hypothesis, and simulation plan for safer coordination among autonomous agents.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://runlu.ca/lab.html">
+  <meta property="og:image" content="https://runlu.ca/runlu-hero.png">
+  <title>RUNLU LAB 001 · Entanglement-Inspired Coordination</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="lab.css">
+</head>
+<body class="lab-page">
+  <header class="lab-header">
+    <a class="brand" href="index.html">RUNLU</a>
+    <nav aria-label="RUNLU LAB navigation"><a href="#question">Question</a><a href="#known">Known</a><a href="#experiment">Experiment</a><a href="frontiers.html">View</a></nav>
+    <button id="labLanguage" class="lang-toggle" type="button">中文</button>
+  </header>
+
+  <main>
+    <section class="lab-hero">
+      <div class="lab-mark">LAB 001</div>
+      <div class="copy-en">
+        <p class="section-kicker">RUNLU LAB · OPEN RESEARCH NOTEBOOK</p>
+        <h1>Entanglement-inspired coordination.</h1>
+        <p class="lab-lead">Could ideas from quantum correlations help autonomous agents coordinate more safely when communication is delayed, limited, or unavailable?</p>
+      </div>
+      <div class="copy-zh">
+        <p class="section-kicker">RUNLU LAB · 开放研究笔记</p>
+        <h1>量子纠缠启发式协同。</h1>
+        <p class="lab-lead">当通信延迟、受限或中断时，量子关联的思想能否帮助无人驾驶汽车与机器人进行更安全的协同决策？</p>
+      </div>
+      <div class="lab-status"><span>Stage · Question definition</span><span>Evidence · Early</span><span>Experiment · Not yet run</span><span>Updated · 14 Aug 2026</span></div>
+    </section>
+
+    <section class="truth-strip">
+      <div><b>FACT</b><span>Quantum-entanglement-assisted agent coordination is an active research subject.</span></div>
+      <div><b>HYPOTHESIS</b><span>Its correlation structures may inspire safer autonomous coordination.</span></div>
+      <div><b>NOT A CLAIM</b><span>We have not shown that vehicles, robots, AI, or human thought are physically entangled.</span></div>
+    </section>
+
+    <section id="question" class="lab-section">
+      <div class="lab-label"><span>01</span><b>The question</b></div>
+      <div class="lab-content copy-en">
+        <h2>What happens when agents must decide together—but cannot talk in time?</h2>
+        <p>Autonomous vehicles, warehouse robots, drones, and distributed AI systems often depend on messages: position, speed, intent, hazards, or task state. Real networks can be congested, delayed, interrupted, or attacked. A safe system therefore needs useful coordination even when communication degrades.</p>
+        <p>RUNLU LAB asks whether correlation patterns studied in quantum information—and classical algorithms inspired by them—can provide an additional coordination layer rather than replacing ordinary sensing, communication, or safety controls.</p>
+      </div>
+      <div class="lab-content copy-zh">
+        <h2>当多个智能体必须共同决定，却来不及交流，会发生什么？</h2>
+        <p>无人驾驶汽车、仓库机器人、无人机和分布式AI系统通常依靠信息交换：位置、速度、意图、危险或任务状态。但真实网络可能拥堵、延迟、中断或遭到攻击。因此，一个安全系统不能把全部协同能力都建立在通信永远正常的假设上。</p>
+        <p>RUNLU LAB 想研究：量子信息中的关联结构，以及受其启发的经典算法，能否成为额外的协同层——而不是取代传感器、常规通信和现有安全控制。</p>
+      </div>
+    </section>
+
+    <section id="known" class="lab-section warm">
+      <div class="lab-label"><span>02</span><b>What is known</b></div>
+      <div class="lab-content">
+        <div class="copy-en">
+          <h2>A real scientific starting point already exists.</h2>
+          <p>In July 2026, Sapthagiri Miriyala and Venkata Ramireddy Chirra published eMARL, an entanglement-assisted multi-agent learning framework. In a CHSH coordination task, agents sharing pre-distributed Bell pairs reported an 85.29% win rate while exchanging zero bits during execution; the classical ceiling for that exact no-signalling game is 75%.</p>
+          <p>The paper also tested a simplified 6G beamforming task and reported 95.3% of centralized throughput without runtime signalling. This is not an autonomous-driving result. It is evidence that physical entanglement can aid certain tightly defined distributed coordination problems.</p>
+          <p>Separately, connected-vehicle researchers already use multi-agent reinforcement learning, shared observations, control-barrier-function safety shields, and simulators such as CARLA to study cooperative driving.</p>
+        </div>
+        <div class="copy-zh">
+          <h2>咱们的设想已经有了真实的科学起点。</h2>
+          <p>2026年7月，Sapthagiri Miriyala 与 Venkata Ramireddy Chirra 发表了 eMARL——一种纠缠辅助的多智能体学习框架。在 CHSH 协同任务中，共享预先分发 Bell 对的智能体，在运行时交换零比特信息的情况下取得了85.29%的胜率；该特定无信号博弈的经典上限为75%。</p>
+          <p>论文还测试了一个简化的6G波束成形任务，在无需运行时通信的情况下取得了集中式系统95.3%的吞吐量。这不是无人驾驶实验，但它证明：在某些严格定义的分布式协同问题中，物理纠缠确实可能提供帮助。</p>
+          <p>与此同时，无人驾驶研究已经在使用多智能体强化学习、共享观察、控制障碍函数安全盾以及 CARLA 等模拟器来研究车辆协作。</p>
+        </div>
+        <div class="evidence-grid">
+          <article><span>Established</span><h3>Quantum non-classical correlations</h3><p>Bell-test experiments and quantum information theory establish correlations that classical shared randomness cannot reproduce in specific tasks.</p></article>
+          <article><span>Emerging</span><h3>Entanglement-assisted MARL</h3><p>Recent frameworks show promising results in simulations and narrowly defined coordination environments.</p></article>
+          <article><span>Not established</span><h3>Autonomous-road safety benefit</h3><p>No evidence reviewed here shows that entanglement-assisted policies currently prevent real vehicle crashes.</p></article>
+          <article><span>No credible evidence</span><h3>Human–AI thought entanglement</h3><p>Shared attention, prediction, emotion, or synchronization should not be called physical quantum entanglement without testable physical evidence.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="hypothesis" class="lab-section dark">
+      <div class="lab-label"><span>03</span><b>RUNLU hypothesis</b></div>
+      <div class="lab-content copy-en">
+        <h2>A fallback correlation layer may reduce dangerous disagreement.</h2>
+        <p>When two autonomous agents receive incomplete private observations and cannot exchange timely messages, a pre-agreed correlation policy may help them choose complementary safe actions more reliably than independent decision-making.</p>
+        <p>The first experiment should test an <strong>entanglement-inspired classical policy</strong> on ordinary computers. A later experiment could simulate ideal Bell-pair measurements. Physical quantum hardware is not required to begin, and simulation alone cannot establish a real-world quantum advantage.</p>
+      </div>
+      <div class="lab-content copy-zh">
+        <h2>一个预先建立的关联备用层，也许可以减少危险的决策冲突。</h2>
+        <p>当两个自主智能体分别获得不完整的局部信息，又无法及时交换消息时，预先约定的关联策略，可能比完全独立决策更可靠地让双方采取互补的安全动作。</p>
+        <p>第一阶段应先在普通电脑上测试<strong>受纠缠启发的经典策略</strong>。随后才模拟理想 Bell 对测量。开始研究并不需要真正的量子硬件，而单纯模拟也不能证明现实世界中的量子优势。</p>
+      </div>
+    </section>
+
+    <section id="experiment" class="lab-section">
+      <div class="lab-label"><span>04</span><b>Simulation 001</b></div>
+      <div class="lab-content">
+        <div class="copy-en"><h2>A two-vehicle blind-intersection test.</h2><p>Two vehicles approach an obstructed intersection. Each sees only part of the hazard state. Communication latency and packet loss vary by trial. Both must independently choose brake, slow, or proceed.</p></div>
+        <div class="copy-zh"><h2>双车盲区路口模拟。</h2><p>两辆汽车接近一个视线受阻的路口，每辆车只能看到部分危险状态。每轮实验改变通信延迟与丢包率，两辆车必须分别选择刹车、减速或继续通行。</p></div>
+        <div class="protocol">
+          <div><b>A</b><span>Independent classical policies</span></div>
+          <div><b>B</b><span>Shared-randomness policy</span></div>
+          <div><b>C</b><span>Classical message-sharing policy</span></div>
+          <div><b>D</b><span>Entanglement-inspired correlation policy</span></div>
+          <div><b>E</b><span>Ideal entanglement-assisted simulation</span></div>
+        </div>
+        <h3>Measurements</h3>
+        <ul class="metrics"><li>Collision rate</li><li>Near-miss rate</li><li>Unnecessary full stops</li><li>Average crossing time</li><li>Runtime communication</li><li>Performance under packet loss</li></ul>
+        <div class="not-run"><b>Current status</b><p>The protocol is defined, but no RUNLU simulation has been executed. No result or safety improvement is claimed yet.</p></div>
+      </div>
+    </section>
+
+    <section class="lab-section warm">
+      <div class="lab-label"><span>05</span><b>Guardrails</b></div>
+      <div class="lab-content">
+        <div class="copy-en"><h2>What this project cannot claim.</h2></div>
+        <div class="copy-zh"><h2>目前不能声称什么。</h2></div>
+        <ul class="guardrails">
+          <li>Quantum entanglement does not transmit usable instructions faster than light.</li>
+          <li>A software simulation is not evidence that physical vehicles share quantum entanglement.</li>
+          <li>Better performance in one game does not automatically transfer to road safety.</li>
+          <li>No real vehicle should be controlled by this experimental model without extensive verification and certified safety systems.</li>
+          <li>Psychological rapport or human–AI synchronization is not proof of quantum entanglement.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="sources">
+      <p class="section-kicker">ORIGINAL WORK & STARTING SOURCES</p>
+      <a href="https://www.nature.com/articles/s41598-026-58291-7" target="_blank" rel="noopener"><b>eMARL</b><span>Miriyala & Chirra · Scientific Reports · 2026 ↗</span></a>
+      <a href="https://arxiv.org/abs/2405.17486" target="_blank" rel="noopener"><b>eQMARL</b><span>DeRieux & Saad · preprint · 2024 ↗</span></a>
+      <a href="https://arxiv.org/abs/2210.02300" target="_blank" rel="noopener"><b>Safe MARL for connected vehicles</b><span>Zhang et al. · CARLA simulation · preprint ↗</span></a>
+      <p class="source-note">Research belongs to its original authors and institutions. RUNLU LAB records an independent question and proposed experiment; it does not claim ownership of the cited work.</p>
+    </section>
+
+    <section class="next-step">
+      <p class="section-kicker">NEXT EXPERIMENT</p>
+      <div class="copy-en"><h2>Build the smallest honest simulation.</h2><p>Start with a reproducible two-agent model, publish the rules and baseline results, then decide whether the hypothesis deserves a larger CARLA experiment.</p></div>
+      <div class="copy-zh"><h2>先做一个最小、诚实、可重复的模拟。</h2><p>从双智能体模型开始，公开规则与基线结果，然后再决定这个假设是否值得进入更大型的 CARLA 无人驾驶模拟。</p></div>
+      <a href="index.html">← RUNLU home</a>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div>RUNLU · 润庐</div><div>Questions before claims.</div><div>© 2026 RUNLU</div></footer>
+  <script>
+    const button=document.getElementById('labLanguage');
+    const saved=localStorage.getItem('runlu-lab-language');
+    if(saved==='zh'){document.documentElement.lang='zh-CN';button.textContent='English'}
+    button.addEventListener('click',()=>{const zh=document.documentElement.lang!=='zh-CN';document.documentElement.lang=zh?'zh-CN':'en';button.textContent=zh?'English':'中文';localStorage.setItem('runlu-lab-language',zh?'zh':'en')});
+  </script>
+</body>
+</html>
