@@ -128,10 +128,10 @@ export default {
         console.error("RUNLU Pulse analytics error", error);
         return json(
           {
-            error: "Analytics query failed",
-            message: error instanceof Error ? error.message : String(error)
+            error: "Analytics query failed"
           },
-          502
+          502,
+          { "Cache-Control": "no-store" }
         );
       }
     }
@@ -158,7 +158,7 @@ async function fetchAnalytics(env, days) {
   if (!env.CF_ACCOUNT_ID) throw new Error("Missing CF_ACCOUNT_ID secret");
 
   const host = env.RUNLU_HOST || "runlu.ca";
-  const homeCountry = env.RUNLU_HOME_COUNTRY || "Canada";
+  const homeCountry = env.RUNLU_HOME_COUNTRY || "CA";
   const end = new Date();
   const start = new Date(end.getTime() - days * 24 * 60 * 60 * 1000);
 
