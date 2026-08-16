@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "runlu-pulse",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-16",
+  "workers_dev": false,
+  "routes": [
+    {
+      "pattern": "pulse.runlu.ca",
+      "custom_domain": true
+    }
+  ],
+  "vars": {
+    "RUNLU_HOST": "runlu.ca",
+    "RUNLU_HOME_COUNTRY": "Canada"
+  },
+  "secrets": {
+    "required": [
+      "CF_ANALYTICS_TOKEN",
+      "CF_ACCOUNT_ID"
+    ]
+  }
+}
