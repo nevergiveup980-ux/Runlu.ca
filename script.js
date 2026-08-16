@@ -16,17 +16,6 @@ if(menuButton&&mobileMenu){
 }
 
 let currentLanguage=localStorage.getItem('runlu_site_language')||'en';
-const siteFooter=document.querySelector('.site-footer');
-if(siteFooter&&siteFooter.lastElementChild){
-  const pulseLink=document.createElement('a');
-  pulseLink.href='https://pulse.runlu.ca/';
-  pulseLink.dataset.en='Pulse ↗';
-  pulseLink.dataset.zh='Pulse · 访问统计 ↗';
-  pulseLink.setAttribute('aria-label','Open private RUNLU Pulse analytics');
-  pulseLink.style.borderBottom='1px solid currentColor';
-  pulseLink.style.whiteSpace='nowrap';
-  siteFooter.lastElementChild.append(document.createTextNode(' · '),pulseLink);
-}
 function applyLanguage(lang){
   document.documentElement.lang=lang==='zh'?'zh-CN':'en';
   document.querySelectorAll('[data-en][data-zh]').forEach(el=>{el.textContent=el.dataset[lang]});
