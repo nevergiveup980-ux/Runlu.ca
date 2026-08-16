@@ -24,7 +24,13 @@ The Worker serves both the private dashboard and its same-origin `/api/analytics
 
 ## Required Cloudflare token
 
-Create a dedicated token for RUNLU Pulse with the minimum analytics read permission needed for Cloudflare GraphQL Analytics. Do **not** reuse a full-access token.
+Create a dedicated token named `RUNLU Pulse Analytics Read` with only:
+
+- Permission: **Account** → **Account Analytics** → **Read**
+- Account resources: include only the RUNLU Cloudflare account
+- No zone edit, DNS, Workers, Access, billing, or other permissions
+
+Do **not** reuse the Full Access OAuth connection or another broad token.
 
 Store it only as the Worker secret `CF_ANALYTICS_TOKEN`.
 
@@ -44,7 +50,7 @@ The Wrangler configuration attaches the Worker to the custom domain `pulse.runlu
 
 ## Protect the dashboard
 
-After deployment, protect `pulse.runlu.ca` with Cloudflare Access and allow only the owner's email/account. Keep the dashboard out of the public RUNLU navigation and sitemap.
+After deployment, enable Cloudflare Access for the account and create a self-hosted application for exactly `pulse.runlu.ca`. Add one **Allow** policy whose include rule is the owner's exact email address. Do not use an email-domain rule. Keep the dashboard out of the public RUNLU navigation and sitemap.
 
 The Worker also sends `X-Robots-Tag: noindex, nofollow, noarchive` and includes a matching HTML robots directive.
 
@@ -63,5 +69,7 @@ Never commit `.dev.vars` or a real API token.
 
 - Analytics query only; no DNS, Worker, Pages, WAF, billing, or zone settings are changed by the dashboard.
 - Token is stored as an encrypted Worker secret.
+- Account ID is stored as the encrypted Worker secret `CF_ACCOUNT_ID`.
+- `RUNLU_HOME_COUNTRY` uses Cloudflare's ISO country code (`CA`) so Canadian traffic is not mislabeled as possible external activity.
 - The browser calls only the Worker itself; it never receives the Cloudflare token.
 - "Possible external" is deliberately labeled as a heuristic and must not be treated as a count of identified people.
