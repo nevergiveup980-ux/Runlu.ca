@@ -3,6 +3,7 @@
   "name": "runlu-pulse",
   "main": "src/index.js",
   "compatibility_date": "2026-08-16",
+  "compatibility_flags": ["nodejs_compat"],
   "workers_dev": false,
   "routes": [
     {
@@ -12,7 +13,11 @@
   ],
   "vars": {
     "RUNLU_HOST": "runlu.ca",
-    "RUNLU_HOME_COUNTRY": "Canada"
+    "RUNLU_HOME_COUNTRY": "CA"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
   },
   "secrets": {
     "required": [
