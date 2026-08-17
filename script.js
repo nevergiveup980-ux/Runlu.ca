@@ -1,6 +1,5 @@
 const menuButton=document.getElementById('menuButton');
 const mobileMenu=document.getElementById('mobileMenu');
-const languageToggle=document.getElementById('languageToggle');
 const year=document.getElementById('year');
 if(year)year.textContent=new Date().getFullYear();
 
@@ -15,18 +14,6 @@ if(menuButton&&mobileMenu){
   }));
 }
 
-let currentLanguage=localStorage.getItem('runlu_site_language')||'en';
-function applyLanguage(lang){
-  document.documentElement.lang=lang==='zh'?'zh-CN':'en';
-  document.querySelectorAll('[data-en][data-zh]').forEach(el=>{el.textContent=el.dataset[lang]});
-  if(languageToggle)languageToggle.textContent=lang==='en'?'中文':'EN';
-  localStorage.setItem('runlu_site_language',lang);
-}
-if(languageToggle)languageToggle.addEventListener('click',()=>{
-  currentLanguage=currentLanguage==='en'?'zh':'en';
-  applyLanguage(currentLanguage);
-});
-applyLanguage(currentLanguage);
 
 document.documentElement.classList.add('js-enabled');
 const hero=document.querySelector('.hero');

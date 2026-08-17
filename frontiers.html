@@ -197,16 +197,6 @@
     <div>Understand carefully. Credit clearly.</div>
     <div>© 2026 RUNLU</div>
   </footer>
-  <script>
-    const button=document.getElementById('viewLanguage');
-    const saved=localStorage.getItem('runlu-view-language');
-    if(saved==='zh'){document.documentElement.lang='zh-CN';button.textContent='English'}
-    button.addEventListener('click',()=>{
-      const toZh=document.documentElement.lang!=='zh-CN';
-      document.documentElement.lang=toZh?'zh-CN':'en';
-      button.textContent=toZh?'English':'中文';
-      localStorage.setItem('runlu-view-language',toZh?'zh':'en');
-    });
-  </script>
+  <script src="runlu-language.js?v=1.0"></script>
 </body>
 </html>

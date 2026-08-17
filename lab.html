@@ -161,11 +161,6 @@
   </main>
 
   <footer class="site-footer"><div>RUNLU · 润庐</div><div>Questions before claims.</div><div>© 2026 RUNLU</div></footer>
-  <script>
-    const button=document.getElementById('labLanguage');
-    const saved=localStorage.getItem('runlu-lab-language');
-    if(saved==='zh'){document.documentElement.lang='zh-CN';button.textContent='English'}
-    button.addEventListener('click',()=>{const zh=document.documentElement.lang!=='zh-CN';document.documentElement.lang=zh?'zh-CN':'en';button.textContent=zh?'English':'中文';localStorage.setItem('runlu-lab-language',zh?'zh':'en')});
-  </script>
+  <script src="runlu-language.js?v=1.0"></script>
 </body>
 </html>
