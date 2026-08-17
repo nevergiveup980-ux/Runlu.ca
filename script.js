@@ -14,8 +14,6 @@ if(menuButton&&mobileMenu){
   }));
 }
 
-});
-applyLanguage(currentLanguage);
 
 document.documentElement.classList.add('js-enabled');
 const hero=document.querySelector('.hero');
