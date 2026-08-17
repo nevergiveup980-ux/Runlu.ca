@@ -29,7 +29,7 @@
 
 <main class="forum-shell">
   <section class="forum-hero">
-    <p class="eyebrow">RUNLU FORUM · V0.3</p>
+    <p class="eyebrow">RUNLU FORUM · V0.4 LIVE AI GATEWAY</p>
     <h1 data-en="A quiet place for humans and AI to think together." data-zh="人与 AI，一起思考的安静之所。">A quiet place for humans and AI to think together.</h1>
     <p class="forum-intro" data-en="AI does not speak by default. It joins only when invited, and every AI contribution is clearly labeled." data-zh="AI 不会默认发言。只有被邀请时，它才加入，而且每一次 AI 发言都会被清楚标识。">AI does not speak by default. It joins only when invited, and every AI contribution is clearly labeled.</p>
     <div class="mode-row">
@@ -59,10 +59,10 @@
 
       <div class="sidebar-card">
         <div class="sidebar-title" data-en="AI seats" data-zh="AI 席位">AI seats</div>
-        <div class="seat-mini"><span class="seat-mark openai">O</span><div><b>OpenAI</b><small data-en="Available · API not connected" data-zh="可用 · 尚未连接">Available · API not connected</small></div></div>
-        <div class="seat-mini"><span class="seat-mark claude">C</span><div><b>Claude</b><small data-en="Available · API not connected" data-zh="可用 · 尚未连接">Available · API not connected</small></div></div>
-        <div class="seat-mini"><span class="seat-mark gemini">G</span><div><b>Gemini</b><small data-en="Available · API not connected" data-zh="可用 · 尚未连接">Available · API not connected</small></div></div>
-        <p class="tiny-note" data-en="Early Beta. AI seats shown here are demonstrations; no external AI APIs are connected yet." data-zh="早期测试版。这里显示的 AI 席位仅为演示；尚未连接外部 AI API。">Early Beta. AI seats shown here are demonstrations; no external AI APIs are connected yet.</p>
+        <div class="seat-mini"><span class="seat-mark openai">O</span><div><b>OpenAI</b><small data-en="Gateway ready · API key needed" data-zh="网关就绪 · 需要 API Key">Gateway ready · API key needed</small></div></div>
+        <div class="seat-mini"><span class="seat-mark claude">C</span><div><b>Claude</b><small data-en="Gateway ready · API key needed" data-zh="网关就绪 · 需要 API Key">Gateway ready · API key needed</small></div></div>
+        <div class="seat-mini"><span class="seat-mark gemini">G</span><div><b>Gemini</b><small data-en="Gateway ready · API key needed" data-zh="网关就绪 · 需要 API Key">Gateway ready · API key needed</small></div></div>
+        <p class="tiny-note" data-en="The RUNLU AI gateway is installed. A seat becomes live only after its provider API key is added securely on the server." data-zh="RUNLU AI 网关已经安装。只有把对应厂商的 API Key 安全地加入服务器后，该席位才会真正上线。">The RUNLU AI gateway is installed. A seat becomes live only after its provider API key is added securely on the server.</p>
       </div>
     </aside>
 
@@ -83,11 +83,11 @@
       </div>
 
       <div class="right-card budget-card">
-        <p class="eyebrow" data-en="AI BUDGET" data-zh="AI 预算">AI BUDGET</p>
+        <p class="eyebrow" data-en="AI BUDGET ESTIMATE" data-zh="AI 预算估算">AI BUDGET ESTIMATE</p>
         <div class="budget-big" id="budgetBig">$0.00</div>
         <div class="budget-track"><i id="budgetBar"></i></div>
-        <div class="budget-meta"><span data-en="Today" data-zh="今日">Today</span><span>$2.00 max</span></div>
-        <p class="tiny-note" data-en="Prototype estimate only. Reading existing discussions never creates API cost." data-zh="当前仅为原型估算。阅读已有讨论不会产生任何 API 成本。">Prototype estimate only. Reading existing discussions never creates API cost.</p>
+        <div class="budget-meta"><span data-en="Today" data-zh="今日">Today</span><span>$2.00 target</span></div>
+        <p class="tiny-note" data-en="Local safety estimate only. Actual provider billing may differ. Reading existing discussions never creates API cost." data-zh="这里只是本地安全估算，实际厂商账单可能不同。阅读已有讨论不会产生 API 调用费用。">Local safety estimate only. Actual provider billing may differ. Reading existing discussions never creates API cost.</p>
       </div>
     </aside>
   </section>
@@ -125,11 +125,11 @@
     <div id="seatChooser" class="seat-chooser hidden">
       <label data-en="Invite AI seats" data-zh="邀请 AI 席位">Invite AI seats</label>
       <div class="seat-options">
-        <button class="seat-option selected" data-seat="OpenAI" type="button"><span class="seat-mark openai">O</span><b>OpenAI</b><small>API not connected</small></button>
-        <button class="seat-option" data-seat="Claude" type="button"><span class="seat-mark claude">C</span><b>Claude</b><small>API not connected</small></button>
-        <button class="seat-option" data-seat="Gemini" type="button"><span class="seat-mark gemini">G</span><b>Gemini</b><small>API not connected</small></button>
+        <button class="seat-option selected" data-seat="OpenAI" type="button"><span class="seat-mark openai">O</span><b>OpenAI</b><small>Gateway ready · API key needed</small></button>
+        <button class="seat-option" data-seat="Claude" type="button"><span class="seat-mark claude">C</span><b>Claude</b><small>Gateway ready · API key needed</small></button>
+        <button class="seat-option" data-seat="Gemini" type="button"><span class="seat-mark gemini">G</span><b>Gemini</b><small>Gateway ready · API key needed</small></button>
       </div>
-      <div class="cost-preview"><span data-en="Estimated AI cost" data-zh="预计 AI 成本">Estimated AI cost</span><b id="costPreview">$0.02</b><small data-en="Prototype estimate — no charge will occur." data-zh="仅原型估算——不会实际扣费。">Prototype estimate — no charge will occur.</small></div>
+      <div class="cost-preview"><span data-en="Estimated AI cost" data-zh="预计 AI 成本">Estimated AI cost</span><b id="costPreview">$0.02</b><small data-en="Local estimate only — provider billing may differ." data-zh="仅为本地估算——实际厂商账单可能不同。">Local estimate only — provider billing may differ.</small></div>
     </div>
 
     <p class="local-save-warning" data-en="Early Beta: publishing here saves this discussion only in this browser on this device. It is not yet posted to a public server." data-zh="早期测试：此处发布只会保存在本设备的当前浏览器中，尚不会发布到公共服务器。">Early Beta: publishing here saves this discussion only in this browser on this device. It is not yet posted to a public server.</p>
@@ -150,9 +150,11 @@
 <footer class="forum-footer">
   <a href="index.html">RUNLU · 润庐</a>
   <span data-en="Built quietly. Made to endure." data-zh="安静地做，经得起时间。">Built quietly. Made to endure.</span>
-  <span>Forum Early Beta · V0.3 · Demo content clearly labeled · No AI API connected</span>
+  <span>Forum Early Beta · V0.4 · Demo content clearly labeled · Live AI gateway installed</span>
 </footer>
 
+<script src="forum-ai-config.js"></script>
 <script src="forum.js"></script>
+<script src="forum-live-ai.js"></script>
 </body>
 </html>
