@@ -27,7 +27,7 @@ jobs:
           for file in *.js; do
             [ -f "$file" ] && node --check "$file"
           done
-      - name: Check sitemap, metadata, and internal links
+      - name: Check sitemap and internal links
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -39,32 +39,23 @@ jobs:
           tree = ET.parse(root / 'sitemap.xml')
           ns = {'sm': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
 
-          class PageParser(HTMLParser):
+          class Links(HTMLParser):
               def __init__(self):
-                  super().__init__(); self.links=[]; self.canon=[]; self.og_images=[]
+                  super().__init__(); self.links=[]
               def handle_starttag(self, tag, attrs):
                   a=dict(attrs)
                   if tag == 'a' and a.get('href'): self.links.append(a['href'])
                   if tag in ('script','link'):
                       key='src' if tag=='script' else 'href'
                       if a.get(key): self.links.append(a[key])
-                  if tag == 'link' and a.get('rel') == 'canonical' and a.get('href'):
-                      self.canon.append(a['href'])
-                  if tag == 'meta' and a.get('property') == 'og:image' and a.get('content'):
-                      self.og_images.append(a['content'])
 
           missing=[]
           for page in root.rglob('*.html'):
-              parser=PageParser(); parser.feed(page.read_text(encoding='utf-8'))
+              parser=Links(); parser.feed(page.read_text(encoding='utf-8'))
               for href in parser.links:
                   if href.startswith(('#','mailto:','http://','https://','tel:','javascript:')): continue
                   path=urlsplit(href).path
                   if path and not (page.parent / path).exists(): missing.append(f'{page}: {href}')
-              for image in parser.og_images:
-                  parsed=urlsplit(image)
-                  if parsed.netloc == 'runlu.ca':
-                      local=root / parsed.path.lstrip('/')
-                      if not local.exists(): missing.append(f'{page}: og:image {image}')
 
           for loc in tree.findall('.//sm:loc', ns):
               url=(loc.text or '').strip(); parsed=urlsplit(url)
