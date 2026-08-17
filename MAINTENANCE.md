@@ -11,10 +11,18 @@
 1. Create a branch from current `main`.
 2. Make focused changes.
 3. Run the repository site checks.
-4. Review the diff for content truthfulness, privacy, links, and product status.
+4. Review the diff for content truthfulness, privacy, links, metadata, and product status.
 5. Open a pull request into `main`.
 6. Merge only after checks pass.
 7. Verify runlu.ca after deployment.
+
+## Site-integrity checks
+
+- Check HTML pages recursively, including nested folders such as `notes/`.
+- Confirm sitemap URLs resolve to repository pages.
+- Check local scripts, stylesheets, and internal links for missing targets.
+- Review canonical and Open Graph metadata when pages or assets move.
+- Keep social-preview image URLs aligned with real deployed assets.
 
 ## Truthfulness rules
 
