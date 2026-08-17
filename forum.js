@@ -20,20 +20,14 @@ const samples=[
  {id:'sample-4',title:'A good tool should become quieter as you learn it.',body:'The best interfaces seem to disappear with familiarity. Does AI make software quieter — or does it risk making every product more talkative?',category:'keeping',mode:'human',author:'Demo participant',created:'Demo sample',comments:1,seats:[],sample:true,
   replies:[{who:'Demo human response',badge:'Demo',text:'A mature tool should require less explanation over time. AI should probably learn when not to speak.'}]}
 ];
-let lang=localStorage.getItem('runlu_forum_lang')||'en',filter='all',selectedMode='human';
+let lang=window.RUNLULanguage?.get()||'en',filter='all',selectedMode='human';
+window.addEventListener('runlu:languagechange',event=>{lang=event.detail.language});
 
 function userPosts(){try{return JSON.parse(localStorage.getItem(STORAGE)||'[]')}catch{return[]}}
 function savePosts(rows){localStorage.setItem(STORAGE,JSON.stringify(rows))}
 function allPosts(){return [...userPosts(),...samples]}
 function formatTime(iso){if(!iso||iso.startsWith('Prototype')||iso.startsWith('Demo'))return iso;const d=new Date(iso);return d.toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
-function applyLang(){
- document.documentElement.lang=lang==='zh'?'zh-CN':'en';
- document.querySelectorAll('[data-en][data-zh]').forEach(el=>el.textContent=el.dataset[lang]);
- $('forumLang').textContent=lang==='en'?'中文':'EN';
- localStorage.setItem('runlu_forum_lang',lang)
-}
-$('forumLang').onclick=()=>{lang=lang==='en'?'zh':'en';applyLang()};
 
 function renderFeed(){
  const rows=allPosts().filter(p=>filter==='all'||p.category===filter);
@@ -122,4 +116,4 @@ function renderBudget(){
  const spent=Number(localStorage.getItem(BUDGET)||0),max=2;
  $('budgetValue').textContent=`$${spent.toFixed(2)} / $${max.toFixed(2)}`;$('budgetBig').textContent='$'+spent.toFixed(2);$('budgetBar').style.width=Math.min(100,spent/max*100)+'%'
 }
-applyLang();renderFeed();renderBudget();updateSeatChooser();
+renderFeed();renderBudget();updateSeatChooser();
