@@ -24,8 +24,9 @@ jobs:
           node-version: "22"
       - name: Check JavaScript syntax
         run: |
-          node --check script.js
-          node --check forum.js
+          for file in *.js; do
+            [ -f "$file" ] && node --check "$file"
+          done
       - name: Check sitemap and internal links
         run: |
           python - <<'PY'
@@ -35,7 +36,8 @@ jobs:
           from urllib.parse import urlsplit
 
           root = Path('.')
-          ET.parse(root / 'sitemap.xml')
+          tree = ET.parse(root / 'sitemap.xml')
+          ns = {'sm': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
 
           class Links(HTMLParser):
               def __init__(self):
@@ -48,15 +50,21 @@ jobs:
                       if a.get(key): self.links.append(a[key])
 
           missing=[]
-          for page in root.glob('*.html'):
+          for page in root.rglob('*.html'):
               parser=Links(); parser.feed(page.read_text(encoding='utf-8'))
               for href in parser.links:
                   if href.startswith(('#','mailto:','http://','https://','tel:','javascript:')): continue
                   path=urlsplit(href).path
-                  if not path: continue
-                  target=(page.parent / path)
-                  if not target.exists(): missing.append(f'{page}: {href}')
+                  if path and not (page.parent / path).exists(): missing.append(f'{page}: {href}')
+
+          for loc in tree.findall('.//sm:loc', ns):
+              url=(loc.text or '').strip(); parsed=urlsplit(url)
+              if parsed.netloc != 'runlu.ca': continue
+              rel=parsed.path.lstrip('/') or 'index.html'
+              if rel.endswith('/'): rel += 'index.html'
+              if not (root / rel).exists(): missing.append(f'sitemap: {url}')
+
           if missing:
-              raise SystemExit('Missing local targets:\n'+'\n'.join(missing))
+              raise SystemExit('Missing local targets:\n'+'\n'.join(sorted(set(missing))))
           print('Site integrity checks passed.')
           PY
