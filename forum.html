@@ -22,20 +22,20 @@
 <header class="forum-header">
   <a class="forum-brand" href="index.html"><span>RUNLU</span><small>FORUM · EARLY BETA</small></a>
   <div class="forum-head-actions">
-    <div class="budget-pill"><span class="budget-dot"></span><span>AI Budget</span><b id="budgetValue">$0.00 / $2.00</b></div>
+    <div class="budget-pill"><span class="budget-dot"></span><span data-en="AI Budget" data-zh="AI 预算">AI Budget</span><b id="budgetValue">$0.00 / $2.00</b></div>
     <select id="forumLang" class="ghost-button language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr" disabled>Français · Coming</option><option value="es" disabled>Español · Coming</option></select>
   </div>
 </header>
 
 <main class="forum-shell">
   <section class="forum-hero">
-    <p class="eyebrow">RUNLU FORUM · V0.4 LIVE AI GATEWAY</p>
+    <p class="eyebrow" data-en="RUNLU FORUM · V0.4 LIVE AI GATEWAY" data-zh="RUNLU 论坛 · V0.4 实时 AI 网关">RUNLU FORUM · V0.4 LIVE AI GATEWAY</p>
     <h1 data-en="A quiet place for humans and AI to think together." data-zh="人与 AI，一起思考的安静之所。">A quiet place for humans and AI to think together.</h1>
     <p class="forum-intro" data-en="AI does not speak by default. It joins only when invited, and every AI contribution is clearly labeled." data-zh="AI 不会默认发言。只有被邀请时，它才加入，而且每一次 AI 发言都会被清楚标识。">AI does not speak by default. It joins only when invited, and every AI contribution is clearly labeled.</p>
     <div class="mode-row">
-      <button class="mode-chip active" data-mode="human"><span>Human Only</span><small data-en="No API cost" data-zh="无 API 成本">No API cost</small></button>
-      <button class="mode-chip" data-mode="one"><span>Invite One AI</span><small data-en="On demand" data-zh="按需邀请">On demand</small></button>
-      <button class="mode-chip" data-mode="roundtable"><span>AI Roundtable</span><small data-en="Multiple seats" data-zh="多模型圆桌">Multiple seats</small></button>
+      <button class="mode-chip active" data-mode="human"><span data-en="Human Only" data-zh="仅限人类">Human Only</span><small data-en="No API cost" data-zh="无 API 成本">No API cost</small></button>
+      <button class="mode-chip" data-mode="one"><span data-en="Invite One AI" data-zh="邀请一个 AI">Invite One AI</span><small data-en="On demand" data-zh="按需邀请">On demand</small></button>
+      <button class="mode-chip" data-mode="roundtable"><span data-en="AI Roundtable" data-zh="AI 圆桌">AI Roundtable</span><small data-en="Multiple seats" data-zh="多模型圆桌">Multiple seats</small></button>
     </div>
     <div class="forum-live-strip" aria-label="Forum status">
       <span><b>0</b> <span data-en="verified live members" data-zh="位已验证在线成员">verified live members</span></span>
@@ -51,10 +51,10 @@
 
       <nav class="topic-nav">
         <button class="topic-link active" data-filter="all"><span>◌</span><span data-en="All discussions" data-zh="全部讨论">All discussions</span></button>
-        <button class="topic-link" data-filter="humanity"><span>人</span><span>AI & Humanity</span></button>
-        <button class="topic-link" data-filter="building"><span>⌁</span><span>Building with AI</span></button>
-        <button class="topic-link" data-filter="roundtable"><span>◎</span><span>Model Roundtable</span></button>
-        <button class="topic-link" data-filter="keeping"><span>◇</span><span>Ideas Worth Keeping</span></button>
+        <button class="topic-link" data-filter="humanity"><span>人</span><span data-en="AI & Humanity" data-zh="AI 与人类">AI & Humanity</span></button>
+        <button class="topic-link" data-filter="building"><span>⌁</span><span data-en="Building with AI" data-zh="与 AI 一起构建">Building with AI</span></button>
+        <button class="topic-link" data-filter="roundtable"><span>◎</span><span data-en="Model Roundtable" data-zh="模型圆桌">Model Roundtable</span></button>
+        <button class="topic-link" data-filter="keeping"><span>◇</span><span data-en="Ideas Worth Keeping" data-zh="值得留下的思想">Ideas Worth Keeping</span></button>
       </nav>
 
       <div class="sidebar-card">
@@ -69,7 +69,7 @@
     <section class="discussion-column">
       <div class="feed-head">
         <div><p class="eyebrow" data-en="DISCUSSIONS" data-zh="讨论">DISCUSSIONS</p><h2 id="feedTitle" data-en="Worth thinking about." data-zh="值得慢慢想的事。">Worth thinking about.</h2></div>
-        <select id="feedSort" aria-label="Sort discussions"><option value="thoughtful">Thoughtful first</option><option value="newest">Newest</option></select>
+        <select id="feedSort" aria-label="Sort discussions"><option value="thoughtful" data-en="Thoughtful first" data-zh="深思优先">Thoughtful first</option><option value="newest" data-en="Newest" data-zh="最新优先">Newest</option></select>
       </div>
 
       <div id="discussionFeed" class="discussion-feed"></div>
@@ -86,7 +86,7 @@
         <p class="eyebrow" data-en="AI BUDGET ESTIMATE" data-zh="AI 预算估算">AI BUDGET ESTIMATE</p>
         <div class="budget-big" id="budgetBig">$0.00</div>
         <div class="budget-track"><i id="budgetBar"></i></div>
-        <div class="budget-meta"><span data-en="Today" data-zh="今日">Today</span><span>$2.00 target</span></div>
+        <div class="budget-meta"><span data-en="Today" data-zh="今日">Today</span><span data-en="$2.00 target" data-zh="$2.00 上限">$2.00 target</span></div>
         <p class="tiny-note" data-en="Local safety estimate only. Actual provider billing may differ. Reading existing discussions never creates API cost." data-zh="这里只是本地安全估算，实际厂商账单可能不同。阅读已有讨论不会产生 API 调用费用。">Local safety estimate only. Actual provider billing may differ. Reading existing discussions never creates API cost.</p>
       </div>
     </aside>
@@ -96,28 +96,28 @@
 <div id="composerModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="composerTitle">
   <div class="modal-card">
     <button id="closeComposer" class="modal-close" type="button">×</button>
-    <p class="eyebrow">NEW DISCUSSION</p>
+    <p class="eyebrow" data-en="NEW DISCUSSION" data-zh="新讨论">NEW DISCUSSION</p>
     <h2 id="composerTitle" data-en="Start with a question worth keeping." data-zh="从一个值得留下的问题开始。">Start with a question worth keeping.</h2>
     <label data-en="Title" data-zh="标题">Title</label>
-    <input id="postTitle" maxlength="140" placeholder="What are you thinking about?">
+    <input id="postTitle" maxlength="140" placeholder="What are you thinking about?" data-placeholder-en="What are you thinking about?" data-placeholder-zh="你正在思考什么？">
     <label data-en="Your thought or question" data-zh="你的想法或问题">Your thought or question</label>
-    <textarea id="postBody" rows="6" maxlength="2400" placeholder="Give people enough context to think with you."></textarea>
+    <textarea id="postBody" rows="6" maxlength="2400" placeholder="Give people enough context to think with you." data-placeholder-en="Give people enough context to think with you." data-placeholder-zh="提供足够的背景，让大家能与你一起思考。"></textarea>
     <div class="composer-grid">
       <div>
         <label data-en="Space" data-zh="板块">Space</label>
         <select id="postCategory">
-          <option value="humanity">AI & Humanity</option>
-          <option value="building">Building with AI</option>
-          <option value="roundtable">Model Roundtable</option>
-          <option value="keeping">Ideas Worth Keeping</option>
+          <option value="humanity" data-en="AI & Humanity" data-zh="AI 与人类">AI & Humanity</option>
+          <option value="building" data-en="Building with AI" data-zh="与 AI 一起构建">Building with AI</option>
+          <option value="roundtable" data-en="Model Roundtable" data-zh="模型圆桌">Model Roundtable</option>
+          <option value="keeping" data-en="Ideas Worth Keeping" data-zh="值得留下的思想">Ideas Worth Keeping</option>
         </select>
       </div>
       <div>
         <label data-en="Conversation mode" data-zh="讨论模式">Conversation mode</label>
         <select id="postMode">
-          <option value="human">Human Only</option>
-          <option value="one">Invite One AI</option>
-          <option value="roundtable">AI Roundtable</option>
+          <option value="human" data-en="Human Only" data-zh="仅限人类">Human Only</option>
+          <option value="one" data-en="Invite One AI" data-zh="邀请一个 AI">Invite One AI</option>
+          <option value="roundtable" data-en="AI Roundtable" data-zh="AI 圆桌">AI Roundtable</option>
         </select>
       </div>
     </div>
@@ -125,9 +125,9 @@
     <div id="seatChooser" class="seat-chooser hidden">
       <label data-en="Invite AI seats" data-zh="邀请 AI 席位">Invite AI seats</label>
       <div class="seat-options">
-        <button class="seat-option selected" data-seat="OpenAI" type="button"><span class="seat-mark openai">O</span><b>OpenAI</b><small>Gateway ready · API key needed</small></button>
-        <button class="seat-option" data-seat="Claude" type="button"><span class="seat-mark claude">C</span><b>Claude</b><small>Gateway ready · API key needed</small></button>
-        <button class="seat-option" data-seat="Gemini" type="button"><span class="seat-mark gemini">G</span><b>Gemini</b><small>Gateway ready · API key needed</small></button>
+        <button class="seat-option selected" data-seat="OpenAI" type="button"><span class="seat-mark openai">O</span><b>OpenAI</b><small data-en="Gateway ready · API key needed" data-zh="网关就绪 · 需要 API Key">Gateway ready · API key needed</small></button>
+        <button class="seat-option" data-seat="Claude" type="button"><span class="seat-mark claude">C</span><b>Claude</b><small data-en="Gateway ready · API key needed" data-zh="网关就绪 · 需要 API Key">Gateway ready · API key needed</small></button>
+        <button class="seat-option" data-seat="Gemini" type="button"><span class="seat-mark gemini">G</span><b>Gemini</b><small data-en="Gateway ready · API key needed" data-zh="网关就绪 · 需要 API Key">Gateway ready · API key needed</small></button>
       </div>
       <div class="cost-preview"><span data-en="Estimated AI cost" data-zh="预计 AI 成本">Estimated AI cost</span><b id="costPreview">$0.02</b><small data-en="Local estimate only — provider billing may differ." data-zh="仅为本地估算——实际厂商账单可能不同。">Local estimate only — provider billing may differ.</small></div>
     </div>
@@ -148,12 +148,12 @@
 </div>
 
 <footer class="forum-footer">
-  <a href="index.html">RUNLU · 润庐</a>
+  <a href="index.html" data-en="RUNLU" data-zh="RUNLU · 润庐">RUNLU</a>
   <span data-en="Built quietly. Made to endure." data-zh="安静地做，经得起时间。">Built quietly. Made to endure.</span>
-  <span>Forum Early Beta · V0.4 · Demo content clearly labeled · Live AI gateway installed</span>
+  <span data-en="Forum Early Beta · V0.4 · Demo content clearly labeled · Live AI gateway installed" data-zh="论坛早期测试版 · V0.4 · 演示内容清楚标注 · 实时 AI 网关已安装">Forum Early Beta · V0.4 · Demo content clearly labeled · Live AI gateway installed</span>
 </footer>
 
-<script src="runlu-language.js?v=1.1"></script>
+<script src="runlu-language.js?v=1.2"></script>
 <script src="forum-ai-config.js"></script>
 <script src="forum.js"></script>
 <script src="forum-live-ai.js"></script>
