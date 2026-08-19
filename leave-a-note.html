@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Send a private note, suggestion, question, or collaboration idea to RUNLU." />
+  <meta name="theme-color" content="#f7f4ed" />
+  <link rel="canonical" href="https://runlu.ca/leave-a-note.html" />
+  <meta property="og:title" content="Leave a Note · RUNLU" />
+  <meta property="og:description" content="A quiet, private way to share a thought with RUNLU." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://runlu.ca/leave-a-note.html" />
+  <title>Leave a Note · RUNLU</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="note-page">
+  <header class="note-header">
+    <a class="brand" href="index.html">RUNLU</a>
+    <div class="note-header-actions">
+      <a class="note-back" href="index.html#contact" data-en="← Back to RUNLU" data-zh="← 返回润庐">← Back to RUNLU</a>
+      <select class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr" disabled>Français · Coming</option><option value="es" disabled>Español · Coming</option></select>
+    </div>
+  </header>
+
+  <main class="note-main">
+    <section class="note-intro">
+      <div class="section-kicker" data-en="A quiet channel" data-zh="一条安静的通道">A quiet channel</div>
+      <h1 data-en="Leave a Note." data-zh="给润庐留言。">Leave a Note.</h1>
+      <p data-en="A suggestion, a question, a product thought, or simply something worth sharing — every note will be read with care." data-zh="无论是建议、问题、产品想法，还是一段值得分享的话——每一条留言，我们都会认真阅读。">A suggestion, a question, a product thought, or simply something worth sharing — every note will be read with care.</p>
+      <p class="note-privacy" data-en="Your note is private by default. It will not appear publicly. If we ever wish to feature it, we will ask for your permission first." data-zh="你的留言默认是私密的，不会自动公开。如果将来希望精选展示，我们会先征得你的同意。">Your note is private by default. It will not appear publicly. If we ever wish to feature it, we will ask for your permission first.</p>
+    </section>
+
+    <form id="noteForm" class="note-form" novalidate>
+      <div class="note-field">
+        <label for="noteCategory" data-en="What is this about?" data-zh="这是一条什么留言？">What is this about?</label>
+        <select id="noteCategory" name="category" required>
+          <option value="" data-en="Choose one" data-zh="请选择">Choose one</option>
+          <option value="product" data-en="Product idea" data-zh="产品建议">Product idea</option>
+          <option value="feedback" data-en="Website feedback" data-zh="网站反馈">Website feedback</option>
+          <option value="collaboration" data-en="Collaboration" data-zh="合作想法">Collaboration</option>
+          <option value="other" data-en="Something else" data-zh="其他">Something else</option>
+        </select>
+      </div>
+
+      <div class="note-row">
+        <div class="note-field">
+          <label for="noteName" data-en="Name or nickname" data-zh="姓名或昵称">Name or nickname</label>
+          <input id="noteName" name="name" type="text" maxlength="80" autocomplete="name" />
+          <p class="note-help" data-en="Optional. Anonymous notes are welcome." data-zh="选填，也欢迎匿名留言。">Optional. Anonymous notes are welcome.</p>
+        </div>
+        <div class="note-field">
+          <label for="noteEmail" data-en="Email" data-zh="邮箱">Email</label>
+          <input id="noteEmail" name="email" type="email" maxlength="254" autocomplete="email" inputmode="email" />
+          <p class="note-help" data-en="Only needed if you would like a reply." data-zh="只有希望收到回复时才需要填写。">Only needed if you would like a reply.</p>
+        </div>
+      </div>
+
+      <div class="note-field">
+        <label for="noteMessage" data-en="Your note" data-zh="你的留言">Your note</label>
+        <textarea id="noteMessage" name="message" minlength="10" maxlength="4000" required data-placeholder-en="Write what is on your mind…" data-placeholder-zh="写下你想说的话……" placeholder="Write what is on your mind…"></textarea>
+        <p class="note-help"><span id="noteCount">0</span> / 4000</p>
+      </div>
+
+      <label class="note-check"><input id="noteReply" name="wants_reply" type="checkbox" /><span data-en="I would like a reply." data-zh="我希望收到回复。">I would like a reply.</span></label>
+      <label class="note-check"><input id="noteFeature" name="consent_to_feature" type="checkbox" /><span data-en="You may contact me later to ask about featuring this note. This does not grant permission to publish it." data-zh="如果将来希望精选展示，可以联系我另行征求同意；勾选此项并不代表已经授权公开。">You may contact me later to ask about featuring this note. This does not grant permission to publish it.</span></label>
+
+      <div class="note-honeypot" aria-hidden="true"><label for="noteWebsite">Website</label><input id="noteWebsite" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
+      <button id="noteSubmit" class="note-submit" type="submit" data-en="Send Note" data-zh="发送留言">Send Note</button>
+      <p id="noteStatus" class="note-status" role="status" aria-live="polite"></p>
+    </form>
+  </main>
+
+  <footer class="site-footer"><div>RUNLU · 润庐</div><div data-en="Thank you for taking the time." data-zh="谢谢你愿意花时间写下这些。">Thank you for taking the time.</div><div>© 2026 RUNLU</div></footer>
+  <script src="runlu-language.js?v=1.2"></script>
+  <script src="leave-a-note.js?v=1.0"></script>
+</body>
+</html>
