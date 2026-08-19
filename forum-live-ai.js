@@ -3,6 +3,7 @@
   let providerStatus = { OpenAI: false, Claude: false, Gemini: false };
   let currentThreadId = null;
   const liveProviderNames = ['OpenAI', 'Claude', 'Gemini'];
+  const liveText=(en,zh,fr,es)=>({en,zh,fr,es}[lang]||en);
 
   function aiConfigReady() {
     return Boolean(cfg.endpoint && cfg.anonKey);
@@ -26,9 +27,9 @@
   }
 
   function statusText(provider) {
-    if (!aiConfigReady()) return lang === 'zh' ? '网关未配置' : 'Gateway not configured';
-    if (providerStatus[provider]) return lang === 'zh' ? '在线 · 已连接' : 'Live · Connected';
-    return lang === 'zh' ? '网关就绪 · 需要 API Key' : 'Gateway ready · API key needed';
+    if (!aiConfigReady()) return liveText('Gateway not configured','网关未配置','Passerelle non configurée','Pasarela no configurada');
+    if (providerStatus[provider]) return liveText('Live · Connected','在线 · 已连接','En direct · Connecté','En vivo · Conectado');
+    return liveText('Gateway ready · API key needed','网关就绪 · 需要 API Key',"Passerelle prête · clé d’API requise",'Pasarela lista · se necesita clave de API');
   }
 
   function refreshSeatStatus() {
@@ -57,12 +58,12 @@
 
   function replyHtml(r) {
     const model = r.model ? ` · ${esc(r.model)}` : '';
-    const badge = esc(r.badge || 'Reply');
-    return `<div class="reply"><div class="reply-avatar">${esc((r.who || 'R')[0])}</div><div><div class="reply-head"><b>${esc(r.who || 'Reply')}</b><small>${badge}${model}</small></div><p>${esc(r.text || '')}</p></div></div>`;
+    const badge = esc(r.badge || tr('reply'));
+    return `<div class="reply"><div class="reply-avatar">${esc((r.who || 'R')[0])}</div><div><div class="reply-head"><b>${esc(r.who || tr('reply'))}</b><small>${badge}${model}</small></div><p>${esc(r.text || '')}</p></div></div>`;
   }
 
   function providerButton(provider, enabled) {
-    const label = provider === 'OpenAI' ? 'Invite OpenAI' : provider === 'Claude' ? 'Invite Claude' : 'Invite Gemini';
+    const label = `${tr('invite')} ${provider}`;
     return `<button type="button" data-live-provider="${provider}" ${enabled ? '' : 'disabled'}>${label}</button>`;
   }
 
@@ -71,20 +72,20 @@
     const p = allPosts().find(x => x.id === id);
     if (!p) return;
     const replies = (p.replies || []).map(replyHtml).join('');
-    const seats = (p.seats || []).length ? p.seats.join(', ') : 'None';
+    const seats = (p.seats || []).length ? p.seats.join(', ') : tr('none');
     const canInvite = !p.sample;
     const liveButtons = liveProviderNames.map(provider => providerButton(provider, canInvite && providerStatus[provider])).join('');
     const roundtableProviders = (p.seats || []).filter(x => providerStatus[x]);
     const roundtableEnabled = canInvite && (roundtableProviders.length >= 2 || liveProviderNames.filter(x => providerStatus[x]).length >= 2);
     const note = p.sample
-      ? '<div class="prototype-note">Demo transcript · Every reply below is illustrative interface content only. No person or commercial AI model participated in this conversation.</div>'
-      : `<div class="prototype-note">Live AI gateway is installed. Only connected seats can be invited. Current configured seats: ${liveProviderNames.filter(x => providerStatus[x]).join(', ') || 'none yet'}.</div>`;
+      ? `<div class="prototype-note">${esc(tr('demoTranscript'))}</div>`
+      : `<div class="prototype-note">${esc(liveText('Live AI gateway is installed. Only connected seats can be invited. Current configured seats:','实时 AI 网关已安装。只能邀请已连接的席位。当前已配置席位：',"La passerelle IA en direct est installée. Seuls les sièges connectés peuvent être invités. Sièges configurés :",'La pasarela de IA en vivo está instalada. Solo se pueden invitar puestos conectados. Puestos configurados:'))} ${liveProviderNames.filter(x => providerStatus[x]).join(', ') || liveText('none yet','暂无','aucun','ninguno')}.</div>`;
 
-    $('threadContent').innerHTML = `<div class="thread-head"><div class="discussion-meta"><span class="category-pill">${esc(categoryNames[p.category])}</span><span class="mode-pill">${esc(modeNames[p.mode])}</span></div><h2>${esc(p.title)}</h2><div class="discussion-meta">${esc(p.author || 'You')} · ${esc(formatTime(p.created))}</div></div>
-      <p class="thread-body">${esc(p.body)}</p>
+    $('threadContent').innerHTML = `<div class="thread-head"><div class="discussion-meta"><span class="category-pill">${esc(text(categoryNames[p.category]))}</span><span class="mode-pill">${esc(text(modeNames[p.mode]))}</span></div><h2>${esc(text(p.title))}</h2><div class="discussion-meta">${esc(text(p.author)||tr('you'))} · ${esc(formatTime(p.created))}</div></div>
+      <p class="thread-body">${esc(text(p.body))}</p>
       ${note}
-      <div class="thread-divider"></div><p class="eyebrow">CONVERSATION</p>${replies || '<div class="empty-state">No replies yet.</div>'}
-      <div class="invite-panel"><h4>Invite AI</h4><p>Seats configured for this thread: ${esc(seats)}.</p><div class="invite-buttons">${liveButtons}<button type="button" id="liveRoundtable" ${roundtableEnabled ? '' : 'disabled'}>Start Roundtable</button></div><div id="liveAiState" class="tiny-note"></div></div>`;
+      <div class="thread-divider"></div><p class="eyebrow">${esc(tr('conversation'))}</p>${replies || `<div class="empty-state">${esc(tr('noReplies'))}</div>`}
+      <div class="invite-panel"><h4>${esc(tr('inviteAI'))}</h4><p>${esc(tr('configuredSeats'))}: ${esc(seats)}.</p><div class="invite-buttons">${liveButtons}<button type="button" id="liveRoundtable" ${roundtableEnabled ? '' : 'disabled'}>${esc(tr('startRoundtable'))}</button></div><div id="liveAiState" class="tiny-note"></div></div>`;
 
     $('threadModal').classList.remove('hidden');
     document.querySelectorAll('[data-live-provider]').forEach(btn => {
@@ -129,7 +130,7 @@
     const p = userPosts().find(x => x.id === postId);
     if (!p || !providers?.length) return;
     const state = $('liveAiState');
-    if (state) state.textContent = lang === 'zh' ? 'AI 正在思考…' : 'AI is thinking…';
+    if (state) state.textContent = liveText('AI is thinking…','AI 正在思考…',"L’IA réfléchit…",'La IA está pensando…');
     document.querySelectorAll('.invite-buttons button').forEach(b => b.disabled = true);
     try {
       const context = (p.replies || []).slice(-6).map(r => `${r.who}: ${r.text}`).join('\n\n');
@@ -150,7 +151,7 @@
     const title = $('postTitle').value.trim();
     const body = $('postBody').value.trim();
     if (!title || !body) {
-      alert(lang === 'zh' ? '请先写标题和内容。' : 'Please add a title and some context.');
+      alert(liveText('Please add a title and some context.','请先写标题和内容。','Ajoutez un titre et un peu de contexte.','Añade un título y algo de contexto.'));
       return;
     }
     const mode = $('postMode').value;
@@ -175,7 +176,7 @@
       if (connected.length) await inviteProviders(id, connected);
       else {
         const state = $('liveAiState');
-        if (state) state.textContent = lang === 'zh' ? 'AI 网关已安装；请先添加所选模型的 API Key。' : 'AI gateway installed; add the selected provider API key to activate the seat.';
+        if (state) state.textContent = liveText('AI gateway installed; add the selected provider API key to activate the seat.','AI 网关已安装；请先添加所选模型的 API Key。',"Passerelle IA installée ; ajoutez la clé d’API du fournisseur choisi pour activer le siège.",'Pasarela de IA instalada; añade la clave de API del proveedor elegido para activar el puesto.');
       }
     }
   }
@@ -193,4 +194,5 @@
   }
 
   refreshProviderStatus();
+  window.addEventListener('runlu:languagechange',refreshSeatStatus);
 })();

@@ -25,8 +25,13 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check script.js
+          node --check runlu-language.js
           node --check forum.js
+          node --check forum-live-ai.js
           node --check leave-a-note.js
+          node --check scripts/check-multilingual.mjs
+      - name: Enforce complete four-language pages
+        run: node scripts/check-multilingual.mjs
       - name: Check sitemap and internal links
         run: |
           python - <<'PY'

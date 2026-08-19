@@ -11,11 +11,12 @@
   const consent = document.getElementById('noteFeature');
   const honeypot = document.getElementById('noteWebsite');
 
-  const language = () => document.documentElement.lang === 'zh-CN' ? 'zh' : 'en';
-  const copy = (en, zh) => language() === 'zh' ? zh : en;
+  const language = () => ({'zh-CN':'zh',fr:'fr',es:'es'}[document.documentElement.lang] || 'en');
+  const copy = (en, zh, fr, es) => ({en, zh, fr, es}[language()] || en);
 
   const syncLanguage = () => {
-    message.placeholder = message.dataset[`placeholder${language() === 'zh' ? 'Zh' : 'En'}`];
+    const suffix = {en:'En',zh:'Zh',fr:'Fr',es:'Es'}[language()];
+    message.placeholder = message.dataset[`placeholder${suffix}`];
     document.querySelectorAll('#noteCategory option[data-en]').forEach(option => {
       option.textContent = option.dataset[language()];
     });
@@ -33,31 +34,31 @@
 
     if (!category.value) {
       status.classList.add('error');
-      status.textContent = copy('Please choose a note type.', '请选择留言类型。');
+      status.textContent = copy('Please choose a note type.', '请选择留言类型。', 'Veuillez choisir un type de message.', 'Elija un tipo de mensaje.');
       category.focus();
       return;
     }
     if (message.value.trim().length < 10) {
       status.classList.add('error');
-      status.textContent = copy('Please write at least 10 characters.', '请至少写 10 个字。');
+      status.textContent = copy('Please write at least 10 characters.', '请至少写 10 个字。', 'Veuillez écrire au moins 10 caractères.', 'Escriba al menos 10 caracteres.');
       message.focus();
       return;
     }
     if (reply.checked && !email.value.trim()) {
       status.classList.add('error');
-      status.textContent = copy('Please add an email if you would like a reply.', '如需回复，请填写邮箱。');
+      status.textContent = copy('Please add an email if you would like a reply.', '如需回复，请填写邮箱。', 'Veuillez ajouter un courriel si vous souhaitez une réponse.', 'Añada un correo electrónico si desea una respuesta.');
       email.focus();
       return;
     }
     if (email.value && !email.validity.valid) {
       status.classList.add('error');
-      status.textContent = copy('Please check the email address.', '请检查邮箱格式。');
+      status.textContent = copy('Please check the email address.', '请检查邮箱格式。', 'Veuillez vérifier l’adresse courriel.', 'Compruebe la dirección de correo electrónico.');
       email.focus();
       return;
     }
 
     submit.disabled = true;
-    submit.textContent = copy('Sending…', '正在发送……');
+    submit.textContent = copy('Sending…', '正在发送……', 'Envoi…', 'Enviando…');
     try {
       const response = await fetch(ENDPOINT, {
         method: 'POST',
@@ -74,17 +75,17 @@
         }),
       });
       const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(result.error || copy('We could not save your note. Please try again.', '暂时无法提交，请稍后再试。'));
+      if (!response.ok) throw new Error(copy('We could not save your note. Please try again.', '暂时无法提交，请稍后再试。', 'Impossible d’enregistrer votre message. Veuillez réessayer.', 'No pudimos guardar su mensaje. Inténtelo de nuevo.'));
       form.reset();
       count.textContent = '0';
       status.classList.add('success');
-      status.textContent = result.message || copy('Thank you. Your note will be read with care.', '谢谢你的留言。我们会认真阅读。');
+      status.textContent = copy('Thank you. Your note will be read with care.', '谢谢你的留言。我们会认真阅读。', 'Merci. Votre message sera lu avec attention.', 'Gracias. Leeremos su mensaje con atención.');
     } catch (error) {
       status.classList.add('error');
-      status.textContent = error.message || copy('We could not save your note. Please try again.', '暂时无法提交，请稍后再试。');
+      status.textContent = error.message || copy('We could not save your note. Please try again.', '暂时无法提交，请稍后再试。', 'Impossible d’enregistrer votre message. Veuillez réessayer.', 'No pudimos guardar su mensaje. Inténtelo de nuevo.');
     } finally {
       submit.disabled = false;
-      submit.textContent = copy('Send Note', '发送留言');
+      submit.textContent = copy('Send Note', '发送留言', 'Envoyer le message', 'Enviar mensaje');
     }
   });
 })();

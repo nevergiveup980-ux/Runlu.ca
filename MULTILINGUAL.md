@@ -4,17 +4,17 @@
 
 - `en`: English — active
 - `zh`: Simplified Chinese — active
-- `fr`: French — planned and hidden until reviewed
-- `es`: Spanish — planned and hidden until reviewed
+- `fr`: French — active
+- `es`: Spanish — active
 
-The shared preference key is `runlu_site_language`. English is the fallback whenever a requested translation is missing or has not been approved.
+The shared preference key is `runlu_site_language`. English remains the technical fallback, but a public release must contain reviewed content in all four languages.
 
 ## Short-text template
 
 Use data attributes for navigation labels, buttons, badges, and short paragraphs:
 
 ```html
-<span data-en="Read the article" data-zh="阅读文章" data-fr="" data-es="">Read the article</span>
+<span data-en="Read the article" data-zh="阅读文章" data-fr="Lire l’article" data-es="Leer el artículo">Read the article</span>
 ```
 
 ## Long-form template
@@ -24,22 +24,22 @@ Use separate blocks for articles and substantial prose:
 ```html
 <section class="copy-en" lang="en">Reviewed English content</section>
 <section class="copy-zh" lang="zh-CN">经审核的中文内容</section>
-<section class="copy-fr" lang="fr" hidden>Reviewed French content</section>
-<section class="copy-es" lang="es" hidden>Reviewed Spanish content</section>
+<section class="copy-fr" lang="fr">Contenu français révisé</section>
+<section class="copy-es" lang="es">Contenido en español revisado</section>
 ```
 
-Planned-language blocks remain hidden until translations are complete and the shared language core activates that language.
+All four blocks must be complete before publication. The shared language core displays only the selected language.
 
 ## Editorial rule
 
-Never expose a partially translated page. If the chosen language is unavailable, RUNLU falls back to the complete English version. Scientific and health translations require terminology and evidence-boundary review, not raw machine translation.
+Never expose a partially translated page. Scientific and health translations require terminology and evidence-boundary review, not raw machine translation. A change is not complete until English, Chinese, French, and Spanish are updated together.
 
 ## New-page checklist
 
-1. Review the English source.
-2. Add complete Chinese content.
-3. Load `runlu-language.js`.
-4. Use the standard language selector.
-5. Confirm only one language body is visible.
-6. Confirm the choice persists across RUNLU pages.
-7. Add French or Spanish only after full-page review.
+1. Review the English source and its evidence boundaries.
+2. Add complete, human-reviewed Chinese, French, and Spanish content.
+3. Confirm scientific and health terminology, evidence type, sources, and limitations remain equivalent in all four languages.
+4. Load `runlu-language.js` and use the standard language selector.
+5. Confirm only the selected language body is visible.
+6. Confirm the choice persists across RUNLU pages and dynamic interface messages follow it.
+7. Run `node scripts/check-multilingual.mjs`; publication is blocked if any language is missing.
