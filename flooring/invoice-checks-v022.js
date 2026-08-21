@@ -1,46 +1,73 @@
-/* RUNLU Deerfoot Flooring OS V0.2.2 — safe invoice checkbox bridge */
+/* RUNLU Deerfoot Flooring OS V0.2.3 — Deerfoot right-bottom checkbox bridge */
 (function(){
   function ensure(j){
     if(!j)return;
-    if(typeof j.depositPaidConfirmed!=='boolean')j.depositPaidConfirmed=Number(j.depositPaid||0)>0;
-    if(typeof j.balancePaid!=='boolean'){const c=calc(j);j.balancePaid=c.total>0&&c.balance<=0}
+    if(typeof j.paidBox1!=='boolean')j.paidBox1=typeof j.depositPaidConfirmed==='boolean'?j.depositPaidConfirmed:Number(j.depositPaid||0)>0;
+    if(typeof j.paidBox2!=='boolean')j.paidBox2=typeof j.balancePaid==='boolean'?j.balancePaid:false;
+    if(typeof j.balanceDueBox!=='boolean')j.balanceDueBox=false;
     if(typeof j.productViewedBeforeInstall!=='boolean')j.productViewedBeforeInstall=false;
+    j.depositPaidConfirmed=j.paidBox1;
+    j.balancePaid=j.paidBox2;
+  }
+  function relabel(id,text){
+    const el=document.getElementById(id),lab=el?.closest('label');if(!lab)return;
+    Array.from(lab.childNodes).forEach(n=>{if(n.nodeType===3)n.textContent=' '+text});
+  }
+  function ensureUI(){
+    const box=document.getElementById('invoiceFormChecks');if(!box)return;
+    relabel('invoiceDepositPaidCheck','PAID Box 1');
+    relabel('invoiceBalancePaidCheck','PAID Box 2');
+    relabel('invoiceProductViewedCheck','Customer viewed product before install');
+    if(!document.getElementById('invoiceBalanceDueBoxCheck')){
+      const grid=box.querySelector('div[style*="display:grid"]')||box;
+      const lab=document.createElement('label');lab.style.cssText='display:flex;gap:9px;align-items:center;margin:0;color:#25312b;font-size:13px';
+      lab.innerHTML='<input id="invoiceBalanceDueBoxCheck" type="checkbox" style="width:20px;height:20px"> BALANCE DUE Box';
+      grid.appendChild(lab);
+    }
+    const note=box.querySelector('.muted');if(note)note.textContent='The two PAID boxes and the separate BALANCE DUE box now match the original Deerfoot paper form. Payment Method remains single-choice.';
   }
   function syncUI(){
-    const j=active();if(!j)return;ensure(j);
-    const a=document.getElementById('invoiceDepositPaidCheck'),b=document.getElementById('invoiceBalancePaidCheck'),c=document.getElementById('invoiceProductViewedCheck');
-    if(a)a.checked=!!j.depositPaidConfirmed;if(b)b.checked=!!j.balancePaid;if(c)c.checked=!!j.productViewedBeforeInstall;
+    const j=active();if(!j)return;ensure(j);ensureUI();
+    const a=document.getElementById('invoiceDepositPaidCheck'),b=document.getElementById('invoiceBalancePaidCheck'),c=document.getElementById('invoiceProductViewedCheck'),d=document.getElementById('invoiceBalanceDueBoxCheck');
+    if(a)a.checked=!!j.paidBox1;if(b)b.checked=!!j.paidBox2;if(c)c.checked=!!j.productViewedBeforeInstall;if(d)d.checked=!!j.balanceDueBox;
   }
   function readUI(){
-    const j=active();if(!j)return;ensure(j);
-    const a=document.getElementById('invoiceDepositPaidCheck'),b=document.getElementById('invoiceBalancePaidCheck'),c=document.getElementById('invoiceProductViewedCheck');
-    if(a)j.depositPaidConfirmed=!!a.checked;if(b)j.balancePaid=!!b.checked;if(c)j.productViewedBeforeInstall=!!c.checked;
+    const j=active();if(!j)return;ensure(j);ensureUI();
+    const a=document.getElementById('invoiceDepositPaidCheck'),b=document.getElementById('invoiceBalancePaidCheck'),c=document.getElementById('invoiceProductViewedCheck'),d=document.getElementById('invoiceBalanceDueBoxCheck');
+    if(a)j.paidBox1=!!a.checked;if(b)j.paidBox2=!!b.checked;if(c)j.productViewedBeforeInstall=!!c.checked;if(d)j.balanceDueBox=!!d.checked;
+    j.depositPaidConfirmed=j.paidBox1;j.balancePaid=j.paidBox2;
   }
-  function square(el,checked){
-    if(!el)return;el.style.display='inline-flex';el.style.alignItems='center';el.style.justifyContent='center';el.style.fontWeight='700';el.style.fontSize='7pt';el.style.lineHeight='1';el.textContent=checked?'✓':'';
+  function square(el,checked,stacked){
+    if(!el)return;el.style.display='flex';el.style.alignItems='center';el.style.justifyContent='center';el.style.fontWeight='700';el.style.fontSize='7pt';el.style.lineHeight='1';
+    if(stacked){el.style.margin='1mm auto 0';el.style.width='3.6mm';el.style.height='3.6mm'}
+    el.textContent=checked?'✓':'';
+  }
+  function ensureBalanceBox(d){
+    const band=d.querySelector('.priceBand'),row=d.querySelector('.priceBand .balanceRow');if(!row)return null;
+    if(band)band.style.height='154.5mm';
+    row.style.display='grid';row.style.gridTemplateColumns='21.5mm 15mm 6.5mm';row.style.height='14mm';
+    let chk=row.querySelector('.balanceCheckCell');if(!chk){chk=d.createElement('div');chk.className='balanceCheckCell';chk.style.cssText='border-left:.32mm solid #62686b;display:flex;align-items:center;justify-content:center';row.appendChild(chk)}
+    let b=chk.querySelector('.balanceDueCheckBox');if(!b){b=d.createElement('span');b.className='balanceDueCheckBox';b.style.cssText='width:3.6mm;height:3.6mm;border:.28mm solid #62686b;background:#fff';chk.appendChild(b)}
+    return b;
   }
   function renderIntoInvoiceFrame(){
     const j=active(),frame=document.getElementById('invoiceFrame');if(!j||!frame)return;ensure(j);
     let d=null;try{d=frame.contentDocument||frame.contentWindow?.document}catch(e){return}if(!d)return;
-    const paid=Array.from(d.querySelectorAll('.priceBand .miniBox'));square(paid[0],!!j.depositPaidConfirmed);square(paid[1],!!j.balancePaid);
+    const paid=Array.from(d.querySelectorAll('.priceBand .miniBox'));square(paid[0],!!j.paidBox1,true);square(paid[1],!!j.paidBox2,true);
+    const bb=ensureBalanceBox(d);square(bb,!!j.balanceDueBox,false);
     d.querySelectorAll('.paycheck').forEach(el=>el.classList.toggle('on',String(el.dataset.pay||'').toLowerCase()===String(j.paymentMethod||'').toLowerCase()));
     const notice=d.querySelector('.noticeBlock');if(notice){
-      let box=notice.querySelector('.productViewedBox');
-      if(!box){
-        const walker=d.createTreeWalker(notice,NodeFilter.SHOW_TEXT);let node=null;
-        while(walker.nextNode()){if((walker.currentNode.textContent||'').includes('□')){node=walker.currentNode;break}}
-        if(node){node.textContent=node.textContent.replace('□','');box=d.createElement('span');box.className='productViewedBox';box.style.width='3.2mm';box.style.height='3.2mm';box.style.border='.22mm solid #62686b';box.style.verticalAlign='-0.55mm';box.style.marginLeft='.6mm';node.parentNode.insertBefore(box,node.nextSibling)}
-      }
-      square(box,!!j.productViewedBeforeInstall);
+      let pv=notice.querySelector('.productViewedBox');
+      if(!pv){const walker=d.createTreeWalker(notice,NodeFilter.SHOW_TEXT);let node=null;while(walker.nextNode()){if((walker.currentNode.textContent||'').includes('□')){node=walker.currentNode;break}}if(node){node.textContent=node.textContent.replace('□','');pv=d.createElement('span');pv.className='productViewedBox';pv.style.cssText='display:inline-flex;align-items:center;justify-content:center;width:3.2mm;height:3.2mm;border:.22mm solid #62686b;vertical-align:-.55mm;margin-left:.6mm;font-size:7pt;font-weight:700';node.parentNode.insertBefore(pv,node.nextSibling)}}
+      if(pv)pv.textContent=j.productViewedBeforeInstall?'✓':'';
     }
   }
   prepareInvoice=function(){
-    const j=active();if(!j)return;
-    if(document.getElementById('accounting')?.classList.contains('active'))readUI();
-    ensure(j);saveStore();
-    const c=calc(j),payload={...j,subtotal:c.subtotal,gst:c.gst,grandTotal:c.total,balanceDue:c.balance,invoiceDate:j.invoiceDate||j.date||new Date().toISOString().slice(0,10)};
-    localStorage.setItem(INV,JSON.stringify(payload));
-    const f=byId('invoiceFrame');if(f){f.onload=()=>{setTimeout(renderIntoInvoiceFrame,30)};f.src='deerfoot-invoice.html?job='+encodeURIComponent(j.jobNumber||'')+'&checks=022&t='+Date.now()}
+    const j=active();if(!j)return;if(document.getElementById('accounting')?.classList.contains('active'))readUI();ensure(j);saveStore();
+    const c=calc(j),payload={...j,paidBox1:j.paidBox1,paidBox2:j.paidBox2,balanceDueBox:j.balanceDueBox,subtotal:c.subtotal,gst:c.gst,grandTotal:c.total,balanceDue:c.balance,invoiceDate:j.invoiceDate||j.date||new Date().toISOString().slice(0,10)};
+    localStorage.setItem(INV,JSON.stringify(payload));const f=byId('invoiceFrame');if(f){f.onload=()=>setTimeout(renderIntoInvoiceFrame,30);f.src='deerfoot-invoice.html?job='+encodeURIComponent(j.jobNumber||'')+'&checks=023&t='+Date.now()}
   };
+  const baseLoad=loadAccounting;loadAccounting=function(){baseLoad();setTimeout(syncUI,0)};
+  const baseSave=saveAccounting;saveAccounting=function(){readUI();baseSave();saveStore()};
   window.addEventListener('load',()=>{setTimeout(syncUI,0);const f=document.getElementById('invoiceFrame');if(f)f.addEventListener('load',()=>setTimeout(renderIntoInvoiceFrame,30))});
 })();
