@@ -5,31 +5,31 @@ function apply(){const t=document.getElementById('template').value,c=document.ge
 ['template','copy','mode','ox','oy','scale'].forEach(id=>document.getElementById(id).addEventListener('input',apply));apply();
 (function(){const BRIDGE_KEY='runlu_flooring_active_invoice_v1';function money(n){return '$'+Number(n||0).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})}function fmtDate(s){if(!s)return '';const d=new Date(s+'T12:00:00');return Number.isNaN(d.getTime())?s:d.toLocaleDateString('en-CA',{year:'numeric',month:'short',day:'numeric'})}function applyBridge(){let data=null;try{data=JSON.parse(localStorage.getItem(BRIDGE_KEY)||'null')}catch(e){}if(!data)return;const q=s=>document.querySelector(s),qa=s=>Array.from(document.querySelectorAll(s));if(q('.soldData'))q('.soldData').innerHTML=[data.customerName,data.soldToAddress].filter(Boolean).join('<br>');if(q('.shipData'))q('.shipData').innerHTML=[data.shipToName||data.customerName,data.shipToAddress].filter(Boolean).join('<br>');if(q('.emailData'))q('.emailData').textContent=data.email||'';if(q('.cellData'))q('.cellData').textContent=data.cell||'';if(q('.phoneHData'))q('.phoneHData').textContent=data.phoneHome||'';if(q('.phoneWData'))q('.phoneWData').textContent=data.phoneWork||'';if(q('.pickData'))q('.pickData').textContent=data.pickup||'';if(q('.deliveryData'))q('.deliveryData').textContent=data.delivery||'';if(q('.requiredData'))q('.requiredData').textContent=fmtDate(data.dateRequired);if(q('.clerkData'))q('.clerkData').textContent=data.clerk||'';if(q('.dateData'))q('.dateData').textContent=fmtDate(data.invoiceDate||data.date);qa('.invoiceNoTop,.invoiceNoBottom').forEach(el=>el.textContent=data.invoiceNumber||data.jobNumber||'');if(q('.notesData'))q('.notesData').textContent=data.notes||'';const rows=q('#rows');if(rows){rows.innerHTML='';const items=Array.isArray(data.items)?data.items:[];for(let i=0;i<15;i++){const x=items[i]||{},tr=document.createElement('tr');[x.qty||'',x.size||'',x.style||'',x.colour||'',x.supplier||''].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.appendChild(td)});rows.appendChild(tr)}}qa('.priceRowData').forEach(el=>el.remove());const items=Array.isArray(data.items)?data.items:[];items.slice(0,15).forEach((x,i)=>{const top=108+i*5.02,p=document.createElement('div'),t=document.createElement('div');p.className='priceRowData price';p.style.top=top+'mm';p.textContent=x.price?money(x.price):'';t.className='priceRowData total';t.style.top=top+'mm';t.textContent=x.total?money(x.total):'';document.querySelector('.data').appendChild(p);document.querySelector('.data').appendChild(t)});const totals=qa('.totalData'),vals=[data.deliveryCharge,data.subtotal,data.gst,data.grandTotal,data.depositPaid,data.balanceDue];totals.forEach((el,i)=>{if(i<vals.length)el.textContent=money(vals[i])});qa('.paycheck').forEach(el=>el.classList.toggle('on',String(el.dataset.pay||'').toLowerCase()===String(data.paymentMethod||'').toLowerCase()));const tag=q('.copyTag');if(tag&&data.isDemo)tag.textContent='DEMO · '+tag.textContent;const brand=document.querySelector('.brand small');if(brand)brand.innerHTML='Deerfoot production-style invoice · active Job / Order <span class="invoiceBridgeBadge">'+(data.jobNumber||'Selected')+'</span>'}window.addEventListener('load',applyBridge);window.addEventListener('storage',e=>{if(e.key===BRIDGE_KEY)applyBridge()})})();
 
-/* V0.2.2 invoice checkbox renderer */
+/* V0.2.3 Deerfoot right-bottom form renderer */
 (function(){
  const BRIDGE_KEY='runlu_flooring_active_invoice_v1';
  function getData(){try{return JSON.parse(localStorage.getItem(BRIDGE_KEY)||'null')}catch(e){return null}}
- function styleSquare(el){if(!el)return;el.style.display='inline-flex';el.style.alignItems='center';el.style.justifyContent='center';el.style.fontWeight='700';el.style.fontSize='7pt';el.style.lineHeight='1'}
- function ensureProductViewedBox(){
-   const notice=document.querySelector('.noticeBlock');if(!notice)return null;
-   let box=notice.querySelector('.productViewedBox');if(box)return box;
-   const firstLine=notice.childNodes[0];
-   if(firstLine&&firstLine.nodeType===3){
-     const text=firstLine.textContent||'';const marker=' □';
-     if(text.includes(marker)){
-       const before=text.replace(marker,'');firstLine.textContent=before+' ';
-       box=document.createElement('span');box.className='productViewedBox';box.style.width='3.2mm';box.style.height='3.2mm';box.style.border='.22mm solid #62686b';box.style.verticalAlign='-0.55mm';notice.insertBefore(box,firstLine.nextSibling);styleSquare(box);return box;
-     }
-   }
-   box=document.createElement('span');box.className='productViewedBox';box.style.width='3.2mm';box.style.height='3.2mm';box.style.border='.22mm solid #62686b';box.style.marginLeft='1mm';styleSquare(box);notice.appendChild(box);return box;
+ function square(el,checked,stacked){if(!el)return;el.style.display='flex';el.style.alignItems='center';el.style.justifyContent='center';el.style.fontWeight='700';el.style.fontSize='7pt';el.style.lineHeight='1';el.style.background='#fff';if(stacked){el.style.width='3.6mm';el.style.height='3.6mm';el.style.margin='1mm auto 0'}el.textContent=checked?'✓':''}
+ function ensureProductViewedBox(){const notice=document.querySelector('.noticeBlock');if(!notice)return null;let box=notice.querySelector('.productViewedBox');if(box)return box;const walker=document.createTreeWalker(notice,NodeFilter.SHOW_TEXT);let node=null;while(walker.nextNode()){if((walker.currentNode.textContent||'').includes('□')){node=walker.currentNode;break}}if(node){node.textContent=node.textContent.replace('□','');box=document.createElement('span');box.className='productViewedBox';box.style.cssText='display:inline-flex;align-items:center;justify-content:center;width:3.2mm;height:3.2mm;border:.22mm solid #62686b;vertical-align:-.55mm;margin-left:.6mm;font-size:7pt;font-weight:700;background:#fff';node.parentNode.insertBefore(box,node.nextSibling);return box}return null}
+ function ensureBalanceBox(){
+   const band=document.querySelector('.priceBand'),row=document.querySelector('.priceBand .balanceRow');if(!row)return null;
+   if(band)band.style.height='154.5mm';
+   row.style.display='grid';row.style.gridTemplateColumns='21.5mm 15mm 6.5mm';row.style.height='14mm';
+   const lab=row.querySelector('.lab');if(lab)lab.style.borderRight='.32mm solid #62686b';
+   const amt=row.querySelector('.amt');if(amt){amt.style.padding='3.4mm 1mm 3.4mm 0';amt.style.textAlign='right'}
+   let chk=row.querySelector('.balanceCheckCell');if(!chk){chk=document.createElement('div');chk.className='balanceCheckCell';chk.style.cssText='border-left:.32mm solid #62686b;display:flex;align-items:center;justify-content:center';row.appendChild(chk)}
+   let box=chk.querySelector('.balanceDueCheckBox');if(!box){box=document.createElement('span');box.className='balanceDueCheckBox';box.style.cssText='display:flex;align-items:center;justify-content:center;width:3.6mm;height:3.6mm;border:.28mm solid #62686b;background:#fff;font-size:7pt;font-weight:700';chk.appendChild(box)}
+   return box;
  }
  function renderFormChecks(){
    const data=getData();if(!data)return;
-   const productBox=ensureProductViewedBox();if(productBox)productBox.textContent=data.productViewedBeforeInstall?'✓':'';
    const paidBoxes=Array.from(document.querySelectorAll('.priceBand .miniBox'));
-   paidBoxes.forEach(styleSquare);
-   if(paidBoxes[0])paidBoxes[0].textContent=data.depositPaidConfirmed?'✓':'';
-   if(paidBoxes[1])paidBoxes[1].textContent=data.balancePaid?'✓':'';
+   const p1=typeof data.paidBox1==='boolean'?data.paidBox1:!!data.depositPaidConfirmed;
+   const p2=typeof data.paidBox2==='boolean'?data.paidBox2:!!data.balancePaid;
+   paidBoxes.forEach((el,i)=>square(el,i===0?p1:p2,true));
+   const paidMini=document.querySelector('.priceBand .paidMini');if(paidMini){paidMini.style.width='5.5mm';paidMini.style.right='1.2mm';paidMini.style.textAlign='center'}
+   const balanceBox=ensureBalanceBox();square(balanceBox,!!data.balanceDueBox,false);
+   const productBox=ensureProductViewedBox();if(productBox)productBox.textContent=data.productViewedBeforeInstall?'✓':'';
  }
  window.addEventListener('load',renderFormChecks);
  window.addEventListener('storage',e=>{if(e.key===BRIDGE_KEY)renderFormChecks()});
