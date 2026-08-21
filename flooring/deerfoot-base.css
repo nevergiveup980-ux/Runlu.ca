@@ -1,0 +1,88 @@
+:root{
+  --ink:#2f3336;--line:#7a8084;--paper:#f6f5ed;--red:#b14e59;
+  --app:#eef1f4;--accent:#244f3f;--muted:#66727b;
+  --copy-bg:#fff;
+  --offset-x:0mm;--offset-y:0mm;--print-scale:1;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--app);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:#172027}
+.appbar{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid #dfe5e8;padding:12px 14px}
+.appbar .inner{max-width:1180px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-weight:800}.brand small{display:block;font-weight:500;color:var(--muted);font-size:11px;margin-top:2px}
+.controls{max-width:1180px;margin:14px auto;padding:0 14px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.control{background:#fff;border:1px solid #dfe5e8;border-radius:12px;padding:10px}
+.control label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800;margin-bottom:6px}
+select,input,button{font:inherit}select,input[type=number]{width:100%;border:1px solid #cfd7dc;border-radius:8px;padding:8px;background:#fff}
+button{border:0;border-radius:9px;padding:9px 12px;background:#e8edf0;font-weight:700;cursor:pointer}button.primary{background:var(--accent);color:#fff}
+.hint{max-width:1180px;margin:0 auto 12px;padding:0 14px;color:var(--muted);font-size:12px;line-height:1.45}
+.previewWrap{padding:0 14px 40px;overflow:auto}
+.previewStage{width:max-content;margin:auto;transform-origin:top left}
+.invoice{position:relative;width:215.9mm;height:279.4mm;background:var(--copy-bg);box-shadow:0 8px 28px rgba(0,0,0,.12);overflow:hidden;color:var(--ink);font-family:Arial,Helvetica,sans-serif;transform:translate(var(--offset-x),var(--offset-y)) scale(var(--print-scale));transform-origin:top left}
+.invoice::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(125,110,80,.025),transparent 14%,transparent 86%,rgba(125,110,80,.018));pointer-events:none}
+.static,.data{position:absolute;inset:0}
+.data{z-index:3}.static{z-index:2}
+.abs{position:absolute}
+.line{border-bottom:.22mm solid var(--line)}
+.box{border:.22mm solid var(--line)}
+.small{font-size:6.8pt}.tiny{font-size:5.7pt}.label{font-size:6.2pt;font-weight:700}.value{font-size:8.6pt;font-weight:500}.center{text-align:center}.right{text-align:right}.bold{font-weight:700}
+.companyInfo{left:10.5mm;top:13.2mm;width:60mm;line-height:1.12;font-size:7.4pt}
+.dcMark{left:91mm;top:10mm;width:34mm;text-align:center;font-family:Georgia,"Times New Roman",serif;font-size:33pt;line-height:.9;letter-spacing:-6px;font-weight:500}
+.companyName{left:69mm;top:27.2mm;width:75mm;text-align:center;font:12.4pt Georgia,"Times New Roman",serif}
+.dateLabel{left:170mm;top:8.7mm;width:25mm;text-align:center;font-size:7.6pt}
+.dateBox{left:160mm;top:13mm;width:41mm;height:10mm}
+.invoiceNoTop{left:165mm;top:26.5mm;width:34mm;text-align:center;font:15.5pt Georgia,"Times New Roman",serif;color:var(--red);letter-spacing:.6mm}
+.customerArea{left:10mm;top:42mm;width:191mm;height:38mm}
+.soldLabel{left:10mm;top:45mm;width:5mm;line-height:4.7mm;text-align:center;font-size:6.1pt}
+.shipLabel{left:109mm;top:44mm;width:5mm;line-height:4.6mm;text-align:center;font-size:6.1pt}
+.customerLine{height:7.2mm}.soldLines{left:17mm;top:44mm;width:86mm}.shipLines{left:116mm;top:43mm;width:84mm}
+.soldData{left:19mm;top:43.6mm;width:82mm;line-height:7.2mm}.shipData{left:118mm;top:42.7mm;width:80mm;line-height:7.2mm}
+.emailLabel{left:10mm;top:81.2mm}.emailLine{left:21mm;top:80.5mm;width:107mm}.cellLabel{left:134mm;top:81.2mm}.cellLine{left:141mm;top:80.5mm;width:58mm}
+.phoneLabel{left:10mm;top:88.4mm}.phoneHLine{left:27mm;top:87.7mm;width:50mm}.phoneWLabel{left:80mm;top:88.4mm}.phoneWLine{left:88mm;top:87.7mm;width:42mm}
+.pickLabel{left:10mm;top:96mm}.pickLine{left:24mm;top:95.3mm;width:48mm}.deliveryLabel{left:74mm;top:96mm}.deliveryLine{left:90mm;top:95.3mm;width:38mm}.requiredLabel{left:131mm;top:96mm}.requiredLine{left:154mm;top:95.3mm;width:26mm}.clerkLabel{left:181mm;top:96mm}.clerkLine{left:192mm;top:95.3mm;width:9mm}
+.emailData{left:22mm;top:78.8mm;width:104mm}.cellData{left:142mm;top:78.8mm;width:55mm}.phoneHData{left:28mm;top:86mm;width:47mm}.phoneWData{left:89mm;top:86mm;width:39mm}.pickData{left:25mm;top:93.4mm;width:46mm}.deliveryData{left:91mm;top:93.4mm;width:36mm}.requiredData{left:155mm;top:93.4mm;width:24mm}.clerkData{left:192mm;top:93.4mm;width:9mm}
+.items{left:10mm;top:100mm;width:148mm;border-collapse:collapse;table-layout:fixed;font-size:6.3pt}
+.items th,.items td{border:.34mm solid #5b6266;height:5.02mm;padding:.8mm 1mm;vertical-align:middle;overflow:hidden}
+.items th{height:7mm;font-weight:500;text-align:center;background:#f2f3f1}
+.items col.c1{width:19mm}.items col.c2{width:21mm}.items col.c3{width:46mm}.items col.c4{width:26mm}.items col.c5{width:36mm}
+.items td:nth-child(5){text-align:left}
+.leftGrid{left:10mm;top:107mm;width:148mm;height:67.1mm;pointer-events:none;background-image:repeating-linear-gradient(to bottom,rgba(91,98,102,.95) 0 .28mm,transparent .28mm 5.02mm),linear-gradient(to right,transparent 19mm,rgba(91,98,102,.95) 19mm 19.34mm,transparent 19.34mm 40mm,rgba(91,98,102,.95) 40mm 40.34mm,transparent 40.34mm 86mm,rgba(91,98,102,.95) 86mm 86.34mm,transparent 86.34mm 112mm,rgba(91,98,102,.95) 112mm 112.34mm,transparent 112.34mm)}
+.priceBand{left:158mm;top:100.8mm;width:43mm;height:143.2mm;border:.32mm solid var(--line);background:repeating-linear-gradient(90deg,var(--legacy-shade) 0 10.5mm,var(--legacy-shade2) 10.5mm 10.85mm)}
+.priceBand .head{display:grid;grid-template-columns:21.5mm 21.5mm;height:7mm;border-bottom:.32mm solid var(--line);font-size:6.25pt;background:#f2f3f1}
+.priceBand .head div{display:flex;align-items:center;justify-content:center;border-right:.32mm solid var(--line)}
+.priceBand .head div:last-child{border-right:0}
+.priceBand .grid{position:relative;height:74.5mm;border-bottom:.32mm solid var(--line)}
+.priceBand .grid::before{content:"";position:absolute;left:21.5mm;top:0;bottom:0;border-left:.32mm solid var(--line)}
+.priceBand .grid .h{position:absolute;left:0;right:0;border-top:.28mm solid var(--line)}
+.priceBand .totals{position:absolute;left:0;right:0;top:81.5mm;bottom:0;font-size:7pt}
+.priceBand .totalRow{display:grid;grid-template-columns:21.5mm 1fr;min-height:10.5mm;border-bottom:.32mm solid var(--line)}
+.priceBand .totalRow .lab{border-right:.32mm solid var(--line);padding:4mm 2mm 2mm}.priceBand .totalRow .amt{padding:4mm 2mm 2mm;text-align:right;font-weight:600}
+.priceBand .totalRow.total .lab,.priceBand .totalRow.total .amt{font-weight:700}
+.priceBand .depositRow{height:17mm;border-bottom:.32mm solid var(--line);position:relative;padding:2.5mm 2mm;font-size:7pt}.priceBand .paidMini{position:absolute;right:1.5mm;top:1mm;font-size:4.8pt;text-align:center}.priceBand .miniBox{width:3.6mm;height:3.6mm;border:.28mm solid var(--line);margin:1mm auto 0}
+.priceBand .balanceRow{height:14mm;display:grid;grid-template-columns:21.5mm 1fr}.priceBand .balanceRow .lab{border-right:.32mm solid var(--line);padding:3.4mm 2mm;font-weight:700}.priceBand .balanceRow .amt{padding:3.4mm 2mm;text-align:right;font-weight:700}
+.notesLabel{left:10mm;top:176.2mm}.notesBox{left:10mm;top:177.5mm;width:148mm;height:18mm;border-top:.22mm solid var(--line);border-bottom:.22mm solid var(--line)}
+.notesBox::before,.notesBox::after{content:"";position:absolute;left:0;right:0;border-top:.22mm solid var(--line)}.notesBox::before{top:6mm}.notesBox::after{top:12mm}
+.notesData{left:12mm;top:179mm;width:144mm;font-size:7.5pt;line-height:5.5mm}
+.noticeBlock{left:10mm;top:197mm;width:148mm;height:15mm;border-bottom:.22mm solid var(--line);padding-top:2mm;font-size:6.2pt;font-weight:700;line-height:5.2mm}
+.policyBox{left:10mm;top:212mm;width:126mm;height:36mm;border-bottom:.22mm solid var(--line);font-size:5.5pt;line-height:1.1;padding-top:2mm}
+.policyRow{display:grid;grid-template-columns:18mm 1fr;margin-bottom:1.2mm}.policyRow b{font-size:5.9pt}
+.paymentBox{left:136mm;top:212mm;width:20mm;height:36mm;border:.22mm solid var(--line);font-size:5.6pt}
+.payrow{height:6mm;border-bottom:.22mm solid var(--line);padding:1.8mm 1mm}.payrow:last-child{border-bottom:0}
+.paycheck{float:right;width:3.8mm;height:3.8mm;border:.22mm solid var(--line);margin-top:-.2mm;position:relative}.paycheck.on::after{content:"✓";position:absolute;font-size:7pt;left:.4mm;top:-1.2mm;font-weight:700}
+.totalsBox{left:156mm;top:176.5mm;width:45mm;height:72.5mm;border:.22mm solid var(--line);font-size:7pt}
+.totalRow{display:grid;grid-template-columns:23mm 1fr;min-height:10.5mm;border-bottom:.22mm solid var(--line)}.totalRow .lab{border-right:.22mm solid var(--line);padding:4mm 2mm 2mm}.totalRow .amt{padding:4mm 2mm 2mm;text-align:right;font-weight:600}.totalRow.total .lab,.totalRow.total .amt{font-weight:700}
+.depositRow{height:17mm;border-bottom:.22mm solid var(--line);position:relative;padding:2.5mm 2mm;font-size:7pt}.paidMini{position:absolute;right:1.5mm;top:1mm;font-size:4.8pt;text-align:center}.miniBox{width:3.6mm;height:3.6mm;border:.22mm solid var(--line);margin:1mm auto 0}
+.balanceRow{height:14mm;display:grid;grid-template-columns:23mm 1fr}.balanceRow .lab{border-right:.22mm solid var(--line);padding:3.4mm 2mm;font-weight:700}.balanceRow .amt{padding:3.4mm 2mm;text-align:right;font-weight:700}
+.terms{left:10mm;top:250mm;width:146mm;font-size:5.5pt;line-height:1.12}.terms b{font-size:6pt}
+.acceptTitle{left:10mm;top:260.4mm;font-size:7.4pt;font-weight:700}.acceptText{left:10mm;top:264mm;width:145mm;font-size:5.9pt}
+.authLine{left:10mm;top:270mm;width:106mm;font-size:6pt}.authRule{display:inline-block;width:72mm;border-bottom:.22mm solid var(--line)}.authDate{left:118mm;top:270mm;width:38mm;font-size:6pt}.dateRule{display:inline-block;width:24mm;border-bottom:.22mm solid var(--line)}
+.recvLine{left:10mm;top:275mm;width:108mm;font-size:5.8pt}.recvRule{display:inline-block;width:59mm;border-bottom:.22mm solid var(--line)}.sigLine{left:120mm;top:275mm;width:47mm;font-size:5.8pt}.sigRule{display:inline-block;width:30mm;border-bottom:.22mm solid var(--line)}.recvDate{left:169mm;top:275mm;width:32mm;font-size:5.8pt}.recvDateRule{display:inline-block;width:20mm;border-bottom:.22mm solid var(--line)}
+.footerNo{left:10mm;top:281mm;color:var(--red);font:13.5pt Georgia,"Times New Roman",serif;letter-spacing:.4mm}.thankyou{left:72mm;top:280.7mm;width:112mm;text-align:center;font:italic 8.6pt Arial,sans-serif;line-height:1.05}
+.footerNo{top:272.3mm}.thankyou{top:271.6mm}.recvLine,.sigLine,.recvDate{top:267mm}.authLine,.authDate{top:262.5mm}.acceptTitle{top:252mm}.acceptText{top:255.2mm}.terms{top:243.5mm}.totalsBox{height:66.5mm}.policyBox,.paymentBox{height:31mm}.payrow{height:5.16mm}
+.dateData{left:162mm;top:16mm;width:37mm;text-align:center}.invoiceNoBottom{left:10mm;top:272.2mm;width:30mm;color:var(--red);font:13.5pt Georgia,"Times New Roman",serif;letter-spacing:.4mm}
+.totalData{font-size:7.2pt}
+.copyTag{display:none;left:164mm;top:35mm;width:36mm;text-align:center;font-size:5.8pt;letter-spacing:.08em;font-weight:700}
+.invoice.copy-customer{--copy-bg:#fff}.invoice.copy-warehouse{--copy-bg:#fff9d8}.invoice.copy-accounting{--copy-bg:#ffe7ec}
+.invoice.show-copy .copyTag{display:block}
+.invoice.overlay .static{visibility:hidden}.invoice.overlay{background:#fff;box-shadow:none}.invoice.overlay::before{display:none}.invoice.overlay .copyTag{display:none}
+.universalPlaceholder{width:215.9mm;height:279.4mm;background:#fff;box-shadow:0 8px 28px rgba(0,0,0,.12);display:none;align-items:center;justify-content:center;padding:25mm;text-align:center;color:#3e4b52}
+.universalPlaceholder h2{font-weight:700}.universalPlaceholder p{color:#6b777e;line-height:1.6}
