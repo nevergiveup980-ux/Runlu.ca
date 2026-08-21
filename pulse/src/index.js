@@ -160,7 +160,17 @@ async function fetchAnalytics(env, days) {
   const host = env.RUNLU_HOST || "runlu.ca";
   const homeCountry = env.RUNLU_HOME_COUNTRY || "CA";
   const end = new Date();
-  const start = new Date(end.getTime() - days * 24 * 60 * 60 * 1000);
+  const start = new Date(
+    Date.UTC(
+      end.getUTCFullYear(),
+      end.getUTCMonth(),
+      end.getUTCDate() - (days - 1),
+      0,
+      0,
+      0,
+      0
+    )
+  );
 
   const response = await fetch(GRAPHQL_ENDPOINT, {
     method: "POST",
