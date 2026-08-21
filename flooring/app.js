@@ -38,3 +38,39 @@ function saveAccounting(){const j=active();if(!j)return;j.deliveryCharge=Number(
 function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function attr(v){return esc(v).replace(/"/g,'&quot;')}
 window.addEventListener('load',load);
+
+/* V0.2.2 Deerfoot invoice form checks */
+(function(){
+  const CHECK_IDS=['invoiceDepositPaidCheck','invoiceBalancePaidCheck','invoiceProductViewedCheck'];
+  function normalizeChecks(j){
+    if(!j)return;
+    if(typeof j.depositPaidConfirmed!=='boolean')j.depositPaidConfirmed=Number(j.depositPaid||0)>0;
+    if(typeof j.balancePaid!=='boolean'){const c=calc(j);j.balancePaid=c.total>0&&c.balance<=0}
+    if(typeof j.productViewedBeforeInstall!=='boolean')j.productViewedBeforeInstall=false;
+  }
+  function injectCheckControls(){
+    const section=document.getElementById('accounting');if(!section||document.getElementById('invoiceFormChecks'))return;
+    const card=section.querySelector('.card');if(!card)return;
+    const actions=card.querySelector('.actions');
+    const box=document.createElement('div');box.id='invoiceFormChecks';box.className='notice';box.style.marginTop='12px';
+    box.innerHTML='<b style="display:block;margin-bottom:8px;color:#173d30">Invoice Form Checks</b><div style="display:grid;gap:9px"><label style="display:flex;gap:9px;align-items:center;margin:0;color:#25312b;font-size:13px"><input id="invoiceDepositPaidCheck" type="checkbox" style="width:20px;height:20px"> Mark first PAID box ✓</label><label style="display:flex;gap:9px;align-items:center;margin:0;color:#25312b;font-size:13px"><input id="invoiceBalancePaidCheck" type="checkbox" style="width:20px;height:20px"> Mark second PAID box ✓</label><label style="display:flex;gap:9px;align-items:center;margin:0;color:#25312b;font-size:13px"><input id="invoiceProductViewedCheck" type="checkbox" style="width:20px;height:20px"> Customer viewed product before install ✓</label></div><div class="muted" style="margin-top:8px">Payment Method above remains single-choice and automatically checks FINANCE / CASH / CHEQUE / VISA / MASTER CARD / INTERAC on the printed Deerfoot invoice.</div>';
+    if(actions)card.insertBefore(box,actions);else card.appendChild(box);
+  }
+  function loadCheckControls(){
+    injectCheckControls();const j=active();if(!j)return;normalizeChecks(j);
+    const a=document.getElementById(CHECK_IDS[0]),b=document.getElementById(CHECK_IDS[1]),c=document.getElementById(CHECK_IDS[2]);
+    if(a)a.checked=!!j.depositPaidConfirmed;if(b)b.checked=!!j.balancePaid;if(c)c.checked=!!j.productViewedBeforeInstall;
+  }
+  function saveCheckControls(){
+    const j=active();if(!j)return;normalizeChecks(j);
+    const a=document.getElementById(CHECK_IDS[0]),b=document.getElementById(CHECK_IDS[1]),c=document.getElementById(CHECK_IDS[2]);
+    if(a)j.depositPaidConfirmed=!!a.checked;if(b)j.balancePaid=!!b.checked;if(c)j.productViewedBeforeInstall=!!c.checked;
+  }
+  const oldLoadAccounting=loadAccounting;
+  loadAccounting=function(){oldLoadAccounting();loadCheckControls()};
+  const oldSaveAccounting=saveAccounting;
+  saveAccounting=function(){saveCheckControls();oldSaveAccounting()};
+  const oldPrepareInvoice=prepareInvoice;
+  prepareInvoice=function(){const j=active();if(j){saveCheckControls();normalizeChecks(j);saveStore()}oldPrepareInvoice()};
+  window.addEventListener('load',()=>{injectCheckControls();const j=active();if(j){normalizeChecks(j);saveStore()}});
+})();
