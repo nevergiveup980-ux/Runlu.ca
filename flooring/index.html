@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173d30">
+<title>RUNLU Deerfoot Flooring OS V0.2</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header><div class="top"><div class="brand"><b>RUNLU Deerfoot Flooring OS</b><span>Deerfoot-first internal build · one Job / Order across departments</span></div><div class="pill">V0.2 Integration Build</div></div></header>
+<nav id="nav"></nav>
+<main>
+<section id="command" class="page active">
+  <div class="hero"><h1>Deerfoot Command Center</h1><p>Sales → Order → Purchasing → Warehouse → Installation → Deerfoot Invoice → Payment.</p><span class="demo">Demo records are clearly labeled. Create a new Job for real use.</span></div>
+  <div class="stats">
+    <div class="stat"><b id="stOpen">0</b><span>Open Jobs</span></div>
+    <div class="stat"><b id="stMaterial">0</b><span>Need Material</span></div>
+    <div class="stat"><b id="stInstall">0</b><span>Ready / Install</span></div>
+    <div class="stat"><b id="stBalance">$0</b><span>Balance Due</span></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><h3>Today's attention</h3><div id="attention"></div></div>
+    <div class="card"><h3>Active Job / Order</h3><div id="activeSummary" class="muted">Select or create a Job.</div><div class="actions"><button class="action primary" onclick="go('jobs')">Open Job</button><button class="action blue" onclick="prepareInvoice();go('invoice')">Deerfoot Invoice</button><button class="action" onclick="go('warehouse')">Warehouse</button></div></div>
+  </div>
+  <div class="grid3">
+    <button class="module" onclick="go('jobs')"><span class="ico">🧾</span><strong>Jobs & Orders</strong><small>Customer, required date, items, status and shared record.</small></button>
+    <button class="module" onclick="go('purchasing')"><span class="ico">📦</span><strong>Purchasing / PO</strong><small>Supplier, PO, material status and warehouse handoff.</small></button>
+    <button class="module" onclick="go('warehouse')"><span class="ico">🏭</span><strong>Warehouse OS</strong><small>Live warehouse subsystem embedded inside Flooring OS.</small></button>
+    <button class="module" onclick="prepareInvoice();go('invoice')"><span class="ico">📄</span><strong>Deerfoot Invoice</strong><small>Final Deerfoot Legacy invoice, including three-copy / overlay printing.</small></button>
+    <button class="module" onclick="go('install')"><span class="ico">🛠️</span><strong>Installation</strong><small>Installer, install date and completion status.</small></button>
+    <button class="module" onclick="go('accounting')"><span class="ico">💵</span><strong>Accounting</strong><small>Deposit, GST, balance and payment method.</small></button>
+  </div>
+</section>
+
+<section id="jobs" class="page">
+  <div class="card"><div class="statusLine"><h2>Jobs & Orders</h2><button class="action primary" onclick="newJob()">+ New Job</button></div><div id="jobList"></div></div>
+  <div class="card"><h3 id="jobEditorTitle">Job / Order</h3>
+    <div class="formgrid">
+      <div><label>Job / Order #</label><input id="jobNumber"></div>
+      <div><label>Invoice #</label><input id="invoiceNumber"></div>
+      <div><label>Customer / Sold To</label><input id="customerName"></div>
+      <div><label>Clerk</label><input id="clerk"></div>
+      <div class="full"><label>Sold To Address</label><input id="soldToAddress"></div>
+      <div><label>Ship To Name</label><input id="shipToName"></div>
+      <div><label>Ship To Address</label><input id="shipToAddress"></div>
+      <div><label>Email</label><input id="email" type="email"></div>
+      <div><label>Cell</label><input id="cell"></div>
+      <div><label>Date Required</label><input id="dateRequired" type="date"></div>
+      <div><label>Status</label><select id="status"><option>Draft</option><option>Confirmed</option><option>Procurement</option><option>Ready</option><option>In Progress</option><option>Completed</option><option>Closed</option><option>On Hold</option><option>Cancelled</option></select></div>
+      <div><label>Pickup</label><input id="pickup"></div>
+      <div><label>Delivery</label><input id="delivery"></div>
+      <div><label>Customer PO / Reference</label><input id="customerPO"></div>
+      <div><label>Supplier PO</label><input id="supplierPO"></div>
+      <div class="full"><label>Notes</label><textarea id="notes"></textarea></div>
+    </div>
+    <h3 style="margin-top:17px">Items</h3><div id="itemsEditor"></div>
+    <div class="actions"><button class="action" onclick="addItem()">+ Item</button><button class="action primary" onclick="saveJob()">Save Job</button><button class="action blue" onclick="prepareInvoice();go('invoice')">Generate Deerfoot Invoice</button></div>
+  </div>
+</section>
+
+<section id="purchasing" class="page">
+  <div class="card"><h2>Purchasing / PO</h2><div id="poSummary" class="muted"></div></div>
+  <div class="card"><h3>Material Handoff</h3><div class="notice">This view keeps the Job / Order as the spine. Supplier PO and item lines stay attached to the selected Job before warehouse execution.</div><div id="poItems"></div><div class="actions"><button class="action primary" onclick="go('warehouse')">Send to Warehouse View</button></div></div>
+</section>
+
+<section id="warehouse" class="page">
+  <div class="card"><div class="statusLine"><div><h2>Warehouse OS</h2><div class="muted"><span class="dot"></span>Existing RUNLU Warehouse OS retained as the warehouse subsystem.</div></div><button class="action blue" onclick="openWarehouse()">Open Full Screen</button></div>
+    <div id="handoff" class="handoff" style="margin-top:10px"></div>
+    <div class="actions"><button class="action" onclick="copyHandoff()">Copy Job Handoff</button><button class="action primary" onclick="refreshWarehouse()">Refresh Warehouse</button></div>
+  </div>
+  <div class="frameWrap"><iframe id="warehouseFrame" title="RUNLU Warehouse OS"></iframe></div>
+</section>
+
+<section id="invoice" class="page">
+  <div class="card"><div class="statusLine"><div><h2>Deerfoot Invoice</h2><div class="muted">Bound directly to the selected Job / Order record.</div></div><button class="action" onclick="prepareInvoice()">Refresh From Job</button></div></div>
+  <div class="frameWrap" style="height:78vh"><iframe id="invoiceFrame" src="deerfoot-invoice.html" title="Deerfoot Invoice"></iframe></div>
+</section>
+
+<section id="install" class="page">
+  <div class="card"><h2>Installation</h2><div class="formgrid"><div><label>Installer</label><input id="installer"></div><div><label>Install Date</label><input id="installDate" type="date"></div><div><label>Install Status</label><select id="installStatus"><option>Not Scheduled</option><option>Scheduled</option><option>In Progress</option><option>Completed</option><option>Callback / Issue</option></select></div><div><label>Site / Install Notes</label><input id="installNotes"></div></div><div class="actions"><button class="action primary" onclick="saveInstall()">Save Installation</button></div></div>
+</section>
+
+<section id="accounting" class="page">
+  <div class="card"><h2>Accounting / Closeout</h2><div class="summary"><div><small>Subtotal</small><b id="aSub">$0.00</b></div><div><small>GST</small><b id="aGst">$0.00</b></div><div><small>Total</small><b id="aTotal">$0.00</b></div><div><small>Balance</small><b id="aBalance">$0.00</b></div></div>
+    <div class="formgrid" style="margin-top:10px"><div><label>Delivery Charge</label><input id="deliveryCharge" type="number" step="0.01"></div><div><label>Deposit Paid</label><input id="depositPaid" type="number" step="0.01"></div><div><label>Payment Method</label><select id="paymentMethod"><option value="">—</option><option value="finance">Finance</option><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="visa">Visa</option><option value="mastercard">Master Card</option><option value="interac">Interac</option></select></div></div>
+    <div class="actions"><button class="action primary" onclick="saveAccounting()">Save Accounting</button><button class="action blue" onclick="prepareInvoice();go('invoice')">Update Invoice</button></div>
+  </div>
+</section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
