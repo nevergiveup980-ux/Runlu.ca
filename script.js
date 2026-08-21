@@ -3,6 +3,39 @@ const mobileMenu=document.getElementById('mobileMenu');
 const year=document.getElementById('year');
 if(year)year.textContent=new Date().getFullYear();
 
+function applyInjectedLanguage(root){
+  const lang=document.documentElement.dataset.runluLanguage||'en';
+  root.querySelectorAll('[data-en]').forEach(el=>{
+    const value=el.dataset[lang]||el.dataset.en;
+    if(value)el.textContent=value;
+  });
+}
+function addGoodsLinks(){
+  document.querySelectorAll('.desktop-nav,.mobile-menu').forEach(nav=>{
+    if(nav.querySelector('a[href="goods.html"]'))return;
+    const link=document.createElement('a');
+    link.href='goods.html';
+    link.dataset.en='Goods';
+    link.dataset.zh='润庐物件';
+    link.dataset.fr='Objets';
+    link.dataset.es='Objetos';
+    link.textContent='Goods';
+    const studio=[...nav.querySelectorAll('a')].find(a=>a.getAttribute('href')==='#studio'||a.getAttribute('href')==='index.html#studio');
+    if(studio)studio.insertAdjacentElement('afterend',link);else nav.appendChild(link);
+    applyInjectedLanguage(nav);
+  });
+  const grid=document.querySelector('#current .current-grid');
+  if(grid&&!grid.querySelector('a[href="goods.html"]')){
+    const item=document.createElement('a');
+    item.className='current-item';
+    item.href='goods.html';
+    item.innerHTML='<span>RUNLU GOODS</span><b data-en="First objects · small batch" data-zh="首批物件 · 小批量" data-fr="Premiers objets · petite série" data-es="Primeros objetos · serie pequeña">First objects · small batch</b>';
+    grid.appendChild(item);
+    applyInjectedLanguage(grid);
+  }
+}
+addGoodsLinks();
+
 if(menuButton&&mobileMenu){
   menuButton.addEventListener('click',()=>{
     const open=mobileMenu.classList.toggle('open');
