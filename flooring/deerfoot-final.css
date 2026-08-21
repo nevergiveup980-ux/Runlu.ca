@@ -28,12 +28,15 @@
 .terms{top:244.9mm;width:148mm;font-size:5.35pt;line-height:1.08}.terms b{font-size:5.8pt}
 .acceptTitle{top:254.4mm;font-size:7.2pt}.acceptText{top:257.4mm;width:148mm;font-size:5.75pt}
 .authLine,.authDate{top:263.1mm}.recvLine,.sigLine,.recvDate{top:268mm}.invoiceNoBottom{top:273.1mm}.thankyou{top:272mm;font-size:8.2pt}
+/* Overlay means variable ink only on preprinted 3-part stock. */
 .invoice.overlay .items{background:transparent!important;border-color:transparent!important}
 .invoice.overlay .items th{visibility:hidden!important;border-color:transparent!important;background:transparent!important}
 .invoice.overlay .items td{border-color:transparent!important;background:transparent!important}
 .invoice.overlay .invoiceNoTop,.invoice.overlay .invoiceNoBottom{visibility:hidden!important}
 .invoice.overlay .notesData{visibility:visible!important}
 @media print{.copyTag{display:none!important}.tractorStrip span{background:#2f3336}}
+
+/* V0.3 fine alignment from physical-form / phone comparison */
 :root{--line:#62686b;--legacy-shade:#e9ebea;--legacy-shade2:#dfe2e1}
 .tractorStrip{left:8.5mm;top:4.3mm;width:191mm;height:6.6mm;padding:0 .8mm}
 .tractorStrip span{width:3.55mm;height:3.55mm}
@@ -55,16 +58,25 @@
 .authLine,.authDate{top:262.8mm}.recvLine,.sigLine,.recvDate{top:267.7mm}
 .invoiceNoBottom{top:272.8mm}.thankyou{top:271.8mm;font-size:8.35pt}
 .invoice:not(.show-copy) .copyTag{display:none!important}
+
+/* V0.4 baseline alignment — values should sit on, not float above or be cut by, the form rules */
 .soldLines{top:43.7mm}.shipLines{top:42.7mm}
 .soldData{top:45.6mm}.shipData{top:44.7mm}
 .emailData,.cellData,.phoneHData,.phoneWData,.pickData,.deliveryData,.requiredData,.clerkData{line-height:1}
 .emailData,.cellData{top:78.65mm}
 .phoneHData,.phoneWData{top:85.85mm}
 .pickData,.deliveryData,.requiredData,.clerkData{top:92.95mm}
+
+/* V0.8 — complete the original form's continuous left outer frame. */
 .formLeftSpine{left:10mm;top:100mm;height:144mm;width:0;border-left:.34mm solid #5b6266;pointer-events:none;z-index:4}
+
+/* V0.9 final footer centering */
 .thankyou{left:48mm !important;width:120mm !important;top:271.8mm !important;text-align:center !important;font-size:8.35pt !important;line-height:1.05 !important}
+
 @media(max-width:800px){.controls{grid-template-columns:1fr 1fr}.appbar .inner{align-items:flex-start;flex-direction:column}.invoice,.universalPlaceholder{transform-origin:top left}.previewStage{transform:scale(.46);margin-bottom:-150mm}.previewWrap{overflow:hidden}}
 @media print{html,body{background:#fff;width:215.9mm;height:279.4mm;overflow:hidden}.appbar,.controls,.hint{display:none!important}.previewWrap{padding:0;overflow:visible}.previewStage{margin:0;transform:none!important}.invoice{box-shadow:none!important;break-after:avoid;page-break-after:avoid}.universalPlaceholder{box-shadow:none}@page{size:Letter portrait;margin:0}}
+
+/* V0.6 structural correction */
 .notesLabel{top:174.8mm}.notesBox{top:176mm;height:21mm;width:148mm}.notesBox::before{top:7mm}.notesBox::after{top:14mm}.notesData{top:177.5mm;width:144mm}
 .noticeBlock{top:197.2mm;width:148mm}
 .policyBox{top:212.6mm;width:126mm;height:31.2mm}
@@ -72,6 +84,8 @@
 .payrow{height:5.2mm}
 .totalsBox{display:none}
 .items td{border-color:#5f666a}.items th{border-color:#5f666a}
+
+/* V0.5 contact-row baseline correction */
 .emailLabel,.cellLabel{top:82.0mm}
 .emailLine,.cellLine{top:84.15mm;border-bottom:.24mm solid var(--line)}
 .emailLine{left:22mm;width:108mm}.cellLine{left:142mm;width:59mm}.emailData,.cellData{top:80.55mm;line-height:3.4mm}
@@ -82,5 +96,22 @@
 .pickLine,.deliveryLine,.requiredLine,.clerkLine{top:98.75mm;border-bottom:.24mm solid var(--line)}
 .pickLine{left:25mm;width:47mm}.deliveryLine{left:91mm;width:37mm}.requiredLine{left:155mm;width:25mm}.clerkLine{left:192mm;width:9mm}.pickData,.deliveryData,.requiredData,.clerkData{top:95.15mm;line-height:3.4mm}
 .phoneHLine,.phoneWLine{min-height:.25mm}
+
+/* RUNLU Deerfoot Flooring OS data bridge */
 .invoiceBridgeBadge{display:inline-block;margin-left:8px;padding:3px 7px;border-radius:999px;background:#e8f3ed;color:#244f3f;font-size:10px;font-weight:800}
 .priceRowData{position:absolute;z-index:5;font-size:7.1pt;line-height:4.5mm;text-align:right;white-space:nowrap}.priceRowData.price{left:159mm;width:19mm}.priceRowData.total{left:180mm;width:19mm;font-weight:600}
+
+/* V0.2.1 iOS AirPrint one-page / light-paper fix */
+html{color-scheme:light only}
+@media print{
+  html,body,.previewWrap,.previewStage{background:#fff!important;color:#172027!important}
+  html,body{width:215.9mm!important;height:auto!important;min-height:0!important;overflow:visible!important}
+  .previewWrap{padding:0!important;margin:0!important;overflow:visible!important}
+  .previewStage{width:205.1mm!important;height:265.5mm!important;margin:0 auto!important;transform:none!important;overflow:visible!important}
+  .invoice{background:#fff!important;color:#2f3336!important;box-shadow:none!important;zoom:.95;transform:none!important;transform-origin:top left!important;break-inside:avoid!important;page-break-inside:avoid!important;break-after:avoid!important;page-break-after:avoid!important}
+  .invoice::before{display:none!important}
+  .invoice.copy-customer{--copy-bg:#fff!important}.invoice.copy-warehouse{--copy-bg:#fff9d8!important}.invoice.copy-accounting{--copy-bg:#ffe7ec!important}
+  .static,.data{background:transparent!important}
+  .items{background:#fff!important}
+  @page{size:Letter portrait;margin:0!important}
+}
