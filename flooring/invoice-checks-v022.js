@@ -71,3 +71,24 @@
   const baseSave=saveAccounting;saveAccounting=function(){readUI();baseSave();saveStore()};
   window.addEventListener('load',()=>{setTimeout(syncUI,0);const f=document.getElementById('invoiceFrame');if(f)f.addEventListener('load',()=>setTimeout(renderIntoInvoiceFrame,30))});
 })();
+
+/* V0.3.0 — Deerfoot Estimate / Assessment integration */
+(function(){
+  try{if(Array.isArray(NAV)&&!NAV.some(x=>x[0]==='estimate'))NAV.splice(1,0,['estimate','Estimate'])}catch(e){}
+  function injectEstimate(){
+    const main=document.querySelector('main');if(!main)return;
+    if(!document.getElementById('estimate')){
+      const section=document.createElement('section');section.id='estimate';section.className='page';section.innerHTML='<div class="card"><div class="statusLine"><div><h2>Estimate / Assessment</h2><div class="muted">Deerfoot V0.3 Visual Final · assessment can create a Draft Job / Order.</div></div><button class="action blue" onclick="window.open(\'estimate-assessment.html\',\'_blank\')">Open Full Screen</button></div></div><div class="frameWrap" style="height:78vh"><iframe id="estimateFrame" src="estimate-assessment.html?v=030" title="Deerfoot Estimate Assessment"></iframe></div>';
+      const jobsSection=document.getElementById('jobs');main.insertBefore(section,jobsSection||main.firstChild);
+    }
+    const grid=document.querySelector('#command .grid3');if(grid&&!document.getElementById('estimateModule')){
+      const btn=document.createElement('button');btn.id='estimateModule';btn.className='module';btn.onclick=()=>go('estimate');btn.innerHTML='<span class="ico">📋</span><strong>Estimate / Assessment</strong><small>Field assessment, measurement, labour detail and one-tap Draft Job creation.</small>';grid.insertBefore(btn,grid.firstChild);
+    }
+  }
+  injectEstimate();
+  window.addEventListener('load',injectEstimate);
+  window.addEventListener('message',e=>{
+    if(e.origin!==location.origin||e.data?.type!=='runlu-estimate-job-created')return;
+    try{jobs=JSON.parse(localStorage.getItem(STORE)||'[]');activeId=localStorage.getItem(ACTIVE)||e.data.jobId;renderAll();go('jobs')}catch(err){}
+  });
+})();
