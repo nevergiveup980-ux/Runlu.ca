@@ -9,6 +9,8 @@
   const CLOUD_ENABLED='runlu_flooring_po_cloud_enabled_v1';
   const PO_STORE='runlu_deerfoot_supplier_orders_v1';
   const PO_SETTINGS='runlu_deerfoot_po_settings_v1';
+  const BACKUP_PO='runlu_deerfoot_supplier_orders_local_backup_v1';
+  const BACKUP_SETTINGS='runlu_deerfoot_po_settings_local_backup_v1';
   let sb=null;
   let session=null;
   let cloudEditingId=null;
@@ -19,8 +21,9 @@
   function isUUID(v){return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(v||''))}
   function cloudEnabled(){return localStorage.getItem(CLOUD_ENABLED)==='1'}
   function activeCloud(){return !!(cloudEnabled()&&session)}
-  function html(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
   function today(){return new Date().toISOString().slice(0,10)}
+  function backupLocal(){if(localStorage.getItem(BACKUP_PO)==null)localStorage.setItem(BACKUP_PO,localStorage.getItem(PO_STORE)??'__NULL__');if(localStorage.getItem(BACKUP_SETTINGS)==null)localStorage.setItem(BACKUP_SETTINGS,localStorage.getItem(PO_SETTINGS)??'__NULL__')}
+  function restoreLocal(){const p=localStorage.getItem(BACKUP_PO),s=localStorage.getItem(BACKUP_SETTINGS);if(p==='__NULL__'||p==null)localStorage.removeItem(PO_STORE);else localStorage.setItem(PO_STORE,p);if(s==='__NULL__'||s==null)localStorage.removeItem(PO_SETTINGS);else localStorage.setItem(PO_SETTINGS,s);localStorage.removeItem(BACKUP_PO);localStorage.removeItem(BACKUP_SETTINGS)}
 
   function injectCloudPanel(){
     const section=by('purchasing');
@@ -70,17 +73,28 @@
     session=(await sb.auth.getSession()).data?.session||null;renderCloudPanel();alert('Signed in. Central Training is still OFF until you enable it.');
   }
 
-  window.poCloudSignOut=async function(){if(sb)await sb.auth.signOut();session=null;localStorage.removeItem(CLOUD_ENABLED);renderCloudPanel();alert('Signed out. PO has returned to local device mode.')}
+  window.poCloudSignOut=async function(){
+    const wasCentral=cloudEnabled();
+    if(wasCentral)restoreLocal();
+    localStorage.removeItem(CLOUD_ENABLED);
+    if(sb)await sb.auth.signOut();
+    session=null;
+    alert('Signed out. PO has returned to local device mode.');
+    location.reload();
+  }
 
   window.poCloudEnable=async function(){
     if(!session){alert('Sign in first.');return}
-    if(!confirm('Enable CENTRAL TRAINING PO on this device? The local PO rehearsal cache will be replaced by the shared training ledger from Supabase.'))return;
+    if(!confirm('Enable CENTRAL TRAINING PO on this device? The local PO rehearsal cache will be temporarily replaced by the shared training ledger from Supabase.'))return;
+    backupLocal();
     localStorage.setItem(CLOUD_ENABLED,'1');
     await syncCloudToLocal(true);
   }
   window.poCloudDisable=function(){
     if(!confirm('Return this device to LOCAL PO mode? Central training records will remain in Supabase.'))return;
-    localStorage.removeItem(CLOUD_ENABLED);renderCloudPanel();location.reload();
+    restoreLocal();
+    localStorage.removeItem(CLOUD_ENABLED);
+    location.reload();
   }
   window.poCloudSyncNow=async function(){if(!activeCloud()){alert('Central Training is not active.');return}await syncCloudToLocal(true)}
 
@@ -116,7 +130,7 @@
     return {p_environment:ENV,p_id:isUUID(cloudEditingId)?cloudEditingId:null,p_job_id:j?.id||'',p_job_number:j?.jobNumber||'',p_customer_name:j?.customerName||'',p_supplier:(by('poSupplier')?.value||'').trim(),p_sales_rep:(by('poSalesRep')?.value||'').trim(),p_order_date:by('poOrderDate')?.value||today(),p_expected_date:by('poExpectedDate')?.value||null,p_notes:(by('poNotes')?.value||'').trim(),p_items:j?.items||[]};
   }
 
-  async function rpc(name,args){const {data,error}=await sb.rpc(name,args);if(error)throw error;return data}
+  async function rpc(name,args){const {data,error}=await sb.rpc(name,args);if(error)throw error;return Array.isArray(data)&&data.length===1?data[0]:data}
 
   function installOverrides(){
     if(overridesInstalled)return;
