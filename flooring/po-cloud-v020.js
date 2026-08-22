@@ -1,4 +1,4 @@
-/* RUNLU Deerfoot Flooring OS · Central PO Training V0.2
+/* RUNLU Deerfoot Flooring OS · Central PO Training V0.2.1
    Authenticated Supabase-backed training mode. Production PO mode remains disabled.
    When Central Training is enabled, PO numbering and the PO ledger are shared across devices.
    The database RPC allocates numbers transactionally so simultaneous Issue actions cannot receive the same number. */
@@ -16,6 +16,7 @@
   let cloudEditingId=null;
   let originals={};
   let overridesInstalled=false;
+  let booted=false;
 
   function by(id){return document.getElementById(id)}
   function isUUID(v){return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(v||''))}
@@ -56,7 +57,7 @@
   }
 
   async function initSupabase(){
-    if(!window.supabase?.createClient)return;
+    if(!window.supabase?.createClient){renderCloudPanel();return}
     sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,storageKey:'runlu-flooring-auth-v1',autoRefreshToken:true,detectSessionInUrl:true}});
     const res=await sb.auth.getSession();session=res.data?.session||null;
     sb.auth.onAuthStateChange((_event,s)=>{session=s;setTimeout(()=>{renderCloudPanel();installOverrides()},0)});
@@ -182,5 +183,11 @@
   }
 
   const observer=new MutationObserver(()=>{injectCloudPanel();installOverrides()});
-  window.addEventListener('load',async()=>{injectCloudPanel();observer.observe(document.body,{childList:true,subtree:true});await initSupabase()});
+  async function boot(){
+    if(booted)return;booted=true;
+    injectCloudPanel();
+    observer.observe(document.body,{childList:true,subtree:true});
+    await initSupabase();
+  }
+  if(document.readyState==='complete')boot();else window.addEventListener('load',boot,{once:true});
 })();
