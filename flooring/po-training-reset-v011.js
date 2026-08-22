@@ -50,3 +50,23 @@
   const observer=new MutationObserver(()=>injectResetUI());
   window.addEventListener('load',()=>{injectResetUI();observer.observe(document.body,{childList:true,subtree:true});setTimeout(injectResetUI,100)});
 })();
+
+/* Central PO Training V0.2 loader.
+   Kept separate so local rehearsal mode remains intact if the cloud library is unavailable. */
+(function loadCentralPOTraining(){
+  function loadCloudClient(){
+    if(document.getElementById('runluPOCloudV020'))return;
+    const s=document.createElement('script');
+    s.id='runluPOCloudV020';
+    s.src='po-cloud-v020.js?v=020';
+    document.head.appendChild(s);
+  }
+  if(window.supabase?.createClient){loadCloudClient();return}
+  if(document.getElementById('runluSupabaseJs'))return;
+  const lib=document.createElement('script');
+  lib.id='runluSupabaseJs';
+  lib.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+  lib.onload=loadCloudClient;
+  lib.onerror=()=>console.warn('RUNLU Central PO Training: Supabase client library could not be loaded; local rehearsal mode remains available.');
+  document.head.appendChild(lib);
+})();
