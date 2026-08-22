@@ -51,14 +51,14 @@
   window.addEventListener('load',()=>{injectResetUI();observer.observe(document.body,{childList:true,subtree:true});setTimeout(injectResetUI,100)});
 })();
 
-/* Central PO Training V0.2 loader.
+/* Central PO Training V0.2.1 loader.
    Kept separate so local rehearsal mode remains intact if the cloud library is unavailable. */
 (function loadCentralPOTraining(){
   function loadCloudClient(){
     if(document.getElementById('runluPOCloudV020'))return;
     const s=document.createElement('script');
     s.id='runluPOCloudV020';
-    s.src='po-cloud-v020.js?v=020';
+    s.src='po-cloud-v020.js?v=021';
     document.head.appendChild(s);
   }
   if(window.supabase?.createClient){loadCloudClient();return}
