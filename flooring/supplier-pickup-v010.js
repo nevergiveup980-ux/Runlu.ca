@@ -10,16 +10,14 @@
   const PO_STORE='runlu_deerfoot_supplier_orders_v1';
   const META_STORE='runlu_supplier_task_meta_v1';
   const PENDING='runlu_supplier_task_pending_issue_v1';
-  let sb=null,session=null,tasks=[],notifications=[],wrapped=false;
+  let sb=null,session=null,tasks=[],notifications=[];
 
   function by(id){return document.getElementById(id)}
-  function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[m]))}
+  function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
   function centralActive(){return !!(session&&localStorage.getItem(CLOUD_ENABLED)==='1')}
   function activeJob(){try{return typeof active==='function'?active():null}catch(_){return null}}
-  function normalizeRpc(data){return Array.isArray(data)&&data.length===1?data[0]:data}
   function monthKey(d){if(!d)return 'No Date';const x=new Date(d+'T12:00:00');return Number.isNaN(x.getTime())?'No Date':x.toLocaleDateString('en-CA',{month:'long',year:'numeric'})}
   function dateLabel(d){if(!d)return 'No requested date';const x=new Date(d+'T12:00:00');return Number.isNaN(x.getTime())?d:x.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'})}
-  function today(){return new Date().toISOString().slice(0,10)}
   function taskStatusClass(s){return s==='Ready'||s==='Completed'?'done':s==='Delayed'?'cancelled':s==='In Progress'||s==='Picked Up'?'manual':''}
 
   function injectPage(){
@@ -46,10 +44,10 @@
 
   function injectPOFields(){
     const grid=document.querySelector('#purchasing .poEditorGrid');if(!grid||by('poFulfillmentMethod'))return;
-    const wrap=document.createElement('div');wrap.innerHTML='<label>Fulfillment</label><select id="poFulfillmentMethod"><option value="Pickup">Pickup from Supplier</option><option value="Supplier Delivery">Supplier Delivery</option></select>';
+    const fulfillment=document.createElement('div');fulfillment.innerHTML='<label>Fulfillment</label><select id="poFulfillmentMethod"><option value="Pickup">Pickup from Supplier</option><option value="Supplier Delivery">Supplier Delivery</option></select>';
     const date=document.createElement('div');date.innerHTML='<label>Pickup / Receiving Date</label><input id="poSupplierRequestedDate" type="date">';
     const type=document.createElement('div');type.innerHTML='<label>Purchase Type</label><select id="poPurchaseType"><option value="Job-specific">Job-specific</option><option value="Stock">Stock Inventory</option></select>';
-    grid.appendChild(wrap.firstElementChild?wrap:wrap);grid.appendChild(date);grid.appendChild(type);
+    grid.appendChild(fulfillment);grid.appendChild(date);grid.appendChild(type);
     ['poFulfillmentMethod','poSupplierRequestedDate','poPurchaseType'].forEach(id=>by(id)?.addEventListener('change',saveDraftMeta));
     loadDraftMeta();
   }
@@ -67,7 +65,7 @@
   }
 
   function renderConnectionState(){
-    const el=by('pickupSchedule');if(!el)return;
+    const el=by('pickupSchedule');if(!el)return true;
     if(!session){el.innerHTML='<div class="poEmpty">Sign in under <b>Central PO Backend · Training</b> first. Local PO rehearsal remains available, but Warehouse sharing needs the central backend.</div>';return true}
     if(!centralActive()){el.innerHTML='<div class="poEmpty">You are signed in, but Central Training is OFF on this device. Enable Central Training in PO / Supplier Orders to activate the shared Pickup chain.</div>';return true}
     return false;
@@ -76,17 +74,17 @@
   window.renderSupplierTasks=function(){
     if(renderConnectionState())return;
     const f=by('pickupFilter')?.value||'';const xs=tasks.filter(t=>!f||t.status===f).sort((a,b)=>String(a.requested_date||'9999').localeCompare(String(b.requested_date||'9999'))||Number(a.po_number)-Number(b.po_number));
-    by('pickupScheduled').textContent=tasks.filter(x=>x.status==='Scheduled').length;
-    by('pickupProgress').textContent=tasks.filter(x=>['In Progress','Picked Up'].includes(x.status)).length;
-    by('pickupReady').textContent=tasks.filter(x=>x.status==='Ready').length;
-    by('pickupDelayed').textContent=tasks.filter(x=>x.status==='Delayed').length;
+    if(by('pickupScheduled'))by('pickupScheduled').textContent=tasks.filter(x=>x.status==='Scheduled').length;
+    if(by('pickupProgress'))by('pickupProgress').textContent=tasks.filter(x=>['In Progress','Picked Up'].includes(x.status)).length;
+    if(by('pickupReady'))by('pickupReady').textContent=tasks.filter(x=>x.status==='Ready').length;
+    if(by('pickupDelayed'))by('pickupDelayed').textContent=tasks.filter(x=>x.status==='Delayed').length;
     const el=by('pickupSchedule');if(!xs.length){el.innerHTML='<div class="poEmpty">No shared supplier tasks yet. Issue a Central PO with a Pickup / Receiving Date to create one automatically.</div>';return}
     const months={};xs.forEach(t=>{const m=monthKey(t.requested_date);(months[m]||(months[m]=[])).push(t)});
     el.innerHTML=Object.entries(months).map(([m,rows])=>`<div style="margin:16px 0 7px;font-weight:850;color:#173d30">${esc(m)}</div>${rows.map(t=>`<div class="poRow"><div><span class="poNumber">#${esc(t.po_number)} <span class="poBadge ${taskStatusClass(t.status)}">${esc(t.status)}</span></span><small>${esc(dateLabel(t.requested_date))} · ${esc(t.fulfillment_method)} · ${esc(t.purchase_type)}</small></div><div><b>${esc(t.supplier)}</b><small>${esc(t.job_number||'Stock / no Job')} · ${esc(t.customer_name||'')}</small></div><div><b>${esc(t.sales_rep||'Sales rep —')}</b><small>${(t.items||[]).map(x=>esc((x.qty||'')+' '+(x.style||'Item'))).join(' · ')||'No item detail'}</small></div><div><small>${t.delay_reason?'Delay: '+esc(t.delay_reason):(t.warehouse_notes?esc(t.warehouse_notes):'Warehouse pending')}</small></div></div>`).join('')}`).join('');
-  }
+  };
 
   function renderNotifications(){
-    const el=by('pickupNotifications');if(!el)return;const unread=notifications.filter(n=>!n.read_at);by('pickupUnread').textContent=unread.length+' unread';
+    const el=by('pickupNotifications');if(!el)return;const unread=notifications.filter(n=>!n.read_at);if(by('pickupUnread'))by('pickupUnread').textContent=unread.length+' unread';
     el.innerHTML=notifications.length?notifications.slice(0,20).map(n=>`<div class="attention" style="align-items:flex-start"><div><b>${n.read_at?'':'● '}${esc(n.sales_rep||'Sales')} · PO #${esc(n.po_number||'')}</b><span>${esc(n.message)}</span><small class="muted">${new Date(n.created_at).toLocaleString()}</small></div>${n.read_at?'':'<button class="action" onclick="markSupplierNoticeRead(\''+n.id+'\')">Read</button>'}</div>`).join(''):'<div class="muted">No Warehouse updates yet.</div>';
   }
 
@@ -117,11 +115,11 @@
   window.refreshSupplierTasks=async function(show){await refresh();if(show)alert('Supplier Pickup / Receiving refreshed.')}
 
   window.markSupplierNoticeRead=async function(id){if(!sb)return;const {error}=await sb.from('flooring_notifications').update({read_at:new Date().toISOString()}).eq('id',id).eq('environment',ENV);if(error){alert(error.message);return}await refresh()}
-  window.saveSupplierAccounting=async function(id){if(!sb||!centralActive()){alert('Central Training is not active.');return}const {data,error}=await sb.rpc('flooring_accounting_update_supplier_task',{p_environment:ENV,p_id:id,p_supplier_invoice_number:by('acctInv-'+id)?.value||'',p_accounting_status:by('acctStatus-'+id)?.value||'Pending',p_accounting_note:by('acctNote-'+id)?.value||''});if(error){alert('Accounting save failed: '+error.message);return}await refresh();alert('Supplier receiving / Accounting review saved.')}
+  window.saveSupplierAccounting=async function(id){if(!sb||!centralActive()){alert('Central Training is not active.');return}const {error}=await sb.rpc('flooring_accounting_update_supplier_task',{p_environment:ENV,p_id:id,p_supplier_invoice_number:by('acctInv-'+id)?.value||'',p_accounting_status:by('acctStatus-'+id)?.value||'Pending',p_accounting_note:by('acctNote-'+id)?.value||''});if(error){alert('Accounting save failed: '+error.message);return}await refresh();alert('Supplier receiving / Accounting review saved.')}
 
   async function createTaskFromPO(po,meta){
     if(!sb||!session||!centralActive()||!po?.poNumber)return;
-    const {error}=await sb.rpc('flooring_create_supplier_task',{p_environment:ENV,p_po_id:/^[0-9a-f-]{36}$/i.test(po.id||'')?po.id:null,p_po_number:Number(po.poNumber),p_job_id:po.jobId||'',p_job_number:po.jobNumber||'',p_customer_name:po.customerName||'',p_supplier:po.supplier||'',p_sales_rep:po.salesRep||'',p_fulfillment_method:meta.fulfillment||'Pickup',p_requested_date:meta.requestedDate||null,p_purchase_type:meta.purchaseType||'Job-specific',p_items:po.items||[]});
+    const {error}=await sb.rpc('flooring_create_supplier_task',{p_environment:ENV,p_po_id:/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(po.id||'')?po.id:null,p_po_number:Number(po.poNumber),p_job_id:po.jobId||'',p_job_number:po.jobNumber||'',p_customer_name:po.customerName||'',p_supplier:po.supplier||'',p_sales_rep:po.salesRep||'',p_fulfillment_method:meta.fulfillment||'Pickup',p_requested_date:meta.requestedDate||null,p_purchase_type:meta.purchaseType||'Job-specific',p_items:po.items||[]});
     if(error)throw error;
   }
 
@@ -145,15 +143,17 @@
 
   function fillMetaFromTask(){const num=(by('poNumber')?.value||'').trim();if(!num){loadDraftMeta();return}const t=tasks.find(x=>String(x.po_number)===num);if(!t)return;if(by('poFulfillmentMethod'))by('poFulfillmentMethod').value=t.fulfillment_method||'Pickup';if(by('poSupplierRequestedDate'))by('poSupplierRequestedDate').value=t.requested_date||'';if(by('poPurchaseType'))by('poPurchaseType').value=t.purchase_type||'Job-specific'}
 
+  function wrapCurrent(name,factory){
+    const current=window[name];if(typeof current!=='function'||current.__runluSupplierPickupWrapped)return;
+    const next=factory(current);next.__runluSupplierPickupWrapped=true;window[name]=next;
+  }
   function wrapActions(){
-    if(wrapped||typeof window.poCloudEnable!=='function'||typeof window.issueDigitalPO!=='function'||typeof window.recordManualPO!=='function')return;
-    wrapped=true;
-    const issue=window.issueDigitalPO,manual=window.recordManualPO,newDraft=window.newPODraft,edit=window.editPO,oldGo=window.go;
-    window.issueDigitalPO=function(){if(!capturePending(false))return;return issue.apply(this,arguments)};
-    window.recordManualPO=function(){if(!capturePending(true))return;return manual.apply(this,arguments)};
-    window.newPODraft=function(){const r=newDraft.apply(this,arguments);setTimeout(()=>{loadDraftMeta()},0);return r};
-    window.editPO=function(){const r=edit.apply(this,arguments);setTimeout(fillMetaFromTask,30);return r};
-    window.go=function(id){const r=oldGo.apply(this,arguments);if(id==='pickup'||id==='accounting')setTimeout(refresh,30);if(id==='purchasing')setTimeout(()=>{injectPOFields();loadDraftMeta()},30);return r};
+    if(typeof window.poCloudEnable!=='function')return;
+    wrapCurrent('issueDigitalPO',old=>function(){if(!capturePending(false))return;return old.apply(this,arguments)});
+    wrapCurrent('recordManualPO',old=>function(){if(!capturePending(true))return;return old.apply(this,arguments)});
+    wrapCurrent('newPODraft',old=>function(){const r=old.apply(this,arguments);setTimeout(loadDraftMeta,0);return r});
+    wrapCurrent('editPO',old=>function(){const r=old.apply(this,arguments);setTimeout(fillMetaFromTask,30);return r});
+    wrapCurrent('go',old=>function(id){const r=old.apply(this,arguments);if(id==='pickup'||id==='accounting')setTimeout(refresh,30);if(id==='purchasing')setTimeout(()=>{injectPOFields();loadDraftMeta()},30);return r});
   }
 
   async function initSupabase(){
@@ -164,6 +164,11 @@
     await refresh();
   }
 
-  function boot(){injectPage();installNav();injectAccounting();const observer=new MutationObserver(()=>{injectPOFields();wrapActions()});observer.observe(document.body,{childList:true,subtree:true});setTimeout(()=>{injectPOFields();wrapActions()},200);initSupabase()}
+  function boot(){
+    injectPage();installNav();injectAccounting();
+    const observer=new MutationObserver(()=>{injectPOFields();wrapActions()});observer.observe(document.body,{childList:true,subtree:true});
+    setInterval(()=>{injectPOFields();wrapActions()},500);
+    initSupabase();
+  }
   if(document.readyState==='loading')window.addEventListener('DOMContentLoaded',boot);else boot();
 })();
