@@ -49,7 +49,57 @@ function addBluePoloGoodsItem(){
     img.alt=img.dataset[key]||img.dataset.altEn;
   }
 }
+function correctMadeGoodsStatuses(){
+  const list=document.querySelector('.goods-list');
+  if(!list)return;
+  const findItem=title=>[...list.querySelectorAll('.goods-item')].find(item=>item.querySelector('h2')?.textContent.trim()===title);
+  const setText=(el,values)=>{
+    if(!el)return;
+    Object.entries(values).forEach(([lang,value])=>{el.dataset[lang]=value});
+  };
+  const setAlt=(img,values)=>{
+    if(!img)return;
+    Object.entries(values).forEach(([lang,value])=>{img.dataset['alt'+lang.charAt(0).toUpperCase()+lang.slice(1)]=value});
+    const lang=document.documentElement.dataset.runluLanguage||'en';
+    const key='alt'+lang.charAt(0).toUpperCase()+lang.slice(1);
+    img.alt=img.dataset[key]||img.dataset.altEn;
+  };
+
+  const crown=findItem('RUNLU Crown Cap');
+  if(crown){
+    setText(crown.querySelector('.goods-index'),{en:'03 · MADE OBJECT',zh:'03 · 已制作物件',fr:'03 · OBJET RÉALISÉ',es:'03 · OBJETO REALIZADO'});
+    setText(crown.querySelector('.goods-tagline'),{en:'A finished RUNLU cap from a bolder, jewel-toned visual direction.',zh:'一顶真正制作完成的 RUNLU 帽子，来自更大胆、更偏珠宝色彩的视觉方向。',fr:'Une casquette RUNLU réellement fabriquée, issue d’une direction visuelle plus audacieuse aux tons précieux.',es:'Una gorra RUNLU realmente fabricada, nacida de una dirección visual más audaz y de tonos joya.'});
+    setText(crown.querySelector('.goods-description'),{en:'A deep navy cap that was actually made, built around a gold crown, a blue jewel, and the RUNLU wordmark. It records an alternate RUNLU visual direction as a real physical object, not merely a design study.',zh:'一顶已经真实制作完成的深海军蓝帽子，以金色皇冠、蓝色宝石和 RUNLU 字样为核心。它记录了 RUNLU 的另一条视觉方向——不是停留在设计图上的研究，而是一件真正存在的实物。',fr:'Une casquette bleu marine réellement fabriquée, construite autour d’une couronne dorée, d’une pierre bleue et du mot-symbole RUNLU. Elle conserve une direction visuelle alternative de RUNLU sous la forme d’un véritable objet, et non d’une simple étude de design.',es:'Una gorra azul marino realmente fabricada, construida alrededor de una corona dorada, una gema azul y el logotipo RUNLU. Conserva una dirección visual alternativa de RUNLU como un objeto físico real, no solo como un estudio de diseño.'});
+    const meta=crown.querySelector('.goods-meta');
+    if(meta)meta.innerHTML='<span data-en="Made" data-zh="已制作" data-fr="Réalisé" data-es="Realizado">Made</span><span data-en="Alternate direction" data-zh="另一视觉方向" data-fr="Direction alternative" data-es="Dirección alternativa">Alternate direction</span><span data-en="Not currently for sale" data-zh="目前不对外销售" data-fr="Pas en vente actuellement" data-es="No está a la venta actualmente">Not currently for sale</span>';
+    setAlt(crown.querySelector('img'),{en:'Real deep navy RUNLU Crown Cap with gold crown and blue jewel',zh:'真实制作的深海军蓝 RUNLU 皇冠帽，配金色皇冠和蓝色宝石',fr:'Casquette Crown RUNLU bleu marine réellement fabriquée, avec couronne dorée et pierre bleue',es:'Gorra Crown RUNLU azul marino realmente fabricada, con corona dorada y gema azul'});
+    applyInjectedLanguage(crown);
+  }
+
+  const belt=findItem('RUNLU Crest Belt');
+  if(belt){
+    setText(belt.querySelector('.goods-index'),{en:'04 · MADE OBJECT',zh:'04 · 已制作物件',fr:'04 · OBJET RÉALISÉ',es:'04 · OBJETO REALIZADO'});
+    setText(belt.querySelector('.goods-tagline'),{en:'A real RUNLU accessory carrying the identity into everyday use.',zh:'一件真正做出来的 RUNLU 配件，把品牌语言带进日常使用。',fr:'Un véritable accessoire RUNLU qui porte son identité dans l’usage quotidien.',es:'Un accesorio RUNLU real que lleva su identidad al uso cotidiano.'});
+    setText(belt.querySelector('.goods-description'),{en:'A black belt that was actually made, centered on an ornate crest buckle with dragon-and-lion heraldic elements and the RUNLU name. It is a finished physical accessory, preserved as part of the RUNLU Goods story.',zh:'一条已经真实制作完成的黑色皮带，核心是一枚带有龙、狮纹章元素与 RUNLU 字样的装饰性腰带扣。它是一件真正完成的实体配件，作为 RUNLU Goods 故事的一部分被保留下来。',fr:'Une ceinture noire réellement fabriquée, centrée sur une boucle héraldique ornée avec des éléments de dragon et de lion ainsi que le nom RUNLU. C’est un accessoire physique fini, conservé comme partie de l’histoire de RUNLU Goods.',es:'Un cinturón negro realmente fabricado, centrado en una hebilla heráldica ornamentada con elementos de dragón y león y el nombre RUNLU. Es un accesorio físico terminado, conservado como parte de la historia de RUNLU Goods.'});
+    const meta=belt.querySelector('.goods-meta');
+    if(meta)meta.innerHTML='<span data-en="Made" data-zh="已制作" data-fr="Réalisé" data-es="Realizado">Made</span><span data-en="Accessory" data-zh="配件" data-fr="Accessoire" data-es="Accesorio">Accessory</span><span data-en="Not currently for sale" data-zh="目前不对外销售" data-fr="Pas en vente actuellement" data-es="No está a la venta actualmente">Not currently for sale</span>';
+    setAlt(belt.querySelector('img'),{en:'Real black RUNLU Crest Belt with ornate heraldic buckle',zh:'真实制作的黑色 RUNLU 徽章皮带，配装饰性纹章腰带扣',fr:'Ceinture RUNLU noire réellement fabriquée avec boucle héraldique ornée',es:'Cinturón RUNLU negro realmente fabricado con hebilla heráldica ornamentada'});
+    applyInjectedLanguage(belt);
+  }
+
+  const dragon=findItem('RUNLU Dragon & Phoenix Cap');
+  if(dragon){
+    setText(dragon.querySelector('.goods-index'),{en:'05 · ARCHIVE PIECE',zh:'05 · 实物档案',fr:'05 · PIÈCE D’ARCHIVE',es:'05 · PIEZA DE ARCHIVO'});
+    setText(dragon.querySelector('.goods-tagline'),{en:'A real early RUNLU object, kept in the story rather than redesigned away.',zh:'一件真实制作过的早期 RUNLU 物件——保留在故事里，而不是把它重新设计掉。',fr:'Un véritable objet RUNLU des débuts, conservé dans l’histoire plutôt que redessiné.',es:'Un objeto RUNLU real de los primeros años, conservado en la historia en lugar de rediseñarlo.'});
+    setText(dragon.querySelector('.goods-description'),{en:'A black cap that was actually made during an earlier RUNLU visual period, embroidered in gold with a dragon-and-phoenix composition, a green center, and the line “RISE FROM WITHIN.” Its style differs from today’s quieter Goods language, which is exactly why this real object belongs in the archive.',zh:'一顶在 RUNLU 较早视觉阶段真正制作完成的黑色帽子，以金色刺绣呈现龙凤构图、绿色中心，并带有 “RISE FROM WITHIN” 字样。它和今天更安静的 Goods 语言并不相同，而这恰恰是这件真实实物值得被保留进档案的原因。',fr:'Une casquette noire réellement fabriquée durant une période visuelle plus ancienne de RUNLU, brodée d’or avec une composition dragon-phénix, un centre vert et la phrase « RISE FROM WITHIN ». Son style diffère du langage plus calme d’aujourd’hui — précisément pourquoi cet objet réel mérite sa place dans l’archive.',es:'Una gorra negra realmente fabricada durante una etapa visual anterior de RUNLU, bordada en dorado con una composición de dragón y fénix, centro verde y la frase “RISE FROM WITHIN”. Su estilo difiere del lenguaje más sereno de hoy, y precisamente por eso este objeto real pertenece al archivo.'});
+    const meta=dragon.querySelector('.goods-meta');
+    if(meta)meta.innerHTML='<span data-en="Made" data-zh="已制作" data-fr="Réalisé" data-es="Realizado">Made</span><span data-en="Archive piece" data-zh="档案作品" data-fr="Pièce d’archive" data-es="Pieza de archivo">Archive piece</span><span data-en="Early RUNLU" data-zh="早期 RUNLU" data-fr="RUNLU des débuts" data-es="RUNLU temprano">Early RUNLU</span>';
+    setAlt(dragon.querySelector('img'),{en:'Real early black RUNLU Dragon & Phoenix Cap with gold embroidery and green center',zh:'真实制作的早期黑色 RUNLU 龙凤帽，金色刺绣与绿色中心',fr:'Véritable ancienne casquette RUNLU noire dragon-phénix, broderie dorée et centre vert',es:'Gorra RUNLU negra real de los primeros años, de dragón y fénix, con bordado dorado y centro verde'});
+    applyInjectedLanguage(dragon);
+  }
+}
 addGoodsLinks();
+correctMadeGoodsStatuses();
 addBluePoloGoodsItem();
 
 if(menuButton&&mobileMenu){
