@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RUNLU Flooring Module Isolation Test</title>
+<link rel="stylesheet" href="app.css?v=module-test-1">
+<link rel="stylesheet" href="showroom-v010.css?v=010">
+<link rel="stylesheet" href="po-supplier-orders-v010.css?v=010">
+<link rel="stylesheet" href="sales-v010.css?v=010">
+<link rel="stylesheet" href="sales-handover-v012.css?v=012">
+<style>
+#probe{max-width:1100px;margin:12px auto;padding:14px;background:#fff;border:2px solid #173d30;border-radius:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.5}.groupBtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.groupBtns button{padding:9px 11px;border:0;border-radius:9px;background:#e8eeeb;font-weight:800}.good{color:#17633e;font-weight:800}.bad{color:#a42c38;font-weight:800}.pending{color:#9a6100;font-weight:800}.log{white-space:pre-wrap;background:#f7f9f8;border:1px solid #dce4df;border-radius:8px;padding:8px;margin-top:10px;max-height:170px;overflow:auto}
+</style>
+</head><body>
+<header><div class="top"><div class="brand"><b>RUNLU Flooring Module Isolation Test</b><span>Base core is loaded first. Add-ons are restored in controlled groups.</span></div><div class="pill">MODULE TEST</div></div></header>
+<div id="probe">
+<div>Base core: <span id="baseState" class="pending">checking…</span></div>
+<div>Last attempted group: <span id="lastAttempt">none</span></div>
+<div>Last completed group: <span id="lastGood">none</span></div>
+<div>Last JS error: <span id="lastError">none</span></div>
+<div class="groupBtns">
+<button data-group="ops">1 · Ops add-ons</button>
+<button data-group="sales">2 · Sales</button>
+<button data-group="handover">3 · Sales Handover</button>
+<button data-group="pricing">4 · Pricing Sync</button>
+<button data-group="claims">5 · Service / Claims</button>
+<button data-group="drill">6 · Sales Drill-down</button>
+<button data-group="settings">7 · System Settings</button>
+<button data-group="shell">8 · Version + Runtime</button>
+</div>
+<div class="log" id="log">Ready.</div>
+</div>
+<nav id="nav"></nav>
+<main>
+<section id="command" class="page active"><div class="hero"><h1>Module Isolation Command Test</h1><p>Load one numbered group at a time. Wait about 2 seconds after each group.</p></div><div class="stats"><div class="stat"><b id="stOpen">0</b><span>Open Jobs</span></div><div class="stat"><b id="stMaterial">0</b><span>Need Material</span></div><div class="stat"><b id="stInstall">0</b><span>Ready / Install</span></div><div class="stat"><b id="stBalance">$0</b><span>Balance Due</span></div></div><div class="grid2"><div class="card"><h3>Today's attention</h3><div id="attention"></div></div><div class="card"><h3>Active Job / Order</h3><div id="activeSummary" class="muted"></div><div class="actions"><button class="action primary" onclick="go('jobs')">Open Job</button></div></div></div></section>
+<section id="showroom" class="page"></section>
+<section id="estimate" class="page"><iframe id="estimateFrame" data-src="estimate-assessment.html" style="display:none"></iframe></section>
+<section id="jobs" class="page"><div class="card"><div class="statusLine"><h2>Jobs</h2><button class="action primary" onclick="newJob()">+ New Job</button></div><div id="jobList"></div></div><div class="card"><h3 id="jobEditorTitle">Job / Order</h3><div class="formgrid"><input id="jobNumber"><input id="invoiceNumber"><input id="customerName"><input id="clerk"><input id="soldToAddress"><input id="shipToName"><input id="shipToAddress"><input id="email"><input id="cell"><input id="dateRequired"><select id="status"><option>Draft</option></select><input id="pickup"><input id="delivery"><input id="customerPO"><input id="supplierPO"><textarea id="notes"></textarea></div><div id="itemsEditor"></div></div></section>
+<section id="purchasing" class="page"><div class="card"><h2>PO</h2><div id="poSummary"></div><div id="poItems"></div></div></section>
+<section id="pickup" class="page"></section>
+<section id="warehouse" class="page"><div id="handoff"></div><iframe id="warehouseFrame" style="display:none"></iframe></section>
+<section id="invoice" class="page"><iframe id="invoiceFrame" style="display:none"></iframe></section>
+<section id="install" class="page"><input id="installer"><input id="installDate"><input id="installStatus"><input id="installNotes"></section>
+<section id="serviceclaims" class="page"></section>
+<section id="accounting" class="page"><div id="aSub"></div><div id="aGst"></div><div id="aTotal"></div><div id="aBalance"></div><input id="deliveryCharge"><input id="depositPaid"><input id="paymentMethod"><div class="actions"></div></section>
+</main>
+<script>
+(function(){
+ const q=id=>document.getElementById(id), log=q('log');
+ const groups={
+  ops:['invoice-checks-v022.js?v=023','showroom-v010.js?v=010','po-supplier-orders-v010.js?v=010','po-training-reset-v011.js?v=013','supplier-pickup-v010.js?v=010'],
+  sales:['sales-v010.js?v=010'],
+  handover:['sales-handover-v012.js?v=013'],
+  pricing:['sales-handover-sync-v013.js?v=018'],
+  claims:['service-claims-v010.js?v=012'],
+  drill:['sales-drilldown-v010.js?v=0312-2'],
+  settings:['system-settings-v010.js?v=010'],
+  shell:['flooring-version-v0313.js?v=001','runtime-bootstrap-v010.js?v=010']
+ };
+ function addLog(s){log.textContent+='\n'+new Date().toLocaleTimeString()+' · '+s;log.scrollTop=log.scrollHeight}
+ function loadOne(src){return new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=()=>resolve(src);s.onerror=()=>reject(new Error('load failed: '+src));document.body.appendChild(s)})}
+ async function runGroup(name){localStorage.setItem('runlu_module_test_last_attempt',name);q('lastAttempt').textContent=name;addLog('START '+name);try{for(const src of groups[name]){addLog('loading '+src);await loadOne(src);await new Promise(r=>setTimeout(r,350));}await new Promise(r=>setTimeout(r,1500));localStorage.setItem('runlu_module_test_last_good',name);q('lastGood').textContent=name;addLog('PASS '+name)}catch(e){q('lastError').textContent=e.message;addLog('FAIL '+name+' · '+e.message)}}
+ window.addEventListener('error',e=>{const t=(e.message||'error')+' @ '+(e.filename||'')+':'+(e.lineno||0);q('lastError').textContent=t;localStorage.setItem('runlu_module_test_error',t);addLog('ERROR '+t)});
+ q('lastAttempt').textContent=localStorage.getItem('runlu_module_test_last_attempt')||'none';q('lastGood').textContent=localStorage.getItem('runlu_module_test_last_good')||'none';q('lastError').textContent=localStorage.getItem('runlu_module_test_error')||'none';
+ document.querySelectorAll('[data-group]').forEach(b=>b.onclick=()=>runGroup(b.dataset.group));
+ window.__moduleTestSetBase=function(){const ok=typeof window.go==='function'&&document.querySelectorAll('#nav button').length>0;q('baseState').textContent=ok?'HEALTHY':'FAILED';q('baseState').className=ok?'good':'bad';addLog('BASE '+(ok?'HEALTHY':'FAILED'))}
+})();
+</script>
+<script src="app.js?v=module-isolation-1"></script>
+<script>setTimeout(()=>window.__moduleTestSetBase&&window.__moduleTestSetBase(),500);</script>
+</body></html>
