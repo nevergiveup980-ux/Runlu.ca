@@ -1,0 +1,45 @@
+/* RUNLU Deerfoot Flooring OS · Sales + Pricing V0.1 */
+.salesHero{overflow:hidden}
+.salesRepButtons{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.salesRepBtn{flex:0 0 auto;border:1px solid #cfd9d4;background:#fff;color:#173d30;border-radius:999px;padding:9px 14px;font-weight:700;font-size:13px;cursor:pointer}
+.salesRepBtn.active{background:#173d30;color:#fff;border-color:#173d30}
+.salesFilters{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-top:12px}
+.salesFilters>div{min-width:150px;flex:0 1 190px}
+.salesFilters label{display:block;margin-bottom:5px}
+.salesStats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:12px 0}
+.salesStats .stat{min-width:0}
+.salesStats .stat b{font-size:19px;word-break:break-word}
+.salesMiniSummary{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px}
+.salesMiniSummary span{background:#f2f6f4;border:1px solid #dce7e1;border-radius:10px;padding:8px 10px;font-size:12px;color:#45554d}
+.salesMiniSummary b{color:#173d30;margin-right:3px}
+.salesTableWrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.salesTable{width:100%;border-collapse:collapse;min-width:820px;font-size:12px}
+.salesTable th{text-align:left;color:#5e6e66;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;padding:9px 8px;border-bottom:1px solid #dce5e1}
+.salesTable td{padding:10px 8px;border-bottom:1px solid #edf1ef;vertical-align:top;color:#25312b}
+.salesTable td small{display:block;color:#77847e;margin-top:4px;white-space:nowrap}
+.salesLink{border:0;background:none;padding:0;color:#173d30;font-weight:800;cursor:pointer;text-align:left;font-size:12px}
+.salesCustomerList{margin-top:9px}
+.salesCustomerRow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #edf1ef}
+.salesCustomerRow>div:last-child{text-align:right}
+.salesCustomerRow b{display:block;color:#25312b;font-size:13px}
+.salesCustomerRow small{display:block;color:#7a8781;font-size:11px;margin-top:3px}
+.salesEmpty{padding:14px 0}
+.pricingProfileGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.pricingProfileGrid>div{border:1px solid #dce6e1;border-radius:12px;padding:11px;background:#fbfcfb}
+.pricingProfileGrid label{display:block;font-weight:800;color:#25312b;margin-bottom:6px}
+.pricingProfileGrid small{display:block;color:#7b8782;margin-top:5px;line-height:1.35}
+.pricingPct{display:flex;align-items:center;gap:7px}
+.pricingPct input{min-width:0}
+.pricingPct span{white-space:nowrap;color:#5f6d67;font-size:12px}
+.salesPricingNote{margin-top:12px;background:#f7f2e7;border:1px solid #eadfbf;border-radius:10px;padding:10px 12px;color:#665b3e;font-size:12px;line-height:1.5}
+.salesTeamEditor{display:flex;gap:8px;margin-top:10px}
+.salesTeamEditor input{flex:1}
+.salesTeamChips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.salesTeamChips span{display:inline-flex;align-items:center;gap:5px;background:#f2f6f4;border:1px solid #dce6e1;border-radius:999px;padding:6px 8px 6px 10px;font-size:12px;font-weight:700;color:#33463d}
+.salesTeamChips button{border:0;background:transparent;color:#8b9691;font-size:16px;line-height:1;cursor:pointer;padding:0 2px}
+.salesPriceItem{grid-template-columns:repeat(6,minmax(95px,1fr));align-items:end}
+.salesPriceItem .wide{grid-column:span 2}
+.salesPriceItem select,.salesPriceItem input{width:100%}
+.salesPriceItem .action.red{align-self:end}
+@media(max-width:980px){.salesStats{grid-template-columns:repeat(3,minmax(0,1fr))}.pricingProfileGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.salesPriceItem{grid-template-columns:repeat(3,minmax(95px,1fr))}}
+@media(max-width:640px){.salesStats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.salesStats .stat b{font-size:17px}.pricingProfileGrid{grid-template-columns:1fr}.salesFilters>div{flex:1 1 130px;min-width:130px}.salesTeamEditor{flex-direction:column}.salesPriceItem{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.salesPriceItem .wide{grid-column:span 2}.salesRepButtons{margin-right:-8px;padding-right:8px}}
