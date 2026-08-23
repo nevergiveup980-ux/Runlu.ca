@@ -1,4 +1,4 @@
-/* RUNLU Deerfoot Flooring OS · Sales + Pricing V0.1 */
+/* RUNLU Deerfoot Flooring OS · Sales + Pricing V0.2 */
 .salesHero{overflow:hidden}
 .salesRepButtons{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
 .salesRepBtn{flex:0 0 auto;border:1px solid #cfd9d4;background:#fff;color:#173d30;border-radius:999px;padding:9px 14px;font-weight:700;font-size:13px;cursor:pointer}
@@ -34,12 +34,16 @@
 .salesPricingNote{margin-top:12px;background:#f7f2e7;border:1px solid #eadfbf;border-radius:10px;padding:10px 12px;color:#665b3e;font-size:12px;line-height:1.5}
 .salesTeamEditor{display:flex;gap:8px;margin-top:10px}
 .salesTeamEditor input{flex:1}
-.salesTeamChips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
-.salesTeamChips span{display:inline-flex;align-items:center;gap:5px;background:#f2f6f4;border:1px solid #dce6e1;border-radius:999px;padding:6px 8px 6px 10px;font-size:12px;font-weight:700;color:#33463d}
-.salesTeamChips button{border:0;background:transparent;color:#8b9691;font-size:16px;line-height:1;cursor:pointer;padding:0 2px}
+.salesTeamChangeGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+.salesTeamChangeGrid>div{border:1px solid #dce6e1;border-radius:12px;padding:12px;background:#fbfcfb}
+.salesTeamChangeGrid h4{margin:0 0 8px;color:#25312b;font-size:13px}
+.salesTeamChangeRow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #edf1ef}
+.salesTeamChangeRow:last-child{border-bottom:0}
+.salesTeamChangeRow b{color:#25312b;font-size:13px}
+.salesTeamChangeRow .actions{margin:0;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .salesPriceItem{grid-template-columns:repeat(6,minmax(95px,1fr));align-items:end}
 .salesPriceItem .wide{grid-column:span 2}
 .salesPriceItem select,.salesPriceItem input{width:100%}
 .salesPriceItem .action.red{align-self:end}
 @media(max-width:980px){.salesStats{grid-template-columns:repeat(3,minmax(0,1fr))}.pricingProfileGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.salesPriceItem{grid-template-columns:repeat(3,minmax(95px,1fr))}}
-@media(max-width:640px){.salesStats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.salesStats .stat b{font-size:17px}.pricingProfileGrid{grid-template-columns:1fr}.salesFilters>div{flex:1 1 130px;min-width:130px}.salesTeamEditor{flex-direction:column}.salesPriceItem{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.salesPriceItem .wide{grid-column:span 2}.salesRepButtons{margin-right:-8px;padding-right:8px}}
+@media(max-width:640px){.salesStats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.salesStats .stat b{font-size:17px}.pricingProfileGrid{grid-template-columns:1fr}.salesFilters>div{flex:1 1 130px;min-width:130px}.salesTeamEditor{flex-direction:column}.salesTeamChangeGrid{grid-template-columns:1fr}.salesTeamChangeRow{align-items:flex-start}.salesTeamChangeRow .action{padding:7px 9px;font-size:11px}.salesPriceItem{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.salesPriceItem .wide{grid-column:span 2}.salesRepButtons{margin-right:-8px;padding-right:8px}}
