@@ -1,0 +1,1 @@
+Runtime fallback shell hotfix marker. The production index now contains the fallback inline so basic navigation does not depend on the main app core finishing first.
