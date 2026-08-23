@@ -1,0 +1,13 @@
+/* RUNLU Deerfoot Flooring OS · Sales Team Changes V0.1.1 */
+.salesTeamChangeCard{margin-top:12px}
+.salesTeamChangeAdd{display:flex;gap:8px;margin-top:12px}
+.salesTeamChangeAdd input{flex:1}
+.salesTeamChangeGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+.salesTeamChangeGrid>div{border:1px solid #dce6e1;border-radius:12px;padding:12px;background:#fbfcfb}
+.salesTeamChangeGrid h4{margin:0 0 8px;color:#25312b;font-size:13px}
+.salesTeamChangeRow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #edf1ef}
+.salesTeamChangeRow:last-child{border-bottom:0}
+.salesTeamChangeRow b{color:#25312b;font-size:13px}
+.salesTeamChangeRow .actions{margin:0;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.salesTeamChangeNote{margin-top:10px;line-height:1.5}
+@media(max-width:640px){.salesTeamChangeAdd{flex-direction:column}.salesTeamChangeGrid{grid-template-columns:1fr}.salesTeamChangeRow{align-items:flex-start}.salesTeamChangeRow .action{padding:7px 9px;font-size:11px}}
