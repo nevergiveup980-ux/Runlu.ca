@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "runlu-pulse",
-  "main": "src/index-calgary.js",
+  "main": "src/index-clean.js",
   "compatibility_date": "2026-08-16",
   "compatibility_flags": ["nodejs_compat"],
   "workers_dev": false,
