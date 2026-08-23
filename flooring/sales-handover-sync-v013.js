@@ -1,6 +1,6 @@
-/* RUNLU Deerfoot Flooring OS · Sales Handover + Pricing Policy sync V0.1.6
+/* RUNLU Deerfoot Flooring OS · Sales Handover + Pricing Policy sync V0.1.7
    Keeps handover state synchronized and separates company pricing policy from salesperson special-order decisions.
-   Special Pricing and Sales Drill-down are loaded reliably after the base Sales workspace is ready. */
+   Loads Special Pricing, Sales Drill-down and Service & Claims reliably after the base workspace is ready. */
 (function(){
   'use strict';
   const REASONS=['Repeat Customer','Referral','Friend','Family','Contractor','Senior','Large Order / Volume','Employee','Manager-approved special price','Other / Custom'];
@@ -108,22 +108,21 @@
       const r=oldGo.apply(this,arguments);setTimeout(()=>{ensurePricingSettings();postProcessPricingEditor()},0);return r;
     };
     ensurePricingSettings();postProcessPricingEditor();
-    document.title='RUNLU Deerfoot Flooring OS V0.3.11';
-    const pill=document.querySelector('header .pill');if(pill)pill.textContent='V0.3.11 Sales Drill-down';
   }
 
   function loadModule(src,key){
     if(document.querySelector(`script[data-runlu-module="${key}"]`))return;
     const s=document.createElement('script');s.dataset.runluModule=key;s.src=src;document.body.appendChild(s);
   }
-  function loadSalesModules(){
+  function loadFeatureModules(){
     loadModule('sales-special-pricing-v010.js?v=011','special-pricing');
-    loadModule('sales-drilldown-v010.js?v=011','sales-drilldown');
+    loadModule('sales-drilldown-v010.js?v=0312','sales-drilldown');
+    loadModule('service-claims-v010.js?v=010','service-claims');
   }
   function boot(){
     setTimeout(installHandoverSync,120);setTimeout(installHandoverSync,600);
     setTimeout(()=>{ensurePricingSettings();installPricingHooks()},180);
-    setTimeout(loadSalesModules,260);
+    setTimeout(loadFeatureModules,260);
   }
   if(document.readyState==='loading')window.addEventListener('load',boot);else boot();
 })();
