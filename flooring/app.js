@@ -82,3 +82,18 @@ window.addEventListener('pageshow',()=>{if(!document.querySelector('#nav button'
   const bootChecks=()=>{injectCheckControls();const j=active();if(j){normalizeChecks(j);saveStore()}};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bootChecks,{once:true});else bootChecks();
 })();
+
+/* V0.3.17 Showroom isolated restore. Core boots first; Showroom attaches independently. */
+(function(){
+  function loadShowroomSafe(){
+    if(window.__runluShowroomSafeRequested)return;
+    window.__runluShowroomSafeRequested=true;
+    const css=document.createElement('link');
+    css.rel='stylesheet';css.href='showroom-safe-v011.css?v=011';document.head.appendChild(css);
+    const s=document.createElement('script');
+    s.src='showroom-safe-v011.js?v=011';s.async=true;
+    s.onerror=()=>console.error('RUNLU Showroom safe module failed to load.');
+    document.body.appendChild(s);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadShowroomSafe,{once:true});else loadShowroomSafe();
+})();
