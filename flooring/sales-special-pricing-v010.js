@@ -1,10 +1,10 @@
-/* RUNLU Deerfoot Flooring OS · Sales Special Pricing V0.1.0
+/* RUNLU Deerfoot Flooring OS · Sales Special Pricing V0.1.1
    Makes salesperson-owned special-order pricing visible directly in Sales while company defaults remain in Settings. */
 (function(){
   'use strict';
   const REASONS=['Repeat Customer','Referral','Friend','Family','Contractor','Senior','Large Order / Volume','Employee','Manager-approved special price','Other / Custom'];
   function by(id){return document.getElementById(id)}
-  function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+  function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[m]))}
   function num(v){const n=Number(v);return Number.isFinite(n)?n:0}
   function qty(v){const m=String(v??'').replace(/,/g,'').match(/-?\d+(?:\.\d+)?/);const n=m?Number(m[0]):NaN;return Number.isFinite(n)&&n>0?n:null}
   function currentJob(){try{return typeof active==='function'?active():null}catch(_){return null}}
@@ -63,9 +63,11 @@
   }
 
   function hookSales(){
+    if(window.__runluSalesSpecialPricingV011)return;window.__runluSalesSpecialPricingV011=true;
     ensureCard();
     const oldRender=window.renderSales;if(typeof oldRender==='function'&&!oldRender.__specialPricingWrapped){const wrapped=function(){const r=oldRender.apply(this,arguments);ensureCard();refreshCard();return r};wrapped.__specialPricingWrapped=true;window.renderSales=wrapped}
     document.title='RUNLU Deerfoot Flooring OS V0.3.10';const pill=document.querySelector('header .pill');if(pill)pill.textContent='V0.3.10 Sales Special Pricing';
   }
-  window.addEventListener('load',()=>{setTimeout(hookSales,1050);setTimeout(()=>{ensureCard();refreshCard()},1500)});
+  function boot(){setTimeout(hookSales,80);setTimeout(()=>{ensureCard();refreshCard()},220)}
+  if(document.readyState==='loading')window.addEventListener('load',boot);else boot();
 })();
