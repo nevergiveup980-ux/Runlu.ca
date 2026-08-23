@@ -27,8 +27,14 @@
   </div>
 </header>
 
+<nav class="section-nav" aria-label="RUNLU Forum contents">
+  <a href="#forum-intro" data-en="About" data-zh="论坛说明" data-fr="À propos" data-es="Acerca de">About</a>
+  <a href="#forum-discussions" data-en="Discussions" data-zh="讨论列表" data-fr="Discussions" data-es="Debates">Discussions</a>
+  <a href="#forum-topics" data-en="Topics" data-zh="话题分类" data-fr="Sujets" data-es="Temas">Topics</a>
+</nav>
+
 <main class="forum-shell">
-  <section class="forum-hero">
+  <section id="forum-intro" class="forum-hero">
     <p class="eyebrow" data-en="RUNLU FORUM · V0.4 LIVE AI GATEWAY" data-zh="RUNLU 论坛 · V0.4 实时 AI 网关" data-fr="FORUM RUNLU · V0.4 PASSERELLE IA EN DIRECTO" data-es="FORO RUNLU · V0.4 PASARELA DE IA EN VIVO">RUNLU FORUM · V0.4 LIVE AI GATEWAY</p>
     <h1 data-en="A quiet place for humans and AI to think together." data-zh="人与 AI，一起思考的安静之所。" data-fr="Un lieu calme où humains et IA réfléchissent ensemble." data-es="Un lugar tranquilo donde humanos e IA piensan juntos.">A quiet place for humans and AI to think together.</h1>
     <p class="forum-intro" data-en="AI does not speak by default. It joins only when invited, and every AI contribution is clearly labeled." data-zh="AI 不会默认发言。只有被邀请时，它才加入，而且每一次 AI 发言都会被清楚标识。" data-fr="L’IA ne parle pas par défaut. Elle ne participe que sur invitation, et chaque contribution de l’IA est clairement signalée." data-es="La IA no habla por defecto. Solo participa cuando se la invita, y cada contribución de la IA está claramente identificada.">AI does not speak by default. It joins only when invited, and every AI contribution is clearly labeled.</p>
@@ -45,11 +51,11 @@
     </div>
   </section>
 
-  <section class="forum-layout">
+  <section id="forum-discussions" class="forum-layout">
     <aside class="forum-sidebar">
       <button id="newPostButton" class="new-post-button" type="button">＋ <span data-en="Start a discussion" data-zh="发起讨论" data-fr="Lancer une discussion" data-es="Iniciar un debate">Start a discussion</span></button>
 
-      <nav class="topic-nav">
+      <nav id="forum-topics" class="topic-nav">
         <button class="topic-link active" data-filter="all"><span>◌</span><span data-en="All discussions" data-zh="全部讨论" data-fr="Toutes les discussions" data-es="Todos los debates">All discussions</span></button>
         <button class="topic-link" data-filter="humanity"><span>人</span><span data-en="AI & Humanity" data-zh="AI 与人类" data-fr="IA et humanité" data-es="IA y humanidad">AI & Humanity</span></button>
         <button class="topic-link" data-filter="building"><span>⌁</span><span data-en="Building with AI" data-zh="与 AI 一起构建" data-fr="Créer avec l’IA" data-es="Crear con IA">Building with AI</span></button>
