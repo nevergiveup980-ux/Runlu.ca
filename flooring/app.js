@@ -1,5 +1,5 @@
 const STORE='runlu_deerfoot_flooring_jobs_v1', ACTIVE='runlu_deerfoot_flooring_active_job_v1', INV='runlu_flooring_active_invoice_v1';
-const NAV=[['command','Command'],['jobs','Jobs'],['purchasing','PO'],['warehouse','Warehouse'],['invoice','Invoice'],['install','Install'],['accounting','Accounting']];
+const NAV=[['command','Command'],['jobs','Jobs'],['purchasing','PO'],['warehouse','Warehouse'],['invoice','Invoice'],['install','Install'],['serviceclaims','Service / Claims'],['accounting','Accounting']];
 let jobs=[],activeId=null,editingItems=[];
 function demoJob(){return {id:'demo-181482',isDemo:true,jobNumber:'181482',invoiceNumber:'181482',date:'2026-08-20',invoiceDate:'2026-08-20',customerName:'Lee Sutter',soldToAddress:'Calgary, Alberta',shipToName:'Tent Event',shipToAddress:'Supply Only',email:'lee.sutter@example.com',cell:'403-589-7888',phoneHome:'',phoneWork:'',clerk:'N',dateRequired:'2026-08-21',pickup:'Aug 21st',delivery:'or sooner',customerPO:'',supplierPO:'',status:'Confirmed',notes:'Supply only. Tent event.',items:[{qty:'90 SQFT',size:'',style:'Custom Pro Linoleum',colour:'Longmoor Caramel',supplier:'Buckwold',price:18.33,total:1650}],deliveryCharge:0,depositPaid:500,paymentMethod:'interac',installer:'',installDate:'',installStatus:'Not Scheduled',installNotes:''}}
 function load(){try{jobs=JSON.parse(localStorage.getItem(STORE)||'[]')}catch(e){jobs=[]}if(!jobs.length){jobs=[demoJob()];saveStore()}activeId=localStorage.getItem(ACTIVE)||jobs[0]?.id||null;if(!jobs.some(j=>j.id===activeId))activeId=jobs[0]?.id||null;renderNav();renderAll()}
@@ -64,7 +64,7 @@ window.addEventListener('load',load);
   function saveCheckControls(){
     const j=active();if(!j)return;normalizeChecks(j);
     const a=document.getElementById(CHECK_IDS[0]),b=document.getElementById(CHECK_IDS[1]),c=document.getElementById(CHECK_IDS[2]);
-    if(a)j.depositPaidConfirmed=!!a.checked;if(b)j.balancePaid=!!b.checked;if(c)j.productViewedBeforeInstall=!!c.checked;
+    if(a)j.depositPaidConfirmed=!!a.checked;if(b)j.balancePaid=!!b.checked;if(c)c.checked=!!j.productViewedBeforeInstall;
   }
   const oldLoadAccounting=loadAccounting;
   loadAccounting=function(){oldLoadAccounting();loadCheckControls()};
