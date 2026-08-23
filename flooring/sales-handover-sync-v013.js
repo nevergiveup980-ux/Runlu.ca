@@ -1,6 +1,6 @@
-/* RUNLU Deerfoot Flooring OS · Sales Handover + Pricing Policy sync V0.1.5
+/* RUNLU Deerfoot Flooring OS · Sales Handover + Pricing Policy sync V0.1.6
    Keeps handover state synchronized and separates company pricing policy from salesperson special-order decisions.
-   Special pricing reasons remain attached to item history and are carried to the Deerfoot invoice Notes area. */
+   Special Pricing and Sales Drill-down are loaded reliably after the base Sales workspace is ready. */
 (function(){
   'use strict';
   const REASONS=['Repeat Customer','Referral','Friend','Family','Contractor','Senior','Large Order / Volume','Employee','Manager-approved special price','Other / Custom'];
@@ -108,24 +108,22 @@
       const r=oldGo.apply(this,arguments);setTimeout(()=>{ensurePricingSettings();postProcessPricingEditor()},0);return r;
     };
     ensurePricingSettings();postProcessPricingEditor();
-    document.title='RUNLU Deerfoot Flooring OS V0.3.9';
-    const pill=document.querySelector('header .pill');if(pill)pill.textContent='V0.3.9 Pricing Policy + Special Orders';
+    document.title='RUNLU Deerfoot Flooring OS V0.3.11';
+    const pill=document.querySelector('header .pill');if(pill)pill.textContent='V0.3.11 Sales Drill-down';
   }
 
-  window.addEventListener('load',()=>{
-    setTimeout(installHandoverSync,650);setTimeout(installHandoverSync,1200);
-    setTimeout(()=>{ensurePricingSettings();installPricingHooks()},900);
-  });
-})();
-
-/* V0.3.10 loader: visible salesperson-owned Special Pricing / Order Override panel in Sales. */
-(function(){
-  function load(){if(document.querySelector('script[data-runlu-special-pricing]'))return;const s=document.createElement('script');s.dataset.runluSpecialPricing='1';s.src='sales-special-pricing-v010.js?v=010';document.body.appendChild(s)}
-  window.addEventListener('load',()=>setTimeout(load,1000));
-})();
-
-/* V0.3.11 loader: Sales summary → lists → customer/job detail drill-down. */
-(function(){
-  function load(){if(document.querySelector('script[data-runlu-sales-drilldown]'))return;const s=document.createElement('script');s.dataset.runluSalesDrilldown='1';s.src='sales-drilldown-v010.js?v=010';document.body.appendChild(s)}
-  window.addEventListener('load',()=>setTimeout(load,1350));
+  function loadModule(src,key){
+    if(document.querySelector(`script[data-runlu-module="${key}"]`))return;
+    const s=document.createElement('script');s.dataset.runluModule=key;s.src=src;document.body.appendChild(s);
+  }
+  function loadSalesModules(){
+    loadModule('sales-special-pricing-v010.js?v=011','special-pricing');
+    loadModule('sales-drilldown-v010.js?v=011','sales-drilldown');
+  }
+  function boot(){
+    setTimeout(installHandoverSync,120);setTimeout(installHandoverSync,600);
+    setTimeout(()=>{ensurePricingSettings();installPricingHooks()},180);
+    setTimeout(loadSalesModules,260);
+  }
+  if(document.readyState==='loading')window.addEventListener('load',boot);else boot();
 })();
