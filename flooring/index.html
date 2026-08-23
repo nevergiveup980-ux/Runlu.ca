@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#173d30">
-<title>RUNLU Deerfoot Flooring OS V0.3.19 Pickup Restore</title>
+<title>RUNLU Deerfoot Flooring OS V0.3.20 Pickup ID Collision Fix</title>
 <link rel="stylesheet" href="app.css?v=032">
 <link rel="stylesheet" href="po-safe-v011.css?v=011">
 <link rel="stylesheet" href="supplier-pickup-safe-v011.css?v=011">
 </head>
 <body>
-<header><div class="top"><div class="brand"><b>RUNLU Deerfoot Flooring OS</b><span>Deerfoot-first internal build · one Job / Order across departments</span></div><div class="pill">V0.3.19 Safe Core + Showroom + PO + Pickup</div></div></header>
+<header><div class="top"><div class="brand"><b>RUNLU Deerfoot Flooring OS</b><span>Deerfoot-first internal build · one Job / Order across departments</span></div><div class="pill">V0.3.20 Safe Core + Showroom + PO + Pickup Fix</div></div></header>
 <nav id="nav"></nav>
 <main>
 <section id="command" class="page active">
@@ -30,7 +30,7 @@
     <button class="module" onclick="go('estimate')"><span class="ico">📐</span><strong>Estimate / Assessment</strong><small>Deerfoot field assessment form, editable and ready to create a Job / Order.</small></button>
     <button class="module" onclick="go('jobs')"><span class="ico">🧾</span><strong>Jobs & Orders</strong><small>Customer, required date, items, status and shared record.</small></button>
     <button class="module" onclick="go('purchasing')"><span class="ico">📦</span><strong>PO / Supplier Orders</strong><small>Sales-managed supplier orders, multi-PO Job linking and digital numbering.</small></button>
-    <button class="module" onclick="go('pickup')"><span class="ico">🚚</span><strong>Supplier Pickup</strong><small>Date-sorted pickup / receiving schedule shared with Warehouse and Accounting.</small></button>
+    <button class="module" onclick="openSupplierPickupSafe()"><span class="ico">🚚</span><strong>Supplier Pickup</strong><small>Date-sorted pickup / receiving schedule shared with Warehouse and Accounting.</small></button>
     <button class="module" onclick="go('warehouse')"><span class="ico">🏭</span><strong>Warehouse OS</strong><small>Live warehouse subsystem embedded inside Flooring OS.</small></button>
     <button class="module" onclick="prepareInvoice();go('invoice')"><span class="ico">📄</span><strong>Deerfoot Invoice</strong><small>Final Deerfoot Legacy invoice, including three-copy / overlay printing.</small></button>
     <button class="module" onclick="go('install')"><span class="ico">🛠️</span><strong>Installation</strong><small>Installer, install date and completion status.</small></button>
@@ -79,6 +79,6 @@
 </main>
 <script src="app.js?v=core-isolation-20260823-1"></script>
 <script src="po-safe-v011.js?v=011"></script>
-<script src="supplier-pickup-safe-v011.js?v=011"></script>
+<script src="supplier-pickup-safe-v011.js?v=012"></script>
 </body>
 </html>
