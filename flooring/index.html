@@ -53,7 +53,7 @@
 
 <section id="estimate" class="page">
   <div class="card"><div class="statusLine"><div><h2>Estimate / Assessment</h2><div class="muted">V0.3 Visual Final · customer / site assessment before the Job / Order.</div></div><button class="action blue" onclick="openEstimateFull()">Open Full Screen</button></div></div>
-  <div class="frameWrap" style="height:82vh"><iframe id="estimateFrame" src="estimate-assessment.html" title="Deerfoot Estimate / Assessment"></iframe></div>
+  <div class="frameWrap" style="height:82vh"><iframe id="estimateFrame" data-src="estimate-assessment.html" title="Deerfoot Estimate / Assessment"></iframe></div>
 </section>
 
 <section id="jobs" class="page">
@@ -70,13 +70,27 @@
 
 <section id="warehouse" class="page"><div class="card"><div class="statusLine"><div><h2>Warehouse OS</h2><div class="muted"><span class="dot"></span>Existing RUNLU Warehouse OS retained as the warehouse subsystem.</div></div><button class="action blue" onclick="openWarehouse()">Open Full Screen</button></div><div id="handoff" class="handoff" style="margin-top:10px"></div><div class="actions"><button class="action" onclick="copyHandoff()">Copy Job Handoff</button><button class="action primary" onclick="refreshWarehouse()">Refresh Warehouse</button></div></div><div class="frameWrap"><iframe id="warehouseFrame" title="RUNLU Warehouse OS"></iframe></div></section>
 
-<section id="invoice" class="page"><div class="card"><div class="statusLine"><div><h2>Deerfoot Invoice</h2><div class="muted">Bound directly to the selected Job / Order record.</div></div><button class="action" onclick="prepareInvoice()">Refresh From Job</button></div></div><div class="frameWrap" style="height:78vh"><iframe id="invoiceFrame" src="deerfoot-invoice.html" title="Deerfoot Invoice"></iframe></div></section>
+<section id="invoice" class="page"><div class="card"><div class="statusLine"><div><h2>Deerfoot Invoice</h2><div class="muted">Bound directly to the selected Job / Order record.</div></div><button class="action" onclick="prepareInvoice()">Refresh From Job</button></div></div><div class="frameWrap" style="height:78vh"><iframe id="invoiceFrame" title="Deerfoot Invoice"></iframe></div></section>
 
 <section id="install" class="page"><div class="card"><h2>Installation</h2><div class="formgrid"><div><label>Installer</label><input id="installer"></div><div><label>Install Date</label><input id="installDate" type="date"></div><div><label>Install Status</label><select id="installStatus"><option>Not Scheduled</option><option>Scheduled</option><option>In Progress</option><option>Completed</option><option>Callback / Issue</option></select></div><div><label>Site / Install Notes</label><input id="installNotes"></div></div><div class="actions"><button class="action primary" onclick="saveInstall()">Save Installation</button></div></div></section>
 
 <section id="accounting" class="page"><div class="card"><h2>Accounting / Closeout</h2><div class="summary"><div><small>Subtotal</small><b id="aSub">$0.00</b></div><div><small>GST</small><b id="aGst">$0.00</b></div><div><small>Total</small><b id="aTotal">$0.00</b></div><div><small>Balance</small><b id="aBalance">$0.00</b></div></div><div class="formgrid" style="margin-top:10px"><div><label>Delivery Charge</label><input id="deliveryCharge" type="number" step="0.01"></div><div><label>Deposit Paid</label><input id="depositPaid" type="number" step="0.01"></div><div><label>Payment Method</label><select id="paymentMethod"><option value="">—</option><option value="finance">Finance</option><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="visa">Visa</option><option value="mastercard">Master Card</option><option value="interac">Interac</option></select></div></div><div class="actions"><button class="action primary" onclick="saveAccounting()">Save Accounting</button><button class="action blue" onclick="prepareInvoice();go('invoice')">Update Invoice</button></div></div></section>
 </main>
 <script src="app.js?v=022"></script>
+<script>
+(function(){
+  const originalGo=window.go;
+  if(typeof originalGo==='function'){
+    window.go=function(id){
+      if(id==='estimate'){
+        const frame=document.getElementById('estimateFrame');
+        if(frame&&!frame.getAttribute('src')) frame.setAttribute('src',frame.dataset.src||'estimate-assessment.html');
+      }
+      return originalGo(id);
+    };
+  }
+})();
+</script>
 <script src="invoice-checks-v022.js?v=023"></script>
 <script src="showroom-v010.js?v=010"></script>
 <script src="po-supplier-orders-v010.js?v=010"></script>
