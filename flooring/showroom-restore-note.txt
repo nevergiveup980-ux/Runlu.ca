@@ -1,1 +1,0 @@
-This file marks the incremental Showroom-only restore after V0.3.16 Safe Core.
