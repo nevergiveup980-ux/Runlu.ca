@@ -79,9 +79,18 @@
 
 <section id="accounting" class="page"><div class="card"><h2>Accounting / Closeout</h2><div class="summary"><div><small>Subtotal</small><b id="aSub">$0.00</b></div><div><small>GST</small><b id="aGst">$0.00</b></div><div><small>Total</small><b id="aTotal">$0.00</b></div><div><small>Balance</small><b id="aBalance">$0.00</b></div></div><div class="formgrid" style="margin-top:10px"><div><label>Delivery Charge</label><input id="deliveryCharge" type="number" step="0.01"></div><div><label>Deposit Paid</label><input id="depositPaid" type="number" step="0.01"></div><div><label>Payment Method</label><select id="paymentMethod"><option value="">—</option><option value="finance">Finance</option><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="visa">Visa</option><option value="mastercard">Master Card</option><option value="interac">Interac</option></select></div></div><div class="actions"><button class="action primary" onclick="saveAccounting()">Save Accounting</button><button class="action blue" onclick="prepareInvoice();go('invoice')">Update Invoice</button></div></div></section>
 </main>
-<script src="app.js?v=0313-runtime-1"></script>
+<script>
+/* Base fallback is intentionally inline so navigation remains usable even if app.js is delayed. */
+(function(){
+  const items=[['command','Command'],['showroom','Showroom'],['estimate','Estimate'],['jobs','Jobs'],['purchasing','PO'],['warehouse','Warehouse'],['invoice','Invoice'],['install','Install'],['accounting','Accounting']];
+  if(typeof window.go!=='function')window.go=function(id){const target=document.getElementById(id);if(!target)return false;document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===id));window.scrollTo({top:0,behavior:'smooth'});return true};
+  const n=document.getElementById('nav');if(n&&!n.querySelector('button'))items.filter(([id])=>document.getElementById(id)).forEach(([id,label])=>{const b=document.createElement('button');b.type='button';b.dataset.page=id;b.textContent=label;b.addEventListener('click',()=>window.go(id));if(id==='command')b.classList.add('active');n.appendChild(b)});
+})();
+</script>
+<script src="app.js?v=0314-core-direct-1"></script>
 <script>
 (function(){
+  if(typeof bootBase==='function')bootBase();else if(typeof load==='function'&&!document.querySelector('#nav button[data-page="jobs"]'))load();
   const originalGo=window.go;
   if(typeof originalGo==='function'){
     window.go=function(id){
@@ -94,7 +103,7 @@
   }
 })();
 </script>
-<script src="invoice-checks-v022.js?v=023"></script>
+<script src="invoice-checks-v022.js?v=024"></script>
 <script src="showroom-v010.js?v=010"></script>
 <script src="po-supplier-orders-v010.js?v=010"></script>
 <script src="po-training-reset-v011.js?v=013"></script>
@@ -106,6 +115,5 @@
 <script src="sales-drilldown-v010.js?v=0312-2"></script>
 <script src="system-settings-v010.js?v=010"></script>
 <script src="flooring-version-v0313.js?v=001"></script>
-<script src="runtime-bootstrap-v010.js?v=010"></script>
 </body>
 </html>
