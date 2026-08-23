@@ -1,12 +1,14 @@
-/* RUNLU Deerfoot Flooring OS · Supplier Pickup Safe V0.1.1
+/* RUNLU Deerfoot Flooring OS · Supplier Pickup Safe V0.1.2
    Incremental restore after Safe Core + Showroom + PO.
-   No NAV mutation, no go() wrapping, no MutationObserver, no polling loop.
+   Dedicated Supplier Pickup page id prevents collision with the Job editor pickup input.
+   No go() wrapping, no MutationObserver, no polling loop.
    This stage uses the existing local PO ledger and pickup metadata.
    Central Supabase / Warehouse sharing will be re-enabled only after this isolated module is validated. */
 (function(){
   'use strict';
   const PO_STORE='runlu_deerfoot_supplier_orders_v1';
   const META_STORE='runlu_supplier_task_meta_v1';
+  const PAGE_ID='supplierPickupPage';
   const by=id=>document.getElementById(id);
   const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   let records=[];
@@ -34,9 +36,9 @@
   function loadMetaFields(){const m=currentMeta();if(by('pickupFulfillmentSafe'))by('pickupFulfillmentSafe').value=m.fulfillment;if(by('pickupRequestedDateSafe'))by('pickupRequestedDateSafe').value=m.requestedDate;if(by('pickupPurchaseTypeSafe'))by('pickupPurchaseTypeSafe').value=m.purchaseType;}
 
   function ensurePage(){
-    if(by('pickup'))return;
+    if(document.querySelector('section#'+PAGE_ID+'.page'))return;
     const main=document.querySelector('main');if(!main)return;
-    const s=document.createElement('section');s.id='pickup';s.className='page';
+    const s=document.createElement('section');s.id=PAGE_ID;s.className='page';
     s.innerHTML=`<div class="card"><div class="statusLine"><div><h2>Supplier Pickup / Receiving</h2><div class="muted">Safe incremental restore · PO-driven inbound schedule.</div></div><button class="action primary" id="pickupRefreshSafe">Refresh</button></div><div class="pickupSafeNotice"><b>Recovery stage:</b> this page currently reads the existing local PO ledger and pickup metadata only. The central Supabase / Warehouse shared bridge remains intentionally off until this module proves stable.</div><div class="pickupSafeStats"><div><b id="pickupScheduledSafe">0</b><span>Scheduled</span></div><div><b id="pickupInProgressSafe">0</b><span>In Progress</span></div><div><b id="pickupReadySafe">0</b><span>Ready</span></div><div><b id="pickupTotalSafe">0</b><span>Total</span></div></div></div><div class="card"><div class="statusLine"><h3>Pickup / Inbound Schedule</h3><select id="pickupFilterSafe"><option value="">All statuses</option><option>Scheduled</option><option>In Progress</option><option>Ready</option><option>Completed</option><option>Cancelled</option></select></div><div id="pickupScheduleSafe"></div></div>`;
     const warehouse=by('warehouse');main.insertBefore(s,warehouse||null);
     by('pickupRefreshSafe')?.addEventListener('click',render);
@@ -44,12 +46,12 @@
   }
 
   function ensureNav(){
-    const nav=by('nav');if(!nav||nav.querySelector('[data-page="pickup"]'))return;
-    const b=document.createElement('button');b.type='button';b.dataset.page='pickup';b.textContent='Pickup';
+    const nav=by('nav');if(!nav||nav.querySelector('[data-page="'+PAGE_ID+'"]'))return;
+    const b=document.createElement('button');b.type='button';b.dataset.page=PAGE_ID;b.textContent='Pickup';
     const anchor=nav.querySelector('[data-page="warehouse"]');anchor?anchor.insertAdjacentElement('beforebegin',b):nav.appendChild(b);
     b.addEventListener('click',()=>{switchToPickup();render();});
   }
-  function switchToPickup(){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='pickup'));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page==='pickup'));window.scrollTo({top:0,behavior:'smooth'});}
+  function switchToPickup(){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===PAGE_ID));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===PAGE_ID));window.scrollTo({top:0,behavior:'smooth'});}
 
   function statusForPO(po){if(po.status==='Cancelled')return 'Cancelled';if(['Received','Completed'].includes(po.status))return po.status==='Completed'?'Completed':'Ready';if(po.status==='Partially Received')return 'In Progress';return po.poNumber?'Scheduled':'Draft';}
   function scheduleRows(){
@@ -73,6 +75,7 @@
     el.innerHTML=Object.entries(groups).map(([month,items])=>`<div class="pickupSafeMonth">${esc(month)}</div>${items.map(x=>`<div class="pickupSafeRow"><div><b>#${esc(x.poNumber)} · ${esc(x.supplier||'Supplier not set')}</b><small>${esc(dateLabel(x.requestedDate))} · ${esc(x.fulfillment)} · ${esc(x.purchaseType)}</small></div><div><b>${esc(x.jobNumber||'No Job #')} · ${esc(x.customerName||'')}</b><small>${esc(x.salesRep||'Sales rep not set')}</small></div><div><span class="pickupSafeStatus ${x.pickupStatus==='Cancelled'?'cancelled':(['Ready','Completed'].includes(x.pickupStatus)?'ready':'')}">${esc(x.pickupStatus)}</span></div></div>`).join('')}`).join('');
   }
 
-  function boot(){ensurePage();ensureNav();ensurePOFields();render();window.runluPickupSafeRender=render;window.addEventListener('storage',ev=>{if([PO_STORE,META_STORE].includes(ev.key))render()});}
+  function openPickup(){ensurePage();ensureNav();switchToPickup();render();}
+  function boot(){ensurePage();ensureNav();ensurePOFields();render();window.runluPickupSafeRender=render;window.openSupplierPickupSafe=openPickup;window.addEventListener('storage',ev=>{if([PO_STORE,META_STORE].includes(ev.key))render()});}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
