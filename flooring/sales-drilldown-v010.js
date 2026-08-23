@@ -1,9 +1,9 @@
-/* RUNLU Deerfoot Flooring OS · Sales Drill-down Loader + Version Authority V0.3.11
+/* RUNLU Deerfoot Flooring OS · App Version Authority V0.3.12
    Keeps legacy feature modules from overwriting the current app version label. */
 (function(){
   'use strict';
-  const VERSION='V0.3.11 Sales Drill-down';
-  const TITLE='RUNLU Deerfoot Flooring OS V0.3.11';
+  const VERSION='V0.3.12 Service & Claims';
+  const TITLE='RUNLU Deerfoot Flooring OS V0.3.12';
 
   function enforce(){
     const pill=document.querySelector('header .pill');
@@ -12,8 +12,8 @@
   }
 
   function installAuthority(){
-    if(window.__runluFlooringVersionAuthority0311){enforce();return;}
-    window.__runluFlooringVersionAuthority0311=true;
+    if(window.__runluFlooringVersionAuthority0312){enforce();return;}
+    window.__runluFlooringVersionAuthority0312=true;
     enforce();
     const pill=document.querySelector('header .pill');
     if(pill) new MutationObserver(enforce).observe(pill,{childList:true,subtree:true,characterData:true});
