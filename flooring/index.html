@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#173d30">
-<title>RUNLU Deerfoot Flooring OS V0.3.11</title>
+<title>RUNLU Deerfoot Flooring OS V0.3.12</title>
 <link rel="stylesheet" href="app.css?v=032">
 <link rel="stylesheet" href="showroom-v010.css?v=010">
 <link rel="stylesheet" href="po-supplier-orders-v010.css?v=010">
@@ -12,11 +12,11 @@
 <link rel="stylesheet" href="sales-handover-v012.css?v=012">
 </head>
 <body>
-<header><div class="top"><div class="brand"><b>RUNLU Deerfoot Flooring OS</b><span>Deerfoot-first internal build · one Job / Order across departments</span></div><div class="pill">V0.3.11 Sales Drill-down</div></div></header>
+<header><div class="top"><div class="brand"><b>RUNLU Deerfoot Flooring OS</b><span>Deerfoot-first internal build · one Job / Order across departments</span></div><div class="pill">V0.3.12 Service & Claims</div></div></header>
 <nav id="nav"></nav>
 <main>
 <section id="command" class="page active">
-  <div class="hero"><h1>Deerfoot Command Center</h1><p>Showroom → Estimate / Assessment → Job / Order → PO / Supplier Orders → Supplier Pickup → Warehouse → Installation → Deerfoot Invoice → Payment.</p><span class="demo">Demo records are clearly labeled. Create real records only when you are ready to use them.</span></div>
+  <div class="hero"><h1>Deerfoot Command Center</h1><p>Showroom → Estimate / Assessment → Job / Order → PO / Supplier Orders → Supplier Pickup → Warehouse → Installation → Deerfoot Invoice → Service / Claims → Payment / Final Closeout.</p><span class="demo">Demo records are clearly labeled. Create real records only when you are ready to use them.</span></div>
   <div class="stats">
     <div class="stat"><b id="stOpen">0</b><span>Open Jobs</span></div>
     <div class="stat"><b id="stMaterial">0</b><span>Need Material</span></div>
@@ -36,6 +36,7 @@
     <button class="module" onclick="go('warehouse')"><span class="ico">🏭</span><strong>Warehouse OS</strong><small>Live warehouse subsystem embedded inside Flooring OS.</small></button>
     <button class="module" onclick="prepareInvoice();go('invoice')"><span class="ico">📄</span><strong>Deerfoot Invoice</strong><small>Final Deerfoot Legacy invoice, including three-copy / overlay printing.</small></button>
     <button class="module" onclick="go('install')"><span class="ico">🛠️</span><strong>Installation</strong><small>Installer, install date and completion status.</small></button>
+    <button id="serviceClaimsModule" class="module" onclick="go('serviceclaims')"><span class="ico">🧰</span><strong>Service / Claims</strong><small>After-sale service, C###### claim PO, inspection, recovery credit and final resolution.</small></button>
     <button class="module" onclick="go('accounting')"><span class="ico">💵</span><strong>Accounting</strong><small>Deposit, GST, supplier receiving match, balance and payment method.</small></button>
   </div>
 </section>
@@ -100,6 +101,8 @@
 <script src="supplier-pickup-v010.js?v=010"></script>
 <script src="sales-v010.js?v=010"></script>
 <script src="sales-handover-v012.js?v=013"></script>
-<script src="sales-handover-sync-v013.js?v=016"></script>
+<script src="sales-handover-sync-v013.js?v=017"></script>
+<script src="service-claims-v010.js?v=012"></script>
+<script src="sales-drilldown-v010.js?v=0312-2"></script>
 </body>
 </html>
