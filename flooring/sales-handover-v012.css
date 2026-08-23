@@ -1,0 +1,25 @@
+/* RUNLU Deerfoot Flooring OS · Sales Handover / Customer Ownership V0.1.2 */
+.salesHandoverCard{margin-top:12px}
+.handoverGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+.handoverGrid label{display:block;margin-bottom:5px}
+.handoverGrid input,.handoverGrid select{width:100%}
+.handoverChecks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.handoverChecks label{display:flex;gap:8px;align-items:flex-start;border:1px solid #dce6e1;background:#fbfcfb;border-radius:10px;padding:10px 12px;color:#33463d;font-size:12px;line-height:1.4}
+.handoverChecks input{width:18px;height:18px;flex:0 0 auto;margin-top:1px}
+.handoverRule{margin-top:12px;background:#f7f2e7;border:1px solid #eadfbf;border-radius:10px;padding:10px 12px;color:#665b3e;font-size:12px;line-height:1.5}
+.handoverPreviewHead{margin-top:14px}
+.handoverPreviewHead h4{margin:0}
+.handoverPreview{border:1px solid #dce6e1;border-radius:12px;overflow:hidden;margin-top:8px;max-height:360px;overflow-y:auto}
+.handoverPreview>.muted{padding:14px}
+.handoverCustomerRow{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border-bottom:1px solid #edf1ef;background:#fff;cursor:pointer}
+.handoverCustomerRow:last-child{border-bottom:0}
+.handoverCustomerRow:hover{background:#fbfcfb}
+.handoverCustomerRow input{width:18px;height:18px;flex:0 0 auto;margin-top:1px}
+.handoverCustomerRow span{min-width:0}
+.handoverCustomerRow b{display:block;color:#25312b;font-size:13px}
+.handoverCustomerRow small{display:block;color:#74817b;font-size:11px;margin-top:4px;line-height:1.45}
+.handoverResult{margin-top:8px;line-height:1.5}
+.handoverResult b{color:#173d30}
+.salesOwnerHint{display:block;color:#6f7f77;font-size:11px;margin-top:4px;line-height:1.35}
+@media(max-width:980px){.handoverGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.handoverGrid{grid-template-columns:1fr}.handoverChecks{grid-template-columns:1fr}.handoverPreviewHead{align-items:flex-start}.handoverPreviewHead .actions{margin:0}.handoverPreview{max-height:300px}}
