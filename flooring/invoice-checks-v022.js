@@ -1,3 +1,15 @@
+/* RUNLU Flooring OS · Immediate Core Boot Bridge
+   This file is the first add-on loaded after app.js. Boot the base workspace now,
+   without waiting for DOMContentLoaded / every later module request to finish. */
+(function(){
+  try{
+    if(!document.querySelector('#nav button')){
+      if(typeof bootBase==='function') bootBase();
+      else if(typeof load==='function') load();
+    }
+  }catch(e){console.error('Flooring immediate core boot failed:',e)}
+})();
+
 /* RUNLU Deerfoot Flooring OS V0.2.3 — Deerfoot right-bottom checkbox bridge */
 (function(){
   function ensure(j){
