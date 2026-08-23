@@ -1,5 +1,5 @@
-/* RUNLU Deerfoot Flooring OS · Sales Handover + Pricing Policy sync V0.1.7
-   Keeps handover state synchronized and separates company pricing policy from salesperson special-order decisions.
+/* RUNLU Deerfoot Flooring OS · Sales Handover + Pricing Policy sync V0.1.8
+   Keeps handover state synchronized and separates Pricing from system-wide Settings.
    Loads Special Pricing, Sales Drill-down and Service & Claims reliably after the base workspace is ready. */
 (function(){
   'use strict';
@@ -14,15 +14,21 @@
     },180));
   }
 
-  function ensurePricingSettings(){
+  function ensurePricingPage(){
     const sales=document.getElementById('sales');
     const grid=document.getElementById('pricingProfileGrid');
     if(!sales||!grid)return;
-    let section=document.getElementById('settings');
+    let section=document.getElementById('pricing');
+    const legacy=document.getElementById('settings');
+    if(!section&&legacy&&document.getElementById('companyPricingSettings')){legacy.id='pricing';section=legacy}
     if(!section){
-      section=document.createElement('section');section.id='settings';section.className='page';
-      section.innerHTML='<div class="card"><div class="statusLine"><div><h2>Settings</h2><div class="muted">Company-wide operating policies. Salespeople use these defaults but do not redefine the company policy for each salesperson.</div></div><span class="tag">Company Policy</span></div></div><div id="companyPricingSettings"></div>';
+      section=document.createElement('section');section.id='pricing';section.className='page';
+      section.innerHTML='<div class="card"><div class="statusLine"><div><h2>Pricing</h2><div class="muted">Company-wide pricing policy. Sales uses these defaults and may apply documented order-level overrides.</div></div><span class="tag">Pricing Policy</span></div></div><div id="companyPricingSettings"></div>';
       sales.insertAdjacentElement('afterend',section);
+    }else{
+      const h2=section.querySelector('h2');if(h2)h2.textContent='Pricing';
+      const topMuted=section.querySelector('.card .statusLine .muted');if(topMuted)topMuted.textContent='Company-wide pricing policy. Sales uses these defaults and may apply documented order-level overrides.';
+      const tag=section.querySelector('.card .statusLine .tag');if(tag)tag.textContent='Pricing Policy';
     }
     const card=grid.closest('.card');
     const host=document.getElementById('companyPricingSettings');
@@ -33,9 +39,13 @@
       const note=card.querySelector('.salesPricingNote');if(note)note.innerHTML='<b>Policy vs. order:</b> These percentages belong to the company, not to an individual salesperson. Special-order decisions such as repeat, referral, friend, family, contractor, senior or volume pricing are handled on the Job / Order and remain visible for Accounting review.';
     }
     const nav=document.getElementById('nav');
-    if(nav&&!nav.querySelector('[data-page="settings"]')){
-      const btn=document.createElement('button');btn.dataset.page='settings';btn.textContent='Settings';btn.onclick=()=>go('settings');
-      const salesBtn=nav.querySelector('[data-page="sales"]');salesBtn?salesBtn.insertAdjacentElement('afterend',btn):nav.appendChild(btn);
+    if(nav){
+      const legacyBtn=nav.querySelector('[data-page="settings"]');
+      if(legacyBtn&&!nav.querySelector('[data-page="pricing"]')){legacyBtn.dataset.page='pricing';legacyBtn.textContent='Pricing';legacyBtn.onclick=()=>go('pricing')}
+      if(!nav.querySelector('[data-page="pricing"]')){
+        const btn=document.createElement('button');btn.dataset.page='pricing';btn.textContent='Pricing';btn.onclick=()=>go('pricing');
+        const salesBtn=nav.querySelector('[data-page="sales"]');salesBtn?salesBtn.insertAdjacentElement('afterend',btn):nav.appendChild(btn);
+      }
     }
   }
 
@@ -68,7 +78,7 @@
   }
 
   function installPricingHooks(){
-    if(window.__runluPricingPolicyV039)return;window.__runluPricingPolicyV039=true;
+    if(window.__runluPricingPolicyV0313)return;window.__runluPricingPolicyV0313=true;
     const oldRender=window.renderItemsEditor;
     if(typeof oldRender==='function')window.renderItemsEditor=function(){const r=oldRender.apply(this,arguments);postProcessPricingEditor();return r};
     const oldApply=window.applyPricingProfile;
@@ -99,15 +109,15 @@
     };
     const oldGo=window.go;
     window.go=function(id){
-      if(id==='settings'){
-        ensurePricingSettings();
-        document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='settings'));
-        document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page==='settings'));
+      if(id==='pricing'){
+        ensurePricingPage();
+        document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='pricing'));
+        document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page==='pricing'));
         window.scrollTo({top:0,behavior:'smooth'});return;
       }
-      const r=oldGo.apply(this,arguments);setTimeout(()=>{ensurePricingSettings();postProcessPricingEditor()},0);return r;
+      const r=oldGo.apply(this,arguments);setTimeout(()=>{ensurePricingPage();postProcessPricingEditor()},0);return r;
     };
-    ensurePricingSettings();postProcessPricingEditor();
+    ensurePricingPage();postProcessPricingEditor();
   }
 
   function loadModule(src,key){
@@ -121,7 +131,7 @@
   }
   function boot(){
     setTimeout(installHandoverSync,120);setTimeout(installHandoverSync,600);
-    setTimeout(()=>{ensurePricingSettings();installPricingHooks()},180);
+    setTimeout(()=>{ensurePricingPage();installPricingHooks()},180);
     setTimeout(loadFeatureModules,260);
   }
   if(document.readyState==='loading')window.addEventListener('load',boot);else boot();
