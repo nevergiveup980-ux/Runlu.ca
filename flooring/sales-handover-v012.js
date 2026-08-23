@@ -27,144 +27,34 @@
   function seedOwnership(){
     const store=loadJSON(OWNERSHIP_KEY,{});const grouped=new Map();
     jobsSafe().forEach(j=>{const name=String(j.customerName||'').trim(),rep=String(j.salesRep||'').trim();if(!name||!rep)return;const key=norm(name);if(!grouped.has(key))grouped.set(key,[]);grouped.get(key).push(j)});
-    grouped.forEach((list,key)=>{
-      if(store[key])return;
-      const ordered=[...list].sort((a,b)=>(dateOfJob(a)||'').localeCompare(dateOfJob(b)||''));
-      const first=ordered.find(j=>String(j.salesRep||'').trim());
-      const last=[...ordered].reverse().find(j=>String(j.salesRep||'').trim());
-      if(!last)return;
-      store[key]={
-        key,
-        customerName:String(last.customerName||first?.customerName||'').trim(),
-        originalSalesRep:String(first?.salesRep||last.salesRep||'').trim(),
-        currentSalesRep:String(last.salesRep||'').trim(),
-        history:[],
-        createdAt:new Date().toISOString(),
-        updatedAt:new Date().toISOString()
-      };
-    });
+    grouped.forEach((list,key)=>{if(store[key])return;const ordered=[...list].sort((a,b)=>(dateOfJob(a)||'').localeCompare(dateOfJob(b)||''));const first=ordered.find(j=>String(j.salesRep||'').trim());const last=[...ordered].reverse().find(j=>String(j.salesRep||'').trim());if(!last)return;store[key]={key,customerName:String(last.customerName||first?.customerName||'').trim(),originalSalesRep:String(first?.salesRep||last.salesRep||'').trim(),currentSalesRep:String(last.salesRep||'').trim(),history:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};});
     saveJSON(OWNERSHIP_KEY,store);return store;
   }
   function ownership(){return seedOwnership()}
   function recordForCustomer(name){const key=norm(name);return ownership()[key]||null}
   function currentOwner(name){return recordForCustomer(name)?.currentSalesRep||''}
   function customersOwnedBy(rep){const low=norm(rep);return Object.values(ownership()).filter(r=>norm(r.currentSalesRep)===low).sort((a,b)=>alpha(a.customerName,b.customerName))}
-  function persistOwnerForNewCustomer(name,rep){
-    const customerName=String(name||'').trim(),salesRep=String(rep||'').trim();if(!customerName||!salesRep)return;
-    const store=ownership(),key=norm(customerName);if(store[key])return;
-    store[key]={key,customerName,originalSalesRep:salesRep,currentSalesRep:salesRep,history:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};saveJSON(OWNERSHIP_KEY,store);
-  }
+  function persistOwnerForNewCustomer(name,rep){const customerName=String(name||'').trim(),salesRep=String(rep||'').trim();if(!customerName||!salesRep)return;const store=ownership(),key=norm(customerName);if(store[key])return;store[key]={key,customerName,originalSalesRep:salesRep,currentSalesRep:salesRep,history:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};saveJSON(OWNERSHIP_KEY,store);}
 
   function ensureCard(){
     const sales=by('sales');if(!sales||by('salesHandoverCard'))return;
     const team=by('salesTeamChangeCard');const card=document.createElement('div');card.id='salesHandoverCard';card.className='card salesHandoverCard';
-    card.innerHTML=`
-      <div class="statusLine"><div><h3>Sales Handover / Customer Ownership</h3><div class="muted">Transfer current customer responsibility to another salesperson without rewriting historical sales performance.</div></div><span class="tag">History Safe</span></div>
-      <div class="handoverGrid">
-        <div><label>Departing / Previous Sales Rep</label><select id="handoverFrom"></select></div>
-        <div><label>Transfer Customers To</label><select id="handoverTo"></select></div>
-        <div><label>Effective Date</label><input id="handoverDate" type="date" value="${today()}"></div>
-        <div><label>Reason</label><input id="handoverReason" placeholder="Departure / transfer / territory change"></div>
-      </div>
-      <div class="handoverChecks">
-        <label><input id="handoverOpenJobs" type="checkbox" checked> Transfer open Jobs to the new responsible Sales Rep</label>
-        <label><input id="handoverFormer" type="checkbox" checked> Mark previous Sales Rep Inactive / Former after all current customers are transferred</label>
-      </div>
-      <div class="handoverRule"><b>Historical rule:</b> Completed / Closed / Cancelled Jobs keep their original Sales Rep, sales, cost and profit. Open Jobs may move to the new responsible rep. Open PO records keep the original Sales Rep and add a Current Responsible Rep.</div>
-      <div class="statusLine handoverPreviewHead"><h4>Current Customers</h4><div class="actions"><button class="action" id="handoverSelectAll">Select All</button><button class="action" id="handoverClearAll">Clear</button></div></div>
-      <div id="handoverPreview" class="handoverPreview"></div>
-      <div class="actions"><button class="action" id="handoverRefresh">Refresh Preview</button><button class="action primary" id="handoverExecute">Transfer Selected Customers</button></div>
-      <div id="handoverResult" class="muted handoverResult"></div>`;
+    card.innerHTML=`<div class="statusLine"><div><h3>Sales Handover / Customer Ownership</h3><div class="muted">Transfer current customer responsibility to another salesperson without rewriting historical sales performance.</div></div><span class="tag">History Safe</span></div><div class="handoverGrid"><div><label>Departing / Previous Sales Rep</label><select id="handoverFrom"></select></div><div><label>Transfer Customers To</label><select id="handoverTo"></select></div><div><label>Effective Date</label><input id="handoverDate" type="date" value="${today()}"></div><div><label>Reason</label><input id="handoverReason" placeholder="Departure / transfer / territory change"></div></div><div class="handoverChecks"><label><input id="handoverOpenJobs" type="checkbox" checked> Transfer open Jobs to the new responsible Sales Rep</label><label><input id="handoverFormer" type="checkbox" checked> Mark previous Sales Rep Inactive / Former after all current customers are transferred</label></div><div class="handoverRule"><b>Historical rule:</b> Completed / Closed / Cancelled Jobs keep their original Sales Rep, sales, cost and profit. Open Jobs may move to the new responsible rep. Open PO records keep the original Sales Rep and add a Current Responsible Rep.</div><div class="statusLine handoverPreviewHead"><h4>Current Customers</h4><div class="actions"><button class="action" id="handoverSelectAll">Select All</button><button class="action" id="handoverClearAll">Clear</button></div></div><div id="handoverPreview" class="handoverPreview"></div><div class="actions"><button class="action" id="handoverRefresh">Refresh Preview</button><button class="action primary" id="handoverExecute">Transfer Selected Customers</button></div><div id="handoverResult" class="muted handoverResult"></div>`;
     if(team)team.insertAdjacentElement('beforebegin',card);else sales.appendChild(card);
-    by('handoverFrom')?.addEventListener('change',()=>{refreshHandoverSelectors(false);renderHandoverPreview()});
-    by('handoverTo')?.addEventListener('change',renderHandoverPreview);
-    by('handoverRefresh')?.addEventListener('click',()=>{seedOwnership();renderHandoverPreview()});
-    by('handoverSelectAll')?.addEventListener('click',()=>card.querySelectorAll('.handoverCustomerCheck').forEach(x=>x.checked=true));
-    by('handoverClearAll')?.addEventListener('click',()=>card.querySelectorAll('.handoverCustomerCheck').forEach(x=>x.checked=false));
-    by('handoverExecute')?.addEventListener('click',executeHandover);
-    installInactiveGuard();refreshHandoverSelectors(true);renderHandoverPreview();
+    by('handoverFrom')?.addEventListener('change',()=>{refreshHandoverSelectors(false);renderHandoverPreview()});by('handoverTo')?.addEventListener('change',renderHandoverPreview);by('handoverRefresh')?.addEventListener('click',()=>{seedOwnership();renderHandoverPreview()});by('handoverSelectAll')?.addEventListener('click',()=>card.querySelectorAll('.handoverCustomerCheck').forEach(x=>x.checked=true));by('handoverClearAll')?.addEventListener('click',()=>card.querySelectorAll('.handoverCustomerCheck').forEach(x=>x.checked=false));by('handoverExecute')?.addEventListener('click',executeHandover);installInactiveGuard();refreshHandoverSelectors(true);renderHandoverPreview();
   }
-
-  function refreshHandoverSelectors(reset){
-    const from=by('handoverFrom'),to=by('handoverTo');if(!from||!to)return;
-    const reps=activeReps(),prevFrom=reset?'':from.value,prevTo=reset?'':to.value;
-    from.innerHTML='<option value="">Choose salesperson</option>'+reps.map(r=>`<option value="${esc2(r)}">${esc2(r)}</option>`).join('');
-    if(prevFrom&&reps.includes(prevFrom))from.value=prevFrom;
-    const chosen=from.value;to.innerHTML='<option value="">Choose new owner</option>'+reps.filter(r=>norm(r)!==norm(chosen)).map(r=>`<option value="${esc2(r)}">${esc2(r)}</option>`).join('');
-    if(prevTo&&reps.includes(prevTo)&&norm(prevTo)!==norm(chosen))to.value=prevTo;
-  }
-
-  function renderHandoverPreview(){
-    const from=by('handoverFrom')?.value||'',el=by('handoverPreview');if(!el)return;
-    if(!from){el.innerHTML='<div class="muted">Choose the previous Sales Rep to see the customers currently assigned to them.</div>';return}
-    const rows=customersOwnedBy(from);
-    el.innerHTML=rows.length?rows.map(r=>{
-      const related=jobsSafe().filter(j=>norm(j.customerName)===r.key),open=related.filter(j=>!CLOSED_JOB.has(j.status)).length,closed=related.length-open;
-      return `<label class="handoverCustomerRow"><input class="handoverCustomerCheck" type="checkbox" checked data-key="${esc2(r.key)}"><span><b>${esc2(r.customerName)}</b><small>Current owner: ${esc2(r.currentSalesRep)} · ${open} open Job${open===1?'':'s'} · ${closed} historical Job${closed===1?'':'s'}</small></span></label>`;
-    }).join(''):'<div class="muted">No current customers are assigned to '+esc2(from)+'. Historical sales records remain available separately.</div>';
-  }
-
+  function refreshHandoverSelectors(reset){const from=by('handoverFrom'),to=by('handoverTo');if(!from||!to)return;const reps=activeReps(),prevFrom=reset?'':from.value,prevTo=reset?'':to.value;from.innerHTML='<option value="">Choose salesperson</option>'+reps.map(r=>`<option value="${esc2(r)}">${esc2(r)}</option>`).join('');if(prevFrom&&reps.includes(prevFrom))from.value=prevFrom;const chosen=from.value;to.innerHTML='<option value="">Choose new owner</option>'+reps.filter(r=>norm(r)!==norm(chosen)).map(r=>`<option value="${esc2(r)}">${esc2(r)}</option>`).join('');if(prevTo&&reps.includes(prevTo)&&norm(prevTo)!==norm(chosen))to.value=prevTo;}
+  function renderHandoverPreview(){const from=by('handoverFrom')?.value||'',el=by('handoverPreview');if(!el)return;if(!from){el.innerHTML='<div class="muted">Choose the previous Sales Rep to see the customers currently assigned to them.</div>';return}const rows=customersOwnedBy(from);el.innerHTML=rows.length?rows.map(r=>{const related=jobsSafe().filter(j=>norm(j.customerName)===r.key),open=related.filter(j=>!CLOSED_JOB.has(j.status)).length,closed=related.length-open;return `<label class="handoverCustomerRow"><input class="handoverCustomerCheck" type="checkbox" checked data-key="${esc2(r.key)}"><span><b>${esc2(r.customerName)}</b><small>Current owner: ${esc2(r.currentSalesRep)} · ${open} open Job${open===1?'':'s'} · ${closed} historical Job${closed===1?'':'s'}</small></span></label>`;}).join(''):'<div class="muted">No current customers are assigned to '+esc2(from)+'. Historical sales records remain available separately.</div>';}
   function selectedCustomerKeys(){return [...document.querySelectorAll('#salesHandoverCard .handoverCustomerCheck:checked')].map(x=>x.dataset.key).filter(Boolean)}
-  function setRepFormer(name){
-    const s=settings(),low=norm(name);s.reps=s.reps.filter(x=>norm(x)!==low);if(!s.inactiveReps.some(x=>norm(x)===low))s.inactiveReps.push(name);s.reps.sort(alpha);s.inactiveReps.sort(alpha);saveJSON(SETTINGS_KEY,s);
-  }
+  function setRepFormer(name){const s=settings(),low=norm(name);s.reps=s.reps.filter(x=>norm(x)!==low);if(!s.inactiveReps.some(x=>norm(x)===low))s.inactiveReps.push(name);s.reps.sort(alpha);s.inactiveReps.sort(alpha);saveJSON(SETTINGS_KEY,s);}
+  function executeHandover(){const from=String(by('handoverFrom')?.value||'').trim(),to=String(by('handoverTo')?.value||'').trim(),effective=by('handoverDate')?.value||today(),reason=String(by('handoverReason')?.value||'').trim()||'Sales responsibility handover';const transferOpen=!!by('handoverOpenJobs')?.checked,markFormer=!!by('handoverFormer')?.checked;if(!from||!to){alert('Choose both the previous Sales Rep and the new customer owner.');return}if(norm(from)===norm(to)){alert('Choose a different Sales Rep for the handover.');return}const all=customersOwnedBy(from),selected=selectedCustomerKeys();if(!selected.length){alert('Select at least one customer to transfer.');return}if(markFormer&&selected.length!==all.length){alert('To mark '+from+' Former, transfer all of their current customers first. Otherwise uncheck “Mark previous Sales Rep Inactive / Former”.');return}if(!confirm(`Transfer ${selected.length} customer${selected.length===1?'':'s'} from ${from} to ${to}? Historical completed sales will not be changed.`))return;const store=ownership(),stamp=new Date().toISOString();let transferred=0,openJobs=0,openPOs=0;selected.forEach(key=>{const r=store[key];if(!r||norm(r.currentSalesRep)!==norm(from))return;r.history=Array.isArray(r.history)?r.history:[];r.history.push({from,to,effectiveDate:effective,reason,changedAt:stamp});r.previousSalesRep=from;r.currentSalesRep=to;r.updatedAt=stamp;transferred++});saveJSON(OWNERSHIP_KEY,store);if(transferOpen){jobsSafe().forEach(j=>{const key=norm(j.customerName);if(!selected.includes(key)||CLOSED_JOB.has(j.status)||norm(j.salesRep)!==norm(from))return;j.originalSalesRep=j.originalSalesRep||j.salesRep||from;j.salesRepHistory=Array.isArray(j.salesRepHistory)?j.salesRepHistory:[];j.salesRepHistory.push({from,to,effectiveDate:effective,reason,changedAt:stamp});j.salesRep=to;j.currentSalesRep=to;openJobs++});try{if(typeof saveStore==='function')saveStore()}catch(_){ }const pos=poSafe();pos.forEach(p=>{const key=norm(p.customerName);if(!selected.includes(key)||CLOSED_PO.has(p.status))return;p.responsibleSalesRep=to;p.salesRepHandover=Array.isArray(p.salesRepHandover)?p.salesRepHandover:[];p.salesRepHandover.push({from,to,effectiveDate:effective,reason,changedAt:stamp});openPOs++});saveJSON(PO_KEY,pos);}if(markFormer)setRepFormer(from);const result=by('handoverResult');if(result)result.innerHTML=`<b>Handover completed.</b> ${transferred} customer${transferred===1?'':'s'} now owned by ${esc2(to)}. ${openJobs} open Job${openJobs===1?'':'s'} transferred. ${openPOs} open PO${openPOs===1?'':'s'} assigned to ${esc2(to)} as current responsible rep.${markFormer?' '+esc2(from)+' is now Former.':''}`;refreshHandoverSelectors(true);renderHandoverPreview();syncCustomerOwnerHint();try{if(typeof window.renderSales==='function')window.renderSales()}catch(_){ }}
+  function installInactiveGuard(){const team=by('salesTeamChangeCard');if(!team||team.dataset.handoverGuard==='1')return;team.dataset.handoverGuard='1';team.addEventListener('click',e=>{const btn=e.target.closest('button');if(!btn||btn.textContent.trim()!=='Mark Inactive')return;const row=btn.closest('.salesTeamChangeRow'),name=row?.querySelector('b')?.textContent?.trim()||'';if(!name)return;const count=customersOwnedBy(name).length;if(!count)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();ensureCard();refreshHandoverSelectors(true);if(by('handoverFrom'))by('handoverFrom').value=name;refreshHandoverSelectors(false);renderHandoverPreview();by('handoverFormer').checked=true;by('salesHandoverCard')?.scrollIntoView({behavior:'smooth',block:'start'});alert(name+' still owns '+count+' current customer'+(count===1?'':'s')+'. Complete Customer Handover before marking this salesperson Former.');},true);}
+  function ensureOwnerHint(){const rep=by('salesRep');if(!rep||by('salesOwnerHint'))return;const hint=document.createElement('small');hint.id='salesOwnerHint';hint.className='salesOwnerHint';rep.insertAdjacentElement('afterend',hint);}
+  function syncCustomerOwnerHint(){ensureOwnerHint();const customer=String(by('customerName')?.value||'').trim(),rep=by('salesRep'),hint=by('salesOwnerHint');if(!hint||!rep)return;const owner=currentOwner(customer);if(!customer){hint.textContent='';return}if(owner){hint.textContent='Current account owner: '+owner;if(!rep.value.trim())rep.value=owner}else hint.textContent='No current account owner saved yet.';}
+  function installJobOwnershipHooks(){const customer=by('customerName');if(customer&&!customer.dataset.ownerHook){customer.dataset.ownerHook='1';customer.addEventListener('change',syncCustomerOwnerHint);customer.addEventListener('blur',syncCustomerOwnerHint)}ensureOwnerHint();if(typeof window.saveJob==='function'&&!window.saveJob.__handoverWrapped){const old=window.saveJob;const wrapped=function(){const name=String(by('customerName')?.value||'').trim(),rep=by('salesRep');const owner=currentOwner(name);if(rep&&owner&&!rep.value.trim())rep.value=owner;const chosen=String(rep?.value||'').trim();const result=old.apply(this,arguments);persistOwnerForNewCustomer(name,chosen);syncCustomerOwnerHint();return result};wrapped.__handoverWrapped=true;window.saveJob=wrapped}if(typeof window.loadEditor==='function'&&!window.loadEditor.__handoverWrapped){const old=window.loadEditor;const wrapped=function(){const result=old.apply(this,arguments);setTimeout(syncCustomerOwnerHint,0);return result};wrapped.__handoverWrapped=true;window.loadEditor=wrapped}}
 
-  function executeHandover(){
-    const from=String(by('handoverFrom')?.value||'').trim(),to=String(by('handoverTo')?.value||'').trim(),effective=by('handoverDate')?.value||today(),reason=String(by('handoverReason')?.value||'').trim()||'Sales responsibility handover';
-    const transferOpen=!!by('handoverOpenJobs')?.checked,markFormer=!!by('handoverFormer')?.checked;
-    if(!from||!to){alert('Choose both the previous Sales Rep and the new customer owner.');return}
-    if(norm(from)===norm(to)){alert('Choose a different Sales Rep for the handover.');return}
-    const all=customersOwnedBy(from),selected=selectedCustomerKeys();if(!selected.length){alert('Select at least one customer to transfer.');return}
-    if(markFormer&&selected.length!==all.length){alert('To mark '+from+' Former, transfer all of their current customers first. Otherwise uncheck “Mark previous Sales Rep Inactive / Former”.');return}
-    if(!confirm(`Transfer ${selected.length} customer${selected.length===1?'':'s'} from ${from} to ${to}? Historical completed sales will not be changed.`))return;
-
-    const store=ownership(),stamp=new Date().toISOString();let transferred=0,openJobs=0,openPOs=0;
-    selected.forEach(key=>{const r=store[key];if(!r||norm(r.currentSalesRep)!==norm(from))return;r.history=Array.isArray(r.history)?r.history:[];r.history.push({from,to,effectiveDate:effective,reason,changedAt:stamp});r.previousSalesRep=from;r.currentSalesRep=to;r.updatedAt=stamp;transferred++});
-    saveJSON(OWNERSHIP_KEY,store);
-
-    if(transferOpen){
-      jobsSafe().forEach(j=>{const key=norm(j.customerName);if(!selected.includes(key)||CLOSED_JOB.has(j.status)||norm(j.salesRep)!==norm(from))return;j.originalSalesRep=j.originalSalesRep||j.salesRep||from;j.salesRepHistory=Array.isArray(j.salesRepHistory)?j.salesRepHistory:[];j.salesRepHistory.push({from,to,effectiveDate:effective,reason,changedAt:stamp});j.salesRep=to;j.currentSalesRep=to;openJobs++});
-      try{if(typeof saveStore==='function')saveStore()}catch(_){ }
-      const pos=poSafe();pos.forEach(p=>{const key=norm(p.customerName);if(!selected.includes(key)||CLOSED_PO.has(p.status))return;p.responsibleSalesRep=to;p.salesRepHandover=Array.isArray(p.salesRepHandover)?p.salesRepHandover:[];p.salesRepHandover.push({from,to,effectiveDate:effective,reason,changedAt:stamp});openPOs++});saveJSON(PO_KEY,pos);
-    }
-    if(markFormer)setRepFormer(from);
-
-    const result=by('handoverResult');if(result)result.innerHTML=`<b>Handover completed.</b> ${transferred} customer${transferred===1?'':'s'} now owned by ${esc2(to)}. ${openJobs} open Job${openJobs===1?'':'s'} transferred. ${openPOs} open PO${openPOs===1?'':'s'} assigned to ${esc2(to)} as current responsible rep.${markFormer?' '+esc2(from)+' is now Former.':''}`;
-    refreshHandoverSelectors(true);renderHandoverPreview();syncCustomerOwnerHint();try{if(typeof window.renderSales==='function')window.renderSales()}catch(_){ }
-  }
-
-  function installInactiveGuard(){
-    const team=by('salesTeamChangeCard');if(!team||team.dataset.handoverGuard==='1')return;team.dataset.handoverGuard='1';
-    team.addEventListener('click',e=>{
-      const btn=e.target.closest('button');if(!btn||btn.textContent.trim()!=='Mark Inactive')return;
-      const row=btn.closest('.salesTeamChangeRow'),name=row?.querySelector('b')?.textContent?.trim()||'';if(!name)return;
-      const count=customersOwnedBy(name).length;if(!count)return;
-      e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
-      ensureCard();refreshHandoverSelectors(true);if(by('handoverFrom'))by('handoverFrom').value=name;refreshHandoverSelectors(false);renderHandoverPreview();by('handoverFormer').checked=true;by('salesHandoverCard')?.scrollIntoView({behavior:'smooth',block:'start'});
-      alert(name+' still owns '+count+' current customer'+(count===1?'':'s')+'. Complete Customer Handover before marking this salesperson Former.');
-    },true);
-  }
-
-  function ensureOwnerHint(){
-    const rep=by('salesRep');if(!rep||by('salesOwnerHint'))return;const hint=document.createElement('small');hint.id='salesOwnerHint';hint.className='salesOwnerHint';rep.insertAdjacentElement('afterend',hint);
-  }
-  function syncCustomerOwnerHint(){
-    ensureOwnerHint();const customer=String(by('customerName')?.value||'').trim(),rep=by('salesRep'),hint=by('salesOwnerHint');if(!hint||!rep)return;const owner=currentOwner(customer);
-    if(!customer){hint.textContent='';return}
-    if(owner){hint.textContent='Current account owner: '+owner;if(!rep.value.trim())rep.value=owner}
-    else hint.textContent='No current account owner saved yet.';
-  }
-  function installJobOwnershipHooks(){
-    const customer=by('customerName');if(customer&&!customer.dataset.ownerHook){customer.dataset.ownerHook='1';customer.addEventListener('change',syncCustomerOwnerHint);customer.addEventListener('blur',syncCustomerOwnerHint)}
-    ensureOwnerHint();
-    if(typeof window.saveJob==='function'&&!window.saveJob.__handoverWrapped){const old=window.saveJob;const wrapped=function(){const name=String(by('customerName')?.value||'').trim(),rep=by('salesRep');const owner=currentOwner(name);if(rep&&owner&&!rep.value.trim())rep.value=owner;const chosen=String(rep?.value||'').trim();const result=old.apply(this,arguments);persistOwnerForNewCustomer(name,chosen);syncCustomerOwnerHint();return result};wrapped.__handoverWrapped=true;window.saveJob=wrapped}
-    if(typeof window.loadEditor==='function'&&!window.loadEditor.__handoverWrapped){const old=window.loadEditor;const wrapped=function(){const result=old.apply(this,arguments);setTimeout(syncCustomerOwnerHint,0);return result};wrapped.__handoverWrapped=true;window.loadEditor=wrapped}
-  }
-
-  function enhance(){
-    ensureCard();installJobOwnershipHooks();installInactiveGuard();seedOwnership();
-    const pill=document.querySelector('header .pill');if(pill)pill.textContent='V0.3.8 Sales Handover + Pricing';document.title='RUNLU Deerfoot Flooring OS V0.3.8';
-  }
+  // Feature module only: global app version/title are owned by the main version authority.
+  function enhance(){ensureCard();installJobOwnershipHooks();installInactiveGuard();seedOwnership();}
   window.flooringCustomerOwner=currentOwner;
   window.flooringCustomerOwnershipRecord=recordForCustomer;
   window.addEventListener('load',()=>{setTimeout(enhance,320);setTimeout(enhance,900)});
