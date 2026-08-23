@@ -71,7 +71,7 @@ window.addEventListener('pageshow',()=>{if(!document.querySelector('#nav button'
   function saveCheckControls(){
     const j=active();if(!j)return;normalizeChecks(j);
     const a=document.getElementById(CHECK_IDS[0]),b=document.getElementById(CHECK_IDS[1]),c=document.getElementById(CHECK_IDS[2]);
-    if(a)j.depositPaidConfirmed=!!a.checked;if(b)j.balancePaid=!!b.checked;if(c)c.checked=!!j.productViewedBeforeInstall;
+    if(a)j.depositPaidConfirmed=!!a.checked;if(b)j.balancePaid=!!b.checked;if(c)j.productViewedBeforeInstall=!!c.checked;
   }
   const oldLoadAccounting=loadAccounting;
   loadAccounting=function(){oldLoadAccounting();loadCheckControls()};
