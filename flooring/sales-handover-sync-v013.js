@@ -1,4 +1,4 @@
-/* RUNLU Deerfoot Flooring OS · Sales Handover + Pricing Policy sync V0.1.4
+/* RUNLU Deerfoot Flooring OS · Sales Handover + Pricing Policy sync V0.1.5
    Keeps handover state synchronized and separates company pricing policy from salesperson special-order decisions.
    Special pricing reasons remain attached to item history and are carried to the Deerfoot invoice Notes area. */
 (function(){
@@ -122,4 +122,10 @@
 (function(){
   function load(){if(document.querySelector('script[data-runlu-special-pricing]'))return;const s=document.createElement('script');s.dataset.runluSpecialPricing='1';s.src='sales-special-pricing-v010.js?v=010';document.body.appendChild(s)}
   window.addEventListener('load',()=>setTimeout(load,1000));
+})();
+
+/* V0.3.11 loader: Sales summary → lists → customer/job detail drill-down. */
+(function(){
+  function load(){if(document.querySelector('script[data-runlu-sales-drilldown]'))return;const s=document.createElement('script');s.dataset.runluSalesDrilldown='1';s.src='sales-drilldown-v010.js?v=010';document.body.appendChild(s)}
+  window.addEventListener('load',()=>setTimeout(load,1350));
 })();
