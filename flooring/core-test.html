@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RUNLU Flooring Core Test</title>
+<link rel="stylesheet" href="app.css?v=core-test-1">
+<style>
+#probe{max-width:1100px;margin:12px auto;padding:12px 14px;background:#fff;border:2px solid #173d30;border-radius:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.5}.probeRow{padding:3px 0}.ok{color:#17633e;font-weight:800}.bad{color:#a42c38;font-weight:800}
+</style>
+</head>
+<body>
+<header><div class="top"><div class="brand"><b>RUNLU Flooring Core Isolation Test</b><span>Base app only · no Sales / Pricing / Claims / Settings add-ons</span></div><div class="pill">CORE TEST</div></div></header>
+<div id="probe">
+  <div class="probeRow">Inline JS: <span id="inlineProbe" class="bad">NOT RUNNING</span></div>
+  <div class="probeRow">app.js parsed: <span id="appProbe" class="bad">NOT CONFIRMED</span></div>
+  <div class="probeRow">Base boot / nav: <span id="navProbe" class="bad">NOT CONFIRMED</span></div>
+  <div class="probeRow">Click handler: <span id="clickProbe" class="bad">NOT TESTED</span> <button id="probeButton" class="action">Test Click</button></div>
+  <div class="probeRow">Last JS error: <span id="errorProbe">none</span></div>
+</div>
+<noscript><div style="padding:20px;background:#fee;color:#900;font-weight:bold">JavaScript is disabled in this browser.</div></noscript>
+<nav id="nav"></nav>
+<main>
+<section id="command" class="page active">
+  <div class="hero"><h1>Core Command Test</h1><p>If the base runtime is healthy, the navigation above will populate automatically.</p></div>
+  <div class="stats"><div class="stat"><b id="stOpen">0</b><span>Open Jobs</span></div><div class="stat"><b id="stMaterial">0</b><span>Need Material</span></div><div class="stat"><b id="stInstall">0</b><span>Ready / Install</span></div><div class="stat"><b id="stBalance">$0</b><span>Balance Due</span></div></div>
+  <div class="grid2"><div class="card"><h3>Today's attention</h3><div id="attention"></div></div><div class="card"><h3>Active Job / Order</h3><div id="activeSummary" class="muted">Select or create a Job.</div><div class="actions"><button class="action primary" onclick="go('jobs')">Open Job</button></div></div></div>
+</section>
+<section id="jobs" class="page"><div class="card"><div class="statusLine"><h2>Jobs</h2><button class="action primary" onclick="newJob()">+ New Job</button></div><div id="jobList"></div></div><div class="card"><h3 id="jobEditorTitle">Job / Order</h3><div class="formgrid"><div><label>Job / Order #</label><input id="jobNumber"></div><div><label>Invoice #</label><input id="invoiceNumber"></div><div><label>Customer</label><input id="customerName"></div><div><label>Clerk</label><input id="clerk"></div><div><label>Sold To</label><input id="soldToAddress"></div><div><label>Ship To Name</label><input id="shipToName"></div><div><label>Ship To Address</label><input id="shipToAddress"></div><div><label>Email</label><input id="email"></div><div><label>Cell</label><input id="cell"></div><div><label>Date Required</label><input id="dateRequired"></div><div><label>Status</label><input id="status"></div><div><label>Pickup</label><input id="pickup"></div><div><label>Delivery</label><input id="delivery"></div><div><label>Customer PO</label><input id="customerPO"></div><div><label>Supplier PO</label><input id="supplierPO"></div><div class="full"><label>Notes</label><textarea id="notes"></textarea></div></div><div id="itemsEditor"></div></div></section>
+<section id="purchasing" class="page"><div class="card"><h2>PO</h2><div id="poSummary"></div><div id="poItems"></div></div></section>
+<section id="warehouse" class="page"><div class="card"><h2>Warehouse</h2><div id="handoff"></div></div><iframe id="warehouseFrame" style="display:none"></iframe></section>
+<section id="invoice" class="page"><div class="card"><h2>Invoice</h2></div><iframe id="invoiceFrame" style="display:none"></iframe></section>
+<section id="install" class="page"><div class="card"><h2>Install</h2><input id="installer"><input id="installDate"><input id="installStatus"><input id="installNotes"></div></section>
+<section id="serviceclaims" class="page"><div class="card"><h2>Service / Claims placeholder</h2></div></section>
+<section id="accounting" class="page"><div class="card"><h2>Accounting</h2><div id="aSub"></div><div id="aGst"></div><div id="aTotal"></div><div id="aBalance"></div><input id="deliveryCharge"><input id="depositPaid"><input id="paymentMethod"><div class="actions"></div></div></section>
+</main>
+<script>
+(function(){
+  var p=document.getElementById('inlineProbe');
+  if(p){p.textContent='RUNNING';p.className='ok';}
+  window.addEventListener('error',function(e){var x=document.getElementById('errorProbe');if(x)x.textContent=(e.message||'error')+' @ '+(e.filename||'')+':'+(e.lineno||0);});
+})();
+</script>
+<script src="app.js?v=core-isolation-20260823-1"></script>
+<script>
+(function(){
+  var a=document.getElementById('appProbe');
+  if(a){var good=typeof window.go==='function';a.textContent=good?'YES · window.go exists':'NO · window.go missing';a.className=good?'ok':'bad';}
+  var b=document.getElementById('probeButton');
+  if(b)b.addEventListener('click',function(){var c=document.getElementById('clickProbe');c.textContent='WORKS';c.className='ok';});
+  function checkNav(){var n=document.querySelectorAll('#nav button').length;var p=document.getElementById('navProbe');if(p){p.textContent=n?n+' buttons':'0 buttons';p.className=n?'ok':'bad';}}
+  setTimeout(checkNav,200);setTimeout(checkNav,1200);setTimeout(checkNav,3500);
+})();
+</script>
+</body>
+</html>
