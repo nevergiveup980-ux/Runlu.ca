@@ -1,0 +1,1 @@
+CSP-safe event bridge: converts inline onclick/oninput/onchange handlers to addEventListener and uses direct page switching for go(...).
