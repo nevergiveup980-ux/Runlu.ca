@@ -1,4 +1,4 @@
-/* RUNLU Deerfoot Flooring OS · Sales Drill-down V0.1.0
+/* RUNLU Deerfoot Flooring OS · Sales Drill-down V0.1.1
    Converts Sales summary metrics into browseable detail views: Jobs, Customers, POs and Balance Due.
    Customer list is alphabetical; customer detail shows contact data, ownership, jobs, POs, sales and balance. */
 (function(){
@@ -39,7 +39,7 @@
     return [...m.values()].sort((a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base'}));
   }
   function contactFrom(c){
-    const js=c.jobs;const last=js[js.length-1]||{};return {address:last.soldToAddress||'',email:last.email||'',cell:last.cell||'',home:last.phoneHome||'',work:last.phoneWork||'',rep:last.currentAccountOwner||last.salesRep||'Unassigned'};
+    const js=c.jobs;const last=js[js.length-1]||{};let owner='';try{owner=typeof window.flooringCustomerOwner==='function'?window.flooringCustomerOwner(c.name):''}catch(_){ }return {address:last.soldToAddress||'',email:last.email||'',cell:last.cell||'',home:last.phoneHome||'',work:last.phoneWork||'',rep:owner||last.currentSalesRep||last.salesRep||'Unassigned'};
   }
   function renderCustomers(xs,balanceOnly){
     let cs=customerMap(xs);if(balanceOnly)cs=cs.filter(c=>c.balance>0.005);
@@ -62,6 +62,10 @@
     const box=by('salesRepSummary');if(box){[...box.children].forEach((el,i)=>{const types=['jobs','customers','pos','balance'];if(!types[i])return;el.style.cursor='pointer';el.setAttribute('role','button');el.setAttribute('tabindex','0');el.title='Tap for details';el.onclick=()=>openDrill(types[i]);el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDrill(types[i])}}})}
     const customerCard=by('salesCustomerList')?.closest('.card');if(customerCard&&!customerCard.dataset.drill){customerCard.dataset.drill='1';customerCard.style.cursor='pointer';customerCard.title='Tap to open customer list';customerCard.addEventListener('click',e=>{if(e.target.closest('button,a,input,select'))return;openDrill('customers')})}
   }
-  function install(){ensureDrillPage();makeMetricButtons();const old=window.renderSales;if(typeof old==='function'&&!old.__drillWrapped){const w=function(){const r=old.apply(this,arguments);setTimeout(makeMetricButtons,0);return r};w.__drillWrapped=true;window.renderSales=w}document.title='RUNLU Deerfoot Flooring OS V0.3.11';const pill=document.querySelector('header .pill');if(pill)pill.textContent='V0.3.11 Sales Drill-down';}
-  window.addEventListener('load',()=>{setTimeout(install,1550);setTimeout(makeMetricButtons,2100)});
+  function install(){
+    if(window.__runluSalesDrilldownV011)return;window.__runluSalesDrilldownV011=true;
+    ensureDrillPage();makeMetricButtons();const old=window.renderSales;if(typeof old==='function'&&!old.__drillWrapped){const w=function(){const r=old.apply(this,arguments);setTimeout(makeMetricButtons,0);return r};w.__drillWrapped=true;window.renderSales=w}document.title='RUNLU Deerfoot Flooring OS V0.3.11';const pill=document.querySelector('header .pill');if(pill)pill.textContent='V0.3.11 Sales Drill-down';
+  }
+  function boot(){setTimeout(install,90);setTimeout(makeMetricButtons,250)}
+  if(document.readyState==='loading')window.addEventListener('load',boot);else boot();
 })();
