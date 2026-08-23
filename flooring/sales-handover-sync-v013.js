@@ -117,3 +117,9 @@
     setTimeout(()=>{ensurePricingSettings();installPricingHooks()},900);
   });
 })();
+
+/* V0.3.10 loader: visible salesperson-owned Special Pricing / Order Override panel in Sales. */
+(function(){
+  function load(){if(document.querySelector('script[data-runlu-special-pricing]'))return;const s=document.createElement('script');s.dataset.runluSpecialPricing='1';s.src='sales-special-pricing-v010.js?v=010';document.body.appendChild(s)}
+  window.addEventListener('load',()=>setTimeout(load,1000));
+})();
