@@ -1,0 +1,219 @@
+/* RUNLU Deerfoot Flooring OS · Sales + Pricing V0.1
+   Adds a dedicated Sales workspace, rep-based reporting, configurable markup profiles,
+   and order-level pricing overrides without changing existing Warehouse/Invoice flows.
+   V0.1 remains browser-local because the current Job store is browser-local. */
+(function(){
+  'use strict';
+  const SALES_SETTINGS='runlu_deerfoot_sales_pricing_settings_v1';
+  const PO_STORE='runlu_deerfoot_supplier_orders_v1';
+  const REPORT_REPS=['BILL','JARROD','NICHOLE','PAUL G','TONY','ARLIN','JASON','DANTE','RYAN','DF'];
+  const PROFILE_DEFS=[
+    ['standard','Standard / Regular'],
+    ['contractor','Contractor'],
+    ['repeat','Repeat Customer'],
+    ['referral','Referral / Friend'],
+    ['large','Large Order / Volume'],
+    ['employee','Employee'],
+    ['custom','Custom Override']
+  ];
+  let selectedRep='ALL';
+  let settings=loadSettings();
+
+  function loadSettings(){
+    const base={
+      reps:[...REPORT_REPS],
+      profiles:{standard:'',contractor:'',repeat:'',referral:'',large:'',employee:10,custom:''}
+    };
+    try{
+      const saved=JSON.parse(localStorage.getItem(SALES_SETTINGS)||'null');
+      if(saved&&typeof saved==='object'){
+        if(Array.isArray(saved.reps)&&saved.reps.length)base.reps=saved.reps;
+        if(saved.profiles&&typeof saved.profiles==='object')base.profiles={...base.profiles,...saved.profiles};
+      }
+    }catch(_){ }
+    return base;
+  }
+  function saveSettings(){localStorage.setItem(SALES_SETTINGS,JSON.stringify(settings))}
+  function html(v){return typeof esc==='function'?esc(v):String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+  function money2(n){return typeof money==='function'?money(n):'$'+Number(n||0).toFixed(2)}
+  function num(v){const n=Number(v);return Number.isFinite(n)?n:0}
+  function qtyNumber(v){const m=String(v??'').replace(/,/g,'').match(/-?\d+(?:\.\d+)?/);const n=m?Number(m[0]):NaN;return Number.isFinite(n)&&n>0?n:null}
+  function pct(v){const n=Number(v);return Number.isFinite(n)?n:null}
+  function profileLabel(id){return PROFILE_DEFS.find(x=>x[0]===id)?.[1]||id||'Standard / Regular'}
+  function profileOptions(selected){return PROFILE_DEFS.map(([id,label])=>`<option value="${id}" ${id===(selected||'standard')?'selected':''}>${label}</option>`).join('')}
+  function itemCost(x){
+    if(x.costTotal!==undefined&&x.costTotal!==null&&String(x.costTotal)!=='')return num(x.costTotal);
+    const q=qtyNumber(x.qty);return q&&num(x.cost)>0?q*num(x.cost):0;
+  }
+  function jobMetrics(j){
+    const c=typeof calc==='function'?calc(j):{subtotal:0,gst:0,total:0,balance:0};
+    const revenueItems=(j.items||[]).filter(x=>num(x.total)>0);
+    const cost=(j.items||[]).reduce((s,x)=>s+itemCost(x),0);
+    const missingCost=revenueItems.filter(x=>itemCost(x)<=0).length;
+    const profit=c.subtotal-cost;
+    return {netSales:c.subtotal,tax:c.gst,grossSales:c.total,cost,profit,margin:c.subtotal>0?profit/c.subtotal*100:0,missingCost,balance:c.balance};
+  }
+  function jobRep(j){return String(j?.salesRep||'').trim()||'Unassigned'}
+  function poRecords(){try{return JSON.parse(localStorage.getItem(PO_STORE)||'[]')||[]}catch(_){return []}}
+  function poForJob(j,all){return all.filter(p=>p.jobId===j.id||(!p.jobId&&p.jobNumber&&p.jobNumber===j.jobNumber)||p.jobNumber===j.jobNumber)}
+  function dateOf(j){return String(j?.date||j?.invoiceDate||j?.dateRequired||'').slice(0,10)}
+  function todayLocal(){const d=new Date(),off=d.getTimezoneOffset();return new Date(d.getTime()-off*60000).toISOString().slice(0,10)}
+  function monthStart(){const t=todayLocal();return t.slice(0,8)+'01'}
+
+  function ensureSalesSection(){
+    if(document.getElementById('sales'))return;
+    const command=document.getElementById('command');if(!command)return;
+    const section=document.createElement('section');section.id='sales';section.className='page';
+    section.innerHTML=`
+      <div class="card salesHero">
+        <div class="statusLine"><div><h2>Sales</h2><div class="muted">Sales Rep → Customers → Jobs → POs → Written Sales → Cost → Gross Profit.</div></div><span class="tag">V0.1 Sales + Pricing</span></div>
+        <div id="salesRepButtons" class="salesRepButtons"></div>
+        <div class="salesFilters"><div><label>From</label><input id="salesFrom" type="date" value="${monthStart()}"></div><div><label>To</label><input id="salesTo" type="date" value="${todayLocal()}"></div><button class="action" id="salesThisMonth">Month to Date</button><button class="action" id="salesAllDates">All Dates</button></div>
+      </div>
+      <div class="salesStats">
+        <div class="stat"><b id="salesGross">$0</b><span>Gross / Written Sales</span></div>
+        <div class="stat"><b id="salesTax">$0</b><span>Tax</span></div>
+        <div class="stat"><b id="salesNet">$0</b><span>Net Sales</span></div>
+        <div class="stat"><b id="salesCost">$0</b><span>Known Cost</span></div>
+        <div class="stat"><b id="salesProfit">$0</b><span>Gross Profit</span></div>
+        <div class="stat"><b id="salesMargin">0%</b><span>Gross Margin</span></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><div class="statusLine"><h3 id="salesDetailTitle">All Sales</h3><span id="salesCompleteness" class="muted"></span></div><div id="salesRepSummary" class="salesMiniSummary"></div><div id="salesJobTable"></div></div>
+        <div class="card"><h3>Customers</h3><div class="muted">Customer list is derived from the selected salesperson's Job / Order history.</div><div id="salesCustomerList" class="salesCustomerList"></div></div>
+      </div>
+      <div class="card"><div class="statusLine"><div><h3>Pricing Profiles</h3><div class="muted">Company defaults are suggestions. A salesperson may override a specific order; the applied rule and reason remain with the item.</div></div><button class="action primary" id="savePricingProfiles">Save Pricing Settings</button></div>
+        <div class="pricingProfileGrid" id="pricingProfileGrid"></div>
+        <div class="salesPricingNote"><b>Employee:</b> initialized as Cost × 110% = 10% markup from the historical practice described for Deerfoot. It remains editable. Other percentages are intentionally blank until the real company rules are known.</div>
+      </div>
+      <div class="card"><div class="statusLine"><div><h3>Sales Team</h3><div class="muted">Seeded from the August 22 Deerfoot Sales Totals report; names discovered in Jobs/POs are added automatically.</div></div></div><div class="salesTeamEditor"><input id="salesNewRep" placeholder="Add salesperson / sales code"><button class="action" id="salesAddRep">Add</button></div><div id="salesTeamChips" class="salesTeamChips"></div></div>`;
+    command.insertAdjacentElement('afterend',section);
+    document.getElementById('salesFrom')?.addEventListener('change',renderSales);
+    document.getElementById('salesTo')?.addEventListener('change',renderSales);
+    document.getElementById('salesThisMonth')?.addEventListener('click',()=>{by('salesFrom').value=monthStart();by('salesTo').value=todayLocal();renderSales()});
+    document.getElementById('salesAllDates')?.addEventListener('click',()=>{by('salesFrom').value='';by('salesTo').value='';renderSales()});
+    document.getElementById('savePricingProfiles')?.addEventListener('click',saveProfileInputs);
+    document.getElementById('salesAddRep')?.addEventListener('click',addRepFromInput);
+  }
+  function by(id){return document.getElementById(id)}
+
+  function collectReps(){
+    const found=[];
+    const push=v=>{const s=String(v||'').trim();if(s&&!found.some(x=>x.toLowerCase()===s.toLowerCase()))found.push(s)};
+    settings.reps.forEach(push);
+    try{(jobs||[]).forEach(j=>push(j.salesRep))}catch(_){ }
+    poRecords().forEach(p=>push(p.salesRep));
+    return found;
+  }
+  function renderRepButtons(){
+    const el=by('salesRepButtons');if(!el)return;
+    const reps=collectReps();
+    el.innerHTML=[`<button class="salesRepBtn ${selectedRep==='ALL'?'active':''}" data-rep="ALL">All Sales</button>`,...reps.map(r=>`<button class="salesRepBtn ${selectedRep===r?'active':''}" data-rep="${html(r)}">${html(r)}</button>`)].join('');
+    el.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{selectedRep=btn.dataset.rep||'ALL';renderSales()}));
+  }
+  function inRange(j){const d=dateOf(j),from=by('salesFrom')?.value||'',to=by('salesTo')?.value||'';if(!d)return !from&&!to;if(from&&d<from)return false;if(to&&d>to)return false;return true}
+  function filteredJobs(){try{return (jobs||[]).filter(j=>j.status!=='Cancelled'&&inRange(j)&&(selectedRep==='ALL'||jobRep(j)===selectedRep))}catch(_){return []}}
+  function renderSales(){
+    ensureSalesSection();syncJobSalesRepDatalist();renderRepButtons();renderProfileInputs();renderTeamChips();
+    const xs=filteredJobs(),allPO=poRecords();
+    const totals=xs.reduce((a,j)=>{const m=jobMetrics(j);a.gross+=m.grossSales;a.tax+=m.tax;a.net+=m.netSales;a.cost+=m.cost;a.profit+=m.profit;a.missing+=m.missingCost;a.po+=poForJob(j,allPO).filter(p=>p.status!=='Cancelled').length;return a},{gross:0,tax:0,net:0,cost:0,profit:0,missing:0,po:0});
+    by('salesGross').textContent=money2(totals.gross).replace('.00','');
+    by('salesTax').textContent=money2(totals.tax).replace('.00','');
+    by('salesNet').textContent=money2(totals.net).replace('.00','');
+    by('salesCost').textContent=money2(totals.cost).replace('.00','');
+    by('salesProfit').textContent=totals.missing?'Pending':money2(totals.profit).replace('.00','');
+    by('salesMargin').textContent=totals.missing?'Pending':(totals.net?((totals.profit/totals.net)*100).toFixed(1)+'%':'0%');
+    by('salesDetailTitle').textContent=selectedRep==='ALL'?'All Sales':selectedRep;
+    by('salesCompleteness').textContent=totals.missing?`${totals.missing} sold item line(s) still need cost`:'Cost data complete for sold item lines';
+    const customers=[...new Set(xs.map(j=>String(j.customerName||'').trim()).filter(Boolean))];
+    by('salesRepSummary').innerHTML=`<span><b>${xs.length}</b> Jobs</span><span><b>${customers.length}</b> Customers</span><span><b>${totals.po}</b> POs</span><span><b>${money2(xs.reduce((s,j)=>s+jobMetrics(j).balance,0)).replace('.00','')}</b> Balance Due</span>`;
+    renderJobTable(xs,allPO);renderCustomerList(xs);
+  }
+  function renderJobTable(xs,allPO){
+    const el=by('salesJobTable');if(!el)return;
+    if(!xs.length){el.innerHTML='<div class="muted salesEmpty">No matching sales records for this period.</div>';return}
+    el.innerHTML=`<div class="salesTableWrap"><table class="salesTable"><thead><tr><th>Sales Rep</th><th>Customer / Job</th><th>PO</th><th>Net Sales</th><th>Cost</th><th>Gross Profit</th><th>Margin</th><th>Status</th></tr></thead><tbody>${xs.map(j=>{const m=jobMetrics(j),pos=poForJob(j,allPO).filter(p=>p.status!=='Cancelled'),profit=m.missingCost?'Pending':money2(m.profit),margin=m.missingCost?'—':m.margin.toFixed(1)+'%';return `<tr><td><b>${html(jobRep(j))}</b></td><td><button class="salesLink" data-job="${html(j.id)}">${html(j.customerName||'Unnamed')}</button><small>#${html(j.jobNumber||'—')} · ${html(dateOf(j)||'No date')}</small></td><td>${pos.length?pos.map(p=>html(p.poNumber?'#'+p.poNumber:'Draft')).join(', '):'—'}</td><td>${money2(m.netSales)}</td><td>${m.missingCost?money2(m.cost)+'*':money2(m.cost)}</td><td>${profit}</td><td>${margin}</td><td>${html(j.status||'Draft')}</td></tr>`}).join('')}</tbody></table></div>`;
+    el.querySelectorAll('.salesLink').forEach(btn=>btn.addEventListener('click',()=>{if(typeof selectJob==='function')selectJob(btn.dataset.job)}));
+  }
+  function renderCustomerList(xs){
+    const el=by('salesCustomerList');if(!el)return;
+    const map=new Map();xs.forEach(j=>{const name=String(j.customerName||'Unnamed customer').trim();if(!map.has(name))map.set(name,{jobs:0,sales:0,balance:0});const r=map.get(name),m=jobMetrics(j);r.jobs++;r.sales+=m.netSales;r.balance+=m.balance});
+    const rows=[...map.entries()].sort((a,b)=>b[1].sales-a[1].sales);
+    el.innerHTML=rows.length?rows.map(([name,r])=>`<div class="salesCustomerRow"><div><b>${html(name)}</b><small>${r.jobs} Job${r.jobs===1?'':'s'}</small></div><div><b>${money2(r.sales)}</b><small>${r.balance>0?money2(r.balance)+' due':'Paid / no balance'}</small></div></div>`).join(''):'<div class="muted salesEmpty">No customers in this selection.</div>';
+  }
+
+  function renderProfileInputs(){
+    const el=by('pricingProfileGrid');if(!el)return;
+    el.innerHTML=PROFILE_DEFS.filter(([id])=>id!=='custom').map(([id,label])=>`<div><label>${label}</label><div class="pricingPct"><input id="priceProfile_${id}" inputmode="decimal" type="number" min="-100" step="0.1" value="${html(settings.profiles[id]??'')}" placeholder="Set %"><span>% markup</span></div>${id==='employee'?'<small>10% markup = Cost × 110%</small>':'<small>Leave blank if no company default is known.</small>'}</div>`).join('');
+  }
+  function saveProfileInputs(){
+    PROFILE_DEFS.filter(([id])=>id!=='custom').forEach(([id])=>{const raw=by('priceProfile_'+id)?.value??'';settings.profiles[id]=raw===''?'':Number(raw)});saveSettings();alert('Pricing profiles saved on this device.');renderItemsEditorSafe();
+  }
+  function renderTeamChips(){const el=by('salesTeamChips');if(!el)return;el.innerHTML=settings.reps.map((r,i)=>`<span>${html(r)}<button type="button" data-i="${i}" title="Remove">×</button></span>`).join('');el.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{settings.reps.splice(Number(b.dataset.i),1);saveSettings();renderSales();syncJobSalesRepDatalist()}))}
+  function addRepFromInput(){const input=by('salesNewRep'),name=String(input?.value||'').trim();if(!name)return;if(!settings.reps.some(x=>x.toLowerCase()===name.toLowerCase()))settings.reps.push(name);saveSettings();input.value='';renderSales();syncJobSalesRepDatalist()}
+
+  function ensureJobSalesRepField(){
+    if(by('salesRep'))return;
+    const clerk=by('clerk');if(!clerk)return;
+    const div=document.createElement('div');div.innerHTML='<label>Sales Rep</label><input id="salesRep" list="salesRepList" placeholder="Select or type salesperson"><datalist id="salesRepList"></datalist>';
+    clerk.parentElement.insertAdjacentElement('afterend',div);syncJobSalesRepDatalist();
+  }
+  function syncJobSalesRepDatalist(){const dl=by('salesRepList');if(dl)dl.innerHTML=collectReps().map(r=>`<option value="${html(r)}"></option>`).join('')}
+
+  function normalizedItem(x){
+    const y=x||{};if(!y.pricingProfile)y.pricingProfile='standard';
+    if(y.markupPct===undefined||y.markupPct===null||y.markupPct===''){const d=settings.profiles[y.pricingProfile];if(d!==''&&d!==undefined)y.markupPct=Number(d)}
+    if(y.defaultMarkupPct===undefined||y.defaultMarkupPct===null||y.defaultMarkupPct===''){const d=settings.profiles[y.pricingProfile];y.defaultMarkupPct=d===''?'':d}
+    if(y.cost===undefined)y.cost='';if(y.costTotal===undefined)y.costTotal='';if(y.overrideReason===undefined)y.overrideReason='';return y;
+  }
+  function autoCalcLine(i,from){
+    const x=normalizedItem(editingItems[i]);if(!x)return;
+    const q=qtyNumber(x.qty),cost=num(x.cost),markup=pct(x.markupPct);
+    if(cost>0&&markup!==null&&from!=='price'){x.price=Number((cost*(1+markup/100)).toFixed(2))}
+    if(q&&cost>0&&from!=='costTotal')x.costTotal=Number((q*cost).toFixed(2));
+    if(q&&num(x.price)>0&&from!=='total')x.total=Number((q*num(x.price)).toFixed(2));
+    const def=pct(x.defaultMarkupPct),applied=pct(x.markupPct);x.pricingOverride=def!==null&&applied!==null&&Math.abs(def-applied)>.0001;
+  }
+  function renderItemsEditorSafe(){try{if(typeof renderItemsEditor==='function')renderItemsEditor()}catch(_){}}
+
+  function installPricingEditor(){
+    window.renderItemsEditor=function(){
+      const el=by('itemsEditor');if(!el)return;
+      el.innerHTML=editingItems.length?editingItems.map((raw,i)=>{const x=normalizedItem(raw);return `<div class="itemRow salesPriceItem">
+        <div><label>Qty</label><input value="${html(x.qty||'')}" oninput="editItem(${i},'qty',this.value)"></div>
+        <div><label>Size</label><input value="${html(x.size||'')}" oninput="editItem(${i},'size',this.value)"></div>
+        <div class="wide"><label>Style</label><input value="${html(x.style||'')}" oninput="editItem(${i},'style',this.value)"></div>
+        <div><label>Colour</label><input value="${html(x.colour||'')}" oninput="editItem(${i},'colour',this.value)"></div>
+        <div><label>Supplier</label><input value="${html(x.supplier||'')}" oninput="editItem(${i},'supplier',this.value)"></div>
+        <div><label>Cost / Unit</label><input type="number" step=".01" value="${html(x.cost??'')}" oninput="editPricingItem(${i},'cost',this.value)"></div>
+        <div><label>Cost Total</label><input type="number" step=".01" value="${html(x.costTotal??'')}" oninput="editPricingItem(${i},'costTotal',this.value)"></div>
+        <div><label>Pricing Profile</label><select onchange="applyPricingProfile(${i},this.value)">${profileOptions(x.pricingProfile)}</select></div>
+        <div><label>Markup %</label><input type="number" step=".1" value="${html(x.markupPct??'')}" oninput="editPricingItem(${i},'markupPct',this.value)"></div>
+        <div><label>Selling / Unit</label><input type="number" step=".01" value="${num(x.price)}" oninput="editPricingItem(${i},'price',this.value)"></div>
+        <div><label>Line Total</label><input type="number" step=".01" value="${num(x.total)}" oninput="editPricingItem(${i},'total',this.value)"></div>
+        <div class="wide"><label>Price Override Reason</label><input value="${html(x.overrideReason||'')}" placeholder="e.g. contractor / repeat / large order" oninput="editPricingItem(${i},'overrideReason',this.value)"></div>
+        <button class="action red" onclick="removeItem(${i})">×</button>
+      </div>`}).join(''):'<div class="muted">No item lines yet.</div>';
+    };
+    window.editItem=function(i,k,v){const x=normalizedItem(editingItems[i]);if(!x)return;x[k]=v;if(k==='qty'){autoCalcLine(i,'qty');renderItemsEditor()} };
+    window.editPricingItem=function(i,k,v){const x=normalizedItem(editingItems[i]);if(!x)return;if(['cost','costTotal','markupPct','price','total'].includes(k))x[k]=v===''?'':Number(v);else x[k]=v;if(k==='price'&&num(x.cost)>0)x.markupPct=Number(((num(x.price)/num(x.cost)-1)*100).toFixed(2));autoCalcLine(i,k);if(!['overrideReason','total','costTotal'].includes(k))renderItemsEditor()};
+    window.applyPricingProfile=function(i,id){const x=normalizedItem(editingItems[i]);if(!x)return;x.pricingProfile=id;const d=settings.profiles[id];x.defaultMarkupPct=d===''?'':Number(d);if(id!=='custom'&&d!=='')x.markupPct=Number(d);if(id==='custom')x.overrideReason=x.overrideReason||'Custom pricing';autoCalcLine(i,'profile');renderItemsEditor()};
+    const oldAdd=window.addItem;
+    window.addItem=function(){if(typeof oldAdd==='function')oldAdd();const x=editingItems[editingItems.length-1];if(x){x.pricingProfile='standard';const d=settings.profiles.standard;x.defaultMarkupPct=d===''?'':Number(d);x.markupPct=d===''?'':Number(d);x.cost='';x.costTotal='';x.overrideReason='';renderItemsEditor()}};
+  }
+
+  function installHooks(){
+    ensureSalesSection();ensureJobSalesRepField();installPricingEditor();
+    const nav=by('nav');if(nav&&!nav.querySelector('[data-page="sales"]')){
+      const btn=document.createElement('button');btn.dataset.page='sales';btn.textContent='Sales';btn.onclick=()=>go('sales');const first=nav.querySelector('button');first?first.insertAdjacentElement('afterend',btn):nav.appendChild(btn);
+    }
+    const oldGo=window.go;window.go=function(id){if(id==='sales'){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='sales'));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page==='sales'));renderSales();window.scrollTo({top:0,behavior:'smooth'});return}return oldGo(id)};
+    const oldLoadEditor=window.loadEditor;window.loadEditor=function(){oldLoadEditor();ensureJobSalesRepField();const j=typeof active==='function'?active():null;if(by('salesRep'))by('salesRep').value=j?.salesRep||'';try{editingItems=(editingItems||[]).map(normalizedItem);renderItemsEditor()}catch(_){}};
+    const oldSaveJob=window.saveJob;window.saveJob=function(){const j=typeof active==='function'?active():null;if(j&&by('salesRep'))j.salesRep=by('salesRep').value.trim();oldSaveJob();renderSales()};
+    const oldNewPO=window.newPODraft;if(typeof oldNewPO==='function')window.newPODraft=function(){oldNewPO();const j=typeof active==='function'?active():null,el=by('poSalesRep');if(el&&!el.value&&j?.salesRep)el.value=j.salesRep};
+    document.title='RUNLU Deerfoot Flooring OS V0.3.6';const pill=document.querySelector('header .pill');if(pill)pill.textContent='V0.3.6 Sales + Pricing';
+    renderSales();
+  }
+  window.renderSales=renderSales;
+  window.addEventListener('load',()=>setTimeout(installHooks,120));
+})();
