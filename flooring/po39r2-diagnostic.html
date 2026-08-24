@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#102b23">
+<title>RUNLU Flooring · 037 + PO 39R2 Diagnostic</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Arial,Helvetica,sans-serif;background:#e9efec;color:#fff;overflow:hidden}.bar{height:58px;background:#102b23;display:flex;align-items:center;gap:10px;padding:8px 12px;padding-top:max(8px,env(safe-area-inset-top));position:relative;z-index:2}.title{min-width:0;flex:1}.title b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.title span{display:block;font-size:11px;opacity:.78;margin-top:2px}.badge{background:#1b6b4d;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:800;white-space:nowrap}.btn{border:0;border-radius:9px;padding:9px 11px;font-size:12px;font-weight:800;background:#fff;color:#173d30}.frame{display:block;border:0;width:100%;height:calc(100dvh - 58px);background:#fff}@media(max-width:620px){.bar{height:64px;padding-left:8px;padding-right:8px}.frame{height:calc(100dvh - 64px)}.title span{display:none}.badge{font-size:10px;padding:6px 8px}.btn{padding:8px 9px;font-size:11px}}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="title"><b>037 Stable + PO 39R2 Isolated Test</b><span>No production startup changes · router injected only inside this test frame</span></div>
+  <div class="badge" id="status">Loading 037…</div>
+  <button class="btn" id="reloadBtn" type="button">Reload</button>
+  <button class="btn" id="stableBtn" type="button">Stable 037</button>
+</div>
+<iframe class="frame" id="testFrame" title="RUNLU Deerfoot Flooring OS 037 with isolated PO 39R2"></iframe>
+<script>
+(function(){
+  'use strict';
+  const frame=document.getElementById('testFrame');
+  const status=document.getElementById('status');
+  let injectTimer=0;
+  function setStatus(text,ok){status.textContent=text;status.style.background=ok?'#1b6b4d':'#8a6200'}
+  function load(){
+    clearTimeout(injectTimer);
+    setStatus('Loading 037…',false);
+    frame.src='index.html?diag=po39r2&t='+Date.now();
+  }
+  frame.addEventListener('load',function(){
+    clearTimeout(injectTimer);
+    injectTimer=setTimeout(function(){
+      try{
+        const w=frame.contentWindow,d=frame.contentDocument;
+        if(!w||!d)throw new Error('frame unavailable');
+        if(w.__runluPOLegacyOutput039R2){setStatus('39R2 injected ✓',true);return}
+        const s=d.createElement('script');
+        s.src='po-legacy-output-v039r2.js?diag='+Date.now();
+        s.dataset.runluDiag='po39r2';
+        s.onload=function(){setStatus(w.__runluPOLegacyOutput039R2?'39R2 injected ✓':'Router loaded',true)};
+        s.onerror=function(){setStatus('Router load failed',false)};
+        d.body.appendChild(s);
+      }catch(err){console.error('RUNLU PO39R2 diagnostic injection failed:',err);setStatus('Injection failed',false)}
+    },450);
+  });
+  document.getElementById('reloadBtn').addEventListener('click',load);
+  document.getElementById('stableBtn').addEventListener('click',function(){location.href='index.html?t='+Date.now()});
+  load();
+})();
+</script>
+</body>
+</html>
