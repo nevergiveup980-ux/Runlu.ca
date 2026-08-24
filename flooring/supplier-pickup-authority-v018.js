@@ -61,7 +61,7 @@
     /* PO Item Lines is loaded explicitly by index.html. Do not inject it here. */
     if(!document.querySelector('script[data-runlu-warehouse-po-bridge="1"]')){
       const s=document.createElement('script');
-      s.src='warehouse-po-handoff-v001.js?v=001';
+      s.src='warehouse-po-handoff-v001.js?v=002';
       s.dataset.runluWarehousePoBridge='1';
       document.head.appendChild(s);
     }
