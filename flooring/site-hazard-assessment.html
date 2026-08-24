@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173d30">
+<title>RUNLU Deerfoot · Site Hazard Assessment</title>
+<style>
+:root{--ink:#171b1d;--line:#222;--green:#173d30;--blue:#245fdb;--paper:#fff;--bg:#eef2f0;--warn:#a63a22}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+.toolbar{position:sticky;top:0;z-index:5;background:#173d30;color:#fff;padding:10px max(12px,env(safe-area-inset-left));display:flex;gap:8px;align-items:center;flex-wrap:wrap}.toolbar b{margin-right:auto}.toolbar button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:pointer}.primary{background:#fff;color:#173d30}.blue{background:#dceaff;color:#174f97}.ghost{background:#e8ecea;color:#24312c}
+.status{max-width:1040px;margin:12px auto 0;padding:0 12px}.status .msg{border-radius:10px;padding:10px 12px;background:#fff;border:1px solid #d8e0dc;color:#42514a}.status .warn{background:#fff0ec;border-color:#e6a99b;color:#8b2f1e;font-weight:700}
+.paper{width:min(1040px,calc(100% - 24px));margin:12px auto 30px;background:var(--paper);padding:30px 34px 28px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+h1{text-align:center;text-decoration:underline;margin:0 0 34px;font-size:35px}.topgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px 28px;margin-bottom:30px}.field{display:flex;align-items:end;gap:8px}.field.full{grid-column:1/-1}.field label{font-weight:700;white-space:nowrap}.lineinput{border:0;border-bottom:2px solid var(--line);border-radius:0;padding:5px 6px;font:inherit;min-width:0;width:100%;background:transparent;outline:none}.lineinput:focus{background:#fffde8}
+table{width:100%;border-collapse:collapse}.hazard{border:3px solid var(--line)}.hazard th,.hazard td{border:2px solid var(--line);padding:10px 8px;vertical-align:middle}.hazard th{font-size:18px}.hazard .n{width:40px;text-align:center;font-weight:700}.hazard .haz{width:29%;font-weight:700;text-align:center}.hazard .risk{width:34%;text-align:center}.hazard .action{width:37%}.scale{font-size:11px;margin-top:7px}.riskopts{display:flex;justify-content:space-around;gap:5px;align-items:center}.riskopts label{display:flex;gap:3px;align-items:center;font-size:15px;font-weight:400}.riskopts input{width:17px;height:17px}.actionInput{border:0;width:100%;min-height:44px;resize:vertical;font:inherit;padding:5px;background:transparent;outline:none}.actionInput:focus{background:#fffde8}.footnote{text-align:center;font-weight:700;margin:8px 0 24px}.longfield{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:end;margin:15px 0}.longfield label{font-weight:700}.textline{border:0;border-bottom:2px solid var(--line);padding:6px;font:inherit;outline:none;width:100%;background:transparent}.multiline{min-height:56px;resize:vertical}.office{border:2px solid var(--line);padding:10px 14px;margin:28px 50px 0}.office b{display:block;margin-bottom:16px}.officegrid{display:grid;grid-template-columns:1fr 1fr;gap:26px}.typed-note{font-size:11px;color:#666;text-align:right;margin-top:4px}
+@media(max-width:700px){.paper{padding:22px 14px;width:calc(100% - 12px)}h1{font-size:26px;margin-bottom:22px}.topgrid{grid-template-columns:1fr;gap:11px}.field.full{grid-column:auto}.hazard{font-size:12px}.hazard th{font-size:13px;padding:7px 4px}.hazard td{padding:6px 4px}.hazard .n{width:26px}.hazard .haz{width:24%}.hazard .risk{width:42%}.riskopts{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.riskopts label{font-size:12px}.actionInput{font-size:12px}.office{margin:22px 0 0}.officegrid{grid-template-columns:1fr}.toolbar b{width:100%;margin:0}.toolbar{padding-top:max(10px,env(safe-area-inset-top))}}
+@media print{body{background:#fff}.toolbar,.status{display:none!important}.paper{width:100%;margin:0;padding:18px 22px;box-shadow:none}.lineinput,.textline,.actionInput{color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}.typed-note{display:none}.hazard th,.hazard td{padding:7px 6px}h1{font-size:29px;margin-bottom:24px}}
+</style>
+</head>
+<body>
+<div class="toolbar"><b>RUNLU Deerfoot · Site Hazard Assessment</b><button class="ghost" onclick="backToOS()">← Flooring OS</button><button class="ghost" onclick="newBlank()">New Blank</button><button class="blue" onclick="saveDraft()">Save Draft</button><button class="primary" onclick="window.print()">Print / Save PDF</button></div>
+<div class="status"><div id="statusMsg" class="msg">Job-bound electronic recreation of the Deerfoot Site Hazard Assessment.</div></div>
+<form id="hazardForm" class="paper" autocomplete="off">
+<h1>Site Hazard Assessment</h1>
+<div class="topgrid">
+  <div class="field"><label>Date:</label><input id="date" class="lineinput" type="date"></div>
+  <div class="field"><label>Installer:</label><input id="installer" class="lineinput"></div>
+  <div class="field"><label>PO:</label><input id="po" class="lineinput"></div>
+  <div class="field"><label>Install Type:</label><input id="installType" class="lineinput"></div>
+  <div class="field full"><label>Customer:</label><input id="customer" class="lineinput"></div>
+  <div class="field full"><label>Address:</label><input id="address" class="lineinput"></div>
+</div>
+<table class="hazard">
+<thead><tr><th colspan="2">Potential Hazard</th><th>Severity / Risk Level<div class="scale">1 – Very Dangerous; 2 – Moderate; 3 – Low; 4 – OK; N/A</div></th><th>Action Taken</th></tr></thead>
+<tbody id="hazardRows"></tbody>
+</table>
+<div class="footnote">*** Store must be contacted for any hazards with a rating of 1 or 2 ***</div>
+<div class="longfield"><label>Additional Hazards:</label><textarea id="additionalHazards" class="textline multiline"></textarea></div>
+<div class="longfield"><label>Corrective Actions:</label><textarea id="correctiveActions" class="textline multiline"></textarea></div>
+<div class="longfield"><label>Signature:</label><input id="signature" class="textline" placeholder="Type name / electronic signature"></div>
+<div class="typed-note">Typed name is stored as the electronic form signature.</div>
+<div class="office"><b>For Office Use Only</b><div class="officegrid"><div class="field"><label>Reviewed By:</label><input id="reviewedBy" class="lineinput"></div><div class="field"><label>Date:</label><input id="reviewDate" class="lineinput" type="date"></div></div></div>
+</form>
+<script>
+(function(){
+'use strict';
+const JOBS='runlu_deerfoot_flooring_jobs_v1',ACTIVE='runlu_deerfoot_flooring_active_job_v1',STORE='runlu_deerfoot_site_hazard_v1';
+const hazards=['Poor Housekeeping','Poor Air Quality','Unacceptable Temperature','Restricted Entry/Exit','Tools/Cords in Poor Working Condition','Missing PPE or Safety Guards','Slips/Trips/Falls','Missing Lights'];
+const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function jobs(){try{return JSON.parse(localStorage.getItem(JOBS)||'[]')}catch(_){return []}}
+function activeJob(){const list=jobs(),q=new URLSearchParams(location.search).get('job'),aid=localStorage.getItem(ACTIVE);return list.find(j=>j.jobNumber===q||j.id===q)||list.find(j=>j.id===aid)||null}
+function key(){const j=activeJob();return j?.id||j?.jobNumber||'blank'}
+function db(){try{return JSON.parse(localStorage.getItem(STORE)||'{}')}catch(_){return {}}}
+function setDb(x){localStorage.setItem(STORE,JSON.stringify(x))}
+function buildRows(){const tbody=$('hazardRows');tbody.innerHTML=hazards.map((h,i)=>`<tr><td class="n">${i+1}</td><td class="haz">${esc(h)}</td><td class="risk"><div class="riskopts">${['1','2','3','4','NA'].map(v=>`<label><input type="radio" name="risk${i}" value="${v}" onchange="riskChanged()">${v==='NA'?'N/A':v}</label>`).join('')}</div></td><td class="action"><textarea id="action${i}" class="actionInput"></textarea></td></tr>`).join('')}
+function currentData(){return {date:$('date').value,installer:$('installer').value,po:$('po').value,installType:$('installType').value,customer:$('customer').value,address:$('address').value,risks:hazards.map((_,i)=>document.querySelector(`input[name="risk${i}"]:checked`)?.value||''),actions:hazards.map((_,i)=>$('action'+i).value),additionalHazards:$('additionalHazards').value,correctiveActions:$('correctiveActions').value,signature:$('signature').value,reviewedBy:$('reviewedBy').value,reviewDate:$('reviewDate').value,updatedAt:new Date().toISOString()}}
+function apply(d){['date','installer','po','installType','customer','address','additionalHazards','correctiveActions','signature','reviewedBy','reviewDate'].forEach(id=>$(id).value=d?.[id]||'');(d?.risks||[]).forEach((v,i)=>{const r=document.querySelector(`input[name="risk${i}"][value="${v}"]`);if(r)r.checked=true});(d?.actions||[]).forEach((v,i)=>{if($('action'+i))$('action'+i).value=v||''});riskChanged()}
+function defaults(){const j=activeJob(),today=new Date().toISOString().slice(0,10);return {date:today,installer:j?.installer||'',po:j?.supplierPO||'',installType:'',customer:j?.customerName||'',address:j?.shipToAddress||j?.soldToAddress||'',risks:Array(8).fill(''),actions:Array(8).fill(''),additionalHazards:'',correctiveActions:'',signature:'',reviewedBy:'',reviewDate:''}}
+window.riskChanged=function(){const d=currentData(),critical=d.risks.some(v=>v==='1'||v==='2'),box=$('statusMsg');box.className='msg'+(critical?' warn':'');box.textContent=critical?'STORE CONTACT REQUIRED: one or more hazards are rated 1 or 2. Record the action taken before finalizing.':'Job-bound electronic recreation of the Deerfoot Site Hazard Assessment.'}
+window.saveDraft=function(){const x=db();x[key()]={...currentData(),jobNumber:activeJob()?.jobNumber||'',jobId:activeJob()?.id||''};setDb(x);$('statusMsg').className='msg';$('statusMsg').textContent='Site Hazard Assessment draft saved for '+(activeJob()?.jobNumber?'Job '+activeJob().jobNumber:'this form')+'.';riskChanged()}
+window.newBlank=function(){if(!confirm('Clear this form on screen? The last saved draft will remain until you save again.'))return;apply({date:new Date().toISOString().slice(0,10),risks:[],actions:[]})}
+window.backToOS=function(){if(history.length>1)history.back();else location.href='index.html'}
+function boot(){buildRows();const x=db(),saved=x[key()];apply(saved||defaults());const j=activeJob();if(j&&!saved)$('statusMsg').textContent='Loaded from active Job '+(j.jobNumber||'')+'. Fill the assessment and Save Draft.';}
+boot();
+})();
+</script>
+</body>
+</html>
