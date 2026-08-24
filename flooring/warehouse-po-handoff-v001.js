@@ -1,5 +1,6 @@
-/* RUNLU Deerfoot Flooring OS · Warehouse PO Handoff V0.1.0
+/* RUNLU Deerfoot Flooring OS · Warehouse PO Handoff V0.1.1
    Adds a PO-driven handoff from Supplier Pickup / Receiving into Warehouse OS.
+   Includes compact PO item-line payloads so Warehouse can prefill stock receiving.
    Also separates Completed from Ready in Supplier Pickup summary stats. */
 (function(){
   'use strict';
@@ -25,6 +26,16 @@
     const items=(po?.items?.length?po.items:j?.items)||[];
     return {po,j,items};
   }
+  function compactItems(items,po){
+    return (Array.isArray(items)?items:[]).map(x=>({
+      style:x?.style||x?.product||'',
+      colour:x?.colour||x?.color||'',
+      sku:x?.sku||'',
+      qty:x?.qty??x?.quantity??'',
+      unit:x?.unit||'',
+      supplier:x?.supplier||po?.supplier||''
+    })).filter(x=>x.style||x.sku||x.qty);
+  }
   function handoffTextPO(){
     const {po,j,items}=handoffData();
     if(!po&&!j)return 'No active Job or supplier PO.';
@@ -40,12 +51,13 @@
       'Job / Order: '+(po?.jobNumber||j?.jobNumber||''),
       'Customer: '+(po?.customerName||j?.customerName||''),
       'Items:',
-      ...(items.length?items.map((x,i)=>`${i+1}. ${x.qty||''} | ${x.style||''} | ${x.colour||''} | ${x.supplier||po?.supplier||''}`):['(No item lines on this PO yet)']),
+      ...(items.length?items.map((x,i)=>`${i+1}. ${x.qty||''} ${x.unit||''} | ${x.style||''} | ${x.colour||''} | ${x.sku||''}`):['(No item lines on this PO yet)']),
       'Notes: '+(po?.notes||j?.notes||'')
     ].join('\n');
   }
   function warehouseUrlPO(){
-    const {po,j}=handoffData();
+    const {po,j,items}=handoffData();
+    const itemPayload=compactItems(items,po);
     const p=new URLSearchParams({
       from:'flooring',
       po:po?.poNumber||j?.supplierPO||'',
@@ -56,7 +68,9 @@
       fulfillment:po?.fulfillment||'',
       purchaseType:po?.purchaseType||'',
       job:po?.jobNumber||j?.jobNumber||'',
-      customer:po?.customerName||j?.customerName||''
+      customer:po?.customerName||j?.customerName||'',
+      items:JSON.stringify(itemPayload),
+      itemCount:String(itemPayload.length)
     });
     return 'https://warehouse.runlu.ca/?'+p.toString();
   }
