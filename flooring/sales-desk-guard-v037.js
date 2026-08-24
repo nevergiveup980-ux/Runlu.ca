@@ -1,10 +1,16 @@
-/* RUNLU Deerfoot Flooring OS · Sales Desk routing guard V0.3.37
+/* RUNLU Deerfoot Flooring OS · Sales Desk routing guard V0.3.38
    Synchronizes the base app's in-memory Active Job before routing from a Sales Desk drawer.
    Adds direct Open Desk actions in salesperson summaries and team lists.
+   Loads the V0.3.38 mobile Sales Desk polish layer.
 */
 (function(){
   'use strict';
   if(window.__runluSalesDeskGuard037)return;window.__runluSalesDeskGuard037=true;
+  function ensurePolish(){
+    if(window.__runluSalesDeskPolish038||document.querySelector('script[data-runlu-sales-desk-polish="038"]'))return;
+    const s=document.createElement('script');s.src='sales-desk-polish-v038.js?v=038';s.async=false;s.dataset.runluSalesDeskPolish='038';
+    s.onerror=()=>console.error('RUNLU V0.3.38 Sales Desk mobile polish failed to load.');document.body.appendChild(s);
+  }
   function repFromDesk(){return String(document.getElementById('sd037Title')?.textContent||'').split(' — ')[0].trim()}
   function openRepDesk(rep){
     rep=String(rep||'').trim();if(!rep)return;
@@ -22,7 +28,7 @@
   }
   function enhanceAll(){enhanceRepRows();enhanceTeamRows()}
   function watchRoot(id){const root=document.getElementById(id);if(!root||root.dataset.sd037Watch)return;if(!root)return;root.dataset.sd037Watch='1';new MutationObserver(enhanceAll).observe(root,{childList:true,subtree:true})}
-  function watchSales(){enhanceAll();['sales033RepSummary','sales033ActiveTeam','sales033InactiveTeam'].forEach(watchRoot)}
+  function watchSales(){enhanceAll();['sales033RepSummary','sales033ActiveTeam','sales033InactiveTeam'].forEach(watchRoot);ensurePolish()}
   document.addEventListener('click',function(e){
     const b=e.target?.closest?.('button');if(!b)return;
     if(b.id==='sd037NewJob'){
@@ -42,6 +48,7 @@
     if(target!=='jobs')setTimeout(()=>{try{if(target==='invoice'&&typeof window.prepareInvoice==='function')window.prepareInvoice();if(typeof window.go==='function')window.go(target)}catch(err){console.error('Sales Desk module route failed:',err)}},0);
   },true);
   document.addEventListener('click',e=>{if(e.target?.closest?.('button')?.dataset?.page==='sales')setTimeout(watchSales,0)},true);
-  [250,700,1500].forEach(ms=>setTimeout(watchSales,ms));
+  [120,350,800,1500].forEach(ms=>setTimeout(watchSales,ms));
   window.addEventListener('pageshow',watchSales);
+  ensurePolish();
 })();
