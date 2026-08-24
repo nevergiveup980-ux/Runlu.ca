@@ -1,7 +1,8 @@
-/* RUNLU Deerfoot Flooring OS · Service / Claims Safe V0.1.5
+/* RUNLU Deerfoot Flooring OS · Service / Claims Safe V0.1.6
    Lightweight per-Job service/claim record plus safe Estimate navigation repair,
    final Pricing / Settings / responsive polish, restored Sales Core V0.3.33,
-   electronic Site Hazard / Claim Invoice forms, and Claim C-number sequencing V0.3.35.
+   electronic Site Hazard / Claim Invoice forms, Claim C-number sequencing,
+   and standardized form Preview / Print output V0.3.36.
    No polling, no inventory mutations, no network writes from this module.
 */
 (function(){
@@ -59,16 +60,25 @@
   function ensureLegacyForms(){
     if(window.__runluLegacyForms035||document.querySelector('script[data-runlu-legacy-forms="035"]'))return;
     const s=document.createElement('script');
-    s.src='legacy-forms-v034.js?v=035';
+    s.src='legacy-forms-v034.js?v=036';
     s.async=false;
     s.dataset.runluLegacyForms='035';
-    s.onerror=()=>console.error('RUNLU V0.3.35 electronic forms / Claim C-number sequencing failed to load.');
+    s.onerror=()=>console.error('RUNLU electronic forms / Claim C-number sequencing failed to load.');
+    document.body.appendChild(s);
+  }
+  function ensureFormOutput(){
+    if(window.__runluFormOutput036||document.querySelector('script[data-runlu-form-output="036"]'))return;
+    const s=document.createElement('script');
+    s.src='form-output-v036.js?v=036';
+    s.async=false;
+    s.dataset.runluFormOutput='036';
+    s.onerror=()=>console.error('RUNLU V0.3.36 form Preview / Print standard failed to load.');
     document.body.appendChild(s);
   }
   function markVersion(){
     const pill=document.querySelector('header .pill');
-    if(pill)pill.textContent='V0.3.35 Claim C-Number Sequence';
-    document.title='RUNLU Deerfoot Flooring OS V0.3.35';
+    if(pill)pill.textContent='V0.3.36 Amounts + Form Preview / Print';
+    document.title='RUNLU Deerfoot Flooring OS V0.3.36';
   }
 
   function loadClaim(){
@@ -87,7 +97,7 @@
   }
   function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
   function boot(){
-    ensureEstimateNav();ensureFinalPolish();ensureSalesCore();ensureLegacyForms();markVersion();
+    ensureEstimateNav();ensureFinalPolish();ensureSalesCore();ensureLegacyForms();ensureFormOutput();markVersion();
     by('serviceClaimSaveBtn')?.addEventListener('click',()=>saveClaim(false));
     by('serviceClaimResolveBtn')?.addEventListener('click',()=>saveClaim(true));
     document.addEventListener('click',ev=>{
@@ -98,5 +108,5 @@
     window.runluServiceClaimsLoad=loadClaim;
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-  window.addEventListener('pageshow',()=>{ensureEstimateNav();ensureFinalPolish();ensureSalesCore();ensureLegacyForms();markVersion();});
+  window.addEventListener('pageshow',()=>{ensureEstimateNav();ensureFinalPolish();ensureSalesCore();ensureLegacyForms();ensureFormOutput();markVersion();});
 })();
