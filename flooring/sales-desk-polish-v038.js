@@ -13,6 +13,13 @@
   let restoring=false;
 
   function markVersion(){
+    const globalBuild=String(window.RUNLU_FLOORING_BUILD||'');
+    if(globalBuild==='V0.3.39R'){
+      const pill=document.querySelector('header .pill');
+      if(pill)pill.textContent='V0.3.39R PO Legacy Output';
+      document.title='RUNLU Deerfoot Flooring OS V0.3.39R';
+      return;
+    }
     const pill=document.querySelector('header .pill');
     if(pill)pill.textContent='V0.3.38 Sales Desk Mobile Polish';
     document.title='RUNLU Deerfoot Flooring OS V0.3.38';
