@@ -1,6 +1,6 @@
-/* RUNLU Deerfoot Flooring OS · Service / Claims Safe V0.1.2
-   Lightweight per-Job service/claim record plus safe Estimate navigation repair
-   and final V0.3.32 Pricing / Settings / responsive polish loader.
+/* RUNLU Deerfoot Flooring OS · Service / Claims Safe V0.1.3
+   Lightweight per-Job service/claim record plus safe Estimate navigation repair,
+   final Pricing / Settings / responsive polish, and restored Sales Core V0.3.33.
    No polling, no inventory mutations, no network writes from this module.
 */
 (function(){
@@ -46,10 +46,19 @@
     s.onerror=()=>console.error('RUNLU V0.3.32 final polish failed to load.');
     document.body.appendChild(s);
   }
+  function ensureSalesCore(){
+    if(window.__runluSalesCore033||document.querySelector('script[data-runlu-sales-core="033"]'))return;
+    const s=document.createElement('script');
+    s.src='sales-core-v033.js?v=033';
+    s.async=false;
+    s.dataset.runluSalesCore='033';
+    s.onerror=()=>console.error('RUNLU V0.3.33 Sales Core failed to load.');
+    document.body.appendChild(s);
+  }
   function markVersion(){
     const pill=document.querySelector('header .pill');
-    if(pill)pill.textContent='V0.3.32 Pricing + Settings + Responsive';
-    document.title='RUNLU Deerfoot Flooring OS V0.3.32';
+    if(pill)pill.textContent='V0.3.33 Sales Core Restored';
+    document.title='RUNLU Deerfoot Flooring OS V0.3.33';
   }
 
   function loadClaim(){
@@ -68,7 +77,7 @@
   }
   function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
   function boot(){
-    ensureEstimateNav();ensureFinalPolish();markVersion();
+    ensureEstimateNav();ensureFinalPolish();ensureSalesCore();markVersion();
     by('serviceClaimSaveBtn')?.addEventListener('click',()=>saveClaim(false));
     by('serviceClaimResolveBtn')?.addEventListener('click',()=>saveClaim(true));
     document.addEventListener('click',ev=>{
@@ -79,5 +88,5 @@
     window.runluServiceClaimsLoad=loadClaim;
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-  window.addEventListener('pageshow',()=>{ensureEstimateNav();ensureFinalPolish();markVersion();});
+  window.addEventListener('pageshow',()=>{ensureEstimateNav();ensureFinalPolish();ensureSalesCore();markVersion();});
 })();
