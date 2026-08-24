@@ -24,11 +24,9 @@ jobs:
           node-version: "22"
       - name: Check JavaScript syntax
         run: |
-          node --check script.js
-          node --check runlu-language.js
-          node --check forum.js
-          node --check forum-live-ai.js
-          node --check leave-a-note.js
+          for file in *.js; do
+            [ -f "$file" ] && node --check "$file"
+          done
           node --check scripts/check-multilingual.mjs
       - name: Enforce complete four-language pages
         run: node scripts/check-multilingual.mjs
@@ -41,7 +39,8 @@ jobs:
           from urllib.parse import urlsplit
 
           root = Path('.')
-          ET.parse(root / 'sitemap.xml')
+          sitemap = ET.parse(root / 'sitemap.xml')
+          ns = {'sm': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
 
           class Links(HTMLParser):
               def __init__(self):
@@ -54,15 +53,25 @@ jobs:
                       if a.get(key): self.links.append(a[key])
 
           missing=[]
-          for page in root.glob('*.html'):
+          for page in root.rglob('*.html'):
+              # Private/standalone app projects are maintained separately from the public site map.
+              if page.parts and page.parts[0] in {'pulse'}:
+                  continue
               parser=Links(); parser.feed(page.read_text(encoding='utf-8'))
               for href in parser.links:
-                  if href.startswith(('#','mailto:','http://','https://','tel:','javascript:')): continue
+                  if href.startswith(('#','mailto:','http://','https://','tel:','javascript:','data:')): continue
                   path=urlsplit(href).path
-                  if not path: continue
-                  target=(page.parent / path)
-                  if not target.exists(): missing.append(f'{page}: {href}')
+                  if path and not (page.parent / path).exists():
+                      missing.append(f'{page}: {href}')
+
+          for loc in sitemap.findall('.//sm:loc', ns):
+              url=(loc.text or '').strip(); parsed=urlsplit(url)
+              if parsed.netloc not in {'runlu.ca','www.runlu.ca'}: continue
+              rel=parsed.path.lstrip('/') or 'index.html'
+              if rel.endswith('/'): rel += 'index.html'
+              if not (root / rel).exists(): missing.append(f'sitemap: {url}')
+
           if missing:
-              raise SystemExit('Missing local targets:\n'+'\n'.join(missing))
+              raise SystemExit('Missing local targets:\n'+'\n'.join(sorted(set(missing))))
           print('Site integrity checks passed.')
           PY
