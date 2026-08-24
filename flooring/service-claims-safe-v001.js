@@ -1,6 +1,7 @@
-/* RUNLU Deerfoot Flooring OS · Service / Claims Safe V0.1.1
-   Lightweight per-Job service/claim record plus safe Estimate navigation repair.
-   No polling, no DOM observers, no network writes.
+/* RUNLU Deerfoot Flooring OS · Service / Claims Safe V0.1.2
+   Lightweight per-Job service/claim record plus safe Estimate navigation repair
+   and final V0.3.32 Pricing / Settings / responsive polish loader.
+   No polling, no inventory mutations, no network writes from this module.
 */
 (function(){
   'use strict';
@@ -36,10 +37,19 @@
     }
     ensureEstimateFrame();
   }
+  function ensureFinalPolish(){
+    if(window.__runluFinalPolish032||document.querySelector('script[data-runlu-final-polish="032"]'))return;
+    const s=document.createElement('script');
+    s.src='final-polish-v032.js?v=032';
+    s.async=false;
+    s.dataset.runluFinalPolish='032';
+    s.onerror=()=>console.error('RUNLU V0.3.32 final polish failed to load.');
+    document.body.appendChild(s);
+  }
   function markVersion(){
     const pill=document.querySelector('header .pill');
-    if(pill)pill.textContent='V0.3.31 Estimate Nav Fix';
-    document.title='RUNLU Deerfoot Flooring OS V0.3.31 Estimate Nav Fix';
+    if(pill)pill.textContent='V0.3.32 Pricing + Settings + Responsive';
+    document.title='RUNLU Deerfoot Flooring OS V0.3.32';
   }
 
   function loadClaim(){
@@ -58,7 +68,7 @@
   }
   function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
   function boot(){
-    ensureEstimateNav();markVersion();
+    ensureEstimateNav();ensureFinalPolish();markVersion();
     by('serviceClaimSaveBtn')?.addEventListener('click',()=>saveClaim(false));
     by('serviceClaimResolveBtn')?.addEventListener('click',()=>saveClaim(true));
     document.addEventListener('click',ev=>{
@@ -69,5 +79,5 @@
     window.runluServiceClaimsLoad=loadClaim;
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-  window.addEventListener('pageshow',()=>{ensureEstimateNav();markVersion();});
+  window.addEventListener('pageshow',()=>{ensureEstimateNav();ensureFinalPolish();markVersion();});
 })();
