@@ -51,6 +51,13 @@
     if(changed)write(SNAP_STORE,snap);
   }
   function refreshPickup(){try{window.runluPickupSafeRender?.()}catch(_){}}
+  function loadWarehouseBridge(){
+    if(document.querySelector('script[data-runlu-warehouse-po-bridge="1"]'))return;
+    const s=document.createElement('script');
+    s.src='warehouse-po-handoff-v001.js?v=001';
+    s.dataset.runluWarehousePoBridge='1';
+    document.head.appendChild(s);
+  }
   function boot(){
     reconcile();
     document.addEventListener('input',ev=>{if(['pickupRequestedDateSafe','pickupFulfillmentSafe','pickupPurchaseTypeSafe'].includes(ev.target?.id))persist()},true);
@@ -59,6 +66,7 @@
     window.addEventListener('pagehide',persist);
     window.runluPersistSupplierPickupAuthoritative=persist;
     refreshPickup();
+    loadWarehouseBridge();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
