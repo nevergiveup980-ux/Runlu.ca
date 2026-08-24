@@ -1,8 +1,14 @@
 /* RUNLU Deerfoot Flooring OS · Supplier Pickup Authority V0.1.8
    Makes the PO record authoritative for Supplier Pickup / Receiving metadata.
-   Prevents an older snapshot from masking a newly saved PO pickup date after refresh. */
+   Prevents an older snapshot from masking a newly saved PO pickup date after refresh.
+   UI Recovery: pre-sets the old PO Item Lines guard so a cached V0.1.1 script cannot lock Safari/desktop navigation.
+*/
 (function(){
   'use strict';
+  // IMPORTANT: index.html loads this authority before po-item-lines-v001.js.
+  // Setting this guard here neutralizes any browser/CDN-cached copy of the old item-lines runtime.
+  window.__runluPOItemLinesV011=true;
+
   const PO_STORE='runlu_deerfoot_supplier_orders_v1';
   const SNAP_STORE='runlu_supplier_pickup_by_po_v1';
   const by=id=>document.getElementById(id);
@@ -52,8 +58,7 @@
   }
   function refreshPickup(){try{window.runluPickupSafeRender?.()}catch(_){}}
   function loadAuxiliaryScripts(){
-    /* PO Item Lines is loaded explicitly by index.html. Do not inject it here;
-       duplicate execution previously caused Safari / desktop UI lockups. */
+    /* PO Item Lines is loaded explicitly by index.html. Do not inject it here. */
     if(!document.querySelector('script[data-runlu-warehouse-po-bridge="1"]')){
       const s=document.createElement('script');
       s.src='warehouse-po-handoff-v001.js?v=001';
