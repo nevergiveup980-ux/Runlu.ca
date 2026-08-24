@@ -1,15 +1,20 @@
-/* RUNLU Deerfoot Flooring OS · PO Item Lines V0.1.0
+/* RUNLU Deerfoot Flooring OS · PO Item Lines V0.1.1
    Adds editable PO product lines without changing the existing PO core.
    Stock Inventory lines feed Warehouse receiving; Job-specific lines remain job-staged.
+   V0.1.1 removes the self-triggering MutationObserver that could lock Safari / desktop UI.
 */
 (function(){
   'use strict';
+  if(window.__runluPOItemLinesV011)return;
+  window.__runluPOItemLinesV011=true;
+
   const PO_STORE='runlu_deerfoot_supplier_orders_v1';
   const PANEL_ID='poItemLinesPanel';
   const by=id=>document.getElementById(id);
   const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   let draftItems=[];
   let lastPO='';
+  let timer=null;
 
   function readPOs(){try{const x=JSON.parse(localStorage.getItem(PO_STORE)||'[]');return Array.isArray(x)?x:[]}catch(_){return []}}
   function writePOs(x){localStorage.setItem(PO_STORE,JSON.stringify(x))}
@@ -40,14 +45,15 @@
   }
 
   function ensurePanel(){
-    if(by(PANEL_ID))return;
-    const meta=by('pickupMetaSafe');if(!meta)return;
+    if(by(PANEL_ID))return true;
+    const meta=by('pickupMetaSafe');if(!meta)return false;
     const panel=document.createElement('div');panel.id=PANEL_ID;panel.className='full';
     panel.innerHTML=`<div class="poItemHead"><div><h3>PO Item Lines</h3><div class="muted" id="poItemModeHelp"></div></div><button class="action" type="button" id="poAddItemLine">+ Item</button></div><div id="poItemLines"></div><div class="actions"><button class="action primary" type="button" id="poSaveItemLines">Save Item Lines</button></div><div class="poItemMsg" id="poItemMsg">Add the actual product ordered from the supplier.</div>`;
     meta.insertAdjacentElement('afterend',panel);
     by('poAddItemLine')?.addEventListener('click',()=>{draftItems=gather();draftItems.push({style:'',colour:'',sku:'',qty:'',unit:'carton',size:''});renderItems(draftItems)});
     by('poSaveItemLines')?.addEventListener('click',()=>saveItems(true));
-    updateHelp();loadForVisiblePO();
+    updateHelp();
+    return true;
   }
 
   function updateHelp(){
@@ -76,10 +82,10 @@
     });
   }
 
-  function loadForVisiblePO(){
-    ensurePanel();
+  function loadForVisiblePO(force=false){
+    if(!ensurePanel())return;
     const n=poNumber();
-    if(n===lastPO&&by('poItemLines')?.children.length)return;
+    if(!force&&n===lastPO&&by('poItemLines'))return;
     lastPO=n;
     const po=currentPO();
     draftItems=po&&Array.isArray(po.items)?JSON.parse(JSON.stringify(po.items)):[];
@@ -88,7 +94,7 @@
   }
 
   function saveItems(showAlert){
-    ensurePanel();
+    if(!ensurePanel())return false;
     const items=gather();
     if(items.some(x=>!x.style)){if(showAlert)alert('Enter Product / Style for every PO item.');return false}
     if(items.some(x=>!x.qty||Number(x.qty)<=0)){if(showAlert)alert('Enter a Quantity greater than 0 for every PO item.');return false}
@@ -108,25 +114,29 @@
       const n=poNumber();if(!n)return;
       const pos=readPOs();const po=pos.find(x=>String(x.poNumber||'').trim()===n);if(!po)return;
       if(draftItems.length){po.items=JSON.parse(JSON.stringify(draftItems));writePOs(pos);try{window.runluPickupSafeRender?.()}catch(_){}}
-      lastPO='';loadForVisiblePO();
+      lastPO='';loadForVisiblePO(true);
     },120);
   }
 
   function versionBadge(){
-    document.title='RUNLU Deerfoot Flooring OS V0.3.27 PO Item Lines';
-    const pill=document.querySelector('header .pill');if(pill)pill.textContent='V0.3.27 PO Item Lines';
+    const title='RUNLU Deerfoot Flooring OS V0.3.28 PO Item Lines Stable';
+    if(document.title!==title)document.title=title;
+    const pill=document.querySelector('header .pill');if(pill&&pill.textContent!=='V0.3.28 PO Item Lines Stable')pill.textContent='V0.3.28 PO Item Lines Stable';
   }
 
   function boot(){
-    injectStyle();ensurePanel();versionBadge();
-    const obs=new MutationObserver(()=>{ensurePanel();versionBadge()});obs.observe(document.body,{childList:true,subtree:true});
+    injectStyle();versionBadge();
+    setTimeout(()=>loadForVisiblePO(true),0);
+    setTimeout(()=>loadForVisiblePO(true),250);
     document.addEventListener('change',ev=>{if(ev.target?.id==='pickupPurchaseTypeSafe')updateHelp()},true);
     document.addEventListener('click',ev=>{
-      if(ev.target?.closest?.('[data-po-open]'))setTimeout(()=>{lastPO='';loadForVisiblePO()},30);
-      if(ev.target?.id==='poNewBtn')setTimeout(()=>{lastPO='';draftItems=[];renderItems([]);updateHelp()},30);
+      if(ev.target?.closest?.('[data-po-open]'))setTimeout(()=>{lastPO='';loadForVisiblePO(true)},30);
+      if(ev.target?.id==='poNewBtn')setTimeout(()=>{lastPO='';draftItems=[];if(ensurePanel()){renderItems([]);updateHelp()}},30);
       if(['poManualBtn','poIssueBtn','poSaveDraftBtn'].includes(ev.target?.id))attachAfterPOAction();
     },true);
-    setInterval(()=>{const n=poNumber();if(n!==lastPO)loadForVisiblePO()},700);
+    if(timer)clearInterval(timer);
+    timer=setInterval(()=>{if(!by(PANEL_ID))ensurePanel();const n=poNumber();if(n!==lastPO)loadForVisiblePO(true)},1000);
+    window.addEventListener('pageshow',()=>{versionBadge();setTimeout(()=>loadForVisiblePO(true),0)});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
