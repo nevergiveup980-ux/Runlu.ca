@@ -1,7 +1,7 @@
 /* RUNLU Deerfoot Flooring OS · Service / Claims Safe V0.1.5
    Lightweight per-Job service/claim record plus safe Estimate navigation repair,
    final Pricing / Settings / responsive polish, restored Sales Core V0.3.33,
-   electronic Site Hazard / Claim Invoice forms, and shared Invoice Number Authority V0.3.35.
+   electronic Site Hazard / Claim Invoice forms, and Claim C-number sequencing V0.3.35.
    No polling, no inventory mutations, no network writes from this module.
 */
 (function(){
@@ -62,12 +62,12 @@
     s.src='legacy-forms-v034.js?v=035';
     s.async=false;
     s.dataset.runluLegacyForms='035';
-    s.onerror=()=>console.error('RUNLU V0.3.35 electronic forms / invoice numbering failed to load.');
+    s.onerror=()=>console.error('RUNLU V0.3.35 electronic forms / Claim C-number sequencing failed to load.');
     document.body.appendChild(s);
   }
   function markVersion(){
     const pill=document.querySelector('header .pill');
-    if(pill)pill.textContent='V0.3.35 Shared Invoice Number Authority';
+    if(pill)pill.textContent='V0.3.35 Claim C-Number Sequence';
     document.title='RUNLU Deerfoot Flooring OS V0.3.35';
   }
 
@@ -85,7 +85,7 @@
     db[key]={...old,jobId:j.id||'',jobNumber:j.jobNumber||'',customerName:j.customerName||'',claimNumber:get('claimNumberSafe'),type:get('claimTypeSafe')||'Service',status,openedDate:get('claimOpenedDateSafe'),supplier:get('claimSupplierSafe'),relatedPO:get('claimRelatedPOSafe'),inspector:get('claimInspectorSafe'),recoveryCredit:get('claimRecoverySafe'),notes:get('claimNotesSafe'),updatedAt:new Date().toISOString()};
     write(db);set('claimStatusSafe',status);loadClaim();alert(markResolved?'Service / claim marked Resolved.':'Service / claim saved.');
   }
-  function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[m]))}
+  function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
   function boot(){
     ensureEstimateNav();ensureFinalPolish();ensureSalesCore();ensureLegacyForms();markVersion();
     by('serviceClaimSaveBtn')?.addEventListener('click',()=>saveClaim(false));
