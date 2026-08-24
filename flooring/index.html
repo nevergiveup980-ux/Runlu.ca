@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#173d30">
-<title>RUNLU Deerfoot Flooring OS V0.3.21 PO-Bound Pickup Metadata</title>
+<title>RUNLU Deerfoot Flooring OS V0.3.22 Pickup Date Separation</title>
 <link rel="stylesheet" href="app.css?v=032">
 <link rel="stylesheet" href="po-safe-v011.css?v=011">
 <link rel="stylesheet" href="supplier-pickup-safe-v011.css?v=011">
 </head>
 <body>
-<header><div class="top"><div class="brand"><b>RUNLU Deerfoot Flooring OS</b><span>Deerfoot-first internal build · one Job / Order across departments</span></div><div class="pill">V0.3.21 Safe Core + Showroom + PO + Pickup Metadata</div></div></header>
+<header><div class="top"><div class="brand"><b>RUNLU Deerfoot Flooring OS</b><span>Deerfoot-first internal build · one Job / Order across departments</span></div><div class="pill">V0.3.22 Customer Pickup Date + Supplier Pickup Separation</div></div></header>
 <nav id="nav"></nav>
 <main>
 <section id="command" class="page active">
@@ -61,7 +61,7 @@
   <div class="card"><div class="statusLine"><h2>Jobs & Orders</h2><button class="action primary" onclick="newJob()">+ New Job</button></div><div id="jobList"></div></div>
   <div class="card"><h3 id="jobEditorTitle">Job / Order</h3>
     <div class="formgrid">
-      <div><label>Job / Order #</label><input id="jobNumber"></div><div><label>Invoice #</label><input id="invoiceNumber"></div><div><label>Customer / Sold To</label><input id="customerName"></div><div><label>Clerk</label><input id="clerk"></div><div class="full"><label>Sold To Address</label><input id="soldToAddress"></div><div><label>Ship To Name</label><input id="shipToName"></div><div><label>Ship To Address</label><input id="shipToAddress"></div><div><label>Email</label><input id="email" type="email"></div><div><label>Cell</label><input id="cell"></div><div><label>Date Required</label><input id="dateRequired" type="date"></div><div><label>Status</label><select id="status"><option>Draft</option><option>Confirmed</option><option>Procurement</option><option>Ready</option><option>In Progress</option><option>Completed</option><option>Closed</option><option>On Hold</option><option>Cancelled</option></select></div><div><label>Pickup</label><input id="pickup"></div><div><label>Delivery</label><input id="delivery"></div><div><label>Customer PO / Reference</label><input id="customerPO"></div><div><label>Linked PO #s (managed in PO module)</label><input id="supplierPO" readonly placeholder="Managed in PO / Supplier Orders"></div><div class="full"><label>Notes</label><textarea id="notes"></textarea></div>
+      <div><label>Job / Order #</label><input id="jobNumber"></div><div><label>Invoice #</label><input id="invoiceNumber"></div><div><label>Customer / Sold To</label><input id="customerName"></div><div><label>Clerk</label><input id="clerk"></div><div class="full"><label>Sold To Address</label><input id="soldToAddress"></div><div><label>Ship To Name</label><input id="shipToName"></div><div><label>Ship To Address</label><input id="shipToAddress"></div><div><label>Email</label><input id="email" type="email"></div><div><label>Cell</label><input id="cell"></div><div><label>Date Required</label><input id="dateRequired" type="date"></div><div><label>Status</label><select id="status"><option>Draft</option><option>Confirmed</option><option>Procurement</option><option>Ready</option><option>In Progress</option><option>Completed</option><option>Closed</option><option>On Hold</option><option>Cancelled</option></select></div><div><label>Customer Pickup Date</label><input id="pickup" type="date"></div><div><label>Delivery</label><input id="delivery"></div><div><label>Customer PO / Reference</label><input id="customerPO"></div><div><label>Linked PO #s (managed in PO module)</label><input id="supplierPO" readonly placeholder="Managed in PO / Supplier Orders"></div><div class="full"><label>Notes</label><textarea id="notes"></textarea></div>
     </div>
     <h3 style="margin-top:17px">Items</h3><div id="itemsEditor"></div><div class="actions"><button class="action" onclick="addItem()">+ Item</button><button class="action primary" onclick="saveJob()">Save Job</button><button class="action blue" onclick="prepareInvoice();go('invoice')">Generate Deerfoot Invoice</button></div>
   </div>
@@ -79,6 +79,6 @@
 </main>
 <script src="app.js?v=core-isolation-20260823-1"></script>
 <script src="po-safe-v011.js?v=012"></script>
-<script src="supplier-pickup-safe-v011.js?v=013"></script>
+<script src="supplier-pickup-safe-v011.js?v=014"></script>
 </body>
 </html>
