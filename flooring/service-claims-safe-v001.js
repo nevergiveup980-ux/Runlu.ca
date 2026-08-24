@@ -1,5 +1,6 @@
-/* RUNLU Deerfoot Flooring OS · Service / Claims Safe V0.1.0
-   Lightweight per-Job service/claim record. No polling, no DOM observers, no network writes.
+/* RUNLU Deerfoot Flooring OS · Service / Claims Safe V0.1.1
+   Lightweight per-Job service/claim record plus safe Estimate navigation repair.
+   No polling, no DOM observers, no network writes.
 */
 (function(){
   'use strict';
@@ -14,6 +15,33 @@
   function defaultClaim(j){return {claimNumber:'',type:'Service',status:'Open',openedDate:new Date().toISOString().slice(0,10),supplier:'',relatedPO:j?.supplierPO||'',inspector:'',recoveryCredit:'',notes:'',updatedAt:''}}
   function set(id,v){const el=by(id);if(el)el.value=v??''}
   function get(id){return (by(id)?.value||'').trim()}
+
+  function ensureEstimateFrame(){
+    const f=by('estimateFrame');
+    if(f&&!f.getAttribute('src'))f.setAttribute('src',f.dataset.src||'estimate-assessment.html');
+  }
+  function ensureEstimateNav(){
+    const nav=by('nav');if(!nav)return;
+    let btn=nav.querySelector('button[data-page="estimate"]');
+    if(!btn){
+      btn=document.createElement('button');
+      btn.dataset.page='estimate';
+      btn.textContent='Estimate';
+      btn.addEventListener('click',()=>{ensureEstimateFrame();if(typeof go==='function')go('estimate')});
+      const showroom=nav.querySelector('button[data-page="showroom"]');
+      const jobs=nav.querySelector('button[data-page="jobs"]');
+      if(showroom&&showroom.nextSibling)nav.insertBefore(btn,showroom.nextSibling);
+      else if(jobs)nav.insertBefore(btn,jobs);
+      else nav.appendChild(btn);
+    }
+    ensureEstimateFrame();
+  }
+  function markVersion(){
+    const pill=document.querySelector('header .pill');
+    if(pill)pill.textContent='V0.3.31 Estimate Nav Fix';
+    document.title='RUNLU Deerfoot Flooring OS V0.3.31 Estimate Nav Fix';
+  }
+
   function loadClaim(){
     const j=activeJob(),summary=by('serviceClaimJobSummary');
     if(summary)summary.innerHTML=j?`<b>${j.isDemo?'<span class="tag demoTag">DEMO</span> ':''}${escapeHtml(j.jobNumber||'No #')} · ${escapeHtml(j.customerName||'Unnamed customer')}</b><br>${escapeHtml(j.status||'Draft')} · Linked PO: ${escapeHtml(j.supplierPO||'None')}`:'Select or create a Job / Order first.';
@@ -30,10 +58,16 @@
   }
   function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
   function boot(){
+    ensureEstimateNav();markVersion();
     by('serviceClaimSaveBtn')?.addEventListener('click',()=>saveClaim(false));
     by('serviceClaimResolveBtn')?.addEventListener('click',()=>saveClaim(true));
-    document.addEventListener('click',ev=>{const b=ev.target?.closest?.('button');if(b?.dataset?.page==='serviceclaims'||b?.id==='serviceClaimsModule')setTimeout(loadClaim,0)},true);
+    document.addEventListener('click',ev=>{
+      const b=ev.target?.closest?.('button');
+      if(b?.dataset?.page==='serviceclaims'||b?.id==='serviceClaimsModule')setTimeout(loadClaim,0);
+      if(b?.dataset?.page==='estimate'||String(b?.getAttribute?.('onclick')||'').includes("go('estimate')"))ensureEstimateFrame();
+    },true);
     window.runluServiceClaimsLoad=loadClaim;
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+  window.addEventListener('pageshow',()=>{ensureEstimateNav();markVersion();});
 })();
