@@ -1,8 +1,9 @@
-/* RUNLU Deerfoot Flooring OS · Service / Claims Safe V0.1.6
+/* RUNLU Deerfoot Flooring OS · Service / Claims Safe V0.1.7
    Lightweight per-Job service/claim record plus safe Estimate navigation repair,
    final Pricing / Settings / responsive polish, restored Sales Core V0.3.33,
    electronic Site Hazard / Claim Invoice forms, Claim C-number sequencing,
-   and standardized form Preview / Print output V0.3.36.
+   standardized form Preview / Print output V0.3.36,
+   and Sales Desk / Filing Cabinet V0.3.37.
    No polling, no inventory mutations, no network writes from this module.
 */
 (function(){
@@ -54,7 +55,27 @@
     s.src='sales-core-v033.js?v=033';
     s.async=false;
     s.dataset.runluSalesCore='033';
+    s.onload=ensureSalesDesk;
     s.onerror=()=>console.error('RUNLU V0.3.33 Sales Core failed to load.');
+    document.body.appendChild(s);
+  }
+  function ensureSalesDeskGuard(){
+    if(window.__runluSalesDeskGuard037||document.querySelector('script[data-runlu-sales-desk-guard="037"]'))return;
+    const s=document.createElement('script');
+    s.src='sales-desk-guard-v037.js?v=037';
+    s.async=false;
+    s.dataset.runluSalesDeskGuard='037';
+    s.onerror=()=>console.error('RUNLU V0.3.37 Sales Desk routing guard failed to load.');
+    document.body.appendChild(s);
+  }
+  function ensureSalesDesk(){
+    if(window.__runluSalesDesk037||document.querySelector('script[data-runlu-sales-desk="037"]')){ensureSalesDeskGuard();return}
+    const s=document.createElement('script');
+    s.src='sales-desk-v037.js?v=037';
+    s.async=false;
+    s.dataset.runluSalesDesk='037';
+    s.onload=ensureSalesDeskGuard;
+    s.onerror=()=>console.error('RUNLU V0.3.37 Sales Desk failed to load.');
     document.body.appendChild(s);
   }
   function ensureLegacyForms(){
@@ -77,8 +98,8 @@
   }
   function markVersion(){
     const pill=document.querySelector('header .pill');
-    if(pill)pill.textContent='V0.3.36 Amounts + Form Preview / Print';
-    document.title='RUNLU Deerfoot Flooring OS V0.3.36';
+    if(pill)pill.textContent='V0.3.37 Sales Desk / Filing Cabinet';
+    document.title='RUNLU Deerfoot Flooring OS V0.3.37';
   }
 
   function loadClaim(){
@@ -97,7 +118,7 @@
   }
   function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
   function boot(){
-    ensureEstimateNav();ensureFinalPolish();ensureSalesCore();ensureLegacyForms();ensureFormOutput();markVersion();
+    ensureEstimateNav();ensureFinalPolish();ensureSalesCore();ensureSalesDesk();ensureLegacyForms();ensureFormOutput();markVersion();
     by('serviceClaimSaveBtn')?.addEventListener('click',()=>saveClaim(false));
     by('serviceClaimResolveBtn')?.addEventListener('click',()=>saveClaim(true));
     document.addEventListener('click',ev=>{
@@ -108,5 +129,5 @@
     window.runluServiceClaimsLoad=loadClaim;
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-  window.addEventListener('pageshow',()=>{ensureEstimateNav();ensureFinalPolish();ensureSalesCore();ensureLegacyForms();ensureFormOutput();markVersion();});
+  window.addEventListener('pageshow',()=>{ensureEstimateNav();ensureFinalPolish();ensureSalesCore();ensureSalesDesk();ensureLegacyForms();ensureFormOutput();markVersion();});
 })();
