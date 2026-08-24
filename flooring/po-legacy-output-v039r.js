@@ -1,6 +1,6 @@
 /* RUNLU Deerfoot Flooring OS · PO Legacy Output Router V0.3.39R
    Isolated enhancement on top of the stable V0.3.38 baseline.
-   Scope: PO Preview / Print routing only.
+   Scope: PO Preview / Print routing + authoritative global build label only.
    Does not alter Sales, Claims, Estimate, Warehouse, invoice numbering, or the shared loader.
 */
 (function(){
@@ -9,7 +9,15 @@
   window.__runluPOLegacyOutput039R=true;
 
   const KEY='runlu_deerfoot_po_print_preview_v039r';
+  const BUILD='V0.3.39R PO Legacy Output';
   const by=id=>document.getElementById(id);
+
+  function markBuild(){
+    window.RUNLU_FLOORING_BUILD='V0.3.39R';
+    const pill=document.querySelector('header .pill');
+    if(pill)pill.textContent=BUILD;
+    document.title='RUNLU Deerfoot Flooring OS V0.3.39R';
+  }
 
   function activeJob(){
     try{if(typeof window.active==='function')return window.active()||{}}catch(_){}
@@ -60,6 +68,8 @@
     openLegacy();
   },true);
 
+  window.addEventListener('pageshow',markBuild);
+  markBuild();
   window.runluPOPreview039R=openLegacy;
   window.runluPOPrint039R=openLegacy;
 })();
