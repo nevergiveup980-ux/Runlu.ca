@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#173d30">
-<title>RUNLU Deerfoot Flooring OS V0.3.27 PO Item Lines</title>
+<title>RUNLU Deerfoot Flooring OS V0.3.28 UI Stability + PO Item Lines</title>
 <link rel="stylesheet" href="app.css?v=032">
 <link rel="stylesheet" href="po-safe-v011.css?v=011">
 <link rel="stylesheet" href="supplier-pickup-safe-v011.css?v=011">
 </head>
 <body>
-<header><div class="top"><div class="brand"><b>RUNLU Deerfoot Flooring OS</b><span>Deerfoot-first internal build · one Job / Order across departments</span></div><div class="pill">V0.3.27 PO Item Lines</div></div></header>
+<header><div class="top"><div class="brand"><b>RUNLU Deerfoot Flooring OS</b><span>Deerfoot-first internal build · one Job / Order across departments</span></div><div class="pill">V0.3.28 UI Stability + PO Item Lines</div></div></header>
 <nav id="nav"></nav>
 <main>
 <section id="command" class="page active">
@@ -77,10 +77,10 @@
 
 <section id="accounting" class="page"><div class="card"><h2>Accounting / Closeout</h2><div class="summary"><div><small>Subtotal</small><b id="aSub">$0.00</b></div><div><small>GST</small><b id="aGst">$0.00</b></div><div><small>Total</small><b id="aTotal">$0.00</b></div><div><small>Balance</small><b id="aBalance">$0.00</b></div></div><div class="formgrid" style="margin-top:10px"><div><label>Delivery Charge</label><input id="deliveryCharge" type="number" step="0.01"></div><div><label>Deposit Paid</label><input id="depositPaid" type="number" step="0.01"></div><div><label>Payment Method</label><select id="paymentMethod"><option value="">—</option><option value="finance">Finance</option><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="visa">Visa</option><option value="mastercard">Master Card</option><option value="interac">Interac</option></select></div></div><div class="actions"><button class="action primary" onclick="saveAccounting()">Save Accounting</button><button class="action blue" onclick="prepareInvoice();go('invoice')">Update Invoice</button></div></div></section>
 </main>
-<script src="app.js?v=core-isolation-20260823-1"></script>
+<script src="app.js?v=core-isolation-20260823-2"></script>
 <script src="po-safe-v011.js?v=012"></script>
 <script src="supplier-pickup-safe-v017.js?v=017"></script>
-<script src="supplier-pickup-authority-v018.js?v=019"></script>
-<script src="po-item-lines-v001.js?v=001"></script>
+<script src="supplier-pickup-authority-v018.js?v=020"></script>
+<script src="po-item-lines-v001.js?v=002" data-runlu-po-item-lines="1"></script>
 </body>
 </html>
