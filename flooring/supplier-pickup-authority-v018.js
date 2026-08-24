@@ -52,12 +52,8 @@
   }
   function refreshPickup(){try{window.runluPickupSafeRender?.()}catch(_){}}
   function loadAuxiliaryScripts(){
-    if(!document.querySelector('script[data-runlu-po-item-lines="1"]')){
-      const i=document.createElement('script');
-      i.src='po-item-lines-v001.js?v=001';
-      i.dataset.runluPoItemLines='1';
-      document.head.appendChild(i);
-    }
+    /* PO Item Lines is loaded explicitly by index.html. Do not inject it here;
+       duplicate execution previously caused Safari / desktop UI lockups. */
     if(!document.querySelector('script[data-runlu-warehouse-po-bridge="1"]')){
       const s=document.createElement('script');
       s.src='warehouse-po-handoff-v001.js?v=001';
