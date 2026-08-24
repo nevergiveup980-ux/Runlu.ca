@@ -12,6 +12,12 @@
   const $=id=>document.getElementById(id);
   let restoring=false;
 
+  function markVersion(){
+    const pill=document.querySelector('header .pill');
+    if(pill)pill.textContent='V0.3.38 Sales Desk Mobile Polish';
+    document.title='RUNLU Deerfoot Flooring OS V0.3.38';
+  }
+
   function injectStyle(){
     if($('salesDeskPolishStyle038'))return;
     const s=document.createElement('style');
@@ -81,16 +87,14 @@
     let savedTab='',savedRep='';
     try{savedTab=localStorage.getItem(TAB_KEY)||'';savedRep=localStorage.getItem(REP_KEY)||''}catch(_){}
     if(!savedTab||!savedRep||savedRep.toLowerCase()!==rep.toLowerCase()){centerActive();return}
-    const target=sec.querySelector('.sd037Tab[data-sdtab="'+CSS.escape(savedTab)+'"]');
+    const escTab=window.CSS?.escape?CSS.escape(savedTab):savedTab.replace(/[^a-z0-9_-]/gi,'');
+    const target=sec.querySelector('.sd037Tab[data-sdtab="'+escTab+'"]');
     if(!target||target.classList.contains('active')){centerActive();return}
-    restoring=true;
-    target.click();
-    setTimeout(()=>{restoring=false;centerActive()},30);
+    restoring=true;target.click();setTimeout(()=>{restoring=false;centerActive()},30);
   }
 
   function polish(){
-    injectStyle();shortenSearch();wrapTabs();addRepChip();
-    setTimeout(restoreTab,40);
+    markVersion();injectStyle();shortenSearch();wrapTabs();addRepChip();setTimeout(restoreTab,40);
   }
 
   document.addEventListener('click',e=>{
@@ -100,9 +104,7 @@
   window.addEventListener('resize',shortenSearch,{passive:true});
   window.addEventListener('pageshow',()=>setTimeout(polish,80));
 
-  const observer=new MutationObserver(()=>{
-    if($('salesdesk'))polish();
-  });
+  const observer=new MutationObserver(()=>{if($('salesdesk'))polish()});
   observer.observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
   [100,350,900].forEach(ms=>setTimeout(polish,ms));
 })();
