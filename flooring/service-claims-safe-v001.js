@@ -1,6 +1,7 @@
-/* RUNLU Deerfoot Flooring OS · Service / Claims Safe V0.1.3
+/* RUNLU Deerfoot Flooring OS · Service / Claims Safe V0.1.4
    Lightweight per-Job service/claim record plus safe Estimate navigation repair,
-   final Pricing / Settings / responsive polish, and restored Sales Core V0.3.33.
+   final Pricing / Settings / responsive polish, restored Sales Core V0.3.33,
+   and electronic Site Hazard / Claim Invoice forms V0.3.34.
    No polling, no inventory mutations, no network writes from this module.
 */
 (function(){
@@ -55,10 +56,19 @@
     s.onerror=()=>console.error('RUNLU V0.3.33 Sales Core failed to load.');
     document.body.appendChild(s);
   }
+  function ensureLegacyForms(){
+    if(window.__runluLegacyForms034||document.querySelector('script[data-runlu-legacy-forms="034"]'))return;
+    const s=document.createElement('script');
+    s.src='legacy-forms-v034.js?v=034';
+    s.async=false;
+    s.dataset.runluLegacyForms='034';
+    s.onerror=()=>console.error('RUNLU V0.3.34 electronic legacy forms failed to load.');
+    document.body.appendChild(s);
+  }
   function markVersion(){
     const pill=document.querySelector('header .pill');
-    if(pill)pill.textContent='V0.3.33 Sales Core Restored';
-    document.title='RUNLU Deerfoot Flooring OS V0.3.33';
+    if(pill)pill.textContent='V0.3.34 Electronic Safety + Claim Forms';
+    document.title='RUNLU Deerfoot Flooring OS V0.3.34';
   }
 
   function loadClaim(){
@@ -77,7 +87,7 @@
   }
   function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
   function boot(){
-    ensureEstimateNav();ensureFinalPolish();ensureSalesCore();markVersion();
+    ensureEstimateNav();ensureFinalPolish();ensureSalesCore();ensureLegacyForms();markVersion();
     by('serviceClaimSaveBtn')?.addEventListener('click',()=>saveClaim(false));
     by('serviceClaimResolveBtn')?.addEventListener('click',()=>saveClaim(true));
     document.addEventListener('click',ev=>{
@@ -88,5 +98,5 @@
     window.runluServiceClaimsLoad=loadClaim;
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-  window.addEventListener('pageshow',()=>{ensureEstimateNav();ensureFinalPolish();ensureSalesCore();markVersion();});
+  window.addEventListener('pageshow',()=>{ensureEstimateNav();ensureFinalPolish();ensureSalesCore();ensureLegacyForms();markVersion();});
 })();
