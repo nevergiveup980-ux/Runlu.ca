@@ -1,8 +1,9 @@
-/* RUNLU Deerfoot Flooring OS · Supplier Pickup Safe V0.1.4
+/* RUNLU Deerfoot Flooring OS · Supplier Pickup Safe V0.1.5
    Incremental restore after Safe Core + Showroom + PO.
    Dedicated Supplier Pickup page id prevents collision with the Job editor pickup input.
    Supplier pickup / receiving metadata is read from each PO record only; Expected Date is not treated as Pickup Date.
    The Job editor's Pickup field is promoted to an explicit Customer Pickup Date for the Deerfoot invoice.
+   V0.1.5 flushes the visible PO editor's pickup metadata into the PO record before the Pickup schedule renders.
    No go() wrapping, no MutationObserver, no polling loop.
    Central Supabase / Warehouse sharing will be re-enabled only after this isolated module is validated. */
 (function(){
@@ -16,6 +17,7 @@
   let records=[];
 
   function loadPOs(){try{records=JSON.parse(localStorage.getItem(PO_STORE)||'[]')}catch(_){records=[]}}
+  function savePOs(){localStorage.setItem(PO_STORE,JSON.stringify(records))}
   function allMeta(){try{return JSON.parse(localStorage.getItem(META_STORE)||'{}')}catch(_){return {}}}
 
   function isoDate(v){return /^\d{4}-\d{2}-\d{2}$/.test(String(v||''))}
@@ -37,6 +39,36 @@
   }
   function ensureInvoicePickupHook(){const frame=by('invoiceFrame');if(!frame||frame.dataset.runluPickupHook==='1')return;frame.dataset.runluPickupHook='1';frame.addEventListener('load',renderInvoicePickupDate)}
 
+  /*
+    The PO editor can visibly contain a Supplier Pickup / Receiving Date even when an
+    older browser-restored form value has not yet reached localStorage. Before the
+    schedule renders, identify the PO currently open in the editor and persist the
+    visible pickup fields directly onto that PO record. This makes the PO editor the
+    source of truth and prevents a visible date from becoming “date not set”.
+  */
+  function flushVisiblePOPickupMeta(){
+    const dateEl=by('pickupRequestedDateSafe');
+    const title=(by('poSafeEditorTitle')?.textContent||'').trim();
+    if(!dateEl||!title)return false;
+    const match=title.match(/^PO\s*#\s*(.+?)(?:\s*·|$)/i);
+    if(!match)return false;
+    const poNumber=match[1].trim();
+    loadPOs();
+    const po=records.find(x=>String(x.poNumber||'').trim()===poNumber);
+    if(!po)return false;
+    const fulfillment=by('pickupFulfillmentSafe')?.value||po.fulfillment||'Pickup';
+    const requestedDate=dateEl.value||'';
+    const purchaseType=by('pickupPurchaseTypeSafe')?.value||po.purchaseType||'Job-specific';
+    const changed=po.fulfillment!==fulfillment||po.requestedDate!==requestedDate||po.purchaseType!==purchaseType;
+    if(changed){
+      po.fulfillment=fulfillment;
+      po.requestedDate=requestedDate;
+      po.purchaseType=purchaseType;
+      savePOs();
+    }
+    return changed;
+  }
+
   function ensurePage(){
     if(document.querySelector('section#'+PAGE_ID+'.page'))return;
     const main=document.querySelector('main');if(!main)return;
@@ -51,7 +83,7 @@
     const nav=by('nav');if(!nav||nav.querySelector('[data-page="'+PAGE_ID+'"]'))return;
     const b=document.createElement('button');b.type='button';b.dataset.page=PAGE_ID;b.textContent='Pickup';
     const anchor=nav.querySelector('[data-page="warehouse"]');anchor?anchor.insertAdjacentElement('beforebegin',b):nav.appendChild(b);
-    b.addEventListener('click',()=>{switchToPickup();render();});
+    b.addEventListener('click',()=>{flushVisiblePOPickupMeta();switchToPickup();render();});
   }
   function switchToPickup(){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===PAGE_ID));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===PAGE_ID));window.scrollTo({top:0,behavior:'smooth'});}
 
@@ -72,6 +104,7 @@
   function dateLabel(d){if(!d)return 'Supplier pickup date not set';const x=new Date(d+'T12:00:00');return Number.isNaN(x.getTime())?d:x.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'})}
   function monthLabel(d){if(!d)return 'Supplier pickup date not set';const x=new Date(d+'T12:00:00');return Number.isNaN(x.getTime())?'Supplier pickup date not set':x.toLocaleDateString('en-CA',{month:'long',year:'numeric'})}
   function render(){
+    flushVisiblePOPickupMeta();
     loadPOs();ensureCustomerPickupDateField();ensureSupplierPickupLabel();ensureInvoicePickupHook();
     const rows=scheduleRows();
     if(by('pickupScheduledSafe'))by('pickupScheduledSafe').textContent=rows.filter(x=>x.pickupStatus==='Scheduled').length;
@@ -86,7 +119,12 @@
     el.innerHTML=Object.entries(groups).map(([month,items])=>`<div class="pickupSafeMonth">${esc(month)}</div>${items.map(x=>`<div class="pickupSafeRow"><div><b>#${esc(x.poNumber)} · ${esc(x.supplier||'Supplier not set')}</b><small>${esc(dateLabel(x.requestedDate))} · ${esc(x.fulfillment)} · ${esc(x.purchaseType)}</small></div><div><b>${esc(x.jobNumber||'No Job #')} · ${esc(x.customerName||'')}</b><small>${esc(x.salesRep||'Sales rep not set')}</small></div><div><span class="pickupSafeStatus ${x.pickupStatus==='Cancelled'?'cancelled':(['Ready','Completed'].includes(x.pickupStatus)?'ready':'')}">${esc(x.pickupStatus)}</span></div></div>`).join('')}`).join('');
   }
 
-  function openPickup(){ensurePage();ensureNav();switchToPickup();render();}
-  function boot(){ensureCustomerPickupDateField();ensureInvoicePickupHook();ensurePage();ensureNav();ensureSupplierPickupLabel();render();window.runluPickupSafeRender=render;window.openSupplierPickupSafe=openPickup;window.addEventListener('storage',ev=>{if([PO_STORE,META_STORE,INVOICE_STORE].includes(ev.key)){render();renderInvoicePickupDate()}})}
+  function openPickup(){flushVisiblePOPickupMeta();ensurePage();ensureNav();switchToPickup();render();}
+  function boot(){
+    ensureCustomerPickupDateField();ensureInvoicePickupHook();ensurePage();ensureNav();ensureSupplierPickupLabel();render();
+    window.runluPickupSafeRender=render;window.openSupplierPickupSafe=openPickup;window.runluFlushVisiblePOPickupMeta=flushVisiblePOPickupMeta;
+    ['input','change'].forEach(type=>document.addEventListener(type,ev=>{if(['pickupFulfillmentSafe','pickupRequestedDateSafe','pickupPurchaseTypeSafe'].includes(ev.target?.id)){flushVisiblePOPickupMeta();render()}}));
+    window.addEventListener('storage',ev=>{if([PO_STORE,META_STORE,INVOICE_STORE].includes(ev.key)){render();renderInvoicePickupDate()}})
+  }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
