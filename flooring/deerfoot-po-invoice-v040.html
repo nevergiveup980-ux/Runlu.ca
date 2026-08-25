@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>RUNLU Flooring OS · PO → Deerfoot Invoice V0.3.40</title>
+<link rel="stylesheet" href="deerfoot-base.css">
+<link rel="stylesheet" href="deerfoot-final.css?v=021">
+<style>
+.notesBox{border-top:0!important}
+.poPurpose{font-weight:800;color:#173d30}.controls .control.costControl{min-width:180px}
+</style>
+</head>
+<body>
+<div class="appbar"><div class="inner"><div class="brand">PO → Deerfoot Invoice<small>Same Deerfoot legacy form · supplier pickup / internal PO workflow · V0.3.40</small></div><button class="primary" onclick="window.print()">Print / Save PDF</button></div></div>
+<div class="controls">
+  <div class="control"><label>Copy</label><select id="copy"><option value="customer">White</option><option value="warehouse">Yellow</option><option value="accounting">Pink</option></select></div>
+  <div class="control"><label>Output</label><select id="mode"><option value="full">Full Form</option><option value="overlay">3-Part Overlay · Data Only</option></select></div>
+  <div class="control costControl"><label>Price / Cost</label><select id="costMode"><option value="hide">Hide · Supplier Pickup</option><option value="show">Show PO Cost · Internal</option></select></div>
+  <div class="control"><label>Offset X (mm)</label><input id="ox" type="number" value="0" step="0.5"></div>
+  <div class="control"><label>Offset Y (mm)</label><input id="oy" type="number" value="0" step="0.5"></div>
+  <div class="control"><label>Scale (%)</label><input id="scale" type="number" value="100" step="0.1"></div>
+</div>
+<div class="hint"><span class="poPurpose">Deerfoot real-world rule:</span> this PO workflow prints the same Deerfoot Invoice form used in daily operations. The printed <b>SUPPLIER / STOCK</b> column comes from each line's <b>Source / Reference</b>. Source Type stays structured internally. PO costs are hidden by default.</div>
+<div class="previewWrap"><div class="previewStage">
+<div id="invoice" class="invoice copy-customer">
+  <div class="static">
+    <div class="abs tractorStrip" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="abs printerMark">COMPUFORMS CALGARY (Div. of THE TIMES PRESS LIMITED) &nbsp; (403) 291-4922</div>
+    <div class="abs formCode">66893 (01/2025)</div>
+    <div class="abs companyInfo">6170 - 12th Street S.E.<br>Calgary, AB&nbsp;&nbsp;T2H 2X2<br>Email: sales@deerfootcarpet.com<br>Phone: (403) 255-5880<br>Fax: (403) 253-1571<br>www.deerfootcarpet.com<br><b>OUR G.S.T. NO. R138029897</b></div>
+    <div class="abs dcMark">D<span style="margin-left:-7px">C</span></div>
+    <div class="abs companyName">Deerfoot Carpet &amp; Flooring</div>
+    <div class="abs dateLabel">DATE</div><div class="abs dateBox box"></div>
+    <div class="abs soldLabel">S<br>O<br>L<br>D<br><br>T<br>O</div><div class="abs shipLabel">S<br>H<br>I<br>P<br><br>T<br>O</div>
+    <div class="abs soldLines"><div class="customerLine line"></div><div class="customerLine line"></div><div class="customerLine line"></div><div class="customerLine line"></div></div>
+    <div class="abs shipLines"><div class="customerLine line"></div><div class="customerLine line"></div><div class="customerLine line"></div><div class="customerLine line"></div></div>
+    <div class="abs emailLabel label">EMAIL</div><div class="abs emailLine line"></div><div class="abs cellLabel label">(C)</div><div class="abs cellLine line"></div>
+    <div class="abs phoneLabel label">PHONE (H)</div><div class="abs phoneHLine line"></div><div class="abs phoneWLabel label">(W)</div><div class="abs phoneWLine line"></div>
+    <div class="abs pickLabel label">PICK UP:</div><div class="abs pickLine line"></div><div class="abs deliveryLabel label">DELIVERY:</div><div class="abs deliveryLine line"></div><div class="abs requiredLabel label">DATE REQUIRED:</div><div class="abs requiredLine line"></div><div class="abs clerkLabel label">CLERK:</div><div class="abs clerkLine line"></div>
+    <div class="abs formLeftSpine"></div><div class="abs leftGrid"></div><div class="abs notesLabel label">NOTES:</div><div class="abs notesBox"></div>
+    <div class="abs noticeBlock">CUSTOMER HAS BEEN INFORMED THEY SHOULD VIEW PRODUCT BEFORE INSTALL □<br>TO PAY USING E-TRANSFER PLEASE SEND TO ACCOUNTING@DEERFOOTCARPET.COM</div>
+    <div class="abs policyBox">
+      <div class="policyRow"><b>REFUNDS:</b><span>DEERFOOT DOES NOT GIVE REFUNDS FOR LEFTOVER MATERIAL (WASTE). LEFTOVER MATERIAL WILL VARY FROM JOB TO JOB. WASTE MUST BE FACTORED INTO EVERY JOB.</span></div>
+      <div class="policyRow"><b>SHORTAGES:</b><span>IN CASE OF ADDITIONAL MATERIAL BEING NEEDED, CUSTOMER WILL BE CHARGED.</span></div>
+      <div class="policyRow"><b>INSTALLATION<br>GUARANTEES:</b><span>FULLY PAID CUSTOMERS WILL BE GUARANTEED WHEN USING ONE OF OUR RECOMMENDED INSTALLERS FOR 1 YEAR AFTER THE INSTALLATION DATE, UNLESS OTHERWISE NOTED.</span></div>
+      <div class="policyRow"><b>RESTOCKING:</b><span>A MINIMUM 25% RESTOCKING FEE WILL BE CHARGED ON ALL CANCELLED ORDERS IF OUR SUPPLIER ACCEPTS RETURN OR COLOUR CHANGES, BROKEN CARTONS OF MATERIAL AND/OR SPECIAL ORDER IN ITEMS HAVE NO RETURN POLICY. NO RETURNS WILL BE ACCEPTED 30 DAYS AFTER COMPLETION OF JOB.</span></div>
+    </div>
+    <div class="abs paymentBox">
+      <div class="payrow">FINANCE <span class="paycheck" data-pay="finance"></span></div><div class="payrow">CASH <span class="paycheck" data-pay="cash"></span></div><div class="payrow">CHEQUE <span class="paycheck" data-pay="cheque"></span></div><div class="payrow">VISA <span class="paycheck" data-pay="visa"></span></div><div class="payrow">MASTER CARD <span class="paycheck" data-pay="mastercard"></span></div><div class="payrow">INTERAC <span class="paycheck" data-pay="interac"></span></div>
+    </div>
+    <div class="abs terms"><b>TERMS:</b>&nbsp; Existing inventory items payable at time of ordering material. Order-in material minimum 50% deposit, balance due on last day of install. Service work will not be performed until outstanding balances are paid. Overdue balances will be charged at an additional rate of 2% interest per month, (24% per annum), as well as any other additional charges associated with collecting any late debts.</div>
+    <div class="abs acceptTitle">ACCEPTANCE OF INVOICE</div><div class="abs acceptText">I accept the terms listed on this invoice and I have the proper legal permission to authorize this work / materials.</div>
+    <div class="abs authLine">Authorized Signature <span class="authRule"></span></div><div class="abs authDate">Date <span class="dateRule"></span></div>
+    <div class="abs recvLine">Product received in good condition (Print) <span class="recvRule"></span></div><div class="abs sigLine">Signature <span class="sigRule"></span></div><div class="abs recvDate">Date <span class="recvDateRule"></span></div>
+    <div class="abs thankyou">Thank you for your order.<br>We hope that you will be pleased and tell your friends.</div>
+  </div>
+  <div class="data">
+    <div class="abs dateData value"></div><div class="abs invoiceNoTop"></div><div class="abs invoiceNoBottom"></div><div class="abs copyTag">PO WORKFLOW · WHITE COPY</div>
+    <div class="abs soldData value"></div><div class="abs shipData value"></div>
+    <div class="abs emailData value"></div><div class="abs cellData value"></div><div class="abs phoneHData value"></div><div class="abs phoneWData value"></div>
+    <div class="abs pickData value"></div><div class="abs deliveryData value"></div><div class="abs requiredData value"></div><div class="abs clerkData value"></div>
+    <table class="abs items"><colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"><col class="c5"></colgroup><thead><tr><th>YDS/SQFT</th><th>SIZE</th><th>STYLE</th><th>COLOUR</th><th>SUPPLIER/STOCK</th></tr></thead><tbody id="rows"></tbody></table>
+    <div class="abs priceBand">
+      <div class="head"><div>PRICE</div><div>TOTAL</div></div>
+      <div class="grid"><div class="h" style="top:4.98mm"></div><div class="h" style="top:9.96mm"></div><div class="h" style="top:14.94mm"></div><div class="h" style="top:19.92mm"></div><div class="h" style="top:24.90mm"></div><div class="h" style="top:29.88mm"></div><div class="h" style="top:34.86mm"></div><div class="h" style="top:39.84mm"></div><div class="h" style="top:44.82mm"></div><div class="h" style="top:49.80mm"></div><div class="h" style="top:54.78mm"></div><div class="h" style="top:59.76mm"></div><div class="h" style="top:64.74mm"></div><div class="h" style="top:69.72mm"></div></div>
+      <div class="totals"><div class="totalRow"><div class="lab">DELIVERY</div><div class="amt"></div></div><div class="totalRow"><div class="lab">SUB</div><div class="amt"></div></div><div class="totalRow"><div class="lab">G.S.T.</div><div class="amt"></div></div><div class="totalRow total"><div class="lab">TOTAL</div><div class="amt"></div></div><div class="depositRow">DEPOSIT/S<br>DUE <div class="paidMini">PAID<div class="miniBox"></div><div class="miniBox"></div></div></div><div class="balanceRow"><div class="lab">BALANCE<br>DUE</div><div class="amt"></div></div></div>
+    </div>
+    <div class="abs notesData"></div>
+    <div class="abs totalData" style="left:181mm;top:188.8mm;width:18mm;text-align:right"></div><div class="abs totalData" style="left:181mm;top:199.4mm;width:18mm;text-align:right"></div><div class="abs totalData" style="left:181mm;top:210.0mm;width:18mm;text-align:right"></div><div class="abs totalData bold" style="left:181mm;top:220.5mm;width:18mm;text-align:right"></div><div class="abs totalData" style="left:181mm;top:236.3mm;width:18mm;text-align:right"></div><div class="abs totalData bold" style="left:181mm;top:250.0mm;width:18mm;text-align:right"></div>
+  </div>
+</div></div></div>
+<script src="deerfoot-po-invoice-v040.js?v=040"></script>
+</body></html>
