@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#173d30">
+<title>PO Editable Deerfoot Invoice · V0.3.44R2</title>
+<style>*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#edf1ef}#editor{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}</style>
+</head>
+<body><iframe id="editor" title="PO Editable Deerfoot Invoice"></iframe>
+<script>
+(function(){
+'use strict';
+const PO_STORE='runlu_deerfoot_supplier_orders_v1',PREVIEW='runlu_flooring_po_deerfoot_invoice_v040',DRAFTS='runlu_deerfoot_po_paper_drafts_v044',JOBS='runlu_deerfoot_flooring_jobs_v1';
+const frame=document.getElementById('editor');
+const read=(k,f)=>{try{const x=JSON.parse(localStorage.getItem(k)||'null');return x==null?f:x}catch(_){return f}},write=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const num=v=>{const x=Number(String(v??'').replace(/[$,]/g,'').trim());return Number.isFinite(x)?x:0};
+const iso=(v,f='')=>{const s=String(v||'').trim();if(!s)return f;if(/^\d{4}-\d{2}-\d{2}$/.test(s))return s;const d=new Date(s);return Number.isNaN(d.getTime())?f:d.toISOString().slice(0,10)};
+function cleanPo(v){return String(v||'').replace(/^PO\s*#?\s*/i,'').trim()}
+function preview(){return read(PREVIEW,{})||{}}
+function draftKey(p){return 'draft:'+String(p.jobNumber||'none')+':'+String(p.invoiceDate||'')}
+function latestDraft(p){const db=read(DRAFTS,{}),exact=db[draftKey(p)];if(exact)return exact;return Object.values(db).filter(x=>x&&!cleanPo(x.poNumber)).sort((a,b)=>String(b.savedAt||b.updatedAt||'').localeCompare(String(a.savedAt||a.updatedAt||'')))[0]||null}
+function supplierOf(p,d){return String((d?.items||p.items||[]).map(x=>x?.supplier||'').find(Boolean)||(d?.items||p.items||[]).map(x=>x?.sourceRef||'').find(Boolean)||'').trim()}
+function findJob(p){const xs=read(JOBS,[]);return Array.isArray(xs)?xs.find(j=>j.jobNumber===p.jobNumber)||null:null}
+function subtotal(items){return Math.round((items||[]).reduce((s,x)=>s+(num(x.lineTotal)||num(x.qty)*num(x.unitCost)),0)*100)/100}
+function saveUnnumberedToLedger(w){
+  const p=preview();
+  const oldAlert=w.alert;try{w.alert=()=>{};w.saveDraft()}finally{w.alert=oldAlert}
+  const d=latestDraft(p);if(!d)return alert('The paper draft could not be read. Please tap Save Draft once and try again.');
+  if(!confirm('Save this paper as an unnumbered PO Draft in the PO Ledger? A PO number can be assigned later when the PO is issued.'))return;
+  let rows=read(PO_STORE,[]);if(!Array.isArray(rows))rows=[];
+  const dk=draftKey(p),sup=supplierOf(p,d),job=findJob(p);
+  let i=rows.findIndex(r=>!r.poNumber&&r.status==='Draft'&&(r.paperDraftKey===dk||(r.jobNumber===p.jobNumber&&r.orderDate===iso(d.invoiceDate,p.invoiceDate||''))));
+  const base=i>=0?rows[i]:{};
+  const r={...base,id:base.id||('po-paper-'+Date.now()+'-'+Math.random().toString(36).slice(2,7)),jobId:base.jobId||job?.id||'',jobNumber:base.jobNumber||p.jobNumber||'',customerName:base.customerName||p.customerName||'',mode:base.mode||'digital',poNumber:'',supplier:sup||base.supplier||'',salesRep:d.clerk||p.clerk||base.salesRep||'',orderDate:iso(d.invoiceDate,p.invoiceDate||new Date().toISOString().slice(0,10)),expectedDate:iso(d.dateRequired,base.expectedDate||''),status:'Draft',notes:d.notes||'',fulfillment:base.fulfillment||'Pickup',requestedDate:iso(d.pickup,base.requestedDate||''),purchaseType:base.purchaseType||'Job-specific',delivery:d.delivery||'',items:Array.isArray(d.items)?d.items:[],subtotal:subtotal(d.items||[]),paperCustomerSnapshot:d.customerSnapshot||{},paperDraftKey:dk,createdAt:base.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};
+  if(i>=0)rows[i]=r;else rows.unshift(r);write(PO_STORE,rows);
+  p.paperDraftPoId=r.id;p.delivery=r.delivery;p.items=r.items;p.notes=r.notes;p.clerk=r.salesRep;p.pickup=r.requestedDate;p.dateRequired=r.expectedDate;write(PREVIEW,p);
+  const st=w.document.getElementById('status');if(st)st.innerHTML='<b>PO Draft</b> · Saved to PO Ledger · PO number will be assigned later.';
+  alert('Saved to PO Ledger as an unnumbered PO Draft. Return to PO / Supplier Orders when you are ready to assign or issue the PO number.');
+}
+function patch(){
+  const w=frame.contentWindow,d=frame.contentDocument;if(!w||!d)return;
+  const nativeSave=w.saveToPO,nativeReload=w.reloadFromPO;
+  const buttons=[...d.querySelectorAll('button')];
+  const btn=buttons.find(b=>String(b.getAttribute('onclick')||'').includes('saveToPO'));
+  const reloadBtn=buttons.find(b=>String(b.getAttribute('onclick')||'').includes('reloadFromPO'));
+  if(reloadBtn){reloadBtn.textContent='Reload from PO Form';reloadBtn.title='Replace the current paper with the latest PO form data.'}
+  const sub=d.querySelector('.sub');
+  if(sub&&!d.getElementById('poPaperGuide044R2')){
+    const guide=d.createElement('div');guide.id='poPaperGuide044R2';guide.style.cssText='padding:8px 12px;background:#fffdf4;border-bottom:1px solid #eadca9;color:#5d5534;font:12px/1.4 Arial,Helvetica,sans-serif';
+    guide.innerHTML='<b>Simple workflow:</b> <b>Save Draft</b> keeps only the electronic paper. <b>Save to PO Draft</b> puts an unnumbered draft into the PO Ledger. Once numbered, the button changes to <b>Save to PO #…</b>. <b>Reload from PO Form</b> replaces unsaved paper edits.';
+    sub.insertAdjacentElement('afterend',guide);
+  }
+  function relabel(message){const p=preview(),n=cleanPo(p.poNumber||p.invoiceNumber),st=d.getElementById('status');if(btn){btn.textContent=n?'Save to PO #'+n:'Save to PO Draft · No # yet';btn.disabled=false;btn.title=n?'Save paper changes back to PO #'+n:'Save this paper into the PO Ledger as an unnumbered draft.'}if(st&&!message)st.innerHTML=n?'<b>PO #'+n+'</b> · Save Draft = paper only · Save to PO #'+n+' = update PO Ledger.':'<b>PO Unnumbered</b> · Paper Draft mode · Save Draft keeps the paper only; Save to PO Draft adds it to the PO Ledger.'}
+  w.saveToPO=function(){const p=preview(),n=cleanPo(p.poNumber||p.invoiceNumber);if(n&&typeof nativeSave==='function')return nativeSave();return saveUnnumberedToLedger(w)};
+  w.reloadFromPO=function(){if(!confirm('Reload from the PO form? Any paper edits that have not been saved as a draft will be replaced.'))return;if(typeof nativeReload==='function')return nativeReload()};
+  const p=preview(),saved=latestDraft(p);
+  if(saved&&typeof w.loadDraft==='function'){
+    const oldAlert=w.alert;try{w.alert=()=>{};w.loadDraft()}catch(_){}finally{w.alert=oldAlert}
+    const st=d.getElementById('status');if(st)st.innerHTML='<b>PO '+(cleanPo(p.poNumber||p.invoiceNumber)||'Unnumbered')+'</b> · Saved paper draft restored automatically.';
+  }
+  relabel(!!saved);
+}
+frame.addEventListener('load',()=>setTimeout(patch,120));
+frame.src='deerfoot-po-invoice-paper-edit-v044.html?ux=044r2&t='+Date.now();
+})();
+</script></body></html>
