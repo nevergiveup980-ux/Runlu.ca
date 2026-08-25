@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173d30">
+<title>RUNLU Deerfoot Claim Invoice V0.3.41R2 Handoff</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#edf1ef;font-family:Arial,Helvetica,sans-serif}iframe{width:100%;height:100%;border:0;background:#fff}.cover{position:fixed;inset:0;z-index:50;background:#edf1ef;display:flex;align-items:center;justify-content:center;padding:24px;color:#173d30;font-weight:800;text-align:center;line-height:1.45}.cover.fail{color:#7a2b2b}
+</style>
+</head>
+<body>
+<div id="cover" class="cover">Loading current Job + Service / Claims data…</div>
+<iframe id="form" title="Deerfoot Claim Invoice original replica"></iframe>
+<script>
+(function(){
+'use strict';
+const HANDOFF='runlu_claim_handoff_v042r1_';
+const token=new URLSearchParams(location.search).get('token')||'';
+const frame=document.getElementById('form'),cover=document.getElementById('cover');
+let payload=null,frameReady=false,applied=false;
+function safe(v){return String(v??'').trim()}
+function readLocal(){if(!token)return null;try{return JSON.parse(localStorage.getItem(HANDOFF+token)||'null')}catch(_){return null}}
+function setValue(d,id,v){const e=d.getElementById(id);if(e)e.value=v??''}
+function setRadio(d,name,v){if(!v)return;const e=[...d.querySelectorAll(`input[name="${name}"]`)].find(x=>x.value===v);if(e)e.checked=true}
+function formType(v){const s=safe(v).toUpperCase();if(s.includes('CLAIM'))return 'CLAIM';if(s.includes('COMPLAINT')||s.includes('DAMAGE'))return 'COMPLAINT';return 'SERVICE'}
+function claimDigits(v){return safe(v).replace(/^C\s*/i,'')}
+function money(v){const n=Number(String(v??'').replace(/[$,]/g,''));return Number.isFinite(n)&&n?('$'+n.toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})) : ''}
+function noteLines(c){const a=[];if(c.status)a.push('Status: '+c.status);if(c.relatedPO)a.push('Related PO: '+c.relatedPO);if(c.inspector)a.push('Inspector / Assigned To: '+c.inspector);if(c.recoveryCredit)a.push('Recovery Credit: '+money(c.recoveryCredit));return a.join('\n')}
+function products(j){return (Array.isArray(j.items)?j.items:[]).map(x=>[x.style,x.colour].filter(Boolean).join(' · ')).filter(Boolean).join('; ')}
+function suppliers(j){return [...new Set((Array.isArray(j.items)?j.items:[]).map(x=>x.supplier||x.sourceRef).filter(Boolean))].join(', ')}
+function apply(){
+  if(applied||!payload||!frameReady)return;
+  try{
+    const w=frame.contentWindow,d=frame.contentDocument,j=payload.job||{},c=payload.claim||{},cno=safe(c.claimNumber),digits=claimDigits(cno),prev=safe(j.invoiceNumber);
+    const status=d.querySelector('.status');if(status)status.innerHTML='<b>Deerfoot rule:</b> Claim Invoice # <b>'+(cno||'—')+'</b> · Previous Regular Invoice <b>'+(prev||'—')+'</b> · Current Job + Service / Claims data handed over explicitly · Alberta GST 5%.';
+    const serial=d.querySelector('.serial');if(serial){const lab=serial.querySelector('.tiny.bold');if(lab)lab.textContent='CLAIM INVOICE #';}
+    const topNo=d.getElementById('systemInvoiceNumber');if(topNo)topNo.textContent=cno||'—';
+    const legacy=d.querySelector('.legacyRef');if(legacy)legacy.style.display='none';
+    const hiddenRef=d.getElementById('legacyClaimRef');if(hiddenRef)hiddenRef.value=digits;
+    const bottomLabel=d.querySelector('.bottomSerial small');if(bottomLabel)bottomLabel.textContent='CLAIM INVOICE #';
+    const bottom=d.getElementById('legacyBottom');if(bottom)bottom.textContent=digits||'—';
+    setRadio(d,'formType',formType(c.type));
+    if(c.openedDate)setValue(d,'date',c.openedDate);
+    setValue(d,'name',j.customerName||'');setValue(d,'address',j.soldToAddress||j.shipToAddress||'');
+    setValue(d,'phoneHome',j.phoneHome||'');setValue(d,'cell',j.cell||'');
+    setValue(d,'salesperson',j.salesRep||j.salesperson||'');setValue(d,'installer',j.installer||'');setValue(d,'dateInstalled',j.installDate||'');
+    setValue(d,'previousInvoice',prev);setValue(d,'productName',products(j));setValue(d,'supplierName',c.supplier||suppliers(j));
+    if(c.notes)setValue(d,'problem',c.notes);
+    const extra=noteLines(c);if(extra)setValue(d,'miscNotes',extra);
+    const completed=d.getElementById('serviceCompleted');if(completed&&/RESOLVED|CLOSED|COMPLETED/i.test(safe(c.status)))completed.checked=true;
+
+    if(typeof w.saveDraft==='function'&&!w.__runluClaimR2SaveWrapped){
+      w.__runluClaimR2SaveWrapped=true;const oldSave=w.saveDraft,nativeAlert=w.alert.bind(w);
+      w.saveDraft=function(){const oldAlert=w.alert;w.alert=()=>{};try{oldSave()}finally{w.alert=oldAlert}nativeAlert('Claim Invoice draft saved. Claim Invoice # '+(cno||'—')+'. Previous Regular Invoice '+(prev||'—')+'.')};
+    }
+    applied=true;cover.style.display='none';
+    try{localStorage.removeItem(HANDOFF+token)}catch(_){}
+  }catch(e){console.error(e);cover.textContent='Claim data handoff failed. Return to Service / Claims and open the Claim Invoice again.';cover.classList.add('fail')}
+}
+function accept(p){if(!p||typeof p!=='object')return;payload=p;apply()}
+window.addEventListener('message',e=>{if(e.origin!==location.origin)return;const m=e.data||{};if(m.type==='RUNLU_CLAIM_HANDOFF_V042R1'&&m.token===token)accept(m.payload)});
+frame.addEventListener('load',()=>{frameReady=true;apply()});
+const local=readLocal();if(local)payload=local;
+const job=payload?.job?.jobNumber||payload?.job?.id||'';const qp=new URLSearchParams();if(job)qp.set('job',job);qp.set('t',Date.now());frame.src='claim-invoice-v041r1.html?'+qp.toString();
+try{window.opener?.postMessage({type:'RUNLU_CLAIM_HANDOFF_REQUEST_V042R1',token},location.origin)}catch(_){}
+setTimeout(()=>{try{window.opener?.postMessage({type:'RUNLU_CLAIM_HANDOFF_REQUEST_V042R1',token},location.origin)}catch(_){}},350);
+setTimeout(()=>{if(!applied){const p=readLocal();if(p){accept(p);return}cover.textContent='Still waiting for the current Service / Claims data…';}},1200);
+setTimeout(()=>{if(!applied){cover.textContent='Data handoff was not received. Return to Service / Claims and tap Open Original Claim Invoice again.';cover.classList.add('fail')}},3200);
+})();
+</script>
+</body>
+</html>
