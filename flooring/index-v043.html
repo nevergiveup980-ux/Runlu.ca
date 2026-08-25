@@ -29,14 +29,33 @@ function patchLabels(w,d){
     const claimModule=d.getElementById('serviceClaimsModule');if(claimModule){const s=claimModule.querySelector('small');if(s)s.textContent='Service / Claims with original Deerfoot Claim Invoice and Job-bound data handoff.'}
   }catch(e){console.error('V043 label patch failed',e)}
 }
+function patchPOOutput(w){
+  try{
+    if(w.__runluV043POOutputPatch)return;
+    w.__runluV043POOutputPatch=true;
+    const nativeOpen=w.open.bind(w);
+    w.open=function(url,target,features){
+      try{
+        const u=String(url||'');
+        if(u.includes('deerfoot-po-invoice-v040.html')){
+          const key='runlu_flooring_po_deerfoot_invoice_v040';
+          const data=JSON.parse(w.localStorage.getItem(key)||'{}')||{};
+          const po=String(data.poNumber||'').trim();
+          if(po){data.invoiceNumber='PO # '+po;w.localStorage.setItem(key,JSON.stringify(data));}
+        }
+      }catch(e){console.error('V043 PO number compatibility patch failed',e)}
+      return nativeOpen(url,target,features);
+    };
+  }catch(e){console.error('V043 PO output patch failed',e)}
+}
 function inject(){
   try{
     const w=frame.contentWindow,d=frame.contentDocument;if(!w||!d)return fail('V0.3.43 could not access the integrated app.');
-    patchLabels(w,d);
+    patchLabels(w,d);patchPOOutput(w);
     let s=d.querySelector('script[data-runlu-v043-claim]');
     if(s){try{w.RUNLUClaimIntegration042R2?.install()}catch(_){};boot.classList.add('ready');return}
     s=d.createElement('script');s.src='claim-integration-v042r1.js?v=043';s.dataset.runluV043Claim='1';
-    s.onload=()=>{try{patchLabels(w,d);w.RUNLUClaimIntegration042R2?.install();boot.classList.add('ready')}catch(e){console.error(e);fail('V0.3.43 Claim integration did not finish loading.')}};
+    s.onload=()=>{try{patchLabels(w,d);patchPOOutput(w);w.RUNLUClaimIntegration042R2?.install();boot.classList.add('ready')}catch(e){console.error(e);fail('V0.3.43 Claim integration did not finish loading.')}};
     s.onerror=()=>fail('V0.3.43 Claim integration failed to load.');
     d.body.appendChild(s);
   }catch(e){console.error(e);fail('V0.3.43 integration failed to initialize.');}
