@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>RUNLU Deerfoot Claim Invoice V0.3.41 Research</title>
+<style>
+:root{--green:#173d30;--bg:#edf1ef;--ink:#14221c;--muted:#6d7873}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+.bar{position:sticky;top:0;z-index:20;background:var(--green);color:#fff;padding:max(10px,env(safe-area-inset-top)) 14px 10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}.bar b{font-size:16px;margin-right:auto}.pill{background:#285c49;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:700}.bar button{border:0;border-radius:10px;padding:10px 13px;font-weight:800;cursor:pointer}.note{padding:10px 14px;background:#fff;border-bottom:1px solid #d6dfda;color:#47534d;font-size:13px;line-height:1.45}.note b{color:var(--green)}
+.frameWrap{height:calc(100vh - 112px)}iframe{width:100%;height:100%;border:0;background:#fff}
+@media(max-width:700px){.bar b{width:100%;font-size:15px}.frameWrap{height:calc(100vh - 150px)}}
+</style>
+</head>
+<body>
+<div class="bar"><b>Claim Invoice V0.3.41 Research</b><span id="status" class="pill">Loading…</span><button onclick="reloadFrame()">Reload</button><button onclick="location.href='index.html'">Stable OS</button></div>
+<div class="note"><b>Numbering rule:</b> System Invoice # follows the Regular Deerfoot Invoice source (<code>invoiceNumber</code>, otherwise <code>jobNumber</code>). The old <b>C-number</b> remains only as <b>Legacy Claim Ref</b>. GST stays at 5%.</div>
+<div class="frameWrap"><iframe id="claimFrame" title="Claim Invoice research"></iframe></div>
+<script>
+(function(){
+'use strict';
+const JOBS='runlu_deerfoot_flooring_jobs_v1',ACTIVE='runlu_deerfoot_flooring_active_job_v1',STORE='runlu_deerfoot_claim_invoice_v1';
+const frame=document.getElementById('claimFrame'),status=document.getElementById('status');
+function jobs(){try{return JSON.parse(localStorage.getItem(JOBS)||'[]')}catch(_){return []}}
+function activeJob(){const list=jobs(),aid=localStorage.getItem(ACTIVE);return list.find(j=>j.id===aid)||list[0]||null}
+function systemInvoiceNo(){const j=activeJob()||{};return String(j.invoiceNumber||j.jobNumber||'').trim()}
+function jobKey(){const j=activeJob();return j?.id||j?.jobNumber||'blank'}
+function patchSaved(){try{const db=JSON.parse(localStorage.getItem(STORE)||'{}')||{},key=jobKey();db[key]={...(db[key]||{}),systemInvoiceNumber:systemInvoiceNo(),legacyClaimRef:String(db[key]?.claimNumber||'').replace(/^C/i,'')};localStorage.setItem(STORE,JSON.stringify(db))}catch(_){}}
+function enhance(){
+  const w=frame.contentWindow,d=frame.contentDocument;if(!w||!d)return;
+  const sysNo=systemInvoiceNo();
+  const toolbar=d.querySelector('.toolbar b');if(toolbar)toolbar.textContent='RUNLU Deerfoot · Claim Invoice · V0.3.41 Research';
+  const msg=d.getElementById('statusMsg');if(msg)msg.innerHTML='<b>System Invoice # '+(sysNo||'—')+'</b> · C-number is Legacy Claim Ref only · Alberta GST 5%.';
+  const meta=d.querySelector('.claimmeta');
+  if(meta&&!d.getElementById('systemInvoiceNumber')){
+    const row=d.createElement('div');row.className='fieldline systemInvoiceRow';row.innerHTML='<label>SYSTEM INVOICE #</label><input id="systemInvoiceNumber" readonly>';
+    meta.insertBefore(row,meta.lastElementChild);
+    const input=row.querySelector('input');input.value=sysNo;input.style.fontWeight='800';input.style.color='#173d30';
+  }
+  const claim=d.querySelector('.claimNumber');
+  if(claim){const inp=d.getElementById('claimNumber');if(inp){claim.childNodes.forEach(n=>{if(n.nodeType===3)n.textContent='LEGACY CLAIM REF · C '});inp.setAttribute('aria-label','Legacy Claim Reference');}}
+  const bottom=d.querySelector('.bottomClaim');if(bottom&&!bottom.dataset.v041){bottom.dataset.v041='1';bottom.insertAdjacentHTML('afterbegin','<small style="font-size:10px;color:#555;margin-right:8px">LEGACY CLAIM REF</small>');}
+  const oldSave=w.saveDraft;
+  if(typeof oldSave==='function'&&!w.__runluV041SaveWrapped){w.__runluV041SaveWrapped=true;w.saveDraft=function(){oldSave();patchSaved();const m=d.getElementById('statusMsg');if(m)m.innerHTML='<b>Saved.</b> System Invoice # '+(sysNo||'—')+' · Legacy Claim Ref C'+(d.getElementById('claimNumber')?.value||'—')+'.';};}
+  status.textContent='V0.3.41 ready ✓';
+}
+window.reloadFrame=function(){status.textContent='Loading…';const j=activeJob();const p=new URLSearchParams();if(j?.jobNumber)p.set('job',j.jobNumber);p.set('t',Date.now());frame.src='claim-invoice.html?'+p.toString();};
+frame.addEventListener('load',()=>{try{enhance()}catch(e){console.error(e);status.textContent='Enhance failed';}});
+reloadFrame();
+})();
+</script>
+</body>
+</html>
