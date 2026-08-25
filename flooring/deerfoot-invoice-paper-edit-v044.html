@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173d30">
+<title>Deerfoot Editable Paper Invoice · V0.3.44 Research</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#edf1ef;font-family:Arial,Helvetica,sans-serif;color:#203129}.bar{height:auto;min-height:66px;background:#173d30;color:#fff;padding:max(9px,env(safe-area-inset-top)) 12px 9px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.bar b{font-size:15px;margin-right:auto}.bar button{border:0;border-radius:10px;padding:10px 12px;font-weight:800;background:#e8eeeb;color:#173d30}.bar .primary{background:#fff}.bar .save{background:#d9ebff;color:#1f568f}.bar .commit{background:#fff0c6;color:#684d00}.bar .print{background:#fff;color:#173d30}.sub{background:#f5f7f6;border-bottom:1px solid #dce4e0;padding:7px 12px;font-size:12px;line-height:1.35;color:#53615a}.sub b{color:#173d30}.sub .draft{font-weight:800;color:#8a5b00}#paper{width:100%;height:calc(100% - 112px);border:0;background:#fff}@media(max-width:760px){.bar b{width:100%;margin-right:0}.bar button{padding:9px 10px}.sub{font-size:11px}#paper{height:calc(100% - 164px)}}
+</style>
+</head>
+<body>
+<div class="bar">
+  <b>Deerfoot Invoice · Paper Edit Mode · V0.3.44 Research</b>
+  <button onclick="reloadFromJob()">Reload from Job</button>
+  <button onclick="loadDraft()">Load Draft</button>
+  <button class="save" onclick="saveDraft()">Save Draft</button>
+  <button onclick="recalculateLines()">Recalculate</button>
+  <button class="commit" onclick="saveToJob()">Save to Job / Invoice</button>
+  <button class="print" onclick="printPaper()">Print / Save PDF</button>
+</div>
+<div class="sub"><b>Dual-track rule:</b> database/form entry remains unchanged. Paper Edit Mode edits the familiar Deerfoot invoice directly. <span id="status">Loading active Job…</span></div>
+<iframe id="paper" title="Editable Deerfoot Invoice"></iframe>
+<script>
+(function(){
+'use strict';
+const JOBS='runlu_deerfoot_flooring_jobs_v1',ACTIVE='runlu_deerfoot_flooring_active_job_v1',BRIDGE='runlu_flooring_active_invoice_v1',DRAFTS='runlu_deerfoot_invoice_paper_drafts_v044',GST=.05;
+const frame=document.getElementById('paper'),status=document.getElementById('status');
+let doc=null,win=null,active=null;
+const qs=new URLSearchParams(location.search);
+function read(k,fallback){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(fallback))}catch(_){return fallback}}
+function write(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function jobs(){return read(JOBS,[])}
+function findActive(){const list=jobs(),q=qs.get('job'),aid=localStorage.getItem(ACTIVE);return list.find(j=>j.id===q||j.jobNumber===q)||list.find(j=>j.id===aid)||list[0]||null}
+function key(){return active?.id||active?.jobNumber||'blank'}
+function n(v){const x=Number(String(v??'').replace(/[$,]/g,'').trim());return Number.isFinite(x)?x:0}
+function money(v){return '$'+Number(v||0).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function isoDate(v,fallback=''){const s=String(v||'').trim();if(!s)return fallback;const m=s.match(/^\d{4}-\d{2}-\d{2}$/);if(m)return s;const d=new Date(s);return Number.isNaN(d.getTime())?fallback:d.toISOString().slice(0,10)}
+function splitBlock(el){const lines=String(el?.innerText||'').split(/\n+/).map(x=>x.trim()).filter(Boolean);return {name:lines.shift()||'',address:lines.join(', ')}}
+function ensureBridge(){active=findActive();if(!active)return;const itemSub=(active.items||[]).reduce((s,x)=>s+Number(x.total||0),0),delivery=Number(active.deliveryCharge||0),subtotal=itemSub+delivery,gst=Math.round(subtotal*GST*100)/100,total=subtotal+gst,deposit=Number(active.depositPaid||0),payload={...active,subtotal,gst,grandTotal:total,balanceDue:Math.max(0,total-deposit),invoiceDate:active.invoiceDate||active.date||new Date().toISOString().slice(0,10)};write(BRIDGE,payload)}
+function injectStyle(){const s=doc.createElement('style');s.id='paperEditV044Style';s.textContent=`
+  .appbar,.controls,.hint{display:none!important}.previewWrap{padding-top:10px!important}
+  [contenteditable="true"]{cursor:text;border-radius:1px;min-height:3mm}.paperEditField:hover{background:rgba(255,247,188,.45)}
+  [contenteditable="true"]:focus{outline:.35mm solid rgba(207,166,32,.7)!important;background:#fff5b8!important}
+  .items td[contenteditable="true"]{padding:.35mm .65mm!important}.paperEditPrice{border-radius:1px;padding:0 .4mm}
+  .paperEditCalculated{background:rgba(232,238,235,.42)}
+  .paperEditHint{position:absolute;left:11mm;top:278mm;font-size:5pt;color:#8a6b1b;z-index:20}
+  @media print{[contenteditable="true"],.paperEditPrice{outline:none!important;background:transparent!important}.paperEditHint{display:none!important}}
+`;doc.head.appendChild(s)}
+function editable(sel){const el=doc.querySelector(sel);if(!el)return;el.contentEditable='true';el.spellcheck=false;el.classList.add('paperEditField')}
+function ensurePriceRows(){const data=doc.querySelector('.data');if(!data)return;doc.querySelectorAll('.priceRowData').forEach(x=>x.remove());for(let i=0;i<15;i++){const top=108+i*5.02;['price','total'].forEach(kind=>{const el=doc.createElement('div');el.className='priceRowData '+kind+' paperEditPrice';el.dataset.row=String(i);el.dataset.kind=kind;el.style.top=top+'mm';el.contentEditable='true';el.spellcheck=false;data.appendChild(el)})}}
+function enablePayment(){doc.querySelectorAll('.paycheck').forEach(el=>{el.style.cursor='pointer';el.onclick=()=>{doc.querySelectorAll('.paycheck').forEach(x=>x.classList.remove('on'));el.classList.add('on')}})}
+function enableFields(){['.soldData','.shipData','.emailData','.cellData','.phoneHData','.phoneWData','.pickData','.deliveryData','.requiredData','.clerkData','.dateData','.notesData'].forEach(editable);doc.querySelectorAll('#rows td').forEach(td=>{td.contentEditable='true';td.spellcheck=false;td.classList.add('paperEditField')});ensurePriceRows();const totals=[...doc.querySelectorAll('.totalData')];[0,4].forEach(i=>{if(totals[i]){totals[i].contentEditable='true';totals[i].classList.add('paperEditField')}});[1,2,3,5].forEach(i=>totals[i]?.classList.add('paperEditCalculated'));enablePayment();const hint=doc.createElement('div');hint.className='paperEditHint';hint.textContent='PAPER EDIT MODE · editable fields glow softly when selected';doc.querySelector('.invoice')?.appendChild(hint);doc.addEventListener('input',()=>recalcTotals(false));}
+function bridgeData(){return read(BRIDGE,{})||{}}
+function applyData(d){if(!doc||!d)return;const q=s=>doc.querySelector(s);q('.soldData').innerText=[d.customerName,d.soldToAddress].filter(Boolean).join('\n');q('.shipData').innerText=[d.shipToName||d.customerName,d.shipToAddress].filter(Boolean).join('\n');q('.emailData').innerText=d.email||'';q('.cellData').innerText=d.cell||'';q('.phoneHData').innerText=d.phoneHome||'';q('.phoneWData').innerText=d.phoneWork||'';q('.pickData').innerText=d.pickup||'';q('.deliveryData').innerText=d.delivery||'';q('.requiredData').innerText=d.dateRequired||'';q('.clerkData').innerText=d.clerk||'';q('.dateData').innerText=d.invoiceDate||d.date||'';q('.notesData').innerText=d.notes||'';doc.querySelectorAll('.invoiceNoTop,.invoiceNoBottom').forEach(x=>x.textContent=d.invoiceNumber||d.jobNumber||'');const rows=[...doc.querySelectorAll('#rows tr')];const items=Array.isArray(d.items)?d.items:[];rows.forEach((tr,i)=>{const x=items[i]||{},cells=[...tr.children],vals=[x.qty||'',x.size||'',x.style||'',x.colour||'',x.supplier||x.sourceRef||''];cells.forEach((td,j)=>td.innerText=vals[j]||'')});const prices=[...doc.querySelectorAll('.priceRowData.price')],totals=[...doc.querySelectorAll('.priceRowData.total')];for(let i=0;i<15;i++){prices[i].innerText=items[i]?.price?Number(items[i].price).toFixed(2):'';totals[i].innerText=items[i]?.total?Number(items[i].total).toFixed(2):''}const summary=[...doc.querySelectorAll('.totalData')];if(summary[0])summary[0].innerText=money(d.deliveryCharge||0);if(summary[4])summary[4].innerText=money(d.depositPaid||0);doc.querySelectorAll('.paycheck').forEach(el=>el.classList.toggle('on',String(el.dataset.pay||'').toLowerCase()===String(d.paymentMethod||'').toLowerCase()));recalcTotals(false)}
+function collect(){const q=s=>doc.querySelector(s),sold=splitBlock(q('.soldData')),ship=splitBlock(q('.shipData')),rows=[...doc.querySelectorAll('#rows tr')],prices=[...doc.querySelectorAll('.priceRowData.price')],lineTotals=[...doc.querySelectorAll('.priceRowData.total')],base=active||{};const items=rows.map((tr,i)=>{const c=[...tr.children].map(td=>td.innerText.trim()),old=(base.items||[])[i]||{};return {...old,qty:c[0]||'',size:c[1]||'',style:c[2]||'',colour:c[3]||'',supplier:c[4]||'',price:n(prices[i]?.innerText),total:n(lineTotals[i]?.innerText)}}).filter(x=>x.qty||x.size||x.style||x.colour||x.supplier||x.price||x.total);const totals=[...doc.querySelectorAll('.totalData')];return {customerName:sold.name,soldToAddress:sold.address,shipToName:ship.name,shipToAddress:ship.address,email:q('.emailData')?.innerText.trim()||'',cell:q('.cellData')?.innerText.trim()||'',phoneHome:q('.phoneHData')?.innerText.trim()||'',phoneWork:q('.phoneWData')?.innerText.trim()||'',pickup:q('.pickData')?.innerText.trim()||'',delivery:q('.deliveryData')?.innerText.trim()||'',dateRequired:q('.requiredData')?.innerText.trim()||'',clerk:q('.clerkData')?.innerText.trim()||'',invoiceDate:q('.dateData')?.innerText.trim()||'',notes:q('.notesData')?.innerText.trim()||'',items,deliveryCharge:n(totals[0]?.innerText),depositPaid:n(totals[4]?.innerText),paymentMethod:doc.querySelector('.paycheck.on')?.dataset.pay||'',updatedAt:new Date().toISOString()}}
+function recalcTotals(lines){if(!doc)return;const rows=[...doc.querySelectorAll('#rows tr')],prices=[...doc.querySelectorAll('.priceRowData.price')],lineTotals=[...doc.querySelectorAll('.priceRowData.total')];if(lines){rows.forEach((tr,i)=>{const qtyText=tr.children[0]?.innerText||'',qty=Number((qtyText.match(/-?\d+(?:\.\d+)?/)||[])[0]||0),price=n(prices[i]?.innerText);if(qty&&price)lineTotals[i].innerText=(qty*price).toFixed(2)})}const lineSub=lineTotals.reduce((s,x)=>s+n(x.innerText),0),summary=[...doc.querySelectorAll('.totalData')],delivery=n(summary[0]?.innerText),sub=lineSub+delivery,gst=Math.round(sub*GST*100)/100,total=sub+gst,deposit=n(summary[4]?.innerText),balance=Math.max(0,total-deposit);if(summary[1])summary[1].innerText=money(sub);if(summary[2])summary[2].innerText=money(gst);if(summary[3])summary[3].innerText=money(total);if(summary[5])summary[5].innerText=money(balance)}
+function draftDb(){return read(DRAFTS,{})}
+function updateStatus(){const db=draftDb(),d=db[key()];status.innerHTML=(active?'<b>Job '+(active.jobNumber||'New')+'</b>':'No active Job')+(d?' · <span class="draft">Draft saved '+new Date(d.savedAt||d.updatedAt).toLocaleString()+'</span>':' · No paper draft saved yet.')}
+function bootEditor(){win=frame.contentWindow;doc=frame.contentDocument;active=findActive();injectStyle();enableFields();applyData(bridgeData());updateStatus()}
+window.reloadFromJob=function(){ensureBridge();frame.src='deerfoot-invoice.html?paperedit=044&t='+Date.now()}
+window.saveDraft=function(){if(!doc)return;const db=draftDb();db[key()]={...collect(),jobId:active?.id||'',jobNumber:active?.jobNumber||'',savedAt:new Date().toISOString()};write(DRAFTS,db);updateStatus();alert('Editable Deerfoot Invoice draft saved. The Job record was not changed.')}
+window.loadDraft=function(){const d=draftDb()[key()];if(!d)return alert('No saved paper draft for this Job.');applyData(d);alert('Saved paper draft loaded.')}
+window.recalculateLines=function(){recalcTotals(true)}
+window.saveToJob=function(){if(!active||!doc)return alert('No active Job is available.');if(!confirm('Save the paper edits back to the active Job / Invoice record?'))return;const x=collect(),list=jobs(),idx=list.findIndex(j=>j.id===active.id||j.jobNumber===active.jobNumber);if(idx<0)return alert('Active Job could not be found.');const j=list[idx];Object.assign(j,{customerName:x.customerName,soldToAddress:x.soldToAddress,shipToName:x.shipToName,shipToAddress:x.shipToAddress,email:x.email,cell:x.cell,phoneHome:x.phoneHome,phoneWork:x.phoneWork,pickup:x.pickup,delivery:x.delivery,dateRequired:isoDate(x.dateRequired,j.dateRequired||''),clerk:x.clerk,invoiceDate:isoDate(x.invoiceDate,j.invoiceDate||j.date||new Date().toISOString().slice(0,10)),notes:x.notes,items:x.items,deliveryCharge:x.deliveryCharge,depositPaid:x.depositPaid,paymentMethod:x.paymentMethod});write(JOBS,list);active=j;localStorage.setItem(ACTIVE,j.id||j.jobNumber||'');const itemSub=(j.items||[]).reduce((s,a)=>s+Number(a.total||0),0),subtotal=itemSub+Number(j.deliveryCharge||0),gst=Math.round(subtotal*GST*100)/100,total=subtotal+gst;write(BRIDGE,{...j,subtotal,gst,grandTotal:total,balanceDue:Math.max(0,total-Number(j.depositPaid||0))});const db=draftDb();db[key()]={...x,jobId:j.id||'',jobNumber:j.jobNumber||'',savedAt:new Date().toISOString()};write(DRAFTS,db);applyData(read(BRIDGE,{}));updateStatus();alert('Paper edits saved back to the active Job / Invoice.')}
+window.printPaper=function(){if(!win)return;win.focus();win.print()}
+ensureBridge();frame.addEventListener('load',()=>setTimeout(bootEditor,60));frame.src='deerfoot-invoice.html?paperedit=044&t='+Date.now();
+})();
+</script>
+</body>
+</html>
