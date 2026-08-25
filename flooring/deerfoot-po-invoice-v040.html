@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>RUNLU Flooring OS · PO → Deerfoot Invoice V0.3.40R1</title>
+<title>RUNLU Flooring OS · PO → Deerfoot Invoice V0.3.40R2</title>
 <link rel="stylesheet" href="deerfoot-base.css">
 <link rel="stylesheet" href="deerfoot-final.css?v=021">
 <style>
@@ -12,7 +12,7 @@
 </style>
 </head>
 <body>
-<div class="appbar"><div class="inner"><div class="brand">PO → Deerfoot Invoice<small>Same Deerfoot legacy form · supplier pickup / internal PO workflow · V0.3.40R1</small></div><button class="primary" onclick="window.print()">Print / Save PDF</button></div></div>
+<div class="appbar"><div class="inner"><div class="brand">PO → Deerfoot Invoice<small>Same Deerfoot legacy form · supplier pickup / internal PO workflow · V0.3.40R2</small></div><button class="primary" onclick="window.print()">Print / Save PDF</button></div></div>
 <div class="controls">
   <div class="control"><label>Copy</label><select id="copy"><option value="customer">White</option><option value="warehouse">Yellow</option><option value="accounting">Pink</option></select></div>
   <div class="control"><label>Output</label><select id="mode"><option value="full">Full Form</option><option value="overlay">3-Part Overlay · Data Only</option></select></div>
@@ -21,7 +21,7 @@
   <div class="control"><label>Offset Y (mm)</label><input id="oy" type="number" value="0" step="0.5"></div>
   <div class="control"><label>Scale (%)</label><input id="scale" type="number" value="100" step="0.1"></div>
 </div>
-<div class="hint"><span class="poPurpose">Deerfoot real-world rule:</span> this PO workflow prints the same Deerfoot Invoice form used in daily operations. The printed <b>SUPPLIER / STOCK</b> column comes from each line's <b>Source / Reference</b>. Source Type stays structured internally. <b>PRICE / TOTAL print by default</b>; use Hide Price only when a no-price pickup copy is needed.</div>
+<div class="hint"><span class="poPurpose">Deerfoot real-world rule:</span> this PO workflow prints the same Deerfoot Invoice form used in daily operations. The printed <b>SUPPLIER / STOCK</b> column comes from each line's <b>Source / Reference</b>. Source Type stays structured internally. <b>PRICE / TOTAL print by default</b>; Alberta <b>GST is calculated automatically at 5%</b>. Use Hide Price only when a no-price pickup copy is needed.</div>
 <div class="previewWrap"><div class="previewStage">
 <div id="invoice" class="invoice copy-customer">
   <div class="static">
@@ -70,5 +70,5 @@
     <div class="abs totalData" style="left:181mm;top:188.8mm;width:18mm;text-align:right"></div><div class="abs totalData" style="left:181mm;top:199.4mm;width:18mm;text-align:right"></div><div class="abs totalData" style="left:181mm;top:210.0mm;width:18mm;text-align:right"></div><div class="abs totalData bold" style="left:181mm;top:220.5mm;width:18mm;text-align:right"></div><div class="abs totalData" style="left:181mm;top:236.3mm;width:18mm;text-align:right"></div><div class="abs totalData bold" style="left:181mm;top:250.0mm;width:18mm;text-align:right"></div>
   </div>
 </div></div></div>
-<script src="deerfoot-po-invoice-v040.js?v=041"></script>
+<script src="deerfoot-po-invoice-v040.js?v=042"></script>
 </body></html>
