@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173d30">
+<title>RUNLU Deerfoot V0.3.42 Claim Integration Diagnostic</title>
+<style>
+:root{--green:#173d30;--bg:#edf1ef;--ink:#17251f}*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+.bar{background:var(--green);color:#fff;padding:max(10px,env(safe-area-inset-top)) 12px 10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.bar b{margin-right:auto}.pill{background:#2b604c;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800}.bar button{border:0;border-radius:9px;padding:9px 12px;font-weight:800}.note{background:#fff;border-bottom:1px solid #d5ddd9;padding:9px 12px;font-size:12px;line-height:1.45;color:#46534d}.note b{color:var(--green)}
+.wrap{height:calc(100vh - 110px)}iframe{width:100%;height:100%;border:0;background:#fff}@media(max-width:700px){.bar b{width:100%}.wrap{height:calc(100vh - 145px)}}
+</style>
+</head>
+<body>
+<div class="bar"><b>V0.3.42 · Service / Claims → Original Claim Invoice</b><span id="status" class="pill">Loading stable 037…</span><button onclick="openClaims()">Service / Claims</button><button onclick="reloadLab()">Reload Lab</button><button onclick="location.href='index.html'">Stable OS</button></div>
+<div class="note"><b>Isolation test:</b> the iframe loads the unchanged stable Flooring OS first, then injects only the V0.3.42 Claim Bridge. Old C-number sequencing is not used by the new entry. System Invoice # follows the Regular Invoice; C-number is Legacy Claim / Service Ref only.</div>
+<div class="wrap"><iframe id="os" title="Stable Flooring OS with V0.3.42 Claim integration"></iframe></div>
+<script>
+(function(){
+'use strict';
+const frame=document.getElementById('os'),status=document.getElementById('status');
+function inject(){
+  try{
+    const d=frame.contentDocument;if(!d)return;
+    if(d.querySelector('script[data-runlu-claim042]')){status.textContent='V0.3.42 injected ✓';return}
+    const s=d.createElement('script');s.src='claim-integration-v042.js?v=042';s.dataset.runluClaim042='1';
+    s.onload=()=>{status.textContent='V0.3.42 injected ✓';try{frame.contentWindow.RUNLUClaimIntegration042?.install()}catch(_){}};
+    s.onerror=()=>status.textContent='Bridge load failed';d.body.appendChild(s);
+  }catch(e){console.error(e);status.textContent='Injection failed';}
+}
+window.openClaims=function(){try{frame.contentWindow.go('serviceclaims');setTimeout(()=>frame.contentWindow.RUNLUClaimIntegration042?.install(),100)}catch(e){console.error(e)}};
+window.reloadLab=function(){status.textContent='Loading stable 037…';frame.src='index.html?t='+Date.now()};
+frame.addEventListener('load',()=>setTimeout(inject,100));
+reloadLab();
+})();
+</script>
+</body>
+</html>
