@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173d30">
+<title>RUNLU Deerfoot Flooring OS V0.3.43 Release Candidate</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#edf1ef;font-family:Arial,Helvetica,sans-serif}#os{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}.boot{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:24px;background:#edf1ef;color:#173d30;font-weight:800;text-align:center;line-height:1.45;transition:opacity .18s ease}.boot.ready{opacity:0;pointer-events:none}.boot.fail{color:#7a2b2b;background:#fff4f1}.boot small{display:block;margin-top:8px;font-weight:500;color:#63716b}
+</style>
+</head>
+<body>
+<div id="boot" class="boot"><div>RUNLU Deerfoot Flooring OS<br>V0.3.43 Release Candidate<small>Loading verified modules…</small></div></div>
+<iframe id="os" title="RUNLU Deerfoot Flooring OS V0.3.43"></iframe>
+<script>
+(function(){
+'use strict';
+const frame=document.getElementById('os'),boot=document.getElementById('boot');
+function fail(msg){boot.classList.remove('ready');boot.classList.add('fail');boot.innerHTML='<div>'+msg+'<small>Stable V0.3.37 remains unchanged.</small></div>'}
+function patchLabels(w,d){
+  try{
+    d.title='RUNLU Deerfoot Flooring OS V0.3.43 Release Candidate';
+    const pill=d.querySelector('header .pill');if(pill)pill.textContent='V0.3.43 Release Candidate';
+    const brand=d.querySelector('header .brand span');if(brand)brand.textContent='Integrated candidate · stable 037 base · Deerfoot-native PO + Claim workflows';
+    const demo=d.querySelector('#command .demo');if(demo)demo.textContent='V0.3.43 RELEASE CANDIDATE · Stable V0.3.37 remains preserved for rollback.';
+    const poMuted=d.querySelector('#purchasing .statusLine .muted');if(poMuted)poMuted.textContent='V0.3.43 · structured Source / Reference + Deerfoot Invoice preview / print.';
+    const svc=d.querySelector('#serviceclaims .statusLine .muted');if(svc)svc.textContent='After-sale service, original Deerfoot Claim Invoice, inspection, supplier recovery and final resolution.';
+    const poModule=[...d.querySelectorAll('.module')].find(x=>x.querySelector('strong')?.textContent==='PO / Supplier Orders');if(poModule){const s=poModule.querySelector('small');if(s)s.textContent='Source / Reference, pricing, Alberta GST 5%, Deerfoot Invoice preview / print.'}
+    const claimModule=d.getElementById('serviceClaimsModule');if(claimModule){const s=claimModule.querySelector('small');if(s)s.textContent='Service / Claims with original Deerfoot Claim Invoice and Job-bound data handoff.'}
+  }catch(e){console.error('V043 label patch failed',e)}
+}
+function inject(){
+  try{
+    const w=frame.contentWindow,d=frame.contentDocument;if(!w||!d)return fail('V0.3.43 could not access the integrated app.');
+    patchLabels(w,d);
+    let s=d.querySelector('script[data-runlu-v043-claim]');
+    if(s){try{w.RUNLUClaimIntegration042R2?.install()}catch(_){};boot.classList.add('ready');return}
+    s=d.createElement('script');s.src='claim-integration-v042r1.js?v=043';s.dataset.runluV043Claim='1';
+    s.onload=()=>{try{patchLabels(w,d);w.RUNLUClaimIntegration042R2?.install();boot.classList.add('ready')}catch(e){console.error(e);fail('V0.3.43 Claim integration did not finish loading.')}};
+    s.onerror=()=>fail('V0.3.43 Claim integration failed to load.');
+    d.body.appendChild(s);
+  }catch(e){console.error(e);fail('V0.3.43 integration failed to initialize.');}
+}
+frame.addEventListener('load',()=>setTimeout(inject,80));
+frame.src='index-v040.html?v=043&t='+Date.now();
+})();
+</script>
+</body>
+</html>
