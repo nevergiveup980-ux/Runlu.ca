@@ -3,103 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
 <meta name="theme-color" content="#173d30">
-<title>RUNLU Deerfoot Flooring OS V0.3.37 Sales Desk / Filing Cabinet</title>
-<link rel="stylesheet" href="app.css?v=032">
-<link rel="stylesheet" href="po-safe-v011.css?v=011">
-<link rel="stylesheet" href="supplier-pickup-safe-v011.css?v=011">
-<link rel="stylesheet" href="po-native-items-v001.css?v=002">
+<title>RUNLU Deerfoot Flooring OS V0.3.43R2</title>
+<style>html,body{margin:0;height:100%;display:grid;place-items:center;background:#edf1ef;color:#173d30;font-family:Arial,Helvetica,sans-serif}.boot{font-weight:800;text-align:center;line-height:1.5}.boot small{display:block;margin-top:8px;font-weight:500;color:#66736d}</style>
 </head>
 <body>
-<header><div class="top"><div class="brand"><b>RUNLU Deerfoot Flooring OS</b><span>Deerfoot-first internal build · one Job / Order across departments</span></div><div class="pill">V0.3.37 Sales Desk / Filing Cabinet</div></div></header>
-<nav id="nav"></nav>
-<main>
-<section id="command" class="page active">
-  <div class="hero"><h1>Deerfoot Command Center</h1><p>Showroom → Estimate / Assessment → Job / Order → PO / Supplier Orders → Supplier Pickup → Warehouse → Installation → Deerfoot Invoice → Service / Claims → Payment / Final Closeout.</p><span class="demo">Demo records are clearly labeled. Create real records only when you are ready to use them.</span></div>
-  <div class="stats">
-    <div class="stat"><b id="stOpen">0</b><span>Open Jobs</span></div>
-    <div class="stat"><b id="stMaterial">0</b><span>Need Material</span></div>
-    <div class="stat"><b id="stInstall">0</b><span>Ready / Install</span></div>
-    <div class="stat"><b id="stBalance">$0</b><span>Balance Due</span></div>
-  </div>
-  <div class="grid2">
-    <div class="card"><h3>Today's attention</h3><div id="attention"></div></div>
-    <div class="card"><h3>Active Job / Order</h3><div id="activeSummary" class="muted">Select or create a Job.</div><div class="actions"><button class="action primary" onclick="go('jobs')">Open Job</button><button class="action blue" onclick="prepareInvoice();go('invoice')">Deerfoot Invoice</button><button class="action" onclick="go('warehouse')">Warehouse</button></div></div>
-  </div>
-  <div class="grid3">
-    <button class="module" onclick="go('showroom')"><span class="ico">🛋️</span><strong>Showroom</strong><small>Sample catalog, zones, checkout / return and start an estimate.</small></button>
-    <button class="module" onclick="go('estimate')"><span class="ico">📐</span><strong>Estimate / Assessment</strong><small>Deerfoot field assessment form, editable and ready to create a Job / Order.</small></button>
-    <button class="module" onclick="go('jobs')"><span class="ico">🧾</span><strong>Jobs & Orders</strong><small>Customer, required date, items, status and shared record.</small></button>
-    <button class="module" onclick="go('purchasing')"><span class="ico">📦</span><strong>PO / Supplier Orders</strong><small>Sales-managed supplier orders, multi-PO Job linking and digital numbering.</small></button>
-    <button class="module" onclick="openSupplierPickupSafe()"><span class="ico">🚚</span><strong>Supplier Pickup</strong><small>Date-sorted pickup / receiving schedule shared with Warehouse and Accounting.</small></button>
-    <button class="module" onclick="go('warehouse')"><span class="ico">🏭</span><strong>Warehouse OS</strong><small>Live warehouse subsystem embedded inside Flooring OS.</small></button>
-    <button class="module" onclick="prepareInvoice();go('invoice')"><span class="ico">📄</span><strong>Deerfoot Invoice</strong><small>Final Deerfoot Legacy invoice, including three-copy / overlay printing.</small></button>
-    <button class="module" onclick="go('install')"><span class="ico">🛠️</span><strong>Installation</strong><small>Installer, install date and completion status.</small></button>
-    <button id="serviceClaimsModule" class="module" onclick="go('serviceclaims')"><span class="ico">🧰</span><strong>Service / Claims</strong><small>After-sale service, C###### claim PO, inspection, recovery credit and final resolution.</small></button>
-    <button class="module" onclick="go('accounting')"><span class="ico">💵</span><strong>Accounting</strong><small>Deposit, GST, supplier receiving match, balance and payment method.</small></button>
-  </div>
-</section>
-
-<section id="showroom" class="page">
-  <div class="card"><div class="statusLine"><div><h2>Showroom Management</h2><div class="muted">Front-of-house sample system for Deerfoot sales.</div></div><button class="action primary" onclick="newShowroomSample()">+ Add Sample</button></div>
-    <div class="showroomNotice"><b>V0.1 starter map:</b> the zone names below are a configurable operating map, not a claim that they match the exact physical Deerfoot showroom layout yet. Demo sample records are marked DEMO.</div>
-    <div class="showroomStats"><div><b id="showOnDisplay">0</b><span>On Display</span></div><div><b id="showCheckedOut">0</b><span>Checked Out</span></div><div><b id="showAttention">0</b><span>Needs Attention</span></div><div><b id="showTotal">0</b><span>Total Samples</span></div></div>
-  </div>
-  <div class="grid2">
-    <div class="card"><h3>Showroom Map / Zones</h3><div id="showroomMap" class="zoneGrid"></div></div>
-    <div class="card"><h3>Sample Checkout / Return</h3><div class="checkoutBox"><div id="checkoutSelected" class="checkoutSelected muted">Choose a sample from the catalog.</div><div class="formgrid"><div><label>Customer</label><input id="checkoutCustomer"></div><div><label>Phone</label><input id="checkoutPhone"></div><div><label>Due Date</label><input id="checkoutDue" type="date"></div></div><div class="actions"><button id="checkoutAction" class="action primary" onclick="checkoutOrReturn()">Checkout Sample</button></div></div></div>
-  </div>
-  <div class="card"><div class="statusLine"><h3>Sample Catalog</h3><span class="muted">Search by sample ID, style, colour, supplier, customer or zone.</span></div><div class="showroomToolbar"><input id="showSearch" placeholder="Search showroom samples"><select id="showStatusFilter"><option value="">All statuses</option><option>On Display</option><option>Checked Out</option><option>Missing</option><option>Discontinued</option><option>Replace</option></select><select id="showZoneFilter"></select></div><div id="showroomSampleList"></div></div>
-  <div class="card"><h3 id="showEditorTitle">Add Showroom Sample</h3><div class="showroomForm"><div><label>Sample ID</label><input id="showSampleId" placeholder="e.g. DF-001"></div><div><label>Product Type</label><input id="showType" placeholder="Carpet / Hardwood / LVP..."></div><div><label>Supplier</label><input id="showSupplier"></div><div><label>Status</label><select id="showSampleStatus"><option>On Display</option><option>Checked Out</option><option>Missing</option><option>Discontinued</option><option>Replace</option></select></div><div class="wide"><label>Style / Product</label><input id="showStyle"></div><div><label>Colour</label><input id="showColour"></div><div><label>Price / Unit</label><input id="showPrice" inputmode="decimal"></div><div><label>Showroom Zone</label><select id="showLocation"></select></div><div class="full"><label>Notes</label><textarea id="showNotes"></textarea></div></div><div class="actions"><button class="action" onclick="newShowroomSample()">Clear</button><button class="action primary" onclick="saveShowroomSample()">Save Sample</button></div></div>
-</section>
-
-<section id="estimate" class="page">
-  <div class="card"><div class="statusLine"><div><h2>Estimate / Assessment</h2><div class="muted">V0.3 Visual Final · customer / site assessment before the Job / Order.</div></div><button class="action blue" onclick="openEstimateFull()">Open Full Screen</button></div></div>
-  <div class="frameWrap" style="height:82vh"><iframe id="estimateFrame" data-src="estimate-assessment.html" title="Deerfoot Estimate / Assessment"></iframe></div>
-</section>
-
-<section id="jobs" class="page">
-  <div class="card"><div class="statusLine"><h2>Jobs & Orders</h2><button class="action primary" onclick="newJob()">+ New Job</button></div><div id="jobList"></div></div>
-  <div class="card"><h3 id="jobEditorTitle">Job / Order</h3>
-    <div class="formgrid">
-      <div><label>Job / Order #</label><input id="jobNumber"></div><div><label>Invoice #</label><input id="invoiceNumber"></div><div><label>Customer / Sold To</label><input id="customerName"></div><div><label>Clerk</label><input id="clerk"></div><div class="full"><label>Sold To Address</label><input id="soldToAddress"></div><div><label>Ship To Name</label><input id="shipToName"></div><div><label>Ship To Address</label><input id="shipToAddress"></div><div><label>Email</label><input id="email" type="email"></div><div><label>Cell</label><input id="cell"></div><div><label>Date Required</label><input id="dateRequired" type="date"></div><div><label>Status</label><select id="status"><option>Draft</option><option>Confirmed</option><option>Procurement</option><option>Ready</option><option>In Progress</option><option>Completed</option><option>Closed</option><option>On Hold</option><option>Cancelled</option></select></div><div><label>Customer Pickup Date</label><input id="pickup" type="date"></div><div><label>Delivery</label><input id="delivery"></div><div><label>Customer PO / Reference</label><input id="customerPO"></div><div><label>Linked PO #s (managed in PO module)</label><input id="supplierPO" readonly placeholder="Managed in PO / Supplier Orders"></div><div class="full"><label>Notes</label><textarea id="notes"></textarea></div>
-    </div>
-    <h3 style="margin-top:17px">Items</h3><div id="itemsEditor"></div><div class="actions"><button class="action" onclick="addItem()">+ Item</button><button class="action primary" onclick="saveJob()">Save Job</button><button class="action blue" onclick="prepareInvoice();go('invoice')">Generate Deerfoot Invoice</button></div>
-  </div>
-</section>
-
-<section id="purchasing" class="page"><div class="card"><h2>PO / Supplier Orders</h2><div id="poSummary" class="muted"></div><div id="poItems"></div></div></section>
-
-<section id="warehouse" class="page"><div class="card"><div class="statusLine"><div><h2>Warehouse OS</h2><div class="muted"><span class="dot"></span>Existing RUNLU Warehouse OS retained as the warehouse subsystem.</div></div><button class="action blue" onclick="openWarehouse()">Open Full Screen</button></div><div id="handoff" class="handoff" style="margin-top:10px"></div><div class="actions"><button class="action" onclick="copyHandoff()">Copy Job Handoff</button><button class="action primary" onclick="refreshWarehouse()">Refresh Warehouse</button></div></div><div class="frameWrap"><iframe id="warehouseFrame" title="RUNLU Warehouse OS"></iframe></div></section>
-
-<section id="invoice" class="page"><div class="card"><div class="statusLine"><div><h2>Deerfoot Invoice</h2><div class="muted">Bound directly to the selected Job / Order record.</div></div><button class="action" onclick="prepareInvoice()">Refresh From Job</button></div></div><div class="frameWrap" style="height:78vh"><iframe id="invoiceFrame" title="Deerfoot Invoice"></iframe></div></section>
-
-<section id="install" class="page"><div class="card"><h2>Installation</h2><div class="formgrid"><div><label>Installer</label><input id="installer"></div><div><label>Install Date</label><input id="installDate" type="date"></div><div><label>Install Status</label><select id="installStatus"><option>Not Scheduled</option><option>Scheduled</option><option>In Progress</option><option>Completed</option><option>Callback / Issue</option></select></div><div><label>Site / Install Notes</label><input id="installNotes"></div></div><div class="actions"><button class="action primary" onclick="saveInstall()">Save Installation</button></div></div></section>
-
-<section id="serviceclaims" class="page">
-  <div class="card"><div class="statusLine"><div><h2>Service / Claims</h2><div class="muted">After-sale service, inspection, supplier recovery and final resolution.</div></div><span class="tag">Job-bound</span></div><div id="serviceClaimJobSummary" class="notice" style="margin-top:10px">Select or create a Job / Order first.</div></div>
-  <div class="card"><div class="formgrid">
-    <div><label>Claim / Service #</label><input id="claimNumberSafe" placeholder="C###### or service reference"></div>
-    <div><label>Type</label><select id="claimTypeSafe"><option>Service</option><option>Warranty</option><option>Damage</option><option>Supplier Claim</option></select></div>
-    <div><label>Status</label><select id="claimStatusSafe"><option>Open</option><option>Inspection Scheduled</option><option>Waiting Supplier</option><option>Approved</option><option>Credit Pending</option><option>Resolved</option><option>Closed</option></select></div>
-    <div><label>Opened Date</label><input id="claimOpenedDateSafe" type="date"></div>
-    <div><label>Supplier</label><input id="claimSupplierSafe"></div>
-    <div><label>Related PO</label><input id="claimRelatedPOSafe"></div>
-    <div><label>Inspector / Assigned To</label><input id="claimInspectorSafe"></div>
-    <div><label>Recovery Credit</label><input id="claimRecoverySafe" inputmode="decimal" placeholder="0.00"></div>
-    <div class="full"><label>Notes / Findings / Resolution</label><textarea id="claimNotesSafe"></textarea></div>
-  </div><div class="actions"><button class="action primary" id="serviceClaimSaveBtn">Save Service / Claim</button><button class="action" id="serviceClaimResolveBtn">Mark Resolved</button></div><div id="serviceClaimMsg" class="notice">No saved service / claim record for this Job yet.</div></div>
-</section>
-
-<section id="accounting" class="page"><div class="card"><h2>Accounting / Closeout</h2><div class="summary"><div><small>Subtotal</small><b id="aSub">$0.00</b></div><div><small>GST</small><b id="aGst">$0.00</b></div><div><small>Total</small><b id="aTotal">$0.00</b></div><div><small>Balance</small><b id="aBalance">$0.00</b></div></div><div class="formgrid" style="margin-top:10px"><div><label>Delivery Charge</label><input id="deliveryCharge" type="number" step="0.01"></div><div><label>Deposit Paid</label><input id="depositPaid" type="number" step="0.01"></div><div><label>Payment Method</label><select id="paymentMethod"><option value="">—</option><option value="finance">Finance</option><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="visa">Visa</option><option value="mastercard">Master Card</option><option value="interac">Interac</option></select></div></div><div class="actions"><button class="action primary" onclick="saveAccounting()">Save Accounting</button><button class="action blue" onclick="prepareInvoice();go('invoice')">Update Invoice</button></div></div></section>
-</main>
-<script src="app.js?v=core-isolation-20260823-2"></script>
-<script src="po-safe-v011.js?v=014"></script>
-<script src="supplier-pickup-safe-v017.js?v=017"></script>
-<script src="supplier-pickup-authority-v018.js?v=020"></script>
-<script src="sales-core-v033.js?v=037"></script>
-<script src="sales-desk-v037.js?v=037"></script>
-<script src="sales-desk-guard-v037.js?v=037"></script>
-<script src="service-claims-safe-v001.js?v=037"></script>
+<div class="boot">RUNLU Deerfoot Flooring OS<br>V0.3.43R2 Full Build<small>Loading complete integrated version…</small></div>
+<script>
+location.replace('index-v043r2-full.html?prod=1&t='+Date.now());
+</script>
 </body>
 </html>
