@@ -11,7 +11,7 @@
   function lineTotal(x){const direct=numeric(x.lineTotal);return direct||numeric(x.qty)*numeric(x.unitCost)}
   function rowQty(x){return [x.qty,String(x.unit||'').toUpperCase()].filter(Boolean).join(' ')}
   function supplierStock(x){return x.sourceRef||x.supplierStock||x.supplier||''}
-  function invoiceNotes(data){const lines=[];const po=String(data.poNumber||'').trim();if(po)lines.push('PO # '+po);const notes=String(data.notes||'').trim();if(notes)lines.push(notes);return lines.join('\n')}
+  function displayNumber(data){const po=String(data.poNumber||'').trim();return po?'PO # '+po:String(data.invoiceNumber||'').trim()}
   function applyControls(){
     const c=document.getElementById('copy').value,m=document.getElementById('mode').value;invoice.classList.remove('copy-customer','copy-warehouse','copy-accounting','overlay');invoice.classList.add('copy-'+c);if(m==='overlay')invoice.classList.add('overlay');
     document.documentElement.style.setProperty('--offset-x',(Number(document.getElementById('ox').value)||0)+'mm');document.documentElement.style.setProperty('--offset-y',(Number(document.getElementById('oy').value)||0)+'mm');document.documentElement.style.setProperty('--print-scale',(Number(document.getElementById('scale').value)||100)/100);
@@ -39,7 +39,7 @@
     if(q('.soldData'))q('.soldData').innerHTML=[data.customerName,data.soldToAddress].filter(Boolean).join('<br>');if(q('.shipData'))q('.shipData').innerHTML=[data.shipToName||data.customerName,data.shipToAddress].filter(Boolean).join('<br>');
     if(q('.emailData'))q('.emailData').textContent=data.email||'';if(q('.cellData'))q('.cellData').textContent=data.cell||'';if(q('.phoneHData'))q('.phoneHData').textContent=data.phoneHome||'';if(q('.phoneWData'))q('.phoneWData').textContent=data.phoneWork||'';
     if(q('.pickData'))q('.pickData').textContent=fmtDate(data.pickup);if(q('.deliveryData'))q('.deliveryData').textContent=data.delivery||'';if(q('.requiredData'))q('.requiredData').textContent=fmtDate(data.dateRequired);if(q('.clerkData'))q('.clerkData').textContent=data.clerk||'';if(q('.dateData'))q('.dateData').textContent=fmtDate(data.invoiceDate);
-    qa('.invoiceNoTop,.invoiceNoBottom').forEach(el=>el.textContent=data.invoiceNumber||'');if(q('.notesData'))q('.notesData').textContent=invoiceNotes(data);
+    qa('.invoiceNoTop,.invoiceNoBottom').forEach(el=>el.textContent=displayNumber(data));if(q('.notesData'))q('.notesData').textContent=data.notes||'';
     renderRows(data);renderMoney();renderTag();applyControls();
   }
   ['copy','mode','costMode','ox','oy','scale'].forEach(id=>document.getElementById(id)?.addEventListener('input',applyControls));
