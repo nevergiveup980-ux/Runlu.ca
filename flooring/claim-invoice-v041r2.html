@@ -26,13 +26,15 @@ function setRadio(d,name,v){if(!v)return;const e=[...d.querySelectorAll(`input[n
 function formType(v){const s=safe(v).toUpperCase();if(s.includes('CLAIM'))return 'CLAIM';if(s.includes('COMPLAINT')||s.includes('DAMAGE'))return 'COMPLAINT';return 'SERVICE'}
 function claimDigits(v){return safe(v).replace(/^C\s*/i,'')}
 function money(v){const n=Number(String(v??'').replace(/[$,]/g,''));return Number.isFinite(n)&&n?('$'+n.toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})) : ''}
-function noteLines(c){const a=[];if(c.status)a.push('Status: '+c.status);if(c.relatedPO)a.push('Related PO: '+c.relatedPO);if(c.inspector)a.push('Inspector / Assigned To: '+c.inspector);if(c.recoveryCredit)a.push('Recovery Credit: '+money(c.recoveryCredit));return a.join('\n')}
+function looksLikeRegularInvoice(v){return /^\d{6}$/.test(safe(v))}
+function previousRegularInvoice(j,c){const direct=safe(j.invoiceNumber);if(direct)return direct;const explicit=safe(c.previousInvoice);if(explicit)return explicit;const maybe=safe(c.relatedPO);return looksLikeRegularInvoice(maybe)?maybe:''}
+function noteLines(c,prev){const a=[];if(c.status)a.push('Status: '+c.status);if(c.relatedPO&&safe(c.relatedPO)!==safe(prev))a.push('Related PO: '+c.relatedPO);if(c.inspector)a.push('Inspector / Assigned To: '+c.inspector);if(c.recoveryCredit)a.push('Recovery Credit: '+money(c.recoveryCredit));return a.join('\n')}
 function products(j){return (Array.isArray(j.items)?j.items:[]).map(x=>[x.style,x.colour].filter(Boolean).join(' · ')).filter(Boolean).join('; ')}
 function suppliers(j){return [...new Set((Array.isArray(j.items)?j.items:[]).map(x=>x.supplier||x.sourceRef).filter(Boolean))].join(', ')}
 function apply(){
   if(applied||!payload||!frameReady)return;
   try{
-    const w=frame.contentWindow,d=frame.contentDocument,j=payload.job||{},c=payload.claim||{},cno=safe(c.claimNumber),digits=claimDigits(cno),prev=safe(j.invoiceNumber);
+    const w=frame.contentWindow,d=frame.contentDocument,j=payload.job||{},c=payload.claim||{},cno=safe(c.claimNumber),digits=claimDigits(cno),prev=previousRegularInvoice(j,c);
     const status=d.querySelector('.status');if(status)status.innerHTML='<b>Deerfoot rule:</b> Claim Invoice # <b>'+(cno||'—')+'</b> · Previous Regular Invoice <b>'+(prev||'—')+'</b> · Current Job + Service / Claims data handed over explicitly · Alberta GST 5%.';
     const serial=d.querySelector('.serial');if(serial){const lab=serial.querySelector('.tiny.bold');if(lab)lab.textContent='CLAIM INVOICE #';}
     const topNo=d.getElementById('systemInvoiceNumber');if(topNo)topNo.textContent=cno||'—';
@@ -47,7 +49,7 @@ function apply(){
     setValue(d,'salesperson',j.salesRep||j.salesperson||'');setValue(d,'installer',j.installer||'');setValue(d,'dateInstalled',j.installDate||'');
     setValue(d,'previousInvoice',prev);setValue(d,'productName',products(j));setValue(d,'supplierName',c.supplier||suppliers(j));
     if(c.notes)setValue(d,'problem',c.notes);
-    const extra=noteLines(c);if(extra)setValue(d,'miscNotes',extra);
+    const extra=noteLines(c,prev);if(extra)setValue(d,'miscNotes',extra);
     const completed=d.getElementById('serviceCompleted');if(completed&&/RESOLVED|CLOSED|COMPLETED/i.test(safe(c.status)))completed.checked=true;
     if(typeof w.saveDraft==='function'&&!w.__runluClaimR2SaveWrapped){
       w.__runluClaimR2SaveWrapped=true;const oldSave=w.saveDraft,nativeAlert=w.alert.bind(w);
