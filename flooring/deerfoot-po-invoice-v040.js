@@ -1,6 +1,7 @@
 (function(){
   'use strict';
   const KEY='runlu_flooring_po_deerfoot_invoice_v040';
+  const GST_RATE=0.05;
   const invoice=document.getElementById('invoice'),tbody=document.getElementById('rows');
   const q=s=>document.querySelector(s),qa=s=>Array.from(document.querySelectorAll(s));
   function money(n){return '$'+Number(n||0).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})}
@@ -25,9 +26,13 @@
   function renderMoney(){
     const data=read(),show=document.getElementById('costMode').value==='show',totals=qa('.totalData');
     if(!show){totals.forEach(el=>el.textContent='');qa('.priceRowData').forEach(el=>el.remove());renderRows(data);return}
-    const sub=Number(data.subtotal||((data.items||[]).reduce((s,x)=>s+lineTotal(x),0))||0),vals=[0,sub,0,sub,0,sub];totals.forEach((el,i)=>el.textContent=vals[i]?money(vals[i]):'');renderRows(data);
+    const sub=Number(data.subtotal||((data.items||[]).reduce((s,x)=>s+lineTotal(x),0))||0);
+    const gst=Math.round(sub*GST_RATE*100)/100;
+    const total=Math.round((sub+gst)*100)/100;
+    const vals=[0,sub,gst,total,0,total];
+    totals.forEach((el,i)=>el.textContent=vals[i]?money(vals[i]):'');renderRows(data);
   }
-  function renderTag(){const data=read(),c=document.getElementById('copy').value,tag=q('.copyTag');if(!tag)return;const copy=c==='customer'?'WHITE':c==='warehouse'?'YELLOW':'PINK';tag.textContent=(data.isDemo?'DEMO · ':'')+'PO WORKFLOW · '+copy+' COPY · V0.3.40'}
+  function renderTag(){const data=read(),c=document.getElementById('copy').value,tag=q('.copyTag');if(!tag)return;const copy=c==='customer'?'WHITE':c==='warehouse'?'YELLOW':'PINK';tag.textContent=(data.isDemo?'DEMO · ':'')+'PO WORKFLOW · '+copy+' COPY · V0.3.40R2 · GST 5%'}
   function render(){
     const data=read();
     if(q('.soldData'))q('.soldData').innerHTML=[data.customerName,data.soldToAddress].filter(Boolean).join('<br>');if(q('.shipData'))q('.shipData').innerHTML=[data.shipToName||data.customerName,data.shipToAddress].filter(Boolean).join('<br>');
