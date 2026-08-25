@@ -11,7 +11,7 @@
   function lineTotal(x){const direct=numeric(x.lineTotal);return direct||numeric(x.qty)*numeric(x.unitCost)}
   function rowQty(x){return [x.qty,String(x.unit||'').toUpperCase()].filter(Boolean).join(' ')}
   function supplierStock(x){return x.sourceRef||x.supplierStock||x.supplier||''}
-  function displayNumber(data){const po=String(data.poNumber||'').trim();return po?'PO # '+po:String(data.invoiceNumber||'').trim()}
+  function displayNumber(data){const po=String(data.poNumber||'').trim();return po||String(data.invoiceNumber||'').replace(/^PO\s*#?\s*/i,'').trim()}
   function applyControls(){
     const c=document.getElementById('copy').value,m=document.getElementById('mode').value;invoice.classList.remove('copy-customer','copy-warehouse','copy-accounting','overlay');invoice.classList.add('copy-'+c);if(m==='overlay')invoice.classList.add('overlay');
     document.documentElement.style.setProperty('--offset-x',(Number(document.getElementById('ox').value)||0)+'mm');document.documentElement.style.setProperty('--offset-y',(Number(document.getElementById('oy').value)||0)+'mm');document.documentElement.style.setProperty('--print-scale',(Number(document.getElementById('scale').value)||100)/100);
@@ -33,7 +33,7 @@
     const vals=[0,sub,gst,total,0,total];
     totals.forEach((el,i)=>el.textContent=vals[i]?money(vals[i]):'');renderRows(data);
   }
-  function renderTag(){const data=read(),c=document.getElementById('copy').value,tag=q('.copyTag');if(!tag)return;const copy=c==='customer'?'WHITE':c==='warehouse'?'YELLOW':'PINK';tag.textContent=(data.isDemo?'DEMO · ':'')+'PO WORKFLOW · '+copy+' COPY · V0.3.43 RC · GST 5%'}
+  function renderTag(){const data=read(),c=document.getElementById('copy').value,tag=q('.copyTag');if(!tag)return;const copy=c==='customer'?'WHITE':c==='warehouse'?'YELLOW':'PINK';tag.textContent=(data.isDemo?'DEMO · ':'')+'PO WORKFLOW · '+copy+' COPY · V0.3.43R2 · GST 5%'}
   function render(){
     const data=read();
     if(q('.soldData'))q('.soldData').innerHTML=[data.customerName,data.soldToAddress].filter(Boolean).join('<br>');if(q('.shipData'))q('.shipData').innerHTML=[data.shipToName||data.customerName,data.shipToAddress].filter(Boolean).join('<br>');
