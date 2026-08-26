@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#173d30">
-<title>PO Editable Deerfoot Invoice · V0.3.44R6</title>
+<title>PO Editable Deerfoot Invoice · V0.3.44</title>
 <style>*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#edf1ef}#editor{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}</style>
 </head>
-<body><iframe id="editor" title="PO Editable Deerfoot Invoice V0.3.44R6"></iframe>
+<body><iframe id="editor" title="PO Editable Deerfoot Invoice V0.3.44"></iframe>
 <script>
 (function(){
 'use strict';
@@ -34,16 +34,16 @@ function forceScrollLayout(){
         paper.style.setProperty('min-height',h+'px','important');
         paper.style.setProperty('overflow','hidden','important');
         paper.setAttribute('scrolling','no');
-      }catch(e){console.error('R6 paper resize failed',e)}
+      }catch(e){console.error('V0.3.44 paper resize failed',e)}
     }
     paper.addEventListener('load',()=>{setTimeout(resizePaper,80);setTimeout(resizePaper,300)});
     resizePaper();setTimeout(resizePaper,200);setTimeout(resizePaper,600);
-    const title=d3.querySelector('.bar b');if(title)title.textContent='PO → Deerfoot Invoice · Paper Edit Mode · V0.3.44R6 Research';
-    const guide=d3.getElementById('poPaperGuide044R2');if(guide&&!guide.dataset.r6){guide.dataset.r6='1';guide.insertAdjacentHTML('beforeend',' <b>Full-paper view:</b> the editable invoice now expands to its full paper height so the lower-left PO number and signature area remain reachable on mobile.');}
-  }catch(e){console.error('R6 full-paper layout failed',e)}
+    const title=d3.querySelector('.bar b');if(title)title.textContent='PO → Deerfoot Invoice · Paper Edit Mode · V0.3.44';
+    const guide=d3.getElementById('poPaperGuide044R2');if(guide){guide.innerHTML='<b>Paper Edit:</b> Save Draft keeps the electronic paper only. Save to PO updates the PO Ledger. Quantity and Price recalculate line totals, GST 5%, Total and Balance automatically. Reload from PO Form replaces unsaved paper edits.';}
+  }catch(e){console.error('V0.3.44 full-paper layout failed',e)}
 }
 function schedule(){[120,350,700,1200].forEach(ms=>setTimeout(forceScrollLayout,ms))}
 outer.addEventListener('load',schedule);
-outer.src='deerfoot-po-invoice-paper-edit-v044r5.html?layout=044r6&t='+Date.now();
+outer.src='deerfoot-po-invoice-paper-edit-v044r5.html?layout=044final&t='+Date.now();
 })();
 </script></body></html>
