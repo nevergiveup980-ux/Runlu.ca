@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#173d30">
+<title>PO Editable Deerfoot Invoice · V0.3.44R5</title>
+<style>*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#edf1ef}#editor{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}</style>
+</head>
+<body><iframe id="editor" title="PO Editable Deerfoot Invoice V0.3.44R5"></iframe>
+<script>
+(function(){
+'use strict';
+const PREVIEW='runlu_flooring_po_deerfoot_invoice_v040';
+const outer=document.getElementById('editor');
+function readPreview(){try{return JSON.parse(localStorage.getItem(PREVIEW)||'{}')||{}}catch(_){return {}}}
+function cleanPo(v){return String(v||'').replace(/^PO\s*#?\s*/i,'').trim()}
+function patchPaper(mw,md){
+  const paper=md.getElementById('paper');if(!paper)return;
+  function applyFixes(){
+    const pd=paper.contentDocument;if(!pd)return;
+    const p=readPreview(),po=cleanPo(p.poNumber||p.invoiceNumber);
+    const top=pd.querySelector('.invoiceNoTop');if(top)top.textContent=po;
+    const originalBottom=pd.querySelector('.invoiceNoBottom');if(originalBottom)originalBottom.style.setProperty('display','none','important');
+    let helperStyle=pd.getElementById('poBottomVisibility044R5');
+    if(!helperStyle){
+      helperStyle=pd.createElement('style');helperStyle.id='poBottomVisibility044R5';
+      helperStyle.textContent='.previewWrap{padding-bottom:150px!important}#poBottomNumber044R5{position:absolute;left:10mm;top:268.8mm;width:42mm;color:#b14e59;font:13.5pt Georgia,"Times New Roman",serif;letter-spacing:.4mm;z-index:120;pointer-events:none;white-space:nowrap}@media print{.previewWrap{padding-bottom:0!important}#poBottomNumber044R5{top:272.2mm!important}}';
+      pd.head.appendChild(helperStyle);
+    }
+    const invoice=pd.querySelector('.invoice');
+    if(invoice){let mark=pd.getElementById('poBottomNumber044R5');if(!mark){mark=pd.createElement('div');mark.id='poBottomNumber044R5';invoice.appendChild(mark)}mark.textContent=po}
+    if(!pd.__runluR5AutoCalc){
+      pd.__runluR5AutoCalc=true;
+      const run=()=>{setTimeout(()=>{try{mw.recalculateLines?.()}catch(e){console.error('R5 auto calculation failed',e)}},0);setTimeout(()=>{try{mw.recalculateLines?.()}catch(_){}},70)};
+      pd.addEventListener('input',run,true);pd.addEventListener('change',run,true);pd.addEventListener('blur',run,true);
+    }
+    try{mw.recalculateLines?.()}catch(_){}
+  }
+  paper.addEventListener('load',()=>{setTimeout(applyFixes,80);setTimeout(applyFixes,240)});
+  setTimeout(applyFixes,120);setTimeout(applyFixes,350);setTimeout(applyFixes,700);
+}
+function patchMiddle(){
+  const od=outer.contentDocument;if(!od)return;const middle=od.getElementById('editor');if(!middle)return;
+  function ready(){const mw=middle.contentWindow,md=middle.contentDocument;if(!mw||!md)return;const title=md.querySelector('.bar b');if(title)title.textContent='PO → Deerfoot Invoice · Paper Edit Mode · V0.3.44R5 Research';const guide=md.getElementById('poPaperGuide044R2');if(guide&&!guide.dataset.r5){guide.dataset.r5='1';guide.insertAdjacentHTML('beforeend',' <b>Mobile footer:</b> extra bottom scroll space keeps the lower-left PO number visible above the browser toolbar.');}patchPaper(mw,md)}
+  middle.addEventListener('load',()=>setTimeout(ready,80));setTimeout(ready,120);setTimeout(ready,350);setTimeout(ready,700);
+}
+outer.addEventListener('load',()=>setTimeout(patchMiddle,100));
+outer.src='deerfoot-po-invoice-paper-edit-v044r2.html?fix=044r5&t='+Date.now();
+})();
+</script></body></html>
