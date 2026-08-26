@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#173d30">
+<title>PO Editable Deerfoot Invoice · V0.3.44R3</title>
+<style>*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#edf1ef}#editor{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}</style>
+</head>
+<body><iframe id="editor" title="PO Editable Deerfoot Invoice V0.3.44R3"></iframe>
+<script>
+(function(){
+'use strict';
+const PREVIEW='runlu_flooring_po_deerfoot_invoice_v040';
+const outer=document.getElementById('editor');
+function readPreview(){try{return JSON.parse(localStorage.getItem(PREVIEW)||'{}')||{}}catch(_){return {}}}
+function cleanPo(v){return String(v||'').replace(/^PO\s*#?\s*/i,'').trim()}
+function patchPaper(mw,md){
+  const paper=md.getElementById('paper');if(!paper)return;
+  function applyFixes(){
+    const pd=paper.contentDocument;if(!pd)return;
+    const p=readPreview(),po=cleanPo(p.poNumber||p.invoiceNumber);
+    pd.querySelectorAll('.invoiceNoTop,.invoiceNoBottom').forEach(el=>{el.textContent=po});
+    const bottom=pd.querySelector('.invoiceNoBottom');
+    if(bottom){bottom.style.setProperty('display','block','important');bottom.style.setProperty('visibility','visible','important');bottom.style.setProperty('opacity','1','important');bottom.style.setProperty('z-index','80','important');bottom.style.setProperty('left','10mm','important');bottom.style.setProperty('top','270.6mm','important');bottom.style.setProperty('width','42mm','important');bottom.style.setProperty('pointer-events','none','important')}
+    if(!pd.__runluR3AutoCalc){
+      pd.__runluR3AutoCalc=true;
+      pd.addEventListener('input',ev=>{
+        const t=ev.target;if(!(t instanceof Element))return;
+        if(t.matches('.priceRowData.price')||t.matches('#rows td:first-child')){
+          setTimeout(()=>{try{mw.recalculateLines?.()}catch(e){console.error('R3 auto calculation failed',e)}},0);
+        }
+      },true);
+    }
+  }
+  paper.addEventListener('load',()=>setTimeout(applyFixes,100));
+  setTimeout(applyFixes,120);setTimeout(applyFixes,350);
+}
+function patchMiddle(){
+  const od=outer.contentDocument;if(!od)return;
+  const middle=od.getElementById('editor');if(!middle)return;
+  function ready(){const mw=middle.contentWindow,md=middle.contentDocument;if(!mw||!md)return;const title=md.querySelector('.bar b');if(title)title.textContent='PO → Deerfoot Invoice · Paper Edit Mode · V0.3.44R3 Research';patchPaper(mw,md)}
+  middle.addEventListener('load',()=>setTimeout(ready,100));setTimeout(ready,150);setTimeout(ready,400);
+}
+outer.addEventListener('load',()=>setTimeout(patchMiddle,120));
+outer.src='deerfoot-po-invoice-paper-edit-v044r2.html?fix=044r3&t='+Date.now();
+})();
+</script></body></html>
