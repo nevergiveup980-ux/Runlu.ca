@@ -77,6 +77,19 @@
     current=language;localStorage.setItem(KEY,current);apply(current,{announce:true})
   }
   function toggle(){set(current==='en'?'zh':'en')}
+  function ensureHealthView006Link(){
+    const nav=document.querySelector('.health-page .section-nav');
+    if(!nav||nav.querySelector('a[href="health-view-006-humid-heat.html"]'))return;
+    const link=document.createElement('a');
+    link.href='health-view-006-humid-heat.html';
+    link.dataset.en='View 006';
+    link.dataset.zh='观察 006';
+    link.dataset.fr='Regard 006';
+    link.dataset.es='Vista 006';
+    link.textContent='View 006';
+    const health002=nav.querySelector('a[href="#health-002"]');
+    if(health002)nav.insertBefore(link,health002);else nav.appendChild(link)
+  }
   function bind(){
     document.querySelectorAll('[data-runlu-language-select]').forEach(select=>{
       if(select.dataset.runluLanguageBound==='true')return;
@@ -89,6 +102,7 @@
       button.dataset.runluLanguageBound='true';
       button.addEventListener('click',toggle)
     });
+    ensureHealthView006Link();
     apply(current)
   }
   window.RUNLULanguage={key:KEY,available:[...AVAILABLE],planned:[...PLANNED],fallback:FALLBACK,get:()=>current,set,toggle,apply,isAvailable};
