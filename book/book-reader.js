@@ -16,17 +16,17 @@
   function currentLanguage(){
     const direct=document.documentElement.dataset.runluLanguage;
     if(NAV[direct])return direct;
-    const html=(document.documentElement.lang||'').toLowerCase();
-    if(html.startsWith('zh'))return 'zh';
-    if(html.startsWith('fr'))return 'fr';
-    if(html.startsWith('es'))return 'es';
-    if(html.startsWith('en'))return 'en';
     const select=document.querySelector('[data-runlu-language-select]');
     if(select&&NAV[select.value])return select.value;
     try{
       const saved=localStorage.getItem('runlu_site_language');
       if(NAV[saved])return saved;
     }catch(error){}
+    const html=(document.documentElement.lang||'').toLowerCase();
+    if(html.startsWith('zh'))return 'zh';
+    if(html.startsWith('fr'))return 'fr';
+    if(html.startsWith('es'))return 'es';
+    if(html.startsWith('en'))return 'en';
     return 'en';
   }
   function syncNav(lang){
@@ -51,12 +51,12 @@
   async function get(lang){
     if(cache[lang])return cache[lang];
     if(source==='text'){
-      const response=await fetch(`data/${key}-${lang}.txt`,{cache:'force-cache'});
+      const response=await fetch(`data/${key}-${lang}.txt`,{cache:'no-cache'});
       if(!response.ok)throw new Error(`text edition ${response.status}`);
       const text=await response.text();
       return cache[lang]=text.split(/\r?\n\s*\r?\n/).map(s=>s.trim()).filter(Boolean);
     }
-    const response=await fetch(`data/${key}-${lang}.json`,{cache:'force-cache'});
+    const response=await fetch(`data/${key}-${lang}.json`,{cache:'no-cache'});
     if(!response.ok)throw new Error(`translation ${response.status}`);
     return cache[lang]=await response.json();
   }
