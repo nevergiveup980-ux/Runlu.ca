@@ -7,6 +7,23 @@
   const cache={};
   if(template)cache.zh=[...template.content.querySelectorAll('p')].map(p=>p.textContent);
   let request=0;
+  const NAV={
+    en:{next:'Next',her:'Her'},
+    zh:{next:'下一章',her:'她'},
+    fr:{next:'Suivant',her:'Elle'},
+    es:{next:'Siguiente',her:'Ella'}
+  };
+  function syncNav(lang){
+    if(key!=='07')return;
+    const next=document.querySelector('.reader-nav .next');
+    if(!next)return;
+    const copy=NAV[lang]||NAV.en;
+    next.href='chapter-08.html';
+    const small=next.querySelector('small');
+    const strong=next.querySelector('strong');
+    if(small)small.textContent=copy.next;
+    if(strong)strong.textContent=copy.her;
+  }
   function render(lines){
     article.replaceChildren(...lines.map((text,i)=>{
       const p=document.createElement('p');
@@ -30,6 +47,7 @@
   async function sync(){
     const id=++request;
     const lang=document.documentElement.dataset.runluLanguage||'en';
+    syncNav(lang);
     try{
       const lines=await get(lang);
       if(id===request)render(lines);
