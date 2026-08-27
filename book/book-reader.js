@@ -13,6 +13,22 @@
     fr:{next:'Suivant',her:'Elle'},
     es:{next:'Siguiente',her:'Ella'}
   };
+  function currentLanguage(){
+    const direct=document.documentElement.dataset.runluLanguage;
+    if(NAV[direct])return direct;
+    const html=(document.documentElement.lang||'').toLowerCase();
+    if(html.startsWith('zh'))return 'zh';
+    if(html.startsWith('fr'))return 'fr';
+    if(html.startsWith('es'))return 'es';
+    if(html.startsWith('en'))return 'en';
+    const select=document.querySelector('[data-runlu-language-select]');
+    if(select&&NAV[select.value])return select.value;
+    try{
+      const saved=localStorage.getItem('runlu_site_language');
+      if(NAV[saved])return saved;
+    }catch(error){}
+    return 'en';
+  }
   function syncNav(lang){
     if(key!=='07')return;
     const next=document.querySelector('.reader-nav .next');
@@ -46,7 +62,7 @@
   }
   async function sync(){
     const id=++request;
-    const lang=document.documentElement.dataset.runluLanguage||'en';
+    const lang=currentLanguage();
     syncNav(lang);
     try{
       const lines=await get(lang);
@@ -63,4 +79,5 @@
   }
   sync();
   window.addEventListener('runlu:languagechange',sync);
+  window.addEventListener('pageshow',sync);
 })();
