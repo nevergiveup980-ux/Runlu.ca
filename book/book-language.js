@@ -14,6 +14,23 @@
   const CAPTION={en:'Cover · English',zh:'封面 · 中文',fr:'Couverture · Français',es:'Portada · Español'};
   const ACTION={en:'Begin reading',zh:'开始阅读',fr:'Commencer la lecture',es:'Empezar a leer'};
 
+  function currentLanguage(){
+    const direct=document.documentElement.dataset.runluLanguage;
+    if(COVERS[direct])return direct;
+    const html=(document.documentElement.lang||'').toLowerCase();
+    if(html.startsWith('zh'))return 'zh';
+    if(html.startsWith('fr'))return 'fr';
+    if(html.startsWith('es'))return 'es';
+    if(html.startsWith('en'))return 'en';
+    const select=document.querySelector('[data-runlu-language-select]');
+    if(select&&COVERS[select.value])return select.value;
+    try{
+      const saved=localStorage.getItem('runlu_site_language');
+      if(COVERS[saved])return saved;
+    }catch(error){}
+    return 'en';
+  }
+
   function ensureCover(){
     const hero=document.querySelector('.book-hero');
     if(!hero)return null;
@@ -50,19 +67,19 @@
   }
 
   function sync(){
-    const lang=document.documentElement.dataset.runluLanguage||'en';
+    const lang=currentLanguage();
     document.querySelectorAll('[data-book-lang]').forEach(el=>{el.hidden=el.dataset.bookLang!==lang});
     const panel=ensureCover();
     if(!panel)return;
     const image=panel.querySelector('.book-cover-image');
     const caption=panel.querySelector('.book-cover-caption');
-    const resolved=COVERS[lang]?lang:'en';
-    image.src=COVERS[resolved];
-    image.alt=ALT[resolved];
-    caption.textContent=CAPTION[resolved];
-    panel.setAttribute('aria-label',ACTION[resolved]);
+    image.src=COVERS[lang];
+    image.alt=ALT[lang];
+    caption.textContent=CAPTION[lang];
+    panel.setAttribute('aria-label',ACTION[lang]);
   }
 
   sync();
   window.addEventListener('runlu:languagechange',sync);
+  window.addEventListener('pageshow',sync);
 })();
