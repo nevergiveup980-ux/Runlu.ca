@@ -17,17 +17,17 @@
   function currentLanguage(){
     const direct=document.documentElement.dataset.runluLanguage;
     if(COVERS[direct])return direct;
-    const html=(document.documentElement.lang||'').toLowerCase();
-    if(html.startsWith('zh'))return 'zh';
-    if(html.startsWith('fr'))return 'fr';
-    if(html.startsWith('es'))return 'es';
-    if(html.startsWith('en'))return 'en';
     const select=document.querySelector('[data-runlu-language-select]');
     if(select&&COVERS[select.value])return select.value;
     try{
       const saved=localStorage.getItem('runlu_site_language');
       if(COVERS[saved])return saved;
     }catch(error){}
+    const html=(document.documentElement.lang||'').toLowerCase();
+    if(html.startsWith('zh'))return 'zh';
+    if(html.startsWith('fr'))return 'fr';
+    if(html.startsWith('es'))return 'es';
+    if(html.startsWith('en'))return 'en';
     return 'en';
   }
 
