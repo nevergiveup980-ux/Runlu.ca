@@ -25,7 +25,6 @@ jobs:
           text = novel.read_text(encoding='utf-8')
           text = text.replace('https://runlu.ca/runlu-hero.png\" property=\"og:image', 'https://runlu.ca/last-one-to-leave/covers/cover-en.webp\" property=\"og:image')
           text = text.replace('.novel-note{margin-top:1rem;font-size:.92rem;opacity:.78}', '.novel-note{margin-top:1rem;font-size:.92rem;opacity:.78}.novel-cover-panel{display:flex;justify-content:center;padding:2.4rem 1.25rem 0}.novel-cover-panel img{width:min(430px,82vw);height:auto;display:block;border-radius:4px;box-shadow:0 24px 55px rgba(35,28,18,.18)}')
-          marker = '<body class="field-page"><header class="site-header"'
           if 'data-runlu-novel-cover' not in text:
               text = text.replace('</header><main>', '</header><main><section class="novel-cover-panel"><img data-runlu-novel-cover src="/last-one-to-leave/covers/cover-en.webp" alt="The Last One to Leave cover" width="640" height="960" decoding="async" fetchpriority="high"></section>', 1)
           if 'cover-language.js' not in text:
@@ -44,7 +43,7 @@ jobs:
               text = text.replace('</body></html>', '<script src="last-one-to-leave/cover-language.js?v=1"></script></body></html>')
           notes.write_text(text, encoding='utf-8')
 
-          Path('last-one-to-leave/cover-language.js').write_text(r'''(()=>{
+          js = '''(()=>{
             const covers={
               en:'/last-one-to-leave/covers/cover-en.webp',
               zh:'/last-one-to-leave/covers/cover-zh.webp',
@@ -79,7 +78,9 @@ jobs:
             sync();
             window.addEventListener('runlu:languagechange',sync);
             window.addEventListener('pageshow',sync);
-          })();\n''', encoding='utf-8')
+          })();
+          '''
+          Path('last-one-to-leave/cover-language.js').write_text(js, encoding='utf-8')
           PY
       - name: Validate cover wiring
         run: |
