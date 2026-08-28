@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173d30">
+<title>RUNLU Deerfoot Flooring OS V0.3.54 Installer Calendar Replica</title>
+<style>*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#edf1ef;font-family:Arial,Helvetica,sans-serif}#os{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}.boot{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:24px;background:#edf1ef;color:#173d30;font-weight:800;text-align:center;line-height:1.45;transition:opacity .18s ease}.boot.ready{opacity:0;pointer-events:none}.boot.fail{color:#7a2b2b;background:#fff4f1}.boot small{display:block;margin-top:8px;font-weight:500;color:#63716b}</style>
+</head>
+<body>
+<div id="boot" class="boot"><div>RUNLU Deerfoot Flooring OS<br>V0.3.54 Installer Calendar Replica<small>V0.3.53 tested calendar logic + Teamup-style scheduler and scrollable installer contacts…</small></div></div>
+<iframe id="os" title="RUNLU Deerfoot Flooring OS V0.3.54 Installer Calendar Replica"></iframe>
+<script>
+(function(){
+'use strict';
+const frame=document.getElementById('os'),boot=document.getElementById('boot');
+function fail(msg){boot.classList.remove('ready');boot.classList.add('fail');boot.innerHTML='<div>'+msg+'<small>V0.3.53 remains available as the previous tested snapshot.</small></div>'}
+function labels(w,d){try{d.title='RUNLU Deerfoot Flooring OS V0.3.54 Installer Calendar Replica';const pill=d.querySelector('header .pill');if(pill)pill.textContent='V0.3.54 Installer Calendar Replica';const brand=d.querySelector('header .brand span');if(brand)brand.textContent='V0.3.53 tested installer logic + Teamup-style calendar replica';const demo=d.querySelector('#command .demo');if(demo)demo.textContent='V0.3.54 · Installer Calendar now uses a denser Teamup-style weekly scheduler with a scrollable installer contacts panel.'}catch(e){console.error(e)}}
+function load(d,src,flag){return new Promise((ok,bad)=>{if(d.querySelector('script['+flag+']'))return ok();const s=d.createElement('script');s.src=src;s.setAttribute(flag,'1');s.onload=ok;s.onerror=bad;d.body.appendChild(s)})}
+async function inject(){try{const w=frame.contentWindow,d=frame.contentDocument;if(!w||!d)return fail('V0.3.54 could not access the integrated app.');labels(w,d);await load(d,'po-delivery-bridge-v043r3.js?v=054','data-runlu-v043r3-delivery');try{w.RUNLUPODelivery043R3?.install()}catch(_){}await load(d,'po-training-reset-v043r4.js?v=054','data-runlu-v043r4-reset');try{w.RUNLUPOTrainingReset043R4?.install()}catch(_){}await load(d,'claim-integration-v042r1.js?v=054','data-runlu-v043-claim');try{w.RUNLUClaimIntegration042R2?.install()}catch(_){}await load(d,'invoice-dual-track-v044.js?v=054','data-runlu-v044-invoice');try{w.RUNLUInvoiceDualTrackV044?.install()}catch(_){}await load(d,'po-invoice-dual-track-v044.js?v=054','data-runlu-v044-po-invoice');try{w.RUNLUPOInvoiceDualTrackV044?.install()}catch(_){}await load(d,'payment-shared-v046.js?v=054','data-runlu-v046-payments');try{w.RUNLUPaymentSharedV046?.install()}catch(_){}await load(d,'deerfoot-real-workflow-v046.js?v=054','data-runlu-v046-real');try{w.RUNLUDeerfootRealWorkflowV046?.install()}catch(_){}await load(d,'payment-cloud-v047.js?v=054','data-runlu-v047-payment-cloud');try{w.RUNLUPaymentCloudV047?.render?.()}catch(_){}await load(d,'invoice-ui-fix-v048.js?v=054','data-runlu-v048-invoice-ui');try{w.RUNLUInvoiceUIFixV048?.install()}catch(_){}await load(d,'invoice-polish-v049.js?v=054','data-runlu-v049-invoice-polish');try{w.RUNLUInvoicePolishV049?.install()}catch(_){}await load(d,'invoice-checkbox-hitfix-v050.js?v=054','data-runlu-v050-checkbox-hitfix');try{w.RUNLUInvoiceCheckboxHitfixV050?.install()}catch(_){}await load(d,'po-invoice-dual-track-v051.js?v=054','data-runlu-v051-po-checkbox');try{w.RUNLUPOInvoiceDualTrackV051?.install()}catch(_){}await load(d,'pickup-planner-v052.js?v=054','data-runlu-v052-pickup-planner');try{w.RUNLUPickupPlannerV052?.install()}catch(_){}await load(d,'installer-calendar-v053.js?v=054','data-runlu-v053-installer-calendar');try{w.RUNLUInstallerCalendarV053?.install?.()}catch(_){}await load(d,'installer-calendar-replica-v054.js?v=054','data-runlu-v054-installer-replica');try{w.RUNLUInstallerReplicaV054?.install?.()}catch(_){}labels(w,d);boot.classList.add('ready')}catch(e){console.error(e);fail('V0.3.54 Installer Calendar Replica failed to initialize.')}}
+frame.addEventListener('load',()=>setTimeout(inject,80));frame.src='index-v040.html?v=054&t='+Date.now();
+})();
+</script>
+</body>
+</html>
