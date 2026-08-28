@@ -102,6 +102,16 @@
     link.textContent='011 · Physical AI';
     nav.appendChild(link)
   }
+  function standardizeFrontierNav(){
+    document.querySelectorAll('a[href="frontiers.html"]').forEach(link=>{
+      if(link.dataset.en!=='View'&&link.textContent.trim()!=='View')return;
+      link.dataset.en='Frontier';
+      link.dataset.zh=link.dataset.zh||'前沿';
+      link.dataset.fr='Frontière';
+      link.dataset.es='Frontera';
+      link.textContent='Frontier'
+    })
+  }
   function bind(){
     document.querySelectorAll('[data-runlu-language-select]').forEach(select=>{
       if(select.dataset.runluLanguageBound==='true')return;
@@ -116,6 +126,7 @@
     });
     ensureHealthView006Link();
     ensureView011Link();
+    standardizeFrontierNav();
     apply(current)
   }
   window.RUNLULanguage={key:KEY,available:[...AVAILABLE],planned:[...PLANNED],fallback:FALLBACK,get:()=>current,set,toggle,apply,isAvailable};
