@@ -1,9 +1,9 @@
 (()=>{
   const COVERS={
-    en:'../assets/books/wind-beyond-walls/cover-en.webp',
-    zh:'../assets/books/wind-beyond-walls/cover-zh.webp',
-    fr:'../assets/books/wind-beyond-walls/cover-fr.webp',
-    es:'../assets/books/wind-beyond-walls/cover-es.webp'
+    en:'../assets/books/wind-beyond-walls/cover-en-v2.webp',
+    zh:'../assets/books/wind-beyond-walls/cover-zh-v2.webp',
+    fr:'../assets/books/wind-beyond-walls/cover-fr-v2.webp',
+    es:'../assets/books/wind-beyond-walls/cover-es-v2.webp'
   };
   const ALT={
     en:'Cover of The Wind Beyond the Walls',
