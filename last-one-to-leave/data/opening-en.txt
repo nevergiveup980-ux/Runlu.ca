@@ -1,0 +1,865 @@
+## Chapter 1 — Monday Morning, One More Employee
+
+At 7:43 on Monday morning, Chen Mo discovered that the company had gained an employee.
+
+The man was not sitting at any desk, nor had he arrived late to the warehouse morning meeting. He had simply appeared in the employee directory, quietly wedged between two names Chen Mo had known for more than a decade.
+
+ETHAN WOOD.
+
+Special Projects Manager.
+
+Chen Mo’s finger stopped on the trackpad. He had only meant to check who was off that day. It had rained over the weekend, water had pooled again by the west warehouse door, and the early shift was short two people. Before eight o’clock he needed to decide whether Owen should start cutting carpet or whether the two temporary workers should first move the hardwood delivered the night before into Zone Three. He had lived through Mondays like this more times than he could count: the coffee still unfinished, the forklifts already running, the first sales call guaranteed to come at 8:01.
+
+But this name stopped the whole morning.
+
+The company had no Special Projects department. It certainly had no manager named Ethan Wood.
+
+Chen Mo clicked the name.
+
+Employee ID: 0000. Hire Date: April 14, 2009. Status: Active. Reports to: Martin Harrison.
+
+He laughed at first, assuming it was a test account left behind after a system update. Human Resources had run a synchronization overnight, and someone in the IT group chat had mentioned that the old database was being moved to the cloud. Chen Mo rarely cared about such things. His responsibility was the physical world—things with weight and length, things that could force an entire order to be redone because a cut was three inches short. A name inside a computer was usually not worth wasting time on.
+
+He signed out and logged back in.
+
+Ethan was still there.
+
+He refreshed the page.
+
+Still there.
+
+At 7:47, Maya passed the glass door. She was twenty-nine and worked in operations analysis. She always seemed to walk half a step too fast, carrying either a laptop or a stack of reports.
+
+“Maya.”
+
+She leaned her head in. “Morning.”
+
+“Do you know Ethan Wood?”
+
+She frowned.
+
+“Who?”
+
+Chen Mo turned the screen toward her.
+
+Maya looked at it for two seconds. Half the sleepiness vanished from her face.
+
+“What is this?”
+
+“That’s what I’m asking you.”
+
+“Special Projects Manager?” She read it aloud. “Since when do we have that position?”
+
+“No idea.”
+
+“New hire?”
+
+“Hired in 2009.”
+
+Maya bent down and looked more closely. Then she said something Chen Mo would remember again and again later.
+
+“That’s strange.”
+
+“What is?”
+
+“I feel like I’ve seen this name before.”
+
+“Where?”
+
+“I can’t remember.”
+
+She straightened and gave a small laugh, as if what she had just said sounded ridiculous even to her.
+
+“Maybe in an old report. I’ll ask IT when they get in.”
+
+She left.
+
+Chen Mo did not close the page.
+
+The first forklift started in the warehouse, its reversing alarm carrying through the wall into the office. At 7:50, Owen swore over the radio because someone had put a pallet of adhesive in the wrong place the night before. At 7:55, Sales sent the first message asking when an order would be ready. At 7:58, the first installer’s van pulled up outside.
+
+Everything returned to the shape a Monday morning was supposed to have.
+
+But Chen Mo kept staring at the name.
+
+Then he realized something. The first thought that had entered his mind when he saw ETHAN WOOD had not been, Who is this man?
+
+It had been something stranger.
+
+When did he come back?
+
+The thought had lasted less than a second, so quickly it almost felt like an illusion.
+
+After the morning meeting, Chen Mo deliberately did not mention the name again. He divided the shift into three groups: one to receive the hardwood delivered overnight, one to handle the cutting orders, and one to clear the water by the west door. When work piles up, the mind automatically pushes aside anything it cannot explain. Warehouses are especially good at that. Goods have weight. Doors have dimensions. Drivers wait. Installers get angry. Compared with all of that, one extra person inside a computer seemed almost weightless.
+
+At 9:05, the first supplier truck backed into the receiving bay. The driver was an older man Chen Mo had known for years, and he complained about traffic in the north end as he handed over the paperwork. Chen Mo checked pallets, lot numbers, and packaging as usual. The third pallet was one box short, although the system showed the quantity as complete. Hassan said the box might have been missed at loading. Chen Mo took photos, received the physical count, then asked Purchasing to chase the discrepancy. The entire process took seven minutes.
+
+When he returned to the office, he stopped in the doorway. The screen was still on. The employee directory was still open. Ethan Wood was still there among all the real names.
+
+For the first time, Chen Mo seriously wondered: if this person existed, where should he be today? Special Projects Manager sounded like a job that might not require someone to be in the warehouse every day. Maybe he had an office. Maybe he travelled. Maybe he only appeared for difficult projects. But the company had only one building, and Chen Mo knew every manager in it. Even consultants who stayed for a single week generated complaints about taking up a meeting room. A manager with seventeen years of service could not have no workstation at all.
+
+He got up and walked through the offices. There was a small meeting room beside Finance, two empty desks behind Sales, and an old upstairs office used for storing samples. Every space had a history. Not one door belonged to Ethan.
+
+Chen Mo went downstairs and asked Grace at reception, “Did the company ever have a Special Projects office?”
+
+Grace was printing a return form for a customer and did not look up. “Special what?”
+
+“Special Projects. That exact name.”
+
+“No.”
+
+“Not even years ago?”
+
+That made Grace look up. “Why are you asking so much about the past today?”
+
+Chen Mo did not answer.
+
+Grace thought for a moment. “Back in the nineties, Martin went through a phase where he called everything a special project. Changing the phone system was a special project. Moving the warehouse was a special project. Even changing hotels for the Christmas party was a special project. But it wasn’t a department.”
+
+“Was someone in charge?”
+
+“Whoever was unlucky enough.”
+
+Chen Mo laughed.
+
+“Any name attached to it?”
+
+Grace shrugged. “Depends on the job. Most of the time, somebody just got it done and that was the end of it.”
+
+Just got it done.
+
+Those words stayed with Chen Mo as he walked back to his office. Only much later would he understand how many of the company’s most important tasks had once belonged to that category. No formal job title. No permanent owner. Sometimes not even a written process. Something happened, someone caught it; the thing passed, and the name disappeared with it.
+
+And now one name seemed to have grown by itself into the system through all the cracks left by those things that had simply been “done.”
+
+At eight o’clock, the morning meeting began.
+
+Chen Mo closed the screen, picked up his clipboard, and walked out.
+
+It was not until that afternoon that he learned he was not the only person in the company who felt something familiar about the name.
+
+## Chapter 2 — Employee ID 0000
+
+At 10:20 a.m., Chen Mo finally had time to look at the employee system again.
+
+The warehouse shift was fully underway. Owen and Hassan were moving two carpet rolls to the cutting table, Maya had gone to reception to deal with a purchase order whose quantities did not match, and Sales had stopped calling for the moment. Chen Mo returned to his office and poured himself a second cup of coffee.
+
+Ethan Wood was still Active.
+
+Chen Mo sorted the employee list by ID.
+
+0000 appeared at the top.
+
+Only below it did the company’s normal numbers begin.
+
+After thirteen years with the company, Chen Mo was not an expert on HR numbering rules, but he knew every official employee had a six-digit number. The first two digits roughly corresponded to the hire year, the middle pair to the department, and the final pair to the individual. Even employees from decades ago who had later been entered into the system were assigned a normal number.
+
+0000 did not look like an employee number.
+
+It looked like a crack left by a door that had never fully closed.
+
+He took a screenshot and sent it to Maya.
+
+She walked in two minutes later.
+
+“I asked IT.”
+
+“What did they say?”
+
+“They only synchronized permissions last night. They didn’t create accounts.”
+
+“So?”
+
+“So this account was already here.”
+
+“When was it created?”
+
+“They’re still checking.”
+
+Chen Mo pointed to 0000. “Is this normal?”
+
+Maya shook her head.
+
+“I checked all current employees. There isn’t another four-digit number.”
+
+“Former employees?”
+
+“None there either.”
+
+She paused. “But I just found Ethan in a 2019 report template.”
+
+“What report?”
+
+“Process permissions matrix.”
+
+“What did he do?”
+
+“Nothing, exactly. His name is in the Approved Exceptions column.”
+
+Chen Mo did not follow.
+
+Maya explained. “Special cases outside the normal system rules. If an approval chain breaks, someone can manually release it. There’s an old note in the sheet: E.W. override.”
+
+“E.W.?”
+
+“Could be Ethan Wood. Could be something else.”
+
+Chen Mo looked at her.
+
+“Didn’t you say you felt like you’d seen the name before?”
+
+“Now I think maybe I saw it in one of those old files.”
+
+“Then why couldn’t you remember?”
+
+Maya shrugged. “We have more than a hundred templates. Who remembers all of them?”
+
+It was a reasonable explanation.
+
+Reasonable enough for Chen Mo to relax, just a little.
+
+A few minutes before eleven, Owen came in for a cutting sheet. When he saw the name on the monitor, his steps slowed.
+
+“Ethan?”
+
+Chen Mo looked up.
+
+Owen seemed surprised by his own reaction.
+
+“You know him?”
+
+“I…”
+
+Owen tucked the cutting sheet under his arm and leaned toward the screen.
+
+“Ethan Wood?”
+
+“Yeah.”
+
+“I feel like I know him.”
+
+“From where?”
+
+Owen did not answer.
+
+He had been with the company twenty-two years, the kind of man who could almost tell which forklift was turning a corner from the sound of its tires. Old warehouse staff had come and gone in waves, but he remained. Chen Mo had seen him forget a purchase order. He had rarely seen him forget a person.
+
+“I honestly can’t remember,” Owen finally said.
+
+“Hired in 2009.”
+
+Owen shook his head immediately.
+
+“Impossible.”
+
+“Why?”
+
+“I was here every day in 2009. We laid people off that year. We even cancelled the Christmas party. Forget hiring a new manager—we wouldn’t even buy a new garbage can.”
+
+“So what about this guy?”
+
+Owen stared at the screen for a while.
+
+“If he really started in 2009, I should know him.”
+
+“But you just said he feels familiar.”
+
+“That’s exactly what’s wrong.”
+
+He picked up the cutting sheet.
+
+At the door, he stopped again.
+
+“Chen.”
+
+“Yeah?”
+
+“Wasn’t 0000 used for test accounts once?”
+
+“How do you know that?”
+
+“I don’t.”
+
+Owen frowned.
+
+“I just feel like somebody used to say that.”
+
+“Who?”
+
+“Can’t remember.”
+
+He left.
+
+Chen Mo watched the doorway.
+
+Ten seconds later, an automatic notification appeared in the lower-right corner of the computer.
+
+An urgent order from Sales had to be ready by two that afternoon. As the system assigned the responsible employee, one name flashed on the screen for an instant.
+
+ETHAN WOOD.
+
+Before lunch, IT sent Maya its preliminary findings. The email was short: 0000 had not been generated by the overnight synchronization; the account creation time could not be confirmed from the current directory; a mapping under the same name existed in the legacy database; recommendation: do not delete yet, isolate permissions first.
+
+“See?” Maya handed Chen Mo her phone. “Even IT doesn’t dare delete him.”
+
+“Because they’re afraid of deleting the wrong thing.”
+
+“That’s the worst part of an old system. You don’t know what a wire is connected to, so you’re afraid to cut it.”
+
+They went to see Kevin, who handled infrastructure. Kevin had been at the company only three years and felt no strange familiarity with Ethan at all. He opened the administration console and listed 0000’s group memberships one by one. Most were read-only. But three very old group names made him frown: OPS_OVERRIDE, EMERGENCY_APPROVAL, LEGACY_NOTIFY.
+
+“Are these still in use?” Chen Mo asked.
+
+“In theory, no.”
+
+“What does ‘in theory’ mean?”
+
+“It means nobody can guarantee there isn’t still a script calling them.”
+
+Kevin explained that company technology was rarely built once from scratch. It accumulated layers, like a warehouse. A database from the nineties was migrated to a server in the 2000s, that server was later moved to the cloud, fields were renamed, permissions inherited, and old accounts were kept alive so some forgotten automated task would not suddenly stop. Every generation of IT left behind a few notes that said, Don’t touch this yet. Given enough time, nobody remembered when ‘yet’ was supposed to end.
+
+Chen Mo asked, “What happens if we disable 0000 right now?”
+
+“Best case, nothing. Worst case, some critical process breaks at 4:30 on Friday afternoon and all of you stand in the warehouse blaming IT.”
+
+Owen happened to walk in for printer paper and heard the last line. “At least you people should be used to that.”
+
+Kevin did not laugh.
+
+He added a monitoring policy to 0000: log every authentication, approval, or script call, but make no active change to existing permissions. Maya insisted that audit-log retention be extended from thirty days to one year.
+
+“You really plan to investigate this for a year?” Kevin asked.
+
+“I plan never to hear ‘the logs already expired’ again.”
+
+Chen Mo watched her work. The investigation had become its first formal action: do not delete, do not believe, do not ignore. Record first.
+
+It was much like handling a shipment of unknown origin in the warehouse. You would not throw it away because the label looked strange, and you would not ship it because the system said everything was normal. The safest choice was to isolate it, preserve the evidence, and then determine what it actually was.
+
+Chen Mo suddenly thought that Ethan had not truly entered the company’s management in 2009, or even in 1998.
+
+He entered it today. Because today, for the first time, someone had decided not to let the name keep working where no one could see it.
+
+Less than half a second later, the display changed back to Chen Mo.
+
+Chen Mo stared at the screen.
+
+This time, he did not laugh.
+
+## Chapter 3 — A Man Without a Desk
+
+At 9:17 a.m., Chen Mo opened the employee directory for the second time.
+
+He had actually hoped the name would be gone.
+
+Strange computer problems were often like that. Refresh. Sign out and sign back in. Or simply wait ten minutes. A bad permission, a delayed synchronization, a piece of cached data would quiet itself down, like a heating pipe that suddenly knocks once inside an office wall and then goes silent.
+
+But the name was still there.
+
+ETHAN WOOD.
+
+Special Projects Manager.
+
+Employee ID: 0000.
+
+Hire Date: April 14, 2009.
+
+Chen Mo left the cursor resting over “0000.”
+
+He stared for several seconds, then looked away.
+
+That was what felt most wrong.
+
+The company’s employee numbers had always been six digits. They had been six digits seventeen years ago, and they were six digits now. Chen Mo’s was 184217. Owen’s was 173806. Laura in Finance had joined earlier and was 160944. Even Martin, whose record had been entered into the HR system retroactively, did not have 0000.
+
+Four zeros were not an employee number.
+
+They looked more like a placeholder.
+
+“You’re still looking at that dead guy?”
+
+The voice came from behind him.
+
+Chen Mo turned. Owen stood in the doorway holding his coffee.
+
+“Who’s dead?”
+
+“The guy on your screen.”
+
+“How do you know about him?”
+
+“Maya told me.”
+
+“How did Maya know?”
+
+“You asked her at 7:47. At 7:53 she asked Laura. At 8:02 Laura asked me.” Owen took a drink. “Welcome to a company with forty-seven employees.”
+
+Chen Mo looked at him for two seconds.
+
+“Do you know Ethan Wood?”
+
+Owen had been smiling. The smile slowly faded.
+
+Not all at once. More like someone searching a drawer in his mind, then stopping with his hand halfway inside.
+
+“Ethan…” he repeated. “Wood?”
+
+“Yeah.”
+
+Owen frowned.
+
+“I think I’ve heard it.”
+
+Chen Mo said nothing.
+
+“But I don’t know where.”
+
+“Are you sure?”
+
+“How do you get sure about something like that?”
+
+Owen set his coffee on the edge of the desk and bent closer to the monitor.
+
+“Special Projects Manager,” he read. “Sounds important.”
+
+“Do we have that department?”
+
+“No.”
+
+“Did we ever?”
+
+“I’ve been here twenty-two years.”
+
+“So?”
+
+“So if it ever existed, I should at least have seen the sign on the door.”
+
+Chen Mo pointed at the hire date.
+
+“2009.”
+
+Owen glanced at it.
+
+“Then it’s even less possible.”
+
+“Why?”
+
+“The company almost didn’t survive 2009.”
+
+Chen Mo looked up.
+
+Owen had straightened.
+
+“We laid people off that year.”
+
+“I know.”
+
+“You don’t know.”
+
+Owen shook his head.
+
+“You didn’t get here until 2013.”
+
+He picked up his coffee. At the doorway, he stopped once more.
+
+“Still, there’s something strange.”
+
+“What?”
+
+“When I first saw the name just now…”
+
+He turned back.
+
+“It didn’t feel unfamiliar.”
+
+Chen Mo waited.
+
+Owen said, “It felt like I was supposed to know him.”
+
+Outside the office, a forklift backed up. The warning beeper sounded again and again.
+
+Chen Mo did not answer.
+
+Owen said nothing else. He left.
+
+Chen Mo turned back to the computer. This time he opened Ethan Wood’s employee details.
+
+Address: blank. Phone: blank. Emergency contact: blank. Pay grade: blank. Department code: blank.
+
+The reporting line was not blank.
+
+Reports to: Martin Harrison.
+
+Martin.
+
+The owner of the company.
+
+More precisely, the second-generation owner.
+
+Harrison Flooring Supply had been founded in 1978 by his father, William Harrison. Martin returned after university to help with the business, took over operations in the nineties, and had been running the company for more than thirty years.
+
+Chen Mo picked up the phone. His finger hovered over Martin’s name for several seconds, then he put it down again.
+
+He did not know why he hesitated.
+
+If this was merely a database error, asking the owner was obviously the fastest way to resolve it. But some things change the moment you ask about them seriously. They stop being “something odd in the computer” and become “something that requires an explanation.”
+
+Chen Mo suddenly did not want it to become the second kind too quickly.
+
+He went to Finance first.
+
+Laura’s office always smelled completely different from the warehouse: paper, toner, coffee, and the dry dust that seemed to exist only inside old filing cabinets.
+
+Three monitors were open on her desk.
+
+“If you’re here to ask me about Ethan,” she said without looking up, “I don’t want to hear it right now.”
+
+Chen Mo stayed in the doorway.
+
+“Why?”
+
+“Because I’ve already wasted forty-two minutes.”
+
+“What did you find?”
+
+“Something I don’t like.”
+
+That made Chen Mo step inside.
+
+Laura finally turned her chair.
+
+“You know what Finance hates most?”
+
+“Numbers that don’t add up?”
+
+“No.”
+
+“Then what?”
+
+“When every number does add up.”
+
+She pushed a printed sheet toward him.
+
+“But you don’t know why.”
+
+Chen Mo picked it up. It was a seventeen-year payroll summary. Laura had highlighted the bottom row in yellow.
+
+ETHAN WOOD.
+
+Total wages: $0.00. Bonus: $0.00. Benefits: $0.00. Pension contributions: $0.00. Vacation balance: 0. Sick leave: 0.
+
+“He’s never been paid?”
+
+“No,” Laura said.
+
+“The system thinks he doesn’t need to be paid.”
+
+“What does that mean?”
+
+“His employee status is Active. Not Contractor. Not Volunteer. Not Inactive. Active Employee.”
+
+“Then why is there no pay?”
+
+“That’s the part I don’t like.”
+
+Chen Mo kept reading.
+
+“Tax records?”
+
+“None.”
+
+“T4?”
+
+“None.”
+
+“Bank information?”
+
+“None.”
+
+“Then how is he in payroll?”
+
+Laura looked at him.
+
+“That is exactly the question.”
+
+She pulled another window onto the screen.
+
+“I checked the database logs. The account wasn’t created today.”
+
+“When?”
+
+“It existed by 2009 at the latest.”
+
+“At the latest?”
+
+“The older data went through two migrations. Before 2006, a lot of what we have is archival and incomplete.”
+
+She paused.
+
+“But Employee ID 0000 also appears in import sheets from before 2009.”
+
+Chen Mo looked up.
+
+“What year?”
+
+“The earliest one I found is 1998.”
+
+The room went quiet.
+
+“But the hire date says 2009.”
+
+“Yes.”
+
+“Doesn’t that contradict itself?”
+
+“That’s why I said I don’t like it.”
+
+Laura took off her glasses.
+
+“There’s something else.”
+
+“What?”
+
+“I know this name.”
+
+Chen Mo was no longer surprised.
+
+“You’ve met him?”
+
+“No.”
+
+“Then—”
+
+“I don’t know.” Laura cut him off. “It just feels familiar.”
+
+She put her glasses back on.
+
+“That’s the part that actually bothers me.”
+
+Chen Mo stood there.
+
+“Owen too.”
+
+Laura said nothing.
+
+“He said when he first saw the name, he felt like he should know it.”
+
+Laura turned toward her screen.
+
+“Chen Mo.”
+
+“Yeah?”
+
+“Don’t go around saying that.”
+
+“Why?”
+
+“Because if twenty out of forty-seven employees end up saying, ‘I think I know a man I’ve never met,’ none of us will get any work done today.”
+
+She paused.
+
+“And Martin is in his office.”
+
+Chen Mo looked at her.
+
+“Did you ask him?”
+
+Laura shook her head.
+
+“No.”
+
+“Why not?”
+
+She did not answer immediately.
+
+After several seconds she said, “Because I just remembered something.”
+
+“What?”
+
+“Years ago—2012, maybe 2013—when I first took over payroll, I once noticed the headcount didn’t match.”
+
+“Off by one?”
+
+Laura looked at him.
+
+“Yes.”
+
+“What happened?”
+
+“I asked the finance person before me.”
+
+“What did she say?”
+
+“She said—leave him alone.”
+
+Chen Mo did not move.
+
+“Her exact words?”
+
+“Close enough.”
+
+“Who?”
+
+“I asked that too.”
+
+“And what did she say?”
+
+Laura looked at him.
+
+“She laughed, and then she said, ‘Ethan doesn’t get paid.’”
+
+At 4:47, employees began leaving. The machinery in the warehouse grew quieter one sound at a time.
+
+At 5:12, Chen Mo was still in his office.
+
+Martin finally returned from the parking lot, suit jacket over one arm, tie loosened.
+
+“Chen.”
+
+He nodded as he passed.
+
+Two steps later, he stopped.
+
+“You’re still here?”
+
+“I need to ask you something.”
+
+“Tomorrow?”
+
+“Now would be better.”
+
+Martin looked at him. It was only a brief glance, but Chen Mo suddenly had the feeling that Martin had already guessed.
+
+“Come in.”
+
+Three photographs hung on the wall of Martin’s office. The first showed the small warehouse when the company opened in 1978. The second showed the 1996 expansion. The third was from the company’s fortieth anniversary in 2018.
+
+Chen Mo did not sit down.
+
+Martin poured half a glass of water.
+
+“What is it?”
+
+Chen Mo said, “Who is Ethan Wood?”
+
+The stream of water stopped in midair.
+
+Less than a second. Then it continued until the glass was full.
+
+Martin set down the pitcher.
+
+“Where did you see that name?”
+
+“In the employee system.”
+
+“Today?”
+
+“This morning.”
+
+“Who else knows?”
+
+“Laura. Owen. Maya.”
+
+Martin drank some water.
+
+“Anyone else?”
+
+“I don’t know.”
+
+“You asked them?”
+
+“Yes.”
+
+“What did they say?”
+
+Chen Mo looked at him.
+
+“They all feel like they know him.”
+
+Martin set the glass on the desk.
+
+“And you?”
+
+That was not the question Chen Mo expected.
+
+“Me?”
+
+“What did you feel when you saw the name?”
+
+Chen Mo thought about it.
+
+“Nothing.”
+
+“Are you sure?”
+
+He was about to say yes, but the word stopped before it came out.
+
+Because he suddenly remembered 7:43 that morning. When he first saw the words ETHAN WOOD, he had not actually thought, Who is this?
+
+His first thought had been: When did he come back?
+
+The thought had been so fast that he had barely noticed it existed.
+
+Chen Mo slowly raised his eyes.
+
+Martin was watching him.
+
+“You know him,” Chen Mo said.
+
+It was not a question.
+
+Martin walked to the window. Half the warehouse lights were already off. Evening sun came through the high windows and turned the racks into rows of dark red.
+
+“I know a lot of people,” he said. “The company is more than forty years old. Some worked here for one day. Some for thirty years. Some leave and still call every Christmas. Others left yesterday and today I already can’t remember their names.”
+
+“What about Ethan?”
+
+Martin did not turn around.
+
+“Stop looking.”
+
+Chen Mo stared at him.
+
+“Why?”
+
+“Because there’s no need.”
+
+“He’s in the employee system.”
+
+“I’ll have IT deal with it.”
+
+“He’s been in the data since 1998.”
+
+Martin’s shoulder moved almost imperceptibly.
+
+“Laura told you that?”
+
+“He’s never received a paycheck.”
+
+“Chen Mo.”
+
+“But the account has always been Active.”
+
+Martin turned around. The tiredness had left his face.
+
+“That’s enough,” he said.
+
+His voice was not loud, but it was the voice of the owner.
+
+“This is a legacy-system issue. I’ll handle it.”
+
+Chen Mo did not move.
+
+“Who is he?”
+
+Martin watched him for several seconds.
+
+“Someone unimportant.”
+
+Chen Mo said, “Then why are you telling me not to look?”
+
+This time Martin was silent for a long while.
+
+There was no one left outside the office. The air-conditioning shifted into night mode, and the sound of the vents suddenly softened.
+
+“Because some things manage to stay inside a company for forty years,” Martin finally said, “only because nobody insists on asking exactly what they are.”
