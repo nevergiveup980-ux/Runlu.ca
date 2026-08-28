@@ -90,6 +90,18 @@
     const health002=nav.querySelector('a[href="#health-002"]');
     if(health002)nav.insertBefore(link,health002);else nav.appendChild(link)
   }
+  function ensureView011Link(){
+    const nav=document.querySelector('.view-page .section-nav');
+    if(!nav||nav.querySelector('a[href="view-011-model-hardware-standard.html"]'))return;
+    const link=document.createElement('a');
+    link.href='view-011-model-hardware-standard.html';
+    link.dataset.en='011 · Physical AI';
+    link.dataset.zh='011 · 物理 AI';
+    link.dataset.fr='011 · IA physique';
+    link.dataset.es='011 · IA física';
+    link.textContent='011 · Physical AI';
+    nav.appendChild(link)
+  }
   function bind(){
     document.querySelectorAll('[data-runlu-language-select]').forEach(select=>{
       if(select.dataset.runluLanguageBound==='true')return;
@@ -103,6 +115,7 @@
       button.addEventListener('click',toggle)
     });
     ensureHealthView006Link();
+    ensureView011Link();
     apply(current)
   }
   window.RUNLULanguage={key:KEY,available:[...AVAILABLE],planned:[...PLANNED],fallback:FALLBACK,get:()=>current,set,toggle,apply,isAvailable};
