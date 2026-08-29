@@ -11,19 +11,27 @@ function normalize(v){return String(v||'').replace(/\s+/g,' ').trim().toLowerCas
 function dedup(){
   const nav=document.getElementById('nav');
   if(!nav)return 0;
-  const seen=new Set();
+  const pages=new Set(),labels=new Set();
   let removed=0;
   Array.from(nav.querySelectorAll('button')).forEach(btn=>{
     const page=normalize(btn.dataset&&btn.dataset.page);
     const label=normalize(btn.textContent);
-    const key=page?'page:'+page:'label:'+label;
-    if(!label&&!page)return;
-    if(seen.has(key)){btn.remove();removed++;return}
-    seen.add(key);
+    if(!page&&!label)return;
+    if((page&&pages.has(page))||(label&&labels.has(label))){btn.remove();removed++;return}
+    if(page)pages.add(page);
+    if(label)labels.add(label);
   });
   return removed;
 }
-
+function labelVersion(){
+  try{
+    document.title='RUNLU Deerfoot Flooring OS V0.3.70.2 Navigation Hotfix';
+    const pill=document.querySelector('header .pill');
+    if(pill)pill.textContent='V0.3.70.2 Nav Hotfix';
+    const brand=document.querySelector('header .brand span');
+    if(brand)brand.textContent='V0.3.63 stable renderer + complete workflow + Pricing Foundation';
+  }catch(_){}
+}
 function patchRenderNav(){
   if(typeof window.renderNav!=='function')return;
   if(window.renderNav.__r702nav)return;
@@ -31,19 +39,19 @@ function patchRenderNav(){
   const wrapped=function(){
     const result=prior.apply(this,arguments);
     dedup();
+    labelVersion();
     return result;
   };
   wrapped.__r702nav=1;
   window.renderNav=wrapped;
 }
-
 function install(){
   patchRenderNav();
   dedup();
-  setTimeout(()=>{patchRenderNav();dedup()},0);
-  setTimeout(()=>{patchRenderNav();dedup()},500);
+  labelVersion();
+  setTimeout(()=>{patchRenderNav();dedup();labelVersion()},0);
+  setTimeout(()=>{patchRenderNav();dedup();labelVersion()},500);
 }
-
 window.RUNLUNavigationDedupV0702={install,dedup};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
