@@ -1,0 +1,251 @@
+## Capítulo 4 — Sueldo: cero
+
+A la mañana siguiente, Laura llamó a Chen Mo a la oficina de finanzas.
+
+Después de cerrar la puerta, bajó las persianas hasta la mitad.
+
+“Anoche volví a revisarlo.”
+
+Sobre la mesa había tres carpetas: una azul, una gris y una negra. Cada una pertenecía a una generación distinta del sistema de nóminas.
+
+“Si fuera una cuenta de prueba, debería haberse eliminado en la primera migración”, dijo Laura. “Si fuera un antiguo empleado, tendría una fecha de baja. Si fuera un contratista, existiría un registro de proveedor. Y si fuera un acceso de respaldo creado por el dueño, tampoco debería aparecer en la tabla de beneficios de empleados.”
+
+“¿Pero aparece en todas?”
+
+“Sí.”
+
+Le entregó a Chen Mo una lista impresa en 1998. Los bordes del papel se habían amarilleado y el encabezado seguía teniendo aquella tipografía de puntos de las viejas impresoras matriciales.
+
+La última línea decía: WOOD, ETHAN — 0000 — N/C.
+
+“¿Qué significa N/C?”
+
+“En el sistema antiguo normalmente era No Compensation. También podía significar Non-Calculated.”
+
+“O sea que ni siquiera en 1998 le pagaban.”
+
+“Más exactamente, al sistema se le había indicado que no calculara su salario.”
+
+Chen Mo preguntó: “¿Quién lo indicó?”
+
+Laura señaló unas iniciales escritas a mano junto a la línea: WH.
+
+William Harrison.
+
+El padre de Martin.
+
+“William se jubiló en 2004”, dijo Laura. “Murió en 2010.”
+
+Chen Mo no dijo nada.
+
+“Así que al menos podemos asegurar una cosa.”
+
+“¿Cuál?”
+
+“Ethan no fue añadido ayer como una broma de alguien.”
+
+Aquello no aclaró nada. Solo hizo que el nombre tuviera de pronto una edad.
+
+Como un trozo de hierro enterrado en un patio: al principio crees que acaba de caer allí, pero al sacarlo descubres que el óxido lleva años metiéndose en la tierra.
+
+Chen Mo devolvió la hoja a la mesa.
+
+“¿Se lo contaste a Martin?”
+
+Laura lo miró.
+
+“¿No se lo preguntaste tú ya?”
+
+“Me dijo que dejara de investigar.”
+
+“Entonces sabe algo.”
+
+“¿Cuánto?”
+
+Laura cerró las carpetas.
+
+“Esa es la pregunta más peligrosa que puedes hacer ahora.”
+
+“¿Peligrosa?”
+
+“En el trabajo, lo realmente peligroso no es no saber”, dijo. “Es saber que el jefe sabe y que el jefe sabe que tú sabes.”
+
+Chen Mo sonrió.
+
+Laura no.
+
+“No estoy bromeando.”
+
+A mediodía, Maya llevó otra pieza del rompecabezas.
+
+En la imagen de un servidor retirado había encontrado una tabla de permisos de 2006. La cuenta de Ethan Wood tenía privilegios mínimos. Ni siquiera podía ver nóminas, modificar pedidos o entrar al módulo financiero.
+
+Solo tenía cuatro permisos:
+
+Inventory Override.
+
+Shipping Exception.
+
+Emergency Approval.
+
+Archive Read.
+
+“Parece un jefe de almacén”, dijo Chen Mo.
+
+“Y a la vez no”, respondió Maya. “Un jefe de almacén no tendría solo permisos para excepciones y ninguno para el trabajo diario.”
+
+“Entonces, ¿a qué se parece?”
+
+Maya pensó un momento.
+
+“A alguien que solo aparece cuando algo sale mal.”
+
+Después de decirlo, ella misma se quedó en silencio.
+
+Los dos miraron la pantalla.
+
+A las 2:17 de aquella tarde, algo salió mal de verdad en el almacén.
+
+Un pedido de alfombra destinado a una obra en el sur de la ciudad estaba seis pulgadas corto. El instalador ya esperaba en la puerta y el cliente presionaba para empezar el trabajo. El sistema mostraba que la longitud de corte era correcta, pero Chen Mo volvió a medirla personalmente. Faltaban seis pulgadas.
+
+Owen tenía mala cara.
+
+“Lo corté yo.”
+
+“Lo sé.”
+
+“Lo comprobé dos veces.”
+
+“No busques la causa todavía”, dijo Chen Mo. “Mira si queda algo del mismo lote de tinte.”
+
+El inventario marcaba cero.
+
+Owen soltó una maldición.
+
+Era un error pequeño, pero de los más molestos. Seis pulgadas podían cambiar por completo el plan de uniones de una habitación. Volver a pedir el material tardaría al menos dos días. El equipo de instalación ya había reservado ese tiempo y después venían otros tres clientes.
+
+Justo cuando Chen Mo iba a llamar a ventas, el sistema mostró una antigua ubicación de inventario.
+
+A-17-Back Rack.
+
+Chen Mo se quedó inmóvil.
+
+A-17 había desaparecido hacía años. Ocho años antes, aquella zona se había convertido en un área de accesorios.
+
+“¿Quién volvió a meter esta ubicación en el sistema?”
+
+Nadie respondió.
+
+Fueron a buscar.
+
+Al fondo del actual estante 12C, detrás de un viejo tubo de alfombra sin código de barras, había de verdad un remanente del mismo lote de tinte.
+
+Algo más de ocho pies.
+
+Suficiente.
+
+Owen sacó el remanente y se quedó allí mucho rato sin decir nada.
+
+“¿Lo pusiste tú?” preguntó Chen Mo.
+
+“Imposible.”
+
+“La etiqueta está escrita por ti.”
+
+La etiqueta de papel llevaba el número de producto y la fecha: 2018-11-03.
+
+Owen contempló su propia letra.
+
+“No recuerdo esto en absoluto.”
+
+“Fue hace seis años. Es normal.”
+
+“No me refiero a eso.”
+
+Owen dio la vuelta a la etiqueta.
+
+En el reverso, escrito con lápiz muy tenue, había otra línea:
+
+KEEP — EW.
+
+La mano de Chen Mo se quedó quieta.
+
+Maya, a su lado, no dijo nada.
+
+Al final Owen dijo: “Esto tampoco demuestra nada.”
+
+Nadie discutió.
+
+Porque tenía razón.
+
+Después de extender tres generaciones de registros de nómina, Laura hizo algo que solo se le ocurriría a alguien de finanzas: descomponer el cero.
+
+“Que el salario sea cero no significa que el coste sea cero”, dijo.
+
+Revisó beneficios, seguros, pensiones, formación, compensación laboral, estacionamiento y subsidios de teléfono. Todo empleado normal dejaba alguna huella de coste. Ethan no dejaba ninguna. Su identidad parecía algo construido por completo dentro del sistema y luego retirado deliberadamente de todos los lugares donde habría que gastar dinero.
+
+Chen Mo preguntó: “Entonces, ¿por qué crearle un perfil de empleado? ¿No habría sido más sencillo usar una cuenta de servicio?”
+
+“Hoy sí”, dijo Laura. “Hace veinte años, no necesariamente. Y antes, muchos programas ni siquiera tenían el concepto de cuenta de servicio. Si un proceso necesitaba una ‘persona’, había que inventarla.”
+
+Encontró una nota de migración del sistema de nómina de 2004. Una línea decía: Retain non-compensated operational identity for legacy approvals.
+
+El documento estaba firmado por Heather, la antecesora de Laura.
+
+La llamaron. Heather se había mudado a Victoria y ahora, jubilada, paseaba a su perro todas las mañanas. Al oír el nombre Ethan Wood no se rio como Robert haría más adelante. Simplemente guardó silencio unos segundos.
+
+“¿Todavía está ahí?” preguntó.
+
+“Todavía.”
+
+“Sabía que nadie se atrevería a borrarlo.”
+
+“¿Lo conocía?”
+
+“Conocía la cuenta.”
+
+“¿Quién la creó?”
+
+“Ya existía cuando me hice cargo.”
+
+“¿Por qué no cobraba?”
+
+Heather dijo: “Porque no era una persona.”
+
+Laura y Chen Mo se miraron.
+
+“Entonces, ¿por qué se llamaba Ethan Wood?”
+
+“Eso sí que no lo sé. En aquella época todos sabían que 0000 no se tocaba. Antes del proceso de fin de mes, si el sistema no encontraba al aprobador real, algunos registros históricos quedaban asignados a 0000. Siempre queríamos rehacerlo, pero cada vez había otro proyecto delante.”
+
+“¿Alguna vez conoció a un Ethan real?”
+
+Heather rio un poco. “Si lo hubiera conocido, no habría dejado que un fantasma entrara en la tabla de beneficios.”
+
+La llamada debería haber simplificado el asunto. Al menos una parte de 0000 era claramente una identidad técnica. Sin embargo, después de colgar, Laura parecía aún más inquieta.
+
+“¿Qué pasa?” preguntó Chen Mo.
+
+“Explicó la cuenta.”
+
+“Sí.”
+
+“No explicó el nombre.”
+
+“Quizá el nombre se eligió al azar.”
+
+“Finanzas odia la palabra azar.”
+
+Laura señaló la lista de importación de 1998. Heather todavía no trabajaba allí ese año. En un archivo en papel de 1992 ya aparecía E.W. Y en un formulario de seguro de 1989 incluso figuraba una firma completa: Ethan Wood.
+
+Una identidad técnica podía heredar un nombre antiguo. Pero el origen de ese nombre seguía sin explicación.
+
+Laura guardó de nuevo los documentos y puso una fecha a cada uno. No dijo “fantasma”. Se limitó a separar lo explicado de lo no explicado.
+
+Con el tiempo, Chen Mo pensaría que esa fue una de las costumbres más importantes de toda la investigación: si explicas la mitad, solo cuenta como la mitad. No encuentres por fin una respuesta razonable y uses esa respuesta para enterrar también todo lo que sigue sin ser razonable.
+
+Dos iniciales no demostraban nada.
+
+Pero aquella tarde, después de que el instalador se llevara el pedido a tiempo, Chen Mo empezó a sospechar seriamente que quizá no estaban investigando a una persona inexistente.
+
+Tal vez estaban investigando una costumbre que llevaba mucho tiempo existiendo, una costumbre a la que nadie se había detenido a prestar verdadera atención.

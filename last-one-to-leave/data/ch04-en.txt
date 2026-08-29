@@ -1,0 +1,251 @@
+## Chapter 4 — Salary: Zero
+
+The next morning, Laura called Chen Mo into the finance office.
+
+After she closed the door, she lowered the blinds halfway.
+
+“I checked again last night.”
+
+Three folders lay on the desk—one blue, one gray, one black—each from a different generation of the company’s payroll systems.
+
+“If this were a test account, it should have been removed during the first migration,” Laura said. “If he were a former employee, there should be a termination date. If he were a contractor, there should be a vendor record. If it were a backup permission created by the owner, it still shouldn’t appear in the employee benefits table.”
+
+“But he’s in all of them?”
+
+“Yes.”
+
+She handed Chen Mo a printout from 1998. The paper had yellowed at the edges, and the heading was still in the dotted type of an old dot-matrix printer.
+
+The last line read: WOOD, ETHAN — 0000 — N/C.
+
+“What does N/C mean?”
+
+“In the old system it usually meant No Compensation. It could also mean Non-Calculated.”
+
+“So even in 1998 they weren’t paying him.”
+
+“More precisely, the system had been told not to calculate his pay.”
+
+Chen Mo asked, “Who told it that?”
+
+Laura pointed to a handwritten set of initials beside the line: WH.
+
+William Harrison.
+
+Martin’s father.
+
+“William retired in 2004,” Laura said. “He died in 2010.”
+
+Chen Mo said nothing.
+
+“So at least one thing is certain.”
+
+“What?”
+
+“Ethan wasn’t added yesterday as somebody’s prank.”
+
+That did not make anything clearer. It only gave the name an age.
+
+Like a piece of iron buried in a yard: at first you think it is something that fell there recently, until you dig it up and discover that rust has been eating into the soil for years.
+
+Chen Mo put the paper back on the desk.
+
+“Did you tell Martin?”
+
+Laura looked at him.
+
+“Didn’t you already ask him?”
+
+“He told me to stop looking.”
+
+“Then he knows something.”
+
+“How much?”
+
+Laura closed the folders.
+
+“That is the most dangerous question you can ask right now.”
+
+“Dangerous?”
+
+“In a workplace, the dangerous thing isn’t that you don’t know,” she said. “It’s that you know the boss knows—and the boss knows that you know.”
+
+Chen Mo smiled.
+
+Laura did not.
+
+“I’m not joking.”
+
+At noon, Maya brought another piece of evidence.
+
+She had found a 2006 permissions table inside an image of a retired server. Ethan Wood’s account had almost no privileges. It could not view payroll, edit orders, or enter the finance module.
+
+It had only four permissions:
+
+Inventory Override.
+
+Shipping Exception.
+
+Emergency Approval.
+
+Archive Read.
+
+“Sounds like a warehouse manager,” Chen Mo said.
+
+“Not really,” Maya replied. “A warehouse manager wouldn’t have only exception permissions and no everyday permissions.”
+
+“Then what does it look like?”
+
+Maya thought for a moment.
+
+“Like someone who appears only when something goes wrong.”
+
+After saying it, she went quiet herself.
+
+They both looked at the screen.
+
+At 2:17 that afternoon, something really did go wrong in the warehouse.
+
+A carpet order headed to a job site in the south end was six inches short. The installer was already waiting at the door, and the customer was pushing to get the job started. The system showed the cut length as correct, but Chen Mo measured it himself. It was short.
+
+Owen looked sick.
+
+“I cut it.”
+
+“I know.”
+
+“I checked twice.”
+
+“Don’t look for the cause yet,” Chen Mo said. “See if we have anything from the same dye lot.”
+
+Inventory showed zero.
+
+Owen swore.
+
+It was a small error, but the kind that caused the most trouble. Six inches could change the entire seam plan for a room. A replacement order would take at least two days. The installers had already cleared their schedule for today, with three more customers lined up behind this one.
+
+Just as Chen Mo was about to call sales, the system surfaced an old inventory location.
+
+A-17-Back Rack.
+
+Chen Mo froze.
+
+A-17 had been dismantled years ago. That space had become an accessories area eight years earlier.
+
+“Who put this location back into the system?”
+
+No one answered.
+
+They went to look.
+
+At the very back of what was now rack 12C, behind an old carpet core with no barcode, there really was a remnant from the same dye lot.
+
+A little over eight feet.
+
+Enough.
+
+Owen dragged it out and stood there for a long time without saying anything.
+
+“You put this here?” Chen Mo asked.
+
+“No way.”
+
+“The label is in your handwriting.”
+
+The paper tag showed the product number and date: 2018-11-03.
+
+Owen stared at his own handwriting.
+
+“I don’t remember this at all.”
+
+“It was six years ago. That’s normal.”
+
+“That’s not what I mean.”
+
+Owen turned the label over.
+
+On the back, in faint pencil, was another line:
+
+KEEP — EW.
+
+Chen Mo’s hand stopped.
+
+Maya stood beside him and said nothing.
+
+Finally Owen said, “That still doesn’t prove anything.”
+
+No one argued.
+
+Because he was right.
+
+After Laura spread out three generations of payroll records, she did something only a finance person would think to do: she broke down the zero.
+
+“A salary of zero doesn’t mean a cost of zero,” she said.
+
+She checked employee benefits, insurance, pension contributions, training, workers’ compensation, parking, mobile-phone allowances. Every normal employee left a cost trail somewhere. Ethan left none. His identity in the system looked like something that had been carefully created and then deliberately removed from every place where money would have to be spent.
+
+Chen Mo asked, “Then why create him as an employee at all? Wouldn’t a service account have been simpler?”
+
+“Today, yes,” Laura said. “Twenty years ago, maybe not. Earlier systems often didn’t even have the idea of a service account. If a process needed a ‘person,’ you had to invent one.”
+
+She found a payroll migration note from 2004. One line read: Retain non-compensated operational identity for legacy approvals.
+
+The document had been signed by Heather, Laura’s predecessor.
+
+They called her. Heather had moved to Victoria and now spent her retirement walking her dog every morning. When she heard the name Ethan Wood, she did not laugh the way Robert later would. She simply went quiet for a moment.
+
+“Still there?” she asked.
+
+“Still there.”
+
+“I knew nobody would dare delete it.”
+
+“You knew him?”
+
+“I knew the account.”
+
+“Who created it?”
+
+“It was already there when I took over.”
+
+“Why no salary?”
+
+Heather said, “Because it wasn’t a person.”
+
+Laura and Chen Mo looked at each other.
+
+“Then why call it Ethan Wood?”
+
+“That I honestly don’t know. Back then everyone knew 0000 wasn’t to be touched. Before the month-end batch ran, if the system couldn’t find the actual approver, some historical records would get attached to 0000. We kept meaning to rebuild it, but every time there was another project ahead of it.”
+
+“Did you ever meet a real Ethan?”
+
+Heather laughed softly. “If I had, I wouldn’t have let a ghost into the benefits table.”
+
+The call should have simplified things. At least part of 0000 was clearly a technical identity. But after Laura hung up, she looked more uneasy, not less.
+
+“What?” Chen Mo asked.
+
+“She explained the account.”
+
+“Right.”
+
+“She didn’t explain the name.”
+
+“The name might have been random.”
+
+“Finance hates the word random.”
+
+Laura pointed to the 1998 import list. Heather had not worked there yet. An even older paper file from 1992 contained E.W. And on a 1989 insurance form there was even a full signature: Ethan Wood.
+
+A technical identity could inherit an old name. But where the old name came from was still unknown.
+
+Laura put the documents back into their folders and labeled each one by date. She never said “haunted.” She simply separated what had been explained from what had not.
+
+Chen Mo later thought this was one of the most important habits in the entire investigation: if you explain half, count it as half. Do not find one reasonable answer and use it to bury everything that remains unreasonable.
+
+Two initials proved nothing.
+
+But that afternoon, after the installer drove away with the order on time, Chen Mo began to seriously suspect that what they were investigating might not be a person who did not exist.
+
+It might be a habit that had existed for a very long time—one that nobody had ever bothered to notice carefully.
