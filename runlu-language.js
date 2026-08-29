@@ -77,18 +77,25 @@
     current=language;localStorage.setItem(KEY,current);apply(current,{announce:true})
   }
   function toggle(){set(current==='en'?'zh':'en')}
-  function ensureHealthView006Link(){
+  function ensureHealthViewLinks(){
     const nav=document.querySelector('.health-page .section-nav');
-    if(!nav||nav.querySelector('a[href="health-view-006-humid-heat.html"]'))return;
-    const link=document.createElement('a');
-    link.href='health-view-006-humid-heat.html';
-    link.dataset.en='View 006';
-    link.dataset.zh='观察 006';
-    link.dataset.fr='Regard 006';
-    link.dataset.es='Vista 006';
-    link.textContent='View 006';
+    if(!nav)return;
+    const entries=[
+      {href:'health-view-006-humid-heat.html',en:'View 006',zh:'观察 006',fr:'Regard 006',es:'Vista 006'},
+      {href:'health-view-007-staree-statins.html',en:'View 007',zh:'观察 007',fr:'Regard 007',es:'Vista 007'}
+    ];
     const health002=nav.querySelector('a[href="#health-002"]');
-    if(health002)nav.insertBefore(link,health002);else nav.appendChild(link)
+    entries.forEach(entry=>{
+      if(nav.querySelector(`a[href="${entry.href}"]`))return;
+      const link=document.createElement('a');
+      link.href=entry.href;
+      link.dataset.en=entry.en;
+      link.dataset.zh=entry.zh;
+      link.dataset.fr=entry.fr;
+      link.dataset.es=entry.es;
+      link.textContent=entry.en;
+      if(health002)nav.insertBefore(link,health002);else nav.appendChild(link)
+    })
   }
   function ensureView011Link(){
     const nav=document.querySelector('.view-page .section-nav');
@@ -124,7 +131,7 @@
       button.dataset.runluLanguageBound='true';
       button.addEventListener('click',toggle)
     });
-    ensureHealthView006Link();
+    ensureHealthViewLinks();
     ensureView011Link();
     standardizeFrontierNav();
     apply(current)
