@@ -1,0 +1,119 @@
+# Chapter 2 — To the Oilfield
+
+*The Wind Beyond the Walls · An Ordinary Life, Two Departures*
+
+In 1983, he was twelve.
+
+When the adults decided to leave, the child had no say. What could be taken was packed; what could not was left behind. Neighbours stood at the gate asking when they would return. The adults answered with plans a child did not fully understand.
+
+In the days before they left, Zhaojiadian did not change simply because one family was going away. Chickens still called. The sun still burned. Dust from the village road still clung to their shoes. That indifference made the leaving feel more real.
+
+When they finally pulled away, Yuansheng did not cry. At least, he did not remember crying.
+
+He only looked back through the window.
+
+The familiar road receded. The houses receded. The entrance to the village receded too.
+
+The stretch of water that had almost swallowed him soon disappeared from sight.
+
+Twelve-year-old Zhang Yuansheng suddenly understood something no one had ever taught him: a world you believe will never change can one day be the thing that leaves you.
+
+The vehicle kept moving forward.
+
+And for the first time, so did he.
+
+The road in 1983 was longer than twelve-year-old Zhang Yuansheng had imagined.
+
+On a map, the distance from Zhaojiadian, in Xiazhang, to Dongying was not half a country. But for a child who had treated his village as the centre of the world, it was far enough. The farther they travelled north and east, the more the familiar mountain shadows faded. The land flattened little by little, and the sky seemed suddenly higher.
+
+At first Yuansheng kept looking outside. Later he grew sleepy. When he woke and looked again, there was still road beyond the window.
+
+For the first time, a strange thought came to him: the world really was much larger than Zhaojiadian.
+
+Shengli Oilfield was not a single well, nor a giant factory behind four walls. It was more like a world assembled from production zones, residential compounds, roads, pipelines, and work yards. Pumpjacks nodded again and again beside the road. Farther away, metal equipment flashed in the sun. Adults saw work; children saw machines they had never seen before.
+
+The world of Zhaojiadian seemed to grow out of the earth. Here there was more steel, the smell of diesel, work uniforms, and the question, “Which work unit are you with?”
+
+During the first few days after the move, the adults were busy rebuilding the family’s daily life. Yuansheng was redrawing his own map: where the toilets were, which way led to school, which open ground was good for football, and whose doorway usually had children gathered around it.
+
+The unfamiliar did not last long.
+
+Children need no formal introductions to meet other children. Play one game of football, walk part of the way home from school, borrow an eraser—even have a fight first—and by the next day they may already be friends. Before long, he knew which road led to school, which shortcut was faster, and which road, though shorter, often had engineering vehicles passing through.
+
+The adults had warned him about that last one.
+
+Children do not always truly listen.
+
+One afternoon, he and several other children were running from an open lot toward the residential area. The others had already crossed the road. Yuansheng was behind. In the distance, an engineering truck was coming along the road, its engine noise scattered by the wind so that it did not sound especially close.
+
+“Hurry up!” someone shouted from the other side.
+
+He sprinted forward.
+
+The next second, a horn split the air.
+
+It was so close it seemed not to come from the truck at all, but to explode directly inside his ears.
+
+Yuansheng stopped by instinct.
+
+It was the worst possible reaction.
+
+The truck was already upon him. The driver slammed on the brakes, tyres scraping harshly at the edge of the dirt road. Dust burst over everything. Yuansheng fell backward on instinct, scraping his palm against the ground.
+
+When the dust settled, the first thing he saw was a tyre.
+
+It was not far from his foot.
+
+The driver leaned out of the window, his face dark with anger and fright.
+
+“Trying to get yourself killed?”
+
+He heard every word.
+
+The children on the other side stopped shouting too. A moment earlier, crossing the road had felt like a race. Suddenly no one thought it was funny.
+
+Yuansheng stood up. A patch of skin on his palm had been scraped away. He did not cry or argue back. He did not yet understand phrases like “an accident missed by one second,” but his body already understood: one more half-step from him, or one later press of the brake from the driver, and the rest of that afternoon would not have ended with going home for dinner.
+
+On the way home, he kept the scraped hand hidden the whole time.
+
+After danger passes, a child’s first fear is often not death, but being scolded at home.
+
+Yet that night, he thought again of the water in Zhaojiadian.
+
+One time, the ground had suddenly disappeared beneath his feet.
+
+This time, a tyre had suddenly appeared in front of him.
+
+Of course, he did not become cautious and timid overnight. The next day he still ran, still played. But from then on, when he heard an engineering truck in the distance, he looked first.
+
+That was how the oilfield entered him, little by little.
+
+Not only through school, housing, and his father’s job, but through moments when machines revealed their real weight, speed, and consequences.
+
+Life at the new school gradually settled. Families from different parts of Shandong gathered there. Their accents and origins differed, yet all were reorganized by the same work-unit life. Adults went to work by shift. Children went to school by bell. Whose father was on duty, whose mother was working late, whose home the children went to after class—life followed an invisible timetable.
+
+For the first time, the idea of the work unit became something Yuansheng could actually feel.
+
+In Zhaojiadian, family and neighbours formed a child’s first society. In the oilfield, the work unit helped determine where a family lived, who their neighbours were, which school their children attended, and, to a large extent, what their future might look like.
+
+And “outside” suddenly grew larger too.
+
+In Zhaojiadian, distance had mostly belonged to imagination. In Dongying, distance began to have directions. Teachers talked about university. Older brothers and sisters of classmates left to study elsewhere. Some returned to the oilfield after graduation. A boy began to understand, faintly, that a person could leave a place and later choose to return.
+
+The departure at twelve had been decided for him by his parents.
+
+Next time, he wanted at least part of the decision to be his own.
+
+The wind in Dongying was straighter than the wind in Xiazhang. Winter made that especially clear. On the flat land there was almost nothing to stop it. It swept in from far away and slipped into the neck of a coat. When he first arrived, he thought the wind had no warmth in it. After living there long enough, he grew used to it.
+
+That is what people do.
+
+First we call something unfamiliar. Later we call it ordinary life.
+
+Xiazhang had not disappeared. It had simply moved behind him.
+
+And Shengli Oilfield was beginning to take possession of a boy’s youth.
+
+---
+
+RUNLU Original · Apple Books International Edition working copy
