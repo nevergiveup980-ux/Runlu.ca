@@ -1,0 +1,83 @@
+## Chapitre 6 — 2009
+
+Les souvenirs de l’entreprise à propos de 2009 ne s’accordaient pas parfaitement.
+
+Certains se rappelaient un hiver particulièrement neigeux. D’autres se souvenaient qu’il n’y avait pas eu de dîner de Noël. Quelques-uns retenaient seulement que l’essence avait été bon marché pendant un temps. Les archives financières racontaient un autre 2009 : commandes en baisse de vingt-huit pour cent, créances douteuses doublées, ligne de crédit réduite, deux commerciaux partis et heures supplémentaires supprimées à l’entrepôt.
+
+Chen Mo trouva Owen dans la salle de pause.
+
+« Vous n’avez vraiment embauché personne cette année-là ? »
+
+« Personne. »
+
+« Même pas un responsable ? »
+
+« Encore moins un responsable. »
+
+« La date d’embauche d’Ethan est le 14 avril. »
+
+Owen resta un moment avec son sandwich à la main. « Avril… C’est l’époque où le toit fuyait. »
+
+Au printemps 2009, de l’eau s’infiltra du côté nord de l’entrepôt et menaça des centaines de cartons de parquet. L’entreprise n’avait pas les moyens de faire venir une équipe spécialisée ; les employés utilisèrent des bâches et des palettes et déplacèrent le stock pendant la nuit.
+
+« Qui a organisé ça ? » demanda Chen Mo.
+
+« Je pensais que c’était Martin. »
+
+« Qui vous a appelé pour revenir le soir ? »
+
+Owen s’arrêta. « Un coup de téléphone. Je ne me rappelle vraiment plus qui. »
+
+Dans l’après-midi, Maya retrouva sur un ancien serveur un courriel collectif daté du 14 avril. Objet : North Wall Emergency Move. Expéditeur : ewood@harrisonflooring.local.
+
+« Domaine local », dit Maya. « Ce n’était pas une adresse externe, mais un compte du serveur interne de l’entreprise. »
+
+Le courriel ne contenait que l’ordre de déplacement des marchandises. La première utilisation enregistrée du compte datait elle aussi du 14 avril 2009.
+
+Chen Mo fixa les deux dates. La fameuse Hire Date n’était peut-être pas une date d’embauche. Ce pouvait simplement être le jour où ce nom était entré pour la première fois dans le système numérique.
+
+Maya continua à creuser. Une ancienne base de données montrait que 0000 avait reçu ce jour-là, pour la première fois, l’autorisation Emergency Ops. L’action provenait de SYSTEM ADMIN, mais l’administrateur de l’époque était décédé.
+
+Ils retrouvèrent aussi une liste manuscrite des personnes présentes cette nuit-là. Douze noms. Aucun Ethan. À côté de chaque personne figuraient une heure d’entrée et une heure de sortie. Le dernier employé était parti à 1 h 53 ; le dernier passage de badge avait eu lieu à 2 h 17 avec une carte de maintenance générique.
+
+« Qui pouvait utiliser cette carte ? »
+
+« N’importe qui avec la clé. »
+
+Owen se souvenait qu’ils avaient déplacé le stock jusqu’à presque deux heures du matin et limité les pertes à quelques dizaines de cartons. Sans cet effort nocturne, l’entreprise aurait pu subir un coup très dur.
+
+Il se souvenait aussi d’un détail parfaitement inutile : à la fin, une cafetière pleine de café chaud se trouvait près de la pointeuse.
+
+« Qui l’avait préparé ? » demanda Chen Mo.
+
+Owen éclata de rire. « Maintenant, à cause de toi, j’ai envie de mettre même le café sur le compte d’Ethan. »
+
+Maya rassembla toutes les traces numériques encore disponibles ce jour-là : courriels, accès, anciennes commandes, permissions exceptionnelles. La chronologie devenait de plus en plus complète, mais aucun parcours réel ne correspondait à un employé nommé Ethan Wood.
+
+La véritable avancée vint de Dave, l’ancien responsable de l’entrepôt.
+
+Au téléphone, Dave éclata de rire dès qu’il entendit 0000. « Vous avez encore ce truc ? »
+
+« Vous connaissez Ethan Wood ? »
+
+« Je connais le nom. À l’époque, certains systèmes d’approbation exigeaient absolument un responsable, alors j’utilisais le vieux compte Ethan quand il en fallait un. »
+
+« Vieux compte ? Qui l’avait créé ? »
+
+« Ne me demandez pas. Il existait avant moi. »
+
+Dave confirma qu’il avait été présent cette nuit-là et qu’il avait peut-être utilisé la carte de maintenance. Il se souvenait aussi avoir écrit une note NORTH WALL FIRST. Quant au courriel interne, il ne savait plus s’il en était l’auteur.
+
+Après cet appel, le 14 avril 2009 prit enfin l’allure d’une histoire réelle plutôt que d’une légende.
+
+Aucun personnage mystérieux n’était apparu pour sauver l’entrepôt. Martin avait envoyé des instructions, Dave avait coordonné le terrain, Owen et plus d’une dizaine d’employés étaient revenus déplacer la marchandise, quelqu’un avait utilisé la carte de maintenance pour fermer, et l’ancien compte Ethan avait porté une partie des autorisations système.
+
+Les gestes de nombreuses personnes s’étaient superposés. Des années plus tard, la mémoire les avait réduits à une phrase : « Cette nuit-là, Ethan s’en est occupé. »
+
+Chen Mo regarda la chronologie au mur et pensa soudain que cette réponse valait mieux qu’un héros.
+
+Une entreprise traverse une crise non parce qu’une seule personne fait tout, mais parce que beaucoup de gens ordinaires accomplissent chacun leur petite part, souvent sans connaître l’ensemble.
+
+Le vrai danger n’était pas de découvrir un nom.
+
+C’était qu’une fois le nom apparu, on commence à lui attribuer tout ce qui n’en avait pas.
