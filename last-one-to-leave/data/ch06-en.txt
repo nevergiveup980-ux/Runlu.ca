@@ -1,0 +1,83 @@
+## Chapter 6 — 2009
+
+The company’s memories of 2009 did not line up neatly.
+
+Some people remembered an unusually snowy winter. Some remembered that there was no Christmas dinner. Others remembered only that gasoline was cheap for a while. The financial records remembered a different 2009: orders down twenty-eight percent, bad debt doubled, the bank line reduced, two salespeople gone, and warehouse overtime canceled.
+
+Chen Mo found Owen in the break room.
+
+“Did you really hire no one that year?”
+
+“No one.”
+
+“No managers either?”
+
+“Especially no managers.”
+
+“Ethan’s hire date is April fourteenth.”
+
+Owen held his sandwich and thought. “April… That was when the roof leaked.”
+
+In the spring of 2009, water came through the north side of the warehouse and nearly soaked hundreds of cartons of hardwood. The company could not afford a professional crew, so employees used plastic sheeting and pallets and moved inventory through the night.
+
+“Who organized it?” Chen Mo asked.
+
+“I thought Martin did.”
+
+“Who called you to come back that night?”
+
+Owen paused. “A phone call. I honestly don’t remember who.”
+
+That afternoon Maya found a group email dated April fourteenth on an old mail server. The subject was North Wall Emergency Move. The sender was ewood@harrisonflooring.local.
+
+“Local domain,” Maya said. “Not an external mailbox. It was an account on the company’s internal server.”
+
+The email contained only the moving sequence. The account’s first recorded use was also April 14, 2009.
+
+Chen Mo stared at the two dates. The so-called Hire Date might not have been a hire date at all. It could simply have been the day the name first entered the digital system.
+
+Maya kept digging. An old database showed that 0000 received Emergency Ops permission for the first time that afternoon. The action came from SYSTEM ADMIN, but the administrator from that period had since died.
+
+They also found a handwritten list of the people present that night. Twelve names. No Ethan. Each person had an entry and exit time. The latest employee left at 1:53 a.m.; the final access record was at 2:17, using a generic maintenance card.
+
+“Who could use the maintenance card?”
+
+“Anyone with the key.”
+
+Owen remembered that they had moved stock until almost two in the morning and kept the loss to a few dozen cartons. Without that overnight effort, the company might have taken a devastating hit.
+
+He also remembered one completely useless detail: when they finished, there was a pot of hot coffee beside the time clock.
+
+“Who made it?” Chen Mo asked.
+
+Owen laughed. “Now you’ve got me wanting to blame even the coffee on Ethan.”
+
+Maya pulled every surviving digital trace from that day—email, access logs, old orders, exceptional permissions. The timeline became increasingly complete, yet no real person’s movements matched an employee named Ethan Wood.
+
+The real breakthrough came from Dave, the former warehouse manager.
+
+When they reached him by phone, Dave laughed as soon as he heard 0000. “You still have that thing?”
+
+“You know Ethan Wood?”
+
+“I know the name. Some approval systems back then required a manager, so I used the old Ethan account when I needed one.”
+
+“Old account? Who created it?”
+
+“Don’t ask me. It was there before I was.”
+
+Dave confirmed that he had been on site that night and might have used the maintenance card. He also remembered writing a NORTH WALL FIRST note. Whether he had sent the internal email, he could no longer say.
+
+After the call, April 14, 2009 looked for the first time like actual history instead of legend.
+
+No mysterious person had arrived to save the warehouse. Martin sent instructions, Dave coordinated the floor, Owen and more than a dozen employees came back to move product, someone used the maintenance card to close up, and the old Ethan account carried part of the system authority.
+
+Many people’s actions overlapped. Years later, memory compressed them into one sentence: “Ethan handled it that night.”
+
+Chen Mo looked at the timeline on the wall and suddenly thought this answer was better than a hero.
+
+A company survives a crisis not because one person does everything, but because many ordinary people each complete a small piece, often without knowing the whole picture.
+
+The real danger was not discovering a name.
+
+It was that once a name appeared, people began handing every nameless thing to it.
