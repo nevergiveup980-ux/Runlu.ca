@@ -1,0 +1,99 @@
+# Chapter 1 — The Village Was the World
+
+*The Wind Beyond the Walls · An Ordinary Life, Two Departures*
+
+In September 1971, the heat of summer had not quite left the plains of central Shandong, in eastern China.
+
+Southwest of Tai’an lay Xiazhang, a rural township, and farther into the countryside, the village of Zhaojiadian. The shadows of the mountains thinned as the land opened out, corn and sorghum growing all the way to the edge of the village. The roads were not yet the smooth concrete lanes they would later become. In dry weather they threw up dust; in rain they turned to mud. Ox carts and bicycles left ruts of unequal depth. Wind moved through the fields carrying the green smell of leaves, the scent of animal sheds, and earth baked warm by the sun.
+
+On September 2, another child was born into the Zhang family. Later, he would be called Zhang Yuansheng.
+
+It was a name very much of its time. No one could have imagined that, decades later, those three Chinese characters would appear in oilfield records, Canadian documents, bank accounts, and on the cold glow of a computer screen. Back then, the most important purpose of a name was simply for a mother to call it from the courtyard gate so a child knew it was time to come home for dinner.
+
+By the time his memories truly began, the world was not very large.
+
+A courtyard, a few dirt roads, fields, a ditch that swelled with water in summer and shrank to shallow mud in winter, and the endless talk of the village adults—that was nearly everything. A child does not know the word hometown. Hometown is a word learned after leaving. In childhood, Zhaojiadian was the world itself.
+
+There were many children in the family, and no one had the luxury of being the centre of attention all day. If you fell, the first question was whether you were bleeding. If not, you usually got up by yourself. Brothers and sisters argued, and adults did not always decide who was right. Today someone might cry as if the sky had fallen; the next morning they would run outside together again.
+
+Yuansheng learned early to run beyond the house.
+
+Field ridges, tree branches, haystacks, and ditch banks were far more interesting than staying indoors. When several children gathered together, courage seemed to swell in the wind. Something no one dared to do alone could suddenly become irresistible once another child said, “You’re scared, aren’t you?”
+
+When he was seven or eight—or perhaps a little older; later he could no longer remember exactly—there was a summer afternoon so hot even the dogs lay against the walls and refused to move. A group of children ran to a rain-filled pond beyond the village. It had rained a few days earlier. The water looked calm, and near the bank the muddy bottom could still be seen.
+
+“It’s not deep,” someone said, testing it with a foot.
+
+Another child had already rolled up his trousers and stepped in. The water rose from ankle to calf. Those on shore laughed and splashed him.
+
+Yuansheng stepped in too.
+
+At first it really was shallow. Mud pressed softly between his toes. He took two steps, then another.
+
+On the fourth step, there was nothing beneath him.
+
+It was as if the ground had been pulled away.
+
+His whole body dropped. Water rose past his chest, then his mouth. His feet kicked wildly below, but he could no longer find the layer of mud he had been standing on. From the bank, it was only a small stretch of water. From inside it, a few steps were enough to enter another world.
+
+He tried to shout. The moment he opened his mouth, he swallowed muddy water.
+
+There was a roar in his ears, and the laughter from shore suddenly seemed far away. Sunlight shattered white across the surface. All he remembered was reaching upward with everything he had and finding nothing but water.
+
+When fear is real, people do not cry out a perfect, dramatic “Help me!” the way they do in films.
+
+He only wanted to touch the bottom.
+
+Even the tip of one toe would have been enough.
+
+But there was nothing below.
+
+As he went under for the second time, pain suddenly tore through his scalp.
+
+Someone behind him had grabbed his hair.
+
+The pain made him struggle almost by instinct, but then another hand caught his arm. Several children dragged and pulled him back toward the shallows.
+
+He lay at the muddy edge coughing for a long time, water in his nose and mouth. The sun was still merciless. Grass along the ditch still moved lazily in the breeze, as if nothing at all had happened.
+
+The older child who had pulled him out was panting. His first words were not comforting. He scolded him: “Why did you go over there?”
+
+Yuansheng did not answer.
+
+The children quickly reached an agreement that seemed almost more important than the rescue itself: do not tell the adults.
+
+On the way home, his trousers were half wet, half drying, and mud had hardened into a crust on his calves. Before entering the courtyard, he deliberately rubbed some of it off against a wall.
+
+His mother looked at him.
+
+“Why are your trousers wet?”
+
+“Stepped in the ditch.”
+
+It was not entirely a lie.
+
+His mother frowned, then probably went back to whatever else needed doing. Dinner happened as usual. Night fell as usual. People talked in the courtyard as usual. Only after lying down did Yuansheng suddenly remember the moment the water had closed above his head.
+
+He placed a hand on his chest. His heart was still beating.
+
+Many years later, he could no longer remember who had grabbed his hair, but he never forgot that flash of pain.
+
+Sometimes pain means you are still alive.
+
+It was not the only time danger brushed past him in childhood. Children of that generation ranged far, while adults had little time to watch them. Someone fell from a wall, someone was chased by livestock, someone rode a bicycle into a ditch. After many close calls, all that remained was an adult saying, “Don’t do that again.” The next day, the children were outside once more.
+
+And amid those seemingly carefree days, the times were quietly opening another door.
+
+Once Yuansheng started school, new words began appearing in the adults’ conversations at home: jobs, the work unit, recruitment, transfers, Shengli Oilfield.
+
+The work unit—the *danwei*—was more than an employer in the China of that era. It could shape where a family lived, where children went to school, and much of the rhythm of daily life. Yuansheng did not yet understand any of that. He only knew the words were appearing more often.
+
+At first, “the oilfield” held no grand meaning for him. It was not national industry, nor a petroleum base on a map. It was simply a place that might make the whole family leave Zhaojiadian.
+
+Leave.
+
+For the first time, the word had weight.
+
+---
+
+RUNLU Original · Apple Books International Edition working copy
