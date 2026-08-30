@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "runlu-pulse",
-  "main": "src/index-clean.js",
+  "main": "src/index-lifetime.js",
   "compatibility_date": "2026-08-16",
   "compatibility_flags": ["nodejs_compat"],
   "workers_dev": false,
@@ -14,7 +14,8 @@
   "vars": {
     "RUNLU_HOST": "runlu.ca",
     "RUNLU_HOME_COUNTRY": "CA",
-    "RUNLU_TIME_ZONE": "America/Edmonton"
+    "RUNLU_TIME_ZONE": "America/Edmonton",
+    "RUNLU_HISTORY_EPOCH": "2026-08-01T00:00:00.000Z"
   },
   "observability": {
     "enabled": true,
