@@ -1,0 +1,99 @@
+# Chapitre 1 — Le village était le monde
+
+*Le Vent au-delà des murs · Une vie ordinaire, deux départs*
+
+En septembre 1971, la chaleur de l’été n’avait pas encore tout à fait quitté les plaines du centre du Shandong, dans l’est de la Chine.
+
+Au sud-ouest de Tai’an se trouvait Xiazhang, un bourg rural, puis, plus loin dans la campagne, le village de Zhaojiadian. L’ombre des montagnes s’effaçait peu à peu tandis que le terrain s’ouvrait, et le maïs comme le sorgho poussaient jusqu’aux premières maisons. Les chemins n’étaient pas encore les routes de béton bien lisses qu’ils deviendraient plus tard. Par temps sec, ils soulevaient la poussière ; sous la pluie, ils se changeaient en boue. Les charrettes à bœufs et les bicyclettes y creusaient des ornières inégales. Le vent traversait les cultures avec l’odeur verte des feuilles, celle des étables et celle de la terre chauffée au soleil.
+
+Le 2 septembre, un nouvel enfant naquit dans la famille Zhang. Plus tard, il s’appellerait Zhang Yuansheng.
+
+C’était un nom très marqué par son époque. Personne n’aurait imaginé que, des décennies plus tard, ces trois caractères chinois figureraient dans les dossiers d’un champ pétrolifère, sur des documents canadiens, dans des comptes bancaires et sur l’écran froid d’un ordinateur. À l’époque, la fonction la plus importante d’un nom était simplement qu’une mère le crie depuis la porte de la cour pour faire comprendre à l’enfant qu’il était temps de rentrer manger.
+
+Quand ses véritables souvenirs commencèrent, le monde n’était pas très grand.
+
+Une cour, quelques chemins de terre, des champs, un fossé qui se remplissait d’eau l’été et n’était plus qu’une boue peu profonde l’hiver, plus les conversations sans fin des adultes du village : cela formait presque tout. Un enfant ne connaît pas encore le mot « pays natal ». On l’apprend après être parti. Dans l’enfance, Zhaojiadian était le monde lui-même.
+
+La famille comptait beaucoup d’enfants, et personne n’avait le luxe d’être au centre de l’attention toute la journée. Quand on tombait, on regardait d’abord s’il y avait du sang. S’il n’y en avait pas, on se relevait généralement tout seul. Les frères et sœurs se disputaient, et les adultes ne décidaient pas chaque fois qui avait raison. Aujourd’hui, on pleurait comme si le ciel s’était effondré ; le lendemain matin, on repartait courir ensemble.
+
+Yuansheng apprit très tôt à courir dehors.
+
+Les talus des champs, les branches d’arbres, les meules de paille et les bords de fossé étaient bien plus intéressants que l’intérieur de la maison. Quand plusieurs enfants se retrouvaient, leur courage semblait gonfler avec le vent. Une chose qu’on n’osait pas faire seul devenait soudain possible dès que quelqu’un lançait : « T’as peur, hein ? »
+
+L’année de ses sept ou huit ans — ou peut-être un peu plus tard, il ne s’en souviendrait jamais avec précision — un après-midi d’été fut si brûlant que même les chiens restaient couchés au pied des murs. Plusieurs enfants coururent jusqu’à une mare profonde à l’extérieur du village. Il avait plu quelques jours auparavant. La surface paraissait calme, et près de la rive on distinguait encore le fond boueux.
+
+« Ce n’est pas profond », dit quelqu’un en tâtant l’eau du pied.
+
+Un autre enfant avait déjà retroussé son pantalon et était entré. L’eau monta des chevilles aux mollets. Ceux qui restaient sur la rive riaient en l’éclaboussant.
+
+Yuansheng entra à son tour.
+
+Au début, ce n’était effectivement pas profond. La boue remontait doucement entre ses orteils. Il fit deux pas, puis un troisième.
+
+Au quatrième, il n’y eut plus rien sous son pied.
+
+Comme si le sol venait d’être retiré.
+
+Son corps s’enfonça d’un coup. L’eau monta jusqu’à sa poitrine, puis jusqu’à sa bouche. Ses jambes battirent dans le vide, incapables de retrouver la couche de vase sur laquelle il se tenait quelques secondes plus tôt. Depuis la rive, ce n’était qu’un petit plan d’eau. Depuis l’intérieur, quelques pas suffisaient à passer dans un autre monde.
+
+Il voulut crier ; dès qu’il ouvrit la bouche, il avala une gorgée d’eau trouble.
+
+Un grondement remplit ses oreilles et les rires de la rive semblèrent soudain très loin. Le soleil se brisait en éclats blancs sur la surface. Il ne se souvenait que d’avoir tendu les bras vers le haut, de toutes ses forces, et de n’avoir saisi que de l’eau.
+
+Quand la peur est réelle, on ne lance pas un « Au secours ! » parfaitement articulé comme au cinéma.
+
+Il voulait seulement toucher le fond.
+
+Même du bout d’un orteil.
+
+Mais il n’y avait rien sous lui.
+
+Au moment où il s’enfonça une deuxième fois, une douleur vive lui arracha le cuir chevelu.
+
+Quelqu’un derrière lui venait de l’attraper par les cheveux.
+
+La douleur le fit se débattre presque par réflexe, mais une autre main saisit son bras. Plusieurs enfants le tirèrent et le traînèrent jusqu’à l’eau peu profonde.
+
+Il resta longtemps couché au bord de la vase à tousser, de l’eau dans le nez et dans la bouche. Le soleil était toujours aussi dur. L’herbe du fossé se balançait toujours sans se presser, comme si rien ne venait de se passer.
+
+Le plus grand qui l’avait sauvé reprit son souffle. Sa première phrase ne fut pas une consolation, mais une réprimande : « Pourquoi t’es allé par là ? »
+
+Yuansheng ne répondit pas.
+
+Les enfants tombèrent rapidement d’accord sur quelque chose qui leur parut presque plus important que le sauvetage : surtout, ne rien dire aux adultes.
+
+Sur le chemin du retour, son pantalon était à moitié mouillé, à moitié sec, et la boue formait une croûte sur ses mollets. Avant d’entrer dans la cour, il frotta même ses jambes contre un mur.
+
+Sa mère le regarda.
+
+« Pourquoi ton pantalon est mouillé ? »
+
+« J’ai marché dans le fossé. »
+
+Ce n’était pas complètement faux.
+
+Sa mère fronça les sourcils puis retourna sans doute à ses occupations. Le dîner eut lieu comme d’habitude. La nuit tomba comme d’habitude. On parla dans la cour comme d’habitude. Ce fut seulement une fois couché que Yuansheng revit l’eau se refermer au-dessus de sa tête.
+
+Il posa une main sur sa poitrine. Son cœur battait encore.
+
+Des années plus tard, il ne se souviendrait plus de celui qui lui avait attrapé les cheveux, mais il se rappellerait toujours cette douleur.
+
+Parfois, la douleur signifie qu’on est encore vivant.
+
+Ce ne fut pas la seule fois que le danger passa près de lui pendant l’enfance. Les enfants de cette génération allaient loin, tandis que les adultes avaient peu de temps pour les surveiller. L’un tombait d’un mur, l’autre se faisait poursuivre par un animal, un autre encore finissait à vélo dans un fossé. Après bien des frayeurs, il ne restait souvent qu’une phrase d’adulte : « Ne recommence pas. » Le lendemain, les enfants étaient de nouveau dehors.
+
+Et au milieu de ces journées apparemment insouciantes, l’époque ouvrait silencieusement une autre porte.
+
+Quand Yuansheng commença l’école, de nouveaux mots apparurent dans les conversations des adultes : emploi, unité de travail, recrutement, mutation, champ pétrolifère de Shengli.
+
+L’unité de travail — le *danwei* — était alors bien davantage qu’un employeur. Elle pouvait déterminer le logement d’une famille, l’école des enfants et une grande partie du rythme de la vie quotidienne. Yuansheng, lui, ne comprenait encore rien à tout cela. Il savait seulement que ces mots revenaient de plus en plus souvent.
+
+Au début, le « champ pétrolifère » n’avait pour lui aucune grandeur particulière. Ce n’était ni l’industrie nationale ni une base pétrolière sur une carte. C’était simplement un endroit qui pourrait obliger toute la famille à quitter Zhaojiadian.
+
+Partir.
+
+Pour la première fois, le mot avait du poids.
+
+---
+
+RUNLU Original · Édition internationale Apple Books — copie de travail
