@@ -1,0 +1,83 @@
+## Capítulo 6 — 2009
+
+Los recuerdos de la empresa sobre 2009 no encajaban del todo.
+
+Algunos recordaban que aquel invierno nevó muchísimo. Otros recordaban que no hubo cena de Navidad. Algunos solo recordaban que la gasolina estuvo barata durante un tiempo. Los archivos financieros conservaban otro 2009: pedidos un veintiocho por ciento abajo, deudas incobrables duplicadas, línea bancaria reducida, dos vendedores fuera y horas extra canceladas en el almacén.
+
+Chen Mo encontró a Owen en la sala de descanso.
+
+«¿De verdad no contrataron a nadie ese año?»
+
+«A nadie».
+
+«¿Ni gerentes?»
+
+«Menos todavía».
+
+«La fecha de contratación de Ethan es el catorce de abril».
+
+Owen sostuvo el sándwich y pensó. «Abril… Fue cuando el techo tenía goteras».
+
+En la primavera de 2009, entró agua por el lado norte del almacén y cientos de cajas de madera estuvieron a punto de mojarse. La empresa no podía pagar un equipo profesional, así que los empleados usaron plástico y tarimas y trasladaron el inventario durante la noche.
+
+«¿Quién lo organizó?», preguntó Chen Mo.
+
+«Yo creía que Martin».
+
+«¿Quién te llamó para volver por la noche?»
+
+Owen se detuvo. «Una llamada. De verdad no recuerdo quién».
+
+Aquella tarde Maya encontró en un servidor antiguo un correo colectivo del catorce de abril. Asunto: North Wall Emergency Move. Remitente: ewood@harrisonflooring.local.
+
+«Dominio local», dijo Maya. «No era un correo externo. Era una cuenta del servidor interno de la empresa».
+
+El mensaje contenía únicamente el orden de traslado. La primera utilización registrada de la cuenta también era del 14 de abril de 2009.
+
+Chen Mo miró las dos fechas. La supuesta Hire Date quizá no era una fecha de contratación. Tal vez solo era el día en que aquel nombre entró por primera vez en el sistema digital.
+
+Maya siguió buscando. Una base de datos antigua mostraba que 0000 recibió permiso Emergency Ops por primera vez aquella tarde. La acción procedía de SYSTEM ADMIN, pero el administrador de esa época ya había fallecido.
+
+También encontraron una lista manuscrita de las personas presentes aquella noche. Doce nombres. Ningún Ethan. Junto a cada persona había hora de entrada y salida. El último empleado salió a la 1:53; el último registro de acceso fue a las 2:17, usando una tarjeta genérica de mantenimiento.
+
+«¿Quién podía usar esa tarjeta?»
+
+«Cualquiera que tuviera llave».
+
+Owen recordaba que habían movido mercancía hasta casi las dos de la madrugada y reducido la pérdida a unas pocas decenas de cajas. Sin aquel esfuerzo nocturno, la empresa podría haber recibido un golpe devastador.
+
+También recordaba un detalle completamente inútil: al terminar, había una cafetera con café caliente junto al reloj de fichar.
+
+«¿Quién lo preparó?», preguntó Chen Mo.
+
+Owen se rio. «Ahora has conseguido que hasta el café quiera atribuírselo a Ethan».
+
+Maya reunió todas las huellas digitales que quedaban de aquel día: correos, accesos, pedidos antiguos, permisos excepcionales. La línea temporal era cada vez más completa, pero ningún recorrido de una persona real correspondía a un empleado llamado Ethan Wood.
+
+El avance verdadero llegó de Dave, antiguo gerente del almacén.
+
+Cuando hablaron con él por teléfono, Dave se rio en cuanto oyó 0000. «¿Todavía conservan esa cosa?»
+
+«¿Conoces a Ethan Wood?»
+
+«Conozco el nombre. En aquella época algunos sistemas de aprobación obligaban a poner un gerente, así que usaba la vieja cuenta Ethan cuando hacía falta».
+
+«¿Vieja cuenta? ¿Quién la creó?»
+
+«No me preguntes. Ya estaba antes que yo».
+
+Dave confirmó que había estado allí aquella noche y que quizá usó la tarjeta de mantenimiento. También recordaba haber escrito una nota NORTH WALL FIRST. Sobre si había enviado el correo interno, ya no estaba seguro.
+
+Después de colgar, el 14 de abril de 2009 pareció por primera vez historia real y no leyenda.
+
+Ningún personaje misterioso había aparecido para salvar el almacén. Martin envió instrucciones, Dave coordinó el trabajo, Owen y más de una docena de empleados volvieron a mover mercancía, alguien cerró usando la tarjeta de mantenimiento y la vieja cuenta Ethan cargó con parte de los permisos del sistema.
+
+Las acciones de muchas personas se superpusieron. Años después, la memoria las comprimió en una sola frase: «Aquella noche Ethan se encargó».
+
+Chen Mo miró la línea temporal de la pared y pensó de pronto que aquella respuesta era mejor que un héroe.
+
+Una empresa supera una crisis no porque una persona lo haga todo, sino porque muchas personas comunes completan cada una una pequeña parte, a menudo sin conocer el panorama completo.
+
+El verdadero peligro no era descubrir un nombre.
+
+Era que, una vez aparecía un nombre, la gente empezaba a entregarle todo aquello que no tenía nombre.
