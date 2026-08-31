@@ -1,0 +1,27 @@
+name: Add RUNLU editorial motto
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/add-runlu-editorial-motto.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-homepage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch homepage
+        run: python scripts/add-runlu-editorial-motto.py
+      - name: Commit update and clean one-time files
+        run: |
+          git config user.name "RUNLU Site Steward"
+          git config user.email "actions@users.noreply.github.com"
+          rm -f scripts/add-runlu-editorial-motto.py
+          rm -f .github/workflows/add-runlu-editorial-motto.yml
+          git add -A
+          git commit -m "Add RUNLU editorial motto to homepage"
+          git push
