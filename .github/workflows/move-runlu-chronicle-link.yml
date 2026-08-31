@@ -1,0 +1,36 @@
+name: Move RUNLU Chronicle link
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/move-chronicle-link-to-about.py'
+      - '.github/workflows/move-runlu-chronicle-link.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch-homepage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Move Chronicle link to About
+        run: python scripts/move-chronicle-link-to-about.py
+      - name: Commit homepage fix
+        run: |
+          git config user.name "RUNLU Site Steward"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Move RUNLU Chronicle link to About"
+            git push
+          fi
+      - name: Remove one-time patch files
+        run: |
+          rm -f scripts/move-chronicle-link-to-about.py .github/workflows/move-runlu-chronicle-link.yml
+          git add scripts/move-chronicle-link-to-about.py .github/workflows/move-runlu-chronicle-link.yml
+          if ! git diff --cached --quiet; then
+            git commit -m "Remove Chronicle link placement patch"
+            git push
+          fi
