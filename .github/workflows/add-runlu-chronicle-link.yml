@@ -1,0 +1,36 @@
+name: Add RUNLU Chronicle home link
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/add-chronicle-home-link.py'
+      - '.github/workflows/add-runlu-chronicle-link.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch-homepage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add Chronicle link
+        run: python scripts/add-chronicle-home-link.py
+      - name: Commit homepage update
+        run: |
+          git config user.name "RUNLU Site Steward"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Link RUNLU Chronicle from homepage"
+            git push
+          fi
+      - name: Remove one-time patch files
+        run: |
+          rm -f scripts/add-chronicle-home-link.py .github/workflows/add-runlu-chronicle-link.yml
+          git add scripts/add-chronicle-home-link.py .github/workflows/add-runlu-chronicle-link.yml
+          if ! git diff --cached --quiet; then
+            git commit -m "Remove one-time Chronicle patch"
+            git push
+          fi
