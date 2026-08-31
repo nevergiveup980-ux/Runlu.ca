@@ -24,12 +24,9 @@ jobs:
           node-version: "22"
       - name: Check JavaScript syntax
         run: |
-          node --check script.js
-          node --check runlu-language.js
-          node --check forum.js
-          node --check forum-live-ai.js
-          node --check leave-a-note.js
-          node --check scripts/check-multilingual.mjs
+          for file in *.js scripts/*.mjs; do
+            [ -f "$file" ] && node --check "$file"
+          done
       - name: Enforce complete four-language pages
         run: node scripts/check-multilingual.mjs
       - name: Check sitemap and internal links
@@ -41,28 +38,56 @@ jobs:
           from urllib.parse import urlsplit
 
           root = Path('.')
-          ET.parse(root / 'sitemap.xml')
+          sitemap = root / 'sitemap.xml'
+          tree = ET.parse(sitemap)
 
           class Links(HTMLParser):
               def __init__(self):
-                  super().__init__(); self.links=[]
+                  super().__init__()
+                  self.links = []
               def handle_starttag(self, tag, attrs):
-                  a=dict(attrs)
-                  if tag == 'a' and a.get('href'): self.links.append(a['href'])
-                  if tag in ('script','link'):
-                      key='src' if tag=='script' else 'href'
-                      if a.get(key): self.links.append(a[key])
+                  a = dict(attrs)
+                  if tag == 'a' and a.get('href'):
+                      self.links.append(a['href'])
+                  if tag in ('script', 'link'):
+                      key = 'src' if tag == 'script' else 'href'
+                      if a.get(key):
+                          self.links.append(a[key])
 
-          missing=[]
-          for page in root.glob('*.html'):
-              parser=Links(); parser.feed(page.read_text(encoding='utf-8'))
+          missing = []
+          for page in root.rglob('*.html'):
+              if any(part.startswith('.') for part in page.parts):
+                  continue
+              parser = Links()
+              parser.feed(page.read_text(encoding='utf-8'))
               for href in parser.links:
-                  if href.startswith(('#','mailto:','http://','https://','tel:','javascript:')): continue
-                  path=urlsplit(href).path
-                  if not path: continue
-                  target=(page.parent / path)
-                  if not target.exists(): missing.append(f'{page}: {href}')
+                  if href.startswith(('#', 'mailto:', 'http://', 'https://', 'tel:', 'javascript:')):
+                      continue
+                  path = urlsplit(href).path
+                  if not path:
+                      continue
+                  target = (page.parent / path).resolve()
+                  if not target.exists():
+                      missing.append(f'{page}: {href}')
+
+          ns = {'sm': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
+          for loc in tree.getroot().findall('sm:url/sm:loc', ns):
+              url = (loc.text or '').strip()
+              parsed = urlsplit(url)
+              if parsed.netloc != 'runlu.ca':
+                  missing.append(f'sitemap.xml: unexpected host {url}')
+                  continue
+              path = parsed.path.lstrip('/')
+              if not path:
+                  target = root / 'index.html'
+              elif path.endswith('/'):
+                  target = root / path / 'index.html'
+              else:
+                  target = root / path
+              if not target.exists():
+                  missing.append(f'sitemap.xml: {url} -> {target}')
+
           if missing:
-              raise SystemExit('Missing local targets:\n'+'\n'.join(missing))
+              raise SystemExit('Missing or invalid local targets:\n' + '\n'.join(missing))
           print('Site integrity checks passed.')
           PY
