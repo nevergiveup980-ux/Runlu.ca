@@ -1,5 +1,6 @@
-/* RUNLU Deerfoot Flooring OS · V0.3.70.2 Navigation Dedup Guard
+/* RUNLU Deerfoot Flooring OS · V0.3.70.2 Navigation Guard
    Keeps the top navigation idempotent across layered incremental renderNav/install wrappers.
+   Also enforces overflow-safe responsive centering across macOS/Windows browsers.
    No business data, storage schema, or page content changes.
    No MutationObserver; V0.3.63 remains the stable renderer rollback baseline. */
 (function(){
@@ -8,6 +9,34 @@ if(window.__runluNavigationDedupV0702)return;
 window.__runluNavigationDedupV0702=true;
 
 function normalize(v){return String(v||'').replace(/\s+/g,' ').trim().toLowerCase()}
+function installResponsiveNavLayout(){
+  if(document.getElementById('runlu-nav-responsive-layout-v072'))return;
+  const style=document.createElement('style');
+  style.id='runlu-nav-responsive-layout-v072';
+  style.textContent=`
+    #nav{
+      display:flex!important;
+      align-items:center!important;
+      justify-content:flex-start!important;
+      gap:2px;
+      overflow-x:auto!important;
+      overflow-y:hidden!important;
+      white-space:nowrap!important;
+      -webkit-overflow-scrolling:touch;
+      overscroll-behavior-x:contain;
+    }
+    #nav>button{
+      flex:0 0 auto!important;
+    }
+    #nav>button:first-child{
+      margin-left:auto!important;
+    }
+    #nav>button:last-child{
+      margin-right:auto!important;
+    }
+  `;
+  document.head.appendChild(style);
+}
 function dedup(){
   const nav=document.getElementById('nav');
   if(!nav)return 0;
@@ -38,6 +67,7 @@ function patchRenderNav(){
   const prior=window.renderNav;
   const wrapped=function(){
     const result=prior.apply(this,arguments);
+    installResponsiveNavLayout();
     dedup();
     labelVersion();
     return result;
@@ -46,12 +76,13 @@ function patchRenderNav(){
   window.renderNav=wrapped;
 }
 function install(){
+  installResponsiveNavLayout();
   patchRenderNav();
   dedup();
   labelVersion();
-  setTimeout(()=>{patchRenderNav();dedup();labelVersion()},0);
-  setTimeout(()=>{patchRenderNav();dedup();labelVersion()},500);
+  setTimeout(()=>{installResponsiveNavLayout();patchRenderNav();dedup();labelVersion()},0);
+  setTimeout(()=>{installResponsiveNavLayout();patchRenderNav();dedup();labelVersion()},500);
 }
-window.RUNLUNavigationDedupV0702={install,dedup};
+window.RUNLUNavigationDedupV0702={install,dedup,installResponsiveNavLayout};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
