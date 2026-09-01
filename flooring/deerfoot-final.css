@@ -101,6 +101,45 @@
 .invoiceBridgeBadge{display:inline-block;margin-left:8px;padding:3px 7px;border-radius:999px;background:#e8f3ed;color:#244f3f;font-size:10px;font-weight:800}
 .priceRowData{position:absolute;z-index:5;font-size:7.1pt;line-height:4.5mm;text-align:right;white-space:nowrap}.priceRowData.price{left:159mm;width:19mm}.priceRowData.total{left:180mm;width:19mm;font-weight:600}
 
+/* V0.9.1 — close the original right-bottom settlement frame.
+   The former 143.2mm priceBand ended above BALANCE DUE while its children
+   continued to render, which left the last row outside the outer border and
+   exposed the value-column divider below the box when printed. */
+.poInvoicePage .priceBand{height:154.5mm}
+.poInvoicePage .priceBand .balanceRow{
+  position:relative;
+  display:block;
+  height:14mm;
+  border-bottom:0;
+}
+.poInvoicePage .priceBand .balanceRow .lab{
+  width:100%;
+  height:100%;
+  border-right:0;
+  padding:3.4mm 2mm;
+  font-weight:700;
+}
+.poInvoicePage .priceBand .balanceRow .amt{
+  position:absolute;
+  left:21.5mm;
+  right:5.2mm;
+  top:0;
+  height:100%;
+  padding:3.4mm 1.4mm;
+  text-align:right;
+  font-weight:700;
+}
+.poInvoicePage .priceBand .balanceRow::after{
+  content:"";
+  position:absolute;
+  right:1.25mm;
+  bottom:1.15mm;
+  width:3.6mm;
+  height:3.6mm;
+  border:.28mm solid var(--line);
+  box-sizing:border-box;
+}
+
 /* V0.2.1 iOS AirPrint one-page / light-paper fix */
 html{color-scheme:light only}
 @media print{
