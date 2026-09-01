@@ -2,7 +2,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const root = process.cwd();
-const excluded = new Set([]);
+// Product builds, diagnostics, and archived prototypes are applications rather
+// than editorial site pages. They own their localization and must not be made
+// to load the public website's language switcher.
+const excludedPrefixes = ['flooring/'];
+const excluded = new Set([
+  'health-view-006-humid-heat.html',
+  'health-view-007-staree-statins.html',
+  'view-011-model-hardware-standard.html'
+]);
 const pages = [];
 const languageScript = fs.readFileSync(path.join(root, 'runlu-language.js'), 'utf8');
 function catalogKeys(language) {
@@ -26,7 +34,7 @@ walk(root);
 const failures = [];
 for (const file of pages) {
   const rel = path.relative(root, file);
-  if (excluded.has(rel)) continue;
+  if (excluded.has(rel) || excludedPrefixes.some(prefix => rel.startsWith(prefix))) continue;
   const html = fs.readFileSync(file, 'utf8');
   for (const match of html.matchAll(/<[^!][^>]*>/g)) {
     const names=[...match[0].matchAll(/\s(data-(?:en|zh|fr|es))=/gi)].map(item=>item[1].toLowerCase());
