@@ -236,13 +236,15 @@
     const a = by("activeSummary");
     if (!a) return;
     let box = by("wa711active");
+    let created = false;
     if (!box) {
       box = document.createElement("div");
       box.id = "wa711active";
       box.className = "wa-active";
       a.insertAdjacentElement("afterend", box);
+      created = true;
     }
-    renderActive();
+    if (created) renderActive();
   }
   function open() {
     ensurePage();
@@ -384,15 +386,18 @@
       } else if (
         e.target?.closest?.('#nav button[data-page="command"],#command')
       )
-        setTimeout(ensureActive, 40);
+        setTimeout(() => {
+          ensureActive();
+          renderActive();
+        }, 40);
     },
     true,
   );
   new MutationObserver(() => {
-    ensurePage();
-    ensureNav();
-    ensureModule();
-    ensureActive();
+    if (!by(PAGE_ID)) ensurePage();
+    if (!by("nav")?.querySelector('[data-page="' + PAGE_ID + '"]')) ensureNav();
+    if (!by("wa711module")) ensureModule();
+    if (!by("wa711active")) ensureActive();
   }).observe(document.documentElement, { childList: true, subtree: true });
   window.RUNLUWarehouseActivityBridgeV0711 = {
     install,
