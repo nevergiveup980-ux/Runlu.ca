@@ -20,6 +20,7 @@
   let lastSync = "";
   let observer = null;
   let inputTimer = null;
+  let installed = false;
 
   const by = (id) => document.getElementById(id);
   const str = (v) => String(v == null ? "" : v).trim();
@@ -455,6 +456,8 @@
     ensureStyle();
     ensureModal();
     decorateRows();
+    if (installed) return;
+    installed = true;
     refresh(false);
     document.addEventListener(
       "input",
