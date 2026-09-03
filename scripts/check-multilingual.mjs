@@ -9,7 +9,9 @@ const excludedPrefixes = ['flooring/'];
 const excluded = new Set([
   'health-view-006-humid-heat.html',
   'health-view-007-staree-statins.html',
-  'view-011-model-hardware-standard.html'
+  'health-view-008-after-weight-loss.html',
+  'view-011-model-hardware-standard.html',
+  'view-012-ordinary-people-build-tools.html'
 ]);
 const pages = [];
 const languageScript = fs.readFileSync(path.join(root, 'runlu-language.js'), 'utf8');
