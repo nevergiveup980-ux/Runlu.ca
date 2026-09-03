@@ -21,6 +21,7 @@
   let observer = null;
   let inputTimer = null;
   let installed = false;
+  let connectionMessage = "";
 
   const by = (id) => document.getElementById(id);
   const str = (v) => String(v == null ? "" : v).trim();
@@ -243,7 +244,12 @@
               )}${item.measure ? " · " + esc(item.measure) : ""}</small></span></button>`,
           )
           .join("")
-      : '<div class="sip72empty">No live Warehouse OS inventory matches this search.</div>';
+      : `<div class="sip72empty">${esc(
+          !inventory.length && offline
+            ? connectionMessage ||
+                "Warehouse OS inventory is not connected on this browser."
+            : "No live Warehouse OS inventory matches this search.",
+        )}</div>`;
     el.querySelectorAll("[data-sip72-id]").forEach((button) =>
       button.addEventListener("click", () =>
         selectDetail(button.dataset.sip72Id),
@@ -375,6 +381,15 @@
     setTimeout(() => by("sip72q")?.focus(), 0);
     if (!inventory.length) refresh(false);
   }
+  function rowQuery(row) {
+    return [
+      row?.querySelector('[data-f="style"]')?.value,
+      row?.querySelector('[data-f="colour"]')?.value,
+    ]
+      .map(str)
+      .filter(Boolean)
+      .join(" ");
+  }
   function closePicker() {
     if (by("sip72")) by("sip72").hidden = true;
     selectedId = "";
@@ -391,9 +406,60 @@
       button.className = "sip72launch";
       button.textContent = "Inventory";
       button.title = "Search live Warehouse OS inventory";
-      button.addEventListener("click", () => openPicker(row, input.value));
+      button.addEventListener("click", () => openPicker(row, rowQuery(row)));
       field.appendChild(button);
     });
+  }
+  function projectSessionCandidate(value) {
+    const seen = new Set();
+    function walk(node, depth) {
+      if (!node || typeof node !== "object" || depth > 5 || seen.has(node))
+        return null;
+      seen.add(node);
+      if (str(node.access_token) && str(node.refresh_token)) {
+        try {
+          const middle = str(node.access_token).split(".")[1];
+          const base64 = middle.replace(/-/g, "+").replace(/_/g, "/");
+          const decoded = JSON.parse(
+            atob(base64 + "=".repeat((4 - (base64.length % 4)) % 4)),
+          );
+          const issuer = str(decoded.iss);
+          const ref = str(decoded.ref);
+          if (
+            issuer.includes("ekrnknlawekeoszzkamd.supabase.co") ||
+            ref === "ekrnknlawekeoszzkamd"
+          )
+            return {
+              access_token: node.access_token,
+              refresh_token: node.refresh_token,
+            };
+        } catch (_) {}
+      }
+      for (const key of Object.keys(node)) {
+        const found = walk(node[key], depth + 1);
+        if (found) return found;
+      }
+      return null;
+    }
+    return walk(value, 0);
+  }
+  async function recoverWarehouseSession(c) {
+    const current = await c.auth.getSession();
+    if (current?.data?.session) return current.data.session;
+    for (let index = 0; index < localStorage.length; index += 1) {
+      const key = localStorage.key(index) || "";
+      if (key === AUTH_STORAGE || !/auth|supabase|warehouse/i.test(key))
+        continue;
+      try {
+        const candidate = projectSessionCandidate(
+          JSON.parse(localStorage.getItem(key) || "null"),
+        );
+        if (!candidate) continue;
+        const restored = await c.auth.setSession(candidate);
+        if (restored?.data?.session) return restored.data.session;
+      } catch (_) {}
+    }
+    return null;
   }
   async function client() {
     if (sb) return sb;
@@ -415,15 +481,17 @@
     const state = by("sip72sync");
     if (!state) return;
     state.textContent = offline
-      ? "OFFLINE CACHE"
+      ? inventory.length
+        ? "OFFLINE CACHE"
+        : "NOT CONNECTED"
       : `LIVE · ${lastSync || "SYNCED"}`;
     state.classList.toggle("off", offline);
   }
   async function refresh(manual) {
     try {
       const c = await client();
-      const session = await c.auth.getSession();
-      if (!session?.data?.session) throw new Error("Sign in required");
+      const session = await recoverWarehouseSession(c);
+      if (!session) throw new Error("Warehouse OS sign-in was not found");
       const res = await c
         .from("warehouse_records")
         .select("dataset_key,record_id,payload,version,updated_at")
@@ -433,6 +501,7 @@
       if (res.error) throw res.error;
       buildInventory(Array.isArray(res.data) ? res.data : []);
       offline = false;
+      connectionMessage = "";
       lastSync = new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
@@ -442,6 +511,9 @@
       const cache = readCache();
       if (cache?.rows) buildInventory(cache.rows);
       offline = true;
+      connectionMessage = cache?.rows?.length
+        ? "Live Warehouse OS connection is unavailable; showing the last inventory saved on this browser."
+        : `${error?.message || "Warehouse OS connection failed"}. Open Warehouse OS in this browser and sign in once, then reopen this picker.`;
       lastSync = cache?.lastSync || "";
       if (manual)
         console.warn(
@@ -463,15 +535,17 @@
       "input",
       (e) => {
         const input = e.target?.matches?.(
-          '[data-po-native-row] [data-f="style"]',
+          '[data-po-native-row] [data-f="style"], [data-po-native-row] [data-f="colour"]',
         )
           ? e.target
           : null;
         if (!input) return;
         clearTimeout(inputTimer);
-        if (norm(input.value).length < 2) return;
+        const row = input.closest("[data-po-native-row]");
+        const query = rowQuery(row);
+        if (norm(input.value).length < 2 || norm(query).length < 2) return;
         inputTimer = setTimeout(
-          () => openPicker(input.closest("[data-po-native-row]"), input.value),
+          () => openPicker(row, rowQuery(row)),
           450,
         );
       },
