@@ -244,17 +244,18 @@
               )}${item.measure ? " · " + esc(item.measure) : ""}</small></span></button>`,
           )
           .join("")
-      : `<div class="sip72empty">${esc(
-          !inventory.length && offline
-            ? connectionMessage ||
-                "Warehouse OS inventory is not connected on this browser."
-            : "No live Warehouse OS inventory matches this search.",
-        )}</div>`;
+      : !inventory.length && offline
+        ? `<div class="sip72empty sip72connect"><b>Connect Warehouse OS inventory</b><p>${esc(
+            connectionMessage ||
+              "Warehouse OS inventory is not connected on this browser.",
+          )}</p><div><input id="sip72email" type="email" autocomplete="username" placeholder="Staff email"><input id="sip72password" type="password" autocomplete="current-password" placeholder="Password"><button type="button" id="sip72signin">Connect & load inventory</button></div><small>This connection is read-only here. Selecting a record does not change Warehouse OS inventory or create a Hold.</small></div>`
+        : '<div class="sip72empty">No live Warehouse OS inventory matches this search.</div>';
     el.querySelectorAll("[data-sip72-id]").forEach((button) =>
       button.addEventListener("click", () =>
         selectDetail(button.dataset.sip72Id),
       ),
     );
+    by("sip72signin")?.addEventListener("click", connectWarehouse);
     by("sip72count").textContent =
       `${rows.length} shown · ${inventory.length} loaded`;
   }
@@ -351,7 +352,7 @@
     const style = document.createElement("style");
     style.id = "sip72style";
     style.textContent = `
-.sip72field{position:relative}.sip72launch{position:absolute;right:4px;top:22px;border:0;border-radius:5px;background:#e6f1eb;color:#23543f;font-size:9px;font-weight:900;padding:4px 6px;cursor:pointer}.sip72field input{padding-right:64px!important}.sip72picked{grid-column:1/-1;border-left:4px solid #438061;background:#eef6f1;color:#315746;padding:6px 8px;border-radius:5px;font-size:9px;font-weight:700}.sip72backdrop{position:fixed;inset:0;z-index:100000;background:rgba(12,28,21,.62);display:flex;align-items:center;justify-content:center;padding:18px}.sip72backdrop[hidden]{display:none!important}.sip72modal{width:min(1120px,97vw);height:min(760px,94vh);background:#fff;border-radius:14px;box-shadow:0 24px 70px rgba(0,0,0,.3);display:grid;grid-template-rows:auto auto minmax(0,1fr);overflow:hidden}.sip72top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 16px;background:#173d30;color:#fff}.sip72top h2{margin:0;font-size:18px}.sip72top p{margin:4px 0 0;font-size:10px;opacity:.8}.sip72top button{border:1px solid rgba(255,255,255,.45);background:transparent;color:#fff;border-radius:7px;padding:6px 9px;cursor:pointer}.sip72tools{display:grid;grid-template-columns:minmax(220px,1fr) 170px auto auto;gap:8px;padding:11px 14px;border-bottom:1px solid #dce5e0;background:#f6f9f7}.sip72tools input,.sip72tools select{padding:9px;border:1px solid #cbd8d1;border-radius:7px;background:#fff}.sip72sync{font-size:9px;font-weight:900;border-radius:999px;padding:6px 8px;background:#e8f3ed;color:#245841;align-self:center}.sip72sync.off{background:#fff0d4;color:#745000}.sip72body{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.8fr);min-height:0}.sip72results{overflow:auto;padding:9px;background:#f4f7f5}.sip72row{width:100%;display:grid;grid-template-columns:minmax(180px,1.4fr) minmax(150px,1fr) minmax(180px,1fr);gap:10px;text-align:left;border:1px solid #d9e3de;border-radius:8px;background:#fff;padding:9px;margin-bottom:7px;cursor:pointer}.sip72row:hover,.sip72row.selected{border-color:#3f765d;box-shadow:0 0 0 1px #3f765d}.sip72row.disabled{opacity:.52}.sip72row b{display:block;color:#203d31;font-size:11px}.sip72row small{display:block;color:#718078;font-size:9px;margin-top:3px}.sip72detail{overflow:auto;padding:15px;border-left:1px solid #dce5e0}.sip72detailHead{display:flex;justify-content:space-between;gap:10px}.sip72detailHead span{font-size:9px;font-weight:900;color:#66756e}.sip72detailHead h3{margin:4px 0;font-size:18px;color:#173d30}.sip72detailHead p{margin:0;color:#67766e;font-size:11px}.sip72availability{height:max-content;border-radius:999px;padding:5px 7px;font-size:8px}.sip72availability.ok{background:#e4f3e9;color:#23653d}.sip72availability.no{background:#fde8e5;color:#8a3327}.sip72detail dl{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:15px 0;border:1px solid #dce5e0;border-radius:8px;overflow:hidden}.sip72detail dl div{padding:8px;border-bottom:1px solid #e5ebe8}.sip72detail dt{font-size:8px;text-transform:uppercase;color:#78857f;font-weight:900}.sip72detail dd{margin:3px 0 0;font-size:10px;color:#263d32;font-weight:700}.sip72note,.sip72holds{font-size:9px;color:#5e6d65;background:#f3f7f5;padding:8px;border-radius:7px}.sip72empty{padding:30px;text-align:center;color:#738078}.sip72intro{color:#6b7972;font-size:11px;line-height:1.5}.sip72count{font-size:9px;color:#697870;align-self:center}@media(max-width:760px){.sip72backdrop{padding:5px}.sip72modal{height:98vh;width:99vw}.sip72tools{grid-template-columns:1fr 110px}.sip72body{grid-template-columns:1fr}.sip72detail{border-left:0;border-top:1px solid #dce5e0;max-height:44vh}.sip72row{grid-template-columns:1fr 1fr}.sip72row span:last-child{grid-column:1/-1}.sip72detail dl{grid-template-columns:1fr 1fr}}`;
+.sip72field{position:relative}.sip72launch{position:absolute;right:4px;top:22px;border:0;border-radius:5px;background:#e6f1eb;color:#23543f;font-size:9px;font-weight:900;padding:4px 6px;cursor:pointer}.sip72field input{padding-right:64px!important}.sip72picked{grid-column:1/-1;border-left:4px solid #438061;background:#eef6f1;color:#315746;padding:6px 8px;border-radius:5px;font-size:9px;font-weight:700}.sip72backdrop{position:fixed;inset:0;z-index:100000;background:rgba(12,28,21,.62);display:flex;align-items:center;justify-content:center;padding:18px}.sip72backdrop[hidden]{display:none!important}.sip72modal{width:min(1120px,97vw);height:min(760px,94vh);background:#fff;border-radius:14px;box-shadow:0 24px 70px rgba(0,0,0,.3);display:grid;grid-template-rows:auto auto minmax(0,1fr);overflow:hidden}.sip72top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 16px;background:#173d30;color:#fff}.sip72top h2{margin:0;font-size:18px}.sip72top p{margin:4px 0 0;font-size:10px;opacity:.8}.sip72top button{border:1px solid rgba(255,255,255,.45);background:transparent;color:#fff;border-radius:7px;padding:6px 9px;cursor:pointer}.sip72tools{display:grid;grid-template-columns:minmax(220px,1fr) 170px auto auto;gap:8px;padding:11px 14px;border-bottom:1px solid #dce5e0;background:#f6f9f7}.sip72tools input,.sip72tools select{padding:9px;border:1px solid #cbd8d1;border-radius:7px;background:#fff}.sip72sync{font-size:9px;font-weight:900;border-radius:999px;padding:6px 8px;background:#e8f3ed;color:#245841;align-self:center}.sip72sync.off{background:#fff0d4;color:#745000}.sip72body{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.8fr);min-height:0}.sip72results{overflow:auto;padding:9px;background:#f4f7f5}.sip72row{width:100%;display:grid;grid-template-columns:minmax(180px,1.4fr) minmax(150px,1fr) minmax(180px,1fr);gap:10px;text-align:left;border:1px solid #d9e3de;border-radius:8px;background:#fff;padding:9px;margin-bottom:7px;cursor:pointer}.sip72row:hover,.sip72row.selected{border-color:#3f765d;box-shadow:0 0 0 1px #3f765d}.sip72row.disabled{opacity:.52}.sip72row b{display:block;color:#203d31;font-size:11px}.sip72row small{display:block;color:#718078;font-size:9px;margin-top:3px}.sip72detail{overflow:auto;padding:15px;border-left:1px solid #dce5e0}.sip72detailHead{display:flex;justify-content:space-between;gap:10px}.sip72detailHead span{font-size:9px;font-weight:900;color:#66756e}.sip72detailHead h3{margin:4px 0;font-size:18px;color:#173d30}.sip72detailHead p{margin:0;color:#67766e;font-size:11px}.sip72availability{height:max-content;border-radius:999px;padding:5px 7px;font-size:8px}.sip72availability.ok{background:#e4f3e9;color:#23653d}.sip72availability.no{background:#fde8e5;color:#8a3327}.sip72detail dl{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:15px 0;border:1px solid #dce5e0;border-radius:8px;overflow:hidden}.sip72detail dl div{padding:8px;border-bottom:1px solid #e5ebe8}.sip72detail dt{font-size:8px;text-transform:uppercase;color:#78857f;font-weight:900}.sip72detail dd{margin:3px 0 0;font-size:10px;color:#263d32;font-weight:700}.sip72note,.sip72holds{font-size:9px;color:#5e6d65;background:#f3f7f5;padding:8px;border-radius:7px}.sip72empty{padding:30px;text-align:center;color:#738078}.sip72connect>b{display:block;color:#173d30;font-size:14px}.sip72connect p{line-height:1.45}.sip72connect>div{display:grid;grid-template-columns:1fr 1fr auto;gap:7px;max-width:680px;margin:12px auto}.sip72connect input,.sip72connect button{padding:9px;border:1px solid #cbd8d1;border-radius:7px}.sip72connect button{background:#245b44;color:#fff;font-weight:800;cursor:pointer}.sip72connect small{display:block;line-height:1.4}.sip72intro{color:#6b7972;font-size:11px;line-height:1.5}.sip72count{font-size:9px;color:#697870;align-self:center}@media(max-width:760px){.sip72backdrop{padding:5px}.sip72modal{height:98vh;width:99vw}.sip72tools{grid-template-columns:1fr 110px}.sip72body{grid-template-columns:1fr}.sip72detail{border-left:0;border-top:1px solid #dce5e0;max-height:44vh}.sip72row{grid-template-columns:1fr 1fr}.sip72row span:last-child{grid-column:1/-1}.sip72detail dl{grid-template-columns:1fr 1fr}.sip72connect>div{grid-template-columns:1fr}.sip72connect{padding:18px 10px}}`;
     document.head.appendChild(style);
   }
   function ensureModal() {
@@ -460,6 +461,31 @@
       } catch (_) {}
     }
     return null;
+  }
+  async function connectWarehouse() {
+    const email = str(by("sip72email")?.value);
+    const password = by("sip72password")?.value || "";
+    const button = by("sip72signin");
+    if (!email || !password) {
+      connectionMessage = "Enter the staff email and password used for RUNLU central services.";
+      renderResults();
+      return;
+    }
+    if (button) {
+      button.disabled = true;
+      button.textContent = "Connecting…";
+    }
+    try {
+      const c = await client();
+      const signed = await c.auth.signInWithPassword({ email, password });
+      if (signed.error) throw signed.error;
+      connectionMessage = "";
+      await refresh(true);
+    } catch (error) {
+      connectionMessage = `Connection failed: ${error?.message || error}`;
+      offline = true;
+      renderResults();
+    }
   }
   async function client() {
     if (sb) return sb;
