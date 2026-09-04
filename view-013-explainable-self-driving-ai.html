@@ -9,10 +9,10 @@
 <meta property="og:type" content="article"><meta property="og:url" content="https://runlu.ca/view-013-explainable-self-driving-ai.html"><meta property="og:image" content="https://runlu.ca/runlu-hero.png">
 <title>RUNLU VIEW 013 · When intelligent systems explain themselves</title>
 <link rel="stylesheet" href="styles.css?v=20260904-1"><link rel="stylesheet" href="frontiers.css?v=20260904-1">
-<style>main{max-width:900px;margin:0 auto;padding:48px 22px 90px}.back{display:inline-block;margin-bottom:30px}.langbar{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 34px}.langbar button{border:1px solid #bbb;background:transparent;padding:8px 12px;border-radius:999px}.copy{display:none}.copy.active{display:block}.meta{opacity:.72;margin:12px 0 28px}.note{border-left:3px solid #aaa;padding-left:16px;margin:28px 0}.sources{margin-top:42px}.sources a{display:inline-block;margin:4px 0}</style>
+<style>main{max-width:900px;margin:0 auto;padding:48px 22px 90px}.back{display:inline-block;margin-bottom:30px}.langbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:20px 0 34px}.langbar select{border:1px solid #bbb;background:transparent;padding:8px 12px;border-radius:999px}.copy{display:none}.copy.active{display:block}.meta{opacity:.72;margin:12px 0 28px}.note{border-left:3px solid #aaa;padding-left:16px;margin:28px 0}.sources{margin-top:42px}.sources a{display:inline-block;margin:4px 0}</style>
 </head><body class="view-page"><main>
 <a class="back" href="frontiers.html">← RUNLU VIEW</a><div class="article-index">013</div>
-<div class="langbar"><button onclick="show('en')">English</button><button onclick="show('zh')">中文</button><button onclick="show('fr')">Français</button><button onclick="show('es')">Español</button></div>
+<div class="langbar"><select id="viewLanguage" class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language" onchange="show(this.value)"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select></div>
 
 <article class="copy active" data-lang="en">
 <p class="section-kicker">AI · AUTONOMOUS SYSTEMS · EXPLAINABILITY · 4 SEP 2026</p>
@@ -68,5 +68,6 @@
 <a href="https://github.com/EoinKenny/CW-Net-Autonomous-Driving" target="_blank" rel="noopener">Research data and materials repository ↗</a>
 </p></section>
 </main>
-<script>function show(l){document.querySelectorAll('.copy').forEach(x=>x.classList.toggle('active',x.dataset.lang===l));document.documentElement.lang=l;localStorage.setItem('runlu_site_language',l)}const saved=localStorage.getItem('runlu_site_language');if(['en','zh','fr','es'].includes(saved))show(saved);</script>
+<script>function show(l){document.querySelectorAll('.copy').forEach(x=>x.classList.toggle('active',x.dataset.lang===l));document.documentElement.lang=l;localStorage.setItem('runlu_site_language',l);const s=document.getElementById('viewLanguage');if(s&&s.value!==l)s.value=l}const saved=localStorage.getItem('runlu_site_language');if(['en','zh','fr','es'].includes(saved))show(saved);window.addEventListener('runlu:languagechange',e=>show(e.detail.language));</script>
+<script src="runlu-language.js?v=2.2"></script>
 </body></html>
