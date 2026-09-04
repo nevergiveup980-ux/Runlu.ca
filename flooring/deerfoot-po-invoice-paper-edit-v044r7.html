@@ -1,1 +1,93 @@
-BB
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#173d30">
+<title>PO Editable Deerfoot Invoice · V0.3.51 Checkbox Fix</title>
+<style>*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#edf1ef}#editor{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}</style>
+</head>
+<body><iframe id="editor" title="PO Editable Deerfoot Invoice V0.3.51"></iframe>
+<script>
+(function(){
+'use strict';
+const PREVIEW='runlu_flooring_po_deerfoot_invoice_v040',CHECKS='runlu_deerfoot_po_invoice_checks_v051';
+const outer=document.getElementById('editor');
+const read=(k,f)=>{try{const x=JSON.parse(localStorage.getItem(k)||'null');return x==null?f:x}catch(_){return f}};
+const write=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+function preview(){return read(PREVIEW,{})||{}}
+function stateKey(){const p=preview(),po=String(p.poNumber||p.invoiceNumber||'').replace(/^PO\s*#?\s*/i,'').trim();return po?'po:'+po:'draft:'+String(p.jobNumber||'none')+':'+String(p.invoiceDate||'')}
+function checkState(){const db=read(CHECKS,{});return db[stateKey()]||{}}
+function saveState(patch){const db=read(CHECKS,{});db[stateKey()]={...(db[stateKey()]||{}),...patch,updatedAt:new Date().toISOString()};write(CHECKS,db);return db[stateKey()]}
+function ensureProductViewedBox(pd){
+  const notice=pd.querySelector('.noticeBlock');if(!notice)return null;
+  let box=notice.querySelector('.productViewedBox');if(box)return box;
+  const walker=pd.createTreeWalker(notice,NodeFilter.SHOW_TEXT);let node=null;
+  while(walker.nextNode()){if((walker.currentNode.textContent||'').includes('□')){node=walker.currentNode;break}}
+  if(!node)return null;
+  node.textContent=node.textContent.replace('□','');
+  box=pd.createElement('span');box.className='productViewedBox';
+  box.style.cssText='display:inline-flex;align-items:center;justify-content:center;width:3.2mm;height:3.2mm;border:.22mm solid #62686b;vertical-align:-.55mm;margin-left:.6mm;font-size:7pt;font-weight:700;background:transparent;cursor:pointer';
+  node.parentNode.insertBefore(box,node.nextSibling);return box;
+}
+function mark(el,on,radio){if(!el)return;el.textContent=on?'✓':'';el.setAttribute('aria-checked',String(!!on));if(radio)el.classList.toggle('on',!!on)}
+function bindPaper(pd){
+  if(!pd||!pd.head)return;
+  if(!pd.getElementById('poCheckboxFixV051Style')){
+    const s=pd.createElement('style');s.id='poCheckboxFixV051Style';s.textContent=`
+      .invoice:not(.overlay) .data{pointer-events:none!important}
+      .invoice:not(.overlay) .data [contenteditable="true"],
+      .invoice:not(.overlay) .data .paperEditPrice,
+      .invoice:not(.overlay) .data .priceRowData,
+      .invoice:not(.overlay) .data .miniBox{pointer-events:auto!important}
+      .invoice:not(.overlay) .static .paymentBox,
+      .invoice:not(.overlay) .static .paymentBox .paycheck,
+      .invoice:not(.overlay) .static .noticeBlock,
+      .invoice:not(.overlay) .static .productViewedBox{pointer-events:auto!important}
+      .poCheckV051{cursor:pointer!important;user-select:none;-webkit-user-select:none}
+      .poCheckV051:focus{outline:.45mm solid rgba(36,79,63,.35);outline-offset:.3mm}
+      @media print{.poCheckV051{outline:none!important}}
+    `;pd.head.appendChild(s);
+  }
+  const state=checkState();
+  const pays=[...pd.querySelectorAll('.paycheck')];
+  pays.forEach(el=>{
+    const val=String(el.dataset.pay||'').toLowerCase();
+    el.classList.add('poCheckV051');el.setAttribute('role','radio');el.tabIndex=0;
+    mark(el,String(state.paymentMethod||'').toLowerCase()===val,true);
+    if(!el.dataset.poCheckV051){
+      el.dataset.poCheckV051='1';
+      const choose=()=>{pays.forEach(x=>mark(x,false,true));mark(el,true,true);saveState({paymentMethod:el.dataset.pay||''})};
+      el.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();choose()});
+      el.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();choose()}});
+    }
+  });
+  const mini=[...pd.querySelectorAll('.priceBand .miniBox')];
+  [['paidBox1',mini[0]],['paidBox2',mini[1]]].forEach(([key,el])=>{
+    if(!el)return;el.classList.add('poCheckV051');el.setAttribute('role','checkbox');el.tabIndex=0;mark(el,!!state[key],false);
+    if(!el.dataset.poCheckV051){el.dataset.poCheckV051='1';const toggle=()=>{const next=el.getAttribute('aria-checked')!=='true';mark(el,next,false);saveState({[key]:next})};el.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();toggle()});el.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();toggle()}})}
+  });
+  const viewed=ensureProductViewedBox(pd);
+  if(viewed){viewed.classList.add('poCheckV051');viewed.setAttribute('role','checkbox');viewed.tabIndex=0;mark(viewed,!!state.productViewedBeforeInstall,false);if(!viewed.dataset.poCheckV051){viewed.dataset.poCheckV051='1';const toggle=()=>{const next=viewed.getAttribute('aria-checked')!=='true';mark(viewed,next,false);saveState({productViewedBeforeInstall:next})};viewed.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();toggle()});viewed.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();toggle()}})}}
+}
+function forceScrollLayout(){
+  try{
+    const d1=outer.contentDocument;if(!d1)return;
+    const f2=d1.getElementById('editor');if(!f2)return;
+    const d2=f2.contentDocument;if(!d2)return;
+    const f3=d2.getElementById('editor');if(!f3)return;
+    const d3=f3.contentDocument;if(!d3)return;
+    const paper=d3.getElementById('paper');if(!paper)return;
+    d3.documentElement.style.setProperty('height','auto','important');d3.documentElement.style.setProperty('min-height','100%','important');d3.documentElement.style.setProperty('overflow-y','auto','important');
+    d3.body.style.setProperty('height','auto','important');d3.body.style.setProperty('min-height','100%','important');d3.body.style.setProperty('overflow-y','auto','important');d3.body.style.setProperty('padding-bottom','150px','important');
+    const bar=d3.querySelector('.bar');if(bar){bar.style.setProperty('position','sticky','important');bar.style.setProperty('top','0','important');bar.style.setProperty('z-index','200','important')}
+    const title=d3.querySelector('.bar b');if(title)title.textContent='PO → Deerfoot Invoice · Paper Edit Mode · V0.3.51';
+    const guide=d3.getElementById('poPaperGuide044R2');if(guide)guide.innerHTML='<b>Paper Edit:</b> PO paper fields remain editable. Finance / Cash / Cheque / Visa / Master Card / Interac are single-select; PAID and Product Viewed boxes toggle independently.';
+    function patchAndResize(){try{const pd=paper.contentDocument;if(!pd)return;bindPaper(pd);const h=Math.max(pd.documentElement.scrollHeight||0,pd.body?.scrollHeight||0,1180)+80;paper.style.setProperty('height',h+'px','important');paper.style.setProperty('min-height',h+'px','important');paper.style.setProperty('overflow','hidden','important');paper.setAttribute('scrolling','no')}catch(e){console.error('V0.3.51 PO paper patch failed',e)}}
+    if(!paper.dataset.poV051){paper.dataset.poV051='1';paper.addEventListener('load',()=>{setTimeout(patchAndResize,80);setTimeout(patchAndResize,300);setTimeout(patchAndResize,700)})}
+    patchAndResize();setTimeout(patchAndResize,200);setTimeout(patchAndResize,600);setTimeout(patchAndResize,1200);
+  }catch(e){console.error('V0.3.51 PO checkbox layout failed',e)}
+}
+function schedule(){[120,350,700,1200,1800].forEach(ms=>setTimeout(forceScrollLayout,ms))}
+outer.addEventListener('load',schedule);
+outer.src='deerfoot-po-invoice-paper-edit-v044r5.html?fix=051&t='+Date.now();
+})();
+</script></body></html>
