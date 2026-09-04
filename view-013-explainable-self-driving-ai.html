@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="RUNLU VIEW 013 — a Nature study showing how explainable deep learning can help people understand and predict self-driving vehicle behaviour.">
+<link rel="canonical" href="https://runlu.ca/view-013-explainable-self-driving-ai.html">
+<meta property="og:title" content="RUNLU VIEW 013 · When intelligent systems explain themselves">
+<meta property="og:description" content="A careful look at CW-Net, a concept-based approach that helped people build more accurate mental models of a self-driving car.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://runlu.ca/view-013-explainable-self-driving-ai.html"><meta property="og:image" content="https://runlu.ca/runlu-hero.png">
+<title>RUNLU VIEW 013 · When intelligent systems explain themselves</title>
+<link rel="stylesheet" href="styles.css?v=20260904-1"><link rel="stylesheet" href="frontiers.css?v=20260904-1">
+<style>main{max-width:900px;margin:0 auto;padding:48px 22px 90px}.back{display:inline-block;margin-bottom:30px}.langbar{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 34px}.langbar button{border:1px solid #bbb;background:transparent;padding:8px 12px;border-radius:999px}.copy{display:none}.copy.active{display:block}.meta{opacity:.72;margin:12px 0 28px}.note{border-left:3px solid #aaa;padding-left:16px;margin:28px 0}.sources{margin-top:42px}.sources a{display:inline-block;margin:4px 0}</style>
+</head><body class="view-page"><main>
+<a class="back" href="frontiers.html">← RUNLU VIEW</a><div class="article-index">013</div>
+<div class="langbar"><button onclick="show('en')">English</button><button onclick="show('zh')">中文</button><button onclick="show('fr')">Français</button><button onclick="show('es')">Español</button></div>
+
+<article class="copy active" data-lang="en">
+<p class="section-kicker">AI · AUTONOMOUS SYSTEMS · EXPLAINABILITY · 4 SEP 2026</p>
+<h1>The next step for intelligent machines may be not only better decisions, but clearer reasons.</h1>
+<p class="meta">Peer-reviewed research · Nature, 2 September 2026 · MIT, Motional and Harvard collaboration</p>
+<p>Modern self-driving systems increasingly depend on deep neural networks. They can be highly capable, but their internal reasoning is often difficult for people to inspect. That matters most when a vehicle behaves unexpectedly and the human nearby must decide whether to trust, predict or override it.</p>
+<p>Researchers led by Eoin M. Kenny and colleagues introduced the Concept-Wrapper Network, or CW-Net. Instead of leaving a planner as a complete black box, CW-Net grounds its decisions in concepts people can understand, such as approaching a stopped vehicle or being close to a cyclist. Those concepts directly feed the final decision layer, so the explanation is tied to the model's actual decision process rather than added afterward as a decorative story.</p>
+<p>The team deployed the system on a real autonomous vehicle, including private-track tests and public-road data from Las Vegas. In larger follow-up studies, explanations helped both experts and non-experts form more accurate mental models of the vehicle and better predict what it would do next. The strongest gains appeared in surprising situations, precisely where understanding matters most.</p>
+<div class="note"><strong>RUNLU boundary:</strong> this does not prove that explanation makes autonomous driving safe, nor that one explanation method solves the black-box problem. The study evaluates one approach, with specific planners, scenarios and human studies. Real safety still depends on sensing, planning, testing, operating limits, human takeover design and many other layers.</div>
+<p>For RUNLU, the deeper lesson reaches beyond cars. As AI moves into warehouses, robots, medical tools and other physical systems, raw capability is only part of trust. A useful system should help people build an accurate picture of what it understands, what it is reacting to and where its limits begin.</p>
+<p>Intelligence that cannot be understood may still perform. Intelligence that can be understood gives humans a better chance to work with it wisely.</p>
+</article>
+
+<article class="copy" data-lang="zh">
+<p class="section-kicker">AI · 自主系统 · 可解释性 · 2026年9月4日</p>
+<h1>智能机器的下一步，也许不仅是作出更好的决定，还要把理由说得更清楚。</h1>
+<p class="meta">同行评议研究 · Nature，2026年9月2日 · MIT、Motional 与 Harvard 合作</p>
+<p>现代自动驾驶系统越来越依赖深度神经网络。它们可以非常强大，但内部推理过程往往很难被人看见。真正关键的时刻，恰恰是在车辆出现意外行为时——旁边的人必须迅速判断：它为什么这么做？下一步可能做什么？是否需要接管？</p>
+<p>Eoin M. Kenny 等研究者提出了 Concept-Wrapper Network（CW-Net）。它不是让规划器继续保持一个完整黑箱，而是把决策建立在人能够理解的概念上，例如“正在接近停住的车辆”“距离骑行者很近”。这些概念直接进入最终决策层，因此解释与模型真正的决策过程相连接，而不是事后附加的一段漂亮说明。</p>
+<p>研究团队把它部署到真实自动驾驶车辆上，进行了封闭场地测试，也采集了拉斯维加斯公共道路数据。在后续更大规模研究中，无论专家还是普通参与者，都能在看到解释后形成更准确的车辆“心理模型”，也更能预测车辆下一步行为。提升最明显的，正是那些令人意外的场景。</p>
+<div class="note"><strong>RUNLU 边界：</strong>这项研究并不能证明“有了解释，自动驾驶就安全”，也不能说明一种方法已经解决了所有黑箱问题。它验证的是一种具体方法、具体规划器和具体场景。真实安全仍依赖感知、规划、测试、运行边界、人工接管以及许多其它层次。</div>
+<p>对 RUNLU 来说，它更深的一层意义并不限于汽车。当 AI 进入仓库、机器人、医疗工具和其它物理系统时，能力本身只是可信的一部分。一个真正好用的系统，还应该让人逐渐形成准确判断：它看见了什么、正在对什么作出反应、能力边界从哪里开始。</p>
+<p>无法理解的智能也许仍然可以工作；能够被理解的智能，则让人更有机会与它正确协作。</p>
+</article>
+
+<article class="copy" data-lang="fr">
+<p class="section-kicker">IA · SYSTÈMES AUTONOMES · EXPLICABILITÉ · 4 SEPT. 2026</p>
+<h1>La prochaine étape des machines intelligentes pourrait être de mieux décider — et de mieux expliquer pourquoi.</h1>
+<p class="meta">Recherche évaluée par les pairs · Nature, 2 septembre 2026 · collaboration MIT, Motional et Harvard</p>
+<p>Les systèmes de conduite autonome reposent de plus en plus sur des réseaux neuronaux profonds. Ils peuvent être très performants, mais leur raisonnement interne reste souvent difficile à inspecter. Le problème devient critique lorsque le véhicule agit de façon inattendue et qu'un humain doit comprendre, prévoir ou reprendre le contrôle.</p>
+<p>Eoin M. Kenny et ses collègues ont présenté le Concept-Wrapper Network, ou CW-Net. La méthode ancre les décisions du planificateur dans des concepts compréhensibles par l'humain, par exemple l'approche d'un véhicule arrêté ou la proximité d'un cycliste. Ces concepts alimentent directement la couche finale de décision, de sorte que l'explication est liée au processus réel du modèle plutôt qu'ajoutée après coup.</p>
+<p>L'équipe a déployé CW-Net sur un véritable véhicule autonome, avec des essais sur piste et des données recueillies sur les routes publiques de Las Vegas. Dans des études plus larges, les explications ont aidé experts et non-experts à construire un modèle mental plus juste du véhicule et à mieux prévoir son comportement, surtout dans les situations surprenantes.</p>
+<div class="note"><strong>Limite RUNLU :</strong> cela ne prouve pas qu'une explication rend la conduite autonome sûre, ni qu'une méthode résout à elle seule le problème de la boîte noire. La sécurité réelle dépend aussi de la perception, de la planification, des tests, des limites d'usage, de la reprise humaine et de nombreux autres niveaux.</div>
+<p>Pour RUNLU, la leçon dépasse l'automobile. À mesure que l'IA entre dans les entrepôts, les robots, les outils médicaux et d'autres systèmes physiques, la capacité brute ne suffit pas à créer la confiance. Un bon système devrait aussi aider les humains à comprendre ce qu'il perçoit, ce à quoi il réagit et où commencent ses limites.</p>
+<p>Une intelligence incomprise peut fonctionner. Une intelligence compréhensible donne aux humains une meilleure chance de travailler avec elle avec discernement.</p>
+</article>
+
+<article class="copy" data-lang="es">
+<p class="section-kicker">IA · SISTEMAS AUTÓNOMOS · EXPLICABILIDAD · 4 SEP 2026</p>
+<h1>El siguiente paso de las máquinas inteligentes puede ser no solo decidir mejor, sino explicar mejor por qué.</h1>
+<p class="meta">Investigación revisada por pares · Nature, 2 de septiembre de 2026 · colaboración entre MIT, Motional y Harvard</p>
+<p>Los sistemas de conducción autónoma dependen cada vez más de redes neuronales profundas. Pueden ser muy capaces, pero su razonamiento interno suele ser difícil de inspeccionar. Eso importa especialmente cuando el vehículo se comporta de manera inesperada y una persona debe entenderlo, predecirlo o tomar el control.</p>
+<p>Eoin M. Kenny y sus colegas presentaron Concept-Wrapper Network, o CW-Net. El método vincula las decisiones del planificador con conceptos comprensibles para las personas, como acercarse a un vehículo detenido o estar cerca de un ciclista. Esos conceptos alimentan directamente la capa final de decisión, por lo que la explicación está conectada con el proceso real del modelo y no se añade después como una historia decorativa.</p>
+<p>El equipo desplegó CW-Net en un vehículo autónomo real, con pruebas en pista y datos de carreteras públicas de Las Vegas. En estudios posteriores, las explicaciones ayudaron tanto a expertos como a no expertos a construir modelos mentales más precisos del vehículo y a predecir mejor su comportamiento, especialmente en situaciones sorprendentes.</p>
+<div class="note"><strong>Límite RUNLU:</strong> esto no demuestra que una explicación haga segura la conducción autónoma ni que un solo método resuelva el problema de la caja negra. La seguridad real también depende de percepción, planificación, pruebas, límites operativos, diseño de intervención humana y muchas otras capas.</div>
+<p>Para RUNLU, la lección va más allá de los automóviles. A medida que la IA entra en almacenes, robots, herramientas médicas y otros sistemas físicos, la capacidad por sí sola es solo una parte de la confianza. Un buen sistema también debería ayudar a las personas a entender qué percibe, a qué está reaccionando y dónde empiezan sus límites.</p>
+<p>Una inteligencia que no se entiende puede funcionar. Una inteligencia que sí se entiende da a los humanos una mejor oportunidad de colaborar con ella con criterio.</p>
+</article>
+
+<section class="sources"><h2>Direct sources</h2><p>
+<a href="https://www.nature.com/articles/s41586-026-10950-5" target="_blank" rel="noopener">Nature — Explainable deep learning improves human mental models of self-driving cars ↗</a><br>
+<a href="https://tomov.github.io/CW-Net/" target="_blank" rel="noopener">CW-Net project page — MIT / Motional ↗</a><br>
+<a href="https://github.com/EoinKenny/CW-Net-Autonomous-Driving" target="_blank" rel="noopener">Research data and materials repository ↗</a>
+</p></section>
+</main>
+<script>function show(l){document.querySelectorAll('.copy').forEach(x=>x.classList.toggle('active',x.dataset.lang===l));document.documentElement.lang=l;localStorage.setItem('runlu_site_language',l)}const saved=localStorage.getItem('runlu_site_language');if(['en','zh','fr','es'].includes(saved))show(saved);</script>
+</body></html>
