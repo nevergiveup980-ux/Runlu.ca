@@ -1,6 +1,6 @@
 # RUNLU GUANSHI · 观势 · Trend Dynamics
 
-Status: **V0.7 · traditional source spine T01–T04 live**
+Status: **V0.8 · traditional source spine T01–T05 live**
 
 Public framework: `guanshi.html`  
 Knowledge map: `guanshi-map.html`  
@@ -9,6 +9,7 @@ T01 Yijing: `guanshi-yijing.html` / `GUANSHI_YIJING.md`
 T02 Yin–Yang: `guanshi-yinyang.html` / `GUANSHI_YINYANG.md`  
 T03 Five Phases: `guanshi-wuxing.html` / `GUANSHI_WUXING.md`  
 T04 Bagua: `guanshi-bagua.html` / `GUANSHI_BAGUA.md`  
+T05 Stems & Branches: `guanshi-ganzhi.html` / `GUANSHI_GANZHI.md`  
 Case protocol: `GUANSHI_CASE_TEMPLATE.md`
 
 ## Purpose
@@ -32,11 +33,17 @@ It is **not** presented as a scientifically proven fortune-telling system.
 
 **传统可以提供观察视角；科学决定什么可以被声称；实践决定什么最终留下。**
 
-A third rule has emerged from T01–T04:
+A third rule has emerged from T01–T05:
 
 > Translate before weighting. Test before trusting.
 
 **先转译，再加权；先检验，再信任。**
+
+T05 adds a time-specific rule:
+
+> A time label can identify when something happened. It does not automatically explain why it happened.
+
+**时间标签可以说明“什么时候”，但不能未经检验就充当“为什么”。**
 
 ## Nine lenses
 
@@ -88,11 +95,22 @@ The modern encoding is explicitly a GUANSHI experiment, not an ancient doctrine.
 
 It must be compared against raw variables. If it does not add clarity, calibration, consistency or predictive value, it remains visual shorthand only.
 
-### T05 · Stems & Branches — Next
-Planned focus: calendrical/time coding, cycle structure, historical use, later correspondences, and whether any modern decision value remains after calendar facts are separated from symbolic claims.
+### T05 · Stems & Branches · V0.8 — Grammar of Time
+Key extraction: historical dating/indexing, cycle structure, later calendrical correspondences, symbolic overlays and prospective tests of added signal.
 
-### T06 · Bazi
-Person × calendrical-time pattern system; deterministic claims require prospective testing.
+Four ledgers are kept separate:
+1. historical time-indexing;
+2. calendrical correspondences;
+3. traditional symbolic correspondences;
+4. predictive claims.
+
+Working test:
+**define outcome → record real drivers → build baseline → add Ganzhi code → test unseen cases → keep only incremental value**
+
+The historical fact that a date carries a stem–branch label does not make that label a cause of the event.
+
+### T06 · Bazi — Next
+Person × calendrical-time pattern system. Planned separation: factual calendar conversion, historical Four Pillars / Ziping structure, symbolic rules, deterministic claims and preregistered testing against base rates and known personal variables.
 
 ### T07 · Six Lines / Meihua
 Later event-focused divination traditions studied separately; predictions require preregistered cases.
@@ -102,17 +120,21 @@ Measurable environmental variables remain separate from traditional symbolic rul
 
 ## Emerging GUANSHI translation architecture
 
-The first four traditional nodes now form a coherent sequence:
+The first five traditional nodes now form a coherent sequence:
 
-**Change → Relation → System → State**
+**Change → Relation → System → State → Time**
 
 or operationally:
 
-**What is changing? → What is interacting? → What system is forming? → What state are we in?**
+**What is changing? → What is interacting? → What system is forming? → What state are we in? → Where are we in time?**
 
 Every traditional input should pass through:
 
 **Original meaning → structural abstraction → observable variables → testable relationship → recorded outcome**
+
+For time-based claims, add one more check:
+
+**calendar label → known seasonal/contextual drivers → baseline comparison → incremental signal**
 
 If a claim cannot pass into observable or falsifiable form, it remains **Traditional** or **Symbolic** and receives no factual predictive weight.
 
@@ -178,8 +200,8 @@ GUANSHI does not use fixed universal percentages.
 - T02 Yin–Yang deep dive — done.
 - T03 Five Phases deep dive — done.
 - T04 Bagua deep dive — done.
-- T05 Stems & Branches — next.
-- T06 Bazi — planned.
+- T05 Stems & Branches deep dive — done.
+- T06 Bazi — next.
 - T07 Six Lines / Meihua — planned.
 - T08 Feng Shui — planned.
 - First low-stakes preregistered test cases — upcoming after the traditional spine is sufficiently defined.
