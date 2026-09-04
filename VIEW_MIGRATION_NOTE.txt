@@ -1,0 +1,1 @@
+Migration marker: the lightweight RUNLU VIEW catalog architecture is being activated on 2026-09-04. The original frontiers page snapshot is preserved separately before the landing page is switched.
