@@ -1,6 +1,6 @@
 # RUNLU GUANSHI · 观势 · Trend Dynamics
 
-Status: **V0.8 · traditional source spine T01–T05 live**
+Status: **V0.9 · traditional source spine T01–T06 live**
 
 Public framework: `guanshi.html`  
 Knowledge map: `guanshi-map.html`  
@@ -10,6 +10,7 @@ T02 Yin–Yang: `guanshi-yinyang.html` / `GUANSHI_YINYANG.md`
 T03 Five Phases: `guanshi-wuxing.html` / `GUANSHI_WUXING.md`  
 T04 Bagua: `guanshi-bagua.html` / `GUANSHI_BAGUA.md`  
 T05 Stems & Branches: `guanshi-ganzhi.html` / `GUANSHI_GANZHI.md`  
+T06 Bazi: `guanshi-bazi.html` / `GUANSHI_BAZI.md`  
 Case protocol: `GUANSHI_CASE_TEMPLATE.md`
 
 ## Purpose
@@ -33,17 +34,21 @@ It is **not** presented as a scientifically proven fortune-telling system.
 
 **传统可以提供观察视角；科学决定什么可以被声称；实践决定什么最终留下。**
 
-A third rule has emerged from T01–T05:
-
 > Translate before weighting. Test before trusting.
 
 **先转译，再加权；先检验，再信任。**
 
-T05 adds a time-specific rule:
+T05 adds:
 
 > A time label can identify when something happened. It does not automatically explain why it happened.
 
 **时间标签可以说明“什么时候”，但不能未经检验就充当“为什么”。**
+
+T06 adds:
+
+> A correct chart is not the same thing as a correct life prediction.
+
+**排盘正确，不等于人生预测正确。**
 
 ## Nine lenses
 
@@ -66,19 +71,18 @@ This is a **learning and model-dependency sequence, not a strict historical gene
 ### T01 · Yijing · V0.4 — Grammar of Change
 Key extraction: change, position, relation, timing and transformation.
 
-Working conversion:
+Working conversion:  
 **text → structure → change → time → position → decision question**
 
 ### T02 · Yin–Yang · V0.5 — Grammar of Relation
 Key extraction: contrast, context, co-dependence, waxing/waning, transformation and dynamic coordination.
 
-Rule:
-A yin/yang statement receives no real-world weight until it can be translated into observable variables.
+Rule: a yin/yang statement receives no real-world weight until it can be translated into observable variables.
 
 ### T03 · Five Phases · V0.6 — Grammar of Systems
 Key extraction: support, constraint, regulation, imbalance, cycles and feedback.
 
-Working conversion:
+Working conversion:  
 **symbol → variable → relationship → loop → data → correction**
 
 Modern systems language is a translation scaffold, not scientific validation of Wuxing.
@@ -91,9 +95,7 @@ Three layers are kept separate:
 2. classical image/association tradition;
 3. GUANSHI experimental three-variable/eight-state encoding.
 
-The modern encoding is explicitly a GUANSHI experiment, not an ancient doctrine.
-
-It must be compared against raw variables. If it does not add clarity, calibration, consistency or predictive value, it remains visual shorthand only.
+The modern encoding is explicitly a GUANSHI experiment, not an ancient doctrine. It must be compared against raw variables. If it adds no clarity, calibration, consistency or predictive value, it remains visual shorthand only.
 
 ### T05 · Stems & Branches · V0.8 — Grammar of Time
 Key extraction: historical dating/indexing, cycle structure, later calendrical correspondences, symbolic overlays and prospective tests of added signal.
@@ -104,37 +106,54 @@ Four ledgers are kept separate:
 3. traditional symbolic correspondences;
 4. predictive claims.
 
-Working test:
+Working test:  
 **define outcome → record real drivers → build baseline → add Ganzhi code → test unseen cases → keep only incremental value**
 
-The historical fact that a date carries a stem–branch label does not make that label a cause of the event.
+### T06 · Bazi · V0.9 — Grammar of Person × Time
+Key extraction: birth facts, reproducible chart conversion, historical Four-Pillars / Zi Ping layers, traditional interpretive rules, life claims and prospective testing.
 
-### T06 · Bazi — Next
-Person × calendrical-time pattern system. Planned separation: factual calendar conversion, historical Four Pillars / Ziping structure, symbolic rules, deterministic claims and preregistered testing against base rates and known personal variables.
+Five ledgers are kept separate:
+1. birth facts;
+2. chart conversion;
+3. traditional model;
+4. life claims;
+5. outcome audit.
 
-### T07 · Six Lines / Meihua
-Later event-focused divination traditions studied separately; predictions require preregistered cases.
+Common traditional components such as Day Master, Ten Gods, month command, hidden stems, strength, combinations/clashes, structures, useful gods and luck cycles remain **Traditional** until a specific claim earns independent support.
 
-### T08 · Feng Shui
-Measurable environmental variables remain separate from traditional symbolic rules.
+Working test:
+
+**define target → build real-world baseline M0 → freeze Bazi rules → create M1 = baseline + Bazi → blind / prospectively score → keep only repeatable incremental value**
+
+A valid birth date or correct stem–branch conversion does not validate claims about personality, marriage, career, health, wealth or life events.
+
+### T07 · Six Lines / Meihua — Next
+Later event-focused divination traditions will be studied separately; predictions must be preregistered before outcomes.
+
+### T08 · Feng Shui — Planned
+Measurable environmental variables will remain separate from traditional symbolic rules.
 
 ## Emerging GUANSHI translation architecture
 
-The first five traditional nodes now form a coherent sequence:
+The first six traditional nodes now form a coherent sequence:
 
-**Change → Relation → System → State → Time**
+**Change → Relation → System → State → Time → Person × Time**
 
-or operationally:
+Operationally:
 
-**What is changing? → What is interacting? → What system is forming? → What state are we in? → Where are we in time?**
+**What is changing? → What is interacting? → What system is forming? → What state are we in? → Where are we in time? → What do we actually know about the person, and does a traditional time-pattern add information beyond that?**
 
 Every traditional input should pass through:
 
 **Original meaning → structural abstraction → observable variables → testable relationship → recorded outcome**
 
-For time-based claims, add one more check:
+For time-based claims add:
 
 **calendar label → known seasonal/contextual drivers → baseline comparison → incremental signal**
+
+For personal models add:
+
+**real personal baseline → frozen traditional rules → blind/prospective comparison → incremental value only**
 
 If a claim cannot pass into observable or falsifiable form, it remains **Traditional** or **Symbolic** and receives no factual predictive weight.
 
@@ -170,10 +189,11 @@ The canonical preregistration structure is in `GUANSHI_CASE_TEMPLATE.md`.
 
 Original predictions are frozen before outcomes are known. Later reviews are appended, never rewritten into the original record.
 
-This is designed to reduce:
+This reduces:
 - vague prediction reinterpretation;
 - remembering hits while forgetting misses;
-- changing explanations after the outcome.
+- changing explanations after the outcome;
+- switching traditional schools after failure.
 
 ## Weighting principles
 
@@ -201,10 +221,10 @@ GUANSHI does not use fixed universal percentages.
 - T03 Five Phases deep dive — done.
 - T04 Bagua deep dive — done.
 - T05 Stems & Branches deep dive — done.
-- T06 Bazi — next.
-- T07 Six Lines / Meihua — planned.
+- T06 Bazi deep dive — done.
+- T07 Six Lines / Meihua — next.
 - T08 Feng Shui — planned.
-- First low-stakes preregistered test cases — upcoming after the traditional spine is sufficiently defined.
+- First low-stakes preregistered test cases — upcoming after T07/T08 boundaries are defined.
 
 ### Phase 2 — Web app
 - Structured question intake.
@@ -226,5 +246,7 @@ GUANSHI does not use fixed universal percentages.
 GUANSHI must not use divination or traditional symbolism as the deciding basis for high-stakes medical, legal, financial, safety or mental-health decisions.
 
 For high-stakes domains, traditional lenses may be discussed as cultural or symbolic context only; evidence-based and professional methods control the recommendation.
+
+Birth date, time and place can be identifying information. Private personal charts must remain private unless explicit consent is given for publication.
 
 All four public languages — English, Simplified Chinese, French and Spanish — must be complete before a GUANSHI public page is considered publishable under RUNLU's multilingual policy.
