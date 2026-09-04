@@ -1,9 +1,11 @@
 # RUNLU GUANSHI · 观势 · Trend Dynamics
 
-Status: **V0.2 · knowledge map + validation protocol**
+Status: **V0.3 · traditional source spine**
 
 Public framework: `guanshi.html`  
 Knowledge map: `guanshi-map.html`  
+Traditional source spine: `guanshi-tradition.html`  
+Traditional research notes: `GUANSHI_TRADITIONAL_LINE.md`  
 Case protocol: `GUANSHI_CASE_TEMPLATE.md`
 
 ## Purpose
@@ -55,17 +57,24 @@ Predictions and recommendations should be recorded before outcomes are known. Re
 - **变 — Scenarios**: how may the situation change under plausible futures?
 - **势 — Dynamics**: after integrating the above, which direction has the strongest evidence-adjusted momentum?
 
-## V0.2 knowledge map
+## V0.3 knowledge map
 
-### Traditional line
-1. **Yijing / change philosophy** — symbolic and philosophical starting layer.
+### Traditional learning / dependency line
+
+**Yijing → Yin–Yang → Five Phases → Bagua → Stems & Branches → Bazi → Six Lines / Meihua → Feng Shui**
+
+This is a **learning and model-dependency sequence, not a strict historical genealogy**. Stems/branches are historically very old; bagua belongs within the Yijing tradition; yin–yang and Five Phases also developed through broader and partly parallel intellectual histories. Source history is recorded separately from learning order.
+
+1. **Yijing / change philosophy** — change, position, relation, timing and transformation.
 2. **Yin–Yang** — relational vocabulary for contrast, alternation and balance; not assumed to be a physical force.
 3. **Five Phases** — historical cycle/relationship model; metaphors separated from causal claims.
 4. **Bagua** — pattern-classification lens; predictive power not assumed.
-5. **Stems, Branches & calendrical cycles** — calendar facts separated from personality/destiny claims.
-6. **Bazi / destiny models** — historical pattern system; deterministic claims require testing and are not treated as fact.
-7. **Divination methods** — may be studied as structured reframing prompts; no bypass of evidence in high-stakes decisions.
-8. **Feng Shui / environment** — measurable environmental variables are explicitly separated from symbolic rules.
+5. **Stems, Branches & calendrical cycles** — calendar facts separated from later symbolic/personality/destiny claims.
+6. **Bazi / Four Pillars** — historical person × calendrical-time pattern system; deterministic claims require prospective testing.
+7. **Six Lines / Meihua** — later event-focused divination traditions studied separately; attribution and textual layers preserved.
+8. **Feng Shui / environment** — measurable environmental variables explicitly separated from symbolic rules.
+
+The detailed source spine is maintained in `GUANSHI_TRADITIONAL_LINE.md` and published as `guanshi-tradition.html`.
 
 ### Modern decision line
 1. **Probability & base rates** — replace absolutes with ranges and uncertainty.
@@ -104,6 +113,17 @@ Every substantive GUANSHI claim should eventually carry one of these labels:
 
 Mixed topics may require multiple labels. Example: a feng shui discussion can contain measurable environmental claims and symbolic traditional claims in the same case; they must be separated rather than blended.
 
+## Traditional source protocol
+
+Each traditional node now targets four distinct records:
+
+1. **Primary text** — what a canonical or historically important text actually says.
+2. **Textual history** — date, attribution, layers, later commentary and uncertainty.
+3. **Modern scholarly history** — how historians and scholars describe the system's formation and use.
+4. **Empirical claim audit** — where a measurable claim exists, what credible modern evidence supports or contradicts it.
+
+A source may establish that an idea was historically taught. It does not by itself establish that the idea predicts modern outcomes.
+
 ## Decision loop
 
 **Observe → Frame → Estimate → Decide → Record → Review → Reweight**
@@ -141,7 +161,7 @@ This prevents three common failures:
 
 ## Weighting principles
 
-V0.2 does **not** assign arbitrary universal percentages such as “science 40%, tradition 10%.” Weight depends on the decision and evidence available.
+V0.3 does **not** assign arbitrary universal percentages such as “science 40%, tradition 10%.” Weight depends on the decision and evidence available.
 
 Instead:
 
@@ -160,8 +180,12 @@ Instead:
 - Two-line knowledge map. **Done V0.2**
 - Evidence labels. **Defined V0.2**
 - Preregistered case template. **Done V0.2**
-- Source library and claim-by-claim evidence review. **Next**
-- First low-stakes test cases. **Next**
+- Scientific source seed ledger. **Done V0.2**
+- Traditional learning / dependency spine. **Done V0.3**
+- Four-language traditional source page. **Done V0.3**
+- Traditional source cards T001–T008. **In progress V0.3**
+- Claim-by-claim empirical evidence review. **Next**
+- First low-stakes preregistered test cases. **Next**
 
 ### Phase 2 — Web app
 - Structured question intake.
