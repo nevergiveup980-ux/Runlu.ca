@@ -119,6 +119,28 @@
       link.textContent='Frontier'
     })
   }
+  function ensureGuanshiLinks(){
+    document.querySelectorAll('.desktop-nav,.mobile-menu').forEach(nav=>{
+      if(nav.querySelector('a[href="guanshi.html"]'))return;
+      const link=document.createElement('a');
+      link.href='guanshi.html';
+      link.dataset.en='Dynamics';
+      link.dataset.zh='观势';
+      link.dataset.fr='Dynamiques';
+      link.dataset.es='Dinámicas';
+      link.textContent='Dynamics';
+      const lab=nav.querySelector('a[href="lab.html"]');
+      if(lab)lab.insertAdjacentElement('afterend',link);else nav.appendChild(link)
+    });
+    const grid=document.querySelector('#current .current-grid');
+    if(grid&&!grid.querySelector('a[href="guanshi.html"]')){
+      const item=document.createElement('a');
+      item.className='current-item';
+      item.href='guanshi.html';
+      item.innerHTML='<span>RUNLU GUANSHI · 观势</span><b data-en="Trend Dynamics · V0.2" data-zh="Trend Dynamics · V0.2" data-fr="Trend Dynamics · V0.2" data-es="Trend Dynamics · V0.2">Trend Dynamics · V0.2</b>';
+      grid.appendChild(item)
+    }
+  }
   function bind(){
     document.querySelectorAll('[data-runlu-language-select]').forEach(select=>{
       if(select.dataset.runluLanguageBound==='true')return;
@@ -134,6 +156,7 @@
     ensureHealthViewLinks();
     ensureView011Link();
     standardizeFrontierNav();
+    ensureGuanshiLinks();
     apply(current)
   }
   window.RUNLULanguage={key:KEY,available:[...AVAILABLE],planned:[...PLANNED],fallback:FALLBACK,get:()=>current,set,toggle,apply,isAvailable};
