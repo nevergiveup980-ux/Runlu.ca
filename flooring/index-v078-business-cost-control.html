@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#173d30">
+<title>RUNLU Deerfoot Flooring OS V0.3.78 Price History & Cost Control</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#edf1ef;font-family:Arial,Helvetica,sans-serif}
+#os78{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}
+#boot78{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:24px;background:#edf1ef;color:#173d30;font-weight:800;text-align:center;line-height:1.45;transition:opacity .18s ease}
+#boot78.ready{opacity:0;pointer-events:none}#boot78.fail{color:#7a2b2b;background:#fff4f1}#boot78 small{display:block;margin-top:8px;font-weight:500;color:#63716b}
+</style>
+</head>
+<body>
+<div id="boot78"><div>RUNLU Deerfoot Flooring OS<br>V0.3.78 Price History &amp; Cost Control<small>Pricing history · Estimate · PO committed cost · Vendor bill actual · Forecast margin…</small></div></div>
+<iframe id="os78" title="RUNLU Deerfoot Flooring OS V0.3.78"></iframe>
+<script>
+(function(){
+'use strict';
+const outer=document.getElementById('os78'),boot=document.getElementById('boot78');
+const stamp=Date.now();
+let installed=false,tries=0;
+function fail(message){boot.classList.remove('ready');boot.classList.add('fail');boot.innerHTML='<div>'+message+'<small>V0.3.77 remains the rollback baseline.</small></div>'}
+function inject(){
+  try{
+    const shellDoc=outer.contentDocument,shellWin=outer.contentWindow;if(!shellDoc||!shellWin)return false;
+    const inner=shellDoc.getElementById('os');if(!inner)return false;
+    const appDoc=inner.contentDocument,appWin=inner.contentWindow;if(!appDoc||!appWin||!appDoc.body)return false;
+    if(appDoc.querySelector('script[data-runlu-v078-cost-control]')){
+      try{appWin.RUNLUPricingCostControlV078?.install?.()}catch(_){}
+      boot.classList.add('ready');installed=true;return true;
+    }
+    const s=appDoc.createElement('script');
+    s.src='pricing-cost-control-v078.js?v=078&t='+Date.now();
+    s.dataset.runluV078CostControl='1';
+    s.onload=()=>{try{appWin.RUNLUPricingCostControlV078?.install?.()}catch(e){console.error(e)}boot.classList.add('ready');installed=true};
+    s.onerror=()=>fail('V0.3.78 Cost Control asset could not load.');
+    appDoc.body.appendChild(s);return true;
+  }catch(e){console.error(e);return false}
+}
+function waitForInner(){
+  if(installed)return;
+  if(inject())return;
+  if(++tries<80)setTimeout(waitForInner,150);else fail('V0.3.78 could not reach the integrated Flooring OS.');
+}
+outer.addEventListener('load',()=>{tries=0;setTimeout(waitForInner,120);try{const inner=outer.contentDocument?.getElementById('os');inner?.addEventListener('load',()=>{installed=false;tries=0;setTimeout(waitForInner,120)})}catch(_){}});
+outer.src='index-v071-pricing-workspace.html?v=078&t='+stamp;
+})();
+</script>
+</body>
+</html>
