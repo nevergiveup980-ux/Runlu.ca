@@ -25,6 +25,9 @@ a{color:inherit;text-decoration:none}
 .gs-cn{font-family:"Noto Sans SC",sans-serif;font-weight:500;letter-spacing:-.06em}
 .gs-dot{font-size:.5em;color:var(--gs-accent)}
 .gs-version{margin:22px 0 0;color:var(--gs-muted);font-size:.9rem}
+.gs-primary-link{display:inline-block;margin-top:24px;padding:11px 16px;border:1px solid var(--gs-ink);border-radius:999px;font-size:.82rem;font-weight:600;letter-spacing:.01em;transition:transform .18s ease,background .18s ease,color .18s ease}
+.gs-primary-link:hover{transform:translateY(-1px);background:var(--gs-ink);color:var(--gs-paper)}
+.gs-dark-link{border-color:#d7c7ad;color:#f5efe5}.gs-dark-link:hover{background:#f5efe5;color:var(--gs-deep)}
 .gs-manifesto{max-width:680px;padding-bottom:8px}
 .gs-lead{font-size:clamp(1.35rem,2.2vw,2rem);line-height:1.4;margin:0 0 22px;font-weight:500;letter-spacing:-.02em}
 .gs-manifesto p:not(.gs-lead){font-size:1rem;color:#4e524a;margin:0}
@@ -64,7 +67,7 @@ a{color:inherit;text-decoration:none}
 .gs-yes .gs-label{color:#d4b386!important}
 .gs-compare p:last-child{margin:0;font-size:clamp(1.05rem,1.8vw,1.4rem);line-height:1.55}
 .gs-boundary-section{background:#f8f4eb}
-.gs-boundary-grid{max-width:1380px;margin:0 auto 0 114px;max-width:1050px}
+.gs-boundary-grid{max-width:1050px;margin:0 auto 0 calc((100% - 1380px)/2 + 114px)}
 .gs-boundary-grid p{font-size:1.03rem;color:#555a51;margin:0 0 18px}
 .gs-boundary-grid p:first-child{font-size:1.24rem;color:var(--gs-ink)}
 .gs-status-section{background:var(--gs-bg)}
@@ -79,6 +82,7 @@ html[data-runlu-language="en"] .copy-zh,html[data-runlu-language="en"] .copy-fr,
 html[data-runlu-language="zh"] .copy-en,html[data-runlu-language="zh"] .copy-fr,html[data-runlu-language="zh"] .copy-es,
 html[data-runlu-language="fr"] .copy-en,html[data-runlu-language="fr"] .copy-zh,html[data-runlu-language="fr"] .copy-es,
 html[data-runlu-language="es"] .copy-en,html[data-runlu-language="es"] .copy-zh,html[data-runlu-language="es"] .copy-fr{display:none!important}
+@media (max-width:1450px){.gs-boundary-grid{margin-left:114px}}
 @media (max-width:980px){
   .gs-top-nav{display:none}
   .gs-header{grid-template-columns:1fr auto}
