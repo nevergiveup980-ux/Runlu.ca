@@ -18,9 +18,33 @@
     const a=document.createElement('a');
     a.className=latest?'catalog-card latest-card':'catalog-card';
     a.href=entry.href;
-    a.dataset.en=entry.en;a.dataset.zh=entry.zh;a.dataset.fr=entry.fr;a.dataset.es=entry.es;
-    a.innerHTML=`<span class="catalog-no">${entry.n}</span><span class="catalog-title">${entry.en}</span>${entry.date?`<span class="catalog-date">${entry.date}</span>`:''}<span class="catalog-arrow">→</span>`;
     a.dataset.runluCatalog='true';
+
+    const number=document.createElement('span');
+    number.className='catalog-no';
+    number.textContent=entry.n;
+
+    const title=document.createElement('span');
+    title.className='catalog-title';
+    title.dataset.en=entry.en;
+    title.dataset.zh=entry.zh;
+    title.dataset.fr=entry.fr;
+    title.dataset.es=entry.es;
+    title.textContent=entry.en;
+
+    a.append(number,title);
+
+    if(entry.date){
+      const date=document.createElement('span');
+      date.className='catalog-date';
+      date.textContent=entry.date;
+      a.appendChild(date)
+    }
+
+    const arrow=document.createElement('span');
+    arrow.className='catalog-arrow';
+    arrow.textContent='→';
+    a.appendChild(arrow);
     return a
   };
   function render(){
