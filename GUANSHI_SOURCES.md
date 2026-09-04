@@ -1,16 +1,17 @@
-# RUNLU GUANSHI · Scientific Source Ledger
+# RUNLU GUANSHI · Scientific + Traditional Source Ledger
 
-Status: V0.2 seed library  
-Rule: sources support **specific methods or claims**, never the framework as a whole.
+Status: V0.3 source library  
+Rule: sources support **specific methods, historical statements or claims**, never the framework as a whole.
 
 ## Source-quality policy
 
-1. Prefer original peer-reviewed papers, major academic reference works, standards, and transparent institutional methods.
+1. Prefer original peer-reviewed papers, major academic reference works, standards, transparent institutional methods and reliable primary-text editions.
 2. Record exactly what a source supports; do not stretch a source beyond its scope.
-3. A famous or highly cited paper is not automatically current truth. Important findings may need replication/review checks before use as an operational rule.
+3. A famous or highly cited source is not automatically current truth. Important findings may need replication/review checks before operational use.
 4. Traditional texts document historical ideas; they do not by themselves establish empirical validity.
 5. Every future public claim should link to an evidence label: Established / Supported / Exploratory / Traditional / Symbolic / Rejected.
 6. High-stakes recommendations require domain-specific evidence and qualified professional standards; this general ledger is not sufficient.
+7. Traditional nodes should separate **primary text**, **textual history**, **modern scholarly history** and **empirical claim audit**.
 
 ---
 
@@ -127,7 +128,7 @@ https://www.cos.io/r3ct/gfs-trial
 
 ---
 
-# How sources connect to the GUANSHI loop
+# How scientific sources connect to the GUANSHI loop
 
 | GUANSHI step | Scientific support seeded in V0.2 |
 |---|---|
@@ -139,11 +140,170 @@ https://www.cos.io/r3ct/gfs-trial
 | Review | S004, S006 — scoring, calibration, preserved record |
 | Reweight | S004 + accumulated GUANSHI cases — reward calibration and added predictive value |
 
-# Traditional-source protocol — next build
+---
 
-For Yijing, yin–yang, five phases, bagua, stems/branches, Bazi, divination and feng shui, create **two records** whenever possible:
+# Traditional source cards · V0.3
 
-1. **Historical-source record** — what the traditional text or school actually says, including date/version/translation uncertainty.
-2. **Empirical-claim record** — whether a specific measurable claim has been tested, how it was tested, and whether credible evidence supports, fails to support, or contradicts it.
+The sequence below is a **learning/model-dependency line**, not a strict chronology:
+
+**Yijing → Yin–Yang → Five Phases → Bagua → Stems/Branches → Bazi → Six Lines/Meihua → Feng Shui**
+
+## T001 · Yijing / Zhouyi — change and transformation
+
+**Primary source**  
+Chinese Text Project, *Book of Changes*, especially `Xi Ci I` and `Xi Ci II`.  
+https://ctext.org/book-of-changes/xi-ci-shang  
+https://ctext.org/book-of-changes/xi-ci-xia
+
+**What it establishes historically**
+- The received Yijing tradition explicitly develops language around change, strong/weak lines, positions, images and transformation.
+- The Xi Ci layer connects two forms, four images, eight trigrams and divinatory practice.
+
+**What it does NOT establish**
+- That every later metaphysical system is already present in identical form in the oldest Zhouyi layer.
+- That symbolic/divinatory interpretations have scientifically demonstrated predictive power.
+
+**GUANSHI label:** Traditional + Symbolic.
+
+---
+
+## T002 · Yin–Yang — relational polarity
+
+**Primary source anchor**  
+*Xi Ci I* contains the canonical formulation linking one yin and one yang with dao and repeatedly frames change through strong/weak, movement/rest and complementary relations.  
+https://ctext.org/book-of-changes/xi-ci-shang
+
+**Historical use for GUANSHI**
+- Documents yin–yang as a central relational vocabulary in the received Yijing tradition.
+
+**Empirical boundary**
+- Does not by itself establish yin and yang as measurable physical forces in the modern scientific sense.
+
+**GUANSHI label:** Traditional + Symbolic.
+
+---
+
+## T003 · Five Phases — early textual anchor
+
+**Primary source**  
+*Shangshu / Book of Documents · Hong Fan / Great Plan*.  
+https://ctext.org/shang-shu/great-plan
+
+**What it establishes historically**
+- The received text explicitly lists water, fire, wood, metal and earth and assigns characteristic tendencies to them.
+
+**What requires later source mapping**
+- How generative/overcoming cycles and extensive correlative systems developed in later traditions.
+- Which later medical, calendrical, astrological or environmental claims can be traced to which texts.
+
+**GUANSHI label:** Traditional.
+
+---
+
+## T004 · Bagua — trigram images and classifications
+
+**Primary sources**  
+*Xi Ci I* and *Shuo Gua*.  
+https://ctext.org/book-of-changes/xi-ci-shang  
+https://ctext.org/book-of-changes/shuo-gua
+
+**What they establish historically**
+- The received Yijing tradition explicitly discusses the eight trigrams.
+- Shuo Gua develops natural images, relations and directional associations around the trigrams.
+
+**Empirical boundary**
+- Historical documentation of a classification system is not evidence of predictive accuracy.
+
+**GUANSHI label:** Traditional + Symbolic.
+
+---
+
+## T005 · Heavenly Stems & Earthly Branches — calendrical scaffold
+
+**Modern scholarly source seed**  
+Ho Peng Yoke, *Chinese Mathematical Astrology: Reaching Out to the Stars*, RoutledgeCurzon/Routledge, 2003/2004.  
+https://www.routledge.com/Chinese-Mathematical-Astrology-Reaching-Out-to-the-Stars/Yoke/p/book/9780415863100
+
+**What it supports for GUANSHI**
+- Stems/branches function as foundational ordinal/calendrical structures reused across Chinese mathematical-astrological systems.
+- Later fate-calculation methods build on this older temporal encoding framework.
+
+**Next source task**
+- Add early inscription/calendar scholarship for the antiquity and mechanics of the sexagenary cycle.
+
+**GUANSHI label:** Historical/calendrical structure + Traditional interpretations.
+
+---
+
+## T006 · Bazi / Four Pillars — layered fate-calculation tradition
+
+**Modern scholarly source seed**  
+Ho Peng Yoke, *Chinese Mathematical Astrology: Reaching Out to the Stars*, especially discussion of Four Pillars / eight characters and Ziping fate-calculation.  
+https://www.routledge.com/Chinese-Mathematical-Astrology-Reaching-Out-to-the-Stars/Yoke/p/book/9780415863100
+
+**Traditional source targets**
+- `渊海子平 / Yuanhai Ziping`;
+- `三命通会 / Sanming Tonghui`;
+- later `滴天髓 / Ditian Sui` and `子平真诠 / Ziping Zhenquan` traditions, with authorship/layering cautions.
+
+**What it supports historically**
+- Four Pillars uses year, month, day and hour stem–branch pairs, yielding eight characters.
+- The tradition developed over time and should not be represented as one unchanged ancient system.
+
+**Empirical boundary**
+- Personality/destiny predictions require prospective testing; deterministic validity is not assumed.
+
+**GUANSHI label:** Traditional / test required.
+
+---
+
+## T007 · Six Lines / Meihua — event-focused divination
+
+**Modern historical source seed**  
+Richard J. Smith, *Fortune-tellers and Philosophers: Divination in Traditional Chinese Society*, Westview Press 1991; later Routledge editions.  
+https://www.routledge.com/Fortune-tellers-and-Philosophers-Divination-In-Traditional-Chinese-Society/Smith/p/book/9780367159801
+
+**What it supports for GUANSHI**
+- Chinese divination includes multiple historically distinct techniques and must be studied in cultural/historical context rather than flattened into one method.
+
+**Next source tasks**
+- Build a separate textual history for Six-Line traditions and Jing Fang-related lineages.
+- Audit the textual attribution and dating of `梅花易数 / Meihua Yishu`; do not assume simple authorship by Shao Yong without source review.
+
+**Empirical boundary**
+- Any predictive claim must be preregistered and scored against outcomes.
+
+**GUANSHI label:** Traditional + Exploratory.
+
+---
+
+## T008 · Feng Shui — environment, siting and symbolic rules
+
+**Traditional textual anchor**  
+`葬书 / Zangshu` textual tradition, historically associated with Guo Pu, with attribution/history cautions.  
+https://ctext.org/wiki.pl?chapter=592339&if=en
+
+**Modern historical source seed**  
+Richard J. Smith, *Fortune-tellers and Philosophers*, including historical discussion of geomancy / “wind and water.”  
+https://www.routledge.com/Fortune-tellers-and-Philosophers-Divination-In-Traditional-Chinese-Society/Smith/p/book/9780367159801
+
+**GUANSHI split rule**
+- **Measurable environment:** light, noise, airflow, temperature, access, circulation, layout, terrain/drainage, safety, privacy.
+- **Traditional symbolism:** directional correspondences, symbolic forms, qi/auspiciousness rules and school-specific prescriptions.
+
+The two layers must be labeled independently.
+
+**GUANSHI label:** Mixed — measurable evidence + Traditional/Symbolic.
+
+---
+
+# Traditional-source protocol
+
+For every traditional node, maintain four records whenever possible:
+
+1. **Primary text** — what the traditional text actually says, including edition/translation uncertainty.
+2. **Textual history** — dating, authorship, layers, commentaries and later recombination.
+3. **Modern scholarly history** — independent academic description of development and use.
+4. **Empirical-claim record** — whether a specific measurable claim has been tested, how it was tested, and what credible evidence shows.
 
 Never convert “historically documented” into “scientifically established.”
