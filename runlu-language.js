@@ -137,7 +137,7 @@
       const item=document.createElement('a');
       item.className='current-item';
       item.href='guanshi.html';
-      item.innerHTML='<span>RUNLU GUANSHI · 观势</span><b data-en="Trend Dynamics · V0.4" data-zh="Trend Dynamics · V0.4" data-fr="Trend Dynamics · V0.4" data-es="Trend Dynamics · V0.4">Trend Dynamics · V0.4</b>';
+      item.innerHTML='<span>RUNLU GUANSHI · 观势</span><b data-en="Trend Dynamics · V0.6" data-zh="Trend Dynamics · V0.6" data-fr="Trend Dynamics · V0.6" data-es="Trend Dynamics · V0.6">Trend Dynamics · V0.6</b>';
       grid.appendChild(item)
     }
     const page=(location.pathname.split('/').pop()||'').toLowerCase();
