@@ -137,7 +137,7 @@
       const item=document.createElement('a');
       item.className='current-item';
       item.href='guanshi.html';
-      item.innerHTML='<span>RUNLU GUANSHI · 观势</span><b data-en="Trend Dynamics · V0.3" data-zh="Trend Dynamics · V0.3" data-fr="Trend Dynamics · V0.3" data-es="Trend Dynamics · V0.3">Trend Dynamics · V0.3</b>';
+      item.innerHTML='<span>RUNLU GUANSHI · 观势</span><b data-en="Trend Dynamics · V0.4" data-zh="Trend Dynamics · V0.4" data-fr="Trend Dynamics · V0.4" data-es="Trend Dynamics · V0.4">Trend Dynamics · V0.4</b>';
       grid.appendChild(item)
     }
     const page=(location.pathname.split('/').pop()||'').toLowerCase();
@@ -167,6 +167,22 @@
           link.textContent='Open the traditional source spine →';
           head.appendChild(link)
         }
+      }
+    }
+    if(page==='guanshi-tradition.html'){
+      const spineLink=document.querySelector('.source-spine a[href="#t01"]');
+      if(spineLink)spineLink.href='guanshi-yijing.html';
+      const t01=document.querySelector('#t01');
+      if(t01&&!t01.querySelector('a[href="guanshi-yijing.html"]')){
+        const link=document.createElement('a');
+        link.href='guanshi-yijing.html';
+        link.className='gs-primary-link';
+        link.dataset.en='Open T01 Yijing deep dive →';
+        link.dataset.zh='进入 T01《易经》深挖 →';
+        link.dataset.fr='Ouvrir l’étude T01 Yijing →';
+        link.dataset.es='Abrir el estudio T01 Yijing →';
+        link.textContent='Open T01 Yijing deep dive →';
+        t01.appendChild(link)
       }
     }
   }
