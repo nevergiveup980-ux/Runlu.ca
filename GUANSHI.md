@@ -1,6 +1,6 @@
 # RUNLU GUANSHI · 观势 · Trend Dynamics
 
-Status: **V1.6 · source spine complete + live consultation + protected AI + validation loop + fixed traditional mechanics**
+Status: **V1.6 · source spine complete + live consultation + protected AI + validation loop + fixed traditional mechanics + intelligent clarification**
 
 Public framework: `guanshi.html`  
 Start GUANSHI: `guanshi-consult.html`  
@@ -70,6 +70,12 @@ V1.6 adds the traditional-mechanics rule:
 
 **先算清楚，再作解释；先把方法固定，再等现实回答。**
 
+V1.6 also adds the consultation-quality rule:
+
+> Ask only what can materially change the judgment.
+
+**只追问真正可能改变结论的资料。**
+
 ## Nine lenses
 
 - **易 — Change**: what is emerging, declining, turning or transforming?
@@ -134,6 +140,22 @@ Traditional View now preserves three ledgers:
 2. **traditional interpretation ledger**;
 3. **reality ledger**.
 
+### Intelligent clarification gate
+
+Before the analysis request, the public consultation pages run a local, zero-AI information check.
+
+If important information is missing, GUANSHI asks at most **2–3 high-impact questions in one round**. Users may answer, write “not sure”, or skip and continue.
+
+The follow-up logic is topic/method aware. Examples include:
+- career: current role/compensation, concrete alternatives, decision horizon, non-negotiables;
+- business: traction/resources, actual options, budget/time/cash-flow limits;
+- relationship: current state, desired outcome, time window, boundaries;
+- Bazi: birth time when known and relevant current reality;
+- Six Lines / Meihua: testable event definition, reality baseline and action relevance;
+- Feng Shui: intended site outcome, direction only when relevant, layout/surroundings and measured facts.
+
+Clarification itself does **not** call the AI route and does **not** consume one of the daily free AI analyses. The actual AI call occurs only after the user completes or skips the clarification step.
+
 ### Deterministic traditional layer · V1.6
 
 **Bazi**
@@ -174,9 +196,9 @@ Public tool: `guanshi-validation.html`
 
 Core loop:
 
-**Consult → Calculate / Cast → Interpret → Freeze → Wait → Review → Reweight**
+**Consult → Clarify if needed → Calculate / Cast → Interpret → Freeze → Wait → Review → Reweight**
 
-**咨询 → 计算 / 起卦 → 解读 → 冻结 → 等待 → 复盘 → 调权**
+**咨询 → 必要时补问 → 计算 / 起卦 → 解读 → 冻结 → 等待 → 复盘 → 调权**
 
 A successful consultation exposes **Freeze for later review / 冻结为验证案例**.
 
@@ -250,16 +272,17 @@ A traditional model earns additional research weight only through prospectively 
 
 ## Decision loop
 
-**Observe → Frame → Estimate → Decide → Calculate / Cast when relevant → Freeze → Review → Reweight**
+**Observe → Frame → Clarify if needed → Estimate → Decide → Calculate / Cast when relevant → Freeze → Review → Reweight**
 
 1. **Observe** — separate known facts, assumptions and unknowns.
 2. **Frame** — define the real question, alternatives, horizon and stakes.
-3. **Estimate** — use base rates, probabilities, scenarios and explicit uncertainty where appropriate.
-4. **Decide** — prefer robust action over dramatic narrative.
-5. **Calculate / Cast** — when a traditional method is selected, use a fixed disclosed mechanism before interpretation.
-6. **Freeze** — record the exact judgment, confidence, method structure and review date before the outcome.
-7. **Review** — append what actually happened, including misses and surprises.
-8. **Reweight** — increase, keep, reduce or reject method/assumption weight based on repeated evidence.
+3. **Clarify** — ask only the 2–3 missing questions that could materially change the judgment; skip this step when the input is already sufficient.
+4. **Estimate** — use base rates, probabilities, scenarios and explicit uncertainty where appropriate.
+5. **Decide** — prefer robust action over dramatic narrative.
+6. **Calculate / Cast** — when a traditional method is selected, use a fixed disclosed mechanism before interpretation.
+7. **Freeze** — record the exact judgment, confidence, method structure and review date before the outcome.
+8. **Review** — append what actually happened, including misses and surprises.
+9. **Reweight** — increase, keep, reduce or reject method/assumption weight based on repeated evidence.
 
 ## Weighting principles
 
@@ -283,6 +306,7 @@ GUANSHI does not use fixed universal percentages.
 - traditional source spine T01–T08;
 - two consultation routes;
 - live server-side GUANSHI analysis;
+- **zero-AI intelligent clarification gate with one-round / max-three-question follow-up**;
 - deterministic Bazi chart layer before AI interpretation;
 - **deterministic Six Lines digital three-coin casting workflow**;
 - **fixed Meihua submission-moment arithmetic workflow**;
@@ -298,12 +322,11 @@ GUANSHI does not use fixed universal percentages.
 ### Next
 1. accumulate low-stakes, comparable, pre-registered cases;
 2. separate calibration by case class and by method instead of pooling everything;
-3. add intelligent follow-up questions when missing information materially changes the answer;
-4. add actual environmental measurements when users have them;
-5. add optional physical-coin/manual Six Lines entry as a separately labeled method if demand appears;
-6. add optional account/history only after retention policy is defined;
-7. add independent Cloudflare Gateway authorization/budget protection;
-8. consider privacy-preserving server anchoring of case hashes.
+3. add actual environmental measurements when users have them;
+4. add optional physical-coin/manual Six Lines entry as a separately labeled method if demand appears;
+5. add optional account/history only after retention policy is defined;
+6. add independent Cloudflare Gateway authorization/budget protection;
+7. consider privacy-preserving server anchoring of case hashes.
 
 ## Boundaries
 
