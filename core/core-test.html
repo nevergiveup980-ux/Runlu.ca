@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#f7f4ed">
+<title>RUNLU Core Smoke Test</title>
+<link rel="stylesheet" href="../styles.css?v=20260905-core01">
+<style>
+body{background:#f7f4ed;color:#171915}.core-shell{max-width:900px;margin:auto;padding:54px 6vw 90px}.core-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}.core-head h1{font-size:clamp(2.7rem,7vw,5.8rem);line-height:.96;letter-spacing:-.055em;font-weight:500;margin:10px 0 14px}.core-head p{max-width:650px;color:#697068}.core-badge{border:1px solid rgba(23,25,21,.12);border-radius:999px;padding:8px 12px;background:#fff;white-space:nowrap;font-size:.78rem}.test-card{margin-top:28px;background:#fff;border:1px solid rgba(23,25,21,.12);border-radius:24px;overflow:hidden}.test-row{display:grid;grid-template-columns:1.2fr .7fr 2fr;gap:16px;padding:16px 18px;border-bottom:1px solid rgba(23,25,21,.1);align-items:center}.test-row:last-child{border-bottom:0}.test-name{font-weight:650}.test-state{font-size:.76rem;font-weight:750;text-transform:uppercase;letter-spacing:.08em}.test-state.pass{color:#2f6f45}.test-state.fail{color:#9b3f32}.test-state.wait{color:#8a7441}.test-detail{font-size:.84rem;color:#697068;overflow-wrap:anywhere}.core-foot{margin-top:24px;color:#697068;font-size:.82rem;line-height:1.6}.core-links{margin-bottom:25px;display:flex;gap:16px;flex-wrap:wrap;font-size:.86rem}.core-links a{border-bottom:1px solid currentColor}.language-select{min-width:120px}@media(max-width:700px){.core-shell{padding:36px 20px 70px}.core-head{display:block}.core-badge{display:inline-flex;margin-top:10px}.test-row{grid-template-columns:1fr}.test-state{margin-top:-8px}.test-detail{margin-top:-8px}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../index.html">RUNLU</a>
+  <select class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language">
+    <option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option>
+  </select>
+</header>
+<main class="core-shell">
+  <div class="core-links"><a href="../asset-map.html" data-en="← Asset Map" data-zh="← 资产图谱" data-fr="← Carte des actifs" data-es="← Mapa de activos">← Asset Map</a><a href="../master-vault.html" data-en="Master Copy Vault" data-zh="母版资产库" data-fr="Coffre des masters" data-es="Bóveda de másteres">Master Copy Vault</a></div>
+  <section class="core-head">
+    <div>
+      <p class="section-kicker">RUNLU CORE · V0.1</p>
+      <h1 data-en="One foundation. Many useful tools." data-zh="一个底座，托住许多工具。" data-fr="Une base. De nombreux outils utiles." data-es="Una base. Muchas herramientas útiles.">One foundation. Many useful tools.</h1>
+      <p data-en="A read-only smoke test for the shared RUNLU browser foundation. It checks reusable capabilities without changing application data." data-zh="这是 RUNLU 共享浏览器底座的只读冒烟测试。它检查可复用能力，不修改任何应用数据。" data-fr="Un test de fumée en lecture seule pour la base navigateur partagée de RUNLU. Il vérifie les capacités réutilisables sans modifier les données des applications." data-es="Una prueba de humo de solo lectura para la base compartida del navegador RUNLU. Comprueba capacidades reutilizables sin modificar datos de las aplicaciones.">A read-only smoke test for the shared RUNLU browser foundation.</p>
+    </div>
+    <div id="versionBadge" class="core-badge">Core loading…</div>
+  </section>
+
+  <section class="test-card" aria-live="polite">
+    <div class="test-row"><div class="test-name" data-en="Core namespace" data-zh="Core 命名空间" data-fr="Espace de noms Core" data-es="Espacio de nombres Core">Core namespace</div><div id="stateCore" class="test-state wait">WAIT</div><div id="detailCore" class="test-detail">—</div></div>
+    <div class="test-row"><div class="test-name" data-en="Four-language layer" data-zh="四语言层" data-fr="Couche multilingue" data-es="Capa multilingüe">Four-language layer</div><div id="stateLang" class="test-state wait">WAIT</div><div id="detailLang" class="test-detail">—</div></div>
+    <div class="test-row"><div class="test-name" data-en="Browser SHA-256" data-zh="浏览器 SHA-256" data-fr="SHA-256 du navigateur" data-es="SHA-256 del navegador">Browser SHA-256</div><div id="stateCrypto" class="test-state wait">WAIT</div><div id="detailCrypto" class="test-detail">—</div></div>
+    <div class="test-row"><div class="test-name" data-en="Cloud adapter" data-zh="云端适配层" data-fr="Adaptateur cloud" data-es="Adaptador cloud">Cloud adapter</div><div id="stateCloud" class="test-state wait">WAIT</div><div id="detailCloud" class="test-detail">—</div></div>
+    <div class="test-row"><div class="test-name" data-en="Auth session read" data-zh="登录会话读取" data-fr="Lecture de session" data-es="Lectura de sesión">Auth session read</div><div id="stateAuth" class="test-state wait">WAIT</div><div id="detailAuth" class="test-detail">—</div></div>
+    <div class="test-row"><div class="test-name" data-en="Versioned file path" data-zh="版本化文件路径" data-fr="Chemin de fichier versionné" data-es="Ruta de archivo versionada">Versioned file path</div><div id="statePath" class="test-state wait">WAIT</div><div id="detailPath" class="test-detail">—</div></div>
+  </section>
+  <p class="core-foot" data-en="This page performs no database writes and no Storage uploads. A green PASS means the shared building block initialized correctly in this browser; it does not replace product-level testing." data-zh="本页不会写入数据库，也不会上传文件。绿色 PASS 代表共享底座已在当前浏览器正确初始化，但它不能替代各产品自己的测试。" data-fr="Cette page n’écrit rien dans la base de données et ne téléverse aucun fichier. PASS en vert signifie que la base partagée s’est initialisée correctement dans ce navigateur; cela ne remplace pas les tests de chaque produit." data-es="Esta página no escribe en la base de datos ni sube archivos. Un PASS verde significa que la base compartida se inicializó correctamente en este navegador; no sustituye las pruebas de cada producto.">This page performs no database writes and no Storage uploads.</p>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../runlu-language.js?v=20260905-core01"></script>
+<script src="runlu-core.js?v=0.1.0"></script>
+<script src="runlu-cloud.js?v=0.1.0"></script>
+<script>
+(()=>{
+  const set=(id,ok,detail)=>{const state=document.getElementById('state'+id),text=document.getElementById('detail'+id);state.textContent=ok?'PASS':'FAIL';state.className='test-state '+(ok?'pass':'fail');text.textContent=detail||''};
+  async function run(){
+    const core=window.RUNLU;
+    set('Core',Boolean(core?.core?.ready),core?.core?.version?`RUNLU Core ${core.core.version}`:'Core not available');
+    const language=core?.i18n?.language?.();set('Lang',['en','zh','fr','es'].includes(language),language?`Current language: ${language}`:'Language state unavailable');
+    const cryptoReady=Boolean(window.crypto?.subtle&&core?.security?.sha256);set('Crypto',cryptoReady,cryptoReady?'Web Crypto + Core SHA-256 ready':'SHA-256 unavailable');
+    try{const client=core?.cloud?.getClient?.();set('Cloud',Boolean(client),core?.cloud?.provider?`${core.cloud.provider} · ${core.cloud.version}`:'Cloud adapter unavailable')}catch(error){set('Cloud',false,error.message)}
+    try{const session=await core.cloud.auth.session();set('Auth',true,session?'Existing authenticated session detected':'No active session; read completed normally')}catch(error){set('Auth',false,error.message)}
+    try{const path=core.cloud.storage.versionedUserPath({userId:'smoke-user',scope:'runlu-core',filename:'sample file.txt'});set('Path',path.startsWith('smoke-user/runlu-core/'),path)}catch(error){set('Path',false,error.message)}
+    document.getElementById('versionBadge').textContent=core?.core?.version?`Core ${core.core.version}`:'Core unavailable';
+  }
+  run();window.addEventListener('runlu:languagechange',()=>{const language=window.RUNLU?.i18n?.language?.();document.getElementById('detailLang').textContent=`Current language: ${language||'—'}`});
+})();
+</script>
+</body>
+</html>

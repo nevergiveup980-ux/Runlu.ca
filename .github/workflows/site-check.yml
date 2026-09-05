@@ -29,6 +29,8 @@ jobs:
           node --check forum.js
           node --check forum-live-ai.js
           node --check leave-a-note.js
+          node --check core/runlu-core.js
+          node --check core/runlu-cloud.js
           node --check scripts/check-multilingual.mjs
       - name: Enforce complete four-language pages
         run: node scripts/check-multilingual.mjs
