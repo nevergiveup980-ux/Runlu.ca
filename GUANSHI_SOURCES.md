@@ -1,6 +1,6 @@
 # RUNLU GUANSHI · Scientific + Traditional Source Ledger
 
-Status: V0.3 source library  
+Status: **V1.1 source library · traditional spine T001–T008 complete**  
 Rule: sources support **specific methods, historical statements or claims**, never the framework as a whole.
 
 ## Source-quality policy
@@ -128,11 +128,30 @@ https://www.cos.io/r3ct/gfs-trial
 
 ---
 
+## S007 · Healthy housing and measurable environmental conditions
+
+**Source**  
+World Health Organization, *WHO Housing and Health Guidelines* (2018).  
+https://www.who.int/publications/i/item/9789241550376
+
+**What it supports for GUANSHI**
+- Housing conditions can materially affect health and well-being.
+- WHO provides evidence-based recommendations relating to inadequate living space/crowding, low and high indoor temperatures, injury hazards and accessibility.
+- The guidelines also integrate existing WHO guidance relevant to water quality, air quality, neighbourhood noise, asbestos, lead, tobacco smoke and radon.
+
+**GUANSHI use**
+- Supports T08 treating temperature, ventilation/air quality, noise, safety, accessibility and usable space as measurable environmental variables.
+- Does **not** support unrelated symbolic claims about auspicious directions, qi or compass-school formulas.
+
+**Label:** Established / supported environmental-health guidance for the specific variables covered.
+
+---
+
 # How scientific sources connect to the GUANSHI loop
 
-| GUANSHI step | Scientific support seeded in V0.2 |
+| GUANSHI step | Scientific support seeded in the ledger |
 |---|---|
-| Observe | S002 — bias awareness |
+| Observe | S002 — bias awareness; S007 — measurable environment |
 | Frame | S001, S003, S005 — options, framing, decision structure |
 | Estimate | S001, S004 — uncertainty and probabilistic forecasts |
 | Decide | S001, S005 — consequences, robustness, multiple futures |
@@ -142,7 +161,7 @@ https://www.cos.io/r3ct/gfs-trial
 
 ---
 
-# Traditional source cards · V0.3
+# Traditional source cards · V1.1
 
 The sequence below is a **learning/model-dependency line**, not a strict chronology:
 
@@ -170,7 +189,7 @@ https://ctext.org/book-of-changes/xi-ci-xia
 ## T002 · Yin–Yang — relational polarity
 
 **Primary source anchor**  
-*Xi Ci I* contains the canonical formulation linking one yin and one yang with dao and repeatedly frames change through strong/weak, movement/rest and complementary relations.  
+*Xi Ci I*.  
 https://ctext.org/book-of-changes/xi-ci-shang
 
 **Historical use for GUANSHI**
@@ -228,9 +247,6 @@ https://www.routledge.com/Chinese-Mathematical-Astrology-Reaching-Out-to-the-Sta
 - Stems/branches function as foundational ordinal/calendrical structures reused across Chinese mathematical-astrological systems.
 - Later fate-calculation methods build on this older temporal encoding framework.
 
-**Next source task**
-- Add early inscription/calendar scholarship for the antiquity and mechanics of the sexagenary cycle.
-
 **GUANSHI label:** Historical/calendrical structure + Traditional interpretations.
 
 ---
@@ -238,7 +254,7 @@ https://www.routledge.com/Chinese-Mathematical-Astrology-Reaching-Out-to-the-Sta
 ## T006 · Bazi / Four Pillars — layered fate-calculation tradition
 
 **Modern scholarly source seed**  
-Ho Peng Yoke, *Chinese Mathematical Astrology: Reaching Out to the Stars*, especially discussion of Four Pillars / eight characters and Ziping fate-calculation.  
+Ho Peng Yoke, *Chinese Mathematical Astrology: Reaching Out to the Stars*.  
 https://www.routledge.com/Chinese-Mathematical-Astrology-Reaching-Out-to-the-Stars/Yoke/p/book/9780415863100
 
 **Traditional source targets**
@@ -266,12 +282,10 @@ https://www.routledge.com/Fortune-tellers-and-Philosophers-Divination-In-Traditi
 **What it supports for GUANSHI**
 - Chinese divination includes multiple historically distinct techniques and must be studied in cultural/historical context rather than flattened into one method.
 
-**Next source tasks**
-- Build a separate textual history for Six-Line traditions and Jing Fang-related lineages.
-- Audit the textual attribution and dating of `梅花易数 / Meihua Yishu`; do not assume simple authorship by Shao Yong without source review.
-
-**Empirical boundary**
-- Any predictive claim must be preregistered and scored against outcomes.
+**T07 audit rule**
+- Six Lines and Meihua remain separate historical/method families.
+- Question, casting method, interpretation school, time window and success criteria must be frozen before the outcome.
+- Famous prediction stories are not validation data.
 
 **GUANSHI label:** Traditional + Exploratory.
 
@@ -280,20 +294,50 @@ https://www.routledge.com/Fortune-tellers-and-Philosophers-Divination-In-Traditi
 ## T008 · Feng Shui — environment, siting and symbolic rules
 
 **Traditional textual anchor**  
-`葬书 / Zangshu` textual tradition, historically associated with Guo Pu, with attribution/history cautions.  
-https://ctext.org/wiki.pl?chapter=592339&if=en
+`葬书 / Zangshu`, Chinese Text Project transmitted edition.  
+https://ctext.org/wiki.pl?if=en&res=404104
+
+**Attribution caution**
+- The received tradition strongly associates the work with Guo Pu.
+- The Chinese Text Project catalogue itself marks author/dynasty metadata as uncertain while presenting the transmitted edition and received association.
+- GUANSHI therefore records the Guo Pu link as part of the received tradition while keeping textual history open to scholarly qualification.
 
 **Modern historical source seed**  
 Richard J. Smith, *Fortune-tellers and Philosophers*, including historical discussion of geomancy / “wind and water.”  
 https://www.routledge.com/Fortune-tellers-and-Philosophers-Divination-In-Traditional-Chinese-Society/Smith/p/book/9780367159801
 
+**Modern environmental evidence seed**  
+World Health Organization, *WHO Housing and Health Guidelines*.  
+https://www.who.int/publications/i/item/9789241550376
+
 **GUANSHI split rule**
-- **Measurable environment:** light, noise, airflow, temperature, access, circulation, layout, terrain/drainage, safety, privacy.
-- **Traditional symbolism:** directional correspondences, symbolic forms, qi/auspiciousness rules and school-specific prescriptions.
 
-The two layers must be labeled independently.
+Measurable environment:
+- daylight / solar exposure;
+- indoor temperature;
+- ventilation and air quality;
+- noise;
+- usable space / crowding;
+- access and circulation;
+- safety and accessibility;
+- privacy and sightlines;
+- terrain, drainage and moisture;
+- orientation where it changes measurable sun, wind, heat, noise or view.
 
-**GUANSHI label:** Mixed — measurable evidence + Traditional/Symbolic.
+Traditional symbolism:
+- qi and wind-water formulations;
+- directional correspondences;
+- symbolic mountain/water forms;
+- bagua/five-phase correspondences;
+- compass-school calculations;
+- school-specific auspiciousness, prosperity, relationship, health or fate prescriptions.
+
+**Empirical boundary**
+- Evidence that housing temperature, air quality, noise or safety matters does not validate unrelated compass or auspiciousness rules.
+- A traditional rule that happens to align with good environmental design does not by itself establish the symbolic/metaphysical mechanism used to explain it.
+- For any measurable claim, compare a reality baseline M0 with M0 plus one preregistered traditional rule set M1.
+
+**GUANSHI label:** Mixed — measurable environmental evidence + Traditional/Symbolic rules.
 
 ---
 
@@ -307,3 +351,5 @@ For every traditional node, maintain four records whenever possible:
 4. **Empirical-claim record** — whether a specific measurable claim has been tested, how it was tested, and what credible evidence shows.
 
 Never convert “historically documented” into “scientifically established.”
+
+Never convert “modern science confirms one environmental variable” into “modern science confirms an entire traditional system.”
