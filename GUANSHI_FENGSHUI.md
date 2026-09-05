@@ -1,8 +1,9 @@
 # RUNLU GUANSHI · T08 Feng Shui · 环境的语法
 
-Status: **V1.1 · traditional source spine complete**
+Status: **V1.2 · structured site ledger live**
 
-Public page: `guanshi-fengshui.html`
+Public page: `guanshi-fengshui.html`  
+Live consultation: `guanshi-traditional-consult.html`
 
 ## Core position
 
@@ -26,6 +27,59 @@ A second rule:
 > Measure first. Symbolize second. Test added value last.
 
 **先测环境，再看象征，最后检验增量价值。**
+
+## V1.2 operational site ledger
+
+The public consultation now collects a structured environmental record instead of relying on a single free-text “Feng Shui description.”
+
+### Measurable / observable inputs
+
+When Feng Shui is selected, the user may record:
+
+- site type: home / workplace / business / room / other;
+- main use of the space;
+- facing direction in degrees, 0–359.9;
+- how the direction was obtained: compass / plan-map / estimate / unknown;
+- daylight quality;
+- ventilation / air movement;
+- noise level;
+- moisture / dampness status;
+- movement / circulation quality;
+- layout notes: entrance, doors, windows, bed/desk and main paths;
+- outside environment: roads, slope, water, surrounding buildings and noise sources;
+- the outcome the user hopes to improve;
+- other known real-world facts and constraints.
+
+The purpose is not to pretend that every item has equal scientific weight. It is to stop the consultation from jumping directly from a symbolic direction to a life conclusion without first describing the actual place.
+
+### Deterministic orientation layer
+
+If a facing degree is supplied, the server calculates two traditional coordinate labels **before AI interpretation**:
+
+1. **8-direction sector** — N / NE / E / SE / S / SW / W / NW, associated with the corresponding trigram label;
+2. **24-mountain label** — one of 壬子癸、丑艮寅、甲卯乙、辰巽巳、丙午丁、未坤申、庚酉辛、戌乾亥.
+
+The original degree and the measurement basis are preserved with the result.
+
+These are deterministic compass labels, not evidence that the symbolic direction causes prosperity, health, relationship or career outcomes.
+
+### Credit rule
+
+If a recommendation works because it improves:
+
+- light;
+- ventilation;
+- noise exposure;
+- moisture control;
+- circulation;
+- privacy;
+- accessibility;
+- heat / sun exposure;
+- safety;
+
+then GUANSHI credits that measurable mechanism first.
+
+A symbolic Feng Shui rule receives separate attention only for **incremental value beyond the measurable explanation**.
 
 ## Historical caution
 
@@ -83,17 +137,17 @@ These remain **Traditional** or **Symbolic** unless a specific measurable claim 
 
 Record first:
 
-- address/location;
-- latitude and orientation;
+- location context without collecting more precise address data than the question needs;
+- facing degree and measurement basis;
 - surrounding roads/buildings;
 - slope, drainage and water exposure;
-- climate and prevailing weather;
-- floor plan, room dimensions and openings;
+- climate and prevailing weather when relevant;
+- floor plan, room dimensions and openings when available;
 - occupancy and actual use.
 
 ### 2 · Measurable environmental variables
 
-Measure where relevant:
+Measure or classify where relevant:
 
 - illuminance / daylight pattern;
 - temperature;
@@ -104,6 +158,8 @@ Measure where relevant:
 - walking paths / bottlenecks;
 - sightlines and privacy;
 - trip/fall or other safety risks.
+
+The public prototype currently uses structured qualitative categories for several variables. Future versions may accept actual measurements where users have them.
 
 ### 3 · Human-use outcomes
 
@@ -177,7 +233,7 @@ These uses must not be mislabeled as proof that symbolic directional rules contr
 
 Environmental effects are domain-specific. Evidence for temperature, air quality, noise, crowding, safety or accessibility does **not** validate unrelated compass or auspiciousness rules.
 
-Likewise, a traditional rule that accidentally points toward a good environmental design outcome does not establish its stated metaphysical mechanism.
+Likewise, a traditional rule that happens to point toward a good environmental design outcome does not establish its stated metaphysical mechanism.
 
 ## High-stakes boundary
 
