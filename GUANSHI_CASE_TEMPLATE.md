@@ -1,33 +1,43 @@
-# RUNLU GUANSHI · Case Template
+# RUNLU GUANSHI · Case & Validation Template
 
-Version: V0.2
+Version: **V1.0 · aligned with GUANSHI V1.5 Validation Lab**
 
-Purpose: record a judgment **before** the outcome is known so GUANSHI can be reviewed rather than retrofitted after the fact.
+Purpose: freeze a judgment **before** the outcome is known, then append dated reviews later without rewriting the original record.
 
-## 1. Question
-- Decision/question:
-- Decision deadline:
-- Review date(s):
+Public tool:
+- `guanshi-validation.html` — **Validation Lab / 观势验证台**
+
+## 1. Case identity
+- Case ID:
+- Created at:
+- Source route: general / traditional / manual
+- Judgment type: binary forecast / decision judgment
+- Review date:
 - Stakes: low / medium / high
-- Reversibility: easy / moderate / difficult / irreversible
 
-## 2. Known facts
-Record only information known at the time.
+## 2. Question
+- Exact question:
+- Decision deadline / event horizon:
+- What would count as resolved?
+
+## 3. Known facts
+Record only information known **before** the outcome.
 
 - Fact 1:
 - Fact 2:
 - Fact 3:
 - Missing information:
 
-## 3. Reality layer
+## 4. Reality layer
 - Resources:
 - Constraints:
 - Environment:
 - Relevant history:
 - Observable behavior:
 - External conditions:
+- Base rate / reference class when available:
 
-## 4. Nine lenses
+## 5. GUANSHI lenses
 - 易 · Change:
 - 象 · Pattern:
 - 数 · Measure:
@@ -38,60 +48,73 @@ Record only information known at the time.
 - 变 · Scenarios:
 - 势 · Integrated direction:
 
-## 5. Modern decision layer
-### Base rate / prior
-- Reference class:
-- Starting probability or qualitative prior:
+## 6. Traditional layer — optional
+For every traditional input, attach a label and never silently convert symbolic interpretation into factual certainty.
 
-### Alternatives
-A.
-B.
-C.
-
-### Scenario table
-| Scenario | Estimated probability | Upside | Downside | Reversible? |
-|---|---:|---|---|---|
-| Best plausible | | | | |
-| Base case | | | | |
-| Adverse plausible | | | | |
-
-### Bias check
-- Confirmation bias risk:
-- Loss aversion risk:
-- Overconfidence risk:
-- Sunk-cost risk:
-- Framing effect risk:
-- Other:
-
-### Robustness
-What choice remains acceptable if our main assumption is wrong?
-
-## 6. Traditional model layer — optional
-For every traditional input, attach an evidence label.
-
-| Model | Input/interpretation | Label | Testable prediction? |
+| Model | Input / interpretation | Label | Testable prediction? |
 |---|---|---|---|
 | Yijing / Bagua | | Symbolic / Traditional | |
 | Yin–Yang / Five Phases | | Symbolic / Traditional | |
 | Stems & Branches | | Traditional / Mixed | |
 | Bazi | | Traditional | |
-| Divination method | | Exploratory / Traditional | |
+| Six Lines / Meihua | | Exploratory / Traditional | |
 | Feng Shui | | Measurable / Symbolic / Traditional | |
 
-Traditional output must never override reliable facts or professional guidance in high-stakes medical, legal, financial, safety or mental-health decisions.
+## 7. Frozen pre-outcome judgment
+This block must be completed **before** the outcome is known.
 
-## 7. Pre-outcome synthesis
-- Recommended action:
+- Exact forecast / judgment to test:
+- Recommended action, if any:
 - Confidence: ___%
 - Main reasons:
 - Strongest counterargument:
-- What would change the recommendation?
-- What evidence would falsify the traditional interpretation?
+- What would count against the judgment?
+- What evidence would change the recommendation?
+- What evidence would falsify a traditional interpretation?
 - What evidence would falsify the modern-model assumption?
 
-## 8. Outcome review
-Complete only after the review date.
+### Binary forecast fields
+Use only when the target is genuinely yes / no.
 
+- Predicted outcome: yes / no
+- Confidence in predicted outcome: ___%
+- Review deadline:
+
+For scoring after resolution, convert to probability of **Yes**:
+- if predicted Yes: `p = confidence`;
+- if predicted No: `p = 1 - confidence`.
+
+Then:
+
+`Brier score = (p - y)^2`
+
+where actual `y = 1` for Yes and `y = 0` for No.
+
+Lower is better. A single Brier score is not proof of forecasting skill; use a series of comparable pre-registered cases.
+
+### Decision judgment fields
+Use when the question is about choosing an action rather than predicting a clean binary event.
+
+- Recommended action:
+- Confidence:
+- Main downside:
+- Robust fallback if the main assumption is wrong:
+
+Do **not** manufacture a binary score when the case is not genuinely binary.
+
+## 8. Integrity fingerprint
+The V1.5 browser tool computes a SHA-256 fingerprint over the frozen original block.
+
+This is useful for detecting accidental local changes. Because both the case and fingerprint are stored in the same browser, it is **not** a public timestamp or independent cryptographic proof of non-tampering.
+
+Future enhancement: optionally anchor only the case hash + timestamp server-side without storing consultation text.
+
+## 9. Outcome review
+Complete only after the review date or when the event clearly resolves.
+
+Each review is a **new dated entry**.
+
+- Review status: interim / final
 - Actual action taken:
 - Actual outcome:
 - What we predicted correctly:
@@ -99,15 +122,37 @@ Complete only after the review date.
 - Important surprise:
 - Was confidence calibrated?
 - Did any traditional lens add information beyond ordinary facts/base rates?
-- Did any traditional lens merely redescribe what was already known?
-- Did any modern method fail because inputs/assumptions were poor?
+- Did a traditional lens merely redescribe what was already known?
+- Did any modern method fail because inputs or assumptions were poor?
 
-## 9. Weight adjustment
+For a resolved binary case:
+- actual outcome: yes / no
+- Brier score:
+- directional hit: yes / no
+
+## 10. Weight adjustment
 - Increase weight:
 - Keep weight:
 - Reduce weight:
 - Reject / archive:
 - Reason:
 
-## 10. Audit rule
-Do not edit the original prediction after the outcome is known. Add corrections and reflections as a dated review so the historical record remains intact.
+Weight adjustments apply to **methods or assumptions**, not to rewriting the historical case.
+
+## 11. Calibration discipline
+Track, at minimum:
+- number of frozen cases;
+- number of final reviews;
+- number of resolved binary forecasts;
+- directional accuracy for resolved binary forecasts;
+- mean Brier score for resolved binary forecasts.
+
+Do not advertise accuracy from a tiny, cherry-picked or mixed sample. Separate comparable case classes where possible.
+
+## 12. Audit rule
+
+> **Do not edit the original prediction after the outcome is known. Add corrections and reflections as a dated review so the historical record remains intact.**
+
+Chinese:
+
+> **结果出来以后，不改原判；只追加复盘。命中的留下，失误的也留下。**
