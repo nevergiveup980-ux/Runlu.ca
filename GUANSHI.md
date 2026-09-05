@@ -1,6 +1,6 @@
 # RUNLU GUANSHI · 观势 · Trend Dynamics
 
-Status: **V1.5 · source spine complete + live consultation + protected AI + validation loop**
+Status: **V1.6 · source spine complete + live consultation + protected AI + validation loop + fixed traditional mechanics**
 
 Public framework: `guanshi.html`  
 Start GUANSHI: `guanshi-consult.html`  
@@ -58,11 +58,17 @@ It is **not** presented as a scientifically proven fortune-telling system.
 
 **环境可以重要；它为什么重要，必须一层一层证明。**
 
-V1.5 adds the operational rule:
+V1.5 adds the operational review rule:
 
 > Do not rewrite the original judgment after reality answers. Append the review.
 
 **结果出来以后，不改原判；只追加复盘。命中的留下，失误的也留下。**
+
+V1.6 adds the traditional-mechanics rule:
+
+> Calculate before interpreting. Freeze the method before knowing the outcome.
+
+**先算清楚，再作解释；先把方法固定，再等现实回答。**
 
 ## Nine lenses
 
@@ -92,7 +98,7 @@ Operationally:
 
 Traditional input should move through:
 
-**Original meaning → structural abstraction → observable variables → testable relationship → frozen judgment → recorded outcome**
+**Original meaning → structural abstraction → deterministic mechanics where applicable → observable variables → testable relationship → frozen judgment → recorded outcome**
 
 If a claim cannot pass into observable or falsifiable form, it remains **Traditional** or **Symbolic** and receives no factual predictive weight.
 
@@ -121,26 +127,60 @@ Reality, constraints, options, timing, uncertainty and downside come first. Trad
 ### Door B · Traditional View
 For a user with an explicit Bazi, Ganzhi/timing, Six Lines, Meihua, Feng Shui or mixed traditional request.
 
-Traditional interpretation and reality analysis remain separate ledgers before synthesis.
+V1.6 shows method-specific inputs instead of treating birth data as a universal entry requirement.
+
+Traditional View now preserves three ledgers:
+1. **calculation / casting ledger**;
+2. **traditional interpretation ledger**;
+3. **reality ledger**.
+
+### Deterministic traditional layer · V1.6
+
+**Bazi**
+- civil-time Four Pillars are computed before interpretation;
+- chart conversion and life claims remain separate evidence layers.
+
+**Six Lines**
+- fixed server-side digital three-coin method;
+- one cryptographic seed;
+- H=3 / T=2;
+- six lines bottom-to-top;
+- 6 and 9 changing;
+- seed, all 18 coin faces, six line values, moving lines, primary and relating hexagrams returned with the consultation.
+
+**Meihua**
+- fixed submission-moment method;
+- year/hour use Earthly-Branch ordinals;
+- lunar month/day are used;
+- modulo 8 determines upper/lower trigrams;
+- modulo 6 determines the moving line;
+- moment, timezone metadata and arithmetic are returned with the consultation.
+
+**Feng Shui**
+- site type/use, facing degrees, measurement basis, daylight, ventilation, noise, moisture, circulation, layout and outside environment can be recorded separately;
+- facing degrees are deterministically converted to an 8-direction sector and 24-mountain label;
+- measurable environmental mechanisms receive explanatory credit before symbolic compass rules.
+
+None of these deterministic mechanics establishes predictive accuracy by itself.
 
 ### AI protection state
-The public analysis route is protected server-side by conservative identity/network/hourly limits and a dedicated GUANSHI reservation budget. See `GUANSHI_CONSULTATION.md` for the current operational limits.
+The public analysis route is protected server-side by conservative identity/network/hourly limits and a dedicated GUANSHI reservation budget. See `GUANSHI_CONSULTATION.md` for current operational limits.
 
 A public RUNLU account UI is not yet live. A second independent Cloudflare Gateway hard cap remains desirable.
 
-## Validation architecture · V1.5
+## Validation architecture
 
 Public tool: `guanshi-validation.html`
 
 Core loop:
 
-**Consult → Freeze → Wait → Review → Reweight**
+**Consult → Calculate / Cast → Interpret → Freeze → Wait → Review → Reweight**
 
-**咨询 → 冻结 → 等待 → 复盘 → 调权**
+**咨询 → 计算 / 起卦 → 解读 → 冻结 → 等待 → 复盘 → 调权**
 
 A successful consultation exposes **Freeze for later review / 冻结为验证案例**.
 
-The latest successful consultation is handed to the Validation Lab through browser `sessionStorage` so the source question and result can be pre-filled without creating a server-side case history.
+The latest successful consultation is handed to the Validation Lab through browser `sessionStorage` so the source question, deterministic structure and interpretation can be frozen together without creating a server-side case history.
 
 ### Judgment class A · Binary forecast
 Use only for genuinely yes/no outcomes.
@@ -182,12 +222,12 @@ Review qualitatively rather than manufacturing a false numeric score.
 ### Anti-hindsight firewall
 The original case block is frozen before the outcome. Later reviews are appended as dated entries.
 
-The V1.5 browser tool computes a SHA-256 integrity fingerprint over the original block. Because the case and hash are stored together locally, this detects accidental change but is **not** an independent public timestamp or tamper-proof certification.
+The browser tool computes a SHA-256 integrity fingerprint over the original block. Because the case and hash are stored together locally, this detects accidental change but is **not** an independent public timestamp or tamper-proof certification.
 
-Possible later improvement: server-anchor only `case hash + timestamp` without storing the consultation text.
+Possible later improvement: server-anchor only `case hash + timestamp` without storing consultation text.
 
 ### Local-first privacy
-Validation cases and reviews are stored in browser `localStorage` in V1.5.
+Validation cases and reviews are stored in browser `localStorage`.
 
 Users can export/import the ledger as JSON. There is no server-side persistent validation database yet.
 
@@ -204,21 +244,22 @@ The Validation Lab currently summarizes:
 
 Small samples are descriptive, not proof.
 
-Do not advertise accuracy from cherry-picked, mixed or tiny samples. Separate comparable case classes as the ledger grows.
+Do not advertise accuracy from cherry-picked, mixed or tiny samples. Separate comparable case classes — and eventually traditional methods — as the ledger grows.
 
 A traditional model earns additional research weight only through prospectively recorded added value over a reasonable reality baseline. A model that merely redescribes known facts receives no predictive credit.
 
 ## Decision loop
 
-**Observe → Frame → Estimate → Decide → Freeze → Review → Reweight**
+**Observe → Frame → Estimate → Decide → Calculate / Cast when relevant → Freeze → Review → Reweight**
 
 1. **Observe** — separate known facts, assumptions and unknowns.
 2. **Frame** — define the real question, alternatives, horizon and stakes.
 3. **Estimate** — use base rates, probabilities, scenarios and explicit uncertainty where appropriate.
 4. **Decide** — prefer robust action over dramatic narrative.
-5. **Freeze** — record the exact judgment, confidence and review date before the outcome.
-6. **Review** — append what actually happened, including misses and surprises.
-7. **Reweight** — increase, keep, reduce or reject method/assumption weight based on repeated evidence.
+5. **Calculate / Cast** — when a traditional method is selected, use a fixed disclosed mechanism before interpretation.
+6. **Freeze** — record the exact judgment, confidence, method structure and review date before the outcome.
+7. **Review** — append what actually happened, including misses and surprises.
+8. **Reweight** — increase, keep, reduce or reject method/assumption weight based on repeated evidence.
 
 ## Weighting principles
 
@@ -243,6 +284,9 @@ GUANSHI does not use fixed universal percentages.
 - two consultation routes;
 - live server-side GUANSHI analysis;
 - deterministic Bazi chart layer before AI interpretation;
+- **deterministic Six Lines digital three-coin casting workflow**;
+- **fixed Meihua submission-moment arithmetic workflow**;
+- **structured Feng Shui site/environment intake with deterministic compass labels**;
 - protected public AI quotas/budget;
 - local-first Validation Lab;
 - frozen case fingerprint;
@@ -253,10 +297,10 @@ GUANSHI does not use fixed universal percentages.
 
 ### Next
 1. accumulate low-stakes, comparable, pre-registered cases;
-2. separate calibration by case class instead of pooling everything;
-3. add deterministic casting workflows for Six Lines / Meihua;
-4. add structured measurement intake for Feng Shui;
-5. add intelligent follow-up questions when missing information materially changes the answer;
+2. separate calibration by case class and by method instead of pooling everything;
+3. add intelligent follow-up questions when missing information materially changes the answer;
+4. add actual environmental measurements when users have them;
+5. add optional physical-coin/manual Six Lines entry as a separately labeled method if demand appears;
 6. add optional account/history only after retention policy is defined;
 7. add independent Cloudflare Gateway authorization/budget protection;
 8. consider privacy-preserving server anchoring of case hashes.
