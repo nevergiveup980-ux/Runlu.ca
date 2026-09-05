@@ -1,6 +1,6 @@
 # RUNLU GUANSHI · Consultation & Validation Protocol
 
-Status: **V1.6 · two consultation routes + live analysis + protected public usage + validation loop + fixed traditional mechanics**
+Status: **V1.6 · two consultation routes + live analysis + protected public usage + validation loop + fixed traditional mechanics + intelligent clarification gate**
 
 Public routes:
 - `guanshi-consult.html` — **Start GUANSHI / 开始观势**
@@ -12,13 +12,17 @@ Server analysis:
 - OpenAI route: RUNLU Cloudflare GPT Gateway
 - deterministic calendar/casting/site layer before AI interpretation
 
+Client preflight:
+- `guanshi-preflight.js`
+- zero-AI missing-information check before the analysis request
+
 ## Product principle
 
 GUANSHI has two doors, one evidence discipline, and one review loop.
 
-**Consult → Calculate / Cast → Interpret → Freeze → Wait → Review → Reweight**
+**Consult → Clarify when needed → Calculate / Cast → Interpret → Freeze → Wait → Review → Reweight**
 
-**咨询 → 计算 / 起卦 → 解读 → 冻结 → 等待 → 复盘 → 调权**
+**咨询 → 必要时补问 → 计算 / 起卦 → 解读 → 冻结 → 等待 → 复盘 → 调权**
 
 ## Route A · Start GUANSHI / 开始观势
 
@@ -61,6 +65,36 @@ Supported categories:
 - mixed / not-sure traditional request.
 
 The page shows method-specific inputs instead of one universal form.
+
+## Intelligent clarification gate
+
+Before the public page calls the AI analysis route, `guanshi-preflight.js` checks whether a small number of missing inputs could materially change the judgment.
+
+Principles:
+- **maximum one clarification round**;
+- **maximum three questions**;
+- questions are chosen by decision topic or selected traditional method;
+- the user may answer, write “not sure”, or explicitly skip and continue;
+- clarification answers are appended to the consultation facts block so they travel with the final result and can be frozen in Validation Lab;
+- editing the original form invalidates the previous preflight and causes a fresh check;
+- the clarification step itself makes **no OpenAI / Gateway call** and therefore does **not** consume one of the daily free AI analyses;
+- the AI call happens only after clarification is completed or skipped.
+
+Examples of high-impact follow-up logic:
+- **career** — current role / approximate compensation / reason for change; concrete alternative or offer; true decision horizon; non-negotiables;
+- **business** — current traction/resources; real alternatives; budget/time/cash-flow/downside limits;
+- **relationship** — current state and recent change; desired outcome; time window; boundary/falsifier;
+- **home/environment** — current site facts; real alternatives; budget/timing constraints;
+- **Bazi** — birth time when known, plus relevant current reality when the question is decision-linked;
+- **Ganzhi/timing** — exact period plus real-world conditions and the action depending on timing;
+- **Six Lines / Meihua** — testable event wording, known reality baseline, and what action depends on the result;
+- **Feng Shui** — intended site outcome, direction only when direction matters, and missing layout/surroundings or measured facts.
+
+The goal is not to maximize data collection. The rule is:
+
+> **Ask only what can materially change the judgment.**
+>
+> **只追问真正可能改变结论的资料。**
 
 ## V1.6 deterministic traditional mechanics
 
@@ -222,8 +256,9 @@ Small samples are descriptive, not evidence of validated forecasting skill. Comp
 
 ## V1.6 privacy state
 
-Consultation fields are processed server-side when the user presses Generate.
+Consultation fields are processed server-side only after the user proceeds to actual analysis.
 
+- preflight clarification is performed in the browser and does not call the AI route;
 - consultation text is not written to the GUANSHI usage ledger;
 - usage metadata is stored separately for budget/abuse protection;
 - deterministic chart/cast/site structures are returned to the browser with the consultation;
@@ -264,15 +299,14 @@ Do not claim that gateway-level hard cap is complete until the Worker itself is 
 
 1. accumulate low-stakes frozen cases before making any performance claim;
 2. separate calibration by comparable case class and by method;
-3. add intelligent follow-up questions when missing information would materially change the analysis;
-4. add actual environmental measurements to Feng Shui cases when users have them;
-5. add optional physical-coin / manual Six Lines entry as a separately labeled method if needed;
-6. add user-controlled account/history only after retention rules are defined;
-7. add Cloudflare gateway hard budget/authentication;
-8. consider server anchoring of validation hashes without storing case text.
+3. add actual environmental measurements to Feng Shui cases when users have them;
+4. add optional physical-coin / manual Six Lines entry as a separately labeled method if needed;
+5. add user-controlled account/history only after retention rules are defined;
+6. add Cloudflare gateway hard budget/authentication;
+7. consider server anchoring of validation hashes without storing case text.
 
 ## Core sentence
 
-> **Calculate before interpreting. Freeze before knowing. Let reality answer last.**
+> **Ask only what matters. Calculate before interpreting. Freeze before knowing. Let reality answer last.**
 >
-> **先算清楚，再作解释；先把话留下，再让现实回答。**
+> **只问真正重要的资料；先算清楚，再作解释；先把话留下，再让现实回答。**
