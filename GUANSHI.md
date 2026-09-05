@@ -1,6 +1,6 @@
 # RUNLU GUANSHI · 观势 · Trend Dynamics
 
-Status: **V1.0 · traditional source spine T01–T07 live**
+Status: **V1.1 · traditional source spine T01–T08 complete**
 
 Public framework: `guanshi.html`  
 Knowledge map: `guanshi-map.html`  
@@ -12,6 +12,7 @@ T04 Bagua: `guanshi-bagua.html` / `GUANSHI_BAGUA.md`
 T05 Stems & Branches: `guanshi-ganzhi.html` / `GUANSHI_GANZHI.md`  
 T06 Bazi: `guanshi-bazi.html` / `GUANSHI_BAZI.md`  
 T07 Six Lines / Meihua: `guanshi-liuyao-meihua.html` / `GUANSHI_LIUYAO_MEIHUA.md`  
+T08 Feng Shui: `guanshi-fengshui.html` / `GUANSHI_FENGSHUI.md`  
 Case protocol: `GUANSHI_CASE_TEMPLATE.md`
 
 ## Purpose
@@ -51,17 +52,25 @@ T06 adds:
 
 **排盘正确，不等于人生预测正确。**
 
-T07 adds the strongest forecast rule so far:
+T07 adds:
 
 > A forecast must exist before the outcome does.
 
 **预测必须先于结果存在。**
 
-And:
-
 > A method that can explain every outcome after the fact has not yet shown predictive skill.
 
 **如果一种方法在事后什么结果都能解释，它还没有证明自己会预测。**
+
+T08 closes the source spine with:
+
+> The environment can matter. Why it matters must be demonstrated layer by layer.
+
+**环境可以重要；它为什么重要，必须一层一层证明。**
+
+> Measure first. Symbolize second. Test added value last.
+
+**先测环境，再看象征，最后检验增量价值。**
 
 ## Nine lenses
 
@@ -161,19 +170,52 @@ Key anti-hindsight rules:
 
 Even without predictive advantage, a practice may retain decision-process value by forcing precise questions, slowing impulsive judgment, generating alternatives and creating a dated decision journal. That process value must not be misreported as proof of divination.
 
-### T08 · Feng Shui — Next
+### T08 · Feng Shui · V1.1 — Grammar of Environment
 
-Measurable environmental variables remain separate from traditional symbolic rules. Planned focus: light, noise, airflow, temperature, access, circulation, terrain, privacy and safety versus orientation, qi, auspiciousness and school-specific symbolic prescriptions.
+Feng Shui closes the traditional source spine by separating **place effects** from **symbolic explanations**.
 
-## Emerging GUANSHI translation architecture
+Two ledgers remain separate:
 
-The first seven traditional nodes now form a coherent chain:
+**Measurable environment**
+- daylight / solar exposure;
+- temperature and thermal stability;
+- ventilation and air quality;
+- noise;
+- access and circulation;
+- usable space / crowding;
+- safety and accessibility;
+- privacy and sightlines;
+- terrain, drainage and moisture;
+- orientation when it changes sun, wind, heat, noise or view.
 
-**Change → Relation → System → State → Time → Person × Time → Event**
+**Traditional / symbolic rules**
+- qi and wind-water formulations;
+- mountain/water symbolic forms;
+- directional auspiciousness;
+- bagua / five-phase correspondences;
+- compass-school calculations;
+- school-specific prosperity, relationship, health or fate claims.
+
+Working test:
+**site facts → environmental measurements → human-use outcomes → freeze traditional rule → compare M0 vs M1 → reweight**
+
+Where:
+- **M0** = measurable environment + known behavioural/context variables;
+- **M1** = M0 + one preregistered Feng Shui rule set.
+
+Environmental evidence for temperature, air quality, noise, safety or accessibility does not validate unrelated symbolic directional rules.
+
+A traditional rule that happens to point toward a good design result does not by itself establish the metaphysical mechanism used to explain it.
+
+## Completed traditional translation architecture
+
+The eight traditional nodes now form the first complete GUANSHI source chain:
+
+**Change → Relation → System → State → Time → Person × Time → Event → Environment**
 
 Operationally:
 
-**What is changing? → What is interacting? → What system is forming? → What state are we in? → Where are we in time? → Does person/time coding add signal? → Can a frozen event forecast beat the reality baseline?**
+**What is changing? → What is interacting? → What system is forming? → What state are we in? → Where are we in time? → Does person/time coding add signal? → Can a frozen event forecast beat the reality baseline? → How does the actual environment shape the situation?**
 
 Every traditional input should pass through:
 
@@ -191,7 +233,17 @@ For event forecasts:
 
 **question → casting rule → interpretation rule → explicit probability/time window → frozen record → outcome score**
 
+For environment-based claims:
+
+**traditional prescription → possible physical mechanism → measurable variables → reality baseline → intervention/observation → outcome → incremental signal**
+
 If a claim cannot pass into observable or falsifiable form, it remains **Traditional** or **Symbolic** and receives no factual predictive weight.
+
+The source chain then returns to the integrative GUANSHI question:
+
+> After facts, context, time, people, events and environment are separated and weighted by evidence, what direction has the strongest real momentum?
+
+That is **势 / Dynamics**.
 
 ## Evidence labels
 
@@ -223,14 +275,9 @@ The canonical preregistration structure is in `GUANSHI_CASE_TEMPLATE.md`.
 
 Original predictions are frozen before outcomes are known. Later reviews are appended, never rewritten into the original record.
 
-T07 extends this to require predeclared:
+T07 requires predeclared event, deadline, casting method, interpretation school, confidence and scoring criteria.
 
-- target event;
-- deadline/time window;
-- casting method;
-- interpretation school;
-- confidence/probability;
-- success/failure criteria.
+T08 similarly requires any traditional environment rule, expected outcome and comparison metric to be written before the result is evaluated.
 
 ## Weighting principles
 
@@ -238,6 +285,7 @@ GUANSHI does not use fixed universal percentages.
 
 - reliable direct evidence outranks symbolic interpretation;
 - strong domain base rates outrank unsupported intuition;
+- measured environmental variables outrank symbolic spatial explanations when the former already explain the outcome;
 - reversible low-cost experiments may accept more exploratory inputs;
 - irreversible/high-downside choices require stronger evidence;
 - traditional models can gain research attention only through prospectively recorded added value;
@@ -252,7 +300,7 @@ GUANSHI does not use fixed universal percentages.
 - Evidence labels — done.
 - Preregistered case template — done.
 - Scientific source seed ledger — done.
-- Traditional source spine — done.
+- Traditional source spine — **complete V1.1**.
 - T01 Yijing — done.
 - T02 Yin–Yang — done.
 - T03 Five Phases — done.
@@ -260,8 +308,8 @@ GUANSHI does not use fixed universal percentages.
 - T05 Stems & Branches — done.
 - T06 Bazi — done.
 - T07 Six Lines / Meihua — done.
-- T08 Feng Shui — next.
-- First low-stakes preregistered test cases — upcoming after T08.
+- T08 Feng Shui — done.
+- First low-stakes preregistered test cases — **next**.
 
 ### Phase 2 — Web app
 - Structured question intake.
@@ -281,6 +329,8 @@ GUANSHI does not use fixed universal percentages.
 ## Boundaries
 
 GUANSHI must not use divination or traditional symbolism as the deciding basis for high-stakes medical, legal, financial, safety or mental-health decisions.
+
+Feng Shui symbolism must not replace structural engineering, building/fire code compliance, environmental testing, hazard assessment, medical advice or legal/property due diligence.
 
 For high-stakes domains, traditional lenses may be discussed as cultural or symbolic context only; evidence-based and professional methods control the recommendation.
 
