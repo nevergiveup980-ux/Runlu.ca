@@ -1,19 +1,25 @@
 # RUNLU GUANSHI · 观势 · Trend Dynamics
 
-Status: **V1.1 · traditional source spine T01–T08 complete**
+Status: **V1.5 · source spine complete + live consultation + protected AI + validation loop**
 
 Public framework: `guanshi.html`  
+Start GUANSHI: `guanshi-consult.html`  
+Traditional View: `guanshi-traditional-consult.html`  
+Validation Lab: `guanshi-validation.html`  
 Knowledge map: `guanshi-map.html`  
 Traditional source spine: `guanshi-tradition.html`  
-T01 Yijing: `guanshi-yijing.html` / `GUANSHI_YIJING.md`  
-T02 Yin–Yang: `guanshi-yinyang.html` / `GUANSHI_YINYANG.md`  
-T03 Five Phases: `guanshi-wuxing.html` / `GUANSHI_WUXING.md`  
-T04 Bagua: `guanshi-bagua.html` / `GUANSHI_BAGUA.md`  
-T05 Stems & Branches: `guanshi-ganzhi.html` / `GUANSHI_GANZHI.md`  
-T06 Bazi: `guanshi-bazi.html` / `GUANSHI_BAZI.md`  
-T07 Six Lines / Meihua: `guanshi-liuyao-meihua.html` / `GUANSHI_LIUYAO_MEIHUA.md`  
-T08 Feng Shui: `guanshi-fengshui.html` / `GUANSHI_FENGSHUI.md`  
+Consultation protocol: `GUANSHI_CONSULTATION.md`  
 Case protocol: `GUANSHI_CASE_TEMPLATE.md`
+
+Traditional source nodes:
+- T01 Yijing: `guanshi-yijing.html` / `GUANSHI_YIJING.md`
+- T02 Yin–Yang: `guanshi-yinyang.html` / `GUANSHI_YINYANG.md`
+- T03 Five Phases: `guanshi-wuxing.html` / `GUANSHI_WUXING.md`
+- T04 Bagua: `guanshi-bagua.html` / `GUANSHI_BAGUA.md`
+- T05 Stems & Branches: `guanshi-ganzhi.html` / `GUANSHI_GANZHI.md`
+- T06 Bazi: `guanshi-bazi.html` / `GUANSHI_BAZI.md`
+- T07 Six Lines / Meihua: `guanshi-liuyao-meihua.html` / `GUANSHI_LIUYAO_MEIHUA.md`
+- T08 Feng Shui: `guanshi-fengshui.html` / `GUANSHI_FENGSHUI.md`
 
 ## Purpose
 
@@ -22,7 +28,7 @@ GUANSHI combines four layers without pretending they have the same evidence stat
 1. evidence-based modern decision methods;
 2. direct observation of real conditions and constraints;
 3. traditional Chinese models as cultural, historical, symbolic or heuristic lenses;
-4. long-term recording, review and correction against real outcomes.
+4. prospective recording, outcome review and correction against reality.
 
 It is **not** presented as a scientifically proven fortune-telling system.
 
@@ -40,37 +46,23 @@ It is **not** presented as a scientifically proven fortune-telling system.
 
 **先转译，再加权；先检验，再信任。**
 
-T05 adds:
-
-> A time label can identify when something happened. It does not automatically explain why it happened.
-
-**时间标签可以说明“什么时候”，但不能未经检验就充当“为什么”。**
-
-T06 adds:
-
 > A correct chart is not the same thing as a correct life prediction.
 
 **排盘正确，不等于人生预测正确。**
-
-T07 adds:
 
 > A forecast must exist before the outcome does.
 
 **预测必须先于结果存在。**
 
-> A method that can explain every outcome after the fact has not yet shown predictive skill.
-
-**如果一种方法在事后什么结果都能解释，它还没有证明自己会预测。**
-
-T08 closes the source spine with:
-
 > The environment can matter. Why it matters must be demonstrated layer by layer.
 
 **环境可以重要；它为什么重要，必须一层一层证明。**
 
-> Measure first. Symbolize second. Test added value last.
+V1.5 adds the operational rule:
 
-**先测环境，再看象征，最后检验增量价值。**
+> Do not rewrite the original judgment after reality answers. Append the review.
+
+**结果出来以后，不改原判；只追加复盘。命中的留下，失误的也留下。**
 
 ## Nine lenses
 
@@ -84,132 +76,13 @@ T08 closes the source spine with:
 - **变 — Scenarios**: how may the situation change under plausible futures?
 - **势 — Dynamics**: after integration, which direction has the strongest evidence-adjusted momentum?
 
-## Traditional learning / dependency line
+## Completed traditional source chain
 
 **Yijing → Yin–Yang → Five Phases → Bagua → Stems & Branches → Bazi → Six Lines / Meihua → Feng Shui**
 
 This is a **learning and model-dependency sequence, not a strict historical genealogy**.
 
-### T01 · Yijing · V0.4 — Grammar of Change
-
-Key extraction: change, position, relation, timing and transformation.
-
-Working conversion:
-**text → structure → change → time → position → decision question**
-
-### T02 · Yin–Yang · V0.5 — Grammar of Relation
-
-Key extraction: contrast, context, co-dependence, waxing/waning, transformation and dynamic coordination.
-
-Rule: a yin/yang statement receives no real-world weight until it can be translated into observable variables.
-
-### T03 · Five Phases · V0.6 — Grammar of Systems
-
-Key extraction: support, constraint, regulation, imbalance, cycles and feedback.
-
-Working conversion:
-**symbol → variable → relationship → loop → data → correction**
-
-Modern systems language is a translation scaffold, not scientific validation of Wuxing.
-
-### T04 · Bagua · V0.7 — Grammar of States
-
-Three layers remain separate:
-1. classical trigram structure;
-2. classical image/association tradition;
-3. GUANSHI experimental three-variable/eight-state encoding.
-
-If the encoding adds no clarity, calibration, consistency or predictive value, it remains visual shorthand only.
-
-### T05 · Stems & Branches · V0.8 — Grammar of Time
-
-Four ledgers remain separate:
-1. historical time-indexing;
-2. calendrical correspondences;
-3. traditional symbolic correspondences;
-4. predictive claims.
-
-Working test:
-**define outcome → record real drivers → build baseline → add Ganzhi code → test unseen cases → keep only incremental value**
-
-### T06 · Bazi · V0.9 — Grammar of Person × Time
-
-Five ledgers remain separate:
-1. birth facts;
-2. chart conversion;
-3. traditional model;
-4. personality/life claims;
-5. prospective validation.
-
-Working test:
-**real-person baseline M0 → add frozen Bazi rules M1 → blind/prospective cases → compare incremental value**
-
-A valid calendar conversion does not certify Day Master, Ten Gods, strength, structures, useful gods, luck cycles or deterministic life claims.
-
-### T07 · Six Lines / Meihua · V1.0 — Grammar of Events & Forecasts
-
-Six Lines and Meihua are treated as **two historically distinct families**, not one timeless method.
-
-Five ledgers remain separate:
-1. question/event definition;
-2. casting or encoding mechanism;
-3. interpretation school/rules;
-4. explicit forecast claim;
-5. outcome scoring.
-
-Working forecast protocol:
-**define event → freeze method/rules/horizon → build reality baseline M0 → add preregistered reading → wait → score → review**
-
-Key anti-hindsight rules:
-- forecast, method, time window and scoring criteria must exist before the result;
-- misses are recorded as carefully as hits;
-- the original forecast is never rewritten;
-- vague statements too broad to fail receive no predictive credit;
-- Six Lines and Meihua are compared separately, not selected after seeing the outcome;
-- famous “accurate prediction” stories are historical/traditional narratives, not validation data.
-
-Even without predictive advantage, a practice may retain decision-process value by forcing precise questions, slowing impulsive judgment, generating alternatives and creating a dated decision journal. That process value must not be misreported as proof of divination.
-
-### T08 · Feng Shui · V1.1 — Grammar of Environment
-
-Feng Shui closes the traditional source spine by separating **place effects** from **symbolic explanations**.
-
-Two ledgers remain separate:
-
-**Measurable environment**
-- daylight / solar exposure;
-- temperature and thermal stability;
-- ventilation and air quality;
-- noise;
-- access and circulation;
-- usable space / crowding;
-- safety and accessibility;
-- privacy and sightlines;
-- terrain, drainage and moisture;
-- orientation when it changes sun, wind, heat, noise or view.
-
-**Traditional / symbolic rules**
-- qi and wind-water formulations;
-- mountain/water symbolic forms;
-- directional auspiciousness;
-- bagua / five-phase correspondences;
-- compass-school calculations;
-- school-specific prosperity, relationship, health or fate claims.
-
-Working test:
-**site facts → environmental measurements → human-use outcomes → freeze traditional rule → compare M0 vs M1 → reweight**
-
-Where:
-- **M0** = measurable environment + known behavioural/context variables;
-- **M1** = M0 + one preregistered Feng Shui rule set.
-
-Environmental evidence for temperature, air quality, noise, safety or accessibility does not validate unrelated symbolic directional rules.
-
-A traditional rule that happens to point toward a good design result does not by itself establish the metaphysical mechanism used to explain it.
-
-## Completed traditional translation architecture
-
-The eight traditional nodes now form the first complete GUANSHI source chain:
+The translation chain is:
 
 **Change → Relation → System → State → Time → Person × Time → Event → Environment**
 
@@ -217,33 +90,11 @@ Operationally:
 
 **What is changing? → What is interacting? → What system is forming? → What state are we in? → Where are we in time? → Does person/time coding add signal? → Can a frozen event forecast beat the reality baseline? → How does the actual environment shape the situation?**
 
-Every traditional input should pass through:
+Traditional input should move through:
 
-**Original meaning → structural abstraction → observable variables → testable relationship → recorded outcome**
-
-For time-based claims:
-
-**calendar label → known seasonal/contextual drivers → baseline comparison → incremental signal**
-
-For person-based claims:
-
-**birth facts → reproducible conversion → frozen interpretive rules → blind/prospective prediction → compare against real-person baseline**
-
-For event forecasts:
-
-**question → casting rule → interpretation rule → explicit probability/time window → frozen record → outcome score**
-
-For environment-based claims:
-
-**traditional prescription → possible physical mechanism → measurable variables → reality baseline → intervention/observation → outcome → incremental signal**
+**Original meaning → structural abstraction → observable variables → testable relationship → frozen judgment → recorded outcome**
 
 If a claim cannot pass into observable or falsifiable form, it remains **Traditional** or **Symbolic** and receives no factual predictive weight.
-
-The source chain then returns to the integrative GUANSHI question:
-
-> After facts, context, time, people, events and environment are separated and weighted by evidence, what direction has the strongest real momentum?
-
-That is **势 / Dynamics**.
 
 ## Evidence labels
 
@@ -254,30 +105,120 @@ That is **势 / Dynamics**.
 - **Symbolic** — cultural/philosophical interpretation, not an empirical fact.
 - **Rejected** — contradicted by reliable evidence or repeatedly failed validation.
 
-## Traditional source protocol
+## Consultation architecture
 
-Each traditional node keeps four records:
+### Door A · Start GUANSHI
+Default for most users.
 
-1. **Primary text** — what the source actually says.
-2. **Textual history** — attribution, layers, later commentary and uncertainty.
-3. **Modern scholarly history** — how historians and scholars describe formation and use.
-4. **Empirical claim audit** — where measurable claims exist, what modern evidence supports or contradicts them.
+First question:
 
-A source may establish that an idea was historically taught. It does not by itself establish predictive accuracy.
+> **What are you trying to see clearly?**
+>
+> **你现在最想看清楚的一件事是什么？**
+
+Reality, constraints, options, timing, uncertainty and downside come first. Traditional lenses are optional.
+
+### Door B · Traditional View
+For a user with an explicit Bazi, Ganzhi/timing, Six Lines, Meihua, Feng Shui or mixed traditional request.
+
+Traditional interpretation and reality analysis remain separate ledgers before synthesis.
+
+### AI protection state
+The public analysis route is protected server-side by conservative identity/network/hourly limits and a dedicated GUANSHI reservation budget. See `GUANSHI_CONSULTATION.md` for the current operational limits.
+
+A public RUNLU account UI is not yet live. A second independent Cloudflare Gateway hard cap remains desirable.
+
+## Validation architecture · V1.5
+
+Public tool: `guanshi-validation.html`
+
+Core loop:
+
+**Consult → Freeze → Wait → Review → Reweight**
+
+**咨询 → 冻结 → 等待 → 复盘 → 调权**
+
+A successful consultation exposes **Freeze for later review / 冻结为验证案例**.
+
+The latest successful consultation is handed to the Validation Lab through browser `sessionStorage` so the source question and result can be pre-filled without creating a server-side case history.
+
+### Judgment class A · Binary forecast
+Use only for genuinely yes/no outcomes.
+
+Freeze:
+- exact event;
+- predicted yes/no outcome;
+- confidence;
+- review date;
+- reasons;
+- counterargument;
+- falsifier.
+
+After resolution:
+- actual yes/no outcome;
+- directional hit/miss;
+- Brier score.
+
+For probability of Yes `p` and actual outcome `y ∈ {0,1}`:
+
+`Brier = (p - y)^2`
+
+Lower is better.
+
+### Judgment class B · Decision judgment
+Use for real-world action choices that are not honestly reducible to a binary event.
+
+Freeze:
+- exact judgment;
+- recommended action;
+- confidence;
+- main reasons;
+- strongest counterargument;
+- falsifier;
+- review date.
+
+Review qualitatively rather than manufacturing a false numeric score.
+
+### Anti-hindsight firewall
+The original case block is frozen before the outcome. Later reviews are appended as dated entries.
+
+The V1.5 browser tool computes a SHA-256 integrity fingerprint over the original block. Because the case and hash are stored together locally, this detects accidental change but is **not** an independent public timestamp or tamper-proof certification.
+
+Possible later improvement: server-anchor only `case hash + timestamp` without storing the consultation text.
+
+### Local-first privacy
+Validation cases and reviews are stored in browser `localStorage` in V1.5.
+
+Users can export/import the ledger as JSON. There is no server-side persistent validation database yet.
+
+This is deliberate: the validation discipline is live without expanding sensitive personal-data retention before an account and retention policy is designed.
+
+## Calibration discipline
+
+The Validation Lab currently summarizes:
+- frozen case count;
+- final review count;
+- resolved binary forecast count;
+- directional accuracy for resolved binary forecasts;
+- mean Brier score for resolved binary forecasts.
+
+Small samples are descriptive, not proof.
+
+Do not advertise accuracy from cherry-picked, mixed or tiny samples. Separate comparable case classes as the ledger grows.
+
+A traditional model earns additional research weight only through prospectively recorded added value over a reasonable reality baseline. A model that merely redescribes known facts receives no predictive credit.
 
 ## Decision loop
 
-**Observe → Frame → Estimate → Decide → Record → Review → Reweight**
+**Observe → Frame → Estimate → Decide → Freeze → Review → Reweight**
 
-The canonical preregistration structure is in `GUANSHI_CASE_TEMPLATE.md`.
-
-## Anti-hindsight protocol
-
-Original predictions are frozen before outcomes are known. Later reviews are appended, never rewritten into the original record.
-
-T07 requires predeclared event, deadline, casting method, interpretation school, confidence and scoring criteria.
-
-T08 similarly requires any traditional environment rule, expected outcome and comparison metric to be written before the result is evaluated.
+1. **Observe** — separate known facts, assumptions and unknowns.
+2. **Frame** — define the real question, alternatives, horizon and stakes.
+3. **Estimate** — use base rates, probabilities, scenarios and explicit uncertainty where appropriate.
+4. **Decide** — prefer robust action over dramatic narrative.
+5. **Freeze** — record the exact judgment, confidence and review date before the outcome.
+6. **Review** — append what actually happened, including misses and surprises.
+7. **Reweight** — increase, keep, reduce or reject method/assumption weight based on repeated evidence.
 
 ## Weighting principles
 
@@ -285,46 +226,40 @@ GUANSHI does not use fixed universal percentages.
 
 - reliable direct evidence outranks symbolic interpretation;
 - strong domain base rates outrank unsupported intuition;
-- measured environmental variables outrank symbolic spatial explanations when the former already explain the outcome;
+- measured environmental variables outrank symbolic spatial explanations when they already explain the outcome;
 - reversible low-cost experiments may accept more exploratory inputs;
 - irreversible/high-downside choices require stronger evidence;
 - traditional models can gain research attention only through prospectively recorded added value;
 - a model that merely redescribes known facts receives no predictive credit;
 - repeated failure lowers weight or leads to rejection.
 
-## Product direction
+## Product phase
 
-### Phase 1 — Website / research framework
-- Four-language public foundation page — done.
-- Knowledge map — done.
-- Evidence labels — done.
-- Preregistered case template — done.
-- Scientific source seed ledger — done.
-- Traditional source spine — **complete V1.1**.
-- T01 Yijing — done.
-- T02 Yin–Yang — done.
-- T03 Five Phases — done.
-- T04 Bagua — done.
-- T05 Stems & Branches — done.
-- T06 Bazi — done.
-- T07 Six Lines / Meihua — done.
-- T08 Feng Shui — done.
-- First low-stakes preregistered test cases — **next**.
+### Completed
+- four-language public framework;
+- knowledge map;
+- evidence labels;
+- traditional source spine T01–T08;
+- two consultation routes;
+- live server-side GUANSHI analysis;
+- deterministic Bazi chart layer before AI interpretation;
+- protected public AI quotas/budget;
+- local-first Validation Lab;
+- frozen case fingerprint;
+- append-only review workflow;
+- binary Brier scoring;
+- calibration snapshot;
+- JSON export/import of the validation ledger.
 
-### Phase 2 — Web app
-- Structured question intake.
-- Scenario comparison.
-- Decision journal.
-- Outcome review.
-- Confidence calibration dashboard.
-- Private personal history without deterministic claims.
-
-### Phase 3 — Mature product / possible app
-- User accounts and private history.
-- Long-term validation database.
-- Transparent model weighting.
-- AI-assisted synthesis with evidence separation.
-- Aggregated validation statistics where ethically and methodologically appropriate.
+### Next
+1. accumulate low-stakes, comparable, pre-registered cases;
+2. separate calibration by case class instead of pooling everything;
+3. add deterministic casting workflows for Six Lines / Meihua;
+4. add structured measurement intake for Feng Shui;
+5. add intelligent follow-up questions when missing information materially changes the answer;
+6. add optional account/history only after retention policy is defined;
+7. add independent Cloudflare Gateway authorization/budget protection;
+8. consider privacy-preserving server anchoring of case hashes.
 
 ## Boundaries
 
@@ -334,4 +269,4 @@ Feng Shui symbolism must not replace structural engineering, building/fire code 
 
 For high-stakes domains, traditional lenses may be discussed as cultural or symbolic context only; evidence-based and professional methods control the recommendation.
 
-All four public languages — English, Simplified Chinese, French and Spanish — must be complete before a GUANSHI public page is considered publishable under RUNLU's multilingual policy.
+All public GUANSHI pages must be complete in English, Simplified Chinese, French and Spanish under RUNLU's multilingual policy.
