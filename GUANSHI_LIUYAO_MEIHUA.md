@@ -1,8 +1,9 @@
 # RUNLU GUANSHI · T07 六爻 / 梅花
 
-Status: **V1.0 research note**
+Status: **V1.2 · fixed operational casting workflows live**
 
-Public page: `guanshi-liuyao-meihua.html`
+Public page: `guanshi-liuyao-meihua.html`  
+Live consultation: `guanshi-traditional-consult.html`
 
 ## Working title
 
@@ -40,17 +41,58 @@ Shao Yong is a real Northern Song thinker strongly associated with Yijing image-
 
 > A forecast must exist before the outcome does.
 
-Chinese:
-
 > **预测必须先于结果存在。**
-
-A second rule follows:
 
 > A method that can explain every outcome after the fact has not yet shown predictive skill.
 
-Chinese:
-
 > **如果一种方法在事后什么结果都能解释，它还没有证明自己会预测。**
+
+## V1.2 operational casting firewall
+
+GUANSHI now fixes the casting mechanism **before interpretation**. The server returns the complete mechanical record with the consultation so the result can later be frozen in Validation Lab.
+
+### Six Lines · GUANSHI digital three-coin v1
+
+The public prototype uses one disclosed digital three-coin method:
+
+1. one cryptographic seed is generated on the server when the user submits the question;
+2. each line derives three digital coin faces from that seed;
+3. H = 3 and T = 2;
+4. three values are summed into 6 / 7 / 8 / 9;
+5. six lines are recorded **bottom to top**;
+6. 6 and 9 are changing lines;
+7. the changing lines are flipped to derive the relating hexagram;
+8. the result prints the seed, all 18 coin faces, all six line values, moving-line positions, primary hexagram and relating hexagram.
+
+The seed is returned for auditability. This does **not** make the reading scientifically predictive; it only makes the casting mechanism explicit and reproducible as a digital procedure.
+
+A later physical-coin or yarrow workflow may be added as a separate method, but it must never be silently mixed with this digital method in one validation series.
+
+### Meihua · GUANSHI submission-moment v1
+
+GUANSHI freezes one time-casting rule for the public prototype:
+
+- the local civil moment when the user presses **Generate** is recorded;
+- year uses the ordinal of the year Earthly Branch: Zi=1 through Hai=12;
+- hour uses the ordinal of the two-hour Earthly Branch;
+- month and day use lunar-calendar numbers;
+- upper trigram = `(year branch ordinal + lunar month + lunar day) mod 8`, with exact multiples treated as 8;
+- lower trigram = `(year branch ordinal + lunar month + lunar day + hour branch ordinal) mod 8`, with exact multiples treated as 8;
+- moving line = the same four-part total `mod 6`, with exact multiples treated as 6;
+- trigram number order is Qian 1, Dui 2, Li 3, Zhen 4, Xun 5, Kan 6, Gen 7, Kun 8.
+
+The consultation prints the frozen moment, timezone metadata, lunar inputs, all arithmetic, upper/lower trigrams, moving line, primary hexagram and relating hexagram.
+
+This is a **frozen GUANSHI experimental implementation of a transmitted Meihua time method**, not a claim that every Meihua school uses exactly the same convention.
+
+### No post-hoc method switching
+
+Once a cast exists:
+
+- do not recast because the first result feels unsatisfactory;
+- do not swap Six Lines for Meihua after seeing the first result and then keep only the more attractive answer;
+- do not change the arithmetic convention after the outcome;
+- if a second method is intentionally compared, preregister it as a separate M1/M2 comparison before the outcome.
 
 ## Five ledgers
 
@@ -71,19 +113,20 @@ Vague prompts such as “看看最近运势” are not suitable for validation.
 
 Record exactly how the symbolic state was generated.
 
-For Six Lines this may include:
+For Six Lines:
 
-- yarrow / coin / other casting rule;
+- method version;
+- seed or physical procedure;
+- every line result;
 - base hexagram;
 - moving lines;
 - changed hexagram;
-- school-specific line assignments if used.
+- school-specific line assignments if added later.
 
-For Meihua this may include:
+For Meihua:
 
-- time-based numbers;
-- observed counts;
-- directions / sounds / characters;
+- frozen moment or other predefined input;
+- calendar convention;
 - arithmetic mapping rule;
 - upper/lower trigram;
 - moving line;
@@ -144,11 +187,11 @@ Use only known real-world information:
 
 ### M1 · Six Lines added
 
-Add a preregistered Six Lines reading without changing M0 inputs.
+Add the fixed Six Lines reading without changing M0 inputs.
 
 ### M2 · Meihua added
 
-Add a preregistered Meihua reading, preferably on separate cases or under a predefined comparison design.
+Add the fixed Meihua reading only under a predefined comparison design or on separate cases.
 
 ### Compare
 
@@ -190,9 +233,11 @@ These benefits must be credited to the decision process itself, not misreported 
 
 - Zhouyi/Xici yarrow divination as received textual practice — **Traditional / historical**.
 - Jing Fang and received Jing-family line systems — **Traditional / historical, layered**.
+- digital three-coin cast mechanics — **Reproducible computation**, not predictive proof.
 - modern Six Lines predictive accuracy — **Test required**.
 - Shao Yong's image-number intellectual context — **Supported historical context**.
 - direct authorship of received `Meihua Yishu` by Shao Yong — **Uncertain / disputed**.
+- GUANSHI Meihua arithmetic — **Reproducible frozen rule**, not predictive proof.
 - Meihua predictive accuracy — **Test required**.
 
 ## Source seeds
@@ -203,7 +248,8 @@ These benefits must be credited to the decision process itself, not misreported 
    https://ctext.org/jingshi-yizhuan/zh
 3. Richard J. Smith, *Fortune-tellers and Philosophers: Divination in Traditional Chinese Society* — broader historical/cultural context of Chinese divination.
 4. Peter K. Bol, “On Shao Yong's Method for Observing Things,” *Monumenta Serica* 61 (2013): 287–299 — Shao Yong's observation method and intellectual context.
-5. Yaqi Fu, research on Song-period wind divination / Meihua-related traditions — useful for authorship and transmission caution around the received `Meihua Yishu`.
+5. Received `梅花易数` year-month-day-hour rule — year/hour Earthly-Branch ordinals, lunar month/day, remainder 8 for trigrams and remainder 6 for the moving line; GUANSHI freezes one disclosed implementation for prospective testing.
+6. Three-coin convention — H=3, T=2; totals 6/7/8/9; six lines bottom-to-top; 6/9 changing — used here as an explicit digital prototype method.
 
 ## Boundary
 
