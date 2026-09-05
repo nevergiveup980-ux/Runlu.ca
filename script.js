@@ -150,3 +150,27 @@ const header=document.querySelector('.site-header');
 const updateHeader=()=>{if(header)header.classList.toggle('is-scrolled',window.scrollY>18)};
 updateHeader();
 window.addEventListener('scroll',updateHeader,{passive:true});
+
+function addRunluCoreHomeEntry(){
+  const path=window.location.pathname.replace(/\/+$/,'')||'/';
+  if(path!=='/'&&!path.endsWith('/index.html'))return;
+  const footer=document.querySelector('.site-footer');
+  const target=footer?.lastElementChild;
+  if(!target||target.querySelector('[data-runlu-core-entry]'))return;
+  const sep=document.createTextNode(' · ');
+  const link=document.createElement('a');
+  link.href='core/core-test.html';
+  link.textContent='Core';
+  link.dataset.runluCoreEntry='';
+  link.setAttribute('aria-label','Open RUNLU Core');
+  link.title='RUNLU Core';
+  link.style.cssText='opacity:.42;border-bottom:1px dotted currentColor;white-space:nowrap;font-size:.9em;transition:opacity .18s ease';
+  const dim=()=>{link.style.opacity='.42'};
+  const show=()=>{link.style.opacity='.82'};
+  link.addEventListener('focus',show);
+  link.addEventListener('blur',dim);
+  link.addEventListener('mouseenter',show);
+  link.addEventListener('mouseleave',dim);
+  target.append(sep,link);
+}
+addRunluCoreHomeEntry();
