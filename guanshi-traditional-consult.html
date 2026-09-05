@@ -19,7 +19,7 @@
     <nav class="gs-top-nav" aria-label="Traditional consultation navigation">
       <a href="guanshi.html" data-en="GUANSHI" data-zh="观势" data-fr="GUANSHI" data-es="GUANSHI">GUANSHI</a>
       <a href="guanshi-consult.html" data-en="Start GUANSHI" data-zh="开始观势" data-fr="Commencer" data-es="Empezar">Start GUANSHI</a>
-      <a href="guanshi-tradition.html" data-en="Source spine" data-zh="原典线" data-fr="Sources" data-es="Fuentes">Source spine</a>
+      <a href="guanshi-validation.html" data-en="Validation" data-zh="验证" data-fr="Validation" data-es="Validación">Validation</a>
     </nav>
     <select class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select>
   </header>
@@ -27,7 +27,7 @@
   <main class="consult-wrap">
     <section class="consult-hero">
       <a class="gs-back" href="guanshi.html" data-en="← Back to GUANSHI" data-zh="← 返回观势" data-fr="← Retour à GUANSHI" data-es="← Volver a GUANSHI">← Back to GUANSHI</a>
-      <p class="consult-kicker">RUNLU GUANSHI · V1.4</p>
+      <p class="consult-kicker">RUNLU GUANSHI · V1.5</p>
       <h1 data-en="Traditional View" data-zh="传统观势" data-fr="Vue traditionnelle" data-es="Vista tradicional">Traditional View</h1>
       <p class="lead" data-en="For people who already know they want a Bazi, timing, Six Lines, Meihua or Feng Shui reading. GUANSHI keeps the traditional interpretation intact while separating it from factual and practical judgment." data-zh="给已经明确想看八字、时运、六爻、梅花或风水的用户。观势会认真保留传统解读，同时把它与事实判断和现实建议分账。" data-fr="Pour les personnes qui souhaitent déjà une lecture Bazi, timing, Six lignes, Meihua ou Feng shui. GUANSHI conserve l’interprétation traditionnelle tout en la séparant du jugement factuel et pratique." data-es="Para quienes ya desean una lectura de Bazi, tiempo, Seis líneas, Meihua o Feng Shui. GUANSHI conserva la interpretación tradicional y la separa del juicio factual y práctico.">For people who already know they want a traditional reading.</p>
       <div class="consult-rule" data-en="Traditional interpretation may be complete and serious; practical conclusions still return to reality and evidence." data-zh="传统可以认真看、完整讲；真正涉及现实行动的结论，仍要回到现实与证据。" data-fr="L’interprétation traditionnelle peut être complète et sérieuse ; les conclusions pratiques reviennent toujours à la réalité et aux preuves." data-es="La interpretación tradicional puede ser completa y seria; las conclusiones prácticas vuelven siempre a la realidad y la evidencia.">Traditional interpretation may be complete and serious; practical conclusions still return to reality and evidence.</div>
@@ -38,91 +38,28 @@
         <h2 data-en="Traditional consultation request" data-zh="传统咨询需求" data-fr="Demande de consultation traditionnelle" data-es="Solicitud de consulta tradicional">Traditional consultation request</h2>
         <p data-en="Choose the method first. Birth information is only needed when the selected method actually uses it." data-zh="先选你真正想看的传统方法。只有该方法确实需要时，才填写出生资料。" data-fr="Choisissez d’abord la méthode. Les informations de naissance ne sont nécessaires que si la méthode les utilise réellement." data-es="Elige primero el método. Los datos de nacimiento solo son necesarios si el método realmente los utiliza.">Choose the method first.</p>
         <div class="traditional-alert" data-en="Public prototype · 2 free AI analyses per browser/account per day. Capacity and protected budget limits may pause generation earlier." data-zh="公开测试期 · 每个浏览器 / 账号每天 2 次免费 AI 观势；遇到小时容量或受保护预算上限时，系统可能更早暂停生成。" data-fr="Prototype public · 2 analyses IA gratuites par navigateur/compte et par jour. La capacité horaire ou le budget protégé peuvent suspendre la génération plus tôt." data-es="Prototipo público · 2 análisis de IA gratis por navegador/cuenta al día. La capacidad horaria o el presupuesto protegido pueden pausar antes la generación.">Public prototype · 2 free AI analyses per browser/account per day.</div>
-
         <div class="traditional-alert" data-en="A birth date is not a universal ticket. Bazi needs birth data; Six Lines / Meihua need a precise event question and a frozen method; Feng Shui needs actual site information." data-zh="出生年月日时不是万能门票：八字需要出生资料；六爻 / 梅花更需要明确事件与固定起卦规则；风水更需要真实场地信息。" data-fr="La date de naissance n’est pas un billet universel : Bazi utilise les données de naissance ; Six lignes / Meihua exigent une question précise et une méthode figée ; le Feng shui exige des informations réelles sur le lieu." data-es="La fecha de nacimiento no es una entrada universal: Bazi usa datos de nacimiento; Seis líneas / Meihua necesitan una pregunta precisa y un método fijado; Feng Shui necesita datos reales del lugar.">A birth date is not a universal ticket.</div>
 
         <input type="hidden" name="methodLabel" data-current-label-en="Traditional method" data-current-label-zh="传统方法" data-current-label-fr="Méthode traditionnelle" data-current-label-es="Método tradicional">
         <input type="hidden" name="topicLabel" data-current-label-en="Topic" data-current-label-zh="主题" data-current-label-fr="Sujet" data-current-label-es="Tema">
 
         <div class="field-grid">
-          <div class="field">
-            <label for="method" data-en="Traditional method" data-zh="想看哪一种" data-fr="Méthode traditionnelle" data-es="Método tradicional">Traditional method</label>
-            <select id="method" name="method">
-              <option value="bazi" data-en="Bazi / Four Pillars" data-zh="八字 / 四柱" data-fr="Bazi / Quatre Piliers" data-es="Bazi / Cuatro Pilares">Bazi / Four Pillars</option>
-              <option value="timing" data-en="Ganzhi / timing" data-zh="干支 / 时运" data-fr="Ganzhi / timing" data-es="Ganzhi / tiempo">Ganzhi / timing</option>
-              <option value="liuyao" data-en="Six Lines" data-zh="六爻" data-fr="Six lignes" data-es="Seis líneas">Six Lines</option>
-              <option value="meihua" data-en="Meihua" data-zh="梅花" data-fr="Meihua" data-es="Meihua">Meihua</option>
-              <option value="fengshui" data-en="Feng Shui" data-zh="风水" data-fr="Feng shui" data-es="Feng Shui">Feng Shui</option>
-              <option value="mixed" data-en="Not sure / mixed traditional view" data-zh="不确定 / 综合传统观势" data-fr="Incertain / vue traditionnelle mixte" data-es="No seguro / vista tradicional mixta">Not sure / mixed traditional view</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="topic" data-en="Topic" data-zh="主题" data-fr="Sujet" data-es="Tema">Topic</label>
-            <select id="topic" name="topic">
-              <option value="life" data-en="Life stage / general" data-zh="人生阶段 / 综合" data-fr="Étape de vie / général" data-es="Etapa de vida / general">Life stage / general</option>
-              <option value="career" data-en="Career / work" data-zh="事业 / 工作" data-fr="Carrière / travail" data-es="Carrera / trabajo">Career / work</option>
-              <option value="relationship" data-en="Relationship / marriage / cooperation" data-zh="关系 / 婚姻 / 合作" data-fr="Relation / mariage / coopération" data-es="Relación / matrimonio / cooperación">Relationship / marriage / cooperation</option>
-              <option value="money" data-en="Money / business" data-zh="财务 / 生意" data-fr="Argent / affaires" data-es="Dinero / negocio">Money / business</option>
-              <option value="home" data-en="Home / property / environment" data-zh="住房 / 房产 / 环境" data-fr="Maison / propriété / environnement" data-es="Vivienda / propiedad / entorno">Home / property / environment</option>
-              <option value="event" data-en="Specific event" data-zh="具体事件" data-fr="Événement précis" data-es="Evento específico">Specific event</option>
-            </select>
-          </div>
+          <div class="field"><label for="method" data-en="Traditional method" data-zh="想看哪一种" data-fr="Méthode traditionnelle" data-es="Método tradicional">Traditional method</label><select id="method" name="method"><option value="bazi" data-en="Bazi / Four Pillars" data-zh="八字 / 四柱" data-fr="Bazi / Quatre Piliers" data-es="Bazi / Cuatro Pilares">Bazi / Four Pillars</option><option value="timing" data-en="Ganzhi / timing" data-zh="干支 / 时运" data-fr="Ganzhi / timing" data-es="Ganzhi / tiempo">Ganzhi / timing</option><option value="liuyao" data-en="Six Lines" data-zh="六爻" data-fr="Six lignes" data-es="Seis líneas">Six Lines</option><option value="meihua" data-en="Meihua" data-zh="梅花" data-fr="Meihua" data-es="Meihua">Meihua</option><option value="fengshui" data-en="Feng Shui" data-zh="风水" data-fr="Feng shui" data-es="Feng Shui">Feng Shui</option><option value="mixed" data-en="Not sure / mixed traditional view" data-zh="不确定 / 综合传统观势" data-fr="Incertain / vue traditionnelle mixte" data-es="No seguro / vista tradicional mixta">Not sure / mixed traditional view</option></select></div>
+          <div class="field"><label for="topic" data-en="Topic" data-zh="主题" data-fr="Sujet" data-es="Tema">Topic</label><select id="topic" name="topic"><option value="life" data-en="Life stage / general" data-zh="人生阶段 / 综合" data-fr="Étape de vie / général" data-es="Etapa de vida / general">Life stage / general</option><option value="career" data-en="Career / work" data-zh="事业 / 工作" data-fr="Carrière / travail" data-es="Carrera / trabajo">Career / work</option><option value="relationship" data-en="Relationship / marriage / cooperation" data-zh="关系 / 婚姻 / 合作" data-fr="Relation / mariage / coopération" data-es="Relación / matrimonio / cooperación">Relationship / marriage / cooperation</option><option value="money" data-en="Money / business" data-zh="财务 / 生意" data-fr="Argent / affaires" data-es="Dinero / negocio">Money / business</option><option value="home" data-en="Home / property / environment" data-zh="住房 / 房产 / 环境" data-fr="Maison / propriété / environnement" data-es="Vivienda / propiedad / entorno">Home / property / environment</option><option value="event" data-en="Specific event" data-zh="具体事件" data-fr="Événement précis" data-es="Evento específico">Specific event</option></select></div>
 
-          <div class="field full">
-            <label for="question"><span data-en="What do you want the traditional layer to examine?" data-zh="你希望传统层重点看什么？" data-fr="Que souhaitez-vous examiner par la couche traditionnelle ?" data-es="¿Qué quieres que examine la capa tradicional?">What do you want the traditional layer to examine?</span> <span class="required-mark">*</span></label>
-            <textarea id="question" name="question" required data-summary-label-en="Traditional question" data-summary-label-zh="传统咨询问题" data-summary-label-fr="Question traditionnelle" data-summary-label-es="Pregunta tradicional"></textarea>
-          </div>
-
-          <div class="field">
-            <label for="birth_date" data-en="Birth date · when relevant" data-zh="出生日期 · 需要时填写" data-fr="Date de naissance · si utile" data-es="Fecha de nacimiento · si aplica">Birth date · when relevant</label>
-            <input id="birth_date" name="birth_date" type="date" data-summary-label-en="Birth date" data-summary-label-zh="出生日期" data-summary-label-fr="Date de naissance" data-summary-label-es="Fecha de nacimiento">
-          </div>
-          <div class="field">
-            <label for="birth_time" data-en="Birth time · when known" data-zh="出生时间 · 已知则填写" data-fr="Heure de naissance · si connue" data-es="Hora de nacimiento · si se conoce">Birth time · when known</label>
-            <input id="birth_time" name="birth_time" type="time" data-summary-label-en="Birth time" data-summary-label-zh="出生时间" data-summary-label-fr="Heure de naissance" data-summary-label-es="Hora de nacimiento">
-          </div>
-
-          <div class="field full">
-            <label for="birth_place" data-en="Birth place · city / region / country" data-zh="出生地点 · 城市 / 地区 / 国家" data-fr="Lieu de naissance · ville / région / pays" data-es="Lugar de nacimiento · ciudad / región / país">Birth place · city / region / country</label>
-            <input id="birth_place" name="birth_place" type="text" data-summary-label-en="Birth place" data-summary-label-zh="出生地点" data-summary-label-fr="Lieu de naissance" data-summary-label-es="Lugar de nacimiento">
-          </div>
-
-          <div class="field full">
-            <label for="event_horizon" data-en="Event, deadline or period you care about" data-zh="关心的事件、截止时间或阶段" data-fr="Événement, échéance ou période concernée" data-es="Evento, fecha límite o periodo que te interesa">Event, deadline or period you care about</label>
-            <input id="event_horizon" name="event_horizon" type="text" data-summary-label-en="Event / time horizon" data-summary-label-zh="事件 / 时间范围" data-summary-label-fr="Événement / horizon" data-summary-label-es="Evento / horizonte temporal">
-          </div>
-
-          <div class="field full">
-            <label for="environment" data-en="Place / layout / orientation · especially for Feng Shui" data-zh="场地 / 布局 / 朝向 · 风水咨询尤其重要" data-fr="Lieu / plan / orientation · surtout pour le Feng shui" data-es="Lugar / distribución / orientación · especialmente para Feng Shui">Place / layout / orientation · especially for Feng Shui</label>
-            <textarea id="environment" name="environment" data-summary-label-en="Place / environment" data-summary-label-zh="场地 / 环境" data-summary-label-fr="Lieu / environnement" data-summary-label-es="Lugar / entorno"></textarea>
-          </div>
-
-          <div class="field full">
-            <label for="facts" data-en="Known real-world facts" data-zh="已经知道的现实事实" data-fr="Faits réels déjà connus" data-es="Hechos reales ya conocidos">Known real-world facts</label>
-            <textarea id="facts" name="facts" data-summary-label-en="Known facts" data-summary-label-zh="现实已知事实" data-summary-label-fr="Faits connus" data-summary-label-es="Hechos conocidos"></textarea>
-          </div>
-
-          <div class="field full">
-            <label for="decision" data-en="Is there a real decision attached to this reading?" data-zh="这次传统咨询背后，有没有真正要做的现实决定？" data-fr="Y a-t-il une décision réelle liée à cette lecture ?" data-es="¿Hay una decisión real vinculada a esta lectura?">Is there a real decision attached to this reading?</label>
-            <textarea id="decision" name="decision" data-summary-label-en="Real-world decision" data-summary-label-zh="现实决策" data-summary-label-fr="Décision réelle" data-summary-label-es="Decisión real"></textarea>
-          </div>
-
-          <div class="field full checkbox-line">
-            <input id="boundary" name="boundary" type="checkbox" required>
-            <label for="boundary" data-en="I understand that traditional interpretation is not a factual guarantee. Practical recommendations will keep reality, evidence and professional standards separate and primary when stakes are high." data-zh="我理解：传统解读不是事实保证。涉及现实行动时，观势会把现实、证据与专业标准单独列出；重大事项以它们为主。" data-fr="Je comprends que l’interprétation traditionnelle n’est pas une garantie factuelle. Les recommandations pratiques sépareront et privilégieront la réalité, les preuves et les normes professionnelles lorsque l’enjeu est élevé." data-es="Entiendo que la interpretación tradicional no es una garantía factual. Las recomendaciones prácticas separarán y priorizarán la realidad, la evidencia y los estándares profesionales cuando el riesgo sea alto.">I understand that traditional interpretation is not a factual guarantee.</label>
-          </div>
+          <div class="field full"><label for="question"><span data-en="What do you want the traditional layer to examine?" data-zh="你希望传统层重点看什么？" data-fr="Que souhaitez-vous examiner par la couche traditionnelle ?" data-es="¿Qué quieres que examine la capa tradicional?">What do you want the traditional layer to examine?</span> <span class="required-mark">*</span></label><textarea id="question" name="question" required data-summary-label-en="Traditional question" data-summary-label-zh="传统咨询问题" data-summary-label-fr="Question traditionnelle" data-summary-label-es="Pregunta tradicional"></textarea></div>
+          <div class="field"><label for="birth_date" data-en="Birth date · when relevant" data-zh="出生日期 · 需要时填写" data-fr="Date de naissance · si utile" data-es="Fecha de nacimiento · si aplica">Birth date · when relevant</label><input id="birth_date" name="birth_date" type="date" data-summary-label-en="Birth date" data-summary-label-zh="出生日期" data-summary-label-fr="Date de naissance" data-summary-label-es="Fecha de nacimiento"></div>
+          <div class="field"><label for="birth_time" data-en="Birth time · when known" data-zh="出生时间 · 已知则填写" data-fr="Heure de naissance · si connue" data-es="Hora de nacimiento · si se conoce">Birth time · when known</label><input id="birth_time" name="birth_time" type="time" data-summary-label-en="Birth time" data-summary-label-zh="出生时间" data-summary-label-fr="Heure de naissance" data-summary-label-es="Hora de nacimiento"></div>
+          <div class="field full"><label for="birth_place" data-en="Birth place · city / region / country" data-zh="出生地点 · 城市 / 地区 / 国家" data-fr="Lieu de naissance · ville / région / pays" data-es="Lugar de nacimiento · ciudad / región / país">Birth place · city / region / country</label><input id="birth_place" name="birth_place" type="text" data-summary-label-en="Birth place" data-summary-label-zh="出生地点" data-summary-label-fr="Lieu de naissance" data-summary-label-es="Lugar de nacimiento"></div>
+          <div class="field full"><label for="event_horizon" data-en="Event, deadline or period you care about" data-zh="关心的事件、截止时间或阶段" data-fr="Événement, échéance ou période concernée" data-es="Evento, fecha límite o periodo que te interesa">Event, deadline or period you care about</label><input id="event_horizon" name="event_horizon" type="text" data-summary-label-en="Event / time horizon" data-summary-label-zh="事件 / 时间范围" data-summary-label-fr="Événement / horizon" data-summary-label-es="Evento / horizonte temporal"></div>
+          <div class="field full"><label for="environment" data-en="Place / layout / orientation · especially for Feng Shui" data-zh="场地 / 布局 / 朝向 · 风水咨询尤其重要" data-fr="Lieu / plan / orientation · surtout pour le Feng shui" data-es="Lugar / distribución / orientación · especialmente para Feng Shui">Place / layout / orientation · especially for Feng Shui</label><textarea id="environment" name="environment" data-summary-label-en="Place / environment" data-summary-label-zh="场地 / 环境" data-summary-label-fr="Lieu / environnement" data-summary-label-es="Lugar / entorno"></textarea></div>
+          <div class="field full"><label for="facts" data-en="Known real-world facts" data-zh="已经知道的现实事实" data-fr="Faits réels déjà connus" data-es="Hechos reales ya conocidos">Known real-world facts</label><textarea id="facts" name="facts" data-summary-label-en="Known facts" data-summary-label-zh="现实已知事实" data-summary-label-fr="Faits connus" data-summary-label-es="Hechos conocidos"></textarea></div>
+          <div class="field full"><label for="decision" data-en="Is there a real decision attached to this reading?" data-zh="这次传统咨询背后，有没有真正要做的现实决定？" data-fr="Y a-t-il une décision réelle liée à cette lecture ?" data-es="¿Hay una decisión real vinculada a esta lectura?">Is there a real decision attached to this reading?</label><textarea id="decision" name="decision" data-summary-label-en="Real-world decision" data-summary-label-zh="现实决策" data-summary-label-fr="Décision réelle" data-summary-label-es="Decisión real"></textarea></div>
+          <div class="field full checkbox-line"><input id="boundary" name="boundary" type="checkbox" required><label for="boundary" data-en="I understand that traditional interpretation is not a factual guarantee. Practical recommendations will keep reality, evidence and professional standards separate and primary when stakes are high." data-zh="我理解：传统解读不是事实保证。涉及现实行动时，观势会把现实、证据与专业标准单独列出；重大事项以它们为主。" data-fr="Je comprends que l’interprétation traditionnelle n’est pas une garantie factuelle. Les recommandations pratiques sépareront et privilégieront la réalité, les preuves et les normes professionnelles lorsque l’enjeu est élevé." data-es="Entiendo que la interpretación tradicional no es una garantía factual. Las recomendaciones prácticas separarán y priorizarán la realidad, la evidencia y los estándares profesionales cuando el riesgo sea alto.">I understand that traditional interpretation is not a factual guarantee.</label></div>
         </div>
 
-        <div class="consult-actions">
-          <button class="consult-btn" type="submit" data-en="Generate Traditional View result" data-zh="生成传统观势结果" data-fr="Générer le résultat traditionnel" data-es="Generar resultado tradicional">Generate Traditional View result</button>
-          <button class="consult-btn secondary" type="reset" data-en="Clear" data-zh="清空" data-fr="Effacer" data-es="Limpiar">Clear</button>
-        </div>
-
-        <div class="consult-output" data-consult-output>
-          <h3 data-en="Your Traditional View consultation result" data-zh="你的传统观势咨询结果" data-fr="Votre résultat de consultation traditionnelle" data-es="Tu resultado de consulta tradicional">Your Traditional View consultation result</h3>
-          <pre data-consult-summary></pre>
-          <div class="consult-actions"><button class="consult-btn" type="button" data-copy-summary>Copy full consultation</button></div>
-        </div>
+        <div class="consult-actions"><button class="consult-btn" type="submit" data-en="Generate Traditional View result" data-zh="生成传统观势结果" data-fr="Générer le résultat traditionnel" data-es="Generar resultado tradicional">Generate Traditional View result</button><button class="consult-btn secondary" type="reset" data-en="Clear" data-zh="清空" data-fr="Effacer" data-es="Limpiar">Clear</button></div>
+        <div class="consult-output" data-consult-output><h3 data-en="Your Traditional View consultation result" data-zh="你的传统观势咨询结果" data-fr="Votre résultat de consultation traditionnelle" data-es="Tu resultado de consulta tradicional">Your Traditional View consultation result</h3><pre data-consult-summary></pre><div class="consult-actions"><button class="consult-btn" type="button" data-copy-summary>Copy full consultation</button></div></div>
       </form>
 
       <aside class="consult-card">
@@ -131,16 +68,17 @@
         <div class="side-list">
           <div class="side-item"><b data-en="Traditional ledger" data-zh="传统账" data-fr="Registre traditionnel" data-es="Registro tradicional">Traditional ledger</b><p data-en="Chart, symbolic relations, school-specific interpretation and traditional timing are presented as tradition." data-zh="排盘、象征关系、流派规则和传统时运按传统体系完整呈现。" data-fr="Thème, relations symboliques, règles d’école et timing traditionnel sont présentés comme tradition." data-es="Carta, relaciones simbólicas, reglas de escuela y tiempo tradicional se presentan como tradición.">Traditional interpretation stays intact.</p></div>
           <div class="side-item"><b data-en="Reality ledger" data-zh="现实账" data-fr="Registre réel" data-es="Registro real">Reality ledger</b><p data-en="Known facts, constraints, base rates, environment and real options are analyzed separately." data-zh="已知事实、限制、基础概率、环境和现实选项另行分析。" data-fr="Faits, contraintes, taux de base, environnement et options réelles sont analysés séparément." data-es="Hechos, restricciones, tasas base, entorno y opciones reales se analizan por separado.">Reality is analyzed separately.</p></div>
-          <div class="side-item"><b data-en="Integrated conclusion" data-zh="综合结论" data-fr="Conclusion intégrée" data-es="Conclusión integrada">Integrated conclusion</b><p data-en="Traditional material may suggest questions or hypotheses; it does not silently outrank stronger evidence." data-zh="传统材料可以提出问题和假设，但不会悄悄凌驾于更强证据之上。" data-fr="Le traditionnel peut suggérer des questions ou hypothèses sans dépasser silencieusement des preuves plus fortes." data-es="Lo tradicional puede sugerir preguntas o hipótesis, pero no supera silenciosamente evidencia más fuerte.">Traditional material may suggest questions or hypotheses.</p></div>
+          <div class="side-item"><b data-en="Validation ledger" data-zh="验证账" data-fr="Registre de validation" data-es="Registro de validación">Validation ledger</b><p data-en="After a result, freeze the exact testable claim before reality is known. Later reviews are appended without rewriting the original." data-zh="得到结果后，把真正可检验的那一句在结果揭晓前冻结；以后只追加复盘，不改原判。" data-fr="Après le résultat, figez l’affirmation testable avant de connaître la réalité ; les révisions sont ajoutées sans réécrire l’original." data-es="Después del resultado, congela la afirmación comprobable antes de conocer la realidad; las revisiones se añaden sin reescribir el original.">Freeze before reality is known.</p></div>
         </div>
-        <div class="privacy-note" data-en="Privacy V1.4: consultation fields are sent to RUNLU’s server-side AI route for this analysis. The usage ledger stores only hashed browser/network identifiers, route and estimated-cost metadata — not the consultation text itself." data-zh="V1.4 隐私说明：生成结果时，咨询资料会发送到 RUNLU 的服务器端 AI 通道处理。用量账本只保存经过哈希处理的浏览器/网络标识、入口类型和估算成本，不保存咨询正文。" data-fr="Confidentialité V1.4 : les données de consultation sont traitées par la voie IA serveur de RUNLU. Le registre d’usage conserve seulement des identifiants navigateur/réseau hachés, le parcours et une estimation de coût, pas le texte de la consultation." data-es="Privacidad V1.4: los datos de consulta se procesan por la ruta de IA del servidor de RUNLU. El registro de uso solo guarda identificadores de navegador/red con hash, la ruta y el coste estimado, no el texto de la consulta.">Privacy V1.4: consultation fields are processed server-side; only hashed usage metadata is stored in the usage ledger.</div>
+        <div class="privacy-note" data-en="Privacy V1.5: consultation fields are sent to RUNLU’s server-side AI route for this analysis. Usage metadata is protected separately; freezing a validation case is local-first unless you export it." data-zh="V1.5 隐私说明：生成结果时，咨询资料会发送到 RUNLU 的服务器端 AI 通道处理；如果把结果冻结为验证案例，案例正文默认只保存在当前浏览器，除非你自己导出。" data-fr="Confidentialité V1.5 : les données sont traitées côté serveur pour l’analyse ; un cas de validation figé reste local au navigateur sauf export manuel." data-es="Privacidad V1.5: los datos se procesan en el servidor para el análisis; un caso de validación congelado permanece local salvo exportación manual.">Privacy V1.5.</div>
+        <div class="route-switch"><a href="guanshi-validation.html" data-en="Open the Validation Lab →" data-zh="打开观势验证台 →" data-fr="Ouvrir le laboratoire de validation →" data-es="Abrir el laboratorio de validación →">Open the Validation Lab →</a></div>
         <div class="route-switch"><a href="guanshi-consult.html" data-en="I want to start from the real-world question instead →" data-zh="我想先从现实问题开始 →" data-fr="Je préfère commencer par la question réelle →" data-es="Prefiero empezar por la pregunta real →">I want to start from the real-world question instead →</a></div>
       </aside>
     </section>
   </main>
 
-  <footer class="gs-footer"><div>RUNLU GUANSHI · V1.4</div><a href="guanshi-consult.html" data-en="Start GUANSHI" data-zh="开始观势" data-fr="Commencer" data-es="Empezar">Start GUANSHI</a><a href="guanshi-tradition.html" data-en="Source spine" data-zh="原典线" data-fr="Sources" data-es="Fuentes">Source spine</a></footer>
+  <footer class="gs-footer"><div>RUNLU GUANSHI · V1.5</div><a href="guanshi-consult.html" data-en="Start GUANSHI" data-zh="开始观势" data-fr="Commencer" data-es="Empezar">Start GUANSHI</a><a href="guanshi-validation.html" data-en="Validation" data-zh="验证" data-fr="Validation" data-es="Validación">Validation</a></footer>
   <script src="runlu-language.js?v=2.4"></script>
-  <script src="guanshi-consult.js?v=20260905-3"></script>
+  <script src="guanshi-consult.js?v=20260905-4"></script>
 </body>
 </html>
