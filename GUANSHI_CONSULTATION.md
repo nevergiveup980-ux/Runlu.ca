@@ -1,6 +1,6 @@
 # RUNLU GUANSHI · Consultation Protocol
 
-Status: **V1.3 · two consultation routes + live analysis engine**
+Status: **V1.4 · two consultation routes + live analysis + protected public usage**
 
 Public routes:
 - `guanshi-consult.html` — **Start GUANSHI / 开始观势**
@@ -77,7 +77,7 @@ The live result is organized into four sections:
 
 For Bazi requests with a birth date, the server performs a deterministic calendar calculation before sending the structured chart to the AI interpretation layer.
 
-Current V1.3 chart layer may include:
+Current V1.4 chart layer may include:
 - year / month / day / hour pillars;
 - Day Master;
 - Five-Phase labels;
@@ -106,38 +106,62 @@ Traditional material may generate questions, hypotheses or cultural interpretati
 
 For high-stakes medical, legal, financial, safety or mental-health decisions, evidence-based and qualified professional methods control the practical recommendation.
 
-## V1.3 privacy / implementation state
+## V1.4 privacy / implementation state
 
-The consultation is no longer local-only.
+The consultation is server-processed when the user presses the generate-result button.
 
-- form fields are sent to the RUNLU server-side AI route only when the user presses the generate-result button;
-- the Edge Function processes the content and forwards the analysis prompt through the RUNLU Cloudflare GPT Gateway to OpenAI;
-- the consultation function does not intentionally write consultation content to a RUNLU consultation database;
+- form fields are sent to the RUNLU server-side AI route for the requested analysis;
+- the Edge Function forwards the analysis prompt through the RUNLU Cloudflare GPT Gateway to OpenAI;
+- consultation text is **not** written to the GUANSHI usage ledger;
+- the usage ledger stores only hashed browser/network identifiers, optional account ID when a real authenticated JWT exists, route, request hash, timestamps and estimated-cost metadata;
 - the page does not yet create a persistent user consultation history;
 - users may copy the full input + result locally after generation.
 
-Do not claim that data never leaves the browser in V1.3.
+Do not claim that consultation data never leaves the browser.
 
-## Operational protections
+## V1.4 public-usage guardrails
 
-- JWT-protected Supabase Edge Function;
-- origin-restricted CORS;
-- per-client daily request limit;
-- shared RUNLU daily AI budget guard;
-- no request-content logging in application code;
-- server prompt forbids invented chart/cast/site facts;
-- high-stakes boundary rules remain active.
+GUANSHI now has a dedicated usage ledger. It no longer shares the Forum AI budget ledger.
+
+Current conservative prototype limits are enforced server-side and atomically:
+
+- **2 free AI analyses per identity per UTC day** — authenticated account when a valid account JWT exists; otherwise persistent browser/device identity;
+- **8 analyses per network per UTC day** — secondary anti-abuse limit;
+- **10 analyses globally per rolling hour** — protects against bursts;
+- **45 seconds minimum between analyses from one browser/device**;
+- **same request blocked for 10 minutes** — prevents duplicate-click / replay waste;
+- **USD 1.50 protected GUANSHI reservation budget per UTC day**;
+- **USD 0.05 conservative internal reservation estimate per AI analysis** for budget control; this is not a statement of exact provider billing;
+- only approved RUNLU web origins may call the GUANSHI Edge Function;
+- a hidden honeypot and minimum page-load time reject simple automated submissions;
+- all quota/budget checks occur on the server. Changing browser buttons or JavaScript alone cannot bypass the database guardrail.
+
+The application-level protected budget and the provider's actual invoice are different concepts. The reservation estimate is deliberately conservative and must be reviewed against real token usage before limits are increased.
+
+## Identity state
+
+V1.4 establishes a persistent anonymous browser/device identity and the server already supports account-based counting when a valid authenticated Supabase JWT is supplied.
+
+There is **not yet a public RUNLU account sign-in UI** in the repository. Therefore ordinary visitors are currently controlled as anonymous device identities plus network limits. Do not describe public account login as live until the account UX and retention policy are deliberately implemented.
+
+## Remaining infrastructure hardening
+
+The official GUANSHI path is protected at the Supabase/database layer. A second independent hard cap or signed server-to-server authorization at the **Cloudflare GPT Gateway itself** is still desirable so that even a hypothetical bypass of the application route cannot create uncontrolled provider spend.
+
+That gateway layer should be added when the Cloudflare Worker source/management connection is available. Do not claim the Cloudflare gateway hard cap is complete before then.
 
 ## Next backend work
 
-1. add explicit user-controlled save/history only after retention policy is defined;
-2. add deterministic casting workflows for Six Lines / Meihua before claiming exact method results;
-3. add stronger site-measurement inputs for Feng Shui;
-4. preserve original forecasts for later outcome review rather than rewriting them;
-5. keep the consultation route visible in any future case record (`general` vs `traditional`).
+1. add user-controlled account sign-in/history only after identity and retention policy are defined;
+2. add a second independent Cloudflare gateway budget/authentication barrier;
+3. monitor actual token/provider cost and tune the conservative reservation estimate;
+4. add deterministic casting workflows for Six Lines / Meihua before claiming exact method results;
+5. add stronger site-measurement inputs for Feng Shui;
+6. preserve original forecasts for later outcome review rather than rewriting them;
+7. keep the consultation route visible in any future case record (`general` vs `traditional`).
 
 ## Core sentence
 
-> **Two doors. One GUANSHI discipline.**
+> **Two doors. One GUANSHI discipline. Protected by evidence — and by a budget.**
 >
-> **两扇门，一套观势纪律。**
+> **两扇门，一套观势纪律；既守证据，也守预算。**
