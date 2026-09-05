@@ -1,6 +1,6 @@
 # RUNLU GUANSHI · 观势 · Trend Dynamics
 
-Status: **V1.6 · source spine complete + live consultation + protected AI + validation loop + fixed traditional mechanics + intelligent clarification**
+Status: **V1.7 · source spine complete + live consultation + protected AI + validation loop + fixed traditional mechanics + intelligent clarification + evidence trace & counter-case**
 
 Public framework: `guanshi.html`  
 Start GUANSHI: `guanshi-consult.html`  
@@ -76,6 +76,12 @@ V1.6 also adds the consultation-quality rule:
 
 **只追问真正可能改变结论的资料。**
 
+V1.7 adds the transparency rule:
+
+> Show why the conclusion was reached — and show how it could be wrong.
+
+**不仅要说为什么这样判断，也要说哪里可能判断错。**
+
 ## Nine lenses
 
 - **易 — Change**: what is emerging, declining, turning or transforming?
@@ -117,6 +123,20 @@ If a claim cannot pass into observable or falsifiable form, it remains **Traditi
 - **Symbolic** — cultural/philosophical interpretation, not an empirical fact.
 - **Rejected** — contradicted by reliable evidence or repeatedly failed validation.
 
+### V1.7 evidence-trace rule
+
+Evidence **source type** and evidence **status** are different things and must not be collapsed.
+
+Source types may include:
+- **User-provided fact** — something the user reports as current or historical reality;
+- **Computed mechanic** — deterministic chart, cast, arithmetic or orientation output;
+- **General evidence-based reasoning** — broadly established or reasonably supported mechanisms used without claiming a fresh source search;
+- **Inference** — model reasoning from the supplied facts;
+- **Traditional** — inherited traditional rule or interpretation;
+- **Symbolic** — metaphorical or cultural reading.
+
+A user-provided statement is not automatically `Established`. A computed Bazi chart or hexagram is not predictive evidence merely because the calculation is deterministic. An inference must not be relabeled as evidence. GUANSHI must never claim that it searched, cited or verified outside evidence unless such evidence is actually present in the consultation input.
+
 ## Consultation architecture
 
 ### Door A · Start GUANSHI
@@ -155,6 +175,40 @@ The follow-up logic is topic/method aware. Examples include:
 - Feng Shui: intended site outcome, direction only when relevant, layout/surroundings and measured facts.
 
 Clarification itself does **not** call the AI route and does **not** consume one of the daily free AI analyses. The actual AI call occurs only after the user completes or skips the clarification step.
+
+### V1.7 transparent result contract
+
+Every live consultation now has six required result sections.
+
+General route:
+1. **Reality Baseline / 现实基线**;
+2. **Key Dynamics / 关键态势**;
+3. **Integrated GUANSHI / 综合观势**;
+4. **Next Steps / 下一步**;
+5. **Why This Answer / 结论溯源**;
+6. **What Could Make This Wrong / 反方检验**.
+
+Traditional route:
+1. **Traditional Interpretation / 传统解读**;
+2. **Reality Check / 现实核对**;
+3. **Integrated GUANSHI / 综合观势**;
+4. **Next Steps / 下一步**;
+5. **Why This Answer / 结论溯源**;
+6. **What Could Make This Wrong / 反方检验**.
+
+`Why This Answer` must trace 3–5 important conclusions to their basis/source type and evidence-status label.
+
+`What Could Make This Wrong` must state:
+- the strongest counter-case;
+- the weakest assumption in the present reasoning;
+- the new information most likely to change or reverse the recommendation;
+- an overall Low / Medium / High uncertainty level with a reason.
+
+The counter-case section must be substantive. It is not a generic disclaimer.
+
+Server response metadata includes:
+- `engine_version: 1.7`;
+- `response_protocol: evidence-trace-v1`.
 
 ### Deterministic traditional layer · V1.6
 
@@ -196,9 +250,9 @@ Public tool: `guanshi-validation.html`
 
 Core loop:
 
-**Consult → Clarify if needed → Calculate / Cast → Interpret → Freeze → Wait → Review → Reweight**
+**Consult → Clarify if needed → Calculate / Cast → Interpret → Trace & challenge → Freeze → Wait → Review → Reweight**
 
-**咨询 → 必要时补问 → 计算 / 起卦 → 解读 → 冻结 → 等待 → 复盘 → 调权**
+**咨询 → 必要时补问 → 计算 / 起卦 → 解读 → 溯源与反方检验 → 冻结 → 等待 → 复盘 → 调权**
 
 A successful consultation exposes **Freeze for later review / 冻结为验证案例**.
 
@@ -272,7 +326,7 @@ A traditional model earns additional research weight only through prospectively 
 
 ## Decision loop
 
-**Observe → Frame → Clarify if needed → Estimate → Decide → Calculate / Cast when relevant → Freeze → Review → Reweight**
+**Observe → Frame → Clarify if needed → Estimate → Decide → Calculate / Cast when relevant → Trace & challenge → Freeze → Review → Reweight**
 
 1. **Observe** — separate known facts, assumptions and unknowns.
 2. **Frame** — define the real question, alternatives, horizon and stakes.
@@ -280,9 +334,10 @@ A traditional model earns additional research weight only through prospectively 
 4. **Estimate** — use base rates, probabilities, scenarios and explicit uncertainty where appropriate.
 5. **Decide** — prefer robust action over dramatic narrative.
 6. **Calculate / Cast** — when a traditional method is selected, use a fixed disclosed mechanism before interpretation.
-7. **Freeze** — record the exact judgment, confidence, method structure and review date before the outcome.
-8. **Review** — append what actually happened, including misses and surprises.
-9. **Reweight** — increase, keep, reduce or reject method/assumption weight based on repeated evidence.
+7. **Trace & challenge** — show the basis for key conclusions, label evidence status, state the strongest counter-case and what could overturn the recommendation.
+8. **Freeze** — record the exact judgment, confidence, method structure and review date before the outcome.
+9. **Review** — append what actually happened, including misses and surprises.
+10. **Reweight** — increase, keep, reduce or reject method/assumption weight based on repeated evidence.
 
 ## Weighting principles
 
@@ -307,6 +362,9 @@ GUANSHI does not use fixed universal percentages.
 - two consultation routes;
 - live server-side GUANSHI analysis;
 - **zero-AI intelligent clarification gate with one-round / max-three-question follow-up**;
+- **V1.7 evidence trace for 3–5 key conclusions**;
+- **V1.7 mandatory strongest counter-case / weakest assumption / overturning information / uncertainty block**;
+- **server response protocol metadata: engine 1.7 + evidence-trace-v1**;
 - deterministic Bazi chart layer before AI interpretation;
 - **deterministic Six Lines digital three-coin casting workflow**;
 - **fixed Meihua submission-moment arithmetic workflow**;
