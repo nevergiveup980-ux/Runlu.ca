@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Freeze GUANSHI judgments before outcomes are known, append dated reviews later, and track calibration without rewriting the original prediction.">
+  <meta name="theme-color" content="#f4efe4">
+  <link rel="canonical" href="https://runlu.ca/guanshi-validation.html">
+  <title>Validation Lab · RUNLU GUANSHI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="guanshi.css?v=20260904-2">
+  <link rel="stylesheet" href="guanshi-validation.css?v=20260905-1">
+</head>
+<body class="guanshi-page validation-page">
+  <header class="gs-header">
+    <a class="brand" href="index.html">RUNLU</a>
+    <nav class="gs-top-nav" aria-label="GUANSHI validation navigation">
+      <a href="guanshi.html" data-en="GUANSHI" data-zh="观势" data-fr="GUANSHI" data-es="GUANSHI">GUANSHI</a>
+      <a href="guanshi-consult.html" data-en="Start GUANSHI" data-zh="开始观势" data-fr="Commencer" data-es="Empezar">Start GUANSHI</a>
+      <a href="guanshi-traditional-consult.html" data-en="Traditional View" data-zh="传统观势" data-fr="Vue traditionnelle" data-es="Vista tradicional">Traditional View</a>
+    </nav>
+    <select class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select>
+  </header>
+
+  <main class="validation-wrap">
+    <section class="validation-hero">
+      <a class="gs-back" href="guanshi.html" data-en="← Back to GUANSHI" data-zh="← 返回观势" data-fr="← Retour à GUANSHI" data-es="← Volver a GUANSHI">← Back to GUANSHI</a>
+      <p class="validation-kicker">RUNLU GUANSHI · V1.5</p>
+      <h1 data-en="Validation Lab" data-zh="观势验证台" data-fr="Laboratoire de validation" data-es="Laboratorio de validación">Validation Lab</h1>
+      <p class="lead" data-en="Freeze the judgment before the outcome. Review later without rewriting history." data-zh="结果出来以前先冻结判断；结果出来以后，只能追加复盘，不能改写历史。" data-fr="Figez le jugement avant le résultat. Révisez plus tard sans réécrire l’historique." data-es="Congela el juicio antes del resultado. Revísalo después sin reescribir la historia.">Freeze the judgment before the outcome.</p>
+      <div class="validation-rule" data-en="A memorable hit is not evidence by itself. GUANSHI learns from a series of frozen judgments — hits, misses and surprises together." data-zh="一次神准不等于证据。观势要从一串事前冻结的判断里学习——命中的、失误的、意外的，一个都不删。" data-fr="Un succès mémorable n’est pas une preuve à lui seul. GUANSHI apprend d’une série de jugements figés — réussites, échecs et surprises." data-es="Un acierto memorable no es evidencia por sí solo. GUANSHI aprende de una serie de juicios congelados: aciertos, fallos y sorpresas.">A memorable hit is not evidence by itself.</div>
+    </section>
+
+    <section class="validation-grid">
+      <form class="validation-card" data-freeze-form>
+        <h2 data-en="1 · Freeze a judgment" data-zh="1 · 冻结一个判断" data-fr="1 · Figer un jugement" data-es="1 · Congelar un juicio">1 · Freeze a judgment</h2>
+        <p data-en="Write the claim so that future reality can disagree with it." data-zh="把判断写到将来的现实有机会反驳它。" data-fr="Formulez l’affirmation de manière à ce que la réalité future puisse la contredire." data-es="Formula la afirmación de modo que la realidad futura pueda contradecirla.">Write a testable claim.</p>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="case-route" data-en="Source route" data-zh="来源入口" data-fr="Parcours source" data-es="Ruta de origen">Source route</label>
+            <select id="case-route" name="route"><option value="general" data-en="Start GUANSHI" data-zh="开始观势" data-fr="Commencer GUANSHI" data-es="Empezar GUANSHI">Start GUANSHI</option><option value="traditional" data-en="Traditional View" data-zh="传统观势" data-fr="Vue traditionnelle" data-es="Vista tradicional">Traditional View</option><option value="manual" data-en="Manual case" data-zh="手工案例" data-fr="Cas manuel" data-es="Caso manual">Manual case</option></select>
+          </div>
+          <div class="field">
+            <label for="case-type" data-en="Judgment type" data-zh="判断类型" data-fr="Type de jugement" data-es="Tipo de juicio">Judgment type</label>
+            <select id="case-type" name="type"><option value="binary" data-en="Binary forecast · yes / no" data-zh="二元预测 · 会 / 不会" data-fr="Prévision binaire · oui / non" data-es="Pronóstico binario · sí / no">Binary forecast</option><option value="decision" data-en="Decision judgment" data-zh="现实决策判断" data-fr="Jugement de décision" data-es="Juicio de decisión">Decision judgment</option></select>
+          </div>
+
+          <div class="field full">
+            <label for="case-question" data-en="Question" data-zh="问题" data-fr="Question" data-es="Pregunta">Question</label>
+            <textarea id="case-question" name="question" required></textarea>
+          </div>
+
+          <div class="field full">
+            <label for="case-claim" data-en="Exact forecast / judgment to test" data-zh="要检验的明确预测 / 判断" data-fr="Prévision / jugement exact à tester" data-es="Pronóstico / juicio exacto a probar">Exact forecast / judgment to test</label>
+            <textarea id="case-claim" name="claim" required></textarea>
+          </div>
+
+          <div class="field" data-binary-only>
+            <label for="predicted-outcome" data-en="Predicted outcome" data-zh="预测结果" data-fr="Résultat prévu" data-es="Resultado previsto">Predicted outcome</label>
+            <select id="predicted-outcome" name="predicted_outcome"><option value="yes" data-en="Yes / occurs" data-zh="会 / 发生" data-fr="Oui / se produit" data-es="Sí / ocurre">Yes</option><option value="no" data-en="No / does not occur" data-zh="不会 / 不发生" data-fr="Non / ne se produit pas" data-es="No / no ocurre">No</option></select>
+          </div>
+          <div class="field">
+            <label for="confidence" data-en="Confidence · %" data-zh="置信度 · %" data-fr="Confiance · %" data-es="Confianza · %">Confidence · %</label>
+            <input id="confidence" name="confidence" type="number" min="50" max="99" value="65" required>
+          </div>
+
+          <div class="field">
+            <label for="review-date" data-en="Review date" data-zh="复盘日期" data-fr="Date de révision" data-es="Fecha de revisión">Review date</label>
+            <input id="review-date" name="review_date" type="date" required>
+          </div>
+          <div class="field">
+            <label for="stakes" data-en="Stakes" data-zh="风险等级" data-fr="Enjeu" data-es="Riesgo">Stakes</label>
+            <select id="stakes" name="stakes"><option value="low" data-en="Low" data-zh="低" data-fr="Faible" data-es="Bajo">Low</option><option value="medium" selected data-en="Medium" data-zh="中等" data-fr="Moyen" data-es="Medio">Medium</option><option value="high" data-en="High" data-zh="高" data-fr="Élevé" data-es="Alto">High</option></select>
+          </div>
+
+          <div class="field full">
+            <label for="recommendation" data-en="Recommended action · if any" data-zh="建议采取的行动 · 如有" data-fr="Action recommandée · le cas échéant" data-es="Acción recomendada · si aplica">Recommended action</label>
+            <textarea id="recommendation" name="recommendation"></textarea>
+          </div>
+          <div class="field full">
+            <label for="reasons" data-en="Main reasons known now" data-zh="当前主要理由" data-fr="Raisons principales connues maintenant" data-es="Razones principales conocidas ahora">Main reasons known now</label>
+            <textarea id="reasons" name="reasons"></textarea>
+          </div>
+          <div class="field full">
+            <label for="counterargument" data-en="Strongest counterargument" data-zh="最强反方理由" data-fr="Meilleur contre-argument" data-es="Contraargumento más fuerte">Strongest counterargument</label>
+            <textarea id="counterargument" name="counterargument"></textarea>
+          </div>
+          <div class="field full">
+            <label for="falsifier" data-en="What would count against this judgment?" data-zh="什么事实出现时，应当认为这个判断受到了反驳？" data-fr="Qu’est-ce qui compterait contre ce jugement ?" data-es="¿Qué contaría en contra de este juicio?">What would count against this judgment?</label>
+            <textarea id="falsifier" name="falsifier"></textarea>
+          </div>
+          <div class="field full">
+            <label for="source-consultation" data-en="Source consultation · optional" data-zh="原始咨询结果 · 可选" data-fr="Consultation source · facultatif" data-es="Consulta fuente · opcional">Source consultation · optional</label>
+            <textarea id="source-consultation" name="source_consultation" rows="8"></textarea>
+          </div>
+        </div>
+
+        <div class="validation-actions"><button class="validation-btn" type="submit" data-en="Freeze case" data-zh="冻结案例" data-fr="Figer le cas" data-es="Congelar caso">Freeze case</button><button class="validation-btn secondary" type="reset" data-en="Clear" data-zh="清空" data-fr="Effacer" data-es="Limpiar">Clear</button></div>
+        <p class="local-note" data-en="V1.5 local-first: case content stays in this browser unless you export it yourself. The fingerprint detects accidental changes but is not a public timestamping service." data-zh="V1.5 本地优先：案例正文只保存在当前浏览器，除非你自己导出。指纹可以发现意外改动，但它不是公共时间戳证明。" data-fr="V1.5 local-first : le contenu reste dans ce navigateur sauf export manuel. L’empreinte détecte les modifications accidentelles mais n’est pas un horodatage public." data-es="V1.5 local-first: el contenido permanece en este navegador salvo que lo exportes. La huella detecta cambios accidentales, pero no es un sello de tiempo público.">V1.5 local-first.</p>
+      </form>
+
+      <aside class="validation-card principle-card">
+        <h2 data-en="The anti-hindsight firewall" data-zh="反事后诸葛亮防火墙" data-fr="Pare-feu anti-rétrospection" data-es="Cortafuegos anti-retrospectivo">The anti-hindsight firewall</h2>
+        <div class="principle-list">
+          <div><b data-en="Freeze first" data-zh="先冻结" data-fr="Figer d’abord" data-es="Congelar primero">Freeze first</b><p data-en="Question, claim, confidence, reasons and review date are sealed together." data-zh="问题、判断、置信度、理由和复盘日期一起冻结。" data-fr="Question, affirmation, confiance, raisons et date de révision sont figées ensemble." data-es="Pregunta, afirmación, confianza, razones y fecha de revisión se congelan juntas.">Freeze first.</p></div>
+          <div><b data-en="Append, never rewrite" data-zh="只追加，不改原判" data-fr="Ajouter, jamais réécrire" data-es="Añadir, nunca reescribir">Append, never rewrite</b><p data-en="Later reviews are new dated entries. The original stays visible." data-zh="以后复盘只能新增一条带日期的记录；原始判断一直保留。" data-fr="Les révisions ultérieures sont de nouvelles entrées datées. L’original reste visible." data-es="Las revisiones posteriores son nuevas entradas fechadas. El original permanece visible.">Append only.</p></div>
+          <div><b data-en="Count misses" data-zh="失误也要算" data-fr="Compter les échecs" data-es="Contar los fallos">Count misses</b><p data-en="A method earns weight from a series, not from a spectacular anecdote." data-zh="一种方法要靠一串记录赢得权重，而不是靠一个传奇案例。" data-fr="Une méthode gagne du poids par une série, pas par une anecdote spectaculaire." data-es="Un método gana peso por una serie, no por una anécdota espectacular.">Count misses.</p></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="validation-card wide">
+      <div class="section-head"><div><p class="eyebrow" data-en="Frozen ledger" data-zh="冻结账本" data-fr="Registre figé" data-es="Registro congelado">Frozen ledger</p><h2 data-en="2 · Cases waiting for reality" data-zh="2 · 等现实来回答的案例" data-fr="2 · Cas en attente de la réalité" data-es="2 · Casos esperando a la realidad">2 · Cases waiting for reality</h2></div><div class="validation-actions"><button class="validation-btn secondary" type="button" data-export data-en="Export JSON" data-zh="导出 JSON" data-fr="Exporter JSON" data-es="Exportar JSON">Export JSON</button><label class="validation-btn secondary import-label"><span data-en="Import JSON" data-zh="导入 JSON" data-fr="Importer JSON" data-es="Importar JSON">Import JSON</span><input type="file" accept="application/json" data-import hidden></label></div></div>
+      <div data-case-list class="case-list"></div>
+      <div data-empty-cases class="empty-state" data-en="No frozen cases yet." data-zh="还没有冻结案例。" data-fr="Aucun cas figé pour le moment." data-es="Aún no hay casos congelados.">No frozen cases yet.</div>
+    </section>
+
+    <section class="validation-grid review-grid">
+      <form class="validation-card" data-review-form>
+        <h2 data-en="3 · Append an outcome review" data-zh="3 · 追加一次结果复盘" data-fr="3 · Ajouter une révision du résultat" data-es="3 · Añadir una revisión del resultado">3 · Append an outcome review</h2>
+        <div class="field-grid">
+          <div class="field full"><label for="review-case" data-en="Frozen case" data-zh="选择冻结案例" data-fr="Cas figé" data-es="Caso congelado">Frozen case</label><select id="review-case" name="case_id" required></select></div>
+          <div class="field" data-review-binary><label for="actual-outcome" data-en="Actual outcome" data-zh="实际结果" data-fr="Résultat réel" data-es="Resultado real">Actual outcome</label><select id="actual-outcome" name="actual_outcome"><option value="yes" data-en="Yes / occurred" data-zh="会 / 已发生" data-fr="Oui / s’est produit" data-es="Sí / ocurrió">Yes</option><option value="no" data-en="No / did not occur" data-zh="不会 / 未发生" data-fr="Non / ne s’est pas produit" data-es="No / no ocurrió">No</option><option value="unresolved" data-en="Still unresolved" data-zh="仍未揭晓" data-fr="Toujours non résolu" data-es="Aún sin resolver">Still unresolved</option></select></div>
+          <div class="field"><label for="review-status" data-en="Review status" data-zh="复盘状态" data-fr="Statut de révision" data-es="Estado de revisión">Review status</label><select id="review-status" name="status"><option value="interim" data-en="Interim" data-zh="阶段复盘" data-fr="Intermédiaire" data-es="Intermedia">Interim</option><option value="final" data-en="Final" data-zh="最终复盘" data-fr="Finale" data-es="Final">Final</option></select></div>
+          <div class="field full"><label for="actual-action" data-en="What actually happened / what action was taken?" data-zh="实际发生了什么 / 最后采取了什么行动？" data-fr="Que s’est-il réellement passé / quelle action a été prise ?" data-es="¿Qué ocurrió realmente / qué acción se tomó?">What actually happened?</label><textarea id="actual-action" name="actual_action" required></textarea></div>
+          <div class="field full"><label for="right" data-en="What was right?" data-zh="哪些判断是对的？" data-fr="Qu’est-ce qui était juste ?" data-es="¿Qué fue correcto?">What was right?</label><textarea id="right" name="right"></textarea></div>
+          <div class="field full"><label for="wrong" data-en="What was wrong?" data-zh="哪些判断错了？" data-fr="Qu’est-ce qui était faux ?" data-es="¿Qué fue incorrecto?">What was wrong?</label><textarea id="wrong" name="wrong"></textarea></div>
+          <div class="field full"><label for="surprise" data-en="Important surprise" data-zh="最大的意外是什么？" data-fr="Surprise importante" data-es="Sorpresa importante">Important surprise</label><textarea id="surprise" name="surprise"></textarea></div>
+          <div class="field full"><label for="weight-change" data-en="Weight adjustment" data-zh="权重怎么调整？" data-fr="Ajustement du poids" data-es="Ajuste de peso">Weight adjustment</label><select id="weight-change" name="weight_change"><option value="increase" data-en="Increase" data-zh="提高" data-fr="Augmenter" data-es="Aumentar">Increase</option><option value="keep" selected data-en="Keep" data-zh="保持" data-fr="Maintenir" data-es="Mantener">Keep</option><option value="reduce" data-en="Reduce" data-zh="降低" data-fr="Réduire" data-es="Reducir">Reduce</option><option value="reject" data-en="Reject / archive" data-zh="拒绝 / 归档" data-fr="Rejeter / archiver" data-es="Rechazar / archivar">Reject</option></select></div>
+        </div>
+        <div class="validation-actions"><button class="validation-btn" type="submit" data-en="Append review" data-zh="追加复盘" data-fr="Ajouter la révision" data-es="Añadir revisión">Append review</button></div>
+      </form>
+
+      <aside class="validation-card metrics-card">
+        <h2 data-en="4 · Calibration snapshot" data-zh="4 · 校准快照" data-fr="4 · Aperçu de calibration" data-es="4 · Resumen de calibración">4 · Calibration snapshot</h2>
+        <div data-metrics class="metrics"></div>
+        <p class="local-note" data-en="Small samples are descriptive, not proof. Calibration becomes meaningful only after enough comparable, pre-registered cases accumulate." data-zh="小样本只能描述，不能证明。只有积累了足够多、可比较、事前登记的案例，校准结果才逐渐有意义。" data-fr="Les petits échantillons sont descriptifs, pas probants. La calibration devient utile avec suffisamment de cas comparables et pré-enregistrés." data-es="Las muestras pequeñas son descriptivas, no probatorias. La calibración cobra sentido con suficientes casos comparables y pre-registrados.">Small samples are descriptive, not proof.</p>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="gs-footer"><div>RUNLU GUANSHI · V1.5 · Validation</div><a href="guanshi-consult.html" data-en="Start GUANSHI" data-zh="开始观势" data-fr="Commencer" data-es="Empezar">Start GUANSHI</a><a href="guanshi-traditional-consult.html" data-en="Traditional View" data-zh="传统观势" data-fr="Vue traditionnelle" data-es="Vista tradicional">Traditional View</a></footer>
+  <script src="runlu-language.js?v=2.4"></script>
+  <script src="guanshi-validation.js?v=20260905-1"></script>
+</body>
+</html>
