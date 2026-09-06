@@ -48,7 +48,7 @@ jobs:
 
           required = [
               root / 'index.html', root / 'read.html', root / 'reader.js',
-              root / 'cover-apple.svg'
+              root / 'cover-apple.jpg'
           ]
           missing = [str(p) for p in required if not p.exists()]
           if missing:
@@ -83,12 +83,12 @@ jobs:
 
           index = (root / 'index.html').read_text(encoding='utf-8')
           notes = Path('notes.html').read_text(encoding='utf-8')
-          if 'cover-apple.svg' not in index:
-              raise SystemExit('Evidence index is not using the Apple Books-aligned cover')
-          if '/evidence/cover-apple.svg' not in notes:
-              raise SystemExit('Stories shelf is not using the Apple Books-aligned Evidence cover')
+          if 'cover-apple.jpg' not in index:
+              raise SystemExit('Evidence index is not using the Apple Books-aligned JPEG cover')
+          if '/evidence/cover-apple.jpg' not in notes:
+              raise SystemExit('Stories shelf is not using the Apple Books-aligned JPEG cover')
 
-          print('Evidence chapters 01–10: four languages and cover references verified.')
+          print('Evidence chapters 01–10: four languages and JPEG cover references verified.')
           PY
       - name: Check sitemap and internal links
         run: |
