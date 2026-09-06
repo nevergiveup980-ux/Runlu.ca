@@ -18,21 +18,43 @@ jobs:
           import base64, json, pathlib, re
           root=pathlib.Path('evidence/data')
           out=pathlib.Path('evidence-audit')
+          decode_notes=[]
           for src,dst in [('08-a.b64','08-a.json'),('08-b.b64','08-b.json')]:
               raw=(root/src).read_text(encoding='utf-8').strip()
-              text=base64.b64decode(raw).decode('utf-8')
+              data=base64.b64decode(raw)
+              strict_ok=True
+              try:
+                  text=data.decode('utf-8')
+              except UnicodeDecodeError as e:
+                  strict_ok=False
+                  text=data.decode('utf-8',errors='replace')
+                  decode_notes.append(f'{src}: UTF-8 error at byte {e.start}; replacement chars={text.count(chr(0xfffd))}')
               obj=json.loads(text)
               (out/dst).write_text(json.dumps(obj,ensure_ascii=False,indent=2),encoding='utf-8')
+              decode_notes.append(f'{src}: strict_utf8={strict_ok}; decoded_bytes={len(data)}')
           for name in ['09-a.json','09-b.json','10-a.json','10-b.json']:
               (out/name).write_text((root/name).read_text(encoding='utf-8'),encoding='utf-8')
           report=[]
+          report.extend(decode_notes)
+          en_markers={'the','and','was','were','that','this','she','he','her','his','with','from','not','you','they','what','why','when','then','could','would','have','had','said'}
+          fr_markers={'le','la','les','des','une','un','elle','il','avec','pas','que','qui','dans','pour','avait','était','dit','mais','sur','est','sont'}
+          es_markers={'el','la','los','las','una','un','ella','él','con','no','que','quien','en','para','había','era','dijo','pero','sobre','es','son'}
           for name in ['08-a.json','08-b.json','09-a.json','09-b.json','10-a.json','10-b.json']:
               obj=json.loads((out/name).read_text(encoding='utf-8'))
               report.append(f'[{name}] keys={list(obj)}')
               for lang,lines in obj.items():
                   joined=' '.join(lines)
-                  ascii_words=re.findall(r"\b[A-Za-z]{3,}\b",joined)
-                  report.append(f'  {lang}: paragraphs={len(lines)} chars={len(joined)} ascii_words={len(ascii_words)}')
+                  report.append(f'  {lang}: paragraphs={len(lines)} chars={len(joined)} replacements={joined.count(chr(0xfffd))}')
+                  if lang in ('fr','es'):
+                      suspicious=[]
+                      target=fr_markers if lang=='fr' else es_markers
+                      for i,line in enumerate(lines,1):
+                          words=[w.lower() for w in re.findall(r"[A-Za-zÀ-ÿ']+",line)]
+                          ens=sum(w in en_markers for w in words)
+                          ts=sum(w in target for w in words)
+                          if ens>=4 and ens>ts*2:
+                              suspicious.append(i)
+                      report.append(f'    suspicious_english_paragraphs={suspicious}')
           (out/'report.txt').write_text('\n'.join(report)+'\n',encoding='utf-8')
           PY
       - uses: actions/upload-artifact@v4
