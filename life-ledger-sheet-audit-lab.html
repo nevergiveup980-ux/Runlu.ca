@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>RUNLU Life Ledger · Sheet Audit Lab</title>
+<style>
+:root{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--ink:#122033;--muted:#748499;--line:#dce5ec;--paper:#f4f7fa;--green:#00c58b;--greenSoft:#e9fbf5;--navy:#0b1d2d;--red:#c84e4e}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink)}button,input{font:inherit}.app{max-width:760px;margin:auto;padding-bottom:40px}.top{background:linear-gradient(125deg,#073b34,#07131f 70%);color:#fff;padding:18px}.top small{letter-spacing:.18em;color:#71e8c6;font-weight:800}.top h1{margin:5px 0 3px;font-size:26px}.top p{margin:0;color:#b7c8d2;font-size:12px}.wrap{padding:14px}.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;margin-bottom:12px}.headline{display:flex;justify-content:space-between;align-items:start;gap:10px}.headline h2{margin:0;font-size:19px}.muted{color:var(--muted)}.total{font-size:31px;font-weight:900;margin:9px 0}.rows{display:grid;gap:8px;margin-top:12px}.row{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--line);border-radius:14px;background:#fff}.row .meta{min-width:0;flex:1}.row b{display:block}.row small{color:var(--muted)}.amt{font-weight:900}.sheetActions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.btn{border:0;border-radius:13px;padding:12px 10px;font-weight:850}.add{background:var(--green);color:#053126}.replace{background:var(--navy);color:#fff}.undo{background:#eef2f5;color:#33475a}.mode{display:flex;gap:7px;margin:10px 0}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 11px;font-size:11px;font-weight:800}.chip.active{background:var(--navy);color:#fff}.weeks{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.week{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 5px;text-align:center}.week small{display:block;color:var(--muted)}.week b{font-size:13px}.editor{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.editor input{border:1px solid var(--line);border-radius:12px;padding:12px}.editor .wide{grid-column:1/-1}.rule{background:var(--greenSoft);border:1px solid #c8efdf;border-radius:15px;padding:12px;color:#286753;font-size:12px;line-height:1.45}.audit{display:grid;gap:8px;margin-top:10px}.event{border-left:4px solid #b7c3cf;background:#f8fafc;padding:10px 12px;border-radius:9px}.event.added{border-left-color:var(--green)}.event.adjust{border-left-color:#3c6688}.event b{display:block;font-size:13px}.event small{color:var(--muted)}.delta{float:right;font-weight:900}.danger{color:var(--red)}@media(max-width:520px){.sheetActions,.editor{grid-template-columns:1fr}.editor .wide{grid-column:auto}.weeks{grid-template-columns:repeat(5,minmax(54px,1fr));overflow:auto}.wrap{padding:10px}}
+</style>
+</head>
+<body><div class="app">
+<header class="top"><small>RUNLU · LIFE LEDGER</small><h1>Sheet Edit Audit Lab</h1><p>Goal: Sheet stays simple while Entries keeps the history.</p></header>
+<div class="wrap">
+<div class="rule"><b>Production rule</b><br><b>+ Add</b> creates a normal underlying entry. <b>Set total</b> never silently destroys earlier entries; it creates only the difference as a traceable adjustment. Clear uses the same rule to bring the visible cell to zero. One dataset stays authoritative.</div>
+
+<section class="card">
+ <div class="headline"><div><h2>Groceries · September 2026</h2><div class="muted">Running total Sheet cell</div></div><button class="btn undo" onclick="undoLast()">↶ Undo last</button></div>
+ <div id="runningTotal" class="total">$0.00</div>
+ <div class="mode"><button id="runMode" class="chip active" onclick="setMode('running')">One running total</button><button id="weekMode" class="chip" onclick="setMode('weekly')">W1–W5 rows</button></div>
+ <div id="weeklyBox" class="weeks"></div>
+ <div class="editor"><input id="amount" inputmode="decimal" placeholder="Amount"><input id="date" type="date" value="2026-09-06"><input id="note" class="wide" placeholder="Note (optional)"></div>
+ <div class="sheetActions"><button class="btn add" onclick="addAmount()">＋ Add amount</button><button class="btn replace" onclick="setTotal()">Set visible total</button></div>
+ <div style="margin-top:9px"><button class="btn undo danger" style="width:100%" onclick="clearTotal()">Clear visible total safely</button></div>
+</section>
+
+<section class="card"><div class="headline"><div><h2>Entries View</h2><div class="muted">What actually happened underneath</div></div><span id="entryCount" class="muted"></span></div><div id="entryRows" class="rows"></div></section>
+<section class="card"><div class="headline"><div><h2>Audit trail</h2><div class="muted">Every Sheet action remains explainable</div></div></div><div id="auditRows" class="audit"></div></section>
+</div></div>
+<script>
+let mode='running';let nextId=10;let entries=[
+{id:1,date:'2026-09-02',item:'Groceries',week:1,kind:'entry',amount:86.40,note:'Weekly shop'},
+{id:2,date:'2026-09-05',item:'Groceries',week:1,kind:'entry',amount:76.00,note:'Top-up'},
+{id:3,date:'2026-09-10',item:'Groceries',week:2,kind:'entry',amount:148.70,note:'Weekly shop'}
+];let history=[];
+const money=n=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(Number(n)||0);
+const signed=n=>(n>=0?'+':'−')+money(Math.abs(n));
+function weekFor(date){const d=Number((date||'2026-09-01').slice(-2));return Math.min(5,Math.max(1,Math.ceil(d/7)))}
+function total(){return entries.reduce((s,e)=>s+e.amount,0)}
+function weekTotal(w){return entries.filter(e=>e.week===w).reduce((s,e)=>s+e.amount,0)}
+function value(){return Number(String(amount.value).replace(/[^0-9.-]/g,''))}
+function snapshot(label){history.push({label,entries:JSON.parse(JSON.stringify(entries))});if(history.length>20)history.shift()}
+function addAmount(){const v=value();if(!(v>0)){alert('Enter an amount greater than zero.');return}snapshot('Add amount');const w=weekFor(date.value);entries.push({id:nextId++,date:date.value,item:'Groceries',week:w,kind:'entry',amount:v,note:note.value||'Added from Sheet'});clearEditor();render()}
+function setTotal(){const target=value();if(target<0||Number.isNaN(target)){alert('Enter the total you want the Sheet to show.');return}const current=total(),delta=+(target-current).toFixed(2);if(Math.abs(delta)<.005){clearEditor();return}snapshot('Set total');const w=weekFor(date.value);entries.push({id:nextId++,date:date.value,item:'Groceries',week:w,kind:'adjustment',amount:delta,note:note.value||`Sheet correction: ${money(current)} → ${money(target)}`});clearEditor();render()}
+function clearTotal(){const current=total();if(!current)return;if(!confirm(`Set the visible Grocery total from ${money(current)} to $0.00 while keeping the history?`))return;snapshot('Clear total');const w=weekFor(date.value);entries.push({id:nextId++,date:date.value,item:'Groceries',week:w,kind:'adjustment',amount:-current,note:'Sheet clear: traceable reversal to zero'});render()}
+function undoLast(){const s=history.pop();if(!s){alert('Nothing to undo.');return}entries=s.entries;render()}
+function clearEditor(){amount.value='';note.value=''}
+function setMode(v){mode=v;render()}
+function render(){runningTotal.textContent=money(total());runMode.classList.toggle('active',mode==='running');weekMode.classList.toggle('active',mode==='weekly');weeklyBox.style.display=mode==='weekly'?'grid':'none';weeklyBox.innerHTML=[1,2,3,4,5].map(w=>`<div class="week"><small>W${w}</small><b>${money(weekTotal(w))}</b></div>`).join('');entryCount.textContent=`${entries.length} records`;entryRows.innerHTML=[...entries].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).map(e=>`<div class="row"><div class="meta"><b>${e.kind==='adjustment'?'Sheet adjustment':'Groceries'}</b><small>${e.date} · W${e.week}${e.note?' · '+e.note:''}</small></div><div class="amt">${signed(e.amount)}</div></div>`).join('');auditRows.innerHTML=[...entries].filter(e=>e.kind==='adjustment').reverse().map(e=>`<div class="event adjust"><span class="delta">${signed(e.amount)}</span><b>Visible total corrected</b><small>${e.date} · ${e.note}</small></div>`).join('')||'<div class="muted">No Sheet corrections yet. “+ Add” records are normal entries and need no special audit label.</div>'}
+render();
+</script></body></html>

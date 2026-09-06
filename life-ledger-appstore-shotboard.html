@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RUNLU Ledger · App Store Shotboard</title>
+<style>
+:root{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--navy:#061a32;--navy2:#0a2c50;--ink:#eef9ff;--muted:#b8d2e6;--aqua:#65e6d2;--line:rgba(255,255,255,.18)}
+*{box-sizing:border-box}html,body{margin:0;background:#101820;color:white}.stage-wrap{min-height:100vh;display:grid;place-items:center;padding:20px}.stage{position:relative;width:1320px;height:2868px;overflow:hidden;background:radial-gradient(circle at 74% 13%,rgba(83,225,206,.22),transparent 26%),linear-gradient(155deg,var(--navy2),var(--navy) 54%,#031020);transform-origin:top center;box-shadow:0 30px 90px rgba(0,0,0,.45)}
+.brandbar{position:absolute;top:76px;left:92px;right:92px;display:flex;align-items:center;justify-content:space-between;font-weight:800;letter-spacing:.06em;color:#dffcf6}.brandbar .brand{font-size:32px}.brandbar .tag{font-size:24px;color:var(--aqua);letter-spacing:.12em}.copy{position:absolute;top:210px;left:96px;right:96px;text-align:center}.copy h1{margin:0 auto;font-size:92px;line-height:1.02;letter-spacing:-.035em;max-width:1120px}.copy p{font-size:38px;line-height:1.35;color:var(--muted);margin:34px auto 0;max-width:1040px}.accent{color:var(--aqua)}
+.appshell{position:absolute;left:105px;right:105px;top:670px;bottom:110px;border-radius:74px;background:#fff;box-shadow:0 38px 90px rgba(0,0,0,.34);overflow:hidden;border:2px solid rgba(255,255,255,.5)}.appshell:before{content:"";position:absolute;inset:0;border-radius:72px;box-shadow:inset 0 0 0 2px rgba(8,35,61,.1);pointer-events:none;z-index:3}.appframe{border:0;width:100%;height:100%;background:#f4f7fa}.fineprint{position:absolute;bottom:42px;left:0;right:0;text-align:center;font-size:18px;color:rgba(220,238,248,.68);letter-spacing:.04em}
+@media(max-width:1350px),(max-height:2890px){.stage{transform:scale(var(--scale, .28))}.stage-wrap{height:calc(2868px * var(--scale, .28));align-items:start}}
+</style>
+</head>
+<body>
+<div class="stage-wrap"><main class="stage" id="stage">
+  <div class="brandbar"><div class="brand">RUNLU LEDGER</div><div class="tag">PRIVATE · SIMPLE · EDITABLE</div></div>
+  <section class="copy"><h1 id="headline"></h1><p id="support"></p></section>
+  <div class="appshell"><iframe id="appframe" class="appframe" title="RUNLU Ledger product screenshot"></iframe></div>
+  <div class="fineprint">Fictional sample data shown for App Store presentation.</div>
+</main></div>
+<script>
+const shots={
+1:{headline:'See your month <span class="accent">at a glance.</span>',support:'Income. Spending. Balance. Clear in seconds.',shot:1},
+2:{headline:'Every transaction stays <span class="accent">easy to follow.</span>',support:'Search, review, and edit the record that changed.',shot:2},
+3:{headline:'One ledger. Two views. <span class="accent">Both editable.</span>',support:'Entries for detail. Sheet View for the whole month.',shot:3},
+4:{headline:'Add a record <span class="accent">in seconds.</span>',support:'Amount first. Familiar items stay close.',shot:4},
+5:{headline:'Your ledger stays <span class="accent">under your control.</span>',support:'No bank connection required. Export when you want.',shot:5}
+};
+const q=new URLSearchParams(location.search),n=Math.max(1,Math.min(5,Number(q.get('shot')||1))),cfg=shots[n];
+headline.innerHTML=cfg.headline;support.textContent=cfg.support;appframe.src=`life-ledger-appstore-candidate-v2-3.html?shot=${cfg.shot}`;
+function fit(){const s=Math.min((innerWidth-40)/1320,(innerHeight-40)/2868,1);document.documentElement.style.setProperty('--scale',String(s));}
+fit();addEventListener('resize',fit);
+</script>
+</body>
+</html>
