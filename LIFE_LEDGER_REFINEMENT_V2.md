@@ -46,16 +46,52 @@ The lab proves the product promise with fictional sample data: edit an individua
 - Fuel should support W1–W5 style rows.
 - Direct cell editing is allowed.
 - A blank cell may become a new record.
-- Mobile cell editing should offer three explicit actions when useful: Replace total, Add to current, Clear this cell.
-- “Add to current” must create or preserve an underlying transaction so Entries can remain traceable.
-- Clearing a cell removes that cell-derived record only after a clear, reversible user action in the production app.
+- Mobile cell editing should offer three explicit actions when useful: Set visible total, Add amount, Clear visible total safely.
+- “Add amount” must create a normal underlying transaction so Entries remains fully traceable.
+- “Set visible total” must not silently overwrite or delete earlier transactions. It records only the difference between the current total and the requested total as a traceable adjustment.
+- “Clear visible total” follows the same correction rule: earlier records remain, and a reversal adjustment brings the visible Sheet cell to zero.
+- Every destructive-looking Sheet action should offer an immediate Undo path.
 - Historical records remain intact when an item is renamed or archived.
 - Optional recurring-category presentation may switch between W1–W5 detail and one running monthly total without duplicating underlying data.
+
+### Traceable Sheet editing semantics
+The Sheet should feel like a simple spreadsheet while the underlying ledger behaves like a reliable record system.
+
+1. **Add amount**
+   - User enters the new purchase amount, not a recalculated total.
+   - A new normal transaction is created with date, note, category and account context.
+   - For recurring weekly groups, the transaction can be assigned to W1–W5 from its date.
+
+2. **Set visible total**
+   - Example: current Grocery total is $311.10 and user wants the Sheet to show $350.00.
+   - The app creates a +$38.90 correction record rather than rewriting earlier grocery transactions.
+   - If the requested total is lower, the correction is negative.
+   - Entries View describes this plainly as a Sheet adjustment or correction.
+
+3. **Clear visible total safely**
+   - Clearing does not erase the history.
+   - The app creates a reversal equal to the current visible total, bringing the cell to zero while retaining the earlier entries.
+   - The user sees a confirmation and can Undo immediately.
+
+4. **Running total vs W1–W5**
+   - These are presentation choices over the same records.
+   - In running-total mode, the Sheet sums all grocery records for the month.
+   - In W1–W5 mode, those same records are grouped by the week bucket derived from their date.
+   - Changing presentation never changes the records.
+
+5. **Auditability without accounting jargon**
+   - The interface says “Added from Sheet,” “Sheet adjustment,” or “Corrected total,” not debit/credit language.
+   - The user can always answer: what changed, when, and why.
+
+### Sheet audit interaction lab
+`life-ledger-sheet-audit-lab.html`
+
+This lab proves that Add, Set Total, Clear and Undo can preserve the Entries history while keeping the Sheet interaction simple.
 
 ### Mobile Sheet interaction lab
 `life-ledger-mobile-sheet-lab.html`
 
-The mobile lab tests one-month focus, fixed readable item labels, large touch targets, W1–W5 / running-total presentation, and Replace / Add / Clear editing actions.
+The mobile lab tests one-month focus, fixed readable item labels, large touch targets, W1–W5 / running-total presentation, and Set Total / Add / Clear editing actions.
 
 ## Home
 Home answers four questions immediately:
@@ -109,6 +145,7 @@ Keep settings focused on:
 - Prove mobile Add flow.
 - Prove simple bar chart.
 - Prove that first-time users can understand Entries vs Sheet View without instructions.
+- Prove that Sheet Add / Set Total / Clear / Undo can remain traceable without feeling like accounting software.
 
 ### Pass 2 — current app transplant
 - Map the existing current-app data model to the dual-view model.
@@ -116,6 +153,7 @@ Keep settings focused on:
 - Add migration safety and export-before-migration.
 - Add editable Sheet View without changing stable records.
 - Keep a single authoritative transaction model underneath both views.
+- Represent Sheet total corrections as explicit adjustment records rather than destructive rewrites.
 
 ### Pass 3 — polish
 - Search / filters.
