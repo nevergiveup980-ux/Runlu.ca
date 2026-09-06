@@ -10,21 +10,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Extract JPEG and switch all live cover references
+      - name: Build JPEG and switch all live cover references
         run: |
           python - <<'PY'
           from pathlib import Path
-          import base64, re
+          import base64, hashlib
 
-          svg = Path('evidence/cover-apple.svg').read_text(encoding='utf-8')
-          m = re.search(r'data:image/jpeg;base64,([A-Za-z0-9+/=]+)', svg)
-          if not m:
-              raise SystemExit('Embedded JPEG not found in cover-apple.svg')
-          data = base64.b64decode(m.group(1), validate=True)
+          parts = [Path(f'evidence/coverparts/{i:02d}.txt') for i in range(4)]
+          raw = ''.join(p.read_text(encoding='utf-8').strip() for p in parts)
+          data = base64.b64decode(raw, validate=True)
+          expected = 'b88fe92e5be13c4e5668a5ba299f05486aab8e5fa7d0fc2928c9e6ad6ec0a6b0'
+          digest = hashlib.sha256(data).hexdigest()
+          if digest != expected:
+              raise SystemExit(f'JPEG checksum mismatch: {digest}')
           if len(data) < 10000 or not data.startswith(b'\xff\xd8') or not data.endswith(b'\xff\xd9'):
-              raise SystemExit(f'Invalid JPEG extracted: {len(data)} bytes')
+              raise SystemExit(f'Invalid JPEG: {len(data)} bytes')
           Path('evidence/cover-apple.jpg').write_bytes(data)
-          print(f'Wrote evidence/cover-apple.jpg: {len(data)} bytes')
+          print(f'Wrote evidence/cover-apple.jpg: {len(data)} bytes sha256={digest}')
 
           old = 'cover-apple.svg?v=20260906-2'
           new = 'cover-apple.jpg?v=20260906-3'
@@ -33,7 +35,7 @@ jobs:
               text = p.read_text(encoding='utf-8')
               if old not in text:
                   raise SystemExit(f'{old} not found in {name}')
-              p.write_text(text.replace(old,new), encoding='utf-8')
+              p.write_text(text.replace(old, new), encoding='utf-8')
 
           p = Path('.github/workflows/site-check.yml')
           text = p.read_text(encoding='utf-8')
@@ -46,6 +48,7 @@ jobs:
           git config user.name "RUNLU maintenance"
           git config user.email "actions@users.noreply.github.com"
           git add evidence/cover-apple.jpg evidence/index.html notes.html last-one-to-leave/cover-language.js .github/workflows/site-check.yml
-          if [ -f evidence/cover-apple.jpg.b64 ]; then git rm evidence/cover-apple.jpg.b64; fi
+          [ -f evidence/cover-apple.jpg.b64 ] && git rm evidence/cover-apple.jpg.b64 || true
+          git rm -r evidence/coverparts
           git commit -m "Serve Evidence cover as plain JPEG"
           git push
