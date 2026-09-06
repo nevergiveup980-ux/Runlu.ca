@@ -21,46 +21,41 @@ A personal ledger that keeps the speed of a modern app and the freedom of a spre
 
 Edits from either view immediately update the same underlying record set. There is no duplicate ledger and no manual reconciliation step.
 
+## Dual-view mental model
+The user should understand the difference without reading documentation:
+
+- **Entries = Show me what happened.** Every transaction is visible as an individual record.
+- **Sheet View = Show me the month laid out.** Recurring items and totals are visible in a familiar grid-like structure.
+- **Both are editors.** Neither view is a read-only report.
+- Switching views changes presentation, not the underlying ledger.
+- The app remembers the user's last preferred Ledger view, but never hides the alternate view.
+- A short contextual sentence should change with the selected view so a first-time user immediately understands what each mode is for.
+- Avoid technical labels such as “database view,” “transaction mode,” or “pivot.” Use plain language: Entries and Sheet View.
+
+### Dual-view interaction lab
+`life-ledger-dual-view-lab.html`
+
+The lab proves the product promise with fictional sample data: edit an individual transaction in Entries, then see the Sheet total change; edit or add to a Sheet cell, then see the underlying transaction list change.
+
 ## Sheet View rules
 - Item labels run vertically on the left.
 - Months run horizontally across the top on desktop.
+- On iPhone, focus on one month at a time rather than squeezing twelve months onto the screen.
 - Common recurring categories may use repeated subrows.
 - Groceries / shopping should support W1–W5 style rows.
 - Fuel should support W1–W5 style rows.
 - Direct cell editing is allowed.
 - A blank cell may become a new record.
+- Mobile cell editing should offer three explicit actions when useful: Replace total, Add to current, Clear this cell.
+- “Add to current” must create or preserve an underlying transaction so Entries can remain traceable.
 - Clearing a cell removes that cell-derived record only after a clear, reversible user action in the production app.
 - Historical records remain intact when an item is renamed or archived.
+- Optional recurring-category presentation may switch between W1–W5 detail and one running monthly total without duplicating underlying data.
 
-## Mobile Sheet View decision
-The iPhone version must not simply shrink the 12-month desktop spreadsheet. It keeps the spreadsheet mental model but changes the interaction:
+### Mobile Sheet interaction lab
+`life-ledger-mobile-sheet-lab.html`
 
-- Show **one focused month at a time** with large previous / next month controls.
-- Keep item names permanently visible; do not require horizontal scrolling just to discover what a value belongs to.
-- Each amount cell is a generous tap target.
-- Tapping a cell opens a bottom editor with three explicit actions:
-  1. **Replace total** — set the cell to a chosen amount.
-  2. **+ Add to current** — add the newly entered amount to the existing monthly amount without requiring mental arithmetic.
-  3. **Clear this cell** — explicit destructive action, protected in production.
-- `+ Add to current` should create or preserve a real underlying activity entry so Entries View can still show the history behind the monthly result.
-- The focused-month screen shows Income, Expenses, and Balance above the sheet rows and refreshes immediately after an edit.
-- The desktop version retains the familiar 12-month cross-sheet layout.
-
-### Flexible grocery / recurring-entry rule
-Recurring shopping is deliberately user-controlled rather than forced into one bookkeeping style.
-
-**Detailed mode**
-- Groceries W1–W5 stay as separate rows.
-- Fuel W1–W5 stay as separate rows.
-- This is best when the user wants to see weekly rhythm.
-
-**Running-total mode**
-- The same group may be displayed as one monthly total row.
-- `+ Add to current` lets the user enter only the new shopping amount; the app handles the accumulation.
-- The user does not need to manually add the previous total, although direct replacement remains available for people who prefer spreadsheet-style control.
-- Switching display mode must not duplicate or lose data; it changes presentation, not the source of truth.
-
-This flexibility is a product feature, not an exception. The app should never force users to record more detail than they want.
+The mobile lab tests one-month focus, fixed readable item labels, large touch targets, W1–W5 / running-total presentation, and Replace / Add / Clear editing actions.
 
 ## Home
 Home answers four questions immediately:
@@ -113,14 +108,14 @@ Keep settings focused on:
 - Prove list editing ↔ sheet editing synchronization.
 - Prove mobile Add flow.
 - Prove simple bar chart.
-- Prove focused-month mobile Sheet View, tap-cell editing, Replace / + Add / Clear, and detailed-vs-running recurring rows.
+- Prove that first-time users can understand Entries vs Sheet View without instructions.
 
 ### Pass 2 — current app transplant
 - Map the existing current-app data model to the dual-view model.
 - Preserve existing records and local storage keys.
 - Add migration safety and export-before-migration.
 - Add editable Sheet View without changing stable records.
-- Ensure mobile `+ Add` writes an underlying activity record rather than silently flattening history.
+- Keep a single authoritative transaction model underneath both views.
 
 ### Pass 3 — polish
 - Search / filters.
@@ -136,8 +131,7 @@ Keep settings focused on:
 - Backup/restore testing.
 - Final App Store metadata and screenshots.
 
-## Prototypes
-- `life-ledger-refine-v2.html` — full app interaction prototype.
-- `life-ledger-mobile-sheet-lab.html` — focused iPhone Sheet View interaction lab.
+## Prototype
+`life-ledger-refine-v2.html`
 
-Both prototypes intentionally use fictional sample values only. Their purpose is interaction and layout validation, not production data storage.
+The prototype intentionally uses fictional sample values only. Its purpose is interaction and layout validation, not production data storage.
