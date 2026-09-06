@@ -17,7 +17,7 @@ jobs:
           import base64, re
 
           svg = Path('evidence/cover-apple.svg').read_text(encoding='utf-8')
-          m = re.search(r'data:image/jpeg;base64,([^\"]+)', svg)
+          m = re.search(r'data:image/jpeg;base64,([A-Za-z0-9+/=]+)', svg)
           if not m:
               raise SystemExit('Embedded JPEG not found in cover-apple.svg')
           data = base64.b64decode(m.group(1), validate=True)
