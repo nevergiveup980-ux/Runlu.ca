@@ -1,0 +1,41 @@
+name: Evidence language audit
+on:
+  push:
+    paths:
+      - '.github/workflows/evidence-audit.yml'
+      - 'evidence/**'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decode and audit Evidence chapters
+        run: |
+          mkdir -p evidence-audit
+          python - <<'PY'
+          import base64, json, pathlib, re
+          root=pathlib.Path('evidence/data')
+          out=pathlib.Path('evidence-audit')
+          for src,dst in [('08-a.b64','08-a.json'),('08-b.b64','08-b.json')]:
+              raw=(root/src).read_text(encoding='utf-8').strip()
+              text=base64.b64decode(raw).decode('utf-8')
+              obj=json.loads(text)
+              (out/dst).write_text(json.dumps(obj,ensure_ascii=False,indent=2),encoding='utf-8')
+          for name in ['09-a.json','09-b.json','10-a.json','10-b.json']:
+              (out/name).write_text((root/name).read_text(encoding='utf-8'),encoding='utf-8')
+          report=[]
+          for name in ['08-a.json','08-b.json','09-a.json','09-b.json','10-a.json','10-b.json']:
+              obj=json.loads((out/name).read_text(encoding='utf-8'))
+              report.append(f'[{name}] keys={list(obj)}')
+              for lang,lines in obj.items():
+                  joined=' '.join(lines)
+                  ascii_words=re.findall(r"\b[A-Za-z]{3,}\b",joined)
+                  report.append(f'  {lang}: paragraphs={len(lines)} chars={len(joined)} ascii_words={len(ascii_words)}')
+          (out/'report.txt').write_text('\n'.join(report)+'\n',encoding='utf-8')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: evidence-language-audit
+          path: evidence-audit
