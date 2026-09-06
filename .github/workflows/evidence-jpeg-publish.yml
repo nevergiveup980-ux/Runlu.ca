@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build JPEG and switch all live cover references
+      - name: Build JPEG and switch live cover references
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -36,18 +36,10 @@ jobs:
               if old not in text:
                   raise SystemExit(f'{old} not found in {name}')
               p.write_text(text.replace(old, new), encoding='utf-8')
-
-          p = Path('.github/workflows/site-check.yml')
-          text = p.read_text(encoding='utf-8')
-          text = text.replace("root / 'cover-apple.svg'", "root / 'cover-apple.jpg'")
-          text = text.replace("if 'cover-apple.svg' not in index:", "if 'cover-apple.jpg' not in index:")
-          text = text.replace("if '/evidence/cover-apple.svg' not in notes:", "if '/evidence/cover-apple.jpg' not in notes:")
-          text = text.replace('Apple Books-aligned cover', 'Apple Books-aligned JPEG cover')
-          p.write_text(text, encoding='utf-8')
           PY
           git config user.name "RUNLU maintenance"
           git config user.email "actions@users.noreply.github.com"
-          git add evidence/cover-apple.jpg evidence/index.html notes.html last-one-to-leave/cover-language.js .github/workflows/site-check.yml
+          git add evidence/cover-apple.jpg evidence/index.html notes.html last-one-to-leave/cover-language.js
           [ -f evidence/cover-apple.jpg.b64 ] && git rm evidence/cover-apple.jpg.b64 || true
           git rm -r evidence/coverparts
           git commit -m "Serve Evidence cover as plain JPEG"
