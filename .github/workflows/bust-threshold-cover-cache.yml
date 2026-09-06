@@ -1,0 +1,36 @@
+name: Bust After Threshold cover cache
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/bust-threshold-cover-cache.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  bust-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Change cover cache key
+        shell: python
+        run: |
+          from pathlib import Path
+          for name in ['notes.html', 'after-threshold/index.html']:
+              p = Path(name)
+              s = p.read_text(encoding='utf-8')
+              s = s.replace('cover-apple.jpg?v=20260906-1', 'cover-apple.jpg?v=20260906-2')
+              p.write_text(s, encoding='utf-8')
+      - name: Commit cache-bust update
+        run: |
+          git config user.name "RUNLU Site Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add notes.html after-threshold/index.html
+          if git diff --cached --quiet; then
+            echo "No changes needed"
+          else
+            git commit -m "Bust After the Threshold cover cache"
+            git push
+          fi
