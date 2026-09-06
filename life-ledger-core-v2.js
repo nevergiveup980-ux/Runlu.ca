@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='2.1';
+const VERSION='2.2';
 
 function clone(x){return JSON.parse(JSON.stringify(x))}
 function n(v){const x=Number(v);return Number.isFinite(x)?x:0}
@@ -19,6 +19,11 @@ function cashEffect(e){
   if(e?.type==='Expense')return -effect;
   return 0;
 }
+function weekBucket(date){
+  const d=Number(String(date||'').slice(8,10));
+  if(!d)return '';
+  return `W${Math.min(5,Math.floor((d-1)/7)+1)}`;
+}
 
 function totals(entries,prefix=''){
   let income=0,expense=0;
@@ -32,9 +37,12 @@ function totals(entries,prefix=''){
   return {income,expense,balance:round2(income-expense)};
 }
 
-function itemTotal(entries,{item,year,month}){
+function itemTotal(entries,{item,year,month,week=''}){
   const prefix=`${year}-${String(month).padStart(2,'0')}`;
-  return round2((entries||[]).filter(e=>e.item===item&&String(e.date||'').startsWith(prefix)).reduce((s,e)=>s+effectAmount(e),0));
+  return round2((entries||[]).filter(e=>{
+    if(e.item!==item||!String(e.date||'').startsWith(prefix))return false;
+    return !week||weekBucket(e.date)===week;
+  }).reduce((s,e)=>s+effectAmount(e),0));
 }
 
 function categoryTotals(entries,prefix=''){
@@ -51,8 +59,9 @@ function categoryTotals(entries,prefix=''){
 function addNormal(entries,input){
   const amount=Math.abs(round2(input.amount));
   if(!amount)throw new Error('Amount must be greater than zero.');
+  if(!String(input.item||'').trim())throw new Error('Item is required.');
   const rec={
-    id:input.id||id(),date:input.date,type:input.type,item:input.item,
+    id:input.id||id(),date:input.date,type:input.type,item:String(input.item).trim(),
     category:input.category||'Other',account:input.account||'',amount,
     note:input.note||'',source:input.source||'Entry'
   };
@@ -64,37 +73,33 @@ function adjustVisibleTotal(entries,input){
   const target=Math.max(0,round2(input.target));
   const delta=round2(target-current);
   if(Math.abs(delta)<0.005)return {entries:[...entries],record:null,undo:null,current,target,delta:0};
+  const week=input.week||'';
   const rec={
     id:input.id||id(),date:input.date,type:input.type,item:input.item,
     category:input.category||'Other',account:input.account||'',amount:Math.abs(delta),
-    adjustmentDelta:delta,note:input.note||`Set visible total to ${target.toFixed(2)}`,
-    source:'Sheet adjustment'
+    adjustmentDelta:delta,note:input.note||`Set visible total${week?` ${week}`:''} to ${target.toFixed(2)}`,
+    source:week?'Sheet week adjustment':'Sheet adjustment'
   };
-  return {entries:[...entries,rec],record:rec,undo:{removeIds:[rec.id]},current,target,delta};
+  return {entries:[...entries,rec],record:rec,undo:{removeIds:[rec.id]},current,target,delta,week};
 }
 
 function clearVisibleTotal(entries,input){
   const current=itemTotal(entries,input);
   if(Math.abs(current)<0.005)return {entries:[...entries],record:null,undo:null,current,delta:0};
-  const delta=round2(-current);
+  const delta=round2(-current),week=input.week||'';
   const rec={
     id:input.id||id(),date:input.date,type:input.type,item:input.item,
     category:input.category||'Other',account:input.account||'',amount:Math.abs(delta),
-    adjustmentDelta:delta,note:input.note||'Clear visible total',source:'Sheet reversal'
+    adjustmentDelta:delta,note:input.note||`Clear visible total${week?` ${week}`:''}`,
+    source:week?'Sheet week reversal':'Sheet reversal'
   };
-  return {entries:[...entries,rec],record:rec,undo:{removeIds:[rec.id]},current,delta};
+  return {entries:[...entries,rec],record:rec,undo:{removeIds:[rec.id]},current,delta,week};
 }
 
 function undo(entries,token){
   if(!token?.removeIds?.length)return [...entries];
   const ids=new Set(token.removeIds.map(String));
   return entries.filter(e=>!ids.has(String(e.id)));
-}
-
-function weekBucket(date){
-  const d=Number(String(date||'').slice(8,10));
-  if(!d)return '';
-  return `W${Math.min(5,Math.floor((d-1)/7)+1)}`;
 }
 
 function recurringPresentation(entries,{item,year,month}){
