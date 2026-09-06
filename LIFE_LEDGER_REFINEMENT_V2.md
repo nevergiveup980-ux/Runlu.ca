@@ -23,7 +23,7 @@ Edits from either view immediately update the same underlying record set. There 
 
 ## Sheet View rules
 - Item labels run vertically on the left.
-- Months run horizontally across the top.
+- Months run horizontally across the top on desktop.
 - Common recurring categories may use repeated subrows.
 - Groceries / shopping should support W1–W5 style rows.
 - Fuel should support W1–W5 style rows.
@@ -31,6 +31,36 @@ Edits from either view immediately update the same underlying record set. There 
 - A blank cell may become a new record.
 - Clearing a cell removes that cell-derived record only after a clear, reversible user action in the production app.
 - Historical records remain intact when an item is renamed or archived.
+
+## Mobile Sheet View decision
+The iPhone version must not simply shrink the 12-month desktop spreadsheet. It keeps the spreadsheet mental model but changes the interaction:
+
+- Show **one focused month at a time** with large previous / next month controls.
+- Keep item names permanently visible; do not require horizontal scrolling just to discover what a value belongs to.
+- Each amount cell is a generous tap target.
+- Tapping a cell opens a bottom editor with three explicit actions:
+  1. **Replace total** — set the cell to a chosen amount.
+  2. **+ Add to current** — add the newly entered amount to the existing monthly amount without requiring mental arithmetic.
+  3. **Clear this cell** — explicit destructive action, protected in production.
+- `+ Add to current` should create or preserve a real underlying activity entry so Entries View can still show the history behind the monthly result.
+- The focused-month screen shows Income, Expenses, and Balance above the sheet rows and refreshes immediately after an edit.
+- The desktop version retains the familiar 12-month cross-sheet layout.
+
+### Flexible grocery / recurring-entry rule
+Recurring shopping is deliberately user-controlled rather than forced into one bookkeeping style.
+
+**Detailed mode**
+- Groceries W1–W5 stay as separate rows.
+- Fuel W1–W5 stay as separate rows.
+- This is best when the user wants to see weekly rhythm.
+
+**Running-total mode**
+- The same group may be displayed as one monthly total row.
+- `+ Add to current` lets the user enter only the new shopping amount; the app handles the accumulation.
+- The user does not need to manually add the previous total, although direct replacement remains available for people who prefer spreadsheet-style control.
+- Switching display mode must not duplicate or lose data; it changes presentation, not the source of truth.
+
+This flexibility is a product feature, not an exception. The app should never force users to record more detail than they want.
 
 ## Home
 Home answers four questions immediately:
@@ -83,12 +113,14 @@ Keep settings focused on:
 - Prove list editing ↔ sheet editing synchronization.
 - Prove mobile Add flow.
 - Prove simple bar chart.
+- Prove focused-month mobile Sheet View, tap-cell editing, Replace / + Add / Clear, and detailed-vs-running recurring rows.
 
 ### Pass 2 — current app transplant
 - Map the existing current-app data model to the dual-view model.
 - Preserve existing records and local storage keys.
 - Add migration safety and export-before-migration.
 - Add editable Sheet View without changing stable records.
+- Ensure mobile `+ Add` writes an underlying activity record rather than silently flattening history.
 
 ### Pass 3 — polish
 - Search / filters.
@@ -104,7 +136,8 @@ Keep settings focused on:
 - Backup/restore testing.
 - Final App Store metadata and screenshots.
 
-## Prototype
-`life-ledger-refine-v2.html`
+## Prototypes
+- `life-ledger-refine-v2.html` — full app interaction prototype.
+- `life-ledger-mobile-sheet-lab.html` — focused iPhone Sheet View interaction lab.
 
-The prototype intentionally uses fictional sample values only. Its purpose is interaction and layout validation, not production data storage.
+Both prototypes intentionally use fictional sample values only. Their purpose is interaction and layout validation, not production data storage.
