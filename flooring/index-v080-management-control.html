@@ -20,19 +20,9 @@
 'use strict';
 const outer=document.getElementById('os80'),boot=document.getElementById('boot80');let done=false,tries=0;
 function fail(message){boot.classList.remove('ready');boot.classList.add('fail');boot.innerHTML='<div>'+message+'<small>V0.3.79 remains the rollback baseline.</small></div>'}
-function deepest(){
-  try{const d79=outer.contentDocument;if(!d79)return null;const os79=d79.getElementById('os79');if(!os79)return null;const d78=os79.contentDocument;if(!d78)return null;const os78=d78.getElementById('os78');if(!os78)return null;const d71=os78.contentDocument;if(!d71)return null;const os71=d71.getElementById('os');if(!os71)return null;const doc=os71.contentDocument,win=os71.contentWindow;return doc&&win&&doc.body?{doc,win}:null}catch(_){return null}
-}
+function deepest(){try{const d79=outer.contentDocument;if(!d79)return null;const os79=d79.getElementById('os79');if(!os79)return null;const d78=os79.contentDocument;if(!d78)return null;const os78=d78.getElementById('os78');if(!os78)return null;const d71=os78.contentDocument;if(!d71)return null;const os71=d71.getElementById('os');if(!os71)return null;const doc=os71.contentDocument,win=os71.contentWindow;return doc&&win&&doc.body?{doc,win}:null}catch(_){return null}}
 function add(ctx,src,flag,global){return new Promise((resolve,reject)=>{if(ctx.doc.querySelector(`script[${flag}]`)){try{ctx.win[global]?.install?.()}catch(_){}return resolve()}const s=ctx.doc.createElement('script');s.src=src+(src.includes('?')?'&':'?')+'t='+Date.now();s.setAttribute(flag,'1');s.onload=()=>{try{ctx.win[global]?.install?.()}catch(e){console.error(e)}resolve()};s.onerror=()=>reject(new Error(src+' failed'));ctx.doc.body.appendChild(s)})}
-async function inject(){
-  const ctx=deepest();if(!ctx)return false;
-  try{
-    await add(ctx,'management-review-v080.js?v=080','data-runlu-v080-management','RUNLUManagementReviewV080');
-    await add(ctx,'po-inventory-holds-v080.js?v=080','data-runlu-v080-holds','RUNLUPOInventoryHoldsV080');
-    try{ctx.doc.title='RUNLU Deerfoot Flooring OS V0.3.80 Management Control';const p=ctx.doc.querySelector('header .pill');if(p)p.textContent='V0.3.80 Management Control'}catch(_){}
-    boot.classList.add('ready');done=true;return true;
-  }catch(e){console.error(e);fail('V0.3.80 management assets could not load.');return true}
-}
+async function inject(){const ctx=deepest();if(!ctx)return false;try{await add(ctx,'management-review-v080.js?v=080','data-runlu-v080-management','RUNLUManagementReviewV080');await add(ctx,'po-inventory-holds-v080r1.js?v=080r1','data-runlu-v080-holds-r1','RUNLUPOInventoryHoldsV080');try{ctx.doc.title='RUNLU Deerfoot Flooring OS V0.3.80 Management Control';const p=ctx.doc.querySelector('header .pill');if(p)p.textContent='V0.3.80 Management Control'}catch(_){}boot.classList.add('ready');done=true;return true}catch(e){console.error(e);fail('V0.3.80 management assets could not load.');return true}}
 function wait(){if(done)return;if(inject())return;if(++tries<120)setTimeout(wait,150);else fail('V0.3.80 could not reach the integrated Flooring OS.')}
 outer.addEventListener('load',()=>{tries=0;setTimeout(wait,180)});outer.src='index-v079-integration-ready.html?v=080&t='+Date.now();
 })();
