@@ -1,0 +1,34 @@
+name: Evidence cover cache refresh
+on:
+  push:
+    paths:
+      - '.github/workflows/evidence-cover-refresh.yml'
+permissions:
+  contents: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bump Evidence cover asset version
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          files = [
+              Path('evidence/index.html'),
+              Path('notes.html'),
+              Path('last-one-to-leave/cover-language.js'),
+          ]
+          old = 'cover-apple.svg?v=20260906-1'
+          new = 'cover-apple.svg?v=20260906-2'
+          for path in files:
+              text = path.read_text(encoding='utf-8')
+              if old not in text:
+                  raise SystemExit(f'{old} not found in {path}')
+              path.write_text(text.replace(old, new), encoding='utf-8')
+          PY
+          git config user.name "RUNLU maintenance"
+          git config user.email "actions@users.noreply.github.com"
+          git add evidence/index.html notes.html last-one-to-leave/cover-language.js
+          git commit -m "Refresh Evidence cover asset version"
+          git push
