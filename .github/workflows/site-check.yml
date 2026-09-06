@@ -31,9 +31,65 @@ jobs:
           node --check leave-a-note.js
           node --check core/runlu-core.js
           node --check core/runlu-cloud.js
+          node --check evidence/reader.js
+          node --check last-one-to-leave/cover-language.js
           node --check scripts/check-multilingual.mjs
       - name: Enforce complete four-language pages
         run: node scripts/check-multilingual.mjs
+      - name: Check Evidence four-language reader package
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64, json
+
+          root = Path('evidence')
+          data_root = root / 'data'
+          expected = {'en', 'zh', 'fr', 'es'}
+
+          required = [
+              root / 'index.html', root / 'read.html', root / 'reader.js',
+              root / 'cover-apple.svg'
+          ]
+          missing = [str(p) for p in required if not p.exists()]
+          if missing:
+              raise SystemExit('Missing Evidence assets:\n' + '\n'.join(missing))
+
+          def read_json(path):
+              return json.loads(path.read_text(encoding='utf-8'))
+
+          def read_b64_json(path):
+              raw = path.read_text(encoding='utf-8').strip()
+              decoded = base64.b64decode(raw, validate=True).decode('utf-8')
+              return json.loads(decoded)
+
+          for n in range(1, 11):
+              key = f'{n:02d}'
+              if key == '08':
+                  a = read_b64_json(data_root / f'{key}-a.b64')
+                  b = read_b64_json(data_root / f'{key}-b.b64')
+              else:
+                  a = read_json(data_root / f'{key}-a.json')
+                  b = read_json(data_root / f'{key}-b.json')
+              merged = {**a, **b}
+              if set(merged) != expected:
+                  raise SystemExit(f'Chapter {key}: expected languages {sorted(expected)}, got {sorted(merged)}')
+              for lang, lines in merged.items():
+                  if not isinstance(lines, list) or not lines:
+                      raise SystemExit(f'Chapter {key} {lang}: empty or invalid content')
+                  if not all(isinstance(x, str) and x.strip() for x in lines):
+                      raise SystemExit(f'Chapter {key} {lang}: contains empty/non-text paragraph')
+                  if any('\ufffd' in x for x in lines):
+                      raise SystemExit(f'Chapter {key} {lang}: contains Unicode replacement characters')
+
+          index = (root / 'index.html').read_text(encoding='utf-8')
+          notes = Path('notes.html').read_text(encoding='utf-8')
+          if 'cover-apple.svg' not in index:
+              raise SystemExit('Evidence index is not using the Apple Books-aligned cover')
+          if '/evidence/cover-apple.svg' not in notes:
+              raise SystemExit('Stories shelf is not using the Apple Books-aligned Evidence cover')
+
+          print('Evidence chapters 01–10: four languages and cover references verified.')
+          PY
       - name: Check sitemap and internal links
         run: |
           python - <<'PY'
