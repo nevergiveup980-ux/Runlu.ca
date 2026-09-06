@@ -1,0 +1,51 @@
+name: Publish Evidence cover as JPEG
+on:
+  push:
+    paths:
+      - '.github/workflows/evidence-jpeg-publish.yml'
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract JPEG and switch all live cover references
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64, re
+
+          svg = Path('evidence/cover-apple.svg').read_text(encoding='utf-8')
+          m = re.search(r'data:image/jpeg;base64,([^\"]+)', svg)
+          if not m:
+              raise SystemExit('Embedded JPEG not found in cover-apple.svg')
+          data = base64.b64decode(m.group(1), validate=True)
+          if len(data) < 10000 or not data.startswith(b'\xff\xd8') or not data.endswith(b'\xff\xd9'):
+              raise SystemExit(f'Invalid JPEG extracted: {len(data)} bytes')
+          Path('evidence/cover-apple.jpg').write_bytes(data)
+          print(f'Wrote evidence/cover-apple.jpg: {len(data)} bytes')
+
+          old = 'cover-apple.svg?v=20260906-2'
+          new = 'cover-apple.jpg?v=20260906-3'
+          for name in ['evidence/index.html','notes.html','last-one-to-leave/cover-language.js']:
+              p = Path(name)
+              text = p.read_text(encoding='utf-8')
+              if old not in text:
+                  raise SystemExit(f'{old} not found in {name}')
+              p.write_text(text.replace(old,new), encoding='utf-8')
+
+          p = Path('.github/workflows/site-check.yml')
+          text = p.read_text(encoding='utf-8')
+          text = text.replace("root / 'cover-apple.svg'", "root / 'cover-apple.jpg'")
+          text = text.replace("if 'cover-apple.svg' not in index:", "if 'cover-apple.jpg' not in index:")
+          text = text.replace("if '/evidence/cover-apple.svg' not in notes:", "if '/evidence/cover-apple.jpg' not in notes:")
+          text = text.replace('Apple Books-aligned cover', 'Apple Books-aligned JPEG cover')
+          p.write_text(text, encoding='utf-8')
+          PY
+          git config user.name "RUNLU maintenance"
+          git config user.email "actions@users.noreply.github.com"
+          git add evidence/cover-apple.jpg evidence/index.html notes.html last-one-to-leave/cover-language.js .github/workflows/site-check.yml
+          if [ -f evidence/cover-apple.jpg.b64 ]; then git rm evidence/cover-apple.jpg.b64; fi
+          git commit -m "Serve Evidence cover as plain JPEG"
+          git push
