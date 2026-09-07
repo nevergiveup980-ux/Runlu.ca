@@ -12,7 +12,7 @@
 </style>
 </head>
 <body>
-<header class="top"><a class="brand" href="index.html">RUNLU</a><a class="back" href="index.html">← Website</a><select id="lang" aria-label="Language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select></header>
+<header class="top"><a class="brand" href="index.html">RUNLU</a><a class="back" href="index.html">← Website</a><select class="language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select></header>
 <main>
 <section class="hero"><p class="kicker" data-en="APP SUPPORT" data-zh="应用支持" data-fr="ASSISTANCE" data-es="SOPORTE">APP SUPPORT</p><h1>RUNLU Ledger</h1><p class="lead" data-en="Help for RUNLU Ledger, the personal income and expense ledger built around Entries and Sheet View." data-zh="RUNLU Ledger 支持中心。这是一款围绕 Entries 与 Sheet View 双视图设计的个人收支账本。" data-fr="Assistance pour RUNLU Ledger, le registre personnel de revenus et dépenses conçu autour des vues Entries et Sheet View." data-es="Ayuda para RUNLU Ledger, el registro personal de ingresos y gastos basado en Entries y Sheet View.">Help for RUNLU Ledger, the personal income and expense ledger built around Entries and Sheet View.</p></section>
 <section class="grid">
@@ -24,6 +24,6 @@
 <section class="contact"><h2 data-en="Contact support" data-zh="联系支持" data-fr="Contacter l’assistance" data-es="Contactar soporte">Contact support</h2><p data-en="For help with RUNLU Ledger, email:" data-zh="如需 RUNLU Ledger 帮助，请发送邮件至：" data-fr="Pour obtenir de l’aide avec RUNLU Ledger, écrivez à :" data-es="Para obtener ayuda con RUNLU Ledger, escribe a:">For help with RUNLU Ledger, email:</p><p><a href="mailto:hello@runlu.ca">hello@runlu.ca</a></p></section>
 <p class="small" data-en="RUNLU Ledger is a RUNLU product. This support page contains no personal ledger data." data-zh="RUNLU Ledger 为 RUNLU 产品。本支持页面不包含任何个人账本数据。" data-fr="RUNLU Ledger est un produit RUNLU. Cette page d’assistance ne contient aucune donnée personnelle de registre." data-es="RUNLU Ledger es un producto RUNLU. Esta página de soporte no contiene datos personales del registro.">RUNLU Ledger is a RUNLU product. This support page contains no personal ledger data.</p>
 </main>
-<script>const sel=document.getElementById('lang');function apply(l){document.documentElement.lang=l;document.querySelectorAll('[data-en]').forEach(el=>{el.textContent=el.dataset[l]||el.dataset.en})}sel.addEventListener('change',e=>apply(e.target.value));apply('en');</script>
+<script src="runlu-language.js?v=20260907-ledger-support-1"></script>
 </body>
 </html>
