@@ -1,0 +1,47 @@
+name: Sync Foresight public branding
+on:
+  push:
+    paths:
+      - '.github/workflows/foresight-brand-sync.yml'
+permissions:
+  contents: write
+jobs:
+  brand-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update public-facing FORESIGHT branding
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          pages = sorted(Path('.').glob('guanshi*.html'))
+          changed=[]
+          for p in pages:
+              text=p.read_text(encoding='utf-8')
+              old=text
+              # Public brand only. Lowercase guanshi-* URLs, script names and storage keys stay untouched.
+              text=text.replace('GUANSHI','FORESIGHT')
+              text=text.replace('Trend Dynamics','Foresight')
+              # Normalize main-page metadata after replacing the former descriptor.
+              if p.name=='guanshi.html':
+                  text=text.replace('RUNLU FORESIGHT · Foresight —','RUNLU FORESIGHT —')
+                  text=text.replace('RUNLU FORESIGHT · 观势 · Foresight','RUNLU FORESIGHT · 观势')
+                  text=text.replace('<h1><span class="gs-cn">观势</span><span class="gs-dot">·</span><span>Foresight</span></h1>',
+                                    '<h1><span class="gs-cn">观势</span><span class="gs-dot">·</span><span>Foresight</span></h1>')
+              if text != old:
+                  p.write_text(text,encoding='utf-8')
+                  changed.append(p.name)
+
+          print('Updated public Foresight branding in:')
+          for name in changed: print(' -',name)
+          if not changed:
+              raise SystemExit('No public GUANSHI branding found to update')
+          PY
+      - name: Commit branding update
+        run: |
+          git config user.name "RUNLU maintenance"
+          git config user.email "actions@users.noreply.github.com"
+          git add guanshi*.html
+          git commit -m "Rename public GUANSHI brand to Foresight"
+          git push
