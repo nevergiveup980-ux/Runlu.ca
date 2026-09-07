@@ -36,6 +36,7 @@ jobs:
           node --check guanshi-knowledge.js
           node --check guanshi-local-reasoner.js
           node --check guanshi-library.js
+          node --check guanshi-vault.js
           node --check guanshi-consult.js
           node --check scripts/check-multilingual.mjs
       - name: Enforce complete four-language pages
@@ -68,9 +69,32 @@ jobs:
                   raise SystemExit(f'{page} is missing the V2.1 local reasoner or local-only control')
               if 'guanshi-library.html' not in text:
                   raise SystemExit(f'{page} is missing the Local Library route')
+              if 'guanshi-vault.html' not in text:
+                  raise SystemExit(f'{page} is missing the Local Vault route')
           if 'guanshi-knowledge.js?v=20260907-2' not in library or 'guanshi-library.js?v=20260907-1' not in library:
               raise SystemExit('Local Library page is missing its scripts')
-          print('GUANSHI V2.1 local knowledge + local reasoning + consent-controlled library wiring verified.')
+          if 'guanshi-vault.html' not in library:
+              raise SystemExit('Local Library is missing its Local Vault route')
+          print('GUANSHI V2.2 local knowledge + local reasoning + consent-controlled library wiring verified.')
+          PY
+      - name: Check GUANSHI encrypted Local Vault
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          vault = Path('guanshi-vault.html').read_text(encoding='utf-8')
+          js = Path('guanshi-vault.js').read_text(encoding='utf-8')
+          sitemap = Path('sitemap.xml').read_text(encoding='utf-8')
+          required = ['AES-GCM','PBKDF2','RUNLU-GUANSHI-LOCAL-VAULT-V1','runlu_guanshi_local_knowledge_v1','runlu_guanshi_validation_cases_v1','expected_revision','Restore & merge']
+          missing = [x for x in required if x not in js and x not in vault]
+          if missing:
+              raise SystemExit('GUANSHI Local Vault contract missing: ' + ', '.join(missing))
+          if 'guanshi-vault.js?v=20260907-1' not in vault:
+              raise SystemExit('Local Vault page is not loading its current client')
+          if 'https://runlu.ca/guanshi-vault.html' not in sitemap:
+              raise SystemExit('Local Vault is missing from sitemap')
+          if 'auth_secret' not in js or 'ciphertext' not in js or 'shareWithAnalysis' in js:
+              raise SystemExit('Local Vault encryption/privacy separation contract changed unexpectedly')
+          print('GUANSHI V2.2 encrypted cloud vault + cross-device merge contract verified.')
           PY
       - name: Check Evidence four-language reader package
         run: |
