@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Update public-facing FORESIGHT branding
+      - name: Polish public-facing Foresight branding
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -20,28 +20,26 @@ jobs:
           for p in pages:
               text=p.read_text(encoding='utf-8')
               old=text
-              # Public brand only. Lowercase guanshi-* URLs, script names and storage keys stay untouched.
-              text=text.replace('GUANSHI','FORESIGHT')
-              text=text.replace('Trend Dynamics','Foresight')
-              # Normalize main-page metadata after replacing the former descriptor.
+              # User-facing product name is title case; RUNLU lockup remains uppercase.
+              text=text.replace('FORESIGHT','Foresight')
+              text=text.replace('RUNLU Foresight','RUNLU FORESIGHT')
+              # Keep the main page concise and bilingual: RUNLU FORESIGHT · 观势.
               if p.name=='guanshi.html':
                   text=text.replace('RUNLU FORESIGHT · Foresight —','RUNLU FORESIGHT —')
                   text=text.replace('RUNLU FORESIGHT · 观势 · Foresight','RUNLU FORESIGHT · 观势')
-                  text=text.replace('<h1><span class="gs-cn">观势</span><span class="gs-dot">·</span><span>Foresight</span></h1>',
-                                    '<h1><span class="gs-cn">观势</span><span class="gs-dot">·</span><span>Foresight</span></h1>')
               if text != old:
                   p.write_text(text,encoding='utf-8')
                   changed.append(p.name)
 
-          print('Updated public Foresight branding in:')
+          print('Polished Foresight casing in:')
           for name in changed: print(' -',name)
           if not changed:
-              raise SystemExit('No public GUANSHI branding found to update')
+              raise SystemExit('No Foresight casing changes were needed')
           PY
-      - name: Commit branding update
+      - name: Commit branding polish
         run: |
           git config user.name "RUNLU maintenance"
           git config user.email "actions@users.noreply.github.com"
           git add guanshi*.html
-          git commit -m "Rename public GUANSHI brand to Foresight"
+          git commit -m "Polish public Foresight brand casing"
           git push
