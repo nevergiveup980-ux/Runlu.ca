@@ -321,3 +321,6 @@ Privacy boundary: the user's frozen validation ledger remains browser-local and 
 
 Current limit: Local Knowledge Engine v1 is deterministic lexical/topic/method retrieval. It is **not** yet an embedding/vector RAG system and it does **not** provide a fully offline local LLM.
 
+### User local-library consent boundary
+
+`guanshi-library.html` provides user-controlled browser-local knowledge storage. Each note is local-only by default. A per-note opt-in controls whether a matched excerpt may be included in a consultation request. Notes without that opt-in remain excluded from the analysis payload. The Validation Lab ledger is separate and is never promoted into the knowledge library automatically.

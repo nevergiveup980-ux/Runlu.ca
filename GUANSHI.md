@@ -414,3 +414,6 @@ Rules:
 
 This establishes the local-first knowledge architecture without pretending that lexical retrieval is semantic RAG or that static framework text is empirical evidence.
 
+### User-controlled local library
+
+V2.0 also adds `guanshi-library.html`. Personal notes are stored under `runlu_guanshi_local_knowledge_v1` in browser `localStorage`. Saving a note does not upload it and does not upgrade its evidence status. A note is eligible to leave the device only when the user explicitly enables **Allow matched excerpt in analysis**; even then, the local retriever must first select it as relevant. Validation cases remain a separate local ledger and are not automatically mixed into the knowledge library.
