@@ -33,9 +33,27 @@ jobs:
           node --check core/runlu-cloud.js
           node --check evidence/reader.js
           node --check last-one-to-leave/cover-language.js
+          node --check guanshi-knowledge.js
+          node --check guanshi-consult.js
           node --check scripts/check-multilingual.mjs
       - name: Enforce complete four-language pages
         run: node scripts/check-multilingual.mjs
+      - name: Check GUANSHI local knowledge wiring
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          kb = Path('guanshi-knowledge.js').read_text(encoding='utf-8')
+          consult = Path('guanshi-consult.js').read_text(encoding='utf-8')
+          if "2.0-local-kb-v1" not in kb or "window.GUANSHI_KB" not in kb:
+              raise SystemExit('GUANSHI local knowledge index is missing its version/export contract')
+          if "_runlu_local_knowledge_context" not in consult or "GUANSHI_KB?.search" not in consult:
+              raise SystemExit('GUANSHI consultation is not using the local knowledge retriever')
+          for page in ['guanshi-consult.html','guanshi-traditional-consult.html']:
+              text = Path(page).read_text(encoding='utf-8')
+              if 'guanshi-knowledge.js?v=20260907-1' not in text:
+                  raise SystemExit(f'{page} is not loading the local knowledge index')
+          print('GUANSHI V2 local knowledge retrieval wiring verified.')
+          PY
       - name: Check Evidence four-language reader package
         run: |
           python - <<'PY'
