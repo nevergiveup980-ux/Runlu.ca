@@ -30,7 +30,7 @@
   <main class="vault-wrap">
     <section class="vault-hero">
       <a class="gs-back" href="guanshi.html" data-en="← Back to GUANSHI" data-zh="← 返回观势" data-fr="← Retour à GUANSHI" data-es="← Volver a GUANSHI">← Back to GUANSHI</a>
-      <p class="consult-kicker">RUNLU GUANSHI · V2.2 · LOCAL VAULT</p>
+      <p class="consult-kicker">RUNLU GUANSHI · V2.3 · LOCAL VAULT</p>
       <h1 data-en="Local Vault" data-zh="本地保险箱" data-fr="Coffre local" data-es="Bóveda local">Local Vault</h1>
       <p class="lead" data-en="Your local AI code comes back automatically on any device. This vault protects the part that is uniquely yours: local knowledge and validation history." data-zh="本地 AI 能力换设备后会随网站自动回来；真正需要保护的是只属于你的那一部分：本地知识与验证历史。" data-fr="Le moteur local revient automatiquement sur tout appareil. Le coffre protège ce qui vous appartient : connaissances locales et historique de validation." data-es="El motor local vuelve automáticamente en cualquier dispositivo. La bóveda protege lo que es tuyo: conocimiento local e historial de validación.">Your local AI code comes back automatically on any device.</p>
       <div class="vault-privacy" data-en="Zero-knowledge boundary: the recovery key is used in this browser to derive the encryption key. RUNLU stores only encrypted ciphertext plus technical version metadata. The recovery key itself is not uploaded or saved by this page. Cloud backup permission is separate from permission to share a knowledge note with cloud AI." data-zh="零知识边界：恢复密钥只在当前浏览器里用于派生加密密钥。RUNLU 云端只保存密文和必要的版本元数据；本页面不会上传或保存恢复密钥。云端备份权限与“允许某条知识交给云端 AI 分析”仍然是两回事。" data-fr="Limite zéro connaissance : la clé de récupération sert localement à dériver la clé de chiffrement. RUNLU ne conserve que le texte chiffré et les métadonnées techniques. La sauvegarde cloud reste distincte de l’autorisation d’envoyer une note à l’IA cloud." data-es="Límite de conocimiento cero: la clave de recuperación se usa localmente para derivar el cifrado. RUNLU guarda solo texto cifrado y metadatos técnicas. La copia en la nube sigue separada del permiso para compartir una nota con la IA.">Zero-knowledge boundary.</div>
@@ -68,6 +68,17 @@
         <div class="vault-history" data-vault-history-box hidden></div>
       </section>
 
+      <section class="vault-card">
+        <h2 data-en="Automatic encrypted backup" data-zh="自动加密备份" data-fr="Sauvegarde automatique chiffrée" data-es="Copia automática cifrada">Automatic encrypted backup</h2>
+        <p data-en="Opt in on this device after the first manual backup or restore. When Local Library or Validation data changes, GUANSHI creates a new encrypted snapshot automatically. The recovery phrase itself is not stored; this browser remembers only a non-extractable WebCrypto key and the vault credential needed to move ciphertext." data-zh="在第一次手动备份或恢复以后，可以为这台设备主动开启。以后“本地知识库”或“验证账本”发生变化，观势会自动创建新的加密快照。恢复密钥原文本身不会保存；浏览器只记住不可导出的 WebCrypto 密钥和传输密文所需的保险箱凭据。" data-fr="Après une première sauvegarde ou restauration manuelle, activez cette option. Les changements locaux déclenchent ensuite un nouvel instantané chiffré. La phrase de récupération n’est pas stockée." data-es="Después de una primera copia o restauración manual, activa esta opción. Los cambios locales crean una nueva instantánea cifrada. La frase de recuperación no se guarda.">Opt-in automatic encrypted backup.</p>
+        <div class="vault-actions">
+          <button class="vault-btn" type="button" data-auto-vault-enable data-en="Enable on this device" data-zh="在这台设备开启" data-fr="Activer sur cet appareil" data-es="Activar en este dispositivo">Enable on this device</button>
+          <button class="vault-btn secondary" type="button" data-auto-vault-disable data-en="Turn off & forget device key" data-zh="关闭并删除设备密钥" data-fr="Désactiver et oublier la clé" data-es="Desactivar y olvidar la clave">Turn off & forget device key</button>
+        </div>
+        <div class="vault-status" data-auto-vault-state></div>
+        <p class="vault-note" data-en="Conflict rule: automatic backup never overwrites a newer cloud revision. It pauses and asks you to Restore & merge first." data-zh="冲突规则：自动备份绝不会覆盖更新的云端版本；发现云端更新时会自动暂停，并要求先“恢复并合并”。" data-fr="Une révision cloud plus récente met la sauvegarde automatique en pause jusqu’à la fusion." data-es="Una revisión más nueva en la nube pausa la copia automática hasta fusionar.">Newer cloud revisions pause auto backup.</p>
+      </section>
+
       <aside class="vault-card">
         <h2 data-en="Cross-device rule" data-zh="跨设备规则" data-fr="Règle multi-appareils" data-es="Regla entre dispositivos">Cross-device rule</h2>
         <div class="vault-steps">
@@ -79,8 +90,9 @@
     </section>
   </main>
 
-  <footer class="gs-footer"><div>RUNLU GUANSHI · V2.2</div><a href="guanshi.html">GUANSHI</a><a href="guanshi-library.html" data-en="Local Library" data-zh="本地知识库" data-fr="Bibliothèque locale" data-es="Biblioteca local">Local Library</a><a href="guanshi-validation.html" data-en="Validation" data-zh="验证" data-fr="Validation" data-es="Validación">Validation</a></footer>
+  <footer class="gs-footer"><div>RUNLU GUANSHI · V2.3</div><a href="guanshi.html">GUANSHI</a><a href="guanshi-library.html" data-en="Local Library" data-zh="本地知识库" data-fr="Bibliothèque locale" data-es="Biblioteca local">Local Library</a><a href="guanshi-validation.html" data-en="Validation" data-zh="验证" data-fr="Validation" data-es="Validación">Validation</a></footer>
   <script src="runlu-language.js?v=2.4"></script>
   <script src="guanshi-vault.js?v=20260907-1"></script>
+<script src="guanshi-auto-vault.js?v=20260907-1"></script>
 </body>
 </html>
