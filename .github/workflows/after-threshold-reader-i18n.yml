@@ -1,0 +1,49 @@
+name: Complete After the Threshold four-language reader
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/after-threshold-reader-i18n.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wire translated reader bodies
+        shell: python
+        run: |
+          from pathlib import Path
+          files=[
+            Path('after-threshold/prologue.html'),
+            Path('after-threshold/chapter-01.html'),
+            Path('after-threshold/chapter-02.html'),
+            Path('after-threshold/chapter-03.html'),
+          ]
+          tag='<script src="reader-i18n.js?v=20260907-1"></script>'
+          for p in files:
+              s=p.read_text(encoding='utf-8')
+              if 'reader-i18n.js' not in s:
+                  s=s.replace('</body>',tag+'</body>')
+              p.write_text(s,encoding='utf-8')
+          p=Path('after-threshold/index.html')
+          s=p.read_text(encoding='utf-8')
+          old='''<p data-en="Prologue and Chapters 1–3, presented here exactly from the published English sample." data-zh="序章与第1—3章，直接采用已出版英文样章文本。" data-fr="Prologue et chapitres 1 à 3, repris directement de l’échantillon anglais publié." data-es="Prólogo y capítulos 1–3, tomados directamente de la muestra inglesa publicada.">Prologue and Chapters 1–3, presented here exactly from the published English sample.</p>'''
+          new='''<p data-en="Prologue and Chapters 1–3. English uses the published sample; Chinese, French, and Spanish use RUNLU website translations of that edition." data-zh="序章与第1—3章。英文采用已出版样章原文；中文、法文、西班牙文为 RUNLU 网站译文。" data-fr="Prologue et chapitres 1 à 3. L’anglais reprend l’échantillon publié ; le chinois, le français et l’espagnol sont des traductions RUNLU de cette édition." data-es="Prólogo y capítulos 1–3. El inglés reproduce la muestra publicada; el chino, el francés y el español son traducciones de RUNLU de esa edición.">Prologue and Chapters 1–3. English uses the published sample; Chinese, French, and Spanish use RUNLU website translations of that edition.</p>'''
+          if old in s: s=s.replace(old,new)
+          p.write_text(s,encoding='utf-8')
+      - name: Commit reader i18n wiring
+        run: |
+          git config user.name "RUNLU Site Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add after-threshold/prologue.html after-threshold/chapter-01.html after-threshold/chapter-02.html after-threshold/chapter-03.html after-threshold/index.html
+          if git diff --cached --quiet; then
+            echo "No changes needed"
+          else
+            git commit -m "Enable four-language After the Threshold reader"
+            git push
+          fi
