@@ -174,3 +174,21 @@ function addRunluCoreHomeEntry(){
   target.append(sep,link);
 }
 addRunluCoreHomeEntry();
+
+
+// RUNLU FORESIGHT stale-menu fallback
+(function(){
+  const fix=()=>{
+    document.querySelectorAll('.desktop-nav a,.mobile-menu a').forEach(a=>{
+      const t=(a.textContent||'').trim();
+      if(t==='Dynamics'||t==='Trend Dynamics'||t==='GUANSHI'){
+        a.href='guanshi.html';
+        a.dataset.en='Foresight'; a.dataset.zh='观势'; a.dataset.fr='Foresight'; a.dataset.es='Foresight';
+        const lang=document.documentElement.dataset.runluLanguage||'en';
+        a.textContent=a.dataset[lang]||a.dataset.en;
+      }
+    });
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fix,{once:true});else fix();
+  setTimeout(fix,250);
+})();
