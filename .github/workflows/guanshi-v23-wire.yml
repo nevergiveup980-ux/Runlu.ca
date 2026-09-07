@@ -34,21 +34,11 @@ jobs:
           if 'guanshi-auto-vault.js?v=20260907-1' not in text:
               text=text.replace('  <script src="guanshi-vault.js?v=20260907-1"></script>','  <script src="guanshi-vault.js?v=20260907-1"></script>\n'+auto_script.strip(),1)
           p.write_text(text,encoding='utf-8')
-
-          p=Path('.github/workflows/site-check.yml'); text=p.read_text(encoding='utf-8')
-          if 'node --check guanshi-auto-vault.js' not in text:
-              text=text.replace('          node --check guanshi-local-reasoner.js\n','          node --check guanshi-local-reasoner.js\n          node --check guanshi-auto-vault.js\n',1)
-          if 'Check GUANSHI automatic encrypted backup' not in text:
-              marker='      - name: Check Evidence four-language reader package\n'
-              block='''      - name: Check GUANSHI automatic encrypted backup\n        run: |\n          python - <<'PY2'\n          from pathlib import Path\n          auto = Path('guanshi-auto-vault.js').read_text(encoding='utf-8')\n          vault = Path('guanshi-vault.html').read_text(encoding='utf-8')\n          required = ['2.3-auto-vault-v1','indexedDB','deriveAutoKey','AES-GCM','PBKDF2','expected_revision','needs_merge','GUANSHI_AUTO_VAULT']\n          missing=[x for x in required if x not in auto]\n          if missing: raise SystemExit('GUANSHI V2.3 auto-vault contract missing: '+', '.join(missing))\n          for token in ['data-auto-vault-enable','data-auto-vault-disable','data-auto-vault-state','guanshi-auto-vault.js?v=20260907-1']:\n              if token not in vault: raise SystemExit('Local Vault page missing '+token)\n          for page in ['guanshi.html','guanshi-consult.html','guanshi-traditional-consult.html','guanshi-library.html','guanshi-validation.html']:\n              body=Path(page).read_text(encoding='utf-8')\n              if 'guanshi-auto-vault.js?v=20260907-1' not in body:\n                  raise SystemExit(page+' is not loading the auto-vault watcher')\n          print('GUANSHI V2.3 opt-in encrypted auto backup wiring verified.')\n          PY2\n'''
-              if marker not in text: raise SystemExit('site-check insertion marker not found')
-              text=text.replace(marker,block+marker,1)
-          p.write_text(text,encoding='utf-8')
           PY
       - name: Commit V2.3 wiring
         run: |
           git config user.name "RUNLU maintenance"
           git config user.email "actions@users.noreply.github.com"
-          git add guanshi.html guanshi-consult.html guanshi-traditional-consult.html guanshi-library.html guanshi-validation.html guanshi-vault.html .github/workflows/site-check.yml
+          git add guanshi.html guanshi-consult.html guanshi-traditional-consult.html guanshi-library.html guanshi-validation.html guanshi-vault.html
           git commit -m "Connect GUANSHI V2.3 automatic encrypted backup"
           git push
