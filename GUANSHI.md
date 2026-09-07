@@ -395,3 +395,22 @@ Feng Shui symbolism must not replace structural engineering, building/fire code 
 For high-stakes domains, traditional lenses may be discussed as cultural or symbolic context only; evidence-based and professional methods control the recommendation.
 
 All public GUANSHI pages must be complete in English, Simplified Chinese, French and Spanish under RUNLU's multilingual policy.
+
+## V2.0 · Local Knowledge Engine v1
+
+GUANSHI now has a **browser-side local knowledge retrieval layer** in `guanshi-knowledge.js`. It is deliberately small, inspectable and zero-AI.
+
+Flow:
+
+**Question → local lexical/topic/method retrieval → selected GUANSHI knowledge nodes → protected server analysis → result → local validation**
+
+Rules:
+- retrieval runs in the browser before the AI request and makes no OpenAI call;
+- the index is built from the existing GUANSHI source spine and carries node ID, source file, evidence-status label and a compact summary;
+- selected nodes are marked explicitly as RUNLU local framework context, **not user-provided facts and not external evidence**;
+- private Validation Lab cases remain in browser `localStorage` and are **not automatically sent into knowledge retrieval or AI analysis**;
+- this first version uses deterministic lexical + topic/method scoring, not embeddings or a vector database;
+- a local LLM is not yet bundled, so full natural-language synthesis still uses the protected cloud AI route.
+
+This establishes the local-first knowledge architecture without pretending that lexical retrieval is semantic RAG or that static framework text is empirical evidence.
+

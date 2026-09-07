@@ -310,3 +310,14 @@ Do not claim that gateway-level hard cap is complete until the Worker itself is 
 > **Ask only what matters. Calculate before interpreting. Freeze before knowing. Let reality answer last.**
 >
 > **只问真正重要的资料；先算清楚，再作解释；先把话留下，再让现实回答。**
+
+## V2.0 local knowledge retrieval
+
+Before the protected AI call, the public consultation pages now run `guanshi-knowledge.js` locally. The retriever selects a small number of relevant public GUANSHI framework nodes by consultation topic, selected traditional method and lexical matches. Each node carries a stable ID, source file, evidence-status label and compact summary.
+
+The selected context is sent inside a clearly marked `_runlu_local_knowledge_context` field stating that it is RUNLU browser-local framework retrieval, not a user-provided fact and not an outside evidence search. The server continues to apply the V1.7 evidence-trace discipline; Traditional/Symbolic nodes do not become Supported merely because they were retrieved.
+
+Privacy boundary: the user's frozen validation ledger remains browser-local and is not automatically included in this retrieval. Export/import remains user-controlled.
+
+Current limit: Local Knowledge Engine v1 is deterministic lexical/topic/method retrieval. It is **not** yet an embedding/vector RAG system and it does **not** provide a fully offline local LLM.
+
