@@ -34,6 +34,7 @@ jobs:
           node --check evidence/reader.js
           node --check last-one-to-leave/cover-language.js
           node --check guanshi-knowledge.js
+          node --check guanshi-library.js
           node --check guanshi-consult.js
           node --check scripts/check-multilingual.mjs
       - name: Enforce complete four-language pages
@@ -44,15 +45,22 @@ jobs:
           from pathlib import Path
           kb = Path('guanshi-knowledge.js').read_text(encoding='utf-8')
           consult = Path('guanshi-consult.js').read_text(encoding='utf-8')
-          if "2.0-local-kb-v1" not in kb or "window.GUANSHI_KB" not in kb:
+          library = Path('guanshi-library.html').read_text(encoding='utf-8')
+          if "2.0-local-kb-v2" not in kb or "window.GUANSHI_KB" not in kb:
               raise SystemExit('GUANSHI local knowledge index is missing its version/export contract')
+          if "runlu_guanshi_local_knowledge_v1" not in kb or "shareWithAnalysis" not in kb:
+              raise SystemExit('GUANSHI user local-library storage/consent contract is missing')
           if "_runlu_local_knowledge_context" not in consult or "GUANSHI_KB?.search" not in consult:
               raise SystemExit('GUANSHI consultation is not using the local knowledge retriever')
           for page in ['guanshi-consult.html','guanshi-traditional-consult.html']:
               text = Path(page).read_text(encoding='utf-8')
-              if 'guanshi-knowledge.js?v=20260907-1' not in text:
-                  raise SystemExit(f'{page} is not loading the local knowledge index')
-          print('GUANSHI V2 local knowledge retrieval wiring verified.')
+              if 'guanshi-knowledge.js?v=20260907-2' not in text:
+                  raise SystemExit(f'{page} is not loading the current local knowledge index')
+              if 'guanshi-library.html' not in text:
+                  raise SystemExit(f'{page} is missing the Local Library route')
+          if 'guanshi-knowledge.js?v=20260907-2' not in library or 'guanshi-library.js?v=20260907-1' not in library:
+              raise SystemExit('Local Library page is missing its scripts')
+          print('GUANSHI V2 local knowledge + consent-controlled local library wiring verified.')
           PY
       - name: Check Evidence four-language reader package
         run: |
