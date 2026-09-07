@@ -35,6 +35,7 @@ jobs:
           node --check last-one-to-leave/cover-language.js
           node --check guanshi-knowledge.js
           node --check guanshi-local-reasoner.js
+          node --check guanshi-auto-vault.js
           node --check guanshi-library.js
           node --check guanshi-vault.js
           node --check guanshi-consult.js
@@ -75,7 +76,7 @@ jobs:
               raise SystemExit('Local Library page is missing its scripts')
           if 'guanshi-vault.html' not in library:
               raise SystemExit('Local Library is missing its Local Vault route')
-          print('GUANSHI V2.2 local knowledge + local reasoning + consent-controlled library wiring verified.')
+          print('GUANSHI V2.3 local knowledge + local reasoning + consent-controlled library wiring verified.')
           PY
       - name: Check GUANSHI encrypted Local Vault
         run: |
@@ -95,6 +96,25 @@ jobs:
           if 'auth_secret' not in js or 'ciphertext' not in js or 'shareWithAnalysis' in js:
               raise SystemExit('Local Vault encryption/privacy separation contract changed unexpectedly')
           print('GUANSHI V2.2 encrypted cloud vault + cross-device merge contract verified.')
+          PY
+      - name: Check GUANSHI automatic encrypted backup
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          auto = Path('guanshi-auto-vault.js').read_text(encoding='utf-8')
+          vault = Path('guanshi-vault.html').read_text(encoding='utf-8')
+          required = ['2.3-auto-vault-v1','indexedDB','deriveAutoKey','AES-GCM','PBKDF2','expected_revision','needs_merge','GUANSHI_AUTO_VAULT']
+          missing=[x for x in required if x not in auto]
+          if missing:
+              raise SystemExit('GUANSHI V2.3 auto-vault contract missing: '+', '.join(missing))
+          for token in ['data-auto-vault-enable','data-auto-vault-disable','data-auto-vault-state','guanshi-auto-vault.js?v=20260907-1']:
+              if token not in vault:
+                  raise SystemExit('Local Vault page missing '+token)
+          for page in ['guanshi.html','guanshi-consult.html','guanshi-traditional-consult.html','guanshi-library.html','guanshi-validation.html']:
+              body=Path(page).read_text(encoding='utf-8')
+              if 'guanshi-auto-vault.js?v=20260907-1' not in body:
+                  raise SystemExit(page+' is not loading the auto-vault watcher')
+          print('GUANSHI V2.3 opt-in encrypted auto backup wiring verified.')
           PY
       - name: Check Evidence four-language reader package
         run: |
