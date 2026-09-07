@@ -1,0 +1,71 @@
+name: Wire GUANSHI V2 local knowledge
+on:
+  push:
+    paths:
+      - '.github/workflows/guanshi-v2-local-kb.yml'
+permissions:
+  contents: write
+jobs:
+  wire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wire local retrieval into consultation routes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def must_replace(path, old, new):
+              p=Path(path); text=p.read_text(encoding='utf-8')
+              if old not in text:
+                  raise SystemExit(f'Expected text not found in {path}: {old[:120]}')
+              p.write_text(text.replace(old,new),encoding='utf-8')
+
+          js='guanshi-consult.js'
+          must_replace(js,
+            "async function callEngine(fields,l){const d=new Date(),response=await fetch(AI.endpoint,",
+            "async function callEngine(fields,l,knowledge=[]){const d=new Date(),enrichedFields={_runlu_local_knowledge_context:JSON.stringify({provenance:'RUNLU browser-local static knowledge retrieval; deterministic lexical/topic-method match; not user-provided fact; not external evidence; preserve each node status label',version:window.GUANSHI_KB?.version||'none',nodes:knowledge}),...fields},response=await fetch(AI.endpoint,")
+          must_replace(js,
+            "body:JSON.stringify({mode,language:l,fields,client_local_date:",
+            "body:JSON.stringify({mode,language:l,fields:enrichedFields,client_local_date:")
+          must_replace(js,
+            "const result=await callEngine(fields,l),quota=",
+            "const knowledge=window.GUANSHI_KB?.search({mode,fields,language:l,max:5})||[],result=await callEngine(fields,l,knowledge),quota=")
+          must_replace(js,
+            "fixed=[chartText(result.chart,t),structureText(result.traditional_structure,t)].filter(Boolean),full=[...intro,...fixed,`【${t.result}】`,result.result,'',quota,`${t.note}: ${note}`].filter(Boolean).join('\\n');",
+            "fixed=[chartText(result.chart,t),structureText(result.traditional_structure,t)].filter(Boolean),knowledgeLine=knowledge.length?`${({zh:'本地知识命中',fr:'Connaissances locales',es:'Conocimiento local',en:'Local knowledge match'}[l]||'Local knowledge match')}: ${knowledge.map(x=>x.id).join(' · ')}`:'',full=[...intro,...fixed,`【${t.result}】`,result.result,'',knowledgeLine,quota,`${t.note}: ${note}`].filter(Boolean).join('\\n');")
+          must_replace(js,
+            "question:fields.question||'',fields,traditional_structure:",
+            "question:fields.question||'',fields,knowledge_used:knowledge,traditional_structure:")
+          p=Path(js); text=p.read_text(encoding='utf-8')
+          text=text.replace("RUNLU GUANSHI · V1.6","RUNLU GUANSHI · V2.0")
+          text=text.replace("Privacy V1.6:","Privacy:").replace("V1.6 隐私说明：","隐私说明：").replace("Confidentialité V1.6 :","Confidentialité :").replace("Privacidad V1.6:","Privacidad:")
+          p.write_text(text,encoding='utf-8')
+
+          for html in ['guanshi-consult.html','guanshi-traditional-consult.html']:
+              p=Path(html); text=p.read_text(encoding='utf-8')
+              text=text.replace('RUNLU GUANSHI · V1.6','RUNLU GUANSHI · V2.0')
+              text=text.replace('Privacy V1.6:','Privacy:').replace('V1.6 隐私说明：','隐私说明：').replace('Confidentialité V1.6 :','Confidentialité :').replace('Privacidad V1.6:','Privacidad:')
+              old='<script src="guanshi-preflight.js?v=20260905-1"></script>\n  <script src="guanshi-consult.js?v=20260905-5"></script>'
+              new='<script src="guanshi-preflight.js?v=20260905-1"></script>\n  <script src="guanshi-knowledge.js?v=20260907-1"></script>\n  <script src="guanshi-consult.js?v=20260907-1"></script>'
+              if old not in text: raise SystemExit(f'Script block not found in {html}')
+              p.write_text(text.replace(old,new),encoding='utf-8')
+
+          additions={
+          'GUANSHI.md':'''\n\n## V2.0 · Local Knowledge Engine v1\n\nGUANSHI now has a **browser-side local knowledge retrieval layer** in `guanshi-knowledge.js`. It is deliberately small, inspectable and zero-AI.\n\nFlow:\n\n**Question → local lexical/topic/method retrieval → selected GUANSHI knowledge nodes → protected server analysis → result → local validation**\n\nRules:\n- retrieval runs in the browser before the AI request and makes no OpenAI call;\n- the index is built from the existing GUANSHI source spine and carries node ID, source file, evidence-status label and a compact summary;\n- selected nodes are marked explicitly as RUNLU local framework context, **not user-provided facts and not external evidence**;\n- private Validation Lab cases remain in browser `localStorage` and are **not automatically sent into knowledge retrieval or AI analysis**;\n- this first version uses deterministic lexical + topic/method scoring, not embeddings or a vector database;\n- a local LLM is not yet bundled, so full natural-language synthesis still uses the protected cloud AI route.\n\nThis establishes the local-first knowledge architecture without pretending that lexical retrieval is semantic RAG or that static framework text is empirical evidence.\n''',
+          'GUANSHI_CONSULTATION.md':'''\n\n## V2.0 local knowledge retrieval\n\nBefore the protected AI call, the public consultation pages now run `guanshi-knowledge.js` locally. The retriever selects a small number of relevant public GUANSHI framework nodes by consultation topic, selected traditional method and lexical matches. Each node carries a stable ID, source file, evidence-status label and compact summary.\n\nThe selected context is sent inside a clearly marked `_runlu_local_knowledge_context` field stating that it is RUNLU browser-local framework retrieval, not a user-provided fact and not an outside evidence search. The server continues to apply the V1.7 evidence-trace discipline; Traditional/Symbolic nodes do not become Supported merely because they were retrieved.\n\nPrivacy boundary: the user's frozen validation ledger remains browser-local and is not automatically included in this retrieval. Export/import remains user-controlled.\n\nCurrent limit: Local Knowledge Engine v1 is deterministic lexical/topic/method retrieval. It is **not** yet an embedding/vector RAG system and it does **not** provide a fully offline local LLM.\n'''
+          }
+          for path,block in additions.items():
+              p=Path(path); text=p.read_text(encoding='utf-8')
+              if '## V2.0 · Local Knowledge Engine v1' in text or '## V2.0 local knowledge retrieval' in text: continue
+              p.write_text(text.rstrip()+block+'\n',encoding='utf-8')
+          PY
+          node --check guanshi-knowledge.js
+          node --check guanshi-consult.js
+          grep -q 'guanshi-knowledge.js?v=20260907-1' guanshi-consult.html
+          grep -q 'guanshi-knowledge.js?v=20260907-1' guanshi-traditional-consult.html
+          git config user.name "RUNLU maintenance"
+          git config user.email "actions@users.noreply.github.com"
+          git add guanshi-consult.js guanshi-consult.html guanshi-traditional-consult.html GUANSHI.md GUANSHI_CONSULTATION.md
+          git commit -m "Connect GUANSHI V2 local knowledge retrieval"
+          git push
