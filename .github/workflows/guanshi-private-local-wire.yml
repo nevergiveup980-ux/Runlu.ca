@@ -1,0 +1,21 @@
+name: Wire private local notes
+on:
+  push:
+    paths:
+      - '.github/workflows/guanshi-private-local-wire.yml'
+permissions:
+  contents: write
+jobs:
+  wire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply private-local knowledge split
+        run: python scripts/patch-guanshi-local-private.py
+      - name: Commit split
+        run: |
+          git config user.name "RUNLU maintenance"
+          git config user.email "actions@users.noreply.github.com"
+          git add guanshi-consult.js
+          git commit -m "Keep private knowledge local in GUANSHI V2.1"
+          git push
