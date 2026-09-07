@@ -1,0 +1,46 @@
+name: Flooring OS Release Gate
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'flooring/**'
+      - 'scripts/run-flooring-release-gate.mjs'
+      - '.github/workflows/flooring-release-gate.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'flooring/**'
+      - 'scripts/run-flooring-release-gate.mjs'
+      - '.github/workflows/flooring-release-gate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  regression-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check regression engine syntax
+        run: |
+          node --check flooring/normal-business-regression-v081.js
+          node --check flooring/adversarial-regression-v082.js
+          node --check flooring/financial-lifecycle-regression-v083.js
+          node --check flooring/permission-concurrency-regression-v084.js
+          node --check flooring/data-integrity-recovery-regression-v085.js
+          node --check flooring/corruption-reconciliation-regression-v086.js
+          node --check flooring/multisales-po-collision-regression-v089.js
+          node --check scripts/run-flooring-release-gate.mjs
+      - name: Run seven-layer critical release gate
+        run: node scripts/run-flooring-release-gate.mjs
+      - name: Upload quality evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flooring-release-evidence
+          path: flooring-release-evidence.json
+          if-no-files-found: error
