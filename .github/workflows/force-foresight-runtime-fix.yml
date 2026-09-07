@@ -1,0 +1,36 @@
+name: Force Foresight runtime fix
+on:
+  push:
+    paths:
+      - '.github/workflows/force-foresight-runtime-fix.yml'
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch stale-menu fallback
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('script.js')
+          s=p.read_text(encoding='utf-8')
+          marker='// RUNLU FORESIGHT stale-menu fallback'
+          if marker not in s:
+              s += '''\n\n// RUNLU FORESIGHT stale-menu fallback\n(function(){\n  const fix=()=>{\n    document.querySelectorAll('.desktop-nav a,.mobile-menu a').forEach(a=>{\n      const t=(a.textContent||'').trim();\n      if(t==='Dynamics'||t==='Trend Dynamics'||t==='GUANSHI'){\n        a.href='guanshi.html';\n        a.dataset.en='Foresight'; a.dataset.zh='观势'; a.dataset.fr='Foresight'; a.dataset.es='Foresight';\n        const lang=document.documentElement.dataset.runluLanguage||'en';\n        a.textContent=a.dataset[lang]||a.dataset.en;\n      }\n    });\n  };\n  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fix,{once:true});else fix();\n  setTimeout(fix,250);\n})();\n'''
+              p.write_text(s,encoding='utf-8')
+          ip=Path('index.html')
+          h=ip.read_text(encoding='utf-8')
+          h=h.replace('script.js?v=20260907-foresight-nav','script.js?v=20260907-foresight-nav-2')
+          if 'http-equiv="Cache-Control"' not in h:
+              h=h.replace('<meta name="theme-color" content="#f7f4ed" />','<meta name="theme-color" content="#f7f4ed" />\n  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />\n  <meta http-equiv="Pragma" content="no-cache" />\n  <meta http-equiv="Expires" content="0" />')
+          ip.write_text(h,encoding='utf-8')
+          PY
+      - name: Commit runtime fallback
+        run: |
+          git config user.name "RUNLU maintenance"
+          git config user.email "actions@users.noreply.github.com"
+          git add script.js index.html
+          git commit -m "Force Foresight label through stale menu cache"
+          git push
