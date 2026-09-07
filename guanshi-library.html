@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="RUNLU GUANSHI Local Knowledge Library — browser-local notes with explicit opt-in before matched excerpts can be used in a cloud analysis.">
+  <meta name="description" content="RUNLU FORESIGHT Local Knowledge Library — browser-local notes with explicit opt-in before matched excerpts can be used in a cloud analysis.">
   <meta name="theme-color" content="#f4efe4">
   <link rel="canonical" href="https://runlu.ca/guanshi-library.html">
-  <title>Local Knowledge · RUNLU GUANSHI</title>
+  <title>Local Knowledge · RUNLU FORESIGHT</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="guanshi.css?v=20260904-2"><link rel="stylesheet" href="guanshi-consult.css?v=20260905-2">
@@ -17,15 +17,15 @@
 <body class="guanshi-page">
   <header class="gs-header">
     <a class="brand" href="index.html">RUNLU</a>
-    <nav class="gs-top-nav" aria-label="GUANSHI navigation"><a href="guanshi.html" data-en="GUANSHI" data-zh="观势" data-fr="GUANSHI" data-es="GUANSHI">GUANSHI</a><a href="guanshi-consult.html" data-en="Consult" data-zh="咨询" data-fr="Consulter" data-es="Consultar">Consult</a><a href="guanshi-validation.html" data-en="Validation" data-zh="验证" data-fr="Validation" data-es="Validación">Validation</a>      <a href="guanshi-vault.html" data-en="Local Vault" data-zh="本地保险箱" data-fr="Coffre local" data-es="Bóveda local">Local Vault</a>
+    <nav class="gs-top-nav" aria-label="FORESIGHT navigation"><a href="guanshi.html" data-en="FORESIGHT" data-zh="观势" data-fr="FORESIGHT" data-es="FORESIGHT">FORESIGHT</a><a href="guanshi-consult.html" data-en="Consult" data-zh="咨询" data-fr="Consulter" data-es="Consultar">Consult</a><a href="guanshi-validation.html" data-en="Validation" data-zh="验证" data-fr="Validation" data-es="Validación">Validation</a>      <a href="guanshi-vault.html" data-en="Local Vault" data-zh="本地保险箱" data-fr="Coffre local" data-es="Bóveda local">Local Vault</a>
 </nav>
     <select class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select>
   </header>
 
   <main class="kb-wrap">
     <section class="kb-hero">
-      <a class="gs-back" href="guanshi.html" data-en="← Back to GUANSHI" data-zh="← 返回观势" data-fr="← Retour à GUANSHI" data-es="← Volver a GUANSHI">← Back to GUANSHI</a>
-      <p class="consult-kicker">RUNLU GUANSHI · V2.3 · LOCAL FIRST</p>
+      <a class="gs-back" href="guanshi.html" data-en="← Back to FORESIGHT" data-zh="← 返回观势" data-fr="← Retour à FORESIGHT" data-es="← Volver a FORESIGHT">← Back to FORESIGHT</a>
+      <p class="consult-kicker">RUNLU FORESIGHT · V2.3 · LOCAL FIRST</p>
       <h1 data-en="Local Knowledge Library" data-zh="本地知识库" data-fr="Bibliothèque locale" data-es="Biblioteca local">Local Knowledge Library</h1>
       <p class="lead" data-en="Keep your own notes in this browser. Nothing in this library is uploaded merely because you save it." data-zh="把你自己的资料留在当前浏览器里。仅仅保存到这里，不会把内容上传到服务器。" data-fr="Conservez vos propres notes dans ce navigateur. Les enregistrer ici ne les envoie pas au serveur." data-es="Guarda tus propias notas en este navegador. Guardarlas aquí no las sube al servidor.">Keep your own notes in this browser.</p>
       <div class="privacy-box" data-en="Privacy boundary: a note remains local unless you explicitly check “Allow matched excerpt in analysis.” Even then, only notes selected as relevant by the local retriever may be included with a consultation request. Validation cases remain separate and are never imported here automatically." data-zh="隐私边界：知识条目默认只留在本机。只有你主动勾选“匹配时允许用于观势分析”，本地检索器判断相关时，才可能把该条摘要随咨询请求发送出去。验证台里的案例与这里分开，绝不会自动导入。" data-fr="Limite de confidentialité : une note reste locale sauf si vous autorisez explicitement son utilisation lorsqu’elle correspond à la consultation. Les cas de validation restent séparés." data-es="Límite de privacidad: una nota permanece local salvo que autorices explícitamente su uso cuando coincida con la consulta. Los casos de validación permanecen separados.">Privacy boundary: local by default.</div>
@@ -43,7 +43,7 @@
           <div><label for="kb-kind" data-en="Source type" data-zh="资料类型" data-fr="Type de source" data-es="Tipo de fuente">Source type</label><select id="kb-kind" name="kind"><option value="reference" data-en="Local reference note" data-zh="本地参考资料" data-fr="Référence locale" data-es="Referencia local">Local reference note</option><option value="fact" data-en="User-provided fact" data-zh="用户提供的事实" data-fr="Fait fourni par l’utilisateur" data-es="Hecho proporcionado">User-provided fact</option><option value="traditional" data-en="Traditional note" data-zh="传统资料" data-fr="Note traditionnelle" data-es="Nota tradicional">Traditional note</option><option value="symbolic" data-en="Symbolic note" data-zh="象征性资料" data-fr="Note symbolique" data-es="Nota simbólica">Symbolic note</option></select></div>
           <div><label for="kb-topic" data-en="Relevant topics · multiple allowed" data-zh="适用主题 · 可多选" data-fr="Sujets · sélection multiple" data-es="Temas · selección múltiple">Relevant topics</label><select id="kb-topic" name="topic" multiple><option value="career">Career / 工作</option><option value="business">Business / 生意</option><option value="relationship">Relationship / 关系</option><option value="home">Home / 环境</option><option value="personal">Personal / 个人</option><option value="other" selected>Other / 其它</option></select></div>
           <div class="full"><label for="kb-method" data-en="Relevant methods · multiple allowed" data-zh="适用方法 · 可多选" data-fr="Méthodes · sélection multiple" data-es="Métodos · selección múltiple">Relevant methods</label><select id="kb-method" name="method" multiple><option value="general" selected>General / 现实观势</option><option value="bazi">Bazi / 八字</option><option value="ganzhi">Ganzhi / 干支</option><option value="liuyao">Six Lines / 六爻</option><option value="meihua">Meihua / 梅花</option><option value="fengshui">Feng Shui / 风水</option><option value="mixed">Mixed / 综合传统</option></select></div>
-          <div class="full kb-share"><input id="kb-share" type="checkbox" name="share_with_analysis"><label for="kb-share" data-en="Allow a matched excerpt to be sent with a GUANSHI consultation when the local retriever judges this note relevant. Leave unchecked to keep it strictly local." data-zh="当本地检索器判断这条资料与问题相关时，允许把匹配摘要随观势咨询发送出去。不勾选，就严格只留在本地。" data-fr="Autoriser l’envoi d’un extrait pertinent avec une consultation GUANSHI. Laissez décoché pour rester strictement local." data-es="Permitir que un extracto pertinente se envíe con una consulta GUANSHI. Déjalo desmarcado para mantenerlo estrictamente local.">Allow matched excerpt in analysis.</label></div>
+          <div class="full kb-share"><input id="kb-share" type="checkbox" name="share_with_analysis"><label for="kb-share" data-en="Allow a matched excerpt to be sent with a FORESIGHT consultation when the local retriever judges this note relevant. Leave unchecked to keep it strictly local." data-zh="当本地检索器判断这条资料与问题相关时，允许把匹配摘要随观势咨询发送出去。不勾选，就严格只留在本地。" data-fr="Autoriser l’envoi d’un extrait pertinent avec une consultation FORESIGHT. Laissez décoché pour rester strictement local." data-es="Permitir que un extracto pertinente se envíe con una consulta FORESIGHT. Déjalo desmarcado para mantenerlo estrictamente local.">Allow matched excerpt in analysis.</label></div>
         </div>
         <div class="kb-actions"><button type="submit" data-en="Save locally" data-zh="保存到本地" data-fr="Enregistrer localement" data-es="Guardar localmente">Save locally</button><button class="secondary" type="reset" data-en="Clear form" data-zh="清空表单" data-fr="Effacer le formulaire" data-es="Limpiar formulario">Clear form</button></div>
         <div class="kb-message" data-kb-message hidden></div>
@@ -58,7 +58,7 @@
       </section>
     </section>
   </main>
-  <footer class="gs-footer"><div>RUNLU GUANSHI · V2.3</div><a href="guanshi.html">GUANSHI</a><a href="guanshi-consult.html" data-en="Consult" data-zh="咨询" data-fr="Consulter" data-es="Consultar">Consult</a></footer>
+  <footer class="gs-footer"><div>RUNLU FORESIGHT · V2.3</div><a href="guanshi.html">FORESIGHT</a><a href="guanshi-consult.html" data-en="Consult" data-zh="咨询" data-fr="Consulter" data-es="Consultar">Consult</a></footer>
   <script src="runlu-language.js?v=2.4"></script><script src="guanshi-knowledge.js?v=20260907-2"></script><script src="guanshi-library.js?v=20260907-1"></script>
   <script src="guanshi-auto-vault.js?v=20260907-1"></script>
 </body>
