@@ -18,15 +18,39 @@
 <script>
 (function(){
 'use strict';
-const outer=document.getElementById('os80'),boot=document.getElementById('boot80');let done=false,tries=0;
-function showBase(reason){if(done)return;done=true;console.warn('[RUNLU V080] opening base business shell:',reason||'fallback');boot.classList.add('ready');}
+const outer=document.getElementById('os80'),boot=document.getElementById('boot80');let done=false,tries=0,revealPending=false;
+function reveal(reason,settleMs=0){
+  if(done||revealPending)return;
+  revealPending=true;
+  const finish=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    if(done)return;
+    done=true;
+    console.warn('[RUNLU V080] opening business shell:',reason||'ready');
+    boot.classList.add('ready');
+  }));
+  settleMs>0?setTimeout(finish,settleMs):finish();
+}
 function deepest(){try{const d79=outer.contentDocument;if(!d79)return null;const os79=d79.getElementById('os79');if(!os79)return null;const d78=os79.contentDocument;if(!d78)return null;const os78=d78.getElementById('os78');if(!os78)return null;const d71=os78.contentDocument;if(!d71)return null;const os71=d71.getElementById('os');if(!os71)return null;const doc=os71.contentDocument,win=os71.contentWindow;return doc&&win&&doc.body?{doc,win}:null}catch(_){return null}}
 function assetUrl(src){return new URL(src,location.href).href+(src.includes('?')?'&':'?')+'t='+Date.now()}
-function add(ctx,src,flag,global,attempt=0){return new Promise((resolve,reject)=>{if(ctx.doc.querySelector(`script[${flag}]`)){try{ctx.win[global]?.install?.()}catch(_){}return resolve()}const s=ctx.doc.createElement('script');s.src=assetUrl(src);s.setAttribute(flag,'1');s.onload=()=>{try{ctx.win[global]?.install?.()}catch(e){console.error(e)}resolve()};s.onerror=()=>{try{s.remove()}catch(_){};if(attempt<2)setTimeout(()=>add(ctx,src,flag,global,attempt+1).then(resolve,reject),350*(attempt+1));else reject(new Error(src+' failed'))};ctx.doc.body.appendChild(s)})}
-async function inject(){const ctx=deepest();if(!ctx)return false;try{await add(ctx,'management-review-v080.js?v=080','data-runlu-v080-management','RUNLUManagementReviewV080');await add(ctx,'po-inventory-holds-v080r1.js?v=080r1','data-runlu-v080-holds-r1','RUNLUPOInventoryHoldsV080');try{ctx.doc.title='RUNLU Deerfoot Flooring OS V0.3.80 Management Control';const p=ctx.doc.querySelector('header .pill');if(p)p.textContent='V0.3.80 Management Control'}catch(_){}showBase('management assets loaded');return true}catch(e){console.error(e);showBase('management add-on unavailable; base shell retained');return true}}
-async function wait(){if(done)return;const reached=await inject();if(done||reached)return;if(++tries<140)setTimeout(wait,150);else showBase('nested shell timeout; fail-open');}
+function add(ctx,src,flag,global,attempt=0){return new Promise((resolve,reject)=>{
+  if(ctx.doc.querySelector(`script[${flag}]`))return resolve();
+  const s=ctx.doc.createElement('script');s.src=assetUrl(src);s.setAttribute(flag,'1');
+  // Both V0.3.80 add-ons self-install when executed. Do not call install() again here.
+  s.onload=()=>resolve();
+  s.onerror=()=>{try{s.remove()}catch(_){};if(attempt<2)setTimeout(()=>add(ctx,src,flag,global,attempt+1).then(resolve,reject),350*(attempt+1));else reject(new Error(src+' failed'))};
+  ctx.doc.body.appendChild(s);
+})}
+async function inject(){const ctx=deepest();if(!ctx)return false;try{
+  await add(ctx,'management-review-v080.js?v=080','data-runlu-v080-management','RUNLUManagementReviewV080');
+  await add(ctx,'po-inventory-holds-v080r1.js?v=080r1','data-runlu-v080-holds-r1','RUNLUPOInventoryHoldsV080');
+  try{ctx.doc.title='RUNLU Deerfoot Flooring OS V0.3.80 Management Control';const p=ctx.doc.querySelector('header .pill');if(p)p.textContent='V0.3.80 Management Control'}catch(_){}
+  // Absorb the add-ons' first short DOM/cloud-status passes behind the opaque boot cover.
+  reveal('management assets loaded and visually settled',950);
+  return true;
+}catch(e){console.error(e);reveal('management add-on unavailable; base shell retained');return true}}
+async function wait(){if(done||revealPending)return;const reached=await inject();if(done||revealPending||reached)return;if(++tries<140)setTimeout(wait,150);else reveal('nested shell timeout; fail-open');}
 outer.addEventListener('load',()=>{tries=0;setTimeout(wait,180)});outer.src='index-v079-integration-ready.html?v=080&t='+Date.now();
-setTimeout(()=>showBase('startup safety timeout'),12000);
+setTimeout(()=>reveal('startup safety timeout'),12000);
 })();
 </script>
 </body>
