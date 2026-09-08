@@ -1,0 +1,23 @@
+name: Flooring Warehouse Work V090
+
+on:
+  pull_request:
+    paths:
+      - 'flooring/warehouse-work-sync-v090.js'
+      - 'flooring/index-v080-management-control.html'
+      - 'scripts/run-flooring-warehouse-work-v090.mjs'
+      - '.github/workflows/flooring-warehouse-work-v090.yml'
+  workflow_dispatch:
+
+jobs:
+  warehouse-work-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: JavaScript syntax
+        run: node --check flooring/warehouse-work-sync-v090.js
+      - name: Warehouse work orchestration regression
+        run: node scripts/run-flooring-warehouse-work-v090.mjs
