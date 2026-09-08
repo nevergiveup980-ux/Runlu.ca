@@ -82,13 +82,13 @@ function decoratePickup(){
   ensurePickupBar();
   document.querySelectorAll('#supplierPickupPage .pickupPlanTask').forEach(row=>{
     const m=(row.textContent||'').match(/PO\s*#\s*(\d+)/i);if(!m)return;const t=taskByPO(m[1]);if(!t)return;
-    const badge=row.querySelector('.pickupSafeStatus');if(badge){badge.textContent=uiStatus(t.status);badge.dataset.cloudWork='1'}
+    const badge=row.querySelector('.pickupSafeStatus');if(badge&&badge.textContent!==uiStatus(t.status)){badge.textContent=uiStatus(t.status);badge.dataset.cloudWork='1'}
   });
   const waiting=tasks.filter(t=>['Waiting','Scheduled'].includes(t.status)).length;
   const progress=tasks.filter(t=>['In Progress','Partial'].includes(t.status)).length;
   const ready=tasks.filter(t=>['Picked Up','Ready'].includes(t.status)).length;
   const completed=tasks.filter(t=>t.status==='Completed').length;
-  if(by('pickupScheduledSafe')){by('pickupScheduledSafe').textContent=waiting;const l=by('pickupScheduledSafe').parentElement?.querySelector('span');if(l)l.textContent='Waiting'}
+  if(by('pickupScheduledSafe')){by('pickupScheduledSafe').textContent=waiting;const l=by('pickupScheduledSafe').parentElement?.querySelector('span');if(l&&l.textContent!=='Waiting')l.textContent='Waiting'}
   if(by('pickupInProgressSafe'))by('pickupInProgressSafe').textContent=progress;
   if(by('pickupReadySafe'))by('pickupReadySafe').textContent=ready;
   if(by('pickupCompletedSafe'))by('pickupCompletedSafe').textContent=completed;
@@ -102,17 +102,18 @@ function ensureEventCard(){
 }
 function renderEvents(){
   const card=ensureEventCard();if(!card)return;const list=by('ww090eventList');if(!list)return;
-  list.innerHTML=events.length?events.map(e=>`<div class="ww090event"><div><b>${esc(e.event_type||'Warehouse Work')}</b><small>${esc(e.occurred_at?new Date(e.occurred_at).toLocaleString():'—')}</small></div><div>${e.po_number?'PO '+esc(e.po_number):''}${e.job_number?' · Job '+esc(e.job_number):''}${e.customer_name?' · '+esc(e.customer_name):''}${e.supplier?' · '+esc(e.supplier):''}</div><div style="text-align:right"><span class="wa-badge">${esc(uiStatus(e.to_status))}</span></div></div>`).join(''):'<div class="muted" style="padding:14px 0">No execution status events yet. Waiting work plans do not create activity.</div>';
+  const html=events.length?events.map(e=>`<div class="ww090event"><div><b>${esc(e.event_type||'Warehouse Work')}</b><small>${esc(e.occurred_at?new Date(e.occurred_at).toLocaleString():'—')}</small></div><div>${e.po_number?'PO '+esc(e.po_number):''}${e.job_number?' · Job '+esc(e.job_number):''}${e.customer_name?' · '+esc(e.customer_name):''}${e.supplier?' · '+esc(e.supplier):''}</div><div style="text-align:right"><span class="wa-badge">${esc(uiStatus(e.to_status))}</span></div></div>`).join(''):'<div class="muted" style="padding:14px 0">No execution status events yet. Waiting work plans do not create activity.</div>';
+  if(list.innerHTML!==html)list.innerHTML=html;
 }
 function paintConnection(force){
-  ensurePickupBar();const el=by('ww090pickupState');if(!el)return;const text=force||(session?`LIVE · ${lastSync||'READY'}`:'SIGN IN REQUIRED');el.textContent=text;el.classList.toggle('warn',!/LIVE|READY/.test(text));
+  ensurePickupBar();const el=by('ww090pickupState');if(!el)return;const text=force||(session?`LIVE · ${lastSync||'READY'}`:'SIGN IN REQUIRED');if(el.textContent!==text)el.textContent=text;el.classList.toggle('warn',!/LIVE|READY/.test(text));
 }
 function paintAll(){ensureStyle();decoratePickup();renderEvents();paintConnection()}
 function install(){
   ensureStyle();
   const cached=read(CACHE,{});tasks=Array.isArray(cached.tasks)?cached.tasks:[];events=Array.isArray(cached.events)?cached.events:[];lastSync=cached.lastSync||'';paintAll();
-  const mo=new MutationObserver(()=>{if(by('supplierPickupPage')||by('warehouseActivity'))requestAnimationFrame(paintAll)});mo.observe(document.body,{childList:true,subtree:true});
-  document.addEventListener('click',e=>{const b=e.target.closest?.('button');if(!b)return;if(b.dataset?.page==='supplierPickupPage'||b.dataset?.page==='warehouseActivity'||/^(Pickup|Warehouse Activity)$/.test(b.textContent?.trim()||''))setTimeout(()=>refresh(false),120)},true);
+  document.addEventListener('click',e=>{const b=e.target.closest?.('button');if(!b)return;const relevant=b.dataset?.page==='supplierPickupPage'||b.dataset?.page==='warehouseActivity'||/^(Pickup|Warehouse Activity)$/.test(b.textContent?.trim()||'');if(relevant){setTimeout(paintAll,40);setTimeout(()=>refresh(false),120)}},true);
+  document.addEventListener('change',e=>{if(e.target.closest?.('#supplierPickupPage'))setTimeout(paintAll,0)},true);
   window.addEventListener('focus',()=>refresh(false));window.addEventListener('pageshow',()=>refresh(false));
   setInterval(()=>{if(document.visibilityState==='visible'&&(pageActive('supplierPickupPage')||pageActive('warehouseActivity')))refresh(false)},20000);
   client().then(()=>refresh(false)).catch(()=>paintConnection('CONNECTOR UNAVAILABLE'));
