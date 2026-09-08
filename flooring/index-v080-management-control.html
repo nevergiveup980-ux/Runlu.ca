@@ -44,6 +44,7 @@ async function inject(){const ctx=deepest();if(!ctx)return false;try{
   await add(ctx,'management-review-v080.js?v=080','data-runlu-v080-management','RUNLUManagementReviewV080');
   await add(ctx,'po-inventory-holds-v080r1.js?v=080r1','data-runlu-v080-holds-r1','RUNLUPOInventoryHoldsV080');
   await add(ctx,'status-stability-v080.js?v=080','data-runlu-v080-status-stability','RUNLUStatusStabilityV080');
+  await add(ctx,'warehouse-activity-auth-feedback-v0712.js?v=0712','data-runlu-wa-auth-v0712','RUNLUWarehouseActivityAuthV0712');
   try{ctx.doc.title='RUNLU Deerfoot Flooring OS V0.3.80 Management Control';const p=ctx.doc.querySelector('header .pill');if(p)p.textContent='V0.3.80 Management Control'}catch(_){}
   // Absorb the add-ons' first short DOM/cloud-status passes behind the opaque boot cover.
   reveal('management assets loaded and visually settled',950);
