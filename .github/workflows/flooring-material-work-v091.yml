@@ -1,0 +1,23 @@
+name: Flooring Material Work V091
+
+on:
+  pull_request:
+    paths:
+      - 'flooring/material-work-sync-v091.js'
+      - 'flooring/index-v080-management-control.html'
+      - 'scripts/run-flooring-material-work-v091.mjs'
+      - '.github/workflows/flooring-material-work-v091.yml'
+  workflow_dispatch:
+
+jobs:
+  material-work-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: JavaScript syntax
+        run: node --check flooring/material-work-sync-v091.js
+      - name: Material work orchestration regression
+        run: node scripts/run-flooring-material-work-v091.mjs
