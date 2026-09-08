@@ -20,6 +20,9 @@
 'use strict';
 const outer=document.getElementById('os79'),boot=document.getElementById('boot79');
 let done=false,tries=0;
+// Resolve injected assets against this wrapper, not against the deepest iframe document.
+// This keeps V0.3.79 stable even when nested shells or browser cache change the child URL context.
+function assetUrl(src){return new URL(src,location.href).href+(src.includes('?')?'&':'?')+'t='+Date.now()}
 function fail(message){boot.classList.remove('ready');boot.classList.add('fail');boot.innerHTML='<div>'+message+'<small>V0.3.78 remains the rollback baseline.</small></div>'}
 function inject(){
   try{
@@ -33,7 +36,7 @@ function inject(){
       boot.classList.add('ready');done=true;return true;
     }
     const s=appDoc.createElement('script');
-    s.src='integration-hub-v079.js?v=079&t='+Date.now();
+    s.src=assetUrl('integration-hub-v079.js?v=079');
     s.dataset.runluV079Integration='1';
     s.onload=()=>{try{appWin.RUNLUIntegrationHubV079?.install?.()}catch(e){console.error(e)}try{appDoc.title='RUNLU Deerfoot Flooring OS V0.3.79 Integration Ready';const pill=appDoc.querySelector('header .pill');if(pill)pill.textContent='V0.3.79 Integration Ready';}catch(_){}boot.classList.add('ready');done=true};
     s.onerror=()=>fail('V0.3.79 Integration Hub asset could not load.');
