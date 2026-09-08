@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173d30">
+<title>RUNLU Deerfoot Flooring OS V0.3.81r4 Stable Display</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#edf1ef;font-family:Arial,Helvetica,sans-serif}
+#os81{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}
+#boot81{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:24px;background:#edf1ef;color:#173d30;font-weight:800;text-align:center;line-height:1.45;opacity:1;visibility:visible;transition:opacity .26s ease,visibility 0s linear .26s}
+#boot81.ready{opacity:0;visibility:hidden;pointer-events:none}
+#boot81 small{display:block;margin-top:8px;font-weight:500;color:#63716b}
+#diag81{display:none;position:fixed;right:8px;bottom:8px;z-index:40;max-width:min(94vw,720px);padding:7px 9px;border-radius:8px;background:rgba(18,43,34,.92);color:#fff;font:700 10px/1.35 Arial,Helvetica,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+#diag81.on{display:block}
+</style>
+</head>
+<body>
+<div id="boot81"><div>RUNLU Deerfoot Flooring OS<br>V0.3.81r4 Stable Display<small>Preparing stable workspace…</small></div></div>
+<iframe id="os81" title="RUNLU Deerfoot Flooring OS V0.3.81r4"></iframe>
+<div id="diag81"></div>
+<script>
+(function(){
+'use strict';
+const outer=document.getElementById('os81'),boot=document.getElementById('boot81'),diag=document.getElementById('diag81');
+const q=new URLSearchParams(location.search),showDiag=q.has('diag')||q.has('debug');
+const state={version:'0.3.81r4',base:'V0.3.78',baseLoaded:false,baseVisible:false,deepReady:false,stableReady:false,displayLocked:false,phase:'BOOT',modules:{},startedAt:new Date().toISOString()};
+window.RUNLUResilientV081R4=state;
+if(showDiag)diag.classList.add('on');
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function paint(){
+  if(!showDiag)return;
+  const xs=Object.entries(state.modules),ok=xs.filter(([,v])=>v==='loaded').map(([k])=>k),bad=xs.filter(([,v])=>v==='failed').map(([k])=>k),pending=xs.filter(([,v])=>v==='loading').map(([k])=>k);
+  let text=`V0.3.81r4 · base ${state.baseLoaded?'LOADED':'WAIT'} · visible ${state.baseVisible?'YES':'NO'} · deep ${state.deepReady?'READY':'WAIT'} · stable ${state.stableReady?'READY':'WAIT'} · display ${state.displayLocked?'LOCKED':'WAIT'} · ${state.phase} · modules ${ok.length} loaded / ${bad.length} failed / ${pending.length} loading`;
+  if(bad.length)text+=` · failed: ${bad.join(',')}`;
+  diag.textContent=text;
+}
+function revealBase(reason){
+  if(state.baseVisible)return;
+  state.baseVisible=true;state.revealReason=reason||'final shell ready';
+  boot.classList.add('ready');paint();
+}
+function deepest(){
+  try{
+    const d78=outer.contentDocument;if(!d78)return null;
+    const os78=d78.getElementById('os78');if(!os78)return null;
+    const d71=os78.contentDocument;if(!d71)return null;
+    const os71=d71.getElementById('os');if(!os71)return null;
+    const doc=os71.contentDocument,win=os71.contentWindow;
+    return doc&&win&&doc.body?{doc,win}:null;
+  }catch(_){return null}
+}
+function stableStackReady(ctx){
+  try{return !!(ctx.win.__runluPricingCostControlV078&&ctx.win.RUNLUStockingPriceBookV074&&ctx.win.RUNLUSmartInventoryPickerV072&&ctx.win.RUNLUPricingWorkspaceV071)}catch(_){return false}
+}
+async function loadOnce(ctx,item,attempt){
+  return new Promise(resolve=>{
+    const s=ctx.doc.createElement('script'),join=item.src.includes('?')?'&':'?';
+    s.src=item.src+join+'r4='+attempt+'&t='+Date.now();
+    s.dataset.runluV081r4=item.key;
+    s.onload=()=>resolve(true);
+    s.onerror=()=>{try{s.remove()}catch(_){}resolve(false)};
+    ctx.doc.body.appendChild(s);
+  });
+}
+async function loadOptional(ctx,item){
+  const key=item.key;
+  if(ctx.doc.querySelector(`script[data-runlu-v081r4="${key}"]`)){state.modules[key]='loaded';paint();return true}
+  state.modules[key]='loading';paint();
+  let ok=false;
+  try{ok=await loadOnce(ctx,item,1)}catch(_){}
+  if(!ok){await sleep(450);try{ok=await loadOnce(ctx,item,2)}catch(_){}}
+  state.modules[key]=ok?'loaded':'failed';
+  if(!ok)console.warn('[RUNLU V081r4] optional module failed after retry:',item.src);
+  paint();return ok;
+}
+function installDisplayLock(ctx){
+  const pillText='V0.3.81r4 Stable';
+  const demoText='V0.3.81r4 · Cost Control + A/R Review + Commission + PO Inventory Holds + Warehouse Work.';
+  function sync(){
+    try{
+      ctx.doc.title='RUNLU Deerfoot Flooring OS V0.3.81r4 Stable';
+      const pill=ctx.doc.querySelector('header .pill');
+      if(pill&&pill.textContent!==pillText)pill.textContent=pillText;
+      const demo=ctx.doc.querySelector('#command .demo');
+      if(demo&&demo.textContent!==demoText)demo.textContent=demoText;
+    }catch(_){}
+  }
+  sync();
+  try{
+    const header=ctx.doc.querySelector('header'),command=ctx.doc.getElementById('command');
+    const observer=new MutationObserver(sync);
+    if(header)observer.observe(header,{subtree:true,childList:true,characterData:true});
+    if(command)observer.observe(command,{subtree:true,childList:true,characterData:true});
+    state.displayObserver=observer;
+  }catch(e){console.warn('[RUNLU V081r4] display lock observer unavailable',e)}
+  state.displayLocked=true;paint();
+  requestAnimationFrame(()=>requestAnimationFrame(sync));
+}
+async function enhance(ctx){
+  if(state.enhancing||state.enhanced)return;
+  state.enhancing=true;state.phase='ENHANCING';paint();
+  const modules=[
+    {key:'management',src:'management-review-v080.js?v=080'},
+    {key:'po-holds',src:'po-inventory-holds-v080r1.js?v=080r1'},
+    {key:'warehouse-auth',src:'warehouse-activity-auth-feedback-v0712.js?v=0712'},
+    {key:'warehouse-work',src:'warehouse-work-sync-v090.js?v=090'},
+    {key:'material-work',src:'material-work-sync-v091.js?v=091'},
+    {key:'status',src:'status-stability-v080.js?v=080'},
+    {key:'integration',src:'integration-hub-v079r1.js?v=079r1'}
+  ];
+  for(const item of modules){
+    try{await loadOptional(ctx,item)}catch(e){state.modules[item.key]='failed';console.warn('[RUNLU V081r4] optional module exception:',item.src,e);paint()}
+    await sleep(320);
+  }
+  state.enhancing=false;state.enhanced=true;state.phase='LOCKING DISPLAY';paint();
+  installDisplayLock(ctx);
+  await sleep(120);
+  state.phase='DONE';state.completedAt=new Date().toISOString();paint();
+  revealBase('stable stack, optional enhancements and final display lock settled');
+}
+let deepTries=0,stableTries=0;
+function waitStable(ctx){
+  state.deepReady=true;state.phase='WAIT STABLE';paint();
+  if(stableStackReady(ctx)){
+    state.stableReady=true;state.phase='STABLE READY';paint();
+    setTimeout(()=>enhance(ctx),900);return;
+  }
+  if(++stableTries<200){setTimeout(()=>{const fresh=deepest();if(fresh)waitStable(fresh)},150);return}
+  state.stableTimeout=true;state.phase='STABLE TIMEOUT · BASE ONLY';paint();
+  console.warn('[RUNLU V081r4] stable readiness timed out; revealing base without optional enhancements.');
+  revealBase('stable timeout fail-open');
+}
+function waitDeep(){
+  const ctx=deepest();
+  if(ctx){stableTries=0;waitStable(ctx);return}
+  if(++deepTries<180){setTimeout(waitDeep,150);return}
+  state.deepTimeout=true;state.phase='DEEP TIMEOUT · BASE ONLY';paint();
+  console.warn('[RUNLU V081r4] deep app not reached; revealing base fail-open.');
+  revealBase('deep timeout fail-open');
+}
+outer.addEventListener('load',()=>{
+  state.baseLoaded=true;state.phase='BASE LOADED';paint();
+  deepTries=0;setTimeout(waitDeep,180);
+});
+outer.src='index-v078-business-cost-control.html?v=081r4&t='+Date.now();
+setTimeout(()=>{
+  if(!state.baseVisible){state.maxSafetyRelease=true;state.phase='SAFETY RELEASE';paint();revealBase('18s max startup safety release')}
+},18000);
+paint();
+})();
+</script>
+</body>
+</html>
