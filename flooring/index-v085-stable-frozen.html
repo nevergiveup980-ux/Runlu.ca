@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173d30">
+<title>RUNLU Deerfoot Flooring OS V0.3.85 Stable</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#edf1ef;font-family:Arial,Helvetica,sans-serif}
+#os85{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}
+#boot85{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:24px;background:#edf1ef;color:#173d30;font-weight:800;text-align:center;line-height:1.45;opacity:1;visibility:visible;transition:opacity .26s ease,visibility 0s linear .26s}
+#boot85.ready{opacity:0;visibility:hidden;pointer-events:none}#boot85 small{display:block;margin-top:8px;font-weight:500;color:#63716b}
+#diag85{display:none;position:fixed;right:8px;bottom:8px;z-index:40;max-width:min(94vw,760px);padding:7px 9px;border-radius:8px;background:rgba(18,43,34,.92);color:#fff;font:700 10px/1.35 Arial,Helvetica,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.18)}#diag85.on{display:block}
+</style>
+</head>
+<body>
+<div id="boot85"><div>RUNLU Deerfoot Flooring OS<br>V0.3.85 Stable<small>Preparing frozen stable workspace + Staff Board + PO VOID + searchable PO Archive…</small></div></div>
+<iframe id="os85" title="RUNLU Deerfoot Flooring OS V0.3.85"></iframe>
+<div id="diag85"></div>
+<script>
+(function(){
+'use strict';
+var outer=document.getElementById('os85'),boot=document.getElementById('boot85'),diag=document.getElementById('diag85');
+var q=new URLSearchParams(location.search),showDiag=q.has('diag')||q.has('debug');
+var state={version:'0.3.85',base:'V0.3.78',baseLoaded:false,baseVisible:false,deepReady:false,stableReady:false,displayLocked:false,phase:'BOOT',modules:{},startedAt:new Date().toISOString()};window.RUNLUResilientV085=state;if(showDiag)diag.classList.add('on');
+var sleep=function(ms){return new Promise(function(r){setTimeout(r,ms)})};
+function paint(){if(!showDiag)return;var xs=Object.entries(state.modules),ok=xs.filter(function(x){return x[1]==='loaded'}),bad=xs.filter(function(x){return x[1]==='failed'}),pending=xs.filter(function(x){return x[1]==='loading'});diag.textContent='V0.3.85 · base '+(state.baseLoaded?'LOADED':'WAIT')+' · visible '+(state.baseVisible?'YES':'NO')+' · deep '+(state.deepReady?'READY':'WAIT')+' · stable '+(state.stableReady?'READY':'WAIT')+' · display '+(state.displayLocked?'LOCKED':'WAIT')+' · '+state.phase+' · modules '+ok.length+' loaded / '+bad.length+' failed / '+pending.length+' loading'+(bad.length?' · failed: '+bad.map(function(x){return x[0]}).join(','):'')}
+function reveal(reason){if(state.baseVisible)return;state.baseVisible=true;state.revealReason=reason||'ready';boot.classList.add('ready');paint()}
+function deepest(){try{var d78=outer.contentDocument;if(!d78)return null;var f78=d78.getElementById('os78');if(!f78)return null;var d71=f78.contentDocument;if(!d71)return null;var f71=d71.getElementById('os');if(!f71)return null;var doc=f71.contentDocument,win=f71.contentWindow;return doc&&win&&doc.body?{doc:doc,win:win}:null}catch(_){return null}}
+function stable(ctx){try{return !!(ctx.win.__runluPricingCostControlV078&&ctx.win.RUNLUStockingPriceBookV074&&ctx.win.RUNLUSmartInventoryPickerV072&&ctx.win.RUNLUPricingWorkspaceV071)}catch(_){return false}}
+function loadOnce(ctx,item,attempt){return new Promise(function(resolve){var s=ctx.doc.createElement('script'),join=item.src.indexOf('?')>=0?'&':'?';s.src=item.src+join+'v85='+attempt+'&t='+Date.now();s.dataset.runluV085=item.key;s.onload=function(){resolve(true)};s.onerror=function(){try{s.remove()}catch(_){}resolve(false)};ctx.doc.body.appendChild(s)})}
+async function loadOptional(ctx,item){if(ctx.doc.querySelector('script[data-runlu-v085="'+item.key+'"]')){state.modules[item.key]='loaded';paint();return true}state.modules[item.key]='loading';paint();var ok=false;try{ok=await loadOnce(ctx,item,1)}catch(_){}if(!ok){await sleep(450);try{ok=await loadOnce(ctx,item,2)}catch(_){}}state.modules[item.key]=ok?'loaded':'failed';paint();return ok}
+function lockDisplay(ctx){var pill='V0.3.85 Stable',demo='V0.3.85 · Cost Control + A/R Review + PO Inventory Holds + Warehouse Work + Compact Staff + auditable PO VOID + searchable PO Archive.';function sync(){try{ctx.doc.title='RUNLU Deerfoot Flooring OS V0.3.85 Stable';var p=ctx.doc.querySelector('header .pill');if(p&&p.textContent!==pill)p.textContent=pill;var d=ctx.doc.querySelector('#command .demo');if(d&&d.textContent!==demo)d.textContent=demo}catch(_){}}sync();try{var ob=new MutationObserver(sync),h=ctx.doc.querySelector('header'),c=ctx.doc.getElementById('command');if(h)ob.observe(h,{subtree:true,childList:true,characterData:true});if(c)ob.observe(c,{subtree:true,childList:true,characterData:true});state.displayObserver=ob}catch(_){}state.displayLocked=true;paint();requestAnimationFrame(function(){requestAnimationFrame(sync)})}
+async function enhance(ctx){if(state.enhancing||state.enhanced)return;state.enhancing=true;state.phase='ENHANCING';paint();var modules=[
+{key:'management',src:'management-review-v080.js?v=080'},
+{key:'po-holds',src:'po-inventory-holds-v080r1.js?v=080r1'},
+{key:'warehouse-auth',src:'warehouse-activity-auth-feedback-v0712.js?v=0712'},
+{key:'warehouse-work',src:'warehouse-work-sync-v090.js?v=090'},
+{key:'material-work',src:'material-work-sync-v091.js?v=091'},
+{key:'status',src:'status-stability-v080.js?v=080'},
+{key:'integration',src:'integration-hub-v079r1.js?v=079r1'},
+{key:'staff',src:'staff-board-v083.js?v=083'},
+{key:'po-void',src:'po-void-v084r2.js?v=084r2'},
+{key:'po-archive',src:'po-history-v085.js?v=085'}];
+for(var i=0;i<modules.length;i++){try{await loadOptional(ctx,modules[i])}catch(e){state.modules[modules[i].key]='failed';paint()}await sleep(320)}state.enhancing=false;state.enhanced=true;state.phase='LOCKING DISPLAY';paint();lockDisplay(ctx);await sleep(120);state.phase='DONE';state.completedAt=new Date().toISOString();paint();reveal('stable stack and ten optional enhancements settled')}
+var deepTries=0,stableTries=0;
+function waitStable(ctx){state.deepReady=true;state.phase='WAIT STABLE';paint();if(stable(ctx)){state.stableReady=true;state.phase='STABLE READY';paint();setTimeout(function(){enhance(ctx)},900);return}if(++stableTries<200){setTimeout(function(){var x=deepest();if(x)waitStable(x)},150);return}state.phase='STABLE TIMEOUT · BASE ONLY';paint();reveal('stable timeout fail-open')}
+function waitDeep(){var ctx=deepest();if(ctx){stableTries=0;waitStable(ctx);return}if(++deepTries<180){setTimeout(waitDeep,150);return}state.phase='DEEP TIMEOUT · BASE ONLY';paint();reveal('deep timeout fail-open')}
+outer.addEventListener('load',function(){state.baseLoaded=true;state.phase='BASE LOADED';paint();deepTries=0;setTimeout(waitDeep,180)});outer.src='index-v078-business-cost-control.html?v=085&t='+Date.now();setTimeout(function(){if(!state.baseVisible){state.phase='SAFETY RELEASE';paint();reveal('18s max startup safety release')}},18000);paint();
+})();
+</script>
+</body>
+</html>
