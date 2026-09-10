@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /control-center.html
+Disallow: /apple-dashboard.html
+Disallow: /asset-ledger.html
+Disallow: /master-vault.html
+Disallow: /core/
 
 Sitemap: https://runlu.ca/sitemap.xml
