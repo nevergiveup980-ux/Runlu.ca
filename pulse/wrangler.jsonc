@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "runlu-pulse",
+  "main": "src/index-canonical.js",
+  "compatibility_date": "2026-08-16",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": false,
+  "vars": {
+    "RUNLU_HOST": "runlu.ca",
+    "RUNLU_HOME_COUNTRY": "CA",
+    "RUNLU_TIME_ZONE": "America/Edmonton",
+    "RUNLU_HISTORY_EPOCH": "2026-08-01T00:00:00.000Z"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "secrets": {
+    "required": [
+      "CF_ANALYTICS_TOKEN",
+      "CF_ACCOUNT_ID"
+    ]
+  }
+}
