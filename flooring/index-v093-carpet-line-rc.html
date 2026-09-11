@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta name="theme-color" content="#173d30">
+<title>RUNLU Deerfoot Flooring OS V0.3.93 Carpet Line RC Link</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#edf1ef;font-family:Arial,Helvetica,sans-serif}
+#os93{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}
+#boot93{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:24px;background:#edf1ef;color:#173d30;font-weight:800;text-align:center;line-height:1.45;opacity:1;visibility:visible;transition:opacity .26s ease,visibility 0s linear .26s}
+#boot93.ready{opacity:0;visibility:hidden;pointer-events:none}#boot93 small{display:block;margin-top:8px;font-weight:500;color:#63716b}
+#diag93{display:none;position:fixed;right:8px;bottom:8px;z-index:40;max-width:min(94vw,780px);padding:7px 9px;border-radius:8px;background:rgba(18,43,34,.92);color:#fff;font:700 10px/1.35 Arial,Helvetica,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.18)}#diag93.on{display:block}
+</style>
+</head>
+<body>
+<div id="boot93"><div>RUNLU Deerfoot Flooring OS<br>V0.3.93 Carpet Line RC Link<small>Preparing V0.3.92 RC Tracking + live Job-line roll availability check…</small></div></div>
+<iframe id="os93" title="RUNLU Deerfoot Flooring OS V0.3.93 Carpet Line RC Link"></iframe>
+<div id="diag93"></div>
+<script>
+(function(){
+'use strict';
+var outer=document.getElementById('os93'),boot=document.getElementById('boot93'),diag=document.getElementById('diag93');
+var q=new URLSearchParams(location.search),showDiag=q.has('diag')||q.has('debug');
+var state={version:'0.3.93',base:'V0.3.92',baseLoaded:false,deepReady:false,module:'waiting',startedAt:new Date().toISOString()};window.RUNLUResilientV093=state;if(showDiag)diag.classList.add('on');
+function paint(){if(!showDiag)return;diag.textContent='V0.3.93 · V0.3.92 '+(state.baseLoaded?'LOADED':'WAIT')+' · deep '+(state.deepReady?'READY':'WAIT')+' · carpet-line-rc '+state.module}
+function reveal(){boot.classList.add('ready');paint()}
+function deepest(){try{var d92=outer.contentDocument;if(!d92)return null;var f92=d92.getElementById('os92');if(!f92)return null;var d78=f92.contentDocument;if(!d78)return null;var f78=d78.getElementById('os78');if(!f78)return null;var d71=f78.contentDocument;if(!d71)return null;var f71=d71.getElementById('os');if(!f71)return null;var doc=f71.contentDocument,win=f71.contentWindow;return doc&&win&&doc.body?{doc:doc,win:win}:null}catch(_){return null}}
+function loadModule(ctx){return new Promise(function(resolve){if(ctx.win.RUNLUCarpetLineRCV093){state.module='loaded';paint();resolve(true);return}var s=ctx.doc.createElement('script');s.src='carpet-line-rc-v093.js?v=093&t='+Date.now();s.dataset.runluV093CarpetLineRc='1';s.onload=function(){state.module=ctx.win.RUNLUCarpetLineRCV093?'loaded':'loaded-api-pending';paint();try{ctx.win.RUNLUCarpetLineRCV093?.decorate?.();ctx.win.RUNLUCarpetLineRCV093?.refresh?.()}catch(_){}resolve(true)};s.onerror=function(){state.module='failed';paint();resolve(false)};ctx.doc.body.appendChild(s)})}
+var tries=0;
+async function wait(){var ctx=deepest();if(ctx&&ctx.win.RUNLUCarpetRCTrackingV092){state.deepReady=true;paint();await loadModule(ctx);try{ctx.doc.title='RUNLU Deerfoot Flooring OS V0.3.93 Carpet Line RC Link';var p=ctx.doc.querySelector('header .pill');if(p)p.textContent='V0.3.93 Carpet Line RC Link';var d=ctx.doc.querySelector('#command .demo');if(d)d.textContent='V0.3.93 · Finance RC → Job carpet line → live roll facts + cut sufficiency check.'}catch(_){}reveal();return}if(++tries<220){setTimeout(wait,150);return}state.module='timeout-base-only';paint();reveal()}
+outer.addEventListener('load',function(){state.baseLoaded=true;paint();tries=0;setTimeout(wait,180)});outer.src='index-v092-rc-tracking.html?v=093&t='+Date.now();setTimeout(function(){if(!boot.classList.contains('ready')){state.module=state.module==='waiting'?'safety-release':state.module;paint();reveal()}},20000);paint();
+})();
+</script>
+</body>
+</html>
