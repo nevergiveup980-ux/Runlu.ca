@@ -4,16 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b0f14">
-<title>RUNLU Field Calculator · V1.4 Online Test</title>
-<style>
-:root{--bg:#0b0f14;--panel:#121820;--panel2:#0e141b;--line:#293544;--text:#f4f7fb;--muted:#9eabb9;--blue:#7cc4ff;--green:#a6e3a1;--yellow:#ffd37a;--red:#ff9a9a}
-*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}body{min-height:100vh}.app{max-width:760px;margin:auto;padding:18px 14px calc(30px + env(safe-area-inset-bottom))}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.brand small{display:block;color:var(--muted);letter-spacing:.16em}.brand h1{margin:2px 0 0;font-size:25px}.ver{font-size:11px;border:1px solid var(--line);padding:7px 9px;border-radius:999px;color:var(--muted)}.status,.card,.result{border:1px solid var(--line);border-radius:17px;background:var(--panel);padding:14px;margin-top:12px}.status.ok{border-color:#4c7452;color:#ddf6d8}.status.bad{border-color:#764848;color:#ffd4d4}.hero{background:linear-gradient(145deg,#17212c,#10161e);padding:16px;border:1px solid var(--line);border-radius:20px}.hero h2{font-size:17px;margin:0 0 6px}.hero p{font-size:13px;line-height:1.45;color:var(--muted);margin:0}.tabs{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:13px}.tabs button{min-height:70px;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:15px;color:var(--text);font-size:15px;font-weight:750;padding:12px}.tabs button span{display:block;color:var(--muted);font-size:11px;margin-top:6px;font-weight:500}.tabs button.active{border-color:var(--blue);background:#132131}.tabs button:last-child:nth-child(odd){grid-column:1/-1}.card h3{font-size:13px;letter-spacing:.09em;margin:0 0 12px;color:#dce7f5}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.field{margin-bottom:10px}.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}.field input,.field select,.field textarea{width:100%;background:#0b1118;border:1px solid #2d3948;color:var(--text);border-radius:12px;padding:12px;font-size:16px}.field textarea{min-height:88px;font-size:13px}.chips{display:flex;gap:7px;flex-wrap:wrap}.chips button{border:1px solid #314051;background:#0d141c;color:#dbe5ef;border-radius:999px;padding:8px 11px}.chips button.active{border-color:var(--blue);background:#132131}.check{display:flex;align-items:center;gap:8px;color:#dce7f5;font-size:13px}.actions{display:grid;grid-template-columns:1.15fr .85fr;gap:9px;margin-top:13px}.actions2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px}button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.btn{border:0;border-radius:14px;padding:14px 12px;font-size:15px;font-weight:800}.primary{background:var(--blue);color:#06121d}.secondary{background:#1b2430;color:var(--text);border:1px solid #303d4d}.hidden{display:none!important}.result{border-color:#3d607e;background:linear-gradient(150deg,#122130,#10171f)}.result h3{margin:0 0 4px;font-size:14px}.big{font-size:32px;font-weight:850;margin:4px 0 12px}.big small{font-size:14px;color:var(--muted)}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px}.metric{padding:10px;border-radius:12px;background:#0b1219;border:1px solid #273443}.metric span{display:block;color:var(--muted);font-size:10px}.metric b{display:block;margin-top:3px;font-size:14px}.note{font-size:11px;color:var(--muted);line-height:1.45;margin-top:10px}.footer{text-align:center;color:var(--muted);font-size:10px;line-height:1.5;margin-top:16px}@media(max-width:430px){.row3{grid-template-columns:1fr 1fr}.actions{grid-template-columns:1fr}.brand h1{font-size:22px}}
-</style>
+<title>RUNLU Field Calculator · V1.5 Online Test</title>
+<link rel="stylesheet" href="field-calculator-v15.css?v=1.5">
 </head>
 <body>
 <div class="app">
-  <div class="top"><div class="brand"><small>RUNLU</small><h1>Field Calculator</h1></div><div class="ver">V1.4 · ONLINE TEST</div></div>
-  <div class="hero"><h2>Fast enough for the field.</h2><p>Six flooring calculators. No login. Local calculation core. Roll Length now supports wrap-count estimation and saved calibration.</p></div>
+  <div class="top"><div class="brand"><small>RUNLU</small><h1>Field Calculator</h1></div><div class="ver">V1.5 · ONLINE TEST</div></div>
+  <div class="hero"><h2>Fast enough for the field.</h2><p>Six flooring calculators. No login. Local calculation core. V1.5 adds material presets, saved remnants, multi-room job totals and advanced carpet rules.</p></div>
   <div id="engine" class="status"><b>🟡 CALC ENGINE STARTING…</b></div>
 
   <div class="tabs">
@@ -25,6 +22,16 @@
     <button type="button" data-type="stairs" onclick="setType('stairs')">STAIRS<span>tread + riser estimate</span></button>
   </div>
 
+  <details id="presetBox" class="card toolcard">
+    <summary>MATERIAL PRESETS <span id="presetCount" class="badge">0 saved</span></summary>
+    <div style="margin-top:12px">
+      <div class="field"><label>Saved preset for this calculator</label><select id="presetSelect"><option value="">No saved preset</option></select></div>
+      <div class="field"><label>Preset name</label><input id="presetName" type="text" placeholder="e.g. 12 ft carpet / Jasper LVP / TEC 774"></div>
+      <div class="minirow"><button type="button" class="btn secondary" onclick="loadPreset()">LOAD</button><button type="button" class="btn secondary" onclick="savePreset()">SAVE CURRENT</button><button type="button" class="btn secondary" onclick="deletePreset()">DELETE</button></div>
+      <div class="note">Presets stay on this device/browser. They save material settings, not room dimensions.</div>
+    </div>
+  </details>
+
   <section id="roomCard" class="card">
     <h3>ROOM</h3>
     <div class="row"><div class="field"><label>Length (ft)</label><input id="Lft" type="number" inputmode="decimal" min="0" placeholder="12"></div><div class="field"><label>Length (in)</label><input id="Lin" type="number" inputmode="decimal" min="0" max="11.99" placeholder="0"></div></div>
@@ -34,10 +41,16 @@
   <section id="carpetPanel" class="card">
     <h3>MATERIAL · CARPET</h3>
     <div class="row"><div class="field"><label>Roll width</label><select id="rollWidth" onchange="toggleCustomRoll()"><option value="12">12 ft</option><option value="13.1667">13 ft 2 in</option><option value="15">15 ft</option><option value="custom">Custom</option></select></div><div class="field"><label>Custom roll width (ft)</label><input id="rollCustom" type="number" value="12" step="0.01"></div></div>
-    <div class="row"><div class="field"><label>Pattern repeat (in)</label><input id="pattern" type="number" value="0" step="0.25"></div><div class="field"><label>Cut allowance / drop (in)</label><input id="allowance" type="number" value="3" step="0.25"></div></div>
     <div class="row"><div class="field"><label>Available roll length (ft)</label><input id="availFt" type="number" min="0" placeholder="139"></div><div class="field"><label>Available inches</label><input id="availIn" type="number" min="0" max="11.99" placeholder="7"></div></div>
-    <div class="field"><label>Orientation</label><div class="chips" id="orient"><button type="button" class="active" onclick="setOrient('auto',this)">AUTO BEST</button><button type="button" onclick="setOrient('length',this)">RUN LENGTH</button><button type="button" onclick="setOrient('width',this)">RUN WIDTH</button></div></div>
-    <label class="check"><input id="seams" type="checkbox" checked> Allow seams when required</label>
+    <div id="carpetRollSource" class="note">Manual roll balance.</div>
+    <details class="subdetails">
+      <summary>ADVANCED CARPET RULES</summary>
+      <div class="row"><div class="field"><label>Pattern repeat (in)</label><input id="pattern" type="number" value="0" step="0.25"></div><div class="field"><label>Cut allowance / drop (in)</label><input id="allowance" type="number" value="3" step="0.25"></div></div>
+      <div class="field"><label>Pile / run direction constraint</label><select id="pileDir"><option value="any">Any / let calculator compare</option><option value="length">Must run along room length</option><option value="width">Must run along room width</option></select></div>
+      <div class="field"><label>Layout preference</label><div class="chips" id="orient"><button type="button" class="active" onclick="setOrient('auto',this)">AUTO BEST</button><button type="button" onclick="setOrient('length',this)">RUN LENGTH</button><button type="button" onclick="setOrient('width',this)">RUN WIDTH</button></div></div>
+      <div class="row"><label class="check"><input id="seams" type="checkbox" checked> Allow parallel seams when required</label><div class="field"><label>Minimum reusable remnant (ft)</label><input id="minRemnant" type="number" value="6" min="0" step="0.5"></div></div>
+      <div class="note">V1.5 uses full-length drops only and does not automatically introduce T-seams. Pattern repeat and pile direction are treated as hard planning rules.</div>
+    </details>
   </section>
 
   <section id="rolllengthPanel" class="card hidden">
@@ -60,6 +73,13 @@
       <button type="button" class="btn secondary" style="width:100%" onclick="calibrateRoll()">CALIBRATE THIS MATERIAL</button>
       <div class="note">Use the measured outside/core diameters above and a verified remaining length. The effective layer value is calculated and stored internally; you do not need to enter material thickness.</div>
     </div>
+    <details class="subdetails">
+      <summary>REMNANT DETAILS · OPTIONAL</summary>
+      <div class="field"><label>Remnant / Roll ID</label><input id="remnantName" type="text" placeholder="e.g. Frosted 768 / Rack 7C"></div>
+      <div class="row"><div class="field"><label>Style</label><input id="remnantStyle" type="text" placeholder="3D02"></div><div class="field"><label>Color</label><input id="remnantColor" type="text" placeholder="768 FROSTED"></div></div>
+      <div class="row"><div class="field"><label>Dye lot</label><input id="remnantDye" type="text" placeholder="P46905-001"></div><div class="field"><label>Location</label><input id="remnantLocation" type="text" placeholder="e.g. 7C"></div></div>
+      <div class="note">These fields are optional. They become useful when the estimate is saved as a reusable remnant.</div>
+    </details>
   </section>
 
   <section id="plankPanel" class="card hidden">
@@ -93,51 +113,31 @@
   <div class="actions"><button id="calcBtn" type="button" class="btn primary" onclick="calculate()">CALCULATE</button><button id="lastBtn" type="button" class="btn secondary" onclick="restoreLast()">USE LAST JOB SETTINGS</button></div>
   <div class="actions2"><button id="nextBtn" type="button" class="btn secondary" onclick="nextJob()">+ NEXT ROOM</button><button id="clearBtn" type="button" class="btn secondary" onclick="clearInputs()">CLEAR</button></div>
   <section id="result" class="result hidden"></section>
-  <div class="footer">Online test build. Calculation core runs in the browser. Manufacturer instructions control final product suitability and installation.</div>
+  <div id="resultActions" class="actions2 hidden"><button id="addJobBtn" type="button" class="btn secondary" onclick="addCurrentToJob()">ADD RESULT TO JOB</button><button id="saveRemnantBtn" type="button" class="btn secondary" onclick="saveCurrentRemnant()">SAVE REMNANT</button></div>
+
+  <details id="remnantBox" class="card toolcard">
+    <summary>SAVED REMNANTS <span id="remnantCount" class="badge">0 saved</span></summary>
+    <div style="margin-top:12px">
+      <div class="field"><label>Saved roll / remnant</label><select id="remnantSelect" onchange="showSelectedRemnant()"><option value="">No saved remnants</option></select></div>
+      <div id="remnantInfo" class="note">Estimate a roll and tap SAVE REMNANT.</div>
+      <div class="minirow"><button type="button" class="btn secondary" onclick="useSelectedRemnantInCarpet()">USE IN CARPET</button><button type="button" class="btn secondary" onclick="deleteSelectedRemnant()">DELETE</button></div>
+    </div>
+  </details>
+
+  <details id="jobBox" class="card toolcard">
+    <summary>JOB / MULTI-ROOM TOTAL <span id="jobCount" class="badge">0 items</span></summary>
+    <div style="margin-top:12px">
+      <div class="row"><div class="field"><label>Job name · optional</label><input id="jobName" type="text" placeholder="e.g. Smith Residence"></div><div class="field"><label>Current room / item</label><input id="jobItemName" type="text" placeholder="e.g. Bedroom 1"></div></div>
+      <div id="jobTotals" class="note">No items yet.</div>
+      <div id="jobList" class="list"></div>
+      <button type="button" class="btn secondary" style="width:100%;margin-top:10px" onclick="clearJob()">CLEAR JOB</button>
+      <div class="note">This is intentionally lightweight: room/item totals only, not CRM or quoting.</div>
+    </div>
+  </details>
+  <div class="footer">Online test build. Calculation core runs in the browser. Saved presets, remnants and job items stay on this device/browser. Manufacturer instructions control final product suitability and installation.</div>
 </div>
-<script>
-'use strict';
-const $=id=>document.getElementById(id);let type='carpet',orientation='auto',memory=null,rollMethod='wraps',lastRollEstimateFt=0;
-const DB={
- tec774:{name:'TEC Flexera 774',size:'4 gal',apps:[['Porous · 1/16 × 1/16 × 1/16 square-notch',500,700],['Non-porous · 1/16 × 1/32 × 1/32 U-notch',700,1000],['Selected smooth-backed flooring · 3/8 nap roller',1000,1400]]},
- tt99_1:{name:'TAK TIK 99',size:'1 gal',apps:[['1/16 × 1/32 × 1/32 U-notch',185,200],['1/16 × 1/16 × 1/16 Flat V',130,155]]},
- tt99_3:{name:'TAK TIK 99',size:'3 gal',apps:[['1/16 × 1/32 × 1/32 U-notch',555,600],['1/16 × 1/16 × 1/16 Flat V',390,465]]}
-};
-function n(id){return parseFloat($(id).value)||0}function dim(a,b){return n(a)+n(b)/12}function ceil(x){return Math.ceil(x-1e-10)}function f(x,d=2){return Number(x).toLocaleString(undefined,{maximumFractionDigits:d})}function ftin(x){let ft=Math.floor(x+1e-9),i=Math.round((x-ft)*48)/4;if(i>=12){ft++;i=0}return ft+"' "+f(i,2)+'"'}function esc(s){return String(s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function setType(t){type=t;document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.type===t));['carpet','rolllength','plank','underlay','adhesive','stairs'].forEach(x=>$(x+'Panel').classList.toggle('hidden',x!==t));$('roomCard').classList.toggle('hidden',['rolllength','underlay','adhesive','stairs'].includes(t));$('result').classList.add('hidden');$('nextBtn').textContent=(t==='carpet'||t==='plank')?'+ NEXT ROOM':t==='rolllength'?'+ NEW ROLL':t==='underlay'?'+ NEW UNDERLAY CALC':t==='adhesive'?'+ NEW GLUE CALC':'+ NEW STAIR CALC';if(t==='rolllength')updateCalStatus()}
-function setOrient(v,b){orientation=v;document.querySelectorAll('#orient button').forEach(x=>x.classList.remove('active'));b.classList.add('active')}function setWaste(v){$('waste').value=v}function setUnder(v){$('underCov').value=v;$('underCovUnit').value='sy'}function toggleCustomRoll(){$('rollCustom').disabled=$('rollWidth').value!=='custom'}
-function roll(){return $('rollWidth').value==='custom'?n('rollCustom'):parseFloat($('rollWidth').value)||0}function room(){return dim('Lft','Lin')*dim('Wft','Win')}
-function rollLengthFromWraps(outerIn,coreIn,wraps){if(outerIn<=coreIn||coreIn<=0||wraps<=0)return 0;return Math.PI*wraps*((outerIn+coreIn)/2)/12}
-function rollLengthFromThickness(outerIn,coreIn,thickMm){let t=thickMm/25.4;if(outerIn<=coreIn||coreIn<=0||t<=0)return 0;return Math.PI*(outerIn*outerIn-coreIn*coreIn)/(4*t)/12}
-function calibratedThicknessMm(outerIn,coreIn,lengthFt){let lin=lengthFt*12;if(outerIn<=coreIn||coreIn<=0||lin<=0)return 0;return Math.PI*(outerIn*outerIn-coreIn*coreIn)/(4*lin)*25.4}
-function setRollMethod(m,b){rollMethod=m;document.querySelectorAll('#rollMethods button').forEach(x=>x.classList.remove('active'));if(b)b.classList.add('active');else $(m==='wraps'?'rollWrapBtn':'rollCalBtn').classList.add('active');$('wrapFields').classList.toggle('hidden',m!=='wraps');$('calFields').classList.toggle('hidden',m!=='calibrated');$('result').classList.add('hidden');if(m==='calibrated')updateCalStatus()}
-function getRollCalibration(){try{let raw=localStorage.getItem('runluRollCalibrationV14');return raw?JSON.parse(raw):null}catch(e){return null}}
-function updateCalStatus(){let c=getRollCalibration();if(c){$('calStatus').innerHTML='Saved calibration: <b>'+esc(c.name||'Saved material')+'</b> · internal effective layer '+f(c.thicknessMm,3)+' mm.'}else{$('calStatus').textContent='No saved calibration yet. Create one from a known roll if the wraps are difficult to count.'}}
-function calibrateRoll(){let D=n('rollOuter'),d=n('rollCore'),L=dim('calLenFt','calLenIn');if(D<=0||d<=0||D<=d||L<=0)return alert('Enter outside diameter, core diameter, and a verified known length.');let mm=calibratedThicknessMm(D,d,L);let c={name:$('rollCalName').value.trim(),thicknessMm:mm,outerIn:D,coreIn:d,lengthFt:L,savedAt:new Date().toISOString()};try{localStorage.setItem('runluRollCalibrationV14',JSON.stringify(c))}catch(e){}rollMethod='calibrated';setRollMethod('calibrated');updateCalStatus();alert('Calibration saved for this browser/device.')}
-function useSavedCalibration(){let c=getRollCalibration();if(!c)return alert('No saved calibration yet. Measure a known roll and calibrate it first.');if(!$('rollCalName').value)$('rollCalName').value=c.name||'';rollMethod='calibrated';setRollMethod('calibrated');updateCalStatus()}
-function forgetRollCalibration(){try{localStorage.removeItem('runluRollCalibrationV14')}catch(e){}updateCalStatus()}
-function useRollEstimateInCarpet(){if(lastRollEstimateFt<=0)return;setType('carpet');$('availFt').value=Math.floor(lastRollEstimateFt);$('availIn').value=((lastRollEstimateFt-Math.floor(lastRollEstimateFt))*12).toFixed(2);$('carpetPanel').scrollIntoView({behavior:'smooth',block:'start'})}
-function carpetLayout(run,across,r,rep,allow,seams){if(!seams&&across>r)return null;let drops=ceil(across/r),each=run+allow/12;if(rep>0)each=ceil(each*12/rep)*rep/12;let lf=drops*each,sf=lf*r;return{drops,each,lf,sf,off:Math.max(0,sf-run*across)}}
-function show(title,big,unit,items,note){$('result').innerHTML='<h3>'+esc(title)+'</h3><div class="big">'+esc(big)+' <small>'+esc(unit||'')+'</small></div><div class="metrics">'+items.map(x=>'<div class="metric"><span>'+esc(x[0])+'</span><b>'+esc(x[1])+'</b></div>').join('')+'</div>'+(note?'<div class="note">'+note+'</div>':'');$('result').classList.remove('hidden');$('result').scrollIntoView({behavior:'smooth',block:'nearest'})}
-function calculate(){try{
- if(type==='carpet'){let L=dim('Lft','Lin'),W=dim('Wft','Win'),r=roll();if(L<=0||W<=0||r<=0)return alert('Enter room dimensions and roll width.');let A=carpetLayout(L,W,r,n('pattern'),n('allowance'),$('seams').checked),B=carpetLayout(W,L,r,n('pattern'),n('allowance'),$('seams').checked),p,label;if(orientation==='length'){p=A;label='Run along room length'}else if(orientation==='width'){p=B;label='Run along room width'}else{if(A&&B){p=A.lf<=B.lf?A:B;label=p===A?'Run along room length':'Run along room width'}else{p=A||B;label=p===A?'Run along room length':'Run along room width'}}if(!p)return show('Carpet','NO FIT','',[['Room',f(L)+' × '+f(W)+' ft'],['Roll width',f(r)+' ft']],'<span style="color:var(--red)">No allowed layout fits the selected roll width.</span>');let av=dim('availFt','availIn'),items=[['Layout',label],['Drops',String(p.drops)],['Cut / drop',ftin(p.each)],['Order',f(p.sf/9)+' sy'],['Net room',f(L*W/9)+' sy'],['Est. offcut',f(p.off/9)+' sy']];if(av>0)items.push(['Roll available',ftin(av)],['After job',av>=p.lf?ftin(av-p.lf):'SHORT '+ftin(p.lf-av)]);show('Carpet',ftin(p.lf),'linear',items,'Auto-best compares the two rectangular orientations. Confirm pile direction, seam position and pattern matching in the field.')}
- if(type==='rolllength'){let D=n('rollOuter'),d=n('rollCore'),rw=n('rollMeasureWidth');if(D<=0||d<=0||D<=d)return alert('Enter a valid outside diameter and core diameter.');let lf=0,items=[],note='';if(rollMethod==='wraps'){let N=n('rollWrapCount');if(N<=0)return alert('Enter the number of wraps / layers.');lf=rollLengthFromWraps(D,d,N);let avg=(D+d)/2,effIn=(D-d)/(2*N),effMm=effIn*25.4;items=[['Wrap count',f(N,0)],['Average diameter',f(avg)+' in'],['Inferred layer',f(effMm,3)+' mm'],['Method','Count wraps']];note='<b>Average circumference × wraps.</b> No material-thickness input was used. Best results come from clearly visible layers and a reasonably round, consistently wound roll.'}else{let c=getRollCalibration();if(!c||!Number(c.thicknessMm))return alert('No saved calibration yet. Create one from a known roll or switch to COUNT WRAPS.');let mm=Number(c.thicknessMm),tIn=mm/25.4;lf=rollLengthFromThickness(D,d,mm);let eq=(D-d)/(2*tIn);items=[['Calibration',c.name||'Saved material'],['Equivalent wraps',f(eq,1)],['Internal layer',f(mm,3)+' mm'],['Method','Saved calibration']];note='<b>Saved calibration estimate.</b> Best when the calibration comes from the same material construction and similar winding tension.'}if(lf<=0)return alert('Unable to estimate this roll. Check the measurements.');lastRollEstimateFt=lf;items.unshift(['Linear feet',f(lf)+' ft']);items.splice(2,0,['Outside / core',f(D)+' / '+f(d)+' in']);if(rw>0){let sf=lf*rw;items.push(['Roll width',f(rw)+' ft'],['Est. area',f(sf)+' sf'],['Est. area',f(sf/9)+' sy'])}note+=' Verify critical cuts before shipping or installation.<button type="button" class="btn secondary" style="width:100%;margin-top:10px" onclick="useRollEstimateInCarpet()">USE AS CARPET ROLL BALANCE</button>';show('Roll Length Estimate',ftin(lf),'remaining',items,note)}
- if(type==='plank'){let area=room(),cov=n('boxCov'),w=n('waste');if(area<=0||cov<=0)return alert('Enter room dimensions and coverage per box.');let need=area*(1+w/100),boxes=ceil(need/cov),actual=boxes*cov;show('Plank / Tile',String(boxes),'boxes',[['Net area',f(area)+' sf'],['With waste',f(need)+' sf'],['Coverage / box',f(cov)+' sf'],['Actual material',f(actual)+' sf'],['Leftover vs room',f(actual-area)+' sf'],['Waste',f(w,1)+'%']],'Order quantity is rounded up to whole boxes.')}
- if(type==='underlay'){let a=n('underArea'),c=n('underCov');if(a<=0||c<=0)return alert('Enter required area and coverage per roll.');let sy=$('underUnit').value==='sy'?a:a/9,cs=$('underCovUnit').value==='sy'?c:c/9,qty=ceil(sy/cs),actual=qty*cs;show('Underlay',String(qty),'rolls',[['Required',f(sy)+' sy'],['Coverage / roll',f(cs)+' sy'],['Actual coverage',f(actual)+' sy'],['Spare coverage',f(actual-sy)+' sy']],'Whole-roll order quantity.')}
- if(type==='adhesive'){let a=n('adhArea'),lo=n('covLow'),hi=Math.max(lo,n('covHigh'));if(a<=0||lo<=0)return alert('Enter required area and coverage range.');let safe=ceil(a/lo),typ=ceil(a/((lo+hi)/2)),best=ceil(a/hi);show('Adhesive',String(safe),$('container').value+(safe===1?'':'S'),[['Required',f(a)+' sf'],['Coverage range',f(lo)+'–'+f(hi)+' sf'],['Typical estimate',String(typ)],['Best-case minimum',String(best)],['Safe capacity',f(safe*lo)+' sf'],['Safe spare',f(safe*lo-a)+' sf']],'Safe Order uses the low end of the selected coverage range. Confirm the manufacturer trowel/application requirements.')}
- if(type==='stairs'){let q=n('steps'),w=n('stairW'),t=n('tread'),r=$('includeRiser').checked?n('riser'):0,wa=n('stairWaste');if(q<=0||w<=0||t<=0)return alert('Enter stair count, width and tread depth.');let net=q*w*(t+r)/144,need=net*(1+wa/100);show('Stairs',f(need),'sf',[['Net surface',f(net)+' sf'],['With waste',f(need)+' sf'],['Steps',String(q)],['Width',f(w)+' in'],['Tread',f(t)+' in'],['Riser',f(r)+' in']],'Basic tread + riser surface estimate; landings, wraps and product-specific cuts are not included.')}
- saveLast();
- }catch(e){console.error(e);$('engine').className='status bad';$('engine').innerHTML='<b>🔴 CALC ENGINE ERROR</b> · '+esc(e.message||e);alert('Calculation error: '+(e.message||e))}}
-function loadAdhesive(){let key=$('adhProduct').value,s=$('adhApp');s.innerHTML='';if(key==='custom'){s.innerHTML='<option>Custom / manufacturer specified</option>';$('covLow').readOnly=false;$('covHigh').readOnly=false;$('adhNote').textContent="Custom mode: enter the manufacturer's stated coverage range for the exact installation.";return}DB[key].apps.forEach((a,i)=>{let o=document.createElement('option');o.value=i;o.textContent=a[0];s.appendChild(o)});$('covLow').readOnly=true;$('covHigh').readOnly=true;loadAdhApp()}
-function loadAdhApp(){let key=$('adhProduct').value;if(key==='custom')return;let a=DB[key].apps[parseInt($('adhApp').value)||0];$('covLow').value=a[1];$('covHigh').value=a[2];$('adhNote').innerHTML='<b>'+esc(DB[key].name)+'</b> · '+esc(DB[key].size)+' · '+esc(a[0])+' · '+f(a[1])+'–'+f(a[2])+' sf/container'}
-function state(){return{type,orientation,rollWidth:$('rollWidth').value,rollCustom:$('rollCustom').value,pattern:$('pattern').value,allowance:$('allowance').value,seams:$('seams').checked,rollOuter:$('rollOuter').value,rollCore:$('rollCore').value,rollMeasureWidth:$('rollMeasureWidth').value,rollWrapCount:$('rollWrapCount').value,rollCalName:$('rollCalName').value,rollMethod,boxCov:$('boxCov').value,waste:$('waste').value,underCov:$('underCov').value,underCovUnit:$('underCovUnit').value,adhProduct:$('adhProduct').value,adhApp:$('adhApp').value,covLow:$('covLow').value,covHigh:$('covHigh').value,container:$('container').value,stairW:$('stairW').value,tread:$('tread').value,riser:$('riser').value,stairWaste:$('stairWaste').value,includeRiser:$('includeRiser').checked}}
-function saveLast(){memory=state();try{localStorage.setItem('runluFieldCalcV14',JSON.stringify(memory))}catch(e){}}
-function restoreLast(){let s=memory;try{if(!s){let raw=localStorage.getItem('runluFieldCalcV14')||localStorage.getItem('runluFieldCalcV13');if(raw)s=JSON.parse(raw)}}catch(e){}if(!s)return alert('No saved job settings yet. Calculate one job first.');setType(s.type||'carpet');orientation=s.orientation||'auto';document.querySelectorAll('#orient button').forEach((b,i)=>b.classList.toggle('active',(orientation==='auto'&&i===0)||(orientation==='length'&&i===1)||(orientation==='width'&&i===2)));['rollWidth','rollCustom','pattern','allowance','rollOuter','rollCore','rollMeasureWidth','rollWrapCount','rollCalName','boxCov','waste','underCov','underCovUnit','adhProduct','covLow','covHigh','container','stairW','tread','riser','stairWaste'].forEach(k=>{if(s[k]!==undefined&&$(k))$(k).value=s[k]});$('seams').checked=s.seams!==false;$('includeRiser').checked=s.includeRiser!==false;rollMethod=s.rollMethod||'wraps';setRollMethod(rollMethod);updateCalStatus();loadAdhesive();if(s.adhApp!==undefined){$('adhApp').value=s.adhApp;loadAdhApp()}toggleCustomRoll();alert('Last job settings restored.')}
-function nextJob(){$('result').classList.add('hidden');if(type==='carpet'||type==='plank'){['Lft','Lin','Wft','Win'].forEach(x=>$(x).value='');$('Lft').focus()}else if(type==='rolllength'){$('rollOuter').value='';$('rollWrapCount').value='';$('calLenFt').value='';$('calLenIn').value='';lastRollEstimateFt=0;$('rollOuter').focus()}else if(type==='underlay'){$('underArea').value='';$('underArea').focus()}else if(type==='adhesive'){$('adhArea').value='';$('adhArea').focus()}else $('steps').focus()}
-function clearInputs(){document.querySelectorAll('input[type=number]').forEach(x=>x.value='');$('rollCalName').value='';rollMethod='wraps';setRollMethod('wraps');lastRollEstimateFt=0;$('rollWidth').value='12';$('rollCustom').value='12';$('pattern').value='0';$('allowance').value='3';$('seams').checked=true;$('boxCov').value='23.8';$('waste').value='10';$('underCov').value='30';$('underUnit').value='sy';$('underCovUnit').value='sy';$('adhProduct').value='custom';loadAdhesive();$('covLow').value='180';$('covHigh').value='180';$('container').value='PAIL';$('steps').value='12';$('stairW').value='36';$('stairWaste').value='10';$('tread').value='11';$('riser').value='7.5';$('includeRiser').checked=true;updateCalStatus();$('result').classList.add('hidden')}
-window.addEventListener('error',e=>{$('engine').className='status bad';$('engine').innerHTML='<b>🔴 CALC ENGINE ERROR</b> · '+esc(e.message||'Unknown error')});
-function boot(){try{loadAdhesive();toggleCustomRoll();setRollMethod('wraps');updateCalStatus();let p=carpetLayout(12,14,12,0,3,true);if(!p||p.drops!==2||Math.abs(p.lf-28.5)>.001)throw new Error('Carpet self-test failed');let lf=rollLengthFromWraps(24,4,40);if(Math.abs(lf-146.607657)>.01)throw new Error('Roll estimator self-test failed');$('engine').className='status ok';$('engine').innerHTML='<b>🟢 CALC ENGINE READY</b> · Buttons and calculations are active.'}catch(e){$('engine').className='status bad';$('engine').innerHTML='<b>🔴 CALC ENGINE ERROR</b> · '+esc(e.message||e)}}
-boot();
-</script>
+<script src="field-calculator-v15-1.js?v=1.5"></script>
+<script src="field-calculator-v15-2.js?v=1.5"></script>
+<script src="field-calculator-v15-3.js?v=1.5"></script>
 </body>
 </html>
