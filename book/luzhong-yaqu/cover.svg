@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="2400" viewBox="0 0 1600 2400" role="img" aria-labelledby="title desc">
+<title id="title">庐中雅趣 · Within the Hut: Quiet Elegance</title>
+<desc id="desc">A warm RUNLU book cover: a quiet study, a lamp, a window toward mountains, a plant and a resting cat.</desc>
+<defs>
+  <linearGradient id="night" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#183041"/><stop offset=".58" stop-color="#37546a"/><stop offset="1" stop-color="#a77b58"/></linearGradient>
+  <linearGradient id="room" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#493526"/><stop offset="1" stop-color="#181713"/></linearGradient>
+  <linearGradient id="desk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6e492d"/><stop offset=".52" stop-color="#a2764c"/><stop offset="1" stop-color="#513522"/></linearGradient>
+  <radialGradient id="glow"><stop offset="0" stop-color="#ffe5a6" stop-opacity=".95"/><stop offset=".48" stop-color="#e8b467" stop-opacity=".42"/><stop offset="1" stop-color="#e8b467" stop-opacity="0"/></radialGradient>
+  <filter id="soft"><feGaussianBlur stdDeviation="22"/></filter>
+</defs>
+<rect width="1600" height="2400" fill="url(#room)"/>
+<rect x="120" y="180" width="1360" height="1210" rx="8" fill="#171b1b"/>
+<rect x="190" y="250" width="1220" height="1040" fill="url(#night)"/>
+<path d="M190 1040 L420 810 L590 920 L780 690 L960 840 L1160 620 L1410 820 L1410 1290 L190 1290 Z" fill="#203b43" opacity=".9"/>
+<path d="M190 1110 L430 900 L610 1010 L810 790 L1030 960 L1230 760 L1410 910 L1410 1290 L190 1290 Z" fill="#2c5150" opacity=".95"/>
+<g opacity=".7" fill="#d7e4db"><circle cx="340" cy="430" r="8"/><circle cx="1010" cy="360" r="6"/><circle cx="1190" cy="470" r="5"/><circle cx="860" cy="300" r="4"/></g>
+<rect x="785" y="250" width="34" height="1040" fill="#1d1916" opacity=".75"/>
+<rect x="190" y="735" width="1220" height="32" fill="#1d1916" opacity=".65"/>
+<rect y="1370" width="1600" height="1030" fill="#201913"/>
+<ellipse cx="380" cy="1590" rx="460" ry="390" fill="url(#glow)" filter="url(#soft)"/>
+<rect x="0" y="1760" width="1600" height="430" fill="url(#desk)"/>
+<rect x="155" y="1540" width="320" height="250" rx="18" fill="#3a291d"/>
+<path d="M255 1510 L365 1510 L430 1660 L190 1660 Z" fill="#d6b174"/>
+<rect x="295" y="1650" width="30" height="130" fill="#4a3324"/>
+<ellipse cx="310" cy="1780" rx="95" ry="22" fill="#2b1d16"/>
+<g stroke="#455a3f" stroke-width="22" stroke-linecap="round" fill="none"><path d="M1110 1735 C1080 1570 1110 1420 1170 1260"/><path d="M1160 1490 C1080 1440 1040 1370 1010 1310"/><path d="M1145 1400 C1220 1360 1270 1290 1300 1220"/></g>
+<g fill="#567052"><ellipse cx="1010" cy="1300" rx="70" ry="34" transform="rotate(28 1010 1300)"/><ellipse cx="1300" cy="1210" rx="78" ry="38" transform="rotate(-28 1300 1210)"/><ellipse cx="1085" cy="1450" rx="74" ry="34" transform="rotate(35 1085 1450)"/><ellipse cx="1218" cy="1360" rx="76" ry="35" transform="rotate(-30 1218 1360)"/></g>
+<ellipse cx="1160" cy="1815" rx="270" ry="92" fill="#26221d"/><path d="M900 1810 C930 1690 1060 1650 1180 1710 C1240 1740 1280 1810 1260 1880 C1150 1920 1030 1920 910 1880 Z" fill="#6c6255"/><path d="M920 1740 L970 1665 L1010 1745" fill="#6c6255"/><path d="M1160 1740 L1210 1670 L1240 1760" fill="#6c6255"/>
+<rect x="120" y="120" width="1360" height="2160" fill="none" stroke="#d1b987" stroke-width="3" opacity=".7"/>
+<text x="180" y="360" fill="#f3e4c7" font-family="Georgia, 'Noto Serif SC', serif" font-size="38" letter-spacing="11">RUNLU BOOKS · 润庐书系</text>
+<text x="180" y="545" fill="#fff4df" font-family="'Noto Serif SC', 'Songti SC', Georgia, serif" font-size="154" font-weight="600">庐中雅趣</text>
+<text x="185" y="655" fill="#ead3ad" font-family="Georgia, serif" font-size="62" font-style="italic">Within the Hut: Quiet Elegance</text>
+<line x1="185" y1="720" x2="690" y2="720" stroke="#d7bd8a" stroke-width="3"/>
+<text x="185" y="800" fill="#f3e4c7" font-family="'Noto Serif SC', Georgia, serif" font-size="46" letter-spacing="8">相伴 · 生成 · 岁月有光</text>
+<text x="180" y="2070" fill="#f4e6cc" font-family="Georgia, 'Noto Serif SC', serif" font-size="48">John Zhang</text>
+<text x="180" y="2140" fill="#cdb58d" font-family="Georgia, serif" font-size="30" letter-spacing="8">RUNLU ORIGINAL</text>
+</svg>
