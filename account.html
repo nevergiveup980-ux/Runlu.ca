@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7f4ed">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="RUNLU Account pilot — private sign-in and account foundation.">
+  <title>RUNLU Account · Pilot</title>
+  <link rel="stylesheet" href="runlu-account.css?v=1">
+</head>
+<body>
+  <header class="account-topbar">
+    <a class="account-brand" href="index.html">RUNLU</a>
+    <div class="account-top-actions">
+      <span class="pilot-badge" data-i18n="pilot">Private pilot</span>
+      <select id="languageSelect" aria-label="Language">
+        <option value="en">English</option>
+        <option value="zh">中文</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+      </select>
+    </div>
+  </header>
+
+  <main class="account-shell">
+    <section class="account-intro">
+      <p class="eyebrow">RUNLU ACCOUNT</p>
+      <h1 data-i18n="title">One quiet account for RUNLU.</h1>
+      <p class="lead" data-i18n="lead">Sign in once. Product access, purchases and your RUNLU library can be connected here over time.</p>
+      <p class="pilot-note" data-i18n="pilot_note">Pilot stage: account authentication only. No existing RUNLU product requires an account yet.</p>
+    </section>
+
+    <section class="account-card" aria-live="polite">
+      <div id="statusBox" class="status-box" hidden></div>
+
+      <div id="authView">
+        <div class="auth-tabs" role="tablist">
+          <button id="signInTab" class="tab active" type="button" data-mode="signin" data-i18n="sign_in">Sign in</button>
+          <button id="signUpTab" class="tab" type="button" data-mode="signup" data-i18n="create_account">Create account</button>
+        </div>
+
+        <form id="authForm" class="account-form">
+          <div id="nameField" class="field" hidden>
+            <label for="displayName" data-i18n="display_name">Display name</label>
+            <input id="displayName" name="displayName" type="text" maxlength="80" autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="email" data-i18n="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="password" data-i18n="password">Password</label>
+            <input id="password" name="password" type="password" minlength="8" autocomplete="current-password" required>
+            <small id="passwordHint" data-i18n="password_hint" hidden>Use at least 8 characters.</small>
+          </div>
+          <button id="authSubmit" class="primary-button" type="submit" data-i18n="sign_in">Sign in</button>
+          <button id="forgotButton" class="text-button" type="button" data-i18n="forgot_password">Forgot password?</button>
+        </form>
+      </div>
+
+      <div id="recoveryView" hidden>
+        <h2 data-i18n="reset_title">Choose a new password</h2>
+        <form id="recoveryForm" class="account-form">
+          <div class="field">
+            <label for="newPassword" data-i18n="new_password">New password</label>
+            <input id="newPassword" type="password" minlength="8" autocomplete="new-password" required>
+          </div>
+          <button class="primary-button" type="submit" data-i18n="save_password">Save new password</button>
+        </form>
+      </div>
+
+      <div id="accountView" hidden>
+        <div class="account-heading-row">
+          <div>
+            <p class="eyebrow" data-i18n="signed_in">SIGNED IN</p>
+            <h2 id="accountEmail">—</h2>
+          </div>
+          <button id="signOutButton" class="secondary-button" type="button" data-i18n="sign_out">Sign out</button>
+        </div>
+
+        <form id="profileForm" class="account-form profile-form">
+          <div class="field">
+            <label for="profileName" data-i18n="display_name">Display name</label>
+            <input id="profileName" type="text" maxlength="80" autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="profileLocale" data-i18n="preferred_language">Preferred language</label>
+            <select id="profileLocale">
+              <option value="en">English</option>
+              <option value="zh">中文</option>
+              <option value="fr">Français</option>
+              <option value="es">Español</option>
+            </select>
+          </div>
+          <button class="primary-button" type="submit" data-i18n="save_profile">Save profile</button>
+        </form>
+
+        <div class="future-grid">
+          <article><h3 data-i18n="library">Library</h3><p data-i18n="library_note">Reserved for products and downloads you own. Not connected yet.</p></article>
+          <article><h3 data-i18n="orders">Orders</h3><p data-i18n="orders_note">Reserved for future RUNLU-direct purchases. Not connected yet.</p></article>
+          <article><h3 data-i18n="subscriptions">Subscriptions</h3><p data-i18n="subscriptions_note">Reserved for future RUNLU services. Apple-managed purchases remain with Apple.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <p class="account-footer-note"><span data-i18n="support_line">Account help:</span> <a href="mailto:support@runlu.ca">support@runlu.ca</a> · <span data-i18n="privacy_line">Privacy:</span> <a href="mailto:privacy@runlu.ca">privacy@runlu.ca</a></p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="runlu-account.js?v=1"></script>
+</body>
+</html>
