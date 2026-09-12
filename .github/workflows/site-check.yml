@@ -170,7 +170,7 @@ jobs:
 
           print('Evidence chapters 01–10: four languages and JPEG cover references verified.')
           PY
-      - name: Check sitemap and internal links
+      - name: Check sitemap and public internal links
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -179,7 +179,8 @@ jobs:
           from urllib.parse import urlsplit
 
           root = Path('.')
-          ET.parse(root / 'sitemap.xml')
+          tree = ET.parse(root / 'sitemap.xml')
+          ns = {'sm': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
 
           class Links(HTMLParser):
               def __init__(self):
@@ -191,16 +192,44 @@ jobs:
                       key='src' if tag=='script' else 'href'
                       if a.get(key): self.links.append(a[key])
 
+          public_pages=[]
           missing=[]
-          for page in root.glob('*.html'):
+          for loc in tree.findall('.//sm:loc', ns):
+              url=(loc.text or '').strip()
+              parsed=urlsplit(url)
+              if parsed.netloc != 'runlu.ca':
+                  missing.append(f'sitemap host: {url}')
+                  continue
+              path=parsed.path.lstrip('/')
+              if not path:
+                  target=root / 'index.html'
+              elif path.endswith('/'):
+                  target=root / path / 'index.html'
+              else:
+                  target=root / path
+              if not target.exists():
+                  missing.append(f'sitemap target: {url} -> {target}')
+              elif target.suffix.lower() == '.html':
+                  public_pages.append(target)
+
+          for page in public_pages:
               parser=Links(); parser.feed(page.read_text(encoding='utf-8'))
               for href in parser.links:
-                  if href.startswith(('#','mailto:','http://','https://','tel:','javascript:')): continue
-                  path=urlsplit(href).path
-                  if not path: continue
-                  target=(page.parent / path)
+                  if href.startswith(('#','mailto:','tel:','javascript:')): continue
+                  parsed=urlsplit(href)
+                  if parsed.scheme in ('http','https'):
+                      if parsed.netloc != 'runlu.ca': continue
+                      path=parsed.path.lstrip('/')
+                      if not path: target=root / 'index.html'
+                      elif path.endswith('/'): target=root / path / 'index.html'
+                      else: target=root / path
+                  else:
+                      path=parsed.path
+                      if not path: continue
+                      target=page.parent / path
                   if not target.exists(): missing.append(f'{page}: {href}')
+
           if missing:
-              raise SystemExit('Missing local targets:\n'+'\n'.join(missing))
-          print('Site integrity checks passed.')
+              raise SystemExit('Missing public-site targets:\n'+'\n'.join(missing))
+          print(f'Public site integrity passed for {len(public_pages)} sitemap HTML pages.')
           PY
