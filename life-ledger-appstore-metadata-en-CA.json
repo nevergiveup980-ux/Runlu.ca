@@ -1,0 +1,49 @@
+{
+  "locale": "en-CA",
+  "name": "RUNLU Ledger",
+  "subtitle": "Two views. One set of data.",
+  "primaryCategory": "Finance",
+  "secondaryCategory": "Productivity",
+  "pricing": {
+    "model": "paid-upfront",
+    "canadaTargetPrice": "CA$3.99",
+    "subscriptionAtLaunch": false,
+    "adsAtLaunch": false
+  },
+  "keywords": "expense,budget,spending,income,cashflow,tracker,spreadsheet,finance,personal,offline",
+  "promotionalText": "Track income and spending your way: use Entries for every transaction or Sheet View for the whole month. Both views edit the same ledger.",
+  "screenshots": [
+    {
+      "slot": 1,
+      "state": "?shot=1",
+      "headline": "See your month at a glance.",
+      "support": "Income. Spending. Balance. Clear in seconds."
+    },
+    {
+      "slot": 2,
+      "state": "?shot=2",
+      "headline": "Every transaction stays easy to follow.",
+      "support": "Search, review, and edit the record that changed."
+    },
+    {
+      "slot": 3,
+      "state": "?shot=3",
+      "headline": "One ledger. Two views. Both editable.",
+      "support": "Entries for detail. Sheet View for the whole month."
+    },
+    {
+      "slot": 4,
+      "state": "?shot=4",
+      "headline": "Add a record in seconds.",
+      "support": "Amount first. Familiar items stay close."
+    },
+    {
+      "slot": 5,
+      "state": "?shot=5",
+      "headline": "Your ledger stays under your control.",
+      "support": "No bank connection required. Export when you want."
+    }
+  ],
+  "launchTarget": "Canada / Finance / Top Paid",
+  "status": "staging-candidate-not-for-submission"
+}
