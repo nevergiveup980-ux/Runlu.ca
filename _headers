@@ -1,0 +1,12 @@
+/notes.html
+  Cache-Control: no-cache, no-store, must-revalidate
+/localized-book-covers.js
+  Cache-Control: no-cache, no-store, must-revalidate
+/book/lost-meridian/
+  Cache-Control: no-cache, no-store, must-revalidate
+/book/lost-meridian/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+/book/lost-meridian/book.js
+  Cache-Control: no-cache, no-store, must-revalidate
+/book/lost-meridian/cover-chunks-*.js
+  Cache-Control: no-cache, no-store, must-revalidate
