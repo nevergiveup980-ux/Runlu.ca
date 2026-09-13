@@ -1,0 +1,11 @@
+# RUNLU large media policy
+# Keep video binaries out of the website source repository.
+*.mp4
+*.mov
+*.m4v
+*.webm
+*.avi
+
+# Temporary/local media working folders
+media-local/
+video-export/
