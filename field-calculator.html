@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b0f14">
-<title>RUNLU Field Calculator · V1.13 Online Test</title>
+<title>RUNLU Field Calculator · V1.14 Online Test</title>
 <link rel="stylesheet" href="field-calculator-v15.css?v=1.5">
 </head>
 <body>
 <div class="app">
-  <div class="top"><div class="brand"><small>RUNLU</small><h1>Field Calculator</h1></div><div class="ver">V1.13 · ONLINE TEST</div></div>
-  <div class="hero"><h2>Fast enough for the field.</h2><p>Eight flooring calculators. V1.13 adds Floor Prep quantity planning and a copy-ready Complete Job Material List while keeping visual carpet, sheet goods, plank/tile, wall-base and advanced stair tools.</p></div>
+  <div class="top"><div class="brand"><small>RUNLU</small><h1>Field Calculator</h1></div><div class="ver">V1.14 · ONLINE TEST</div></div>
+  <div class="hero"><h2>Fast enough for the field.</h2><p>Eight flooring calculators. V1.14 adds Smart Flow area handoffs and a Smart Job Check so material calculations work together instead of living as separate tools.</p></div>
   <div id="engine" class="status"><b>🟡 CALC ENGINE STARTING…</b></div>
 
   <div class="tabs">
@@ -71,7 +71,7 @@
       <div class="field"><label>Calibration name · optional</label><input id="rollCalName" type="text" placeholder="e.g. Contract carpet / sheet vinyl"></div>
       <div class="row"><div class="field"><label>Known length (ft)</label><input id="calLenFt" type="number" inputmode="decimal" min="0" placeholder="100"></div><div class="field"><label>Known inches</label><input id="calLenIn" type="number" inputmode="decimal" min="0" max="11.99" placeholder="0"></div></div>
       <button type="button" class="btn secondary" style="width:100%" onclick="calibrateRoll()">CALIBRATE THIS MATERIAL</button>
-      <div class="note">Use the measured outside/core diameters above and a verified remaining length. The effective layer value is calculated and stored internally; you do not need to enter material thickness.</div>
+      <div class="note">Use the measured outside/core diameters above and a verified known length. The effective layer value is calculated and stored internally; you do not need to enter material thickness.</div>
     </div>
     <details class="subdetails">
       <summary>REMNANT DETAILS · OPTIONAL</summary>
@@ -146,5 +146,6 @@
 <script src="field-calculator-v111.js?v=1.11"></script>
 <script src="field-calculator-v112.js?v=1.12"></script>
 <script src="field-calculator-v113.js?v=1.13"></script>
+<script src="field-calculator-v114.js?v=1.14"></script>
 </body>
 </html>
