@@ -45,7 +45,7 @@
   }
 
   async function loadProfile(user){
-    const {data,error}=await client.from('runlu_profiles').select('display_name,locale,account_tier,account_status,created_at').eq('user_id',user.id).maybeSingle();
+    const {data,error}=await client.from('runlu_profiles').select('display_name,locale,account_tier,account_status,staff_role,created_at').eq('user_id',user.id).maybeSingle();
     if(error)throw error;
     if(data?.account_status==='suspended'){await client.auth.signOut();throw new Error(t('suspended'))}
     el.profileName.value=data?.display_name||'';
@@ -54,23 +54,23 @@
 
   async function loadLibrary(user){
     if(!el.libraryList)return;
-    el.libraryList.replaceChildren();
     const {data,error}=await client.from('runlu_entitlements')
       .select('product_key,status,ends_at,created_at,runlu_product_catalog(name,kind,platform,access_url,status)')
       .eq('user_id',user.id)
       .eq('status','active')
       .order('created_at',{ascending:false});
     if(error)throw error;
+
     const now=Date.now();
+    const seen=new Set();
+    const fragment=document.createDocumentFragment();
     const rows=(data||[]).filter(row=>!row.ends_at||Date.parse(row.ends_at)>now);
-    if(!rows.length){
-      const empty=document.createElement('p');
-      empty.className='library-empty';empty.dataset.i18n='library_empty';empty.textContent=t('library_empty');
-      el.libraryList.append(empty);return;
-    }
+
     for(const row of rows){
+      if(seen.has(row.product_key))continue;
       const relation=Array.isArray(row.runlu_product_catalog)?row.runlu_product_catalog[0]:row.runlu_product_catalog;
       if(!relation||relation.status!=='active')continue;
+      seen.add(row.product_key);
       const item=document.createElement('div');item.className='library-item';
       const text=document.createElement('div');text.className='library-item-copy';
       const name=document.createElement('strong');name.textContent=relation.name||row.product_key;
@@ -78,11 +78,17 @@
       text.append(name,meta);item.append(text);
       const href=safeProductUrl(relation.access_url);
       if(href){const link=document.createElement('a');link.className='library-open';link.href=href;link.dataset.i18n='open_product';link.textContent=t('open_product');item.append(link)}
-      el.libraryList.append(item);
+      fragment.append(item);
     }
-    if(!el.libraryList.childElementCount){
-      const empty=document.createElement('p');empty.className='library-empty';empty.dataset.i18n='library_empty';empty.textContent=t('library_empty');el.libraryList.append(empty)
+
+    if(!fragment.childNodes.length){
+      const empty=document.createElement('p');
+      empty.className='library-empty';empty.dataset.i18n='library_empty';empty.textContent=t('library_empty');
+      fragment.append(empty);
     }
+
+    // Render atomically so overlapping auth/session callbacks can never append a second copy.
+    el.libraryList.replaceChildren(fragment);
   }
 
   async function renderSession(session){
