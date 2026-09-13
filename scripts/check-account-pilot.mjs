@@ -12,7 +12,7 @@ function requireToken(source, token, message) {
 requireToken(html, 'noindex,nofollow', 'Account pilot must remain noindex/nofollow until public launch.');
 requireToken(html, 'no-cache, no-store, must-revalidate', 'Account pilot cache hardening is missing.');
 requireToken(html, 'runlu-account.css?v=4', 'Account page is not loading the current CSS build.');
-requireToken(html, 'runlu-account.js?v=5', 'Account page is not loading the current JS build.');
+requireToken(html, 'runlu-account.js?v=6', 'Account page is not loading the current JS build.');
 requireToken(html, 'id="libraryList"', 'Account Library container is missing.');
 requireToken(css, '[hidden]{display:none!important}', 'Hidden auth/recovery fields can be exposed by CSS without the hidden override.');
 
@@ -27,6 +27,9 @@ requireToken(js, "account_status==='suspended'", 'Suspended-account guard is mis
 requireToken(js, "client.from('runlu_entitlements')", 'Account Library is not reading user entitlements.');
 requireToken(js, 'runlu_product_catalog', 'Account Library is not joining the product catalog.');
 requireToken(js, ".eq('user_id',user.id)", 'Account Library query is not scoped to the signed-in user.');
+requireToken(js, 'const seen=new Set()', 'Account Library product-key deduplication is missing.');
+requireToken(js, 'document.createDocumentFragment()', 'Account Library atomic rendering is missing.');
+requireToken(js, 'el.libraryList.replaceChildren(fragment)', 'Account Library must replace rendered contents atomically.');
 
 if (/\bre_[A-Za-z0-9_\-]{20,}\b/.test(html + js + css)) {
   throw new Error('A Resend-style secret appears to be embedded in public Account assets.');
@@ -36,4 +39,4 @@ if (/href=["'][^"']*account\.html/i.test(home)) {
   throw new Error('Account pilot is linked from the public home page before launch approval.');
 }
 
-console.log('RUNLU Account pilot contract passed: auth, recovery, entitlement Library, cache, privacy and private-pilot guards verified.');
+console.log('RUNLU Account pilot contract passed: auth, recovery, entitlement Library, deduped atomic rendering, cache, privacy and private-pilot guards verified.');
