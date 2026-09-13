@@ -2,6 +2,10 @@
   Cache-Control: no-cache, no-store, must-revalidate
 /localized-book-covers.js
   Cache-Control: no-cache, no-store, must-revalidate
+/frontiers.css
+  Cache-Control: no-cache, no-store, must-revalidate
+/view-019-closed-loop-intelligence.html
+  Cache-Control: no-cache, no-store, must-revalidate
 /book/lost-meridian/
   Cache-Control: no-cache, no-store, must-revalidate
 /book/lost-meridian/index.html
