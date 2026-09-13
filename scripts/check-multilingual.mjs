@@ -2,16 +2,22 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const root = process.cwd();
-// Product builds, diagnostics, and archived prototypes are applications rather
-// than editorial site pages. They own their localization and must not be made
-// to load the public website's language switcher.
+// Product builds, diagnostics, redirects, and archived prototypes are applications
+// rather than editorial site pages. They own their localization and must not be
+// made to load the public website's language switcher.
 const excludedPrefixes = ['flooring/'];
 const excluded = new Set([
   'health-view-006-humid-heat.html',
   'health-view-007-staree-statins.html',
   'health-view-008-after-weight-loss.html',
   'view-011-model-hardware-standard.html',
-  'view-012-ordinary-people-build-tools.html'
+  'view-012-ordinary-people-build-tools.html',
+  'control/index.html',
+  'engineering-reliability.html',
+  'field-calculator-v15.html',
+  'field-calculator.html',
+  'roll-length.html',
+  'runlu-ledger-privacy.html'
 ]);
 const pages = [];
 const languageScript = fs.readFileSync(path.join(root, 'runlu-language.js'), 'utf8');
