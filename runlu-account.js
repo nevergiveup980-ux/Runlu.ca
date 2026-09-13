@@ -15,20 +15,21 @@
   });
 
   const copy = {
-    en:{pilot:'Private pilot',title:'One quiet account for RUNLU.',lead:'Sign in once. Product access, purchases and your RUNLU library can be connected here over time.',pilot_note:'Pilot stage: authentication and the account-linked library foundation are active. Existing RUNLU products do not require an account yet.',sign_in:'Sign in',create_account:'Create account',display_name:'Display name',email:'Email',password:'Password',password_hint:'Use at least 8 characters.',forgot_password:'Forgot password?',reset_title:'Choose a new password',new_password:'New password',save_password:'Save new password',signed_in:'SIGNED IN',sign_out:'Sign out',preferred_language:'Preferred language',save_profile:'Save profile',library:'Library',library_note:'Products explicitly linked to this account appear here. Apple-managed purchases are not imported.',library_empty:'No RUNLU products are linked to this account yet.',open_product:'Open',orders:'Orders',orders_note:'Reserved for future RUNLU-direct purchases. Not connected yet.',subscriptions:'Subscriptions',subscriptions_note:'Reserved for future RUNLU services. Apple-managed purchases remain with Apple.',support_line:'Account help:',privacy_line:'Privacy:',signing_in:'Signing in…',creating:'Creating account…',check_email:'Account created. Check your email to confirm the address before signing in.',signed_in_ok:'Signed in.',signed_out_ok:'Signed out.',profile_saved:'Profile saved.',reset_sent:'If an account exists for that email, a password-reset message has been sent.',password_saved:'Password updated. You can continue using your account.',enter_email:'Enter your email address first.',generic_error:'Something went wrong. Please try again.',suspended:'This account is currently suspended. Contact support@runlu.ca.'},
-    zh:{pilot:'内部试运行',title:'一个安静统一的 RUNLU 账户。',lead:'一次登录，今后逐步连接产品权限、购买记录与 RUNLU 资料库。',pilot_note:'当前为试运行阶段：账户认证与账户资料库基础已经启用；现有 RUNLU 产品暂时都不强制登录。',sign_in:'登录',create_account:'创建账户',display_name:'显示名称',email:'邮箱',password:'密码',password_hint:'至少使用 8 个字符。',forgot_password:'忘记密码？',reset_title:'设置新密码',new_password:'新密码',save_password:'保存新密码',signed_in:'已登录',sign_out:'退出登录',preferred_language:'偏好语言',save_profile:'保存资料',library:'资料库',library_note:'明确关联到这个账户的 RUNLU 产品会显示在这里；Apple 管理的购买不会自动导入。',library_empty:'这个账户目前还没有关联任何 RUNLU 产品。',open_product:'打开',orders:'订单',orders_note:'将来用于 RUNLU 直接购买记录，目前尚未连接。',subscriptions:'订阅',subscriptions_note:'将来用于 RUNLU 服务订阅；由 Apple 管理的购买仍由 Apple 管理。',support_line:'账户帮助：',privacy_line:'隐私：',signing_in:'正在登录…',creating:'正在创建账户…',check_email:'账户已创建，请检查邮箱并确认邮箱地址后再登录。',signed_in_ok:'登录成功。',signed_out_ok:'已退出。',profile_saved:'资料已保存。',reset_sent:'如果该邮箱存在账户，密码重置邮件已经发送。',password_saved:'密码已更新，可以继续使用账户。',enter_email:'请先输入邮箱地址。',generic_error:'发生错误，请稍后再试。',suspended:'该账户目前已暂停，请联系 support@runlu.ca。'},
-    fr:{pilot:'Pilote privé',title:'Un compte discret pour RUNLU.',lead:'Connectez-vous une fois. L’accès aux produits, les achats et votre bibliothèque RUNLU pourront s’y relier progressivement.',pilot_note:'Phase pilote : l’authentification et la base de la bibliothèque liée au compte sont actives. Les produits RUNLU actuels n’exigent pas encore de compte.',sign_in:'Se connecter',create_account:'Créer un compte',display_name:'Nom affiché',email:'Courriel',password:'Mot de passe',password_hint:'Utilisez au moins 8 caractères.',forgot_password:'Mot de passe oublié ?',reset_title:'Choisir un nouveau mot de passe',new_password:'Nouveau mot de passe',save_password:'Enregistrer le mot de passe',signed_in:'CONNECTÉ',sign_out:'Se déconnecter',preferred_language:'Langue préférée',save_profile:'Enregistrer le profil',library:'Bibliothèque',library_note:'Les produits RUNLU explicitement liés à ce compte apparaissent ici. Les achats gérés par Apple ne sont pas importés.',library_empty:'Aucun produit RUNLU n’est encore lié à ce compte.',open_product:'Ouvrir',orders:'Commandes',orders_note:'Réservées aux futurs achats directs auprès de RUNLU. Pas encore connectées.',subscriptions:'Abonnements',subscriptions_note:'Réservés aux futurs services RUNLU. Les achats gérés par Apple restent chez Apple.',support_line:'Aide au compte :',privacy_line:'Confidentialité :',signing_in:'Connexion…',creating:'Création du compte…',check_email:'Compte créé. Consultez votre courriel pour confirmer votre adresse avant de vous connecter.',signed_in_ok:'Connexion réussie.',signed_out_ok:'Déconnecté.',profile_saved:'Profil enregistré.',reset_sent:'Si un compte existe pour cette adresse, un message de réinitialisation a été envoyé.',password_saved:'Mot de passe mis à jour.',enter_email:'Saisissez d’abord votre adresse courriel.',generic_error:'Une erreur est survenue. Veuillez réessayer.',suspended:'Ce compte est suspendu. Contactez support@runlu.ca.'},
-    es:{pilot:'Piloto privado',title:'Una cuenta tranquila para RUNLU.',lead:'Inicia sesión una vez. Con el tiempo, el acceso a productos, las compras y tu biblioteca RUNLU podrán conectarse aquí.',pilot_note:'Etapa piloto: la autenticación y la base de la biblioteca vinculada a la cuenta ya están activas. Los productos RUNLU actuales todavía no exigen una cuenta.',sign_in:'Iniciar sesión',create_account:'Crear cuenta',display_name:'Nombre visible',email:'Correo electrónico',password:'Contraseña',password_hint:'Usa al menos 8 caracteres.',forgot_password:'¿Olvidaste la contraseña?',reset_title:'Elige una nueva contraseña',new_password:'Nueva contraseña',save_password:'Guardar contraseña',signed_in:'SESIÓN INICIADA',sign_out:'Cerrar sesión',preferred_language:'Idioma preferido',save_profile:'Guardar perfil',library:'Biblioteca',library_note:'Los productos RUNLU vinculados explícitamente a esta cuenta aparecen aquí. Las compras gestionadas por Apple no se importan.',library_empty:'Todavía no hay productos RUNLU vinculados a esta cuenta.',open_product:'Abrir',orders:'Pedidos',orders_note:'Reservados para futuras compras directas a RUNLU. Aún no están conectados.',subscriptions:'Suscripciones',subscriptions_note:'Reservadas para futuros servicios RUNLU. Las compras gestionadas por Apple siguen con Apple.',support_line:'Ayuda de cuenta:',privacy_line:'Privacidad:',signing_in:'Iniciando sesión…',creating:'Creando cuenta…',check_email:'Cuenta creada. Revisa tu correo para confirmar la dirección antes de iniciar sesión.',signed_in_ok:'Sesión iniciada.',signed_out_ok:'Sesión cerrada.',profile_saved:'Perfil guardado.',reset_sent:'Si existe una cuenta para ese correo, se ha enviado un mensaje de restablecimiento.',password_saved:'Contraseña actualizada.',enter_email:'Introduce primero tu correo electrónico.',generic_error:'Algo salió mal. Inténtalo de nuevo.',suspended:'Esta cuenta está suspendida. Contacta con support@runlu.ca.'}
+    en:{pilot:'Private pilot',title:'One quiet account for RUNLU.',lead:'Sign in once. Product access, purchases and your RUNLU library can be connected here over time.',pilot_note:'Pilot stage: authentication, account-linked Library and Store preview are active. Existing RUNLU products do not require an account yet.',sign_in:'Sign in',create_account:'Create account',display_name:'Display name',email:'Email',password:'Password',password_hint:'Use at least 8 characters.',forgot_password:'Forgot password?',reset_title:'Choose a new password',new_password:'New password',save_password:'Save new password',signed_in:'SIGNED IN',sign_out:'Sign out',preferred_language:'Preferred language',save_profile:'Save profile',library:'Library',library_note:'Products explicitly linked to this account appear here. Apple-managed purchases are not imported.',library_empty:'No RUNLU products are linked to this account yet.',open_product:'Open',store:'Store preview',store_note:'No checkout is active in this pilot. Free plans can be opened; paid plans remain clearly marked until checkout is ready.',store_empty:'No RUNLU-direct offers are available yet.',planned:'Planned',available:'Available',checkout_not_enabled:'Checkout not enabled',orders:'Orders',orders_note:'Reserved for future RUNLU-direct purchases. Not connected yet.',subscriptions:'Subscriptions',subscriptions_note:'Reserved for future RUNLU services. Apple-managed purchases remain with Apple.',support_line:'Account help:',privacy_line:'Privacy:',signing_in:'Signing in…',creating:'Creating account…',check_email:'Account created. Check your email to confirm the address before signing in.',signed_in_ok:'Signed in.',signed_out_ok:'Signed out.',profile_saved:'Profile saved.',reset_sent:'If an account exists for that email, a password-reset message has been sent.',password_saved:'Password updated. You can continue using your account.',enter_email:'Enter your email address first.',generic_error:'Something went wrong. Please try again.',suspended:'This account is currently suspended. Contact support@runlu.ca.'},
+    zh:{pilot:'内部试运行',title:'一个安静统一的 RUNLU 账户。',lead:'一次登录，今后逐步连接产品权限、购买记录与 RUNLU 资料库。',pilot_note:'当前为试运行阶段：账户认证、账户资料库与商店预览已经启用；现有 RUNLU 产品暂时都不强制登录。',sign_in:'登录',create_account:'创建账户',display_name:'显示名称',email:'邮箱',password:'密码',password_hint:'至少使用 8 个字符。',forgot_password:'忘记密码？',reset_title:'设置新密码',new_password:'新密码',save_password:'保存新密码',signed_in:'已登录',sign_out:'退出登录',preferred_language:'偏好语言',save_profile:'保存资料',library:'资料库',library_note:'明确关联到这个账户的 RUNLU 产品会显示在这里；Apple 管理的购买不会自动导入。',library_empty:'这个账户目前还没有关联任何 RUNLU 产品。',open_product:'打开',store:'商店预览',store_note:'当前试运行不启用付款。免费方案可以打开；付费方案会一直明确标为计划中，直到结账系统真正就绪。',store_empty:'目前还没有 RUNLU 直售方案。',planned:'计划中',available:'可用',checkout_not_enabled:'尚未启用结账',orders:'订单',orders_note:'将来用于 RUNLU 直接购买记录，目前尚未连接。',subscriptions:'订阅',subscriptions_note:'将来用于 RUNLU 服务订阅；由 Apple 管理的购买仍由 Apple 管理。',support_line:'账户帮助：',privacy_line:'隐私：',signing_in:'正在登录…',creating:'正在创建账户…',check_email:'账户已创建，请检查邮箱并确认邮箱地址后再登录。',signed_in_ok:'登录成功。',signed_out_ok:'已退出。',profile_saved:'资料已保存。',reset_sent:'如果该邮箱存在账户，密码重置邮件已经发送。',password_saved:'密码已更新，可以继续使用账户。',enter_email:'请先输入邮箱地址。',generic_error:'发生错误，请稍后再试。',suspended:'该账户目前已暂停，请联系 support@runlu.ca。'},
+    fr:{pilot:'Pilote privé',title:'Un compte discret pour RUNLU.',lead:'Connectez-vous une fois. L’accès aux produits, les achats et votre bibliothèque RUNLU pourront s’y relier progressivement.',pilot_note:'Phase pilote : l’authentification, la bibliothèque liée au compte et l’aperçu de la boutique sont actifs. Les produits RUNLU actuels n’exigent pas encore de compte.',sign_in:'Se connecter',create_account:'Créer un compte',display_name:'Nom affiché',email:'Courriel',password:'Mot de passe',password_hint:'Utilisez au moins 8 caractères.',forgot_password:'Mot de passe oublié ?',reset_title:'Choisir un nouveau mot de passe',new_password:'Nouveau mot de passe',save_password:'Enregistrer le mot de passe',signed_in:'CONNECTÉ',sign_out:'Se déconnecter',preferred_language:'Langue préférée',save_profile:'Enregistrer le profil',library:'Bibliothèque',library_note:'Les produits RUNLU explicitement liés à ce compte apparaissent ici. Les achats gérés par Apple ne sont pas importés.',library_empty:'Aucun produit RUNLU n’est encore lié à ce compte.',open_product:'Ouvrir',store:'Aperçu boutique',store_note:'Aucun paiement n’est actif pendant ce pilote. Les offres gratuites peuvent être ouvertes ; les offres payantes restent clairement indiquées comme prévues.',store_empty:'Aucune offre directe RUNLU n’est disponible pour le moment.',planned:'Prévu',available:'Disponible',checkout_not_enabled:'Paiement non activé',orders:'Commandes',orders_note:'Réservées aux futurs achats directs auprès de RUNLU. Pas encore connectées.',subscriptions:'Abonnements',subscriptions_note:'Réservés aux futurs services RUNLU. Les achats gérés par Apple restent chez Apple.',support_line:'Aide au compte :',privacy_line:'Confidentialité :',signing_in:'Connexion…',creating:'Création du compte…',check_email:'Compte créé. Consultez votre courriel pour confirmer votre adresse avant de vous connecter.',signed_in_ok:'Connexion réussie.',signed_out_ok:'Déconnecté.',profile_saved:'Profil enregistré.',reset_sent:'Si un compte existe pour cette adresse, un message de réinitialisation a été envoyé.',password_saved:'Mot de passe mis à jour.',enter_email:'Saisissez d’abord votre adresse courriel.',generic_error:'Une erreur est survenue. Veuillez réessayer.',suspended:'Ce compte est suspendu. Contactez support@runlu.ca.'},
+    es:{pilot:'Piloto privado',title:'Una cuenta tranquila para RUNLU.',lead:'Inicia sesión una vez. Con el tiempo, el acceso a productos, las compras y tu biblioteca RUNLU podrán conectarse aquí.',pilot_note:'Etapa piloto: la autenticación, la biblioteca vinculada a la cuenta y la vista previa de la tienda ya están activas. Los productos RUNLU actuales todavía no exigen una cuenta.',sign_in:'Iniciar sesión',create_account:'Crear cuenta',display_name:'Nombre visible',email:'Correo electrónico',password:'Contraseña',password_hint:'Usa al menos 8 caracteres.',forgot_password:'¿Olvidaste la contraseña?',reset_title:'Elige una nueva contraseña',new_password:'Nueva contraseña',save_password:'Guardar contraseña',signed_in:'SESIÓN INICIADA',sign_out:'Cerrar sesión',preferred_language:'Idioma preferido',save_profile:'Guardar perfil',library:'Biblioteca',library_note:'Los productos RUNLU vinculados explícitamente a esta cuenta aparecen aquí. Las compras gestionadas por Apple no se importan.',library_empty:'Todavía no hay productos RUNLU vinculados a esta cuenta.',open_product:'Abrir',store:'Vista previa de tienda',store_note:'No hay pagos activos durante este piloto. Los planes gratuitos pueden abrirse; los planes de pago seguirán marcados claramente como previstos.',store_empty:'Todavía no hay ofertas directas de RUNLU disponibles.',planned:'Previsto',available:'Disponible',checkout_not_enabled:'Pago no habilitado',orders:'Pedidos',orders_note:'Reservados para futuras compras directas a RUNLU. Aún no están conectados.',subscriptions:'Suscripciones',subscriptions_note:'Reservadas para futuros servicios RUNLU. Las compras gestionadas por Apple siguen con Apple.',support_line:'Ayuda de cuenta:',privacy_line:'Privacidad:',signing_in:'Iniciando sesión…',creating:'Creando cuenta…',check_email:'Cuenta creada. Revisa tu correo para confirmar la dirección antes de iniciar sesión.',signed_in_ok:'Sesión iniciada.',signed_out_ok:'Sesión cerrada.',profile_saved:'Perfil guardado.',reset_sent:'Si existe una cuenta para ese correo, se ha enviado un mensaje de restablecimiento.',password_saved:'Contraseña actualizada.',enter_email:'Introduce primero tu correo electrónico.',generic_error:'Algo salió mal. Inténtalo de nuevo.',suspended:'Esta cuenta está suspendida. Contacta con support@runlu.ca.'}
   };
 
   const id = (x) => document.getElementById(x);
   const el = {
-    languageSelect:id('languageSelect'),signInTab:id('signInTab'),signUpTab:id('signUpTab'),authForm:id('authForm'),authSubmit:id('authSubmit'),forgotButton:id('forgotButton'),nameField:id('nameField'),displayName:id('displayName'),email:id('email'),password:id('password'),passwordHint:id('passwordHint'),authView:id('authView'),recoveryView:id('recoveryView'),recoveryForm:id('recoveryForm'),newPassword:id('newPassword'),accountView:id('accountView'),accountEmail:id('accountEmail'),signOutButton:id('signOutButton'),profileForm:id('profileForm'),profileName:id('profileName'),profileLocale:id('profileLocale'),libraryList:id('libraryList'),statusBox:id('statusBox')
+    languageSelect:id('languageSelect'),signInTab:id('signInTab'),signUpTab:id('signUpTab'),authForm:id('authForm'),authSubmit:id('authSubmit'),forgotButton:id('forgotButton'),nameField:id('nameField'),displayName:id('displayName'),email:id('email'),password:id('password'),passwordHint:id('passwordHint'),authView:id('authView'),recoveryView:id('recoveryView'),recoveryForm:id('recoveryForm'),newPassword:id('newPassword'),accountView:id('accountView'),accountEmail:id('accountEmail'),signOutButton:id('signOutButton'),profileForm:id('profileForm'),profileName:id('profileName'),profileLocale:id('profileLocale'),libraryList:id('libraryList'),storeList:id('storeList'),statusBox:id('statusBox')
   };
 
   let mode = 'signin';
   let recoveryMode = initialRecoveryHint;
   let lang = normalize(localStorage.getItem('runlu-account-language') || navigator.language);
+  let renderGeneration = 0;
 
   function normalize(v){v=String(v||'').toLowerCase();return v.startsWith('zh')?'zh':v.startsWith('fr')?'fr':v.startsWith('es')?'es':'en'}
   function t(k){return copy[lang]?.[k]||copy.en[k]||k}
@@ -39,10 +40,8 @@
   function setMode(v,{clear=true}={}){mode=v;if(clear)clearStatus();syncMode()}
   function busy(button,on,label){button.disabled=on;if(on){button.dataset.old=button.textContent;button.textContent=label}else{button.textContent=button.dataset.old||button.textContent;delete button.dataset.old;syncMode()}}
   function showRecovery(){el.authView.hidden=true;el.accountView.hidden=true;el.recoveryView.hidden=false}
-  function safeProductUrl(value){
-    if(!value)return null;
-    try{const url=new URL(value,window.location.origin);return url.protocol==='https:'?url.href:null}catch{return null}
-  }
+  function safeProductUrl(value){if(!value)return null;try{const url=new URL(value,window.location.origin);return url.protocol==='https:'?url.href:null}catch{return null}}
+  function emptyMessage(key,className){const p=document.createElement('p');p.className=className;p.dataset.i18n=key;p.textContent=t(key);return p}
 
   async function loadProfile(user){
     const {data,error}=await client.from('runlu_profiles').select('display_name,locale,account_tier,account_status,staff_role,created_at').eq('user_id',user.id).maybeSingle();
@@ -52,53 +51,75 @@
     el.profileLocale.value=data?.locale||lang;
   }
 
-  async function loadLibrary(user){
+  async function loadLibrary(generation){
     if(!el.libraryList)return;
-    const {data,error}=await client.from('runlu_entitlements')
-      .select('product_key,status,ends_at,created_at,runlu_product_catalog(name,kind,platform,access_url,status)')
-      .eq('user_id',user.id)
-      .eq('status','active')
-      .order('created_at',{ascending:false});
+    const {data,error}=await client.from('runlu_account_library_v1')
+      .select('product_key,name,kind,platform,access_url,lifecycle_status,commerce_status,starts_at,ends_at')
+      .order('starts_at',{ascending:false});
     if(error)throw error;
+    if(generation!==renderGeneration)return;
 
-    const now=Date.now();
     const seen=new Set();
     const fragment=document.createDocumentFragment();
-    const rows=(data||[]).filter(row=>!row.ends_at||Date.parse(row.ends_at)>now);
-
-    for(const row of rows){
+    for(const row of data||[]){
       if(seen.has(row.product_key))continue;
-      const relation=Array.isArray(row.runlu_product_catalog)?row.runlu_product_catalog[0]:row.runlu_product_catalog;
-      if(!relation||relation.status!=='active')continue;
       seen.add(row.product_key);
       const item=document.createElement('div');item.className='library-item';
       const text=document.createElement('div');text.className='library-item-copy';
-      const name=document.createElement('strong');name.textContent=relation.name||row.product_key;
-      const meta=document.createElement('span');meta.textContent=[relation.kind,relation.platform].filter(Boolean).join(' · ');
+      const name=document.createElement('strong');name.textContent=row.name||row.product_key;
+      const meta=document.createElement('span');meta.textContent=[row.kind,row.platform].filter(Boolean).join(' · ');
       text.append(name,meta);item.append(text);
-      const href=safeProductUrl(relation.access_url);
+      const href=safeProductUrl(row.access_url);
       if(href){const link=document.createElement('a');link.className='library-open';link.href=href;link.dataset.i18n='open_product';link.textContent=t('open_product');item.append(link)}
       fragment.append(item);
     }
-
-    if(!fragment.childNodes.length){
-      const empty=document.createElement('p');
-      empty.className='library-empty';empty.dataset.i18n='library_empty';empty.textContent=t('library_empty');
-      fragment.append(empty);
-    }
-
-    // Render atomically so overlapping auth/session callbacks can never append a second copy.
+    if(!fragment.childNodes.length)fragment.append(emptyMessage('library_empty','library-empty'));
     el.libraryList.replaceChildren(fragment);
   }
 
+  async function loadStore(generation){
+    if(!el.storeList)return;
+    const {data,error}=await client.from('runlu_store_offers_v1')
+      .select('product_key,product_name,kind,platform,access_url,commerce_status,plan_key,plan_name,plan_type,billing_period,price_cad,availability,public_label,sort_order,action_state')
+      .order('sort_order',{ascending:true});
+    if(error)throw error;
+    if(generation!==renderGeneration)return;
+
+    const seen=new Set();
+    const fragment=document.createDocumentFragment();
+    for(const row of data||[]){
+      if(seen.has(row.plan_key))continue;
+      seen.add(row.plan_key);
+      const item=document.createElement('div');item.className='store-item';
+      const text=document.createElement('div');text.className='store-item-copy';
+      const name=document.createElement('strong');name.textContent=row.plan_name||row.product_name||row.plan_key;
+      const meta=document.createElement('span');meta.textContent=row.public_label||'';
+      text.append(name,meta);item.append(text);
+
+      if(row.action_state==='available_free'){
+        const href=safeProductUrl(row.access_url);
+        if(href){const link=document.createElement('a');link.className='store-action available';link.href=href;link.dataset.i18n='open_product';link.textContent=t('open_product');item.append(link)}
+        else{const badge=document.createElement('span');badge.className='store-action available';badge.dataset.i18n='available';badge.textContent=t('available');item.append(badge)}
+      }else{
+        const badge=document.createElement('span');badge.className='store-action planned';
+        const key=row.action_state==='ready_for_checkout'?'checkout_not_enabled':'planned';
+        badge.dataset.i18n=key;badge.textContent=t(key);item.append(badge);
+      }
+      fragment.append(item);
+    }
+    if(!fragment.childNodes.length)fragment.append(emptyMessage('store_empty','library-empty'));
+    el.storeList.replaceChildren(fragment);
+  }
+
   async function renderSession(session){
+    const generation=++renderGeneration;
     const user=session?.user;
-    if(!user){el.authView.hidden=false;el.recoveryView.hidden=true;el.accountView.hidden=true;if(el.libraryList)el.libraryList.replaceChildren();return}
+    if(!user){el.authView.hidden=false;el.recoveryView.hidden=true;el.accountView.hidden=true;el.libraryList?.replaceChildren();el.storeList?.replaceChildren();return}
     if(recoveryMode){showRecovery();return}
     el.accountEmail.textContent=user.email||'—';
     el.authView.hidden=true;el.recoveryView.hidden=true;el.accountView.hidden=false;
     try{await loadProfile(user)}catch(e){showStatus(e?.message||t('generic_error'),true)}
-    try{await loadLibrary(user)}catch(e){showStatus(e?.message||t('generic_error'),true)}
+    try{await Promise.all([loadLibrary(generation),loadStore(generation)])}catch(e){showStatus(e?.message||t('generic_error'),true)}
   }
 
   el.signInTab.addEventListener('click',()=>setMode('signin'));
