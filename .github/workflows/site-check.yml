@@ -26,6 +26,7 @@ jobs:
         run: |
           node --check script.js
           node --check runlu-language.js
+          node --check runlu-account.js
           node --check forum.js
           node --check forum-live-ai.js
           node --check leave-a-note.js
@@ -40,8 +41,11 @@ jobs:
           node --check guanshi-vault.js
           node --check guanshi-consult.js
           node --check scripts/check-multilingual.mjs
+          node --check scripts/check-account-pilot.mjs
       - name: Enforce complete four-language pages
         run: node scripts/check-multilingual.mjs
+      - name: Check RUNLU Account pilot contract
+        run: node scripts/check-account-pilot.mjs
       - name: Test GUANSHI local reasoner
         run: node scripts/check-guanshi-local-reasoner.mjs
       - name: Check GUANSHI local knowledge wiring
