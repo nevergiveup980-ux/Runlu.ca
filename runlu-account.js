@@ -4,6 +4,10 @@
   const SUPABASE_URL = 'https://ekrnknlawekeoszzkamd.supabase.co';
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_Jr12gnQ7UrU6Wv9xz4L1aA_bcTZiGqn';
   const ACCOUNT_RETURN_URL = 'https://runlu.ca/account.html';
+  const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+  const queryParams = new URLSearchParams(window.location.search);
+  const initialRecoveryHint = hashParams.get('type') === 'recovery' || queryParams.get('type') === 'recovery' || queryParams.get('recovery') === '1';
+
   if (!window.supabase?.createClient) return;
 
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
@@ -18,29 +22,38 @@
   };
 
   const id = (x) => document.getElementById(x);
-  const el = {languageSelect:id('languageSelect'),signInTab:id('signInTab'),signUpTab:id('signUpTab'),authForm:id('authForm'),authSubmit:id('authSubmit'),forgotButton:id('forgotButton'),nameField:id('nameField'),displayName:id('displayName'),email:id('email'),password:id('password'),passwordHint:id('passwordHint'),authView:id('authView'),recoveryView:id('recoveryView'),recoveryForm:id('recoveryForm'),newPassword:id('newPassword'),accountView:id('accountView'),accountEmail:id('accountEmail'),signOutButton:id('signOutButton'),profileForm:id('profileForm'),profileName:id('profileName'),profileLocale:id('profileLocale'),statusBox:id('statusBox')};
+  const el = {
+    languageSelect:id('languageSelect'),signInTab:id('signInTab'),signUpTab:id('signUpTab'),authForm:id('authForm'),authSubmit:id('authSubmit'),forgotButton:id('forgotButton'),nameField:id('nameField'),displayName:id('displayName'),email:id('email'),password:id('password'),passwordHint:id('passwordHint'),authView:id('authView'),recoveryView:id('recoveryView'),recoveryForm:id('recoveryForm'),newPassword:id('newPassword'),accountView:id('accountView'),accountEmail:id('accountEmail'),signOutButton:id('signOutButton'),profileForm:id('profileForm'),profileName:id('profileName'),profileLocale:id('profileLocale'),statusBox:id('statusBox')
+  };
 
   let mode = 'signin';
+  let recoveryMode = initialRecoveryHint;
   let lang = normalize(localStorage.getItem('runlu-account-language') || navigator.language);
+
   function normalize(v){v=String(v||'').toLowerCase();return v.startsWith('zh')?'zh':v.startsWith('fr')?'fr':v.startsWith('es')?'es':'en'}
   function t(k){return copy[lang]?.[k]||copy.en[k]||k}
-  function applyLanguage(v){lang=normalize(v);localStorage.setItem('runlu-account-language',lang);document.documentElement.lang=lang==='zh'?'zh-Hans':lang;el.languageSelect.value=lang;document.querySelectorAll('[data-i18n]').forEach(n=>{const v=t(n.dataset.i18n);if(v)n.textContent=v});syncMode()}
+  function applyLanguage(v){lang=normalize(v);localStorage.setItem('runlu-account-language',lang);document.documentElement.lang=lang==='zh'?'zh-Hans':lang;el.languageSelect.value=lang;document.querySelectorAll('[data-i18n]').forEach(n=>{const value=t(n.dataset.i18n);if(value)n.textContent=value});syncMode()}
   function showStatus(msg,error=false){el.statusBox.textContent=msg;el.statusBox.classList.toggle('error',error);el.statusBox.hidden=false}
   function clearStatus(){el.statusBox.hidden=true;el.statusBox.textContent='';el.statusBox.classList.remove('error')}
   function syncMode(){const up=mode==='signup';el.signInTab.classList.toggle('active',!up);el.signUpTab.classList.toggle('active',up);el.nameField.hidden=!up;el.passwordHint.hidden=!up;el.password.autocomplete=up?'new-password':'current-password';el.authSubmit.textContent=up?t('create_account'):t('sign_in');el.forgotButton.hidden=up}
   function setMode(v,{clear=true}={}){mode=v;if(clear)clearStatus();syncMode()}
   function busy(button,on,label){button.disabled=on;if(on){button.dataset.old=button.textContent;button.textContent=label}else{button.textContent=button.dataset.old||button.textContent;delete button.dataset.old;syncMode()}}
+  function showRecovery(){el.authView.hidden=true;el.accountView.hidden=true;el.recoveryView.hidden=false}
 
   async function loadProfile(user){
     const {data,error}=await client.from('runlu_profiles').select('display_name,locale,account_tier,account_status,created_at').eq('user_id',user.id).maybeSingle();
     if(error)throw error;
     if(data?.account_status==='suspended'){await client.auth.signOut();throw new Error(t('suspended'))}
-    el.profileName.value=data?.display_name||'';el.profileLocale.value=data?.locale||lang;
+    el.profileName.value=data?.display_name||'';
+    el.profileLocale.value=data?.locale||lang;
   }
+
   async function renderSession(session){
     const user=session?.user;
     if(!user){el.authView.hidden=false;el.recoveryView.hidden=true;el.accountView.hidden=true;return}
-    el.accountEmail.textContent=user.email||'—';el.authView.hidden=true;el.recoveryView.hidden=true;el.accountView.hidden=false;
+    if(recoveryMode){showRecovery();return}
+    el.accountEmail.textContent=user.email||'—';
+    el.authView.hidden=true;el.recoveryView.hidden=true;el.accountView.hidden=false;
     try{await loadProfile(user)}catch(e){showStatus(e?.message||t('generic_error'),true)}
   }
 
@@ -66,7 +79,14 @@
   });
 
   el.recoveryForm.addEventListener('submit',async e=>{
-    e.preventDefault();clearStatus();try{const {error}=await client.auth.updateUser({password:el.newPassword.value});if(error)throw error;el.newPassword.value='';showStatus(t('password_saved'));const {data}=await client.auth.getSession();await renderSession(data.session)}catch(e2){showStatus(e2?.message||t('generic_error'),true)}
+    e.preventDefault();clearStatus();
+    try{
+      const {error}=await client.auth.updateUser({password:el.newPassword.value});if(error)throw error;
+      recoveryMode=false;el.newPassword.value='';
+      if(window.history?.replaceState)window.history.replaceState({},'',ACCOUNT_RETURN_URL);
+      showStatus(t('password_saved'));
+      const {data}=await client.auth.getSession();await renderSession(data.session)
+    }catch(e2){showStatus(e2?.message||t('generic_error'),true)}
   });
 
   el.profileForm.addEventListener('submit',async e=>{
@@ -74,15 +94,22 @@
   });
 
   el.signOutButton.addEventListener('click',async()=>{
-    clearStatus();el.signOutButton.disabled=true;try{const {error}=await client.auth.signOut();if(error)throw error;el.password.value='';await renderSession(null);showStatus(t('signed_out_ok'))}catch(e){showStatus(e?.message||t('generic_error'),true)}finally{el.signOutButton.disabled=false}
+    clearStatus();el.signOutButton.disabled=true;try{const {error}=await client.auth.signOut();if(error)throw error;recoveryMode=false;el.password.value='';await renderSession(null);showStatus(t('signed_out_ok'))}catch(e){showStatus(e?.message||t('generic_error'),true)}finally{el.signOutButton.disabled=false}
   });
 
   client.auth.onAuthStateChange((event,session)=>{
-    if(event==='PASSWORD_RECOVERY'){queueMicrotask(()=>{clearStatus();el.authView.hidden=true;el.accountView.hidden=true;el.recoveryView.hidden=false});return}
-    if(['SIGNED_IN','INITIAL_SESSION','USER_UPDATED'].includes(event)) setTimeout(()=>renderSession(session),0);
-    if(event==='SIGNED_OUT') setTimeout(()=>renderSession(null),0);
+    if(event==='PASSWORD_RECOVERY'){
+      recoveryMode=true;
+      queueMicrotask(()=>{clearStatus();showRecovery()});
+      return;
+    }
+    if(['SIGNED_IN','INITIAL_SESSION','USER_UPDATED'].includes(event))setTimeout(()=>renderSession(session),0);
+    if(event==='SIGNED_OUT')setTimeout(()=>renderSession(null),0);
   });
 
   applyLanguage(lang);
-  client.auth.getSession().then(({data,error})=>{if(error)showStatus(error.message,true);else renderSession(data.session)});
+  client.auth.getSession().then(({data,error})=>{
+    if(error)showStatus(error.message,true);
+    else renderSession(data.session)
+  });
 })();
