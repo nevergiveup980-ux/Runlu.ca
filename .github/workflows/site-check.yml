@@ -166,13 +166,13 @@ jobs:
                       raise SystemExit(f'Chapter {key} {lang}: contains Unicode replacement characters')
 
           index = (root / 'index.html').read_text(encoding='utf-8')
-          notes = Path('notes.html').read_text(encoding='utf-8')
+          books = Path('book/index.html').read_text(encoding='utf-8')
           if 'cover-apple.jpg' not in index:
               raise SystemExit('Evidence index is not using the Apple Books-aligned JPEG cover')
-          if '/evidence/cover-apple.jpg' not in notes:
-              raise SystemExit('Stories shelf is not using the Apple Books-aligned JPEG cover')
+          if 'href="../evidence/"' not in books:
+              raise SystemExit('RUNLU Books shelf is missing the Evidence title link')
 
-          print('Evidence chapters 01–10: four languages and JPEG cover references verified.')
+          print('Evidence chapters 01–10, JPEG cover and Books shelf link verified.')
           PY
       - name: Check sitemap and internal links
         run: |
