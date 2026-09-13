@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b0f14">
-<title>RUNLU Field Calculator · V1.15 Sales Copilot</title>
+<title>RUNLU Field Calculator · V1.16 Tile System</title>
 <link rel="stylesheet" href="field-calculator-v15.css?v=1.5">
 </head>
 <body>
 <div class="app">
-  <div class="top"><div class="brand"><small>RUNLU</small><h1>Field Calculator</h1></div><div class="ver">V1.15 · SALES COPILOT</div></div>
-  <div class="hero"><h2>Fast enough for the field.</h2><p>Eight flooring calculators. V1.15 adds a guided Flooring Sales Copilot that builds a material workflow, carries area forward and tracks required versus recommended checks.</p></div>
+  <div class="top"><div class="brand"><small>RUNLU</small><h1>Field Calculator</h1></div><div class="ver">V1.16 · TILE SYSTEM</div></div>
+  <div class="hero"><h2>Fast enough for the field.</h2><p>Nine flooring calculators. V1.16 adds mortar/thinset and grout Safe Order planning, tile handoffs and stronger Sales Copilot coverage.</p></div>
   <div id="engine" class="status"><b>🟡 CALC ENGINE STARTING…</b></div>
 
   <div class="tabs">
@@ -45,11 +45,19 @@
     <div id="carpetRollSource" class="note">Manual roll balance.</div>
     <details class="subdetails">
       <summary>ADVANCED CARPET RULES</summary>
-      <div class="row"><div class="field"><label>Pattern repeat (in)</label><input id="pattern" type="number" value="0" step="0.25"></div><div class="field"><label>Cut allowance / drop (in)</label><input id="allowance" type="number" value="3" step="0.25"></div></div>
+      <div class="row"><div class="field"><label>Pattern match</label><select id="patternMatch"><option value="none">Plain / random match</option><option value="set">Set / straight match</option><option value="drop">Drop / half-drop match</option></select></div><div class="field"><label>Length pattern repeat (in)</label><input id="pattern" type="number" value="0" min="0" step="0.25"></div></div>
+      <div class="row"><div class="field"><label>Trim allowance per end (in)</label><input id="allowance" type="number" value="3" min="0" step="0.25"></div><div class="field"><label>Edge trim per roll side (in)</label><input id="edgeTrim" type="number" value="0" min="0" step="0.125"></div></div>
+      <div class="row"><div class="field"><label>Pattern reserve / additional cut</label><select id="patternReserve"><option value="0">0 repeat</option><option value="0.5">0.5 repeat</option><option value="1" selected>1.0 repeat · conservative</option><option value="1.5">1.5 repeats</option></select></div><div class="field"><label>Installation method</label><select id="carpetInstall"><option value="stretch">Stretch-in · pad + tack strip</option><option value="glue">Direct glue / no tack estimate</option></select></div></div>
       <div class="field"><label>Pile / run direction constraint</label><select id="pileDir"><option value="any">Any / let calculator compare</option><option value="length">Must run along room length</option><option value="width">Must run along room width</option></select></div>
       <div class="field"><label>Layout preference</label><div class="chips" id="orient"><button type="button" class="active" onclick="setOrient('auto',this)">AUTO BEST</button><button type="button" onclick="setOrient('length',this)">RUN LENGTH</button><button type="button" onclick="setOrient('width',this)">RUN WIDTH</button></div></div>
       <div class="row"><label class="check"><input id="seams" type="checkbox" checked> Allow parallel seams when required</label><div class="field"><label>Minimum reusable remnant (ft)</label><input id="minRemnant" type="number" value="6" min="0" step="0.5"></div></div>
-      <div class="note">V1.5 uses full-length drops only and does not automatically introduce T-seams. Pattern repeat and pile direction are treated as hard planning rules.</div>
+      <div class="row"><div class="field"><label>Door/opening length without tack (ft)</label><input id="noTackOpening" type="number" value="0" min="0" step="0.25"></div><div class="field"><label>Tack strip extra (%)</label><input id="tackWaste" type="number" value="5" min="0" step="1"></div></div>
+      <div class="field"><label>Seam tape extra (%)</label><input id="seamWaste" type="number" value="5" min="0" step="1"></div>
+      <div class="note"><b>Planning model:</b> full-length parallel drops only; no automatic T-seams. The 3 in default is treated as trim at <b>each end</b> of a wall-to-wall cut. Patterned jobs use repeat rounding plus the selected reserve on each additional cut; exact drop-match sequencing and manufacturer tolerances still require installer/manufacturer confirmation.</div>
+    </details>
+    <details class="subdetails">
+      <summary>CARPET FIELD CHECKLIST</summary>
+      <div class="note">Plan seams before cutting. Prefer seams running the length of the area; keep main traffic parallel to seams when practical; avoid natural light striking across seams, pivot-traffic zones, and seams perpendicular to door openings. Adjacent broadloom pieces should keep the same pile direction. Patterned carpet may require additional material and field adjustment for bow, skew or elongation—manufacturer guidance controls.</div>
     </details>
   </section>
 
@@ -148,5 +156,6 @@
 <script src="field-calculator-v113.js?v=1.13"></script>
 <script src="field-calculator-v114.js?v=1.14"></script>
 <script src="field-calculator-v115.js?v=1.15"></script>
+<script src="field-calculator-v116.js?v=1.16"></script>
 </body>
 </html>
