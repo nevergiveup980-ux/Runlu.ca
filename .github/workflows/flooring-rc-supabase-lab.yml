@@ -1,0 +1,43 @@
+name: Flooring OS RC Fake Supabase LAB
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'flooring/carpet-rc-tracking-v092.js'
+      - 'scripts/run-flooring-rc-supabase-lab.mjs'
+      - '.github/workflows/flooring-rc-supabase-lab.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'flooring/carpet-rc-tracking-v092.js'
+      - 'scripts/run-flooring-rc-supabase-lab.mjs'
+      - '.github/workflows/flooring-rc-supabase-lab.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  rc-fake-supabase-lab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check actual RC module and LAB runner syntax
+        run: |
+          node --check flooring/carpet-rc-tracking-v092.js
+          node --check scripts/run-flooring-rc-supabase-lab.mjs
+      - name: Execute exact RC module against fake Supabase
+        env:
+          RUNLU_RC_LAB_CYCLES: '250'
+        run: node scripts/run-flooring-rc-supabase-lab.mjs
+      - name: Upload RC LAB evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flooring-rc-fake-supabase-lab-evidence
+          path: flooring-rc-supabase-lab-report.json
+          if-no-files-found: error
