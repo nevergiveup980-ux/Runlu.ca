@@ -1,0 +1,47 @@
+name: Flooring OS Engineering Simulator
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'flooring/engineering-simulator-v010.js'
+      - 'flooring/index-engineering-simulator-v010.html'
+      - 'scripts/run-flooring-engineering-simulator.mjs'
+      - '.github/workflows/flooring-engineering-simulator.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'flooring/engineering-simulator-v010.js'
+      - 'flooring/index-engineering-simulator-v010.html'
+      - 'scripts/run-flooring-engineering-simulator.mjs'
+      - '.github/workflows/flooring-engineering-simulator.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  engineering-simulator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check simulator syntax
+        run: |
+          node --check flooring/engineering-simulator-v010.js
+          node --check scripts/run-flooring-engineering-simulator.mjs
+      - name: Run isolated company workflow endurance simulation
+        env:
+          RUNLU_SIM_STRESS: '5000'
+          RUNLU_SIM_CHAOS: '1000'
+          RUNLU_SIM_SEED: '20260914'
+        run: node scripts/run-flooring-engineering-simulator.mjs
+      - name: Upload simulator evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flooring-engineering-simulator-evidence
+          path: flooring-engineering-simulator-report.json
+          if-no-files-found: error

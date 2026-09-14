@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#132f27">
+<title>RUNLU LAB · Flooring OS Engineering Simulator V0.1</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef2ef;color:#1e332b;font-family:Arial,Helvetica,sans-serif}.wrap{max-width:1180px;margin:auto;padding:18px}.hero{background:#173d30;color:#fff;border-radius:16px;padding:20px;box-shadow:0 6px 22px rgba(20,45,36,.13)}.hero h1{margin:0 0 6px;font-size:24px}.hero p{margin:5px 0;color:#dbe7e1;line-height:1.5}.danger{margin-top:14px;padding:11px 13px;border:1px solid #edc26d;background:#fff4d8;color:#694b00;border-radius:10px;font-weight:900}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}.card{background:#fff;border:1px solid #dbe4df;border-radius:13px;padding:14px;box-shadow:0 2px 8px rgba(20,45,36,.05)}.card h2,.card h3{margin:0 0 9px;color:#173d30}.wide{grid-column:1/-1}.stat b{font-size:25px;display:block}.stat span{font-size:11px;color:#66756e}.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:end}.controls label{display:flex;flex-direction:column;gap:4px;font-size:10px;font-weight:900;color:#607069}.controls input,.controls select{padding:9px 10px;border:1px solid #cad7d1;border-radius:8px;background:#fff;min-width:130px}.btn{border:1px solid #bccbc4;border-radius:9px;background:#fff;padding:9px 12px;font-weight:900;color:#244f3f;cursor:pointer}.btn.primary{background:#173d30;color:#fff;border-color:#173d30}.btn.warn{background:#7b5a11;color:#fff;border-color:#7b5a11}.btn:disabled{opacity:.45;cursor:not-allowed}.status{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:10px;font-weight:900;background:#edf3f0}.status.pass{background:#e2f4e9;color:#21573d}.status.fail{background:#fde7e3;color:#813c31}.status.run{background:#fff2d4;color:#735400}.report{margin-top:10px;white-space:pre-wrap;word-break:break-word;background:#142820;color:#dbe9e2;border-radius:10px;padding:12px;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;max-height:390px;overflow:auto}.checks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.check{padding:10px;border:1px solid #dce5e0;border-radius:9px;background:#f9fbfa;font-size:11px;line-height:1.4}.check b{display:block;color:#173d30;margin-bottom:3px}.muted{font-size:11px;color:#68776f;line-height:1.5}.foot{padding:16px 2px;color:#6b7872;font-size:10px;text-align:center}@media(max-width:860px){.grid{grid-template-columns:1fr 1fr}.checks{grid-template-columns:1fr}}@media(max-width:540px){.grid{grid-template-columns:1fr}.wrap{padding:10px}.hero h1{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <h1>RUNLU LAB · Flooring OS Engineering Simulator V0.1</h1>
+    <p>Scenario Runner · Data Integrity Audit · Stress / Chaos Testing · Replay Evidence</p>
+    <div class="danger">LAB / SIMULATION ONLY · NO PRODUCTION DATA · NO SUPABASE · NO LIVE FLOORING LOCALSTORAGE</div>
+  </section>
+
+  <div class="grid">
+    <div class="card stat"><b id="stMode">IDLE</b><span>Current Mode</span></div>
+    <div class="card stat"><b id="stOps">0</b><span>Operations / Attempts</span></div>
+    <div class="card stat"><b id="stReject">0</b><span>Unsafe Actions Safely Rejected</span></div>
+    <div class="card stat"><b id="stResult">—</b><span>Last Result</span></div>
+
+    <div class="card wide">
+      <h2>Test Console <span id="runState" class="status">READY</span></h2>
+      <div class="controls">
+        <label>Seed<input id="seed" inputmode="numeric" value="20260914"></label>
+        <label>Stress operations<select id="stress"><option>100</option><option>1000</option><option selected>5000</option><option>10000</option></select></label>
+        <label>Chaos attempts<select id="chaos"><option>100</option><option selected>1000</option><option>2500</option><option>5000</option></select></label>
+        <button class="btn primary" data-run="scenarios">Run Scenarios</button>
+        <button class="btn primary" data-run="stress">Run Stress</button>
+        <button class="btn warn" data-run="chaos">Run Chaos</button>
+        <button class="btn primary" data-run="all">Run Full Gate</button>
+        <button class="btn" id="replayBtn" disabled>Replay Last</button>
+        <button class="btn" id="exportBtn" disabled>Export JSON Evidence</button>
+      </div>
+      <p class="muted">Stress uses a deterministic seeded operation stream. Chaos deliberately attempts invalid/duplicate/destructive actions and passes only when they are rejected without corrupting state.</p>
+    </div>
+
+    <div class="card wide">
+      <h3>V0.1 Integrity Contracts</h3>
+      <div class="checks">
+        <div class="check"><b>Inventory conservation</b>Opening + receipts + returns − shipments must equal physical stock across every location. Transfers cannot change totals.</div>
+        <div class="check"><b>PO receipt safety</b>Partial/full receiving cannot over-receive. Duplicate receipt event keys cannot double-add inventory.</div>
+        <div class="check"><b>People TO Call routing</b>Received PO stays Received while Sales routes the Job to Pick Up, Active or keeps it in People TO Call.</div>
+        <div class="check"><b>Carpet roll ledger</b>Finance RC is explicit. Legacy alphanumeric RC is allowed. Every CUT consumes requested length + 3 inches.</div>
+        <div class="check"><b>Deletion / void boundaries</b>A received PO cannot be silently voided and a Job with received PO history cannot be destructively deleted.</div>
+        <div class="check"><b>Replayability</b>Seed and every attempted operation are captured so a failure can be reproduced step-for-step.</div>
+      </div>
+    </div>
+
+    <div class="card wide">
+      <h3>Engineering Evidence</h3>
+      <div id="summary" class="muted">No test has run yet.</div>
+      <div id="report" class="report">Waiting for first simulation…</div>
+    </div>
+  </div>
+  <div class="foot">RUNLU LAB · isolated synthetic engineering environment · V0.1</div>
+</div>
+<script src="engineering-simulator-v010.js?v=010"></script>
+<script>
+(function(){
+'use strict';
+const api=window.RUNLUFlooringEngineeringSimulatorV010,LAB_KEY='runlu_lab_flooring_simulator_v010_last_report';
+const by=id=>document.getElementById(id);let last=null,busy=false;
+function setBusy(v,label){busy=v;document.querySelectorAll('[data-run]').forEach(b=>b.disabled=v);by('runState').textContent=v?(label||'RUNNING'):'READY';by('runState').className='status '+(v?'run':'');if(v)by('stMode').textContent=label||'RUNNING'}
+function totalOps(r){if(!r)return 0;if(r.mode)return r.attemptedOperations||0;return (r.stress?.attemptedOperations||0)+(r.chaos?.attemptedOperations||0)+(r.scenarios?.tests||[]).reduce((a,x)=>a+(x.operations||0),0)}
+function safeRejects(r){if(!r)return 0;if(r.mode)return r.safeRejects||0;return (r.stress?.safeRejects||0)+(r.chaos?.safeRejects||0)+(r.scenarios?.tests||[]).reduce((a,x)=>a+(x.safeRejects||0),0)}
+function compact(r){if(!r)return{};if(r.mode)return{mode:r.mode,pass:r.pass,seed:r.seed,requestedOperations:r.requestedOperations,attemptedOperations:r.attemptedOperations,safeRejects:r.safeRejects,unexpectedRejects:r.unexpectedRejects,auditRuns:r.auditRuns,failure:r.failure,summary:r.summary};return{version:r.version,pass:r.pass,environment:r.environment,generatedAt:r.generatedAt,scenarios:{pass:r.scenarios.pass,passed:r.scenarios.passed,failed:r.scenarios.failed,tests:r.scenarios.tests},stress:compact(r.stress),chaos:compact(r.chaos),boundaries:r.boundaries}}
+function paint(r,label){last=r;try{localStorage.setItem(LAB_KEY,JSON.stringify(r))}catch(_){}const pass=!!r.pass;by('stMode').textContent=label||r.mode||'FULL';by('stOps').textContent=totalOps(r).toLocaleString();by('stReject').textContent=safeRejects(r).toLocaleString();by('stResult').textContent=pass?'PASS':'FAIL';by('runState').textContent=pass?'PASS':'FAIL';by('runState').className='status '+(pass?'pass':'fail');by('summary').innerHTML='<b>'+(pass?'PASS':'FAIL')+'</b> · '+totalOps(r).toLocaleString()+' attempts · '+safeRejects(r).toLocaleString()+' unsafe actions rejected safely · production data touched: <b>0</b>';by('report').textContent=JSON.stringify(compact(r),null,2);by('replayBtn').disabled=!(r.replay||r.stress?.replay||r.chaos?.replay);by('exportBtn').disabled=false}
+function run(kind){if(busy||!api)return;const seed=Number(by('seed').value)||20260914,stress=Number(by('stress').value)||5000,chaos=Number(by('chaos').value)||1000;setBusy(true,kind.toUpperCase());setTimeout(()=>{try{let r;if(kind==='scenarios')r=api.runScenarios();else if(kind==='stress')r=api.runStress(stress,seed);else if(kind==='chaos')r=api.runChaos(chaos,seed+1);else r=api.runAll({stress,chaos,seed});paint(r,kind.toUpperCase())}catch(e){paint({pass:false,mode:kind.toUpperCase(),attemptedOperations:0,safeRejects:0,failure:{error:e.message||String(e)}},kind.toUpperCase())}finally{busy=false;document.querySelectorAll('[data-run]').forEach(b=>b.disabled=false)}},30)}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-run]');if(b)run(b.dataset.run)});
+by('replayBtn').addEventListener('click',()=>{if(!last)return;const p=last.replay||last.stress?.replay||last.chaos?.replay;if(!p)return;setBusy(true,'REPLAY');setTimeout(()=>{try{paint(api.replay(p),'REPLAY')}finally{busy=false;document.querySelectorAll('[data-run]').forEach(b=>b.disabled=false)}},30)});
+by('exportBtn').addEventListener('click',()=>{if(!last)return;const blob=new Blob([JSON.stringify(last,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='runlu-flooring-engineering-simulator-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)});
+try{const old=JSON.parse(localStorage.getItem(LAB_KEY)||'null');if(old){last=old;by('replayBtn').disabled=!(old.replay||old.stress?.replay||old.chaos?.replay);by('exportBtn').disabled=false}}catch(_){}
+if(!api){by('runState').textContent='ENGINE MISSING';by('runState').className='status fail'}
+})();
+</script>
+</body>
+</html>
