@@ -1,10 +1,11 @@
-/* RUNLU Flooring OS · People TO Call Sales Review Routing V0.3.95
+/* RUNLU Flooring OS · People TO Call Sales Review Routing V0.3.95r1
    Company-simulation workflow:
    PO remains Received. Sales reviews the Job/Order in People TO Call and routes the Job only:
    - Order Complete -> Active
    - Pickup Needed -> Pick Up / Back Order work path
    - Keep in People TO Call -> no route change
-   Adds an audit trail and a Pickup review card without changing PO status. */
+   Adds an audit trail and a Pickup review card without changing PO status.
+   r1 hardening: reject unknown route commands and commit Job + People TO Call storage atomically with rollback. */
 (function(){
 'use strict';
 if(window.__runluPeopleToCallReviewV095)return;
@@ -18,6 +19,8 @@ const by=id=>document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const read=(k,f)=>{try{const v=JSON.parse(localStorage.getItem(k)||'null');return v==null?f:v}catch(_){return f}};
 const write=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){console.error('[People Call V095]',e);return false}};
+const raw=k=>{try{return localStorage.getItem(k)}catch(_){return null}};
+const restore=(k,v)=>{try{if(v==null)localStorage.removeItem(k);else localStorage.setItem(k,v);return true}catch(e){console.error('[People Call V095 rollback]',k,e);return false}};
 const now=()=>new Date().toISOString();
 const jobs=()=>{const v=read(JOB_STORE,[]);return Array.isArray(v)?v:[]};
 const pos=()=>{const v=read(PO_STORE,[]);return Array.isArray(v)?v:[]};
@@ -44,11 +47,25 @@ function saveJob(j){
   return true;
 }
 function saveQueue(xs){return write(CALL_STORE,xs)}
+function syncActiveObject(j){try{const a=typeof window.active==='function'?window.active():null;if(a&&a.id===j.id){Object.assign(a,j);if(typeof window.saveStore==='function')window.saveStore()}}catch(e){console.warn('[People Call V095] active sync',e)}}
+function commitReview(js,qs,j){
+  const beforeJobs=raw(JOB_STORE),beforeCalls=raw(CALL_STORE);
+  try{
+    localStorage.setItem(JOB_STORE,JSON.stringify(js));
+    localStorage.setItem(CALL_STORE,JSON.stringify(qs));
+  }catch(e){
+    const jobsBack=restore(JOB_STORE,beforeJobs),callsBack=restore(CALL_STORE,beforeCalls);
+    console.error('[People Call V095] review commit rolled back',e,{jobsBack,callsBack});
+    return false;
+  }
+  syncActiveObject(j);return true;
+}
 function noteFor(qid){return String(dataNode('r95-note',qid)?.value||'').trim()}
 function message(qid,text,err=false){const e=dataNode('r95-msg',qid);if(e){e.textContent=text||'';e.style.color=err?'#8b3a32':'#315f82'}}
 
 function route(qid,jid,dest){
-  const qs=queue(),q=qs.find(x=>x&&x.id===qid),js=jobs(),j=js.find(x=>x&&x.id===jid);if(!q||!j){message(qid,'Order or People TO Call record not found.',true);return}
+  if(!['active','pickup','keep'].includes(dest)){message(qid,'Unknown sales review route. Nothing was changed.',true);return false}
+  const qs=queue(),q=qs.find(x=>x&&x.id===qid),js=jobs(),j=js.find(x=>x&&x.id===jid);if(!q||!j){message(qid,'Order or People TO Call record not found.',true);return false}
   const at=now(),note=noteFor(qid),sourcePOs=Array.isArray(q.sourcePOs)?q.sourcePOs.slice():[];
   const decision=dest==='active'?'ORDER_COMPLETE':dest==='pickup'?'PICKUP_NEEDED':'KEEP_IN_PEOPLE_TO_CALL';
   const to=dest==='active'?'Active':dest==='pickup'?'Pick Up':'People TO Call';
@@ -62,9 +79,9 @@ function route(qid,jid,dest){
   }else{
     j.salesMaterialRoute='people';
   }
-  if(!saveQueue(qs)||!saveJob(j)){message(qid,'Could not save the sales review decision.',true);return}
+  if(!commitReview(js,qs,j)){message(qid,'Could not save the sales review decision. Previous state was restored.',true);return false}
   try{localStorage.setItem(ACTIVE_STORE,j.id)}catch(_){}
-  refreshAll();
+  refreshAll();return true;
 }
 
 function patchPeopleRows(){
@@ -120,6 +137,6 @@ function attachPeopleObserver(){
   let timer=0;const ob=new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(()=>{patchPeopleRows();renderPickupReview()},20)});ob.observe(list,{childList:true});window.__r95peopleObserver=ob;window.__r95peopleObserved=list;
 }
 function install(){ensureStyle();bind();setTimeout(refreshAll,100);setTimeout(refreshAll,700);setTimeout(refreshAll,1500);setTimeout(attachPeopleObserver,180)}
-window.RUNLUPeopleToCallReviewV095={version:'0.3.95',install,refresh:refreshAll,route,poStatusImmutable:true,jobRoutes:['People TO Call','Pick Up','Active']};
+window.RUNLUPeopleToCallReviewV095={version:'0.3.95r1',install,refresh:refreshAll,route,poStatusImmutable:true,atomicReviewCommit:true,jobRoutes:['People TO Call','Pick Up','Active']};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
