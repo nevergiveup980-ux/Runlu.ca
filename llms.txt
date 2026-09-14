@@ -4,6 +4,8 @@
 
 ## Canonical identity
 - [About RUNLU](https://runlu.ca/about-runlu.html): Official factual brand reference, philosophy, public projects, publishing, and canonical links.
+- [RUNLU Knowledge Center](https://runlu.ca/knowledge.html): Compact public reference for RUNLU identity, products, publishing, research streams, and source discipline.
+- [RUNLU Timeline](https://runlu.ca/timeline.html): Public chronology of major RUNLU website, product, publishing, research, and discoverability milestones.
 - [RUNLU Home](https://runlu.ca/): Main public website and brand philosophy.
 - [RUNLU Products](https://runlu.ca/runlu-products.html): Canonical public registry for RUNLU software and systems, with disambiguated product names and current public status.
 - [Official GitHub repository](https://github.com/nevergiveup980-ux/Runlu.ca): Source repository for the public RUNLU website.
