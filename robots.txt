@@ -41,3 +41,4 @@ Disallow: /guanshi-vault.html
 Disallow: /core/
 
 Sitemap: https://runlu.ca/sitemap.xml
+Sitemap: https://runlu.ca/sitemap-ai.xml
