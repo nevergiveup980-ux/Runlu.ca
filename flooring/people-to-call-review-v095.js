@@ -28,6 +28,7 @@ function linkedPOs(j,all=pos()){return all.filter(p=>(p&&p.jobId===j.id)||(p&&j.
 function activeQueueFor(j,qs=queue()){return qs.find(q=>q&&q.status!=='Done'&&(q.orderId===j.id||(!q.orderId&&q.orderNumber&&String(q.orderNumber)===String(j.jobNumber||''))))||null}
 function jobName(j){return norm(j?.customerName||j?.shipToName||'Unnamed Customer')}
 function capHistory(xs,item){const a=Array.isArray(xs)?xs.slice():[];a.push(item);return a.slice(-100)}
+function dataNode(name,value){return [...document.querySelectorAll(`[data-${name}]`)].find(x=>x.dataset[name.replace(/-([a-z])/g,(_,c)=>c.toUpperCase())]===String(value))||null}
 
 function ensureStyle(){
   if(by('r95style'))return;
@@ -43,8 +44,8 @@ function saveJob(j){
   return true;
 }
 function saveQueue(xs){return write(CALL_STORE,xs)}
-function noteFor(qid){return String(document.querySelector(`[data-r95-note="${CSS.escape(String(qid))}"]`)?.value||'').trim()}
-function message(qid,text,err=false){const e=document.querySelector(`[data-r95-msg="${CSS.escape(String(qid))}"]`);if(e){e.textContent=text||'';e.style.color=err?'#8b3a32':'#315f82'}}
+function noteFor(qid){return String(dataNode('r95-note',qid)?.value||'').trim()}
+function message(qid,text,err=false){const e=dataNode('r95-msg',qid);if(e){e.textContent=text||'';e.style.color=err?'#8b3a32':'#315f82'}}
 
 function route(qid,jid,dest){
   const qs=queue(),q=qs.find(x=>x&&x.id===qid),js=jobs(),j=js.find(x=>x&&x.id===jid);if(!q||!j){message(qid,'Order or People TO Call record not found.',true);return}
@@ -72,7 +73,8 @@ function patchPeopleRows(){
     const old=row.querySelector('[data-r66-activate]');if(!old)return;
     const qid=old.dataset.r66Activate,jid=old.dataset.r66Id;if(!qid||!jid)return;
     old.hidden=true;old.setAttribute('aria-hidden','true');
-    if(row.querySelector(`[data-r95-review="${CSS.escape(String(qid))}"]`))return;
+    const status=row.querySelector('[data-r66-call-status]');if(status){[...status.options].forEach(o=>{if(String(o.textContent||'').trim()==='Done')o.remove()})}
+    if(row.querySelector('[data-r95-review]'))return;
     const q=queue().find(x=>x&&x.id===qid)||{};
     const box=document.createElement('div');box.className='r95reviewBox';box.dataset.r95Review=qid;
     box.innerHTML=`<div class="r95reviewHead"><div><b>Sales Review</b><small>PO stays Received · route the Job/Order only.</small></div><span class="r95badge">PEOPLE TO CALL</span></div><div class="r95reviewControls"><input data-r95-note="${esc(qid)}" value="${esc(q.reviewNote||'')}" placeholder="Remaining / pickup note (optional)"><button type="button" class="action r95activeBtn" data-r95-route="active" data-r95-qid="${esc(qid)}" data-r95-jid="${esc(jid)}">Order Complete → Active</button><button type="button" class="action r95pickupBtn" data-r95-route="pickup" data-r95-qid="${esc(qid)}" data-r95-jid="${esc(jid)}">Pickup Needed → Pick Up</button><button type="button" class="action r95keepBtn" data-r95-route="keep" data-r95-qid="${esc(qid)}" data-r95-jid="${esc(jid)}">Keep in People TO Call</button></div><div class="r95msg" data-r95-msg="${esc(qid)}"></div>`;
@@ -101,7 +103,7 @@ function renderPickupReview(){
 function openOrder(id){try{if(typeof window.selectJob==='function')window.selectJob(id);else{localStorage.setItem(ACTIVE_STORE,id);if(typeof window.go==='function')window.go('jobs')}}catch(e){console.error(e)}}
 function refreshAll(){
   try{window.RUNLUOrdersDrawerV066?.refresh?.()}catch(e){console.warn(e)}
-  setTimeout(()=>{patchPeopleRows();renderPickupReview()},30);
+  setTimeout(()=>{patchPeopleRows();renderPickupReview();attachPeopleObserver()},30);
 }
 function bind(){
   if(document.documentElement.dataset.r95bound)return;document.documentElement.dataset.r95bound='1';
@@ -110,11 +112,14 @@ function bind(){
     const o=e.target.closest?.('[data-r95-open]');if(o){openOrder(o.dataset.r95Open);return}
   },true);
   window.addEventListener('storage',e=>{if([JOB_STORE,PO_STORE,CALL_STORE].includes(e.key))setTimeout(refreshAll,30)});
+  window.addEventListener('focus',()=>setTimeout(()=>{patchPeopleRows();renderPickupReview()},30));
 }
-function observe(){
-  if(window.__r95observer)return;let timer=0;const ob=new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(()=>{patchPeopleRows();renderPickupReview()},20)});ob.observe(document.body,{childList:true,subtree:true});window.__r95observer=ob;
+function attachPeopleObserver(){
+  const list=by('r66peopleList');if(!list){setTimeout(attachPeopleObserver,250);return}if(window.__r95peopleObserver&&window.__r95peopleObserved===list)return;
+  try{window.__r95peopleObserver?.disconnect?.()}catch(_){}
+  let timer=0;const ob=new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(()=>{patchPeopleRows();renderPickupReview()},20)});ob.observe(list,{childList:true});window.__r95peopleObserver=ob;window.__r95peopleObserved=list;
 }
-function install(){ensureStyle();bind();observe();setTimeout(refreshAll,100);setTimeout(refreshAll,700);setTimeout(refreshAll,1500)}
+function install(){ensureStyle();bind();setTimeout(refreshAll,100);setTimeout(refreshAll,700);setTimeout(refreshAll,1500);setTimeout(attachPeopleObserver,180)}
 window.RUNLUPeopleToCallReviewV095={version:'0.3.95',install,refresh:refreshAll,route,poStatusImmutable:true,jobRoutes:['People TO Call','Pick Up','Active']};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
