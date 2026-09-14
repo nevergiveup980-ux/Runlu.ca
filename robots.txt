@@ -1,4 +1,37 @@
+# RUNLU public crawl policy
+# Public pages are crawlable. Private operational areas remain excluded.
+
 User-agent: *
+Allow: /
+Disallow: /control-center.html
+Disallow: /apple-dashboard.html
+Disallow: /asset-ledger.html
+Disallow: /master-vault.html
+Disallow: /guanshi-vault.html
+Disallow: /core/
+
+# OpenAI search discovery
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /control-center.html
+Disallow: /apple-dashboard.html
+Disallow: /asset-ledger.html
+Disallow: /master-vault.html
+Disallow: /guanshi-vault.html
+Disallow: /core/
+
+# OpenAI model crawler; public material may be crawled while private areas stay excluded.
+User-agent: GPTBot
+Allow: /
+Disallow: /control-center.html
+Disallow: /apple-dashboard.html
+Disallow: /asset-ledger.html
+Disallow: /master-vault.html
+Disallow: /guanshi-vault.html
+Disallow: /core/
+
+# User-initiated ChatGPT retrieval
+User-agent: ChatGPT-User
 Allow: /
 Disallow: /control-center.html
 Disallow: /apple-dashboard.html
