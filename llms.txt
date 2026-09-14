@@ -5,6 +5,8 @@
 ## Canonical identity
 - [About RUNLU](https://runlu.ca/about-runlu.html): Official factual brand reference, philosophy, public projects, publishing, and canonical links.
 - [RUNLU Home](https://runlu.ca/): Main public website and brand philosophy.
+- [Official GitHub repository](https://github.com/nevergiveup980-ux/Runlu.ca): Source repository for the public RUNLU website.
+- The RUNLU described here is the studio at runlu.ca. It is unrelated to other businesses, products, people, landmarks, foods, or brands that may independently use “Runlu” or the Chinese characters “润庐”.
 
 ## Software and systems
 - [Warehouse OS](https://runlu.ca/warehouse.html): Active warehouse operating system shaped by real warehouse work.
