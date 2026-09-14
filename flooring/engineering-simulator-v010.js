@@ -78,7 +78,7 @@ const ops={
   returnStock(s,x){const q=Number(x.qty);must(q>0,'return qty positive');ensureSku(s,x.sku);s.stock[x.sku][x.location]=ROUND(stockQty(s,x.sku,x.location)+q);s.stockLedger[x.sku].returned=ROUND(s.stockLedger[x.sku].returned+q);record(s,'STOCK_RETURN',{sku:x.sku,qty:q,location:x.location,orderId:x.orderId||''})},
   registerRoll(s,x){const rc=String(x.rc||'').trim();must(rc,'Finance RC required');must(!s.rolls[rc],'duplicate Finance RC');must(Number(x.originalLength)>0,'roll length positive');s.rolls[rc]={rc,millRoll:String(x.millRoll||''),po:String(x.po||''),product:x.product||'SIM Carpet',colour:x.colour||'SIM',dyeLot:x.dyeLot||'',originalLength:Number(x.originalLength),currentLength:Number(x.originalLength),width:Number(x.width)||12,location:x.location||'RECV',status:'Active',cuts:[]};record(s,'ROLL_REGISTER',{rc});return rc},
   transferRoll(s,x){const r=roll(s,x.rc);must(x.to&&x.to!==r.location,'roll destination invalid');const before=r.currentLength;r.location=x.to;record(s,'ROLL_TRANSFER',{rc:r.rc,to:x.to});must(r.currentLength===before,'roll transfer changed length')},
-  cutRoll(s,x){const r=roll(s,x.rc),ft=Number(x.length),count=Math.max(1,Number(x.cutCount)||1),allowance=ROUND(CUT_ALLOWANCE_FT*count),impact=ROUND(ft+allowance);must(ft>0,'cut length positive');must(count===Math.floor(count),'cut count integer');must(r.currentLength>=impact,'cut exceeds roll');r.currentLength=ROUND(r.currentLength-impact);r.cuts.push({length:ft,cutCount:count,allowance,impact,orderId:x.orderId||''});if(r.currentLength<=0)r.status='Depleted';record(s,'ROLL_CUT',{rc:r.rc,length:ft,cutCount:count,allowance,impact,remaining:r.currentLength})},
+  cutRoll(s,x){const r=roll(s,x.rc),ft=Number(x.length),count=Number(x.cutCount??1),allowance=ROUND(CUT_ALLOWANCE_FT*count),impact=ROUND(ft+allowance);must(ft>0,'cut length positive');must(Number.isInteger(count)&&count>0,'cut count positive integer');must(r.currentLength>=impact,'cut exceeds roll');r.currentLength=ROUND(r.currentLength-impact);r.cuts.push({length:ft,cutCount:count,allowance,impact,orderId:x.orderId||''});if(r.currentLength<=0)r.status='Depleted';record(s,'ROLL_CUT',{rc:r.rc,length:ft,cutCount:count,allowance,impact,remaining:r.currentLength})},
   salesReview(s,x){const o=order(s,x.orderId),q=s.peopleToCall[o.id];must(q&&q.status==='Open','order not in People To Call');const d=String(x.decision||'').toLowerCase();must(['active','pickup','keep'].includes(d),'review decision invalid');const linked=linkedPOs(s,o.id),before=linked.map(p=>({id:p.id,status:p.status,received:p.received}));const h={decision:d,note:x.note||'',sourcePOs:q.sourcePOs.slice()};o.history.push(h);q.history.push(h);if(d==='active'){q.status='Done';o.route='Active';o.status='Ready'}else if(d==='pickup'){q.status='Done';o.route='Pick Up';o.status='Procurement';o.pickupNote=x.note||''}else{o.route='People To Call'}for(const b of before){const p=s.pos[b.id];must(p.status===b.status&&p.received===b.received,'sales review mutated PO')}record(s,'SALES_REVIEW',{orderId:o.id,decision:d,note:x.note||''});return o.route}
 };
 
@@ -98,6 +98,9 @@ function audit(s){
     if(p.received<0||p.received>p.ordered)finding('PO_RECEIPT_RANGE',p.id);
     const expected=p.voided?'Cancelled':p.received===p.ordered?'Received':p.received>0?'Partially Received':'Issued';if(p.status!==expected)finding('PO_STATUS_MISMATCH',p.id+' '+p.status+' vs '+expected);
     if(!s.orders[p.orderId])finding('ORPHAN_PO',p.id);
+    const receiptEvents=s.events.filter(e=>e.type==='PO_RECEIVE'&&e.poId===p.id),eventQty=ROUND(receiptEvents.reduce((a,e)=>a+Number(e.qty||0),0));
+    if(Math.abs(eventQty-p.received)>.0001)finding('PO_RECEIPT_LEDGER_MISMATCH',p.id+' events '+eventQty+' vs received '+p.received);
+    if(receiptEvents.length!==p.receiptKeys.length)finding('PO_RECEIPT_KEY_COUNT_MISMATCH',p.id);
     for(const key of p.receiptKeys)if(s.receiptKeys[key]!==p.id)finding('RECEIPT_KEY_MISMATCH',p.id+' '+key);
   }
   const seen=new Set();for(const[k,v]of Object.entries(s.receiptKeys)){if(seen.has(k))finding('DUPLICATE_RECEIPT_KEY',k);seen.add(k);if(!s.pos[v])finding('ORPHAN_RECEIPT_KEY',k)}
@@ -141,16 +144,19 @@ function runScenarios(){
 
 function stressBootstrap(s){for(let i=0;i<6;i++){const o=ops.createOrder(s,{id:'S-O'+i});ops.addLine(s,{orderId:o,sku:'LVP-ART',qty:2+i});const p=ops.createPO(s,{id:'S-PO'+i,orderId:o,sku:i%2?'PAD-HC':'LVP-ART',qty:5+i});ops.receivePO(s,{poId:p,qty:5+i,eventKey:'BOOT-'+i,location:i%2?'12B':'A1'})}ops.registerRoll(s,{rc:'SIM-RC-1',originalLength:250,millRoll:'SIM-M1',location:'3A'});audit(s)}
 function validRandomOp(s,r,i){
-  const orderIds=Object.keys(s.orders),poIds=Object.keys(s.pos),routes=orderIds.filter(id=>s.orders[id].route==='People To Call');const k=int(r,0,8);
-  if(k===0){const from=stockQty(s,'LVP-ART','A1')>1?'A1':'B1',to=from==='A1'?'B1':'A1',q=Math.max(0.1,Math.min(stockQty(s,'LVP-ART',from),int(r,1,3)));return{kind:'transferStock',sku:'LVP-ART',from,to,qty:q}}
-  if(k===1){const loc=stockQty(s,'LVP-ART','A1')>1?'A1':'B1';return{kind:'shipStock',sku:'LVP-ART',location:loc,qty:Math.min(stockQty(s,'LVP-ART',loc),1),orderId:pick(r,orderIds)}}
+  const orderIds=Object.keys(s.orders),poIds=Object.keys(s.pos),routes=orderIds.filter(id=>s.orders[id].route==='People To Call');const k=int(r,0,11);
+  if(k===0){const a=stockQty(s,'LVP-ART','A1'),b=stockQty(s,'LVP-ART','B1');if(Math.max(a,b)<=0)return{kind:'returnStock',sku:'LVP-ART',location:'A1',qty:1,orderId:pick(r,orderIds)};const from=a>=b?'A1':'B1',to=from==='A1'?'B1':'A1',q=Math.min(stockQty(s,'LVP-ART',from),int(r,1,3));return{kind:'transferStock',sku:'LVP-ART',from,to,qty:q}}
+  if(k===1){const a=stockQty(s,'LVP-ART','A1'),b=stockQty(s,'LVP-ART','B1');if(Math.max(a,b)<=0)return{kind:'returnStock',sku:'LVP-ART',location:'A1',qty:1,orderId:pick(r,orderIds)};const location=a>=b?'A1':'B1';return{kind:'shipStock',sku:'LVP-ART',location,qty:Math.min(stockQty(s,'LVP-ART',location),1),orderId:pick(r,orderIds)}}
   if(k===2)return{kind:'returnStock',sku:'LVP-ART',location:pick(r,['A1','B1']),qty:1,orderId:pick(r,orderIds)};
   if(k===3){const o=pick(r,orderIds);return{kind:'addLine',orderId:o,sku:pick(r,['LVP-ART','PAD-HC','GLUE-1']),qty:int(r,1,8),unit:'CTN'}}
-  if(k===4){const o=ops.createOrder(s,{id:'ST-O-'+i});return{kind:'addLine',orderId:o,sku:'LVP-ART',qty:int(r,1,5),unit:'CTN'}}
+  if(k===4)return{kind:'createOrder',id:'ST-O-'+i,customer:'Stress Customer '+i};
   if(k===5){const o=pick(r,orderIds),id='ST-PO-'+i;return{kind:'createPO',id,orderId:o,sku:pick(r,['LVP-ART','PAD-HC','GLUE-1']),qty:int(r,1,6)}}
   if(k===6&&routes.length)return{kind:'salesReview',orderId:pick(r,routes),decision:pick(r,['active','pickup','keep']),note:'stress '+i};
   if(k===7&&s.rolls['SIM-RC-1'].currentLength>2)return{kind:'cutRoll',rc:'SIM-RC-1',length:Math.min(1,s.rolls['SIM-RC-1'].currentLength-.25),cutCount:1,orderId:pick(r,orderIds)};
-  const p=pick(r,poIds),pp=s.pos[p],remain=ROUND(pp.ordered-pp.received);if(remain>0)return{kind:'receivePO',poId:p,qty:remain,eventKey:'ST-R-'+i,location:'RECV'};
+  if(k===8){const open=poIds.filter(id=>s.pos[id].received<s.pos[id].ordered&&!s.pos[id].voided);if(open.length){const p=pick(r,open),remain=ROUND(s.pos[p].ordered-s.pos[p].received);return{kind:'receivePO',poId:p,qty:remain,eventKey:'ST-R-'+i,location:'RECV'}}}
+  if(k===9){const candidates=orderIds.filter(id=>s.orders[id].items.length);if(candidates.length){const o=pick(r,candidates),l=pick(r,s.orders[o].items);return{kind:'editLine',orderId:o,lineId:l.id,qty:int(r,1,12),note:'stress edit '+i}}}
+  if(k===10){const candidates=orderIds.filter(id=>s.orders[id].items.length);if(candidates.length){const o=pick(r,candidates),l=pick(r,s.orders[o].items);return{kind:'deleteLine',orderId:o,lineId:l.id}}}
+  if(k===11){const candidates=orderIds.filter(id=>linkedPOs(s,id).length===0);if(candidates.length)return{kind:'deleteOrder',orderId:pick(r,candidates)}}
   return{kind:'transferRoll',rc:'SIM-RC-1',to:s.rolls['SIM-RC-1'].location==='3A'?'4A':'3A'};
 }
 function runStress(count=1000,seed=20260914){
@@ -162,15 +168,16 @@ function runStress(count=1000,seed=20260914){
   return report('STRESS',s,count,seed,failure);
 }
 function chaosOp(s,r,i){
-  const orderIds=Object.keys(s.orders),poIds=Object.keys(s.pos),rcs=Object.keys(s.rolls),kind=int(r,0,7);
+  const orderIds=Object.keys(s.orders),poIds=Object.keys(s.pos),rcs=Object.keys(s.rolls),kind=int(r,0,8);
   if(kind===0){const p=pick(r,poIds);return{kind:'receivePO',poId:p,qty:s.pos[p].ordered+99,eventKey:'BAD-OVER-'+i,location:'A1'}}
   if(kind===1)return{kind:'shipStock',sku:'PAD-HC',location:'12B',qty:9999};
   if(kind===2)return{kind:'transferStock',sku:'LVP-ART',from:'A1',to:'B1',qty:-5};
   if(kind===3){const rc=pick(r,rcs);return{kind:'registerRoll',rc,originalLength:100}}
   if(kind===4){const rc=pick(r,rcs);return{kind:'cutRoll',rc,length:s.rolls[rc].currentLength+20,cutCount:1}}
   if(kind===5){const o=pick(r,orderIds);if(s.orders[o].route==='People To Call')return{kind:'salesReview',orderId:o,decision:'bogus'};return{kind:'salesReview',orderId:o,decision:'active'}}
-  if(kind===6){const p=pick(r,poIds);if(s.pos[p].received===0){s.pos[p].received=s.pos[p].ordered;s.pos[p].status='Received'}return{kind:'voidPO',poId:p}}
-  const p=pick(r,poIds),key=s.pos[p].receiptKeys[0];if(key)return{kind:'receivePO',poId:p,qty:1,eventKey:key,location:'A1'};return{kind:'receivePO',poId:p,qty:0,eventKey:'BAD-Z-'+i,location:'A1'};
+  if(kind===6)return{kind:'voidPO',poId:pick(r,poIds)};
+  if(kind===7){const p=pick(r,poIds),key=s.pos[p].receiptKeys[0];if(key)return{kind:'receivePO',poId:p,qty:1,eventKey:key,location:'A1'};return{kind:'receivePO',poId:p,qty:0,eventKey:'BAD-Z-'+i,location:'A1'}}
+  return{kind:'deleteOrder',orderId:pick(r,orderIds)};
 }
 function runChaos(count=500,seed=20260915){
   const s=freshState(seed),r=rng(seed);stressBootstrap(s);let failure=null;
