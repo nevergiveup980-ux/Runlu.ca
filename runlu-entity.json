@@ -17,6 +17,17 @@
       "url": "https://runlu.ca/about-runlu.html"
     },
     {
+      "@type": "ProfilePage",
+      "name": "John Zhang · RUNLU",
+      "url": "https://runlu.ca/john-zhang.html",
+      "mainEntity": {
+        "@type": "Person",
+        "@id": "https://runlu.ca/john-zhang.html#person",
+        "name": "John Zhang",
+        "affiliation": {"@id": "https://runlu.ca/#organization"}
+      }
+    },
+    {
       "@type": "WebPage",
       "name": "RUNLU Products · Official Registry",
       "url": "https://runlu.ca/runlu-products.html"
