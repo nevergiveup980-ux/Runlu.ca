@@ -1,0 +1,48 @@
+name: Flooring OS Actual-System Adapter
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'flooring/people-to-call-review-v095.js'
+      - 'flooring/actual-system-adapter-v020.js'
+      - 'flooring/index-actual-system-adapter-v020.html'
+      - 'scripts/run-flooring-actual-system-adapter.mjs'
+      - '.github/workflows/flooring-actual-system-adapter.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'flooring/people-to-call-review-v095.js'
+      - 'flooring/actual-system-adapter-v020.js'
+      - 'flooring/index-actual-system-adapter-v020.html'
+      - 'scripts/run-flooring-actual-system-adapter.mjs'
+      - '.github/workflows/flooring-actual-system-adapter.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  actual-module-adapter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check adapter and actual module syntax
+        run: |
+          node --check flooring/people-to-call-review-v095.js
+          node --check flooring/actual-system-adapter-v020.js
+          node --check scripts/run-flooring-actual-system-adapter.mjs
+      - name: Execute exact actual module inside isolated VM
+        env:
+          RUNLU_ACTUAL_CYCLES: '3000'
+        run: node scripts/run-flooring-actual-system-adapter.mjs
+      - name: Upload actual-module evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flooring-actual-system-adapter-evidence
+          path: flooring-actual-system-adapter-report.json
+          if-no-files-found: error
