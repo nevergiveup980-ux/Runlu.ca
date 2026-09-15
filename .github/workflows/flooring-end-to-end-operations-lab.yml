@@ -1,0 +1,55 @@
+name: Flooring OS End-to-End Operations LAB
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/run-flooring-end-to-end-operations-lab.mjs'
+      - 'scripts/run-flooring-actual-system-adapter.mjs'
+      - 'flooring/people-to-call-review-v095.js'
+      - '.github/workflows/flooring-end-to-end-operations-lab.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/run-flooring-end-to-end-operations-lab.mjs'
+      - 'scripts/run-flooring-actual-system-adapter.mjs'
+      - 'flooring/people-to-call-review-v095.js'
+      - '.github/workflows/flooring-end-to-end-operations-lab.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  end-to-end-operations-lab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check LAB and exact sales-review adapter syntax
+        run: |
+          node --check scripts/run-flooring-end-to-end-operations-lab.mjs
+          node --check scripts/run-flooring-actual-system-adapter.mjs
+          node --check flooring/people-to-call-review-v095.js
+      - name: Re-run exact People To Call production module in isolated VM
+        env:
+          RUNLU_ACTUAL_CYCLES: '1500'
+        run: node scripts/run-flooring-actual-system-adapter.mjs
+      - name: Execute broad synthetic end-to-end workflow stress and chaos
+        env:
+          RUNLU_E2E_WORKFLOWS: '500'
+          RUNLU_E2E_CHAOS: '2000'
+        run: node scripts/run-flooring-end-to-end-operations-lab.mjs
+      - name: Upload end-to-end operations evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flooring-end-to-end-operations-lab-evidence
+          path: |
+            flooring-end-to-end-operations-lab-report.json
+            flooring-actual-system-adapter-report.json
+          if-no-files-found: error
+          retention-days: 30
