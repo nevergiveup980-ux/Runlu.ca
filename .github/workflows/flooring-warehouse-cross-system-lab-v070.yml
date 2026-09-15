@@ -1,0 +1,66 @@
+name: Flooring Warehouse Cross-System LAB V0.7
+
+on:
+  pull_request:
+    paths:
+      - 'flooring/warehouse-work-sync-v090.js'
+      - 'flooring/orders-drawer-v066.js'
+      - 'flooring/people-to-call-review-v095.js'
+      - 'scripts/run-flooring-warehouse-cross-system-lab-v070.mjs'
+      - '.github/workflows/flooring-warehouse-cross-system-lab-v070.yml'
+  push:
+    branches: [ main ]
+    paths:
+      - 'flooring/warehouse-work-sync-v090.js'
+      - 'flooring/orders-drawer-v066.js'
+      - 'flooring/people-to-call-review-v095.js'
+      - 'scripts/run-flooring-warehouse-cross-system-lab-v070.mjs'
+      - '.github/workflows/flooring-warehouse-cross-system-lab-v070.yml'
+  workflow_dispatch:
+
+jobs:
+  cross-system-lab:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout Flooring / RUNLU
+        uses: actions/checkout@v4
+
+      - name: Checkout pinned Warehouse OS authority
+        uses: actions/checkout@v4
+        with:
+          repository: nevergiveup980-ux/warehouse-ai
+          ref: de78a6b08abef7f36c963a8cd8d08828cc908e4c
+          path: _lab_warehouse_ai
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify pinned Warehouse revision
+        run: |
+          test "$(git -C _lab_warehouse_ai rev-parse HEAD)" = "de78a6b08abef7f36c963a8cd8d08828cc908e4c"
+          node -e "const v=require('./_lab_warehouse_ai/version.json'); console.log('Warehouse runtime', v.version, 'Build'+v.build)"
+
+      - name: JavaScript syntax
+        run: |
+          node --check scripts/run-flooring-warehouse-cross-system-lab-v070.mjs
+          node --check flooring/warehouse-work-sync-v090.js
+          node --check flooring/orders-drawer-v066.js
+          node --check flooring/people-to-call-review-v095.js
+          node --check _lab_warehouse_ai/build094-supplier-pickup.js
+          node --check _lab_warehouse_ai/build129-general-internal-transfer-conservation.js
+
+      - name: Run isolated cross-system engineering machine
+        env:
+          RUNLU_CROSS_CYCLES: 1000
+        run: node scripts/run-flooring-warehouse-cross-system-lab-v070.mjs
+
+      - name: Upload cross-system evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: flooring-warehouse-cross-system-v070-evidence
+          path: flooring-warehouse-cross-system-v070-report.json
+          if-no-files-found: error
+          retention-days: 30
