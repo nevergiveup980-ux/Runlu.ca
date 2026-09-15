@@ -17,6 +17,8 @@ const excluded = new Set([
   'engineering-reliability.html',
   'field-calculator-v15.html',
   'field-calculator.html',
+  'field-calculator-support.html',
+  'field-calculator-privacy.html',
   'roll-length.html',
   'runlu-ledger-privacy.html',
   'warehouse-privacy.html'
