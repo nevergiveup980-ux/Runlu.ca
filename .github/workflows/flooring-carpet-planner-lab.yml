@@ -1,0 +1,41 @@
+name: Flooring OS Carpet Planner LAB
+
+on:
+  pull_request:
+    paths:
+      - 'flooring/carpet-line-rc-v093.js'
+      - 'scripts/run-flooring-carpet-planner-lab.mjs'
+      - '.github/workflows/flooring-carpet-planner-lab.yml'
+  workflow_dispatch:
+
+jobs:
+  carpet-planner-lab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Run actions/checkout@v4
+        uses: actions/checkout@v4
+
+      - name: Run actions/setup-node@v4
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check actual planner module and LAB runner syntax
+        run: |
+          node --check flooring/carpet-line-rc-v093.js
+          node --check scripts/run-flooring-carpet-planner-lab.mjs
+
+      - name: Execute exact V093 planner in isolated LAB
+        env:
+          RUNLU_PLANNER_CYCLES: '3000'
+        run: node scripts/run-flooring-carpet-planner-lab.mjs
+
+      - name: Upload planner LAB evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flooring-carpet-planner-lab-evidence
+          path: flooring-carpet-planner-lab-report.json
+          if-no-files-found: error
+          retention-days: 30
