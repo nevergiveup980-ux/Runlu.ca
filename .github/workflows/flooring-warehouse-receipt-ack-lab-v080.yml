@@ -41,10 +41,10 @@ jobs:
         run: |
           test "$(git -C _lab_warehouse_ai rev-parse HEAD)" = "de78a6b08abef7f36c963a8cd8d08828cc908e4c"
           cat _lab_warehouse_ai/version.json
-      - name: JavaScript syntax
-        run: |
-          node --check flooring/warehouse-receipt-ack-v098.js
-          node --check scripts/run-flooring-warehouse-receipt-ack-lab-v080.mjs
+      - name: Check receipt acknowledgement candidate syntax
+        run: node --check flooring/warehouse-receipt-ack-v098.js
+      - name: Check V0.8 LAB harness syntax
+        run: node --check scripts/run-flooring-warehouse-receipt-ack-lab-v080.mjs
       - name: Re-run V0.7 cross-system prerequisite
         env:
           RUNLU_CROSS_CYCLES: 500
