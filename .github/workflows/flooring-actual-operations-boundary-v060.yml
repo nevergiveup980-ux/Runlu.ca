@@ -1,0 +1,64 @@
+name: Flooring OS Actual Operations Boundary V0.6
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'flooring/warehouse-work-sync-v090.js'
+      - 'flooring/material-work-sync-v091.js'
+      - 'flooring/people-to-call-review-v095.js'
+      - 'scripts/run-flooring-actual-operations-boundary-v060.mjs'
+      - 'scripts/run-flooring-actual-system-adapter.mjs'
+      - '.github/workflows/flooring-actual-operations-boundary-v060.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'flooring/warehouse-work-sync-v090.js'
+      - 'flooring/material-work-sync-v091.js'
+      - 'flooring/people-to-call-review-v095.js'
+      - 'scripts/run-flooring-actual-operations-boundary-v060.mjs'
+      - 'scripts/run-flooring-actual-system-adapter.mjs'
+      - '.github/workflows/flooring-actual-operations-boundary-v060.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  actual-operations-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check exact modules and adapters
+        run: |
+          node --check flooring/warehouse-work-sync-v090.js
+          node --check flooring/material-work-sync-v091.js
+          node --check flooring/people-to-call-review-v095.js
+          node --check scripts/run-flooring-actual-system-adapter.mjs
+          node --check scripts/run-flooring-actual-operations-boundary-v060.mjs
+
+      - name: Re-run exact People To Call production module
+        env:
+          RUNLU_ACTUAL_CYCLES: '1000'
+        run: node scripts/run-flooring-actual-system-adapter.mjs
+
+      - name: Execute exact V090 and V091 with fake Supabase transport
+        env:
+          RUNLU_BOUNDARY_CYCLES: '500'
+        run: node scripts/run-flooring-actual-operations-boundary-v060.mjs
+
+      - name: Upload V0.6 boundary evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flooring-actual-operations-boundary-v060-evidence
+          path: |
+            flooring-actual-system-adapter-report.json
+            flooring-actual-operations-boundary-v060-report.json
+          if-no-files-found: error
+          retention-days: 30
