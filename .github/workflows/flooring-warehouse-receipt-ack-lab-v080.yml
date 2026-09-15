@@ -1,0 +1,64 @@
+name: Flooring Warehouse Receipt Ack LAB V0.8
+
+on:
+  pull_request:
+    paths:
+      - 'flooring/warehouse-receipt-ack-v098.js'
+      - 'flooring/orders-drawer-v066.js'
+      - 'flooring/people-to-call-review-v095.js'
+      - 'flooring/warehouse-work-sync-v090.js'
+      - 'scripts/run-flooring-warehouse-cross-system-lab-v070.mjs'
+      - 'scripts/run-flooring-warehouse-receipt-ack-lab-v080.mjs'
+      - '.github/workflows/flooring-warehouse-receipt-ack-lab-v080.yml'
+  push:
+    branches: [ main ]
+    paths:
+      - 'flooring/warehouse-receipt-ack-v098.js'
+      - 'flooring/orders-drawer-v066.js'
+      - 'flooring/people-to-call-review-v095.js'
+      - 'flooring/warehouse-work-sync-v090.js'
+      - 'scripts/run-flooring-warehouse-cross-system-lab-v070.mjs'
+      - 'scripts/run-flooring-warehouse-receipt-ack-lab-v080.mjs'
+      - '.github/workflows/flooring-warehouse-receipt-ack-lab-v080.yml'
+
+jobs:
+  verified-receipt-ack:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout Flooring / RUNLU
+        uses: actions/checkout@v4
+      - name: Checkout pinned Warehouse OS authority
+        uses: actions/checkout@v4
+        with:
+          repository: nevergiveup980-ux/warehouse-ai
+          ref: de78a6b08abef7f36c963a8cd8d08828cc908e4c
+          path: _lab_warehouse_ai
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify pinned Warehouse revision
+        run: |
+          test "$(git -C _lab_warehouse_ai rev-parse HEAD)" = "de78a6b08abef7f36c963a8cd8d08828cc908e4c"
+          cat _lab_warehouse_ai/version.json
+      - name: JavaScript syntax
+        run: |
+          node --check flooring/warehouse-receipt-ack-v098.js
+          node --check scripts/run-flooring-warehouse-receipt-ack-lab-v080.mjs
+      - name: Re-run V0.7 cross-system prerequisite
+        env:
+          RUNLU_CROSS_CYCLES: 500
+        run: node scripts/run-flooring-warehouse-cross-system-lab-v070.mjs
+      - name: Run verified receipt acknowledgement engineering machine
+        env:
+          RUNLU_RECEIPT_ACK_CYCLES: 1000
+        run: node scripts/run-flooring-warehouse-receipt-ack-lab-v080.mjs
+      - name: Upload V0.8 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: flooring-warehouse-receipt-ack-v080-evidence
+          path: |
+            flooring-warehouse-cross-system-v070-report.json
+            flooring-warehouse-receipt-ack-v080-report.json
+          if-no-files-found: error
+          retention-days: 30
