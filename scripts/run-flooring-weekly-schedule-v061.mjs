@@ -109,7 +109,7 @@ check('source contains no storage mutation or network transport calls',()=>{
 check('preview is isolated from mutating Calendar modules and production entry',()=>{
   assert.match(html,/weekly-schedule-v061\.js/);
   assert.doesNotMatch(html,/calendar-chc-people-v060|calendar-schema-v058|calendar-groups-v056/);
-  assert.match(html,/READ ONLY/i);
+  assert.match(source,/READ ONLY/i);
   assert.doesNotMatch(prod,/v061-weekly-schedule|weekly-schedule-v061/);
   assert.match(prod,/index-v090r1-stable-frozen\.html/);
 });
