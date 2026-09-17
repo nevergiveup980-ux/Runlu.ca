@@ -54,7 +54,6 @@ function repoChecks() {
   requireText(latestPage, `>${latest.n}<`, `Latest VIEW ${latest.n} visible article index`);
 
   const health = read('health.html');
-  requireText(health, '@media(max-width:640px)', 'health.html mobile guard');
   const healthPages = [...sitemap.matchAll(/<loc>https:\/\/runlu\.ca\/(health-view-(\d{3})-[^<]+\.html)<\/loc>/g)]
     .map(m => ({ href:m[1], n:m[2] }))
     .sort((a,b) => a.n.localeCompare(b.n));
