@@ -74,6 +74,13 @@ The map is not a recommendation engine and is not intended to manufacture intern
 
 No public-facing related-reading interface was added in this step. The network begins as auditable internal structure first; reader-facing navigation should be introduced only when the relationships are useful enough to improve discovery rather than decorate the site.
 
+### 2026-09-17 — Retrospective signal and operational state awareness
+RUNLU added two small reporting layers rather than another public dashboard. `scripts/report-decision-memory.mjs` summarizes descriptive decision patterns such as publish/hold choices, incidents, corrections, and open evidence-triggered revisit conditions. `scripts/report-runlu-state.mjs` then derives a compact current-state snapshot from the actual VIEW catalog, HEALTH landing navigation, Decision Log, and Knowledge Map.
+
+The state snapshot reports the newest numbered editorial entries, institutional-memory size, open revisit conditions, and knowledge-network scope. These counts are explicitly not performance scores. In particular, publication volume is not treated as improvement and incomplete knowledge-map coverage is allowed when additional relationships would be editorially artificial.
+
+The Memory Integrity workflow now runs these reports as part of its weekly review. This adds a limited form of operational self-observation: RUNLU can describe what state it is in without requiring a separately hand-maintained dashboard to tell it.
+
 ## Next operational milestones
 
 These are directions, not promises or artificial deadlines.
