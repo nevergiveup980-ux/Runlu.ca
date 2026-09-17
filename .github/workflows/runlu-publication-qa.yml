@@ -1,0 +1,54 @@
+name: RUNLU Publication QA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'view-*.html'
+      - 'health-view-*.html'
+      - 'frontiers.html'
+      - 'health.html'
+      - 'view-catalog.js'
+      - 'sitemap.xml'
+      - 'scripts/check-publication-closure.mjs'
+      - '.github/workflows/runlu-publication-qa.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'view-*.html'
+      - 'health-view-*.html'
+      - 'frontiers.html'
+      - 'health.html'
+      - 'view-catalog.js'
+      - 'sitemap.xml'
+      - 'scripts/check-publication-closure.mjs'
+  schedule:
+    - cron: '17 18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  repository-closure:
+    name: Repository publication closure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check editorial publication closure
+        run: node scripts/check-publication-closure.mjs
+
+  public-closure:
+    name: Public CDN publication closure
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check repository and live public site
+        run: node scripts/check-publication-closure.mjs --live
