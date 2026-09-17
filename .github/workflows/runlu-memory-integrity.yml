@@ -10,6 +10,7 @@ on:
       - 'RUNLU_KNOWLEDGE_MAP.json'
       - 'scripts/check-decision-log.mjs'
       - 'scripts/check-knowledge-map.mjs'
+      - 'scripts/report-decision-memory.mjs'
       - '.github/workflows/runlu-memory-integrity.yml'
   pull_request:
     branches: [main]
@@ -20,7 +21,10 @@ on:
       - 'RUNLU_KNOWLEDGE_MAP.json'
       - 'scripts/check-decision-log.mjs'
       - 'scripts/check-knowledge-map.mjs'
+      - 'scripts/report-decision-memory.mjs'
       - '.github/workflows/runlu-memory-integrity.yml'
+  schedule:
+    - cron: '0 15 * * 0'
   workflow_dispatch:
 
 permissions:
@@ -39,6 +43,8 @@ jobs:
         run: node scripts/check-decision-log.mjs
       - name: Validate knowledge map
         run: node scripts/check-knowledge-map.mjs
+      - name: Report decision-memory retrospective signal
+        run: node scripts/report-decision-memory.mjs
       - name: Confirm governance records exist
         run: |
           test -s RUNLU_OPERATING_CHARTER.md
