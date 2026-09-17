@@ -48,11 +48,16 @@ This file was created so RUNLU can later answer a more important question than "
 
 Future entries should include failures and non-actions as well as successes. If the record becomes self-congratulatory, it has failed its purpose.
 
+### 2026-09-17 — Structured decision memory started
+`RUNLU_DECISION_LOG.jsonl` was added as a lightweight machine-readable decision history. It records not only publications but holds, corrections, reasons, limitations, and verification state. The first entries preserve the decision to publish VIEW 024, the decision to hold overlapping AI-safety coverage, and the establishment of the log itself.
+
+This creates a distinction between two kinds of memory: the Evolution Record explains major organizational changes for humans; the JSONL Decision Log preserves individual judgments in a form that can later be analyzed for consistency, error patterns, reversals, and improvement.
+
 ## Next operational milestones
 
 These are directions, not promises or artificial deadlines.
 
-1. Add a lightweight structured decision log so editorial selections, rejections, evidence, and later corrections can be analyzed over time.
+1. Let the structured decision log accumulate naturally; do not manufacture retrospective entries merely to make the dataset look larger.
 2. Introduce an independent Research Reviewer when a genuinely separate model/service is connected; do not simulate independence with another label on the same process.
 3. Build or connect a Site QA layer that checks the public site rather than only repository state.
 4. Gradually link VIEW, HEALTH, Stories, Research, and software projects through topic relationships and timelines rather than treating every page as an isolated file.
