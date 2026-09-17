@@ -1,0 +1,39 @@
+name: RUNLU Memory Integrity
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'RUNLU_DECISION_LOG.jsonl'
+      - 'RUNLU_EVOLUTION_RECORD.md'
+      - 'RUNLU_OPERATING_CHARTER.md'
+      - 'scripts/check-decision-log.mjs'
+      - '.github/workflows/runlu-memory-integrity.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'RUNLU_DECISION_LOG.jsonl'
+      - 'RUNLU_EVOLUTION_RECORD.md'
+      - 'RUNLU_OPERATING_CHARTER.md'
+      - 'scripts/check-decision-log.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-memory:
+    name: Validate institutional memory
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate decision log
+        run: node scripts/check-decision-log.mjs
+      - name: Confirm governance records exist
+        run: |
+          test -s RUNLU_OPERATING_CHARTER.md
+          test -s RUNLU_EVOLUTION_RECORD.md
+          test -s RUNLU_DECISION_LOG.jsonl
