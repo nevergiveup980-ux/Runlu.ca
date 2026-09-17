@@ -41,7 +41,6 @@ function repoChecks() {
     requireText(page, 'property="og:description"', `VIEW ${e.n}`);
     requireText(page, 'name="viewport"', `VIEW ${e.n} mobile viewport`);
     for (const lang of ['en','zh','fr','es']) requireText(page, `data-lang="${lang}"`, `VIEW ${e.n}`);
-    // The explicit evidence/sources block became a hard editorial contract in the current format.
     if (Number(e.n) >= 23) {
       requireText(page, 'evidence', `VIEW ${e.n} evidence/limits block`);
       requireText(page, 'sources', `VIEW ${e.n} sources block`);
@@ -54,8 +53,8 @@ function repoChecks() {
   const latestPage = read(latestFile);
   requireText(latestPage, `>${latest.n}<`, `Latest VIEW ${latest.n} visible article index`);
 
-  // HEALTH independent pages must remain discoverable from the HEALTH landing page.
   const health = read('health.html');
+  requireText(health, '@media(max-width:640px)', 'health.html mobile guard');
   const healthPages = [...sitemap.matchAll(/<loc>https:\/\/runlu\.ca\/(health-view-(\d{3})-[^<]+\.html)<\/loc>/g)]
     .map(m => ({ href:m[1], n:m[2] }))
     .sort((a,b) => a.n.localeCompare(b.n));
@@ -66,18 +65,21 @@ function repoChecks() {
     const canonical = BASE + h.href;
     requireText(page, `rel="canonical" href="${canonical}"`, `HEALTH VIEW ${h.n}`);
     requireText(page, `property="og:url" content="${canonical}"`, `HEALTH VIEW ${h.n}`);
+    requireText(page, 'property="og:title"', `HEALTH VIEW ${h.n}`);
+    requireText(page, 'property="og:description"', `HEALTH VIEW ${h.n}`);
     requireText(page, 'name="viewport"', `HEALTH VIEW ${h.n} mobile viewport`);
+    for (const lang of ['en','zh','fr','es']) requireText(page, `data-lang="${lang}"`, `HEALTH VIEW ${h.n}`);
   }
 
   console.log(`Repository publication closure passed: VIEW 001-${latest.n}; ${healthPages.length} independent HEALTH VIEW pages.`);
-  return { latest, latestFile };
+  return { latest, latestFile, healthPages };
 }
 
 async function fetchText(url) {
   let last;
   for (let i=0;i<3;i++) {
     try {
-      const r = await fetch(url, { headers:{'user-agent':'RUNLU-Publication-QA/1.0'}, redirect:'follow', signal:AbortSignal.timeout(20000) });
+      const r = await fetch(url, { headers:{'user-agent':'RUNLU-Publication-QA/1.1'}, redirect:'follow', signal:AbortSignal.timeout(20000) });
       if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
       return await r.text();
     } catch (e) { last=e; await new Promise(r=>setTimeout(r,1500*(i+1))); }
@@ -85,13 +87,18 @@ async function fetchText(url) {
   fail(`Live fetch failed ${url}: ${last}`);
 }
 
-async function liveChecks(latest, latestFile) {
-  const [catalog, article, sitemap, frontiers] = await Promise.all([
-    fetchText(BASE + 'view-catalog.js?qa=' + Date.now()),
-    fetchText(BASE + latestFile + '?qa=' + Date.now()),
-    fetchText(BASE + 'sitemap.xml?qa=' + Date.now()),
-    fetchText(BASE + 'frontiers.html?qa=' + Date.now())
-  ]);
+async function liveChecks(latest, latestFile, healthPages) {
+  const latestHealth = healthPages.at(-1);
+  const urls = [
+    BASE + 'view-catalog.js?qa=' + Date.now(),
+    BASE + latestFile + '?qa=' + Date.now(),
+    BASE + 'sitemap.xml?qa=' + Date.now(),
+    BASE + 'frontiers.html?qa=' + Date.now(),
+    BASE + 'health.html?qa=' + Date.now()
+  ];
+  if (latestHealth) urls.push(BASE + latestHealth.href + '?qa=' + Date.now());
+  const [catalog, article, sitemap, frontiers, health, healthArticle] = await Promise.all(urls.map(fetchText));
+
   requireText(catalog, `n:'${latest.n}'`, `LIVE VIEW catalog ${latest.n}`);
   requireText(catalog, `href:'${latest.href}'`, `LIVE VIEW catalog href ${latest.n}`);
   requireText(article, `>${latest.n}<`, `LIVE VIEW article ${latest.n}`);
@@ -99,8 +106,16 @@ async function liveChecks(latest, latestFile) {
   for (const lang of ['en','zh','fr','es']) requireText(article, `data-lang="${lang}"`, `LIVE VIEW ${latest.n} ${lang}`);
   requireText(sitemap, `<loc>${BASE + latestFile}</loc>`, `LIVE sitemap ${latest.n}`);
   requireText(frontiers, 'view-catalog.js?v=', 'LIVE frontiers catalog loader');
-  console.log(`Public publication closure passed for latest VIEW ${latest.n}: ${BASE + latestFile}`);
+
+  if (latestHealth) {
+    requireText(health, `href="${latestHealth.href}"`, `LIVE HEALTH VIEW ${latestHealth.n} landing navigation`);
+    requireText(healthArticle, `rel="canonical" href="${BASE + latestHealth.href}"`, `LIVE HEALTH VIEW ${latestHealth.n} canonical`);
+    requireText(sitemap, `<loc>${BASE + latestHealth.href}</loc>`, `LIVE HEALTH VIEW ${latestHealth.n} sitemap`);
+    for (const lang of ['en','zh','fr','es']) requireText(healthArticle, `data-lang="${lang}"`, `LIVE HEALTH VIEW ${latestHealth.n} ${lang}`);
+  }
+
+  console.log(`Public publication closure passed for latest VIEW ${latest.n}${latestHealth ? ` and HEALTH VIEW ${latestHealth.n}` : ''}.`);
 }
 
-const {latest, latestFile} = repoChecks();
-if (LIVE) await liveChecks(latest, latestFile);
+const {latest, latestFile, healthPages} = repoChecks();
+if (LIVE) await liveChecks(latest, latestFile, healthPages);
