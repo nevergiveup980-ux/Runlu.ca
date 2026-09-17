@@ -5,7 +5,7 @@ const rows = fs.readFileSync('RUNLU_DECISION_LOG.jsonl', 'utf8')
   .filter(line => line.trim())
   .map(line => JSON.parse(line));
 
-const countBy = (key) => rows.reduce((acc, row) => {
+const countBy = (items, key) => items.reduce((acc, row) => {
   const value = row[key] ?? '(none)';
   acc[value] = (acc[value] ?? 0) + 1;
   return acc;
@@ -19,8 +19,8 @@ const openRevisit = rows.filter(row => row.revisit_if && !row.reassessment_of &&
 console.log('RUNLU Decision Memory — retrospective signal');
 console.log(`Entries: ${rows.length}`);
 console.log(`Date range: ${rows[0]?.date ?? 'n/a'} → ${rows.at(-1)?.date ?? 'n/a'}`);
-console.log('Types:', countBy('type'));
-console.log('Editorial decisions:', editorial.length ? countBy.call(null, 'decision') : {});
+console.log('Types:', countBy(rows, 'type'));
+console.log('Editorial decisions:', countBy(editorial, 'decision'));
 console.log(`Recorded incidents: ${incidents.length}`);
 console.log(`Recorded corrections/reassessments: ${corrections.length}`);
 console.log(`Open evidence-triggered revisits: ${openRevisit.length}`);
