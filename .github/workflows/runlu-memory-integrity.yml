@@ -8,9 +8,12 @@ on:
       - 'RUNLU_EVOLUTION_RECORD.md'
       - 'RUNLU_OPERATING_CHARTER.md'
       - 'RUNLU_KNOWLEDGE_MAP.json'
+      - 'view-catalog.js'
+      - 'health.html'
       - 'scripts/check-decision-log.mjs'
       - 'scripts/check-knowledge-map.mjs'
       - 'scripts/report-decision-memory.mjs'
+      - 'scripts/report-runlu-state.mjs'
       - '.github/workflows/runlu-memory-integrity.yml'
   pull_request:
     branches: [main]
@@ -19,9 +22,12 @@ on:
       - 'RUNLU_EVOLUTION_RECORD.md'
       - 'RUNLU_OPERATING_CHARTER.md'
       - 'RUNLU_KNOWLEDGE_MAP.json'
+      - 'view-catalog.js'
+      - 'health.html'
       - 'scripts/check-decision-log.mjs'
       - 'scripts/check-knowledge-map.mjs'
       - 'scripts/report-decision-memory.mjs'
+      - 'scripts/report-runlu-state.mjs'
       - '.github/workflows/runlu-memory-integrity.yml'
   schedule:
     - cron: '0 15 * * 0'
@@ -45,6 +51,8 @@ jobs:
         run: node scripts/check-knowledge-map.mjs
       - name: Report decision-memory retrospective signal
         run: node scripts/report-decision-memory.mjs
+      - name: Report RUNLU operational state
+        run: node scripts/report-runlu-state.mjs
       - name: Confirm governance records exist
         run: |
           test -s RUNLU_OPERATING_CHARTER.md
