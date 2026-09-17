@@ -1,0 +1,46 @@
+{
+  "schema": "runlu.knowledge-map.v1",
+  "updated": "2026-09-17",
+  "purpose": "Connect RUNLU material by durable questions and relationships without replacing the original editorial streams.",
+  "principles": [
+    "relationships must be editorially meaningful, not generated for link volume",
+    "a connection does not imply agreement or equal evidence strength",
+    "health evidence and personal experience remain distinct",
+    "future automation may suggest relationships but must preserve provenance"
+  ],
+  "topics": [
+    {"id":"ai-science","label":"AI + Science","question":"What changes when AI becomes part of scientific work rather than only a writing tool?"},
+    {"id":"verifiable-knowledge","label":"Verifiable Knowledge","question":"How does a result become inspectable, reproducible, or executable?"},
+    {"id":"embodied-autonomy","label":"Embodied Autonomy","question":"What changes when AI actions leave the screen and affect physical systems?"},
+    {"id":"agentic-organization","label":"Agentic Organization","question":"What happens when autonomy expands from a tool or robot into an organization?"},
+    {"id":"human-control","label":"Human Control","question":"Who sets goals, boundaries, and stop conditions for autonomous systems?"},
+    {"id":"health-evidence","label":"Health Evidence","question":"What can a study support, and what remains uncertain or individual?"},
+    {"id":"maintenance-recovery","label":"Maintenance + Recovery","question":"How do sustainable health practices account for maintenance, recovery, and individual variation?"}
+  ],
+  "nodes": [
+    {"id":"view-011","stream":"VIEW","path":"view-011-model-hardware-standard.html","topics":["embodied-autonomy","human-control"]},
+    {"id":"view-014","stream":"VIEW","path":"view-014-ai-biodesign.html","topics":["ai-science"]},
+    {"id":"view-015","stream":"VIEW","path":"view-015-ai-fusion-control.html","topics":["ai-science","embodied-autonomy","human-control"]},
+    {"id":"view-016","stream":"VIEW","path":"view-016-ai-formal-mathematics.html","topics":["ai-science","verifiable-knowledge"]},
+    {"id":"view-018","stream":"VIEW","path":"view-018-ai-misuse-observability.html","topics":["human-control"]},
+    {"id":"view-019","stream":"VIEW","path":"view-019-closed-loop-intelligence.html","topics":["embodied-autonomy","agentic-organization"]},
+    {"id":"view-020","stream":"VIEW","path":"view-020-company-as-robot.html","topics":["agentic-organization","embodied-autonomy"]},
+    {"id":"view-021","stream":"VIEW","path":"view-021-red-button-test.html","topics":["agentic-organization","human-control"]},
+    {"id":"view-022","stream":"VIEW","path":"view-022-who-sets-the-goal.html","topics":["agentic-organization","human-control"]},
+    {"id":"view-023","stream":"VIEW","path":"view-023-proof-is-not-the-end.html","topics":["ai-science","verifiable-knowledge"]},
+    {"id":"view-024","stream":"VIEW","path":"view-024-when-papers-become-agents.html","topics":["ai-science","verifiable-knowledge","agentic-organization"]},
+    {"id":"health-view-006","stream":"HEALTH_VIEW","path":"health-view-006-humid-heat.html","topics":["health-evidence"]},
+    {"id":"health-view-007","stream":"HEALTH_VIEW","path":"health-view-007-staree-statins.html","topics":["health-evidence"]},
+    {"id":"health-view-008","stream":"HEALTH_VIEW","path":"health-view-008-after-weight-loss.html","topics":["health-evidence","maintenance-recovery"]},
+    {"id":"health-view-009","stream":"HEALTH_VIEW","path":"health-view-009-recovery-margin.html","topics":["health-evidence","maintenance-recovery"]}
+  ],
+  "edges": [
+    {"from":"view-019","to":"view-020","relation":"expands_scope","note":"Closed-loop autonomy moves from environment-scale robotics toward the company as an autonomous system."},
+    {"from":"view-020","to":"view-021","relation":"raises_governance_question","note":"If a company behaves like an autonomous system, stop authority becomes a concrete governance problem."},
+    {"from":"view-021","to":"view-022","relation":"deepens_governance_question","note":"Emergency stopping is downstream of the more fundamental question of who sets the goal."},
+    {"from":"view-016","to":"view-023","relation":"revisits","note":"Formal checkability leads to the distinction between machine verification, scientific scrutiny, and understanding."},
+    {"from":"view-023","to":"view-024","relation":"extends_interface","note":"Knowledge moves from being checkable to becoming callable and executable through agent interfaces."},
+    {"from":"view-014","to":"view-024","relation":"shares_question","note":"Both examine AI entering the machinery of scientific work rather than merely summarizing its outputs."},
+    {"from":"health-view-008","to":"health-view-009","relation":"extends_practice","note":"Maintenance after change and recovery capacity both shift attention from short-term outcomes to sustainable margins."}
+  ]
+}
