@@ -54,11 +54,18 @@ Future entries should include failures and non-actions as well as successes. If 
 This creates a distinction between two kinds of memory: the Evolution Record explains major organizational changes for humans; the JSONL Decision Log preserves individual judgments in a form that can later be analyzed for consistency, error patterns, reversals, and improvement.
 
 ### 2026-09-17 — Independent publication QA established
-RUNLU added `scripts/check-publication-closure.mjs` and the `RUNLU Publication QA` GitHub Actions workflow. The repository check is deterministic rather than another self-reviewing editorial voice. It tests VIEW sequence and discoverability, article files, four-language presence, canonical/Open Graph metadata, sitemap inclusion, static mobile guards, and independent HEALTH VIEW links. A separate scheduled job checks the live/CDN state of the newest VIEW rather than assuming a repository commit equals a public release.
+RUNLU added `scripts/check-publication-closure.mjs` and the `RUNLU Publication QA` GitHub Actions workflow. The repository check is deterministic rather than another self-reviewing editorial voice. It tests VIEW sequence and discoverability, article files, four-language presence, canonical/Open Graph metadata, sitemap inclusion, static mobile guards, and independent HEALTH VIEW links. A separate scheduled job checks live/CDN publication state rather than assuming a repository commit equals a public release.
 
 The first meaningful result arrived immediately: the new QA correctly detected that HEALTH VIEW 009 existed and was listed in the sitemap but was still absent from the visible HEALTH landing navigation. The defect was repaired in commit `206d0bb2459577b05cad56d3d5337e4a1684f74f`, and the repository publication-closure check then passed.
 
-This is an important organizational change: the system that creates content is no longer the only system deciding whether publication is complete.
+The QA was then expanded so scheduled live checks cover the newest HEALTH VIEW as well as the newest VIEW: live landing discoverability, canonical URL, sitemap presence, and four-language article bodies are now part of the public closure test. An attempted extra static guard was rejected after the QA itself exposed that the assumption did not match the site's actual responsive structure. The guard was corrected rather than changing the site merely to satisfy the test.
+
+This is an important organizational change: the system that creates content is no longer the only system deciding whether publication is complete, and the QA rules themselves are treated as fallible systems that must earn trust through real failures.
+
+### 2026-09-17 — Institutional memory integrity guard established
+RUNLU added `scripts/check-decision-log.mjs` and the `RUNLU Memory Integrity` workflow. The machine-readable Decision Log is now checked for valid JSONL, schema version, ISO dates, recognized decision types, reasons/findings, chronological append order, and probable duplicate entries. The workflow also confirms that the Operating Charter, Evolution Record, and Decision Log remain present.
+
+The first validation run passed. This creates a small but important distinction: RUNLU not only keeps institutional memory; it now checks that the memory remains machine-readable enough to be used later for retrospective analysis.
 
 ## Next operational milestones
 
