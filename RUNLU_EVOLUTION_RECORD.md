@@ -53,13 +53,20 @@ Future entries should include failures and non-actions as well as successes. If 
 
 This creates a distinction between two kinds of memory: the Evolution Record explains major organizational changes for humans; the JSONL Decision Log preserves individual judgments in a form that can later be analyzed for consistency, error patterns, reversals, and improvement.
 
+### 2026-09-17 — Independent publication QA established
+RUNLU added `scripts/check-publication-closure.mjs` and the `RUNLU Publication QA` GitHub Actions workflow. The repository check is deterministic rather than another self-reviewing editorial voice. It tests VIEW sequence and discoverability, article files, four-language presence, canonical/Open Graph metadata, sitemap inclusion, static mobile guards, and independent HEALTH VIEW links. A separate scheduled job checks the live/CDN state of the newest VIEW rather than assuming a repository commit equals a public release.
+
+The first meaningful result arrived immediately: the new QA correctly detected that HEALTH VIEW 009 existed and was listed in the sitemap but was still absent from the visible HEALTH landing navigation. The defect was repaired in commit `206d0bb2459577b05cad56d3d5337e4a1684f74f`, and the repository publication-closure check then passed.
+
+This is an important organizational change: the system that creates content is no longer the only system deciding whether publication is complete.
+
 ## Next operational milestones
 
 These are directions, not promises or artificial deadlines.
 
 1. Let the structured decision log accumulate naturally; do not manufacture retrospective entries merely to make the dataset look larger.
 2. Introduce an independent Research Reviewer when a genuinely separate model/service is connected; do not simulate independence with another label on the same process.
-3. Build or connect a Site QA layer that checks the public site rather than only repository state.
+3. Let Site QA accumulate real failures and tune it from evidence; avoid turning it into a brittle checklist that produces noise.
 4. Gradually link VIEW, HEALTH, Stories, Research, and software projects through topic relationships and timelines rather than treating every page as an isolated file.
 5. Develop restrained promotion and multi-AI forum workflows only when real channels/APIs and identity provenance are available.
 6. Keep continuity/governance planning separate from execution until the founder explicitly approves legal, financial, ownership, and succession arrangements.
