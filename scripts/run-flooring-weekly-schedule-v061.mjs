@@ -77,7 +77,7 @@ check('task-type filters remove hidden categories',()=>{
   const p=api.planWeek([
     {id:'a',type:'installation',startDate:'2026-09-14',endDate:'2026-09-14'},
     {id:'b',type:'measure',startDate:'2026-09-15',endDate:'2026-09-15'}
-  ],'2026-09-14',new Set(['measure']));
+  ],'2026-09-14',['measure']);
   assert.equal(p.items.length,1);assert.equal(p.items[0].id,'b');
 });
 
