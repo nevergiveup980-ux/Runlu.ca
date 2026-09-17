@@ -7,7 +7,9 @@ on:
       - 'RUNLU_DECISION_LOG.jsonl'
       - 'RUNLU_EVOLUTION_RECORD.md'
       - 'RUNLU_OPERATING_CHARTER.md'
+      - 'RUNLU_KNOWLEDGE_MAP.json'
       - 'scripts/check-decision-log.mjs'
+      - 'scripts/check-knowledge-map.mjs'
       - '.github/workflows/runlu-memory-integrity.yml'
   pull_request:
     branches: [main]
@@ -15,7 +17,10 @@ on:
       - 'RUNLU_DECISION_LOG.jsonl'
       - 'RUNLU_EVOLUTION_RECORD.md'
       - 'RUNLU_OPERATING_CHARTER.md'
+      - 'RUNLU_KNOWLEDGE_MAP.json'
       - 'scripts/check-decision-log.mjs'
+      - 'scripts/check-knowledge-map.mjs'
+      - '.github/workflows/runlu-memory-integrity.yml'
   workflow_dispatch:
 
 permissions:
@@ -32,8 +37,11 @@ jobs:
           node-version: '22'
       - name: Validate decision log
         run: node scripts/check-decision-log.mjs
+      - name: Validate knowledge map
+        run: node scripts/check-knowledge-map.mjs
       - name: Confirm governance records exist
         run: |
           test -s RUNLU_OPERATING_CHARTER.md
           test -s RUNLU_EVOLUTION_RECORD.md
           test -s RUNLU_DECISION_LOG.jsonl
+          test -s RUNLU_KNOWLEDGE_MAP.json
