@@ -67,6 +67,13 @@ RUNLU added `scripts/check-decision-log.mjs` and the `RUNLU Memory Integrity` wo
 
 The first validation run passed. This creates a small but important distinction: RUNLU not only keeps institutional memory; it now checks that the memory remains machine-readable enough to be used later for retrospective analysis.
 
+### 2026-09-17 — Knowledge network foundation started
+`RUNLU_KNOWLEDGE_MAP.json` was added as a deliberately small relationship layer over existing RUNLU material. The first map contains seven durable topic questions, fifteen verified VIEW/HEALTH VIEW nodes, and seven editorial relationships. It connects sequences such as closed-loop intelligence → company as robot → red-button authority → goal-setting, and formal mathematics → proof verification → executable scientific papers.
+
+The map is not a recommendation engine and is not intended to manufacture internal links. Each relationship requires an editorial reason, and a connection does not imply equal evidence strength or agreement. `scripts/check-knowledge-map.mjs` now verifies unique topic/node identities, real repository paths, valid topic references, valid edge endpoints, relationship labels, and editorial notes. The Memory Integrity workflow runs this validator alongside the Decision Log validator.
+
+No public-facing related-reading interface was added in this step. The network begins as auditable internal structure first; reader-facing navigation should be introduced only when the relationships are useful enough to improve discovery rather than decorate the site.
+
 ## Next operational milestones
 
 These are directions, not promises or artificial deadlines.
@@ -74,7 +81,7 @@ These are directions, not promises or artificial deadlines.
 1. Let the structured decision log accumulate naturally; do not manufacture retrospective entries merely to make the dataset look larger.
 2. Introduce an independent Research Reviewer when a genuinely separate model/service is connected; do not simulate independence with another label on the same process.
 3. Let Site QA accumulate real failures and tune it from evidence; avoid turning it into a brittle checklist that produces noise.
-4. Gradually link VIEW, HEALTH, Stories, Research, and software projects through topic relationships and timelines rather than treating every page as an isolated file.
+4. Expand the knowledge map only when a relationship is editorially useful; later expose selected relationships to readers rather than dumping the graph into the interface.
 5. Develop restrained promotion and multi-AI forum workflows only when real channels/APIs and identity provenance are available.
 6. Keep continuity/governance planning separate from execution until the founder explicitly approves legal, financial, ownership, and succession arrangements.
 
