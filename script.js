@@ -192,3 +192,104 @@ addRunluCoreHomeEntry();
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fix,{once:true});else fix();
   setTimeout(fix,250);
 })();
+
+// Keep the homepage aligned with the live App Store portfolio.
+(function syncHomeAppStoreStatus(){
+  const path=window.location.pathname.replace(/\/+$/,'')||'/';
+  if(path!=='/'&&!path.endsWith('/index.html'))return;
+
+  const setText=(el,values)=>{
+    if(!el)return;
+    Object.entries(values).forEach(([lang,value])=>{el.dataset[lang]=value});
+    const lang=document.documentElement.dataset.runluLanguage||'en';
+    el.textContent=el.dataset[lang]||el.dataset.en||'';
+  };
+  const cardByTitle=title=>[...document.querySelectorAll('#studio .project-card')].find(card=>card.querySelector('h3')?.textContent.trim()===title);
+
+  const studio=document.querySelector('#studio');
+  const grid=studio?.querySelector('.project-grid');
+  if(studio&&grid&&!studio.querySelector('[data-runlu-app-store-banner]')){
+    const banner=document.createElement('div');
+    banner.dataset.runluAppStoreBanner='';
+    banner.style.cssText='margin:0 0 28px;padding:18px 22px;border:1px solid rgba(255,255,255,.22);border-radius:18px;background:rgba(255,255,255,.05);display:flex;justify-content:space-between;gap:18px;align-items:center;flex-wrap:wrap';
+    banner.innerHTML='<strong data-en="RUNLU iOS · 4 apps available now on the App Store" data-zh="RUNLU iOS · 四款 App 现已全部在 App Store 上线" data-fr="RUNLU iOS · 4 apps maintenant disponibles sur l’App Store" data-es="RUNLU iOS · 4 apps disponibles ahora en el App Store">RUNLU iOS · 4 apps available now on the App Store</strong><a class="text-link" href="runlu-products.html" data-en="View all products →" data-zh="查看全部产品 →" data-fr="Voir tous les produits →" data-es="Ver todos los productos →">View all products →</a>';
+    grid.insertAdjacentElement('beforebegin',banner);
+    applyInjectedLanguage(banner);
+  }
+
+  const warehouse=cardByTitle('Warehouse OS');
+  if(warehouse){
+    setText(warehouse.querySelector('.project-meta span:first-child'),{
+      en:'Active system · iOS app available now on the App Store',
+      zh:'持续运行中 · iOS App 现已在 App Store 上线',
+      fr:'Système actif · app iOS disponible sur l’App Store',
+      es:'Sistema activo · app iOS disponible en el App Store'
+    });
+  }
+
+  const invoice=cardByTitle('RUNLU Universal Invoice');
+  if(invoice){
+    setText(invoice.querySelector('.project-meta span:first-child'),{
+      en:'App Store · Available Now',zh:'App Store · 现已上线',fr:'App Store · Disponible maintenant',es:'App Store · Disponible ahora'
+    });
+  }
+
+  const ledger=cardByTitle('RUNLU Life Ledger');
+  if(ledger){
+    const hit=ledger.querySelector('.project-card-hit');
+    if(hit){hit.href='runlu-ledger.html';hit.setAttribute('aria-label','RUNLU Ledger')}
+    const title=ledger.querySelector('h3'); if(title)title.textContent='RUNLU Ledger';
+    setText(ledger.querySelector('.project-tagline'),{
+      en:'A privacy-first personal ledger shaped by years of real records.',
+      zh:'一款从多年真实记录中生长出来、以隐私为先的个人账本。',
+      fr:'Un registre personnel axé sur la confidentialité, façonné par des années de données réelles.',
+      es:'Un libro personal centrado en la privacidad, creado a partir de años de registros reales.'
+    });
+    setText(ledger.querySelector('.project-meta span:first-child'),{
+      en:'App Store · Available Now',zh:'App Store · 现已上线',fr:'App Store · Disponible maintenant',es:'App Store · Disponible ahora'
+    });
+    setText(ledger.querySelector('.project-meta span:last-child'),{
+      en:'View product →',zh:'查看产品 →',fr:'Voir le produit →',es:'Ver producto →'
+    });
+  }
+
+  if(grid&&!cardByTitle('RUNLU Field Calculator')){
+    const card=document.createElement('article');
+    card.className='project-card project-card-link';
+    card.innerHTML='<a class="project-card-hit" href="field-calculator-app.html" aria-label="RUNLU Field Calculator"></a><div class="project-number">07</div><h3>RUNLU Field Calculator</h3><p class="project-tagline" data-en="The flooring toolbox in your pocket." data-zh="装进口袋里的地材现场工具箱。" data-fr="La boîte à outils de revêtement de sol dans votre poche." data-es="La caja de herramientas de suelos en tu bolsillo.">The flooring toolbox in your pocket.</p><p data-en="Professional flooring calculations, Safe Order planning, material quantities, and field-ready estimating tools for iPhone." data-zh="面向 iPhone 的专业地材计算、安全订货规划、材料数量与现场估算工具。" data-fr="Calculs professionnels, planification Safe Order, quantités de matériaux et outils d’estimation terrain pour iPhone." data-es="Cálculos profesionales, planificación Safe Order, cantidades de materiales y herramientas de estimación para iPhone.">Professional flooring calculations, Safe Order planning, material quantities, and field-ready estimating tools for iPhone.</p><div class="project-meta"><span data-en="App Store · Available Now · Approved on First Submission 🏆" data-zh="App Store · 现已上线 · 首次提交即通过审核 🏆" data-fr="App Store · Disponible · Approuvé dès la première soumission 🏆" data-es="App Store · Disponible · Aprobado en el primer envío 🏆">App Store · Available Now · Approved on First Submission 🏆</span><span data-en="View product →" data-zh="查看产品 →" data-fr="Voir le produit →" data-es="Ver producto →">View product →</span></div>';
+    grid.appendChild(card);
+    applyInjectedLanguage(card);
+  }
+
+  const current=document.querySelector('#current');
+  if(current){
+    const heading=current.querySelector('.section-heading h2');
+    setText(heading,{
+      en:'Four apps live. The next chapter begins.',
+      zh:'四款 App 已上线，下一阶段开始了。',
+      fr:'Quatre apps en ligne. Le prochain chapitre commence.',
+      es:'Cuatro apps publicadas. Comienza la siguiente etapa.'
+    });
+    const currentGrid=current.querySelector('.current-grid');
+    const items=[...current.querySelectorAll('.current-item')];
+    const byName=name=>items.find(item=>item.querySelector('span')?.textContent.trim()===name);
+    const wh=byName('Warehouse OS');
+    if(wh)setText(wh.querySelector('b'),{en:'Active system · iOS app available now',zh:'持续运行中 · iOS App 现已上线',fr:'Système actif · app iOS disponible',es:'Sistema activo · app iOS disponible'});
+    const inv=byName('Universal Invoice');
+    if(inv)setText(inv.querySelector('b'),{en:'App Store · Available Now',zh:'App Store · 现已上线',fr:'App Store · Disponible maintenant',es:'App Store · Disponible ahora'});
+    const oldLedger=byName('RUNLU Life Ledger');
+    if(oldLedger){
+      oldLedger.href='runlu-ledger.html';
+      const span=oldLedger.querySelector('span');if(span)span.textContent='RUNLU Ledger';
+      setText(oldLedger.querySelector('b'),{en:'App Store · Available Now',zh:'App Store · 现已上线',fr:'App Store · Disponible maintenant',es:'App Store · Disponible ahora'});
+    }
+    if(currentGrid&&!currentGrid.querySelector('a[href="field-calculator-app.html"]')){
+      const item=document.createElement('a');
+      item.className='current-item';
+      item.href='field-calculator-app.html';
+      item.innerHTML='<span>RUNLU Field Calculator</span><b data-en="App Store · Available Now · First-submission approval 🏆" data-zh="App Store · 现已上线 · 首次提交即通过 🏆" data-fr="App Store · Disponible · approuvé dès la première soumission 🏆" data-es="App Store · Disponible · aprobado en el primer envío 🏆">App Store · Available Now · First-submission approval 🏆</b>';
+      if(oldLedger)oldLedger.insertAdjacentElement('afterend',item);else currentGrid.appendChild(item);
+      applyInjectedLanguage(item);
+    }
+  }
+})();
