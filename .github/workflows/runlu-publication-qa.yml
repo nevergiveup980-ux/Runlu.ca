@@ -1,4 +1,5 @@
 name: RUNLU Publication QA
+# Deterministic repository closure on editorial changes; independent live/CDN check daily and on manual runs.
 
 on:
   push:
