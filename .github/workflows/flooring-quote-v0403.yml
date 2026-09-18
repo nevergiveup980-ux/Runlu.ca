@@ -1,0 +1,20 @@
+name: Flooring Quote Dual Entry V0.4.03
+on:
+  pull_request:
+    paths:
+      - 'flooring/quote-dual-entry-v0403.js'
+      - 'flooring/index-v0403-quote-dual-entry-preview.html'
+      - 'scripts/run-flooring-quote-v0403.mjs'
+      - '.github/workflows/flooring-quote-v0403.yml'
+  workflow_dispatch:
+jobs:
+  quote-dual-entry-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.4.03 quote schema, dual-entry, totals and write-scope gates
+        run: node scripts/run-flooring-quote-v0403.mjs
