@@ -1,0 +1,20 @@
+name: Flooring Week Schedule V0.3.97
+on:
+  pull_request:
+    paths:
+      - 'flooring/week-schedule-v097.js'
+      - 'flooring/index-v097-installer-workload-preview.html'
+      - 'scripts/run-flooring-week-schedule-v097.mjs'
+      - '.github/workflows/flooring-week-schedule-v097.yml'
+  workflow_dispatch:
+jobs:
+  installer-workload-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.3.97 workload, conflict, pressure and read-only gates
+        run: node scripts/run-flooring-week-schedule-v097.mjs
