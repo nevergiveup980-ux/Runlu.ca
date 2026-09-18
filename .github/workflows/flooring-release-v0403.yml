@@ -1,0 +1,46 @@
+name: Flooring OS V0.4.03 Unified Release Gate
+on:
+  pull_request:
+    paths:
+      - 'flooring/index.html'
+      - 'flooring/index-v0403-release.html'
+      - 'flooring/index-v0403-operations.html'
+      - 'flooring/index-v0403-quote.html'
+      - 'flooring/week-schedule-v0402.js'
+      - 'flooring/quote-dual-entry-v0403.js'
+      - 'scripts/run-flooring-week-schedule-v0402.mjs'
+      - 'scripts/run-flooring-quote-v0403.mjs'
+      - '.github/workflows/flooring-release-v0403.yml'
+  workflow_dispatch:
+jobs:
+  unified-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run Operations regression gate
+        run: node scripts/run-flooring-week-schedule-v0402.mjs
+      - name: Run Quote dual-entry regression gate
+        run: node scripts/run-flooring-quote-v0403.mjs
+      - name: Verify unified production routing
+        run: |
+          node - <<'NODE'
+          const fs=require('fs'),assert=require('assert');
+          const entry=fs.readFileSync('flooring/index.html','utf8');
+          const shell=fs.readFileSync('flooring/index-v0403-release.html','utf8');
+          const ops=fs.readFileSync('flooring/index-v0403-operations.html','utf8');
+          const quote=fs.readFileSync('flooring/index-v0403-quote.html','utf8');
+          assert(entry.includes('index-v0403-release.html?prod=1&release=0403'));
+          assert(entry.includes("q.has('legacy')"));
+          assert(shell.includes("core:'index-v090r1-stable-frozen.html"));
+          assert(shell.includes("operations:'index-v0403-operations.html"));
+          assert(shell.includes("quote:'index-v0403-quote.html"));
+          assert(shell.includes('data-view="core"')&&shell.includes('data-view="operations"')&&shell.includes('data-view="quote"'));
+          assert(ops.includes('week-schedule-v0402.js?v=0402'));
+          assert(quote.includes('quote-dual-entry-v0403.js?v=0403'));
+          assert(quote.includes('Database Fields')&&quote.includes('Table Entry'));
+          console.log('PASS unified production routing and module references');
+          NODE
