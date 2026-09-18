@@ -44,6 +44,24 @@ test('Supplier PO adapter creates pickup/delivery only from dated PO',()=>{
 test('Demo data is explicit and in-memory only',()=>{
   const xs=A.demoTasks('2026-09-18');assert(xs.length>=4);assert(xs.every(x=>x.demo===true&&x.source==='DEMO'))
 });
+test('Daily counts include multi-day tasks on every occupied day',()=>{
+  const w='2026-09-13',xs=[
+    {id:'a',startDate:'2026-09-13',endDate:'2026-09-15'},
+    {id:'b',startDate:'2026-09-15',endDate:'2026-09-15'},
+    {id:'c',startDate:'2026-09-19',endDate:'2026-09-22'}
+  ];assert.deepEqual(A.weekDayCounts(xs,w),[1,1,2,0,0,0,1])
+});
+test('Auto density scales from comfortable to compact to dense',()=>{
+  assert.equal(A.densityProfile(4,4,'auto').mode,'comfortable');
+  assert.equal(A.densityProfile(10,7,'auto').mode,'compact');
+  assert.equal(A.densityProfile(25,25,'auto').mode,'dense');
+  assert.equal(A.densityProfile(30,30,'comfortable').mode,'comfortable')
+});
+test('Dense single-day workload remains deterministic',()=>{
+  const w='2026-09-13',xs=Array.from({length:120},(_,i)=>({id:'d'+i,title:'Dense '+i,person:'P'+(i%12),startDate:'2026-09-15',endDate:'2026-09-15'}));
+  const layout=A.allocateLanes(xs,w),counts=A.weekDayCounts(xs,w),profile=A.densityProfile(layout.laneCount,Math.max(...counts),'auto');
+  assert.equal(layout.tasks.length,120);assert.equal(layout.laneCount,120);assert.equal(counts[2],120);assert.equal(profile.mode,'dense')
+});
 test('1000-task layout pressure',()=>{
   const w='2026-09-13',types=['Installation','Appointment','Pickup'];const xs=Array.from({length:1000},(_,i)=>({id:'t'+i,type:types[i%types.length],title:'Task '+i,person:'P'+(i%50),startDate:A.addDays(w,i%7),endDate:A.addDays(w,Math.min(6,(i%7)+(i%3)))}));const t0=performance.now();const out=A.allocateLanes(xs,w);const ms=performance.now()-t0;assert.equal(out.tasks.length,1000);assert(ms<750,`layout too slow: ${ms.toFixed(1)}ms`)
 });
