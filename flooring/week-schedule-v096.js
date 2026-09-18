@@ -154,13 +154,25 @@ function filterTasks(tasks,filters){
 function loadDatasets(storage){return {
   warehouseOrders:safeRead(storage,KEYS.warehouseOrders,[]),flooringJobs:safeRead(storage,KEYS.flooringJobs,[]),manualEvents:safeRead(storage,KEYS.manualEvents,[]),supplierPOs:safeRead(storage,KEYS.supplierPOs,[]),people:safeRead(storage,KEYS.people,[])
 }}
+function weekDayCounts(tasks,weekStart){
+  const counts=Array(7).fill(0);
+  arr(tasks).forEach(t=>{const c=clipTask(t,weekStart);if(!c)return;for(let i=c.startIndex;i<c.startIndex+c.span&&i<7;i++)counts[i]++});
+  return counts;
+}
+function densityProfile(laneCount,maxDaily,requested='auto'){
+  const req=str(requested).toLowerCase();
+  const mode=req==='comfortable'||req==='compact'||req==='dense'?req:(laneCount>18||maxDaily>18?'dense':laneCount>8||maxDaily>9?'compact':'comfortable');
+  if(mode==='dense')return {mode,laneHeight:31,taskHeight:25,label:'Dense'};
+  if(mode==='compact')return {mode,laneHeight:38,taskHeight:31,label:'Compact'};
+  return {mode:'comfortable',laneHeight:46,taskHeight:38,label:'Comfortable'};
+}
 
-const api={VERSION,KEYS,TYPE_ORDER,TYPE_LABEL,TYPE_CLASS,iso,dateObj,dateIso,addDays,dayDiff,sundayFor,localToday,pretty,normalizeTime,extractWarehouseOrders,extractFlooringJobs,extractManualEvents,extractSupplierPOs,extractAll,demoTasks,clipTask,allocateLanes,filterTasks,loadDatasets};
+const api={VERSION,KEYS,TYPE_ORDER,TYPE_LABEL,TYPE_CLASS,iso,dateObj,dateIso,addDays,dayDiff,sundayFor,localToday,pretty,normalizeTime,extractWarehouseOrders,extractFlooringJobs,extractManualEvents,extractSupplierPOs,extractAll,demoTasks,clipTask,allocateLanes,filterTasks,loadDatasets,weekDayCounts,densityProfile};
 root.RUNLUWeekScheduleV096=api;
 
 if(typeof document==='undefined')return;
 
-let weekStart=sundayFor(localToday()),allTasks=[],usingDemo=false,selectedTypes=new Set(TYPE_ORDER),selectedPerson='ALL',searchText='',openTask=null;
+let weekStart=sundayFor(localToday()),allTasks=[],usingDemo=false,selectedTypes=new Set(TYPE_ORDER),selectedPerson='ALL',searchText='',openTask=null,densityMode='auto';
 const by=id=>document.getElementById(id);
 function visibleTasks(){return filterTasks(allTasks,{types:[...selectedTypes],person:selectedPerson,q:searchText})}
 function typeClass(t){return TYPE_CLASS[t]||'other'}
@@ -178,25 +190,28 @@ function renderControls(){
   const q=by('ws96q');if(q){q.value=searchText;q.oninput=()=>{searchText=q.value;render()}}
 }
 function renderHeader(){by('ws96range').textContent=`${pretty(weekStart,{month:'short',day:'numeric'})} – ${pretty(addDays(weekStart,6),{month:'short',day:'numeric',year:'numeric'})}`}
-function renderStats(tasks,layout){const el=by('ws96stats');if(!el)return;const people=new Set(tasks.map(t=>t.person)).size,multi=tasks.filter(t=>t.startDate!==t.endDate).length,overlap=Math.max(0,layout.laneCount-1);el.innerHTML=`<div><b>${tasks.length}</b><span>Visible tasks</span></div><div><b>${people}</b><span>People</span></div><div><b>${multi}</b><span>Multi-day</span></div><div><b>${overlap}</b><span>Extra overlap lanes</span></div>`}
-function renderBoard(tasks,layout){
-  const board=by('ws96board');if(!board)return;const today=localToday(),laneH=46,headH=62,height=Math.max(240,headH+Math.max(layout.laneCount,1)*laneH+22);
-  let html=`<div class="ws96grid" style="height:${height}px"><div class="ws96days">`;
-  for(let i=0;i<7;i++){const d=addDays(weekStart,i);html+=`<div class="ws96day ${d===today?'today':''}"><span>${esc(pretty(d,{weekday:'short'}))}</span><b>${esc(pretty(d,{month:'short',day:'numeric'}))}</b></div>`}html+='</div><div class="ws96lanes">';
+function renderStats(tasks,layout,counts,profile){const el=by('ws96stats');if(!el)return;const people=new Set(tasks.map(t=>t.person)).size,multi=tasks.filter(t=>t.startDate!==t.endDate).length,busiest=Math.max(0,...counts);el.innerHTML=`<div><b>${tasks.length}</b><span>Visible tasks</span></div><div><b>${people}</b><span>People</span></div><div><b>${multi}</b><span>Multi-day</span></div><div><b>${busiest}</b><span>Busiest day · ${esc(profile.label)}</span></div>`}
+function renderBoard(tasks,layout,counts,profile){
+  const board=by('ws96board');if(!board)return;const today=localToday(),laneH=profile.laneHeight,taskH=profile.taskHeight,headH=62,height=Math.max(240,headH+Math.max(layout.laneCount,1)*laneH+22);
+  let html=`<div class="ws96grid density-${profile.mode}" style="height:${height}px"><div class="ws96days">`;
+  for(let i=0;i<7;i++){const d=addDays(weekStart,i);html+=`<div class="ws96day ${d===today?'today':''}" data-ws96-day="${i}"><span>${esc(pretty(d,{weekday:'short'}))}</span><b>${esc(pretty(d,{month:'short',day:'numeric'}))}</b><em class="ws96count">${counts[i]} task${counts[i]===1?'':'s'}</em></div>`}html+='</div><div class="ws96lanes">';
   for(let i=0;i<7;i++)html+=`<div class="ws96col ${addDays(weekStart,i)===today?'today':''}" style="grid-column:${i+1}"></div>`;
-  layout.tasks.forEach(t=>{const left=(t.startIndex/7)*100,width=(t.span/7)*100,top=10+t.lane*laneH;html+=`<button class="ws96task ${typeClass(t.type)} ${t.demo?'demo':''}" style="left:calc(${left}% + 3px);width:calc(${width}% - 6px);top:${top}px" data-ws96-task="${attr(t.id)}" title="View details"><span class="ws96edge">${t.continuesBefore?'‹':''}</span><span class="ws96taskMain"><b>${esc(t.title)}</b><small>${esc([taskTime(t),t.person,t.customer].filter(Boolean).join(' · '))}</small></span><span class="ws96edge">${t.continuesAfter?'›':''}</span></button>`});
+  layout.tasks.forEach(t=>{const left=(t.startIndex/7)*100,width=(t.span/7)*100,top=10+t.lane*laneH;html+=`<button class="ws96task ${typeClass(t.type)} ${t.demo?'demo':''}" style="left:calc(${left}% + 3px);width:calc(${width}% - 6px);top:${top}px;height:${taskH}px" data-ws96-task="${attr(t.id)}" title="View details"><span class="ws96edge">${t.continuesBefore?'‹':''}</span><span class="ws96taskMain"><b>${esc(t.title)}</b><small>${esc([taskTime(t),t.person,t.customer].filter(Boolean).join(' · '))}</small></span><span class="ws96edge">${t.continuesAfter?'›':''}</span></button>`});
   html+='</div></div>';board.innerHTML=html;board.querySelectorAll('[data-ws96-task]').forEach(b=>b.addEventListener('click',()=>showTask(b.dataset.ws96Task)));
   if(!layout.tasks.length)board.insertAdjacentHTML('beforeend','<div class="ws96empty">No tasks match this week and filter.</div>')
 }
-function render(){renderHeader();const tasks=visibleTasks(),layout=allocateLanes(tasks,weekStart);renderStats(tasks.filter(t=>clipTask(t,weekStart)),layout);renderBoard(tasks,layout);const note=by('ws96demoNote');if(note)note.hidden=!usingDemo}
+function scrollToDay(index,behavior='smooth'){const sc=by('ws96scroll');if(!sc)return;const board=by('ws96board'),width=board?.scrollWidth||1120;sc.scrollTo({left:Math.max(0,(width/7)*index-8),behavior})}
+function focusToday(behavior='smooth'){const today=localToday();if(today<weekStart||today>addDays(weekStart,6))return;scrollToDay(dayDiff(weekStart,today),behavior)}
+function render(focus=false){renderHeader();const tasks=visibleTasks(),weekTasks=tasks.filter(t=>clipTask(t,weekStart)),layout=allocateLanes(tasks,weekStart),counts=weekDayCounts(weekTasks,weekStart),profile=densityProfile(layout.laneCount,Math.max(0,...counts),densityMode);renderStats(weekTasks,layout,counts,profile);renderBoard(tasks,layout,counts,profile);const note=by('ws96demoNote');if(note)note.hidden=!usingDemo;const d=by('ws96density');if(d)d.value=densityMode;if(focus)setTimeout(()=>focusToday('smooth'),0)}
 function showTask(id){openTask=allTasks.find(t=>t.id===id)||null;if(!openTask)return;const t=openTask,modal=by('ws96modal'),body=by('ws96detail');if(!modal||!body)return;const rows=[['Type',TYPE_LABEL[t.type]||t.type],['Date',t.startDate===t.endDate?t.startDate:`${t.startDate} → ${t.endDate}`],['Time',taskTime(t)||'—'],['Assigned to',t.person||'—'],['Installer',t.installer||'—'],['Sales',t.sales||'—'],['Customer',t.customer||'—'],['Job #',t.jobNumber||'—'],['PO #',t.poNumber||'—'],['Status',t.status||'—'],['Address',t.address||'—'],['Notes',t.notes||'—'],['Source',`${t.source}${t.sourceKey?' · '+t.sourceKey:''}`]];body.innerHTML=`<div class="ws96detailTitle">${t.demo?'<span class="ws96demoBadge">DEMO</span>':''}${esc(t.title)}</div>${rows.map(([k,v])=>`<div class="ws96detailRow"><span>${esc(k)}</span><b>${esc(v)}</b></div>`).join('')}<div class="ws96readonly">Read only: no drag, edit, save, status change, PO change, inventory change, or local data write is available here.</div>`;modal.classList.add('open');modal.setAttribute('aria-hidden','false')}
 function closeTask(){const modal=by('ws96modal');if(modal){modal.classList.remove('open');modal.setAttribute('aria-hidden','true')}openTask=null}
 function bind(){
-  by('ws96prev').onclick=()=>{weekStart=addDays(weekStart,-7);render()};by('ws96today').onclick=()=>{weekStart=sundayFor(localToday());render()};by('ws96next').onclick=()=>{weekStart=addDays(weekStart,7);render()};
+  by('ws96prev').onclick=()=>{weekStart=addDays(weekStart,-7);render()};by('ws96today').onclick=()=>{weekStart=sundayFor(localToday());render(true)};by('ws96next').onclick=()=>{weekStart=addDays(weekStart,7);render()};
   by('ws96all').onclick=()=>{selectedTypes=new Set(TYPE_ORDER);renderControls();render()};by('ws96none').onclick=()=>{selectedTypes.clear();renderControls();render()};
+  const density=by('ws96density');if(density)density.onchange=()=>{densityMode=density.value||'auto';render()};
   by('ws96close').onclick=closeTask;by('ws96modal').addEventListener('click',e=>{if(e.target===by('ws96modal'))closeTask()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeTask()});
   root.addEventListener('storage',e=>{if(Object.values(KEYS).includes(e.key))load()});
 }
-function boot(){bind();load()}
+function boot(){bind();load();setTimeout(()=>focusToday('auto'),80)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })(typeof globalThis!=='undefined'?globalThis:this);
