@@ -199,7 +199,8 @@ function conflictAnalysis(tasks,weekStart){
       for(let i=0;i<xs.length;i++)for(let j=i+1;j<xs.length;j++){
         const a=xs[i],b=xs[j];
         const hard=timedHardOverlap(a,b,d);
-        const possible=!hard;
+        const fullyComparable=!hard&&a.startDate===a.endDate&&b.startDate===b.endDate&&a.startDate===d&&b.startDate===d&&knownMinutes(a)>0&&knownMinutes(b)>0;
+        if(fullyComparable)continue;
         const item={id:[person,d,a.id,b.id].join('|'),person,date:d,kind:hard?'hard':'possible',a,b};
         conflicts.push(item);
         [a.id,b.id].forEach(id=>{if(!byTask[id])byTask[id]=[];byTask[id].push(item)});
