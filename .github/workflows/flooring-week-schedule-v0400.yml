@@ -1,0 +1,20 @@
+name: Flooring Action Explain V0.4.00
+on:
+  pull_request:
+    paths:
+      - 'flooring/week-schedule-v0400.js'
+      - 'flooring/index-v0400-action-explain-preview.html'
+      - 'scripts/run-flooring-week-schedule-v0400.mjs'
+      - '.github/workflows/flooring-week-schedule-v0400.yml'
+  workflow_dispatch:
+jobs:
+  action-explain-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.4.00 explanation, action, dispatch, pressure and read-only gates
+        run: node scripts/run-flooring-week-schedule-v0400.mjs
