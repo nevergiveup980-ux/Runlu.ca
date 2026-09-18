@@ -58,9 +58,9 @@ test('Execution plan separates inventory supplier labour fee',()=>{
   const x=A.executionPlan(p);assert.equal(x.inventoryCount,1);assert.equal(x.supplierCount,1);assert.equal(x.labourCount,1);assert.equal(x.feeCount,1);assert.equal(x.mixedSource,true)
 });
 test('Receiving eligibility follows line source only',()=>{
-  assert.deepEqual(A.receiptEligibility({sourceType:'SUPPLIER'}),{warehouseReceive:true,inventoryAllocate:false,nonMaterial:false});
-  assert.deepEqual(A.receiptEligibility({sourceType:'INVENTORY'}),{warehouseReceive:false,inventoryAllocate:true,nonMaterial:false});
-  assert.deepEqual(A.receiptEligibility({sourceType:'LABOUR'}),{warehouseReceive:false,inventoryAllocate:false,nonMaterial:true})
+  assert.equal(JSON.stringify(A.receiptEligibility({sourceType:'SUPPLIER'})),JSON.stringify({warehouseReceive:true,inventoryAllocate:false,nonMaterial:false}));
+  assert.equal(JSON.stringify(A.receiptEligibility({sourceType:'INVENTORY'})),JSON.stringify({warehouseReceive:false,inventoryAllocate:true,nonMaterial:false}));
+  assert.equal(JSON.stringify(A.receiptEligibility({sourceType:'LABOUR'})),JSON.stringify({warehouseReceive:false,inventoryAllocate:false,nonMaterial:true}))
 });
 test('Stock line can carry roll number and warehouse location',()=>{
   const x=A.normalizeLine({id:'i',sourceType:'INVENTORY',rollNumber:'2244',warehouseLocation:'2A',description:'Carpet'});
