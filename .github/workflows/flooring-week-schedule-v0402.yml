@@ -1,0 +1,20 @@
+name: Flooring Pickup Desk V0.4.02
+on:
+  pull_request:
+    paths:
+      - 'flooring/week-schedule-v0402.js'
+      - 'flooring/index-v0402-pickup-deadfiles-preview.html'
+      - 'scripts/run-flooring-week-schedule-v0402.mjs'
+      - '.github/workflows/flooring-week-schedule-v0402.yml'
+  workflow_dispatch:
+jobs:
+  pickup-deadfiles-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.4.02 pickup, dead-files, morning-brief and read-only gates
+        run: node scripts/run-flooring-week-schedule-v0402.mjs
