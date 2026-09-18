@@ -1,0 +1,610 @@
+/* RUNLU Deerfoot Flooring OS · V0.4.02 Pickup Desk + Dead Files Preview
+   Read-only weekly task board. It may READ existing browser-local Flooring / Warehouse
+   order, calendar and PO datasets, but it never writes order state, inventory, PO data,
+   localStorage, IndexedDB, Supabase or any network resource.
+*/
+(function(root){
+'use strict';
+if(root.__RUNLU_WEEK_SCHEDULE_V0402__)return;
+root.__RUNLU_WEEK_SCHEDULE_V096__=true;
+
+const VERSION='0.4.02';
+const KEYS={
+  warehouseOrders:'runlu_orders_v20',
+  flooringJobs:'runlu_deerfoot_flooring_jobs_v1',
+  manualEvents:'runlu_calendar_manual_events_v056',
+  supplierPOs:'runlu_deerfoot_supplier_orders_v1',
+  people:'runlu_calendar_people_v064'
+};
+const DAY_MS=86400000;
+const TYPE_ORDER=['Installation','Appointment','Measurement','CHC','Pickup','Delivery','Required Date','Other'];
+const TYPE_CLASS={
+  Installation:'install',Appointment:'appt',Measurement:'measure',CHC:'chc',Pickup:'pickup',Delivery:'delivery','Required Date':'required',Other:'other'
+};
+const TYPE_LABEL={
+  Installation:'Installation',Appointment:'Appointment',Measurement:'Measurement',CHC:'CHC',Pickup:'Supplier Pickup',Delivery:'Supplier Delivery','Required Date':'Required Date',Other:'Other'
+};
+
+function str(v){return String(v==null?'':v).trim()}
+function esc(v){return str(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function attr(v){return esc(v).replace(/"/g,'&quot;')}
+function iso(v){return /^\d{4}-\d{2}-\d{2}$/.test(str(v))}
+function dateObj(v){if(!iso(v))return null;const d=new Date(v+'T12:00:00');return Number.isNaN(d.getTime())?null:d}
+function dateIso(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function addDays(v,n){const d=typeof v==='string'?dateObj(v):new Date(v);if(!d)return '';d.setDate(d.getDate()+n);return dateIso(d)}
+function dayDiff(a,b){const da=dateObj(a),db=dateObj(b);if(!da||!db)return 0;return Math.round((db-da)/DAY_MS)}
+function sundayFor(v){const d=dateObj(v)||new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-d.getDay());return dateIso(d)}
+function localToday(){const d=new Date();return dateIso(d)}
+function pretty(v,opt){const d=dateObj(v);return d?d.toLocaleDateString('en-CA',opt||{month:'short',day:'numeric'}):'—'}
+function timeOk(v){return /^\d{1,2}:\d{2}$/.test(str(v))}
+function normalizeTime(v){const s=str(v);if(!s)return '';if(/^\d{2}:\d{2}$/.test(s))return s;if(/^\d:\d{2}$/.test(s))return '0'+s;const m=s.match(/^(\d{1,2}):(\d{2})\s*([ap])\.?m\.?$/i);if(m){let h=Number(m[1])%12;if(m[3].toLowerCase()==='p')h+=12;return String(h).padStart(2,'0')+':'+m[2]}return ''}
+function firstDate(){for(const v of arguments){if(iso(v))return v}return ''}
+function firstText(){for(const v of arguments){if(str(v))return str(v)}return ''}
+function arr(v){return Array.isArray(v)?v:[]}
+function safeRead(storage,key,fallback){try{const raw=storage&&storage.getItem?storage.getItem(key):null;if(!raw)return fallback;const v=JSON.parse(raw);return v==null?fallback:v}catch(_){return fallback}}
+function stableId(prefix,parts){return prefix+'-'+parts.map(str).join('|').replace(/[^a-z0-9|_-]+/gi,'-').slice(0,160)}
+function typeOfEvent(x){
+  const raw=(firstText(x.eventType,x.subCalendar,x.sub,x.calendarGroup,x.group,x.type)||'Other').toLowerCase();
+  if(raw.includes('measure'))return 'Measurement';
+  if(raw.includes('appoint'))return 'Appointment';
+  if(raw.includes('chc'))return 'CHC';
+  if(raw.includes('install'))return 'Installation';
+  if(raw.includes('deliver'))return 'Delivery';
+  if(raw.includes('pickup'))return 'Pickup';
+  return 'Other';
+}
+function taskBase(x){return {
+  id:str(x.id),source:str(x.source),sourceKey:str(x.sourceKey),sourceRecordId:str(x.sourceRecordId),
+  type:str(x.type)||'Other',title:str(x.title)||'Untitled task',customer:str(x.customer),person:str(x.person)||'Unassigned',
+  sales:str(x.sales),installer:str(x.installer),startDate:str(x.startDate),endDate:str(x.endDate)||str(x.startDate),
+  startTime:normalizeTime(x.startTime),endTime:normalizeTime(x.endTime),status:str(x.status),address:str(x.address),
+  jobNumber:str(x.jobNumber),poNumber:str(x.poNumber),notes:str(x.notes),demo:!!x.demo
+}}
+function validTask(t){return iso(t.startDate)&&iso(t.endDate)&&t.endDate>=t.startDate}
+function addTask(out,raw){const t=taskBase(raw);if(!t.id)t.id=stableId('task',[t.source,t.type,t.jobNumber,t.poNumber,t.customer,t.person,t.startDate,t.startTime]);if(validTask(t))out.push(t)}
+
+function extractWarehouseOrders(records){
+  const out=[];
+  arr(records).forEach((o,i)=>{
+    if(!o||typeof o!=='object')return;
+    const id=firstText(o.id,o.orderId,o.order_id,o.jobId,o.job_id,'row'+i);
+    const customer=firstText(o.customerName,o.customer_name,o.customer,o.shipToName,o.ship_to_name);
+    const jobNumber=firstText(o.jobNumber,o.job_number,o.orderNumber,o.order_number,o.number,o.job);
+    const sales=firstText(o.sales,o.salesRep,o.sales_rep,o.clerk,o.salesperson,o.salesPerson);
+    const installer=firstText(o.installer,o.installerName,o.installer_name,o.assignedInstaller,o.assigned_installer);
+    const status=firstText(o.installStatus,o.install_status,o.status);
+    const address=firstText(o.installAddress,o.install_address,o.shipToAddress,o.ship_to_address,o.address);
+    const notes=firstText(o.installNotes,o.install_notes,o.notes,o.note);
+    const start=firstDate(o.installDate,o.install_date,o.installStartDate,o.install_start_date,o.scheduleDate,o.schedule_date);
+    const end=firstDate(o.installEndDate,o.install_end_date,o.endDate,o.end_date,start);
+    if(start)addTask(out,{source:'Warehouse Orders',sourceKey:KEYS.warehouseOrders,sourceRecordId:id,type:'Installation',title:firstText(jobNumber?'Job '+jobNumber:'',customer,'Installation'),customer,person:installer||sales||'Unassigned',sales,installer,startDate:start,endDate:end,startTime:firstText(o.installStart,o.install_start,o.startTime,o.start_time),endTime:firstText(o.installEnd,o.install_end,o.endTime,o.end_time),status,address,jobNumber,notes});
+    const pickup=firstDate(o.pickupDate,o.pickup_date,o.supplierPickupDate,o.supplier_pickup_date);
+    if(pickup)addTask(out,{source:'Warehouse Orders',sourceKey:KEYS.warehouseOrders,sourceRecordId:id,type:'Pickup',title:firstText(jobNumber?'Job '+jobNumber:'',customer,'Supplier Pickup'),customer,person:sales||installer||'Unassigned',sales,installer,startDate:pickup,endDate:pickup,status,address,jobNumber,notes});
+    const delivery=firstDate(o.deliveryDate,o.delivery_date,o.supplierDeliveryDate,o.supplier_delivery_date);
+    if(delivery)addTask(out,{source:'Warehouse Orders',sourceKey:KEYS.warehouseOrders,sourceRecordId:id,type:'Delivery',title:firstText(jobNumber?'Job '+jobNumber:'',customer,'Supplier Delivery'),customer,person:sales||installer||'Unassigned',sales,installer,startDate:delivery,endDate:delivery,status,address,jobNumber,notes});
+  });
+  return out;
+}
+function extractFlooringJobs(records){
+  const out=[];
+  arr(records).forEach((j,i)=>{
+    if(!j||typeof j!=='object'||j.isDemo===true)return;
+    const id=firstText(j.id,'job'+i),customer=firstText(j.customerName,j.customer,j.shipToName),jobNumber=firstText(j.jobNumber,j.orderNumber),sales=firstText(j.clerk,j.salesRep,j.sales),installer=firstText(j.installer,j.installerName),status=firstText(j.installStatus,j.status),address=firstText(j.installAddress,j.shipToAddress,j.soldToAddress),notes=firstText(j.installNotes,j.notes);
+    const start=firstDate(j.installDate,j.installStartDate,j.scheduleDate),end=firstDate(j.installEndDate,j.endDate,start);
+    if(start)addTask(out,{source:'Flooring Orders',sourceKey:KEYS.flooringJobs,sourceRecordId:id,type:'Installation',title:firstText(jobNumber?'Job '+jobNumber:'',customer,'Installation'),customer,person:installer||sales||'Unassigned',sales,installer,startDate:start,endDate:end,startTime:j.installStart,endTime:j.installEnd,status,address,jobNumber,notes});
+    const req=firstDate(j.dateRequired,j.requiredDate);
+    if(req&&!start)addTask(out,{source:'Flooring Orders',sourceKey:KEYS.flooringJobs,sourceRecordId:id,type:'Required Date',title:firstText(jobNumber?'Job '+jobNumber:'',customer,'Required Date'),customer,person:sales||installer||'Unassigned',sales,installer,startDate:req,endDate:req,status:firstText(j.status),address,jobNumber,notes});
+  });
+  return out;
+}
+function extractManualEvents(records){
+  const out=[];
+  arr(records).forEach((m,i)=>{
+    if(!m||typeof m!=='object')return;
+    const start=firstDate(m.eventDate,m.date,m.startDate),end=firstDate(m.endDate,m.eventEndDate,start);if(!start)return;
+    const type=typeOfEvent(m),who=firstText(m.assignedTo,m.person,m.staff,m.installer,'Unassigned'),customer=firstText(m.customerName,m.customer),title=firstText(m.title,m.eventType,m.subCalendar,m.sub,customer,type);
+    addTask(out,{source:'Calendar Events',sourceKey:KEYS.manualEvents,sourceRecordId:firstText(m.id,'event'+i),type,title,customer,person:who,sales:type==='Installation'?'':who,installer:type==='Installation'?who:'',startDate:start,endDate:end,startTime:firstText(m.startTime,m.start),endTime:firstText(m.endTime,m.end),status:firstText(m.status),address:firstText(m.address,m.installAddress),jobNumber:firstText(m.jobNumber,m.job),notes:firstText(m.notes,m.note)});
+  });
+  return out;
+}
+function extractSupplierPOs(records){
+  const out=[];
+  arr(records).forEach((p,i)=>{
+    if(!p||typeof p!=='object'||String(p.status||'')==='Cancelled')return;
+    const d=firstDate(p.requestedDate,p.expectedDate,p.pickupDate,p.deliveryDate);if(!d)return;
+    const type=/deliver/i.test(firstText(p.fulfillment,p.method,p.type))?'Delivery':'Pickup';
+    const customer=firstText(p.customerName,p.customer),sales=firstText(p.salesRep,p.sales,p.clerk),po=firstText(p.poNumber,p.po,p.number),job=firstText(p.jobNumber,p.job),supplier=firstText(p.supplier,'Supplier');
+    addTask(out,{source:'Supplier POs',sourceKey:KEYS.supplierPOs,sourceRecordId:firstText(p.id,'po'+i),type,title:`${type==='Delivery'?'Delivery':'Pickup'} · ${supplier}`,customer,person:sales||'Warehouse',sales,startDate:d,endDate:d,status:firstText(p.status),jobNumber:job,poNumber:po,notes:firstText(p.notes,p.note)});
+  });
+  return out;
+}
+function logicalScheduleKey(t){
+  const ref=firstText(t.jobNumber,t.poNumber);
+  if(!ref)return '';
+  return ['logical',t.type,ref,t.person,t.startDate,t.endDate,t.startTime,t.endTime].join('|').toLowerCase();
+}
+function dedupe(tasks){
+  const seen=new Set(),logical=new Set(),out=[];
+  arr(tasks).forEach(t=>{
+    const sourceKey=[t.sourceKey,t.sourceRecordId,t.type,t.startDate,t.endDate,t.startTime,t.person].join('|').toLowerCase();
+    const logicalKey=logicalScheduleKey(t);
+    if(seen.has(sourceKey)||(logicalKey&&logical.has(logicalKey)))return;
+    seen.add(sourceKey);if(logicalKey)logical.add(logicalKey);out.push(t);
+  });
+  return out;
+}
+function extractAll(datasets){return dedupe([].concat(extractWarehouseOrders(datasets.warehouseOrders),extractFlooringJobs(datasets.flooringJobs),extractManualEvents(datasets.manualEvents),extractSupplierPOs(datasets.supplierPOs)))}
+
+function demoTasks(todayValue){
+  const w=sundayFor(todayValue||localToday());
+  return [
+    taskBase({id:'demo-install-a',source:'DEMO',type:'Installation',title:'DEMO Job 182410',customer:'Demo Customer A',person:'Bilal',installer:'Bilal',sales:'Carol',startDate:addDays(w,1),endDate:addDays(w,2),startTime:'08:00',endTime:'16:00',status:'Scheduled',address:'Demo site · Calgary',jobNumber:'182410',notes:'DEMO only · multi-day installation',demo:true}),
+    taskBase({id:'demo-install-b',source:'DEMO',type:'Installation',title:'DEMO Job 182418',customer:'Demo Customer B',person:'Bilal',installer:'Bilal',sales:'Tony',startDate:addDays(w,2),endDate:addDays(w,2),startTime:'10:00',endTime:'14:00',status:'Confirmed',jobNumber:'182418',notes:'DEMO only · overlap test',demo:true}),
+    taskBase({id:'demo-measure',source:'DEMO',type:'Measurement',title:'DEMO Measure',customer:'Demo Customer C',person:'Alana',sales:'Alana',startDate:addDays(w,3),endDate:addDays(w,3),startTime:'11:00',endTime:'12:00',status:'Scheduled',demo:true}),
+    taskBase({id:'demo-pickup',source:'DEMO',type:'Pickup',title:'DEMO Pickup · Fuzion',customer:'Demo Customer D',person:'Tony',sales:'Tony',startDate:addDays(w,4),endDate:addDays(w,4),status:'Ready',poNumber:'DEMO-0319',demo:true}),
+    taskBase({id:'demo-chc',source:'DEMO',type:'CHC',title:'DEMO CHC Visit',customer:'Demo Customer E',person:'Faith',startDate:addDays(w,5),endDate:addDays(w,6),status:'Scheduled',demo:true})
+  ];
+}
+
+function clipTask(task,weekStart){
+  const weekEnd=addDays(weekStart,6),s=task.startDate,e=task.endDate||s;if(!iso(s)||!iso(e)||e<weekStart||s>weekEnd)return null;
+  const cs=s<weekStart?weekStart:s,ce=e>weekEnd?weekEnd:e;
+  return {...task,clipStart:cs,clipEnd:ce,startIndex:dayDiff(weekStart,cs),span:dayDiff(cs,ce)+1,continuesBefore:s<weekStart,continuesAfter:e>weekEnd};
+}
+function compareTask(a,b){return String(a.clipStart).localeCompare(String(b.clipStart))||String(b.clipEnd).localeCompare(String(a.clipEnd))||String(a.startTime||'99:99').localeCompare(String(b.startTime||'99:99'))||String(a.title).localeCompare(String(b.title))}
+function allocateLanes(tasks,weekStart){
+  const clipped=arr(tasks).map(t=>clipTask(t,weekStart)).filter(Boolean).sort(compareTask),laneEnds=[];
+  clipped.forEach(t=>{let lane=0;while(lane<laneEnds.length&&t.startIndex<=laneEnds[lane])lane++;t.lane=lane;laneEnds[lane]=t.startIndex+t.span-1});
+  return {tasks:clipped,laneCount:laneEnds.length};
+}
+function filterTasks(tasks,filters){
+  const types=new Set(arr(filters&&filters.types)),person=str(filters&&filters.person),q=str(filters&&filters.q).toLowerCase();
+  return arr(tasks).filter(t=>(!types.size||types.has(t.type))&&(!person||person==='ALL'||t.person===person)&&(!q||[t.title,t.customer,t.person,t.sales,t.installer,t.jobNumber,t.poNumber,t.status,t.address,t.notes].join(' ').toLowerCase().includes(q)));
+}
+function loadDatasets(storage){return {
+  warehouseOrders:safeRead(storage,KEYS.warehouseOrders,[]),flooringJobs:safeRead(storage,KEYS.flooringJobs,[]),manualEvents:safeRead(storage,KEYS.manualEvents,[]),supplierPOs:safeRead(storage,KEYS.supplierPOs,[]),people:safeRead(storage,KEYS.people,[])
+}}
+function weekDayCounts(tasks,weekStart){
+  const counts=Array(7).fill(0);
+  arr(tasks).forEach(t=>{const c=clipTask(t,weekStart);if(!c)return;for(let i=c.startIndex;i<c.startIndex+c.span&&i<7;i++)counts[i]++});
+  return counts;
+}
+function densityProfile(laneCount,maxDaily,requested='auto'){
+  const req=str(requested).toLowerCase();
+  const mode=req==='comfortable'||req==='compact'||req==='dense'?req:(laneCount>18||maxDaily>18?'dense':laneCount>8||maxDaily>9?'compact':'comfortable');
+  if(mode==='dense')return {mode,laneHeight:31,taskHeight:25,label:'Dense'};
+  if(mode==='compact')return {mode,laneHeight:38,taskHeight:31,label:'Compact'};
+  return {mode:'comfortable',laneHeight:46,taskHeight:38,label:'Comfortable'};
+}
+function minuteOf(v){const t=normalizeTime(v);if(!t)return null;const [h,m]=t.split(':').map(Number);return h*60+m}
+function knownMinutes(t){
+  if(t.startDate!==t.endDate)return 0;
+  const a=minuteOf(t.startTime),b=minuteOf(t.endTime);return a==null||b==null||b<=a?0:b-a;
+}
+function installerIdentity(t){return str(t.installer||((t.type==='Installation')?t.person:''))}
+function installerTasks(tasks){return arr(tasks).filter(t=>installerIdentity(t)&&installerIdentity(t)!=='Unassigned'&&t.type==='Installation')}
+function occupies(t,date){return iso(date)&&t.startDate<=date&&t.endDate>=date}
+function timedHardOverlap(a,b,date){
+  if(a.startDate!==a.endDate||b.startDate!==b.endDate||a.startDate!==date||b.startDate!==date)return false;
+  const as=minuteOf(a.startTime),ae=minuteOf(a.endTime),bs=minuteOf(b.startTime),be=minuteOf(b.endTime);
+  if([as,ae,bs,be].some(x=>x==null)||ae<=as||be<=bs)return false;
+  return as<be&&bs<ae;
+}
+function conflictAnalysis(tasks,weekStart){
+  const end=addDays(weekStart,6),inst=installerTasks(tasks),conflicts=[],byTask={};
+  const people=[...new Set(inst.map(installerIdentity))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'}));
+  people.forEach(person=>{
+    for(let d=weekStart;d<=end;d=addDays(d,1)){
+      const xs=inst.filter(t=>installerIdentity(t)===person&&occupies(t,d));
+      for(let i=0;i<xs.length;i++)for(let j=i+1;j<xs.length;j++){
+        const a=xs[i],b=xs[j];
+        const hard=timedHardOverlap(a,b,d);
+        const fullyComparable=!hard&&a.startDate===a.endDate&&b.startDate===b.endDate&&a.startDate===d&&b.startDate===d&&knownMinutes(a)>0&&knownMinutes(b)>0;
+        if(fullyComparable)continue;
+        const item={id:[person,d,a.id,b.id].join('|'),person,date:d,kind:hard?'hard':'possible',a,b};
+        conflicts.push(item);
+        [a.id,b.id].forEach(id=>{if(!byTask[id])byTask[id]=[];byTask[id].push(item)});
+      }
+    }
+  });
+  return {conflicts,byTask,hard:conflicts.filter(x=>x.kind==='hard').length,possible:conflicts.filter(x=>x.kind==='possible').length};
+}
+function workloadMatrix(tasks,weekStart){
+  const end=addDays(weekStart,6),inst=installerTasks(tasks),analysis=conflictAnalysis(tasks,weekStart);
+  const people=[...new Set(inst.map(installerIdentity))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'}));
+  const rows=people.map(person=>{
+    const days=[];let taskDays=0,minutes=0,hard=0,possible=0;
+    for(let d=weekStart;d<=end;d=addDays(d,1)){
+      const xs=inst.filter(t=>installerIdentity(t)===person&&occupies(t,d));
+      const known=xs.reduce((s,t)=>s+knownMinutes(t),0);
+      const cs=analysis.conflicts.filter(x=>x.person===person&&x.date===d);
+      const h=cs.filter(x=>x.kind==='hard').length,p=cs.filter(x=>x.kind==='possible').length;
+      taskDays+=xs.length;minutes+=known;hard+=h;possible+=p;
+      days.push({date:d,count:xs.length,knownMinutes:known,hard:h,possible:p,tasks:xs});
+    }
+    return {person,days,taskDays,knownMinutes:minutes,hard,possible};
+  });
+  return {rows,analysis};
+}
+function installerRoster(people,tasks){
+  const names=new Set();
+  arr(people).forEach(p=>{if(!p||p.active===false)return;const gs=arr(p.groups).map(x=>str(x).toLowerCase());if(gs.includes('installer')&&str(p.name))names.add(str(p.name))});
+  installerTasks(tasks).forEach(t=>{const n=installerIdentity(t);if(n)names.add(n)});
+  return [...names].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'}));
+}
+function linkedPOsForJob(job,pos){
+  const id=str(job&&job.id),num=str(job&&firstText(job.jobNumber,job.orderNumber));
+  return arr(pos).filter(p=>p&&String(p.status||'')!=='Cancelled'&&((id&&str(p.jobId)===id)||(num&&str(p.jobNumber)===num)));
+}
+function materialStateForJob(job,pos){
+  const ps=linkedPOsForJob(job,pos);
+  if(!ps.length)return {code:'unknown',label:'No linked PO',poCount:0};
+  const sts=ps.map(p=>str(p.status).toLowerCase());
+  const done=sts.filter(s=>s==='received'||s==='completed').length;
+  if(done===sts.length)return {code:'ready',label:'Material Ready',poCount:ps.length};
+  if(done>0||sts.some(s=>s.includes('partial')))return {code:'partial',label:'Partial Material',poCount:ps.length};
+  return {code:'waiting',label:'Waiting Material',poCount:ps.length};
+}
+function openJobRecord(j){
+  const s=str(j&&j.status).toLowerCase(),is=str(j&&j.installStatus).toLowerCase();
+  return !['closed','cancelled','completed'].includes(s)&&is!=='completed';
+}
+function jobInstallStart(j){return firstDate(j&&j.installDate,j&&j.installStartDate,j&&j.scheduleDate)}
+function jobInstallEnd(j){const s=jobInstallStart(j);return firstDate(j&&j.installEndDate,j&&j.endDate,s)}
+function upcomingScheduleGaps(jobs,date,horizonDays=2){
+  const end=addDays(date,horizonDays),out=[];
+  arr(jobs).forEach(j=>{
+    if(!j||j.isDemo===true||!openJobRecord(j))return;
+    const install=jobInstallStart(j),required=firstDate(j.dateRequired,j.requiredDate);
+    const target=install||required;
+    if(!target||target<date||target>end)return;
+    const missing=[];
+    if(!install)missing.push('install date');
+    if(!str(j.installer||j.installerName))missing.push('installer');
+    if(install&&!normalizeTime(j.installStart))missing.push('start time');
+    if(install&&!normalizeTime(j.installEnd))missing.push('end time');
+    if(!missing.length)return;
+    out.push({
+      id:firstText(j.id,j.jobNumber,j.orderNumber),
+      jobNumber:firstText(j.jobNumber,j.orderNumber),
+      customer:firstText(j.customerName,j.customer,j.shipToName),
+      sales:firstText(j.clerk,j.salesRep,j.sales),
+      targetDate:target,
+      sourceDate:install?'Install':'Required',
+      missing,
+      status:firstText(j.installStatus,j.status)
+    });
+  });
+  return out.sort((a,b)=>a.targetDate.localeCompare(b.targetDate)||a.jobNumber.localeCompare(b.jobNumber,undefined,{numeric:true}));
+}
+function dispatchMorning(datasets,tasks,date){
+  const today=iso(date)?date:localToday(),week=sundayFor(today);
+  const installs=installerTasks(tasks).filter(t=>occupies(t,today)).sort((a,b)=>String(a.startTime||'99:99').localeCompare(String(b.startTime||'99:99'))||installerIdentity(a).localeCompare(installerIdentity(b)));
+  const analysis=conflictAnalysis(tasks,week),dayConflicts=analysis.conflicts.filter(x=>x.date===today);
+  const assigned=[...new Set(installs.map(installerIdentity).filter(Boolean))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'}));
+  const roster=installerRoster(datasets.people,tasks);
+  const noInstallAssigned=roster.filter(n=>!assigned.includes(n));
+  const jobs=arr(datasets.flooringJobs).filter(j=>j&&!j.isDemo&&openJobRecord(j)&&jobInstallStart(j)&&jobInstallStart(j)<=today&&jobInstallEnd(j)>=today);
+  const material=jobs.map(job=>({job,state:materialStateForJob(job,datasets.supplierPOs)}));
+  const materialAttention=material.filter(x=>x.state.code!=='ready');
+  const gaps=upcomingScheduleGaps(datasets.flooringJobs,today,2);
+  return {
+    date:today,installs,assigned,roster,noInstallAssigned,
+    hard:dayConflicts.filter(x=>x.kind==='hard'),possible:dayConflicts.filter(x=>x.kind==='possible'),
+    material,materialAttention,gaps
+  };
+}
+function actionLevel(score){return score>=95?'critical':score>=80?'urgent':score>=60?'review':'watch'}
+function uniqueText(values){return [...new Set(arr(values).map(str).filter(Boolean))]}
+function nextChecksFor(kind,detail){
+  if(kind==='conflict')return [
+    'Verify the installer assignment on both jobs',
+    'Verify the exact start and end times on both jobs',
+    'Then decide whether a time or installer adjustment is needed in the source schedule'
+  ];
+  if(kind==='schedule-check')return [
+    'Check the missing or incomplete time information on both jobs',
+    'Confirm whether the same installer is intended for both jobs that day'
+  ];
+  if(kind==='material'){
+    const code=str(detail&&detail.code);
+    if(code==='waiting')return ['Check the linked PO receiving status and outstanding material before the installation starts'];
+    if(code==='partial')return ['Check which linked PO material is still outstanding and whether the installation can proceed as scheduled'];
+    return ['Verify that the job is linked to the correct supplier PO before treating material as ready'];
+  }
+  if(kind==='schedule-gap'){
+    const missing=arr(detail&&detail.missing),out=[];
+    if(missing.includes('install date'))out.push('Verify the install date in the source order');
+    if(missing.includes('installer'))out.push('Verify the intended installer assignment in the source order');
+    if(missing.includes('start time')||missing.includes('end time'))out.push('Verify the installation start and end times in the source order');
+    return out.length?out:['Review the incomplete scheduling fields in the source order'];
+  }
+  return ['Review the source record that produced this advisory item'];
+}
+function explainAction(item){
+  if(!item||typeof item!=='object')return item;
+  const kinds=arr(item.kinds);let why=arr(item.reasons),next=arr(item.nextChecks),evidence=arr(item.evidence);
+  if(item.kind==='conflict'){
+    why=uniqueText(why);next=nextChecksFor('conflict');evidence=['Explicit installer assignment','Explicit single-day start/end times'];
+  }else if(item.kind==='schedule-check'){
+    why=uniqueText(why);next=nextChecksFor('schedule-check');evidence=['Same installer','Same schedule date','Incomplete or multi-day time evidence'];
+  }else if(item.kind==='job'){
+    kinds.forEach(k=>{
+      if(k==='material')next=next.concat(nextChecksFor('material',item.materialState));
+      if(k==='schedule-gap')next=next.concat(nextChecksFor('schedule-gap',{missing:item.missingFields}));
+    });
+    if(kinds.includes('material'))evidence.push('Linked Flooring PO status');
+    if(kinds.includes('schedule-gap'))evidence.push('Flooring job schedule fields');
+  }
+  item.why=uniqueText(why);item.nextChecks=uniqueText(next);item.evidence=uniqueText(evidence);return item;
+}
+function actionRequired(datasets,tasks,date,limit=5){
+  const dispatch=dispatchMorning(datasets,tasks,date),items=[],jobMap=new Map();
+  const pushJob=(job,score,reason,kind)=>{
+    const id=firstText(job&&job.id,job&&job.jobNumber,job&&job.orderNumber,reason);
+    const key='job|'+id;
+    let x=jobMap.get(key);
+    if(!x){
+      x={id:key,score,level:actionLevel(score),kind:'job',jobNumber:firstText(job&&job.jobNumber,job&&job.orderNumber),customer:firstText(job&&job.customerName,job&&job.customer,job&&job.shipToName),installer:firstText(job&&job.installer,job&&job.installerName),sales:firstText(job&&job.clerk,job&&job.salesRep,job&&job.sales),reasons:[],kinds:[],missingFields:[],materialState:null,nextChecks:[],evidence:[]};
+      jobMap.set(key,x);items.push(x);
+    }
+    x.score=Math.max(x.score,score);x.level=actionLevel(x.score);
+    if(!x.reasons.includes(reason))x.reasons.push(reason);
+    if(kind&&!x.kinds.includes(kind))x.kinds.push(kind);
+    return x;
+  };
+  dispatch.hard.forEach(x=>items.push({
+    id:'conflict|'+x.id,score:100,level:'critical',kind:'conflict',
+    title:`Timed overlap · ${x.person}`,
+    subtitle:`${x.a.jobNumber||x.a.customer||x.a.title} ↔ ${x.b.jobNumber||x.b.customer||x.b.title}`,
+    reasons:[`${x.a.startTime||'?'}–${x.a.endTime||'?'} overlaps ${x.b.startTime||'?'}–${x.b.endTime||'?'}`],
+    date:x.date,person:x.person
+  }));
+  dispatch.possible.forEach(x=>items.push({
+    id:'check|'+x.id,score:65,level:'review',kind:'schedule-check',
+    title:`Schedule check · ${x.person}`,
+    subtitle:`${x.a.jobNumber||x.a.customer||x.a.title} ↔ ${x.b.jobNumber||x.b.customer||x.b.title}`,
+    reasons:['Same installer/day but exact overlap cannot be proven from current time data'],
+    date:x.date,person:x.person
+  }));
+  dispatch.materialAttention.forEach(x=>{
+    const code=x.state.code,score=code==='waiting'?92:code==='partial'?86:78;
+    const reason=code==='waiting'?'Material not received for today’s installation':code==='partial'?'Material only partially received for today’s installation':'No linked PO confirms material readiness for today’s installation';
+    const item=pushJob(x.job,score,reason,'material');item.materialState={code:x.state.code,label:x.state.label,poCount:x.state.poCount||0};
+  });
+  dispatch.gaps.forEach(g=>{
+    const days=dayDiff(dispatch.date,g.targetDate),today=days===0;
+    const score=today?90:days===1?72:62;
+    const job=arr(datasets.flooringJobs).find(j=>str(j.id)===str(g.id)||(g.jobNumber&&str(j.jobNumber)===str(g.jobNumber)))||{id:g.id,jobNumber:g.jobNumber,customerName:g.customer,clerk:g.sales};
+    const item=pushJob(job,score,`${today?'Today':'Near-term'}: missing ${g.missing.join(' + ')}`,'schedule-gap');item.missingFields=uniqueText(item.missingFields.concat(g.missing));
+  });
+  items.forEach(x=>{
+    if(x.kind==='job'){
+      x.title=`${x.jobNumber?'Job '+x.jobNumber:'Job'} · ${x.customer||'Unnamed customer'}`;
+      x.subtitle=[x.installer?('Installer '+x.installer):'',x.sales?('Sales '+x.sales):''].filter(Boolean).join(' · ');
+    }
+    explainAction(x);
+  });
+  const order={critical:0,urgent:1,review:2,watch:3};
+  items.sort((a,b)=>b.score-a.score||(order[a.level]-order[b.level])||String(a.title).localeCompare(String(b.title),undefined,{numeric:true,sensitivity:'base'}));
+  const max=Math.max(1,Number(limit)||5);
+  return {date:dispatch.date,total:items.length,items,top:items.slice(0,max),hidden:Math.max(0,items.length-max),dispatch};
+}
+function plural(n,one,many){return Number(n)===1?one:(many||one+'s')}
+function hasOwnAny(o,keys){return !!o&&keys.some(k=>Object.prototype.hasOwnProperty.call(o,k))}
+function explicitTrue(v){const s=str(v).toLowerCase();return v===true||v===1||s==='true'||s==='yes'||s==='y'||s==='1'}
+function explicitFalse(v){const s=str(v).toLowerCase();return v===false||v===0||s==='false'||s==='no'||s==='n'||s==='0'}
+function monthKey(v){return iso(v)?v.slice(0,7):''}
+function nextMonthKey(v){const d=dateObj(v);if(!d)return '';d.setDate(1);d.setMonth(d.getMonth()+1);return dateIso(d).slice(0,7)}
+function completedOrderStatus(j){
+  const values=[j&&j.status,j&&j.orderStatus,j&&j.jobStatus,j&&j.installStatus,j&&j.workflowStatus].map(v=>str(v).toLowerCase()).filter(Boolean);
+  return values.find(s=>['completed','complete','closed','archived','archive','dead file','dead files'].includes(s))||'';
+}
+function isDeadFileJob(j){return !!completedOrderStatus(j)}
+function pickupRawLabel(j){return firstText(j&&j.pickupFolder,j&&j.pickUpFolder,j&&j.pickupBucket,j&&j.pickUpBucket,j&&j.pickupStage,j&&j.pickUpStage,j&&j.pickupStatus,j&&j.pickUpStatus,j&&j.workflowBucket)}
+function pickupDateOf(j){return firstDate(j&&j.customerPickupDate,j&&j.customer_pickup_date,j&&j.pickupDate,j&&j.pickUpDate,j&&j.pickup_date)}
+function pickupRecordFromJob(j,date,index=0){
+  if(!j||typeof j!=='object'||j.isDemo===true||isDeadFileJob(j))return null;
+  const pickupKeys=['pickupFolder','pickUpFolder','pickupBucket','pickUpBucket','pickupStage','pickUpStage','pickupStatus','pickUpStatus','customerPickupDate','customer_pickup_date','pickupDate','pickUpDate','pickup_date','pickupConfirmed','pickUpConfirmed','needsCall','pickupNeedsCall','pickUpNeedsCall'];
+  const raw=pickupRawLabel(j),d=pickupDateOf(j);
+  const signal=hasOwnAny(j,pickupKeys)||/pick[ -]?up|people to call|awaiting confirmation/i.test(raw);
+  if(!signal)return null;
+  const low=str(raw).toLowerCase();
+  let bucket='';
+  if(/people\s+to\s+call|call needed|needs? call|to call/.test(low)||explicitTrue(firstText(j.needsCall,j.pickupNeedsCall,j.pickUpNeedsCall)))bucket='people-to-call';
+  else if(/awaiting\s+confirmation|awaiting confirm|confirm/.test(low)||explicitFalse(firstText(j.pickupConfirmed,j.pickUpConfirmed)))bucket='awaiting-confirmation';
+  else if(/next\s+month/.test(low))bucket='next-month';
+  else if(/this\s+month/.test(low))bucket='this-month';
+  else if(d&&monthKey(d)===monthKey(date))bucket='this-month';
+  else if(d&&monthKey(d)===nextMonthKey(date))bucket='next-month';
+  else if(d)bucket='other-scheduled';
+  else bucket='unclassified';
+  return {
+    id:firstText(j.id,'pickup'+index),jobNumber:firstText(j.jobNumber,j.orderNumber),customer:firstText(j.customerName,j.customer,j.shipToName),
+    sales:firstText(j.clerk,j.salesRep,j.sales),pickupDate:d,bucket,rawLabel:raw,status:firstText(j.status,j.orderStatus,j.jobStatus),
+    source:'Flooring Orders'
+  };
+}
+function deadFileRecord(j,index=0){
+  if(!j||typeof j!=='object'||j.isDemo===true||!isDeadFileJob(j))return null;
+  const archiveDate=firstDate(j.completedDate,j.completeDate,j.closedDate,j.archivedDate,j.archiveDate);
+  const referenceDate=archiveDate||firstDate(j.installEndDate,j.installDate,j.dateRequired,j.requiredDate);
+  return {
+    id:firstText(j.id,'dead'+index),jobNumber:firstText(j.jobNumber,j.orderNumber),customer:firstText(j.customerName,j.customer,j.shipToName),
+    sales:firstText(j.clerk,j.salesRep,j.sales),status:firstText(j.status,j.orderStatus,j.jobStatus,j.installStatus),archiveDate,referenceDate
+  };
+}
+function pickupDesk(datasets,date){
+  const selected=iso(date)?date:localToday(),folders={
+    'awaiting-confirmation':[],'people-to-call':[],'this-month':[],'next-month':[],'other-scheduled':[],'unclassified':[]
+  };
+  arr(datasets&&datasets.flooringJobs).forEach((j,i)=>{const r=pickupRecordFromJob(j,selected,i);if(r)folders[r.bucket].push(r)});
+  Object.values(folders).forEach(xs=>xs.sort((a,b)=>String(a.pickupDate||'9999-99-99').localeCompare(String(b.pickupDate||'9999-99-99'))||String(a.jobNumber).localeCompare(String(b.jobNumber),undefined,{numeric:true})));
+  const deadFiles=arr(datasets&&datasets.flooringJobs).map(deadFileRecord).filter(Boolean).sort((a,b)=>String(b.referenceDate||'').localeCompare(String(a.referenceDate||''))||String(b.jobNumber).localeCompare(String(a.jobNumber),undefined,{numeric:true}));
+  const totalPickup=Object.values(folders).reduce((n,xs)=>n+xs.length,0);
+  return {date:selected,folders,deadFiles,totalPickup,deadCount:deadFiles.length};
+}
+function morningBrief(datasets,tasks,date){
+  const actions=actionRequired(datasets,tasks,date,5),d=actions.dispatch;
+  const materialCounts={waiting:0,partial:0,unknown:0};
+  d.materialAttention.forEach(x=>{const k=x.state.code;if(Object.prototype.hasOwnProperty.call(materialCounts,k))materialCounts[k]++});
+  const todayGaps=d.gaps.filter(g=>g.targetDate===d.date).length;
+  const nearGaps=d.gaps.length-todayGaps;
+  const urgentToday=materialCounts.waiting+materialCounts.partial+todayGaps;
+  const reviewCount=d.possible.length+materialCounts.unknown+nearGaps;
+  const severity=d.hard.length?'critical':urgentToday?'urgent':reviewCount?'review':'clear';
+  let headline='';
+  if(severity==='critical')headline=`${d.hard.length} timed ${plural(d.hard.length,'overlap')} need verification before dispatch.`;
+  else if(severity==='urgent')headline=`No timed overlap found; ${urgentToday} today ${plural(urgentToday,'issue')} need checking.`;
+  else if(severity==='review')headline=`No critical conflict found; ${reviewCount} advisory ${plural(reviewCount,'item')} merit review.`;
+  else headline='No Action Required item identified for this date.';
+  const sentences=[
+    `${d.installs.length} install ${plural(d.installs.length,'task-day')} across ${d.assigned.length} assigned ${plural(d.assigned.length,'installer')}.`
+  ];
+  if(d.materialAttention.length)sentences.push(`${d.materialAttention.length} installation ${plural(d.materialAttention.length,'job')} show material attention: ${materialCounts.waiting} waiting, ${materialCounts.partial} partial, ${materialCounts.unknown} unknown linkage.`);
+  else sentences.push('No material-attention item was identified from linked Flooring PO status for this date.');
+  if(d.gaps.length)sentences.push(`${d.gaps.length} schedule ${plural(d.gaps.length,'gap')} appear in the selected date plus next two days (${todayGaps} today, ${nearGaps} near-term).`);
+  else sentences.push('No near-term schedule gap was identified in the selected date plus next two days.');
+  if(d.noInstallAssigned.length)sentences.push(`${d.noInstallAssigned.length} rostered ${plural(d.noInstallAssigned.length,'installer')} have no installation assignment on this schedule date; this does not mean available or off work.`);
+  const pickup=pickupDesk(datasets,d.date),awaiting=pickup.folders['awaiting-confirmation'].length,calls=pickup.folders['people-to-call'].length,thisMonth=pickup.folders['this-month'].length,nextMonth=pickup.folders['next-month'].length;
+  if(pickup.totalPickup)sentences.push(`Pickup desk: ${awaiting} awaiting confirmation, ${calls} people to call, ${thisMonth} this month, ${nextMonth} next month.`);
+  const top=actions.top[0]||null;
+  const firstCheck=top&&top.nextChecks&&top.nextChecks[0]?top.nextChecks[0]:'';
+  const focus=top?{level:top.level,title:top.title,why:top.why&&top.why[0]||'',firstCheck}:null;
+  const chips=[
+    {key:'installs',label:'Installs',value:d.installs.length},
+    {key:'assigned',label:'Assigned',value:d.assigned.length},
+    {key:'overlap',label:'Timed overlaps',value:d.hard.length},
+    {key:'material',label:'Material attention',value:d.materialAttention.length},
+    {key:'gaps',label:'3-day gaps',value:d.gaps.length}
+  ];
+  return {date:d.date,severity,headline,sentences,focus,chips,actions,pickup};
+}
+
+const api={VERSION,KEYS,TYPE_ORDER,TYPE_LABEL,TYPE_CLASS,iso,dateObj,dateIso,addDays,dayDiff,sundayFor,localToday,pretty,normalizeTime,extractWarehouseOrders,extractFlooringJobs,extractManualEvents,extractSupplierPOs,extractAll,demoTasks,clipTask,allocateLanes,filterTasks,loadDatasets,weekDayCounts,densityProfile,minuteOf,knownMinutes,installerIdentity,installerTasks,timedHardOverlap,conflictAnalysis,workloadMatrix,installerRoster,linkedPOsForJob,materialStateForJob,upcomingScheduleGaps,dispatchMorning,actionLevel,uniqueText,nextChecksFor,explainAction,actionRequired,plural,hasOwnAny,explicitTrue,explicitFalse,monthKey,nextMonthKey,completedOrderStatus,isDeadFileJob,pickupRawLabel,pickupDateOf,pickupRecordFromJob,deadFileRecord,pickupDesk,morningBrief};
+root.RUNLUWeekScheduleV0402=api;
+
+if(typeof document==='undefined')return;
+
+let weekStart=sundayFor(localToday()),allTasks=[],usingDemo=false,selectedTypes=new Set(TYPE_ORDER),selectedPerson='ALL',searchText='',openTask=null,densityMode='auto',dispatchDate=localToday(),sourceDatasets={warehouseOrders:[],flooringJobs:[],manualEvents:[],supplierPOs:[],people:[]},lastConflictAnalysis={conflicts:[],byTask:{},hard:0,possible:0};
+const by=id=>document.getElementById(id);
+function visibleTasks(){return filterTasks(allTasks,{types:[...selectedTypes],person:selectedPerson,q:searchText})}
+function typeClass(t){return TYPE_CLASS[t]||'other'}
+function taskTime(t){if(t.startTime&&t.endTime)return `${t.startTime}–${t.endTime}`;return t.startTime||''}
+function sourceStats(d){return [
+  ['Warehouse orders',arr(d.warehouseOrders).length],['Flooring orders',arr(d.flooringJobs).filter(x=>!x?.isDemo).length],['Calendar events',arr(d.manualEvents).length],['Supplier POs',arr(d.supplierPOs).length]
+]}
+function load(){
+  const d=loadDatasets(root.localStorage);sourceDatasets=d;allTasks=extractAll(d);usingDemo=!allTasks.length;if(usingDemo)allTasks=demoTasks(localToday());renderSource(sourceStats(d));renderControls();render();
+}
+function renderSource(stats){const el=by('ws96source');if(!el)return;const count=allTasks.length;el.innerHTML=`<span class="ws96state ${usingDemo?'demo':'live'}">${usingDemo?'DEMO FALLBACK':'REAL DATA · READ ONLY'}</span><span>${count} schedule task${count===1?'':'s'}</span>${stats.map(([n,c])=>`<span>${esc(n)}: <b>${c}</b></span>`).join('')}`}
+function renderControls(){
+  const types=by('ws96types');if(types){types.innerHTML=TYPE_ORDER.map(t=>`<label class="ws96check"><input type="checkbox" data-ws96-type="${attr(t)}" ${selectedTypes.has(t)?'checked':''}><span>${esc(TYPE_LABEL[t]||t)}</span></label>`).join('');types.querySelectorAll('[data-ws96-type]').forEach(x=>x.addEventListener('change',()=>{if(x.checked)selectedTypes.add(x.dataset.ws96Type);else selectedTypes=new Set([...selectedTypes].filter(t=>t!==x.dataset.ws96Type));render()}))}
+  const people=[...new Set(allTasks.map(t=>t.person).filter(Boolean))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'}));const p=by('ws96person');if(p){p.innerHTML='<option value="ALL">All people</option>'+people.map(n=>`<option value="${attr(n)}">${esc(n)}</option>`).join('');p.value=people.includes(selectedPerson)?selectedPerson:'ALL';selectedPerson=p.value;p.onchange=()=>{selectedPerson=p.value;render()}}
+  const q=by('ws96q');if(q){q.value=searchText;q.oninput=()=>{searchText=q.value;render()}}
+}
+function renderHeader(){by('ws96range').textContent=`${pretty(weekStart,{month:'short',day:'numeric'})} – ${pretty(addDays(weekStart,6),{month:'short',day:'numeric',year:'numeric'})}`}
+function renderStats(tasks,layout,counts,profile){const el=by('ws96stats');if(!el)return;const people=new Set(tasks.map(t=>t.person)).size,multi=tasks.filter(t=>t.startDate!==t.endDate).length,busiest=Math.max(0,...counts);el.innerHTML=`<div><b>${tasks.length}</b><span>Visible tasks</span></div><div><b>${people}</b><span>People</span></div><div><b>${multi}</b><span>Multi-day</span></div><div><b>${busiest}</b><span>Busiest day · ${esc(profile.label)}</span></div>`}
+function renderWorkload(matrix){
+  const el=by('ws97workload');if(!el)return;
+  const summary=by('ws97workloadSummary');if(summary)summary.innerHTML=`<span><b>${matrix.rows.length}</b> installers</span><span class="${matrix.analysis.hard?'bad':''}"><b>${matrix.analysis.hard}</b> timed overlaps</span><span class="${matrix.analysis.possible?'warn':''}"><b>${matrix.analysis.possible}</b> schedule checks</span><span>Known hours count only single-day tasks with both start and end times.</span>`;
+  if(!matrix.rows.length){el.innerHTML='<div class="ws97empty">No installation assignments in this week.</div>';return}
+  let html='<div class="ws97workGrid"><div class="ws97corner">Installer</div>';
+  for(let i=0;i<7;i++){const d=addDays(weekStart,i);html+=`<div class="ws97wh">${esc(pretty(d,{weekday:'short'}))}<small>${esc(pretty(d,{month:'short',day:'numeric'}))}</small></div>`}
+  html+='<div class="ws97wh total">Week</div>';
+  matrix.rows.forEach(r=>{
+    html+=`<div class="ws97person"><b>${esc(r.person)}</b><small>${r.taskDays} task-day${r.taskDays===1?'':'s'}${r.knownMinutes?' · '+(r.knownMinutes/60).toFixed(r.knownMinutes%60?1:0)+'h known':''}</small></div>`;
+    r.days.forEach(d=>{
+      const cls=d.hard?'hard':d.possible?'possible':d.count>=3?'busy':d.count?'active':'';
+      const meta=[d.knownMinutes?(d.knownMinutes/60).toFixed(d.knownMinutes%60?1:0)+'h':'',d.hard?'OVERLAP':'',!d.hard&&d.possible?'CHECK':''].filter(Boolean).join(' · ');
+      html+=`<div class="ws97cell ${cls}"><b>${d.count||'—'}</b><small>${esc(meta||' ')}</small></div>`;
+    });
+    const totalCls=r.hard?'hard':r.possible?'possible':'';
+    html+=`<div class="ws97cell total ${totalCls}"><b>${r.taskDays}</b><small>${r.hard?r.hard+' overlap':r.possible?r.possible+' check':'task-days'}</small></div>`;
+  });
+  html+='</div>';el.innerHTML=html;
+}
+function dispatchInstallRow(t,dispatch){
+  const warns=[...dispatch.hard,...dispatch.possible].filter(x=>x.a.id===t.id||x.b.id===t.id);
+  const warning=warns.some(x=>x.kind==='hard')?'OVERLAP':warns.length?'CHECK':'';
+  const job=arr(sourceDatasets.flooringJobs).find(j=>str(j.id)===str(t.sourceRecordId)||(t.jobNumber&&str(j.jobNumber)===str(t.jobNumber)));
+  const ms=job?materialStateForJob(job,sourceDatasets.supplierPOs):{code:'unknown',label:'Material unknown'};
+  return `<div class="ws98row"><div><b>${esc(t.startTime||'Time not set')} · ${esc(installerIdentity(t))}</b><small>${esc([t.jobNumber,t.customer,t.address].filter(Boolean).join(' · '))}</small></div><div class="ws98badges"><span class="ws98badge ${ms.code}">${esc(ms.label)}</span>${warning?'<span class="ws98badge '+(warning==='OVERLAP'?'hard':'check')+'">'+warning+'</span>':''}</div></div>`;
+}
+function pickupItemHtml(x){
+  return `<div class="ws402pickupItem"><div><b>${esc(x.jobNumber?'Job '+x.jobNumber:'No Job #')}</b><span>${esc(x.customer||'Unnamed customer')}</span></div><small>${esc([x.pickupDate,x.sales].filter(Boolean).join(' · ')||x.rawLabel||'No pickup date')}</small></div>`;
+}
+function renderPickupDesk(desk){
+  const rootEl=by('ws402pickupDesk');if(!rootEl)return;
+  const defs=[
+    ['awaiting-confirmation','Awaiting Confirmation'],
+    ['people-to-call','People to Call'],
+    ['this-month','Pick-ups This Month'],
+    ['next-month','Pick-ups Next Month']
+  ];
+  const folders=by('ws402pickupFolders');if(folders)folders.innerHTML=defs.map(([key,label])=>{
+    const xs=desk.folders[key];return `<section class="ws402folder ${key}"><div class="ws402folderHead"><b>${esc(label)}</b><span>${xs.length}</span></div><div class="ws402folderBody">${xs.length?xs.slice(0,8).map(pickupItemHtml).join(''):'<div class="ws402empty">No matching order read from Flooring data.</div>'}${xs.length>8?'<div class="ws402more">+'+(xs.length-8)+' more</div>':''}</div></section>`;
+  }).join('');
+  const other=desk.folders['other-scheduled'].length+desk.folders.unclassified.length;
+  const meta=by('ws402pickupMeta');if(meta)meta.textContent=`${desk.totalPickup} pickup-related orders · ${other} other/unclassified`;
+  const dead=by('ws402deadFiles');if(dead){
+    const xs=desk.deadFiles.slice(0,8);
+    dead.innerHTML=xs.length?xs.map(x=>`<div class="ws402deadItem"><div><b>${esc(x.jobNumber?'Job '+x.jobNumber:'No Job #')}</b><span>${esc(x.customer||'Unnamed customer')}</span></div><small>${esc([x.status,x.referenceDate].filter(Boolean).join(' · '))}</small></div>`).join(''):'<div class="ws402empty">No explicitly completed / closed / archived Flooring order was read.</div>';
+  }
+  const dc=by('ws402deadCount');if(dc)dc.textContent=String(desk.deadCount);
+}
+function renderMorningBrief(brief){
+  const rootEl=by('ws401brief');if(!rootEl)return;
+  const date=by('ws401briefDate');if(date)date.textContent=pretty(brief.date,{weekday:'long',month:'short',day:'numeric'});
+  const badge=by('ws401briefBadge');if(badge){badge.textContent=brief.severity.toUpperCase();badge.className='ws401briefBadge '+brief.severity}
+  const headline=by('ws401briefHeadline');if(headline)headline.textContent=brief.headline;
+  const chips=by('ws401briefChips');if(chips)chips.innerHTML=brief.chips.map(x=>`<div class="ws401chip ${x.key}"><b>${x.value}</b><span>${esc(x.label)}</span></div>`).join('');
+  const text=by('ws401briefText');if(text)text.innerHTML=brief.sentences.map(s=>'<p>'+esc(s)+'</p>').join('');
+  const focus=by('ws401briefFocus');if(focus){
+    focus.innerHTML=brief.focus?`<div class="ws401focusLabel">FIRST FOCUS · ${esc(brief.focus.level.toUpperCase())}</div><b>${esc(brief.focus.title)}</b><span>${esc(brief.focus.why||'Current Action Required item')}</span>${brief.focus.firstCheck?'<em>Check first: '+esc(brief.focus.firstCheck)+'</em>':''}`:'<div class="ws401focusClear"><b>No first-focus item.</b><span>The current advisory rules found no Action Required item for this date.</span></div>';
+  }
+}
+function renderActions(actions){
+  const el=by('ws99actions');if(!el)return;
+  const count=by('ws99actionCount');if(count)count.textContent=actions.total?String(actions.total):'0';
+  const note=by('ws99actionHidden');if(note)note.textContent=actions.hidden?(`Showing top ${actions.top.length} · ${actions.hidden} more lower-priority item${actions.hidden===1?'':'s'}`):'All current action items shown';
+  if(!actions.top.length){el.innerHTML='<div class="ws99clear"><b>No Action Required item identified.</b><span>This means the current read-only rules found no timed overlap, material-attention item, or near-term schedule gap for the selected date.</span></div>';return}
+  el.innerHTML=actions.top.map((x,i)=>`<div class="ws99action ${x.level}"><div class="ws99rank">${i+1}</div><div class="ws99actionMain"><div class="ws99actionTop"><span class="ws99level">${esc(x.level.toUpperCase())}</span><b>${esc(x.title)}</b></div><small>${esc(x.subtitle||'')}</small><div class="ws400explain"><div class="ws400why"><b>WHY</b>${x.why.map(r=>'<span>'+esc(r)+'</span>').join('')}</div><div class="ws400next"><b>WHAT TO CHECK NEXT</b>${x.nextChecks.map(r=>'<span>'+esc(r)+'</span>').join('')}</div></div><div class="ws400evidence"><b>Evidence used:</b> ${esc(x.evidence.join(' · ')||'Current schedule record')}</div></div><div class="ws99score">${x.score}<small>ORDER</small></div></div>`).join('');
+}
+function renderDispatch(dispatch){
+  const date=by('ws98dispatchDate');if(date&&date.value!==dispatch.date)date.value=dispatch.date;
+  const title=by('ws98dispatchTitle');if(title)title.textContent=`Dispatch Morning · ${pretty(dispatch.date,{weekday:'long',month:'short',day:'numeric'})}`;
+  const stats=by('ws98dispatchStats');if(stats)stats.innerHTML=`<div><b>${dispatch.installs.length}</b><span>Install task-days</span></div><div><b>${dispatch.assigned.length}</b><span>Installers assigned</span></div><div class="${dispatch.hard.length?'bad':''}"><b>${dispatch.hard.length}</b><span>Timed overlaps</span></div><div class="${dispatch.materialAttention.length?'warn':''}"><b>${dispatch.materialAttention.length}</b><span>Material attention</span></div><div class="${dispatch.gaps.length?'warn':''}"><b>${dispatch.gaps.length}</b><span>Next 3-day gaps</span></div>`;
+  const installs=by('ws98todayInstalls');if(installs)installs.innerHTML=dispatch.installs.length?dispatch.installs.map(t=>dispatchInstallRow(t,dispatch)).join(''):'<div class="ws98empty">No installation assignment is scheduled for this date.</div>';
+  const free=by('ws98noInstall');if(free)free.innerHTML=dispatch.noInstallAssigned.length?dispatch.noInstallAssigned.map(n=>`<span class="ws98personChip">${esc(n)}</span>`).join(''):'<div class="ws98empty">Every installer in the current roster has an installation assignment.</div>';
+  const mat=by('ws98material');if(mat)mat.innerHTML=dispatch.materialAttention.length?dispatch.materialAttention.map(x=>`<div class="ws98mini"><b>${esc(firstText(x.job.jobNumber,x.job.orderNumber,'Job'))} · ${esc(firstText(x.job.customerName,x.job.customer,'Customer'))}</b><span class="ws98badge ${x.state.code}">${esc(x.state.label)}</span></div>`).join(''):'<div class="ws98empty">No material-attention item was identified from linked Flooring POs for this date.</div>';
+  const gaps=by('ws98gaps');if(gaps)gaps.innerHTML=dispatch.gaps.length?dispatch.gaps.map(g=>`<div class="ws98mini"><div><b>${esc(g.targetDate)} · ${esc(g.jobNumber||'No Job #')} · ${esc(g.customer||'Unnamed customer')}</b><small>${esc(g.sourceDate+' date · '+(g.sales||'Sales not set'))}</small></div><span class="ws98gap">${esc(g.missing.join(' + '))}</span></div>`).join(''):'<div class="ws98empty">No near-term schedule gap found in Flooring jobs for this 3-day window.</div>';
+}
+function renderBoard(tasks,layout,counts,profile){
+  const board=by('ws96board');if(!board)return;const today=localToday(),laneH=profile.laneHeight,taskH=profile.taskHeight,headH=62,height=Math.max(240,headH+Math.max(layout.laneCount,1)*laneH+22);
+  let html=`<div class="ws96grid density-${profile.mode}" style="height:${height}px"><div class="ws96days">`;
+  for(let i=0;i<7;i++){const d=addDays(weekStart,i);html+=`<div class="ws96day ${d===today?'today':''}" data-ws96-day="${i}"><span>${esc(pretty(d,{weekday:'short'}))}</span><b>${esc(pretty(d,{month:'short',day:'numeric'}))}</b><em class="ws96count">${counts[i]} task${counts[i]===1?'':'s'}</em></div>`}html+='</div><div class="ws96lanes">';
+  for(let i=0;i<7;i++)html+=`<div class="ws96col ${addDays(weekStart,i)===today?'today':''}" style="grid-column:${i+1}"></div>`;
+  layout.tasks.forEach(t=>{const left=(t.startIndex/7)*100,width=(t.span/7)*100,top=10+t.lane*laneH,warns=lastConflictAnalysis.byTask[t.id]||[],hard=warns.some(x=>x.kind==='hard'),possible=!hard&&warns.length;html+=`<button class="ws96task ${typeClass(t.type)} ${t.demo?'demo':''} ${hard?'conflict-hard':possible?'conflict-possible':''}" style="left:calc(${left}% + 3px);width:calc(${width}% - 6px);top:${top}px;height:${taskH}px" data-ws96-task="${attr(t.id)}" title="View details"><span class="ws96edge">${t.continuesBefore?'‹':''}</span><span class="ws96taskMain"><b>${esc(t.title)}${hard?' · ⚠ OVERLAP':possible?' · △ CHECK':''}</b><small>${esc([taskTime(t),t.person,t.customer].filter(Boolean).join(' · '))}</small></span><span class="ws96edge">${t.continuesAfter?'›':''}</span></button>`});
+  html+='</div></div>';board.innerHTML=html;board.querySelectorAll('[data-ws96-task]').forEach(b=>b.addEventListener('click',()=>showTask(b.dataset.ws96Task)));
+  if(!layout.tasks.length)board.insertAdjacentHTML('beforeend','<div class="ws96empty">No tasks match this week and filter.</div>')
+}
+function scrollToDay(index,behavior='smooth'){const sc=by('ws96scroll');if(!sc)return;const board=by('ws96board'),width=board?.scrollWidth||1120;sc.scrollTo({left:Math.max(0,(width/7)*index-8),behavior})}
+function focusToday(behavior='smooth'){const today=localToday();if(today<weekStart||today>addDays(weekStart,6))return;scrollToDay(dayDiff(weekStart,today),behavior)}
+function render(focus=false){renderHeader();const tasks=visibleTasks(),weekTasks=tasks.filter(t=>clipTask(t,weekStart)),layout=allocateLanes(tasks,weekStart),counts=weekDayCounts(weekTasks,weekStart),profile=densityProfile(layout.laneCount,Math.max(0,...counts),densityMode);const workloadSource=selectedPerson==='ALL'?allTasks:allTasks.filter(t=>t.person===selectedPerson||t.installer===selectedPerson),matrix=workloadMatrix(workloadSource,weekStart);lastConflictAnalysis=conflictAnalysis(allTasks,weekStart);const brief=morningBrief(sourceDatasets,allTasks,dispatchDate);renderMorningBrief(brief);renderPickupDesk(brief.pickup);renderActions(brief.actions);renderDispatch(brief.actions.dispatch);renderStats(weekTasks,layout,counts,profile);renderWorkload(matrix);renderBoard(tasks,layout,counts,profile);const note=by('ws96demoNote');if(note)note.hidden=!usingDemo;const d=by('ws96density');if(d)d.value=densityMode;if(focus)setTimeout(()=>focusToday('smooth'),0)}
+function showTask(id){openTask=allTasks.find(t=>t.id===id)||null;if(!openTask)return;const t=openTask,modal=by('ws96modal'),body=by('ws96detail');if(!modal||!body)return;const warns=lastConflictAnalysis.byTask[t.id]||[],warning=warns.some(x=>x.kind==='hard')?'TIMED OVERLAP':warns.length?'SCHEDULE CHECK':'None';const rows=[['Type',TYPE_LABEL[t.type]||t.type],['Date',t.startDate===t.endDate?t.startDate:`${t.startDate} → ${t.endDate}`],['Time',taskTime(t)||'—'],['Assigned to',t.person||'—'],['Installer',t.installer||'—'],['Sales',t.sales||'—'],['Customer',t.customer||'—'],['Job #',t.jobNumber||'—'],['PO #',t.poNumber||'—'],['Status',t.status||'—'],['Schedule warning',warning],['Address',t.address||'—'],['Notes',t.notes||'—'],['Source',`${t.source}${t.sourceKey?' · '+t.sourceKey:''}`]];body.innerHTML=`<div class="ws96detailTitle">${t.demo?'<span class="ws96demoBadge">DEMO</span>':''}${esc(t.title)}</div>${rows.map(([k,v])=>`<div class="ws96detailRow"><span>${esc(k)}</span><b>${esc(v)}</b></div>`).join('')}<div class="ws96readonly">Read only: no drag, edit, save, status change, PO change, inventory change, or local data write is available here.</div>`;modal.classList.add('open');modal.setAttribute('aria-hidden','false')}
+function closeTask(){const modal=by('ws96modal');if(modal){modal.classList.remove('open');modal.setAttribute('aria-hidden','true')}openTask=null}
+function bind(){
+  by('ws96prev').onclick=()=>{weekStart=addDays(weekStart,-7);render()};by('ws96today').onclick=()=>{weekStart=sundayFor(localToday());render(true)};by('ws96next').onclick=()=>{weekStart=addDays(weekStart,7);render()};
+  by('ws96all').onclick=()=>{selectedTypes=new Set(TYPE_ORDER);renderControls();render()};by('ws96none').onclick=()=>{selectedTypes.clear();renderControls();render()};
+  const density=by('ws96density');if(density)density.onchange=()=>{densityMode=density.value||'auto';render()};
+  const dd=by('ws98dispatchDate');if(dd)dd.onchange=()=>{dispatchDate=iso(dd.value)?dd.value:localToday();render()};
+  const dp=by('ws98dispatchPrev');if(dp)dp.onclick=()=>{dispatchDate=addDays(dispatchDate,-1);render()};
+  const dt=by('ws98dispatchToday');if(dt)dt.onclick=()=>{dispatchDate=localToday();render()};
+  const dn=by('ws98dispatchNext');if(dn)dn.onclick=()=>{dispatchDate=addDays(dispatchDate,1);render()};
+  by('ws96close').onclick=closeTask;by('ws96modal').addEventListener('click',e=>{if(e.target===by('ws96modal'))closeTask()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeTask()});
+  root.addEventListener('storage',e=>{if(Object.values(KEYS).includes(e.key))load()});
+}
+function boot(){bind();load();setTimeout(()=>focusToday('auto'),80)}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})(typeof globalThis!=='undefined'?globalThis:this);
