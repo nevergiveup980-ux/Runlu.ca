@@ -397,7 +397,8 @@ function explicitFalse(v){const s=str(v).toLowerCase();return v===false||v===0||
 function monthKey(v){return iso(v)?v.slice(0,7):''}
 function nextMonthKey(v){const d=dateObj(v);if(!d)return '';d.setDate(1);d.setMonth(d.getMonth()+1);return dateIso(d).slice(0,7)}
 function completedOrderStatus(j){
-  const values=[j&&j.status,j&&j.orderStatus,j&&j.jobStatus,j&&j.installStatus,j&&j.workflowStatus].map(v=>str(v).toLowerCase()).filter(Boolean);
+  if(j&&(j.completed===true||j.isCompleted===true||j.archived===true))return 'completed flag';
+  const values=[j&&j.status,j&&j.orderStatus,j&&j.jobStatus,j&&j.workflowStatus,j&&j.archiveStatus,j&&j.fileStatus].map(v=>str(v).toLowerCase()).filter(Boolean);
   return values.find(s=>['completed','complete','closed','archived','archive','dead file','dead files'].includes(s))||'';
 }
 function isDeadFileJob(j){return !!completedOrderStatus(j)}
@@ -406,8 +407,10 @@ function pickupDateOf(j){return firstDate(j&&j.customerPickupDate,j&&j.customer_
 function pickupRecordFromJob(j,date,index=0){
   if(!j||typeof j!=='object'||j.isDemo===true||isDeadFileJob(j))return null;
   const pickupKeys=['pickupFolder','pickUpFolder','pickupBucket','pickUpBucket','pickupStage','pickUpStage','pickupStatus','pickUpStatus','customerPickupDate','customer_pickup_date','pickupDate','pickUpDate','pickup_date','pickupConfirmed','pickUpConfirmed','needsCall','pickupNeedsCall','pickUpNeedsCall'];
-  const raw=pickupRawLabel(j),d=pickupDateOf(j);
-  const signal=hasOwnAny(j,pickupKeys)||/pick[ -]?up|people to call|awaiting confirmation/i.test(raw);
+  const d=pickupDateOf(j),hasPickupFields=hasOwnAny(j,pickupKeys);
+  let raw=pickupRawLabel(j);
+  if(!raw&&hasPickupFields)raw=firstText(j.status,j.orderStatus,j.jobStatus,j.workflowStatus);
+  const signal=hasPickupFields||/pick[ -]?up|people to call/i.test(raw);
   if(!signal)return null;
   const low=str(raw).toLowerCase();
   let bucket='';
