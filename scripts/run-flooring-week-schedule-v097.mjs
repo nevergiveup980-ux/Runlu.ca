@@ -79,7 +79,7 @@ test('Back-to-back timed jobs are not a conflict',()=>{
   const w='2026-09-13',xs=[
     {id:'a',type:'Installation',installer:'Bilal',person:'Bilal',startDate:'2026-09-15',endDate:'2026-09-15',startTime:'08:00',endTime:'12:00'},
     {id:'b',type:'Installation',installer:'Bilal',person:'Bilal',startDate:'2026-09-15',endDate:'2026-09-15',startTime:'12:00',endTime:'16:00'}
-  ];const x=A.conflictAnalysis(xs,w);assert.equal(x.hard,0);assert.equal(x.possible,1)
+  ];const x=A.conflictAnalysis(xs,w);assert.equal(x.hard,0);assert.equal(x.possible,0)
 });
 test('Multi-day assignment plus another job is a conservative schedule check',()=>{
   const w='2026-09-13',xs=[
