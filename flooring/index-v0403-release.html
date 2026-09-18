@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta name="theme-color" content="#173d30">
+<title>RUNLU Deerfoot Flooring OS V0.4.03</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#edf1ef;font-family:Arial,Helvetica,sans-serif;color:#173d30}
+#releaseBar{position:fixed;inset:0 0 auto 0;height:58px;z-index:20;display:flex;align-items:center;gap:9px;padding:7px 9px;background:#173d30;color:#fff;box-shadow:0 2px 10px rgba(0,0,0,.16)}
+.brand{min-width:210px}.brand b{display:block;font-size:12px;line-height:1.2}.brand small{display:block;margin-top:3px;font-size:7.5px;opacity:.72}
+.tabs{display:flex;gap:6px;overflow:auto;flex:1;-webkit-overflow-scrolling:touch}.tabs button{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:#fff;border-radius:9px;padding:8px 10px;white-space:nowrap;font:800 9px/1 Arial;cursor:pointer}.tabs button.active{background:#fff;color:#173d30;border-color:#fff}.status{display:flex;align-items:center;gap:6px;white-space:nowrap}.status span{font-size:7px;opacity:.8}.status b{font-size:8px;background:#e8f3ed;color:#245b42;border-radius:999px;padding:5px 7px}
+#releaseFrame{position:fixed;left:0;right:0;top:58px;bottom:0;width:100%;height:calc(100% - 58px);border:0;background:#fff}
+#boot{position:fixed;left:0;right:0;top:58px;bottom:0;z-index:10;display:grid;place-items:center;background:#edf1ef;color:#173d30;font-weight:800;text-align:center;line-height:1.5;transition:opacity .2s}.ready#boot{opacity:0;pointer-events:none}.bootbox small{display:block;margin-top:5px;font-weight:500;color:#6a7771}
+@media(max-width:760px){#releaseBar{height:52px;padding:6px}.brand{min-width:120px}.brand b{font-size:10px}.brand small{font-size:6.5px}.tabs button{padding:8px 9px;font-size:8px}.status span{display:none}.status b{font-size:7px}.status{margin-left:auto}#releaseFrame{top:52px;height:calc(100% - 52px)}#boot{top:52px}}
+</style>
+</head>
+<body>
+<header id="releaseBar">
+  <div class="brand"><b>RUNLU Deerfoot Flooring OS</b><small>V0.4.03 · Unified release</small></div>
+  <nav class="tabs" aria-label="Flooring OS modules">
+    <button data-view="core">Core OS</button>
+    <button data-view="operations">Operations</button>
+    <button data-view="quote">Quote</button>
+  </nav>
+  <div class="status"><span>Release</span><b>V0.4.03</b></div>
+</header>
+<iframe id="releaseFrame" title="RUNLU Deerfoot Flooring OS V0.4.03"></iframe>
+<div id="boot"><div class="bootbox">RUNLU Deerfoot Flooring OS<small>Opening V0.4.03 unified release…</small></div></div>
+<script>
+(function(){
+'use strict';
+const frame=document.getElementById('releaseFrame'),boot=document.getElementById('boot');
+const views={
+  core:'index-v090r1-stable-frozen.html?prod=1&release=090r1',
+  operations:'index-v0403-operations.html?prod=1&release=0403',
+  quote:'index-v0403-quote.html?prod=1&release=0403'
+};
+function normalizedView(v){return Object.prototype.hasOwnProperty.call(views,v)?v:'core'}
+function currentView(){return normalizedView((location.hash||'').replace(/^#/,'')||new URLSearchParams(location.search).get('view')||'core')}
+function paintButtons(v){document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v))}
+function openView(v,push){
+  v=normalizedView(v);paintButtons(v);boot.classList.remove('ready');
+  const sep=views[v].includes('?')?'&':'?';frame.src=views[v]+sep+'t='+Date.now();
+  if(push&&location.hash!=='#'+v)history.replaceState(null,'','#'+v)
+}
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>openView(b.dataset.view,true));
+frame.addEventListener('load',()=>setTimeout(()=>boot.classList.add('ready'),80));
+window.addEventListener('hashchange',()=>openView(currentView(),false));
+openView(currentView(),false);
+})();
+</script>
+</body>
+</html>

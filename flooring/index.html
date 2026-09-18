@@ -10,13 +10,15 @@
 <style>html,body{margin:0;height:100%;display:grid;place-items:center;background:#edf1ef;color:#173d30;font-family:Arial,Helvetica,sans-serif}.boot{font-weight:800;text-align:center;line-height:1.5}.boot small{display:block;margin-top:8px;font-weight:500;color:#66736d}</style>
 </head>
 <body>
-<div class="boot">RUNLU Deerfoot Flooring OS<small>Opening frozen stable release…</small></div>
+<div class="boot">RUNLU Deerfoot Flooring OS<small>Opening V0.4.03 unified release…</small></div>
 <script>
 (function(){
   const q=new URLSearchParams(location.search);
   const target=(q.has('qa')||q.has('debug'))
     ? 'index-v088-six-engine-gate.html?qa=1&t='+Date.now()
-    : 'index-v090r1-stable-frozen.html?prod=1&release=090r1&t='+Date.now();
+    : q.has('legacy')
+      ? 'index-v090r1-stable-frozen.html?prod=1&release=090r1&t='+Date.now()
+      : 'index-v0403-release.html?prod=1&release=0403&t='+Date.now();
   location.replace(target);
 })();
 </script>
