@@ -49,7 +49,7 @@ test('Daily counts include multi-day tasks on every occupied day',()=>{
     {id:'a',startDate:'2026-09-13',endDate:'2026-09-15'},
     {id:'b',startDate:'2026-09-15',endDate:'2026-09-15'},
     {id:'c',startDate:'2026-09-19',endDate:'2026-09-22'}
-  ];assert.deepEqual(A.weekDayCounts(xs,w),[1,1,2,0,0,0,1])
+  ];assert.equal(JSON.stringify(Array.from(A.weekDayCounts(xs,w))),JSON.stringify([1,1,2,0,0,0,1]))
 });
 test('Auto density scales from comfortable to compact to dense',()=>{
   assert.equal(A.densityProfile(4,4,'auto').mode,'comfortable');
