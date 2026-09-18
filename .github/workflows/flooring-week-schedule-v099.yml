@@ -1,0 +1,20 @@
+name: Flooring Action Required V0.3.99
+on:
+  pull_request:
+    paths:
+      - 'flooring/week-schedule-v099.js'
+      - 'flooring/index-v099-dispatch-action-preview.html'
+      - 'scripts/run-flooring-week-schedule-v099.mjs'
+      - '.github/workflows/flooring-week-schedule-v099.yml'
+  workflow_dispatch:
+jobs:
+  action-required-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.3.99 action, dispatch, workload, pressure and read-only gates
+        run: node scripts/run-flooring-week-schedule-v099.mjs
