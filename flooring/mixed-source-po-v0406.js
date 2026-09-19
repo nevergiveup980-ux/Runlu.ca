@@ -25,7 +25,7 @@ const round2=n=>Math.round((Number(n)||0)*100)/100;
 const money=n=>'$'+round2(n).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2});
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const attr=v=>esc(v).replace(/"/g,'&quot;');
-const today=()=>new Date().toISOString().slice(0,10);
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 const uid=(p='line')=>p+'-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
 
 function defaultFulfillment(source){
@@ -312,11 +312,17 @@ if(typeof document==='undefined')return;
 
 let jobs=[],records=[],activeJobId='',activePOId='',draft=normalizePO(),view='fields',dirty=false;
 let sb=null,cloudInventory=[],cloudHolds=[],cloudSupplierTasks=[],cloudMaterialTasks=[],cloudState='NOT CONNECTED',pickerLineId='',cloudBusy=false;
+const storeErrors=new Set();
 const by=id=>document.getElementById(id);
-function loadStore(key){try{const v=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(v)?v:[]}catch(_){return []}}
+function loadStore(key){
+  const raw=localStorage.getItem(key);if(raw==null)return [];
+  try{const v=JSON.parse(raw);if(!Array.isArray(v))throw new Error('Store is not an array');return v}
+  catch(e){storeErrors.add(key);try{if(!localStorage.getItem(key+'_corrupt_backup_v0407'))localStorage.setItem(key+'_corrupt_backup_v0407',raw)}catch(_){}console.error('RUNLU V0.4.06 blocked corrupt store',key,e);return []}
+}
 function saveStores(){
-  localStorage.setItem(PO_STORE,JSON.stringify(records));
-  if(activeJobId)localStorage.setItem(ACTIVE_JOB,activeJobId);
+  if(storeErrors.has(PO_STORE)){alert('PO storage is unreadable. The original value was preserved and Mixed-Source PO writes are blocked until recovery.');return false}
+  const payload=JSON.stringify(records);localStorage.setItem(PO_STORE,payload);if(localStorage.getItem(PO_STORE)!==payload)throw new Error('PO save verification failed');
+  if(activeJobId)localStorage.setItem(ACTIVE_JOB,activeJobId);return true
 }
 function activeJob(){return jobs.find(j=>j.id===activeJobId)||null}
 function activeRecord(){return records.find(x=>x.id===activePOId)||null}
@@ -339,13 +345,13 @@ function syncJobReference(po){
   const j=jobs.find(x=>x.id===po.jobId);if(!j||!po.poNumber)return;
   const nums=records.filter(x=>x.jobId===po.jobId&&x.poNumber&&x.status!=='Cancelled').map(x=>x.poNumber).sort((a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true}));
   j.supplierPO=nums.join(', ');
-  localStorage.setItem(JOB_STORE,JSON.stringify(jobs));
+  if(storeErrors.has(JOB_STORE))return;localStorage.setItem(JOB_STORE,JSON.stringify(jobs));
 }
 function savePO(){
   if(!canSavePO(draft)){alert('Every PO line needs a Source Type, and the PO must be linked to a Job.');return}
   const existing=activeRecord(),out=applyPO(existing,draft),i=records.findIndex(x=>x.id===out.id);
   if(i>=0)records[i]=out;else records.unshift(out);
-  activePOId=out.id;saveStores();syncJobReference(out);draft=normalizePO(out,activeJob()||{});clearDirty();renderAll();alert('Mixed-source PO saved. No inventory or receiving action was executed.')
+  activePOId=out.id;if(!saveStores())return;syncJobReference(out);draft=normalizePO(out,activeJob()||{});clearDirty();renderAll();alert('Mixed-source PO saved. No inventory or receiving action was executed.')
 }
 function warehousePayload(row){return row&&row.payload&&typeof row.payload==='object'?row.payload:{}}
 function buildCloudInventory(rows){
@@ -369,18 +375,33 @@ async function connectCloud(){
   cloudBusy=true;renderCloud();
   try{const c=await client(),r=await c.auth.signInWithPassword({email,password});if(r.error)throw r.error;cloudBusy=false;cloudState='CONNECTED';await refreshCloud(true)}catch(e){cloudState='ERROR · '+(e?.message||e)}finally{cloudBusy=false;renderCloud()}
 }
+async function pageQuery(make,pageSize=500,maxRows=50000){
+  const out=[];for(let from=0;from<maxRows;from+=pageSize){const q=await make().range(from,from+pageSize-1);if(q.error)throw q.error;const xs=Array.isArray(q.data)?q.data:[];out.push(...xs);if(xs.length<pageSize)break}return out
+}
+async function fetchWarehouseRecords(c){
+  return pageQuery(()=>c.from('warehouse_records').select('dataset_key,record_id,payload,updated_at').in('dataset_key',WAREHOUSE_DATASETS).is('deleted_at',null).order('updated_at',{ascending:false}).order('record_id',{ascending:true}),1000)
+}
+async function fetchActiveHolds(c){
+  const active=await pageQuery(()=>c.from(HOLD_TABLE).select('*').eq('environment',ENV).eq('status','Held').order('created_at',{ascending:false}),500);
+  const po=str(draft.poNumber);if(!po)return active;
+  const historical=await pageQuery(()=>c.from(HOLD_TABLE).select('*').eq('environment',ENV).eq('po_number',po).order('created_at',{ascending:false}),200,5000);
+  const ids=new Set();return [...active,...historical].filter(x=>{const k=str(x.id)||[x.hold_key,x.status,x.updated_at].join('|');if(ids.has(k))return false;ids.add(k);return true})
+}
+function numericPO(){const n=Number(String(draft.poNumber||'').replace(/\D/g,''));return Number.isFinite(n)&&n>0?n:null}
+async function fetchCurrentSupplierTasks(c){
+  const po=numericPO();if(!po)return [];
+  return pageQuery(()=>c.from('flooring_supplier_tasks').select('*').eq('environment',ENV).eq('po_number',po).order('created_at',{ascending:false}),200,5000)
+}
+async function fetchCurrentMaterialTasks(c){
+  const po=numericPO();if(!po)return [];
+  return pageQuery(()=>c.from('flooring_warehouse_material_tasks').select('*').eq('environment',ENV).eq('po_number',po).order('created_at',{ascending:false}),200,5000)
+}
 async function refreshCloud(force=false){
   if(cloudBusy&&!force)return;cloudBusy=true;cloudState='SYNCING';renderCloud();
   try{
     const c=await client(),s=(await c.auth.getSession()).data?.session;if(!s){cloudState='SIGN IN REQUIRED';cloudInventory=[];cloudHolds=[];cloudSupplierTasks=[];cloudMaterialTasks=[];return}
-    const [wr,hr,tr,mr]=await Promise.all([
-      c.from('warehouse_records').select('dataset_key,record_id,payload,updated_at').in('dataset_key',WAREHOUSE_DATASETS).is('deleted_at',null).limit(1000),
-      c.from(HOLD_TABLE).select('*').eq('environment',ENV).order('created_at',{ascending:false}).limit(1000),
-      c.from('flooring_supplier_tasks').select('*').eq('environment',ENV).order('created_at',{ascending:false}).limit(500),
-      c.from('flooring_warehouse_material_tasks').select('*').eq('environment',ENV).order('created_at',{ascending:false}).limit(1000)
-    ]);
-    if(wr.error)throw wr.error;if(hr.error)throw hr.error;if(tr.error)throw tr.error;if(mr.error)throw mr.error;
-    cloudInventory=buildCloudInventory(wr.data||[]);cloudHolds=hr.data||[];cloudSupplierTasks=tr.data||[];cloudMaterialTasks=mr.data||[];cloudState='LIVE';
+    const [wr,hr,tr,mr]=await Promise.all([fetchWarehouseRecords(c),fetchActiveHolds(c),fetchCurrentSupplierTasks(c),fetchCurrentMaterialTasks(c)]);
+    cloudInventory=buildCloudInventory(wr);cloudHolds=hr;cloudSupplierTasks=tr;cloudMaterialTasks=mr;cloudState='LIVE';
   }catch(e){cloudState='ERROR · '+(e?.message||e)}finally{cloudBusy=false;renderCloud();renderPicker()}
 }
 function currentCloudHold(line){
