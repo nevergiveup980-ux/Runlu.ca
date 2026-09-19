@@ -1,4 +1,4 @@
-/* RUNLU Deerfoot Flooring OS · V0.4.03e Always-Ready Table Grid Hotfix */
+/* RUNLU Deerfoot Flooring OS · V0.4.03f iPhone Grid Entry Hotfix */
 (function(root){
 'use strict';
 const VERSION='0.4.03';
@@ -184,12 +184,47 @@ function fieldLineCards(group,title){
   const xs=lineGroup(draft,group);
   return `<section><div class="q403sectHead"><h3>${title}</h3><button type="button" data-q403-add="${group}">+ Line</button></div><div class="q403cards">${xs.length?xs.map((x,i)=>`<div class="q403lineCard" data-line="${attr(x.id)}"><div class="q403lineNo">${i+1}</div><label>Description<input data-q403-line="${group}" data-id="${attr(x.id)}" data-key="description" value="${attr(x.description)}"></label><label>Qty<input data-q403-line="${group}" data-id="${attr(x.id)}" data-key="qty" type="number" step="0.01" value="${x.qty}"></label><label>Unit<input data-q403-line="${group}" data-id="${attr(x.id)}" data-key="unit" value="${attr(x.unit)}"></label><label>List Price<input data-q403-line="${group}" data-id="${attr(x.id)}" data-key="listPrice" type="number" step="0.01" value="${x.listPrice}"></label><label>Quote Price<input data-q403-line="${group}" data-id="${attr(x.id)}" data-key="unitPrice" type="number" step="0.01" value="${x.unitPrice}"></label><label>Line Total<input data-q403-total="${attr(x.id)}" disabled value="${money(lineTotal(x))}"></label><label class="wide">Line Note<input data-q403-line="${group}" data-id="${attr(x.id)}" data-key="note" value="${attr(x.note)}"></label><button type="button" class="danger" data-q403-remove="${group}" data-id="${attr(x.id)}">×</button></div>`).join(''):'<div class="q403empty">No lines yet.</div>'}</div></section>`
 }
+function iosGridCell(group,x,key,value,kind='text',placeholder=''){
+  const numeric=kind==='number',uiBlank=String(x?.id||'').startsWith('ui-')&&!meaningfulLine(x),v=(numeric&&uiBlank&&num(value)===0)?'':(value==null?'':String(value));
+  return `<input class="q403iosInput ${numeric?'q403iosNum':''}" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="${key}" type="text" ${numeric?'inputmode="decimal"':''} enterkeyhint="next" autocomplete="off" autocapitalize="${numeric?'off':'sentences'}" spellcheck="${numeric?'false':'true'}" value="${attr(v)}" placeholder="${attr(placeholder)}" aria-label="${attr(key)}">`
+}
+function iosGridGroup(group,title){
+  const xs=lineGroup(draft,group);
+  return `<section class="q403tableBlock q403iosBlock" data-q403-group="${group}">
+    <div class="q403sectHead"><h3>${title}</h3><button type="button" data-q403-add="${group}">+ Row</button></div>
+    <div class="q403iosWrap">
+      <div class="q403iosGrid q403iosHeader"><div>#</div><div>Description</div><div>Qty</div><div>Unit</div><div>List Price</div><div>Quote Price</div><div>Total</div><div>Note</div><div></div></div>
+      ${xs.map((x,i)=>`<div class="q403iosGrid q403iosRow" data-q403-row="${attr(x.id)}">
+        <div class="q403iosNo">${i+1}</div>
+        ${iosGridCell(group,x,'description',x.description,'text','Product / service')}
+        ${iosGridCell(group,x,'qty',x.qty,'number','0')}
+        ${iosGridCell(group,x,'unit',x.unit,'text','sf / sy / ea')}
+        ${iosGridCell(group,x,'listPrice',x.listPrice,'number','0')}
+        ${iosGridCell(group,x,'unitPrice',x.unitPrice,'number','0')}
+        <div class="q403iosTotal" data-q403-total="${attr(x.id)}">${money(lineTotal(x))}</div>
+        ${iosGridCell(group,x,'note',x.note,'text','Optional note')}
+        <button type="button" class="danger q403iosRemove" data-q403-remove="${group}" data-id="${attr(x.id)}" aria-label="Remove row">×</button>
+      </div>`).join('')}
+    </div>
+  </section>`
+}
 function renderTable(){
   const el=by('q403table');if(!el)return;
-  draft=ensureTableRows(draft);
-  el.innerHTML='<div class="q403tableHint"><b>'+(touchIOS?'iPhone Native Cell Editor active.':'Table Entry is editable.')+'</b> '+(touchIOS?'The blank rows below are live cells. Tap Description, Qty, Unit or Price directly — no + Row is required for the first entries.':'The blank rows below are live cells. Click any cell and type; use + Row only when you need more rows.')+'</div>'+tableGroup('materials','Materials')+tableGroup('labour','Installation / Labour');
-  bindInputs(el);
-  el.querySelectorAll('.q403tableWrap').forEach(w=>{w.scrollLeft=0})
+  try{
+    draft=ensureTableRows(draft);
+    if(touchIOS){
+      el.innerHTML='<div class="q403tableHint q403iosHint"><b>iPhone Grid Entry active · V0.4.03f.</b> These are native iPhone inputs in a CSS grid, not HTML table cells. Tap Description / Qty / Unit / Price directly; swipe the blank space or header sideways for later columns.</div>'+iosGridGroup('materials','Materials')+iosGridGroup('labour','Installation / Labour');
+      bindInputs(el);
+      el.querySelectorAll('.q403iosWrap').forEach(w=>{w.scrollLeft=0});
+      return
+    }
+    el.innerHTML='<div class="q403tableHint"><b>Table Entry is editable.</b> The blank rows below are live cells. Click any cell and type; use + Row only when you need more rows.</div>'+tableGroup('materials','Materials')+tableGroup('labour','Installation / Labour');
+    bindInputs(el);
+    el.querySelectorAll('.q403tableWrap').forEach(w=>{w.scrollLeft=0})
+  }catch(e){
+    console.error('[RUNLU Quote Table Entry]',e);
+    el.innerHTML='<div class="q403tableError"><b>Table Entry render error.</b><span>'+esc(e?.message||String(e))+'</span><small>Database Fields remains available; send this visible error text for repair.</small></div>'
+  }
 }
 function tableGroup(group,title){
   const xs=lineGroup(draft,group),descHead=touchIOS?'':'sticky-desc';
@@ -204,18 +239,15 @@ function bindInputs(scope){
   scope.querySelectorAll('[data-q403-line]').forEach(x=>{
     const update=()=>{draft=updateLine(draft,x.dataset.q403Line,x.dataset.id,x.dataset.key,editValue(x));markDirty();const line=lineGroup(draft,x.dataset.q403Line).find(v=>v.id===x.dataset.id),total=scope.querySelector('[data-q403-total="'+CSS.escape(x.dataset.id)+'"]');if(total&&line){const v=money(lineTotal(line));if(total.tagName==='INPUT')total.value=v;else total.textContent=v}renderSummaryAndPreview()};
     x.oninput=update;
-    x.onfocus=()=>{x.closest('td')?.classList.add('editing');const v=editValue(x);if((x.classList.contains('q403num')||x.classList.contains('q403numCell'))&&(v==='0'||v==='0.00'))setTimeout(()=>selectCellText(x),0)};
+    x.onfocus=()=>{x.closest('td')?.classList.add('editing');const v=editValue(x);if((x.classList.contains('q403num')||x.classList.contains('q403numCell')||x.classList.contains('q403iosNum'))&&(v==='0'||v==='0.00'))setTimeout(()=>selectCellText(x),0)};
     x.onblur=()=>{x.closest('td')?.classList.remove('editing');if(x.isContentEditable&&x.dataset.placeholder&&!editValue(x))x.innerHTML='';update()};
     x.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();focusNextCell(x)}};
-    if(x.isContentEditable){
-      let sx=0,sy=0;
-      x.addEventListener('touchstart',e=>{const t=e.touches?.[0];if(t){sx=t.clientX;sy=t.clientY}},{passive:true});
-      x.addEventListener('touchend',e=>{const t=e.changedTouches?.[0];if(!t)return;const moved=Math.hypot(t.clientX-sx,t.clientY-sy);if(moved<9){e.preventDefault();x.focus({preventScroll:true});if((x.classList.contains('q403numCell'))&&(editValue(x)==='0'||editValue(x)==='0.00'))selectCellText(x)}},{passive:false})
-    }
+    // Native iPhone grid inputs intentionally use Safari's default tap-to-focus behavior.
+    // No touchend preventDefault is installed here because it can suppress the software keyboard.
   });
   scope.querySelectorAll('[data-q403-add]').forEach(x=>x.onclick=()=>{
     const group=x.dataset.q403Add;draft=stripBlankUILines(draft);draft=addLine(draft,group);const added=lineGroup(draft,group).at(-1);markDirty();renderEditor();renderSummaryAndPreview();
-    if(mode==='table'&&added){const target=by('q403table')?.querySelector('[data-q403-line="'+group+'"][data-id="'+CSS.escape(added.id)+'"][data-key="description"]');target?.focus({preventScroll:true});target?.scrollIntoView({block:'nearest',inline:'center'})}
+    if(mode==='table'&&added){const target=by('q403table')?.querySelector('[data-q403-line="'+group+'"][data-id="'+CSS.escape(added.id)+'"][data-key="description"]');target?.focus();target?.scrollIntoView({block:'nearest',inline:'center'})}
   });
   scope.querySelectorAll('[data-q403-remove]').forEach(x=>x.onclick=()=>{draft=removeLine(draft,x.dataset.q403Remove,x.dataset.id);markDirty();renderEditor();renderSummaryAndPreview()});
 }
