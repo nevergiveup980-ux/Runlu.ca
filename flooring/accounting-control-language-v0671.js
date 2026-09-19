@@ -29,6 +29,7 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const iso=v=>/^\d{4}-\d{2}-\d{2}$/.test(String(v||''));
 const localDate=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const today=()=>localDate(new Date());
+const dayNumber=v=>{if(!iso(v))return NaN;const [y,m,d]=String(v).split('-').map(Number);return Date.UTC(y,m-1,d)/86400000};
 const collator=new Intl.Collator('en',{numeric:true,sensitivity:'base'});
 
 function jobs(){const x=read(JOBS,[]);return Array.isArray(x)?x:[]}
@@ -55,7 +56,7 @@ function plus(d,k){if(!iso(d))return'';const x=new Date(d+'T12:00:00');x.setDate
 function dueFor(j,sdb=sideDB()){const s=side(j,sdb);return s.dueDate||plus(s.invoiceDate,s.terms)}
 function ar(j,pdb=payDB(),sdb=sideDB()){
   const c=calc(j),p=paid(j,pdb),bal=Math.max(0,r(n(c.total)-p)),due=dueFor(j,sdb);
-  let days=0;if(bal&&iso(due)){days=Math.floor((new Date(today()+'T12:00:00')-new Date(due+'T12:00:00'))/86400000)}
+  let days=0;if(bal&&iso(due)){days=dayNumber(today())-dayNumber(due)}
   return {paid:p,balance:bal,due,days,overdue:bal>0&&days>0};
 }
 function orderCost(j,allPO=pos(),allBills=vendors(),sdb=sideDB()){
