@@ -72,7 +72,7 @@ test('Visible hint tells user Table Entry is directly editable',()=>{
 });
 
 test('Quote page requests a V0.4.03 table-entry hotfix token',()=>{
-  assert(/quote-dual-entry-v0403\.js\?v=0403[cd]/.test(html));
+  assert(/quote-dual-entry-v0403\.js\?v=0403[cde]/.test(html));
 });
 
 for(const [name,ok,error] of checks)console.log((ok?'PASS':'FAIL')+'  '+name+(error?'  '+error:''));
