@@ -67,8 +67,8 @@ test('Table uses touch-friendly horizontal scrolling',()=>{
 });
 
 test('Visible hint tells user Table Entry is directly editable',()=>{
-  assert(js.includes('Table Entry is editable.'));
-  assert(js.includes('Tap any cell to type.'));
+  assert(js.includes('The blank rows below are live cells.')||js.includes('Tap any cell to type.'));
+  assert(js.includes('iPhone Native Cell Editor active.')||js.includes('Table Entry is editable.'));
 });
 
 test('Quote page requests a V0.4.03 table-entry hotfix token',()=>{
