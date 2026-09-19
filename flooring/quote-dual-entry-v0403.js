@@ -1,4 +1,4 @@
-/* RUNLU Deerfoot Flooring OS · V0.4.03c Quote Table Entry Hotfix */
+/* RUNLU Deerfoot Flooring OS · V0.4.03d Native Cell Editor Hotfix */
 (function(root){
 'use strict';
 const VERSION='0.4.03';
@@ -103,6 +103,22 @@ if(typeof document==='undefined')return;
 
 let jobs=[],activeId='',draft=normalizeQuote(),mode='fields',dirty=false;
 const by=id=>document.getElementById(id);
+const touchIOS=(()=>{const ua=navigator.userAgent||'';return /iPhone|iPad|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)})();
+function editValue(el){return el?.isContentEditable?(el.textContent||'').replace(/\u00a0/g,' ').trim():el?.value}
+function selectCellText(el){
+  try{
+    if(el?.isContentEditable){const r=document.createRange();r.selectNodeContents(el);const s=window.getSelection();s.removeAllRanges();s.addRange(r)}
+    else el?.select?.()
+  }catch(_){}
+}
+function sheetEditCell(group,x,key,value,kind='text',placeholder=''){
+  const numeric=kind==='number',v=value==null?'':String(value);
+  if(touchIOS){
+    return `<td class="q403editCell ${numeric?'q403numCell':''}" contenteditable="true" role="textbox" inputmode="${numeric?'decimal':'text'}" enterkeyhint="next" spellcheck="${numeric?'false':'true'}" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="${key}" data-placeholder="${attr(placeholder)}" aria-label="${attr(key)}">${esc(v)}</td>`
+  }
+  return `<td><input class="q403cell ${numeric?'q403num':''}" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="${key}" ${numeric?'type="number" inputmode="decimal" step="0.01"':''} value="${attr(v)}" placeholder="${attr(placeholder)}"></td>`
+}
+
 function readJobs(){try{const x=JSON.parse(localStorage.getItem(JOBS)||'[]');return Array.isArray(x)?x:[]}catch(_){return []}}
 function writeJobs(){localStorage.setItem(JOBS,JSON.stringify(jobs));if(activeId)localStorage.setItem(ACTIVE,activeId)}
 function activeJob(){return jobs.find(j=>j.id===activeId)||null}
@@ -156,29 +172,35 @@ function fieldLineCards(group,title){
 }
 function renderTable(){
   const el=by('q403table');if(!el)return;
-  el.innerHTML='<div class="q403tableHint"><b>Table Entry is editable.</b> Tap any cell to type. Swipe sideways for pricing / notes. Press Next / Enter to move across cells.</div>'+tableGroup('materials','Materials')+tableGroup('labour','Installation / Labour');
+  el.innerHTML='<div class="q403tableHint"><b>'+(touchIOS?'iPhone Native Cell Editor active.':'Table Entry is editable.')+'</b> '+(touchIOS?'Tap the text or number inside a cell — the iPhone keyboard should open immediately. Swipe on headers / blank table space to move sideways.':'Tap any cell to type. Swipe sideways for pricing / notes. Press Next / Enter to move across cells.')+'</div>'+tableGroup('materials','Materials')+tableGroup('labour','Installation / Labour');
   bindInputs(el);
   el.querySelectorAll('.q403tableWrap').forEach(w=>{w.scrollLeft=0})
 }
 function tableGroup(group,title){
-  const xs=lineGroup(draft,group);
-  return `<section class="q403tableBlock" data-q403-group="${group}"><div class="q403sectHead"><h3>${title}</h3><button type="button" data-q403-add="${group}">+ Row</button></div><div class="q403tableWrap" tabindex="0"><table class="q403sheet"><colgroup><col class="c-num"><col class="c-desc"><col class="c-qty"><col class="c-unit"><col class="c-price"><col class="c-price"><col class="c-total"><col class="c-note"><col class="c-remove"></colgroup><thead><tr><th class="sticky-num">#</th><th class="sticky-desc">Description</th><th>Qty</th><th>Unit</th><th>List Price</th><th>Quote Price</th><th>Total</th><th>Note</th><th></th></tr></thead><tbody>${xs.length?xs.map((x,i)=>`<tr data-q403-row="${attr(x.id)}"><td class="sticky-num rowno">${i+1}</td><td class="sticky-desc"><input class="q403cell q403desc" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="description" value="${attr(x.description)}" placeholder="Product / service"></td><td><input class="q403cell q403num" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="qty" type="number" inputmode="decimal" step="0.01" value="${x.qty}" aria-label="Quantity"></td><td><input class="q403cell" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="unit" value="${attr(x.unit)}" placeholder="sf / sy / ea"></td><td><input class="q403cell q403num" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="listPrice" type="number" inputmode="decimal" step="0.01" value="${x.listPrice}" aria-label="List price"></td><td><input class="q403cell q403num" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="unitPrice" type="number" inputmode="decimal" step="0.01" value="${x.unitPrice}" aria-label="Quote price"></td><td class="money q403calc" data-q403-total="${attr(x.id)}">${money(lineTotal(x))}</td><td><input class="q403cell q403note" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="note" value="${attr(x.note)}" placeholder="Optional note"></td><td><button type="button" class="danger" data-q403-remove="${group}" data-id="${attr(x.id)}" aria-label="Remove row">×</button></td></tr>`).join(''):'<tr><td colspan="9" class="q403empty">No rows yet. Tap + Row to start entering directly in the table.</td></tr>'}</tbody></table></div></section>`
+  const xs=lineGroup(draft,group),descHead=touchIOS?'':'sticky-desc';
+  return `<section class="q403tableBlock" data-q403-group="${group}"><div class="q403sectHead"><h3>${title}</h3><button type="button" data-q403-add="${group}">+ Row</button></div><div class="q403tableWrap"><table class="q403sheet ${touchIOS?'q403nativeSheet':''}"><colgroup><col class="c-num"><col class="c-desc"><col class="c-qty"><col class="c-unit"><col class="c-price"><col class="c-price"><col class="c-total"><col class="c-note"><col class="c-remove"></colgroup><thead><tr><th class="sticky-num">#</th><th class="${descHead}">Description</th><th>Qty</th><th>Unit</th><th>List Price</th><th>Quote Price</th><th>Total</th><th>Note</th><th></th></tr></thead><tbody>${xs.length?xs.map((x,i)=>`<tr data-q403-row="${attr(x.id)}"><td class="sticky-num rowno">${i+1}</td>${sheetEditCell(group,x,'description',x.description,'text','Product / service')}${sheetEditCell(group,x,'qty',x.qty,'number','0')}${sheetEditCell(group,x,'unit',x.unit,'text','sf / sy / ea')}${sheetEditCell(group,x,'listPrice',x.listPrice,'number','0')}${sheetEditCell(group,x,'unitPrice',x.unitPrice,'number','0')}<td class="money q403calc" data-q403-total="${attr(x.id)}">${money(lineTotal(x))}</td>${sheetEditCell(group,x,'note',x.note,'text','Optional note')}<td><button type="button" class="danger" data-q403-remove="${group}" data-id="${attr(x.id)}" aria-label="Remove row">×</button></td></tr>`).join(''):'<tr><td colspan="9" class="q403empty">No rows yet. Tap + Row to start entering directly in the table.</td></tr>'}</tbody></table></div></section>`
 }
 function focusNextCell(input){
   const cells=[...input.closest('table')?.querySelectorAll('[data-q403-line]')||[]],i=cells.indexOf(input);if(i<0)return;
-  const next=cells[i+1];if(next){next.focus();try{next.select()}catch(_){}}
+  const next=cells[i+1];if(next){next.focus({preventScroll:true});selectCellText(next);next.scrollIntoView({block:'nearest',inline:'nearest'})}
 }
 function bindInputs(scope){
   scope.querySelectorAll('[data-q403-field]').forEach(x=>x.oninput=()=>{draft=setQuoteField(draft,x.dataset.q403Field,x.type==='checkbox'?x.checked:x.value);markDirty();renderSummaryAndPreview()});
   scope.querySelectorAll('[data-q403-line]').forEach(x=>{
-    x.oninput=()=>{draft=updateLine(draft,x.dataset.q403Line,x.dataset.id,x.dataset.key,x.value);markDirty();const line=lineGroup(draft,x.dataset.q403Line).find(v=>v.id===x.dataset.id),total=scope.querySelector('[data-q403-total="'+CSS.escape(x.dataset.id)+'"]');if(total&&line){const v=money(lineTotal(line));if(total.tagName==='INPUT')total.value=v;else total.textContent=v}renderSummaryAndPreview()};
-    x.onfocus=()=>{x.closest('td')?.classList.add('editing');if(x.classList.contains('q403num')&&(x.value==='0'||x.value==='0.00'))setTimeout(()=>{try{x.select()}catch(_){}},0)};
-    x.onblur=()=>x.closest('td')?.classList.remove('editing');
-    x.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();focusNextCell(x)}}
+    const update=()=>{draft=updateLine(draft,x.dataset.q403Line,x.dataset.id,x.dataset.key,editValue(x));markDirty();const line=lineGroup(draft,x.dataset.q403Line).find(v=>v.id===x.dataset.id),total=scope.querySelector('[data-q403-total="'+CSS.escape(x.dataset.id)+'"]');if(total&&line){const v=money(lineTotal(line));if(total.tagName==='INPUT')total.value=v;else total.textContent=v}renderSummaryAndPreview()};
+    x.oninput=update;
+    x.onfocus=()=>{x.closest('td')?.classList.add('editing');const v=editValue(x);if((x.classList.contains('q403num')||x.classList.contains('q403numCell'))&&(v==='0'||v==='0.00'))setTimeout(()=>selectCellText(x),0)};
+    x.onblur=()=>{x.closest('td')?.classList.remove('editing');if(x.isContentEditable&&x.dataset.placeholder&&!editValue(x))x.innerHTML='';update()};
+    x.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();focusNextCell(x)}};
+    if(x.isContentEditable){
+      let sx=0,sy=0;
+      x.addEventListener('touchstart',e=>{const t=e.touches?.[0];if(t){sx=t.clientX;sy=t.clientY}},{passive:true});
+      x.addEventListener('touchend',e=>{const t=e.changedTouches?.[0];if(!t)return;const moved=Math.hypot(t.clientX-sx,t.clientY-sy);if(moved<9){e.preventDefault();x.focus({preventScroll:true});if((x.classList.contains('q403numCell'))&&(editValue(x)==='0'||editValue(x)==='0.00'))selectCellText(x)}},{passive:false})
+    }
   });
   scope.querySelectorAll('[data-q403-add]').forEach(x=>x.onclick=()=>{
     const group=x.dataset.q403Add;draft=addLine(draft,group);const added=lineGroup(draft,group).at(-1);markDirty();renderEditor();renderSummaryAndPreview();
-    if(mode==='table'&&added){const target=by('q403table')?.querySelector('[data-q403-line="'+group+'"][data-id="'+CSS.escape(added.id)+'"][data-key="description"]');target?.focus();target?.scrollIntoView({block:'nearest',inline:'center'})}
+    if(mode==='table'&&added){const target=by('q403table')?.querySelector('[data-q403-line="'+group+'"][data-id="'+CSS.escape(added.id)+'"][data-key="description"]');target?.focus({preventScroll:true});target?.scrollIntoView({block:'nearest',inline:'center'})}
   });
   scope.querySelectorAll('[data-q403-remove]').forEach(x=>x.onclick=()=>{draft=removeLine(draft,x.dataset.q403Remove,x.dataset.id);markDirty();renderEditor();renderSummaryAndPreview()});
 }

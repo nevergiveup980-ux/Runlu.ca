@@ -1,0 +1,20 @@
+name: Flooring Quote Native Cell V0.4.03d
+on:
+  pull_request:
+    paths:
+      - 'flooring/quote-dual-entry-v0403.js'
+      - 'flooring/index-v0403-quote.html'
+      - 'scripts/run-flooring-quote-native-cell-v0403d.mjs'
+      - '.github/workflows/flooring-quote-native-cell-v0403d.yml'
+  workflow_dispatch:
+jobs:
+  quote-native-cell:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.4.03d native iPhone cell-edit gate
+        run: node scripts/run-flooring-quote-native-cell-v0403d.mjs
