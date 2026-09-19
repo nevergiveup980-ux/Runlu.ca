@@ -1,4 +1,4 @@
-/* RUNLU Deerfoot Flooring OS · V0.4.03 Quote Dual Entry Preview */
+/* RUNLU Deerfoot Flooring OS · V0.4.03c Quote Table Entry Hotfix */
 (function(root){
 'use strict';
 const VERSION='0.4.03';
@@ -156,16 +156,30 @@ function fieldLineCards(group,title){
 }
 function renderTable(){
   const el=by('q403table');if(!el)return;
-  el.innerHTML=tableGroup('materials','Materials')+tableGroup('labour','Installation / Labour');bindInputs(el)
+  el.innerHTML='<div class="q403tableHint"><b>Table Entry is editable.</b> Tap any cell to type. Swipe sideways for pricing / notes. Press Next / Enter to move across cells.</div>'+tableGroup('materials','Materials')+tableGroup('labour','Installation / Labour');
+  bindInputs(el);
+  el.querySelectorAll('.q403tableWrap').forEach(w=>{w.scrollLeft=0})
 }
 function tableGroup(group,title){
   const xs=lineGroup(draft,group);
-  return `<section class="q403tableBlock"><div class="q403sectHead"><h3>${title}</h3><button type="button" data-q403-add="${group}">+ Row</button></div><div class="q403tableWrap"><table><thead><tr><th>#</th><th>Description</th><th>Qty</th><th>Unit</th><th>List Price</th><th>Quote Price</th><th>Total</th><th>Note</th><th></th></tr></thead><tbody>${xs.length?xs.map((x,i)=>`<tr><td>${i+1}</td><td><input data-q403-line="${group}" data-id="${attr(x.id)}" data-key="description" value="${attr(x.description)}"></td><td><input data-q403-line="${group}" data-id="${attr(x.id)}" data-key="qty" type="number" step="0.01" value="${x.qty}"></td><td><input data-q403-line="${group}" data-id="${attr(x.id)}" data-key="unit" value="${attr(x.unit)}"></td><td><input data-q403-line="${group}" data-id="${attr(x.id)}" data-key="listPrice" type="number" step="0.01" value="${x.listPrice}"></td><td><input data-q403-line="${group}" data-id="${attr(x.id)}" data-key="unitPrice" type="number" step="0.01" value="${x.unitPrice}"></td><td class="money" data-q403-total="${attr(x.id)}">${money(lineTotal(x))}</td><td><input data-q403-line="${group}" data-id="${attr(x.id)}" data-key="note" value="${attr(x.note)}"></td><td><button type="button" class="danger" data-q403-remove="${group}" data-id="${attr(x.id)}">×</button></td></tr>`).join(''):'<tr><td colspan="9" class="q403empty">No rows yet.</td></tr>'}</tbody></table></div></section>`
+  return `<section class="q403tableBlock" data-q403-group="${group}"><div class="q403sectHead"><h3>${title}</h3><button type="button" data-q403-add="${group}">+ Row</button></div><div class="q403tableWrap" tabindex="0"><table class="q403sheet"><colgroup><col class="c-num"><col class="c-desc"><col class="c-qty"><col class="c-unit"><col class="c-price"><col class="c-price"><col class="c-total"><col class="c-note"><col class="c-remove"></colgroup><thead><tr><th class="sticky-num">#</th><th class="sticky-desc">Description</th><th>Qty</th><th>Unit</th><th>List Price</th><th>Quote Price</th><th>Total</th><th>Note</th><th></th></tr></thead><tbody>${xs.length?xs.map((x,i)=>`<tr data-q403-row="${attr(x.id)}"><td class="sticky-num rowno">${i+1}</td><td class="sticky-desc"><input class="q403cell q403desc" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="description" value="${attr(x.description)}" placeholder="Product / service"></td><td><input class="q403cell q403num" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="qty" type="number" inputmode="decimal" step="0.01" value="${x.qty}" aria-label="Quantity"></td><td><input class="q403cell" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="unit" value="${attr(x.unit)}" placeholder="sf / sy / ea"></td><td><input class="q403cell q403num" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="listPrice" type="number" inputmode="decimal" step="0.01" value="${x.listPrice}" aria-label="List price"></td><td><input class="q403cell q403num" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="unitPrice" type="number" inputmode="decimal" step="0.01" value="${x.unitPrice}" aria-label="Quote price"></td><td class="money q403calc" data-q403-total="${attr(x.id)}">${money(lineTotal(x))}</td><td><input class="q403cell q403note" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="note" value="${attr(x.note)}" placeholder="Optional note"></td><td><button type="button" class="danger" data-q403-remove="${group}" data-id="${attr(x.id)}" aria-label="Remove row">×</button></td></tr>`).join(''):'<tr><td colspan="9" class="q403empty">No rows yet. Tap + Row to start entering directly in the table.</td></tr>'}</tbody></table></div></section>`
+}
+function focusNextCell(input){
+  const cells=[...input.closest('table')?.querySelectorAll('[data-q403-line]')||[]],i=cells.indexOf(input);if(i<0)return;
+  const next=cells[i+1];if(next){next.focus();try{next.select()}catch(_){}}
 }
 function bindInputs(scope){
   scope.querySelectorAll('[data-q403-field]').forEach(x=>x.oninput=()=>{draft=setQuoteField(draft,x.dataset.q403Field,x.type==='checkbox'?x.checked:x.value);markDirty();renderSummaryAndPreview()});
-  scope.querySelectorAll('[data-q403-line]').forEach(x=>x.oninput=()=>{draft=updateLine(draft,x.dataset.q403Line,x.dataset.id,x.dataset.key,x.value);markDirty();const line=lineGroup(draft,x.dataset.q403Line).find(v=>v.id===x.dataset.id),total=scope.querySelector('[data-q403-total="'+CSS.escape(x.dataset.id)+'"]');if(total&&line){const v=money(lineTotal(line));if(total.tagName==='INPUT')total.value=v;else total.textContent=v}renderSummaryAndPreview()});
-  scope.querySelectorAll('[data-q403-add]').forEach(x=>x.onclick=()=>{draft=addLine(draft,x.dataset.q403Add);markDirty();renderEditor();renderSummaryAndPreview()});
+  scope.querySelectorAll('[data-q403-line]').forEach(x=>{
+    x.oninput=()=>{draft=updateLine(draft,x.dataset.q403Line,x.dataset.id,x.dataset.key,x.value);markDirty();const line=lineGroup(draft,x.dataset.q403Line).find(v=>v.id===x.dataset.id),total=scope.querySelector('[data-q403-total="'+CSS.escape(x.dataset.id)+'"]');if(total&&line){const v=money(lineTotal(line));if(total.tagName==='INPUT')total.value=v;else total.textContent=v}renderSummaryAndPreview()};
+    x.onfocus=()=>{x.closest('td')?.classList.add('editing');if(x.classList.contains('q403num')&&(x.value==='0'||x.value==='0.00'))setTimeout(()=>{try{x.select()}catch(_){}},0)};
+    x.onblur=()=>x.closest('td')?.classList.remove('editing');
+    x.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();focusNextCell(x)}}
+  });
+  scope.querySelectorAll('[data-q403-add]').forEach(x=>x.onclick=()=>{
+    const group=x.dataset.q403Add;draft=addLine(draft,group);const added=lineGroup(draft,group).at(-1);markDirty();renderEditor();renderSummaryAndPreview();
+    if(mode==='table'&&added){const target=by('q403table')?.querySelector('[data-q403-line="'+group+'"][data-id="'+CSS.escape(added.id)+'"][data-key="description"]');target?.focus();target?.scrollIntoView({block:'nearest',inline:'center'})}
+  });
   scope.querySelectorAll('[data-q403-remove]').forEach(x=>x.onclick=()=>{draft=removeLine(draft,x.dataset.q403Remove,x.dataset.id);markDirty();renderEditor();renderSummaryAndPreview()});
 }
 function renderEditor(){by('q403fields').hidden=mode!=='fields';by('q403table').hidden=mode!=='table';if(mode==='fields')renderFields();else renderTable();document.querySelectorAll('[data-q403-mode]').forEach(b=>b.classList.toggle('active',b.dataset.q403Mode===mode))}
@@ -185,7 +199,7 @@ function renderSummaryAndPreview(){
 function renderAll(){renderJobPicker();renderEditor();renderSummaryAndPreview();const btn=by('q403save'),j=activeJob();if(btn)btn.disabled=!canWriteJob(j);const d=by('q403dirty');if(d)d.textContent=dirty?'Unsaved changes':(j&&j.quote?'Saved quote loaded':'Draft not saved')}
 function bind(){
   by('q403new').onclick=newQuoteJob;by('q403save').onclick=saveQuote;by('q403print').onclick=()=>window.print();
-  document.querySelectorAll('[data-q403-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.q403Mode;renderEditor()});
+  document.querySelectorAll('[data-q403-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.q403Mode;renderEditor();if(mode==='table'){const first=by('q403table')?.querySelector('[data-key="description"]');setTimeout(()=>first?.scrollIntoView({block:'nearest',inline:'start'}),0)}});
 }
 function boot(){bind();load()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
