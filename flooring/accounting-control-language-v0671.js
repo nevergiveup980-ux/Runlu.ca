@@ -27,7 +27,8 @@ const r=x=>Math.round((n(x)+Number.EPSILON)*100)/100;
 const money=x=>r(x).toLocaleString('en-CA',{style:'currency',currency:'CAD'});
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const iso=v=>/^\d{4}-\d{2}-\d{2}$/.test(String(v||''));
-const today=()=>new Date().toISOString().slice(0,10);
+const localDate=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const today=()=>localDate(new Date());
 const collator=new Intl.Collator('en',{numeric:true,sensitivity:'base'});
 
 function jobs(){const x=read(JOBS,[]);return Array.isArray(x)?x:[]}
@@ -50,7 +51,7 @@ function side(j,sdb=sideDB()){
   const x=sdb[k(j)]||sdb[String(j?.jobNumber||'')]||{};
   return {invoiceDate:x.invoiceDate||j?.invoiceDate||j?.date||'',terms:x.terms==null?30:n(x.terms),dueDate:x.dueDate||'',installer:n(x.installer),freight:n(x.freight),prep:n(x.prep),overhead:n(x.overhead),commission:n(x.commission),other:n(x.other),province:x.province||'AB',t5018:x.t5018||'Review',wcb:x.wcb||'Review'};
 }
-function plus(d,k){if(!iso(d))return'';const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+Number(k||0));return x.toISOString().slice(0,10)}
+function plus(d,k){if(!iso(d))return'';const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+Number(k||0));return localDate(x)}
 function dueFor(j,sdb=sideDB()){const s=side(j,sdb);return s.dueDate||plus(s.invoiceDate,s.terms)}
 function ar(j,pdb=payDB(),sdb=sideDB()){
   const c=calc(j),p=paid(j,pdb),bal=Math.max(0,r(n(c.total)-p)),due=dueFor(j,sdb);
