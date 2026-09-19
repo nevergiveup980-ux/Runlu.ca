@@ -1,0 +1,39 @@
+name: Flooring Stability Firewall V0.4.07
+on:
+  pull_request:
+    paths:
+      - 'flooring/app.js'
+      - 'flooring/po-safe-v040.js'
+      - 'flooring/payment-shared-v046.js'
+      - 'flooring/payment-cloud-v047.js'
+      - 'flooring/accounting-foundation-v067.js'
+      - 'flooring/accounting-control-language-v0671.js'
+      - 'flooring/management-review-v080.js'
+      - 'flooring/quote-dual-entry-v0403.js'
+      - 'flooring/deerfoot-real-workflow-v046.js'
+      - 'flooring/orders-drawer-v066.js'
+      - 'flooring/pricing-foundation-v070.js'
+      - 'flooring/po-void-v084r2.js'
+      - 'flooring/po-history-v085.js'
+      - 'flooring/service-claims-safe-v001.js'
+      - 'flooring/pickup-planner-v052.js'
+      - 'flooring/warehouse-work-sync-v090.js'
+      - 'flooring/smart-inventory-picker-v072.js'
+      - 'flooring/material-work-sync-v091.js'
+      - 'flooring/po-inventory-holds-v080r1.js'
+      - 'flooring/storage-resilience-v0407.js'
+      - 'flooring/index-v0403-release.html'
+      - 'scripts/run-flooring-stability-v0407.mjs'
+      - '.github/workflows/flooring-stability-v0407.yml'
+  workflow_dispatch:
+jobs:
+  aging-firewall:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.4.07 multi-year stability gate
+        run: node scripts/run-flooring-stability-v0407.mjs

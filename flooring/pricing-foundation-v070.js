@@ -36,7 +36,7 @@ const money=v=>v==null||v===''?'—':Number(v||0).toLocaleString('en-CA',{style:
 const numOrNull=v=>{if(v==null||String(v).trim()==='')return null;const x=Number(String(v).replace(/[$,]/g,''));return Number.isFinite(x)?Math.round((x+Number.EPSILON)*10000)/10000:null};
 const round2=x=>Math.round((Number(x||0)+Number.EPSILON)*100)/100;
 const now=()=>new Date().toISOString();
-const today=()=>new Date().toISOString().slice(0,10);
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 const collator=new Intl.Collator('en',{numeric:true,sensitivity:'base'});
 let editId=null;
 

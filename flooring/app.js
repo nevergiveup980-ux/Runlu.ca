@@ -1,9 +1,47 @@
-const STORE='runlu_deerfoot_flooring_jobs_v1', ACTIVE='runlu_deerfoot_flooring_active_job_v1', INV='runlu_flooring_active_invoice_v1';
+const STORE='runlu_deerfoot_flooring_jobs_v1', ACTIVE='runlu_deerfoot_flooring_active_job_v1', INV='runlu_flooring_active_invoice_v1', CORRUPT_BACKUP='runlu_deerfoot_flooring_jobs_corrupt_backup_v0407';
 const NAV=[['command','Command'],['jobs','Jobs'],['purchasing','PO'],['warehouse','Warehouse'],['invoice','Invoice'],['install','Install'],['serviceclaims','Service / Claims'],['accounting','Accounting']];
-let jobs=[],activeId=null,editingItems=[];
+let jobs=[],activeId=null,editingItems=[],jobStoreCorrupt=false,jobStoreAlerted=false;
 function demoJob(){return {id:'demo-181482',isDemo:true,jobNumber:'181482',invoiceNumber:'181482',date:'2026-08-20',invoiceDate:'2026-08-20',customerName:'Lee Sutter',soldToAddress:'Calgary, Alberta',shipToName:'Tent Event',shipToAddress:'Supply Only',email:'lee.sutter@example.com',cell:'403-589-7888',phoneHome:'',phoneWork:'',clerk:'N',dateRequired:'2026-08-21',pickup:'Aug 21st',delivery:'or sooner',customerPO:'',supplierPO:'',status:'Confirmed',notes:'Supply only. Tent event.',items:[{qty:'90 SQFT',size:'',style:'Custom Pro Linoleum',colour:'Longmoor Caramel',supplier:'Buckwold',price:18.33,total:1650}],deliveryCharge:0,depositPaid:500,paymentMethod:'interac',installer:'',installDate:'',installStatus:'Not Scheduled',installNotes:''}}
-function load(){try{jobs=JSON.parse(localStorage.getItem(STORE)||'[]')}catch(e){jobs=[]}if(!jobs.length){jobs=[demoJob()];saveStore()}activeId=localStorage.getItem(ACTIVE)||jobs[0]?.id||null;if(!jobs.some(j=>j.id===activeId))activeId=jobs[0]?.id||null;renderNav();renderAll()}
-function saveStore(){localStorage.setItem(STORE,JSON.stringify(jobs));if(activeId)localStorage.setItem(ACTIVE,activeId)}
+function preserveCorruptJobStore(raw,error){
+  jobStoreCorrupt=true;
+  try{if(raw!=null&&!localStorage.getItem(CORRUPT_BACKUP))localStorage.setItem(CORRUPT_BACKUP,raw)}catch(_){}
+  console.error('RUNLU Flooring Job store is unreadable; original data preserved and writes are blocked.',error);
+}
+function warnCorruptJobStore(){
+  if(!jobStoreCorrupt||jobStoreAlerted)return;jobStoreAlerted=true;
+  setTimeout(()=>alert('Flooring Job data could not be read safely. RUNLU preserved the original browser data and blocked Job writes instead of replacing it. Do not reset browser storage; use the recovery copy / backup before continuing.'),80)
+}
+function load(){
+  const raw=localStorage.getItem(STORE);
+  if(raw==null){
+    jobs=[demoJob()];saveStore();
+  }else{
+    try{
+      const parsed=JSON.parse(raw);
+      if(!Array.isArray(parsed))throw new Error('Job store is not an array');
+      jobs=parsed;
+    }catch(e){
+      jobs=[];preserveCorruptJobStore(raw,e);
+    }
+    if(!jobStoreCorrupt&&!jobs.length){jobs=[demoJob()];saveStore()}
+  }
+  activeId=localStorage.getItem(ACTIVE)||jobs[0]?.id||null;
+  if(!jobs.some(j=>j.id===activeId))activeId=jobs[0]?.id||null;
+  renderNav();renderAll();warnCorruptJobStore()
+}
+function saveStore(){
+  if(jobStoreCorrupt){warnCorruptJobStore();return false}
+  try{
+    const payload=JSON.stringify(jobs);localStorage.setItem(STORE,payload);
+    if(localStorage.getItem(STORE)!==payload)throw new Error('Job store verification failed');
+    if(activeId)localStorage.setItem(ACTIVE,activeId);
+    return true
+  }catch(e){
+    console.error('RUNLU Flooring Job save blocked / failed.',e);
+    alert('Flooring Job save failed. Existing browser data was not intentionally cleared. Stop editing and export / back up before retrying.');
+    return false
+  }
+}
 function active(){return jobs.find(j=>j.id===activeId)||null}
 function money(n){return '$'+Number(n||0).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function calc(j){const itemSub=(j.items||[]).reduce((s,x)=>s+Number(x.total||0),0),delivery=Number(j.deliveryCharge||0),subtotal=itemSub+delivery,gst=Math.round(subtotal*.05*100)/100,total=subtotal+gst,dep=Number(j.depositPaid||0);return {itemSub,delivery,subtotal,gst,total,balance:Math.max(0,total-dep)}}

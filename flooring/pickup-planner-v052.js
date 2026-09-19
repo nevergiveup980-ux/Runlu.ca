@@ -20,6 +20,8 @@ const read=(k,f)=>{try{const v=JSON.parse(localStorage.getItem(k)||'null');retur
 const write=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(_){return false}};
 const iso=v=>/^\d{4}-\d{2}-\d{2}$/.test(String(v||''));
 const dayMs=86400000;
+const localToday=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const dayNumber=v=>{if(!iso(v))return NaN;const [y,m,d]=String(v).split('-').map(Number);return Date.UTC(y,m-1,d)/dayMs};
 
 function prefs(){
   const p=read(PREF_STORE,{});return {view:p.view==='supplier'?'supplier':'date',window:[1,2,3,5,7].includes(Number(p.window))?Number(p.window):3};
@@ -54,7 +56,7 @@ function prettyDate(v,long=false){
 }
 function relativeDate(v){
   if(!iso(v))return 'Supplier pickup date not set';
-  const d=new Date(v+'T12:00:00'),t=new Date();t.setHours(12,0,0,0);const diff=Math.round((d-t)/dayMs);
+  const diff=dayNumber(v)-dayNumber(localToday());
   if(diff===0)return 'TODAY · '+prettyDate(v);
   if(diff===1)return 'TOMORROW · '+prettyDate(v);
   if(diff===-1)return 'YESTERDAY · '+prettyDate(v);
@@ -86,8 +88,8 @@ function clusterCandidates(xs,windowDays){
   const dated=sortRows(xs.filter(x=>isPickup(x)&&iso(x.requestedDate)&&!['Completed','Cancelled'].includes(x.pickupStatus)));
   const out=[];let i=0;
   while(i<dated.length){
-    const start=dated[i],startMs=dateValue(start.requestedDate),cluster=[start];let j=i+1;
-    while(j<dated.length&&dateValue(dated[j].requestedDate)-startMs<=windowDays*dayMs){cluster.push(dated[j]);j++}
+    const start=dated[i],startDay=dayNumber(start.requestedDate),cluster=[start];let j=i+1;
+    while(j<dated.length&&dayNumber(dated[j].requestedDate)-startDay<=windowDays){cluster.push(dated[j]);j++}
     if(cluster.length>1)out.push(cluster);
     i=cluster.length>1?j:i+1;
   }

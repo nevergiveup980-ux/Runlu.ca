@@ -17,6 +17,7 @@ const CLOUD_ENABLED='runlu_flooring_payment_cloud_enabled_v047';
 const AUTH_STORAGE='runlu-flooring-auth-v1';
 let sb=null,session=null,lastSync='',busy=false;
 const by=id=>document.getElementById(id);
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
 function activeJob(){try{return typeof window.active==='function'?window.active():null}catch(_){return null}}
@@ -75,7 +76,7 @@ async function uploadInitialLocal(header){
   if(Number(l.depositRequired||0)!==Number(header.deposit_required||0)){
     const u=await sb.from('flooring_customer_payment_ledgers').update({deposit_required:Number(l.depositRequired||0),updated_at:new Date().toISOString(),updated_by:session.user.id,job_id:j.id||'',job_number:j.jobNumber||'',invoice_number:j.invoiceNumber||'',customer_name:j.customerName||''}).eq('id',header.id).eq('environment',ENV);if(u.error)throw u.error;
   }
-  const rows=(l.payments||[]).map(p=>({environment:ENV,ledger_id:header.id,job_key:jk,client_payment_id:String(p.id||('pay-'+Date.now()+Math.random())),payment_date:p.date||new Date().toISOString().slice(0,10),payment_type:p.type||'Payment',amount:Number(p.amount||0),payment_method:p.method||'',reference:p.reference||'',note:p.note||'',recorded_from:p.recordedFrom||'Local opening',updated_at:new Date().toISOString()})).filter(x=>x.amount>0);
+  const rows=(l.payments||[]).map(p=>({environment:ENV,ledger_id:header.id,job_key:jk,client_payment_id:String(p.id||('pay-'+Date.now()+Math.random())),payment_date:p.date||today(),payment_type:p.type||'Payment',amount:Number(p.amount||0),payment_method:p.method||'',reference:p.reference||'',note:p.note||'',recorded_from:p.recordedFrom||'Local opening',updated_at:new Date().toISOString()})).filter(x=>x.amount>0);
   if(rows.length){const r=await sb.from('flooring_customer_payments').upsert(rows,{onConflict:'environment,job_key,client_payment_id'});if(r.error)throw r.error}
 }
 
@@ -99,7 +100,7 @@ async function pushDeposit(){
   if(!centralActive())return;try{const j=activeJob(),l=localLedger(j),c=await ensureCloudLedger(true);const r=await sb.from('flooring_customer_payment_ledgers').update({deposit_required:Number(l.depositRequired||0),job_id:j.id||'',job_number:j.jobNumber||'',invoice_number:j.invoiceNumber||'',customer_name:j.customerName||'',updated_at:new Date().toISOString(),updated_by:session.user.id}).eq('id',c.header.id).eq('environment',ENV);if(r.error)throw r.error;lastSync=fmtTime();renderPanels()}catch(e){console.error(e);alert('Central deposit sync failed: '+e.message)}
 }
 async function pushLocalPayments(){
-  if(!centralActive())return;try{const j=activeJob(),l=localLedger(j),c=await ensureCloudLedger(true),jk=jobKey(j),rows=(l.payments||[]).map(p=>({environment:ENV,ledger_id:c.header.id,job_key:jk,client_payment_id:String(p.id),payment_date:p.date||new Date().toISOString().slice(0,10),payment_type:p.type||'Payment',amount:Number(p.amount||0),payment_method:p.method||'',reference:p.reference||'',note:p.note||'',recorded_from:p.recordedFrom||'Flooring OS',updated_at:new Date().toISOString()})).filter(x=>x.amount>0);if(rows.length){const r=await sb.from('flooring_customer_payments').upsert(rows,{onConflict:'environment,job_key,client_payment_id'});if(r.error)throw r.error}lastSync=fmtTime();renderPanels()}catch(e){console.error(e);alert('Central payment write failed: '+e.message)}
+  if(!centralActive())return;try{const j=activeJob(),l=localLedger(j),c=await ensureCloudLedger(true),jk=jobKey(j),rows=(l.payments||[]).map(p=>({environment:ENV,ledger_id:c.header.id,job_key:jk,client_payment_id:String(p.id),payment_date:p.date||today(),payment_type:p.type||'Payment',amount:Number(p.amount||0),payment_method:p.method||'',reference:p.reference||'',note:p.note||'',recorded_from:p.recordedFrom||'Flooring OS',updated_at:new Date().toISOString()})).filter(x=>x.amount>0);if(rows.length){const r=await sb.from('flooring_customer_payments').upsert(rows,{onConflict:'environment,job_key,client_payment_id'});if(r.error)throw r.error}lastSync=fmtTime();renderPanels()}catch(e){console.error(e);alert('Central payment write failed: '+e.message)}
 }
 async function deleteCloudPayment(clientId){
   if(!centralActive()||!clientId)return;try{const jk=jobKey();const r=await sb.from('flooring_customer_payments').delete().eq('environment',ENV).eq('job_key',jk).eq('client_payment_id',clientId);if(r.error)throw r.error;lastSync=fmtTime();renderPanels()}catch(e){console.error(e);alert('Central payment delete failed: '+e.message)}

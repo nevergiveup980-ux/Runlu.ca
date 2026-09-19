@@ -10,7 +10,7 @@ if(window.__runluPaymentSharedV046)return;
 window.__runluPaymentSharedV046=true;
 const SIDE='runlu_flooring_payment_lifecycle_v045';
 const by=id=>document.getElementById(id);
-const today=()=>new Date().toISOString().slice(0,10);
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 const money=n=>'$'+Number(n||0).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2});
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 function activeJob(){try{return typeof window.active==='function'?window.active():null}catch(_){return null}}

@@ -28,14 +28,22 @@ async function client(){
   sb=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,storageKey:AUTH,autoRefreshToken:true,detectSessionInUrl:true}});
   return sb;
 }
+async function fetchMaterialTasks(c){
+  const page=500,open=[];
+  for(let from=0;from<50000;from+=page){
+    const q=await c.from('flooring_warehouse_material_tasks').select('*').eq('environment',ENV).in('status',['Waiting','In Progress','Partial']).order('created_at',{ascending:false}).range(from,from+page-1);
+    if(q.error)throw q.error;const xs=Array.isArray(q.data)?q.data:[];open.push(...xs);if(xs.length<page)break
+  }
+  const done=await c.from('flooring_warehouse_material_tasks').select('*').eq('environment',ENV).eq('status','Completed').order('created_at',{ascending:false}).limit(200);
+  if(done.error)throw done.error;
+  return [...open,...(done.data||[])]
+}
 async function refresh(manual=false){
   if(busy)return;busy=true;paintState('SYNCING…');
   try{
     const c=await client(),s=(await c.auth.getSession()).data?.session||null;
     if(!s){offline=true;paintState('SIGN IN REQUIRED');return}
-    const q=await c.from('flooring_warehouse_material_tasks').select('*').eq('environment',ENV).order('created_at',{ascending:false});
-    if(q.error)throw q.error;
-    rows=Array.isArray(q.data)?q.data:[];lastSync=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});offline=false;
+    rows=await fetchMaterialTasks(c);lastSync=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});offline=false;
     localStorage.setItem(CACHE,JSON.stringify({rows,lastSync}));render();
     if(manual)alert('Warehouse fulfillment plan refreshed.');
   }catch(e){

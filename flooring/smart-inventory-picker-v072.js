@@ -513,26 +513,37 @@
       : `LIVE · ${lastSync || "SYNCED"}`;
     state.classList.toggle("off", offline);
   }
-  async function refresh(manual) {
-    try {
-      const c = await client();
-      const session = await recoverWarehouseSession(c);
-      if (!session) throw new Error("Warehouse OS sign-in was not found");
+  async function fetchAllWarehouseRecords(c) {
+    const pageSize = 1000, out = [];
+    for (let from = 0; from < 50000; from += pageSize) {
       const res = await c
         .from("warehouse_records")
         .select("dataset_key,record_id,payload,version,updated_at")
         .in("dataset_key", DATASETS)
         .is("deleted_at", null)
-        .limit(1000);
+        .order("updated_at", { ascending: false })
+        .range(from, from + pageSize - 1);
       if (res.error) throw res.error;
-      buildInventory(Array.isArray(res.data) ? res.data : []);
+      const rows = Array.isArray(res.data) ? res.data : [];
+      out.push(...rows);
+      if (rows.length < pageSize) break;
+    }
+    return out;
+  }
+  async function refresh(manual) {
+    try {
+      const c = await client();
+      const session = await recoverWarehouseSession(c);
+      if (!session) throw new Error("Warehouse OS sign-in was not found");
+      const rows = await fetchAllWarehouseRecords(c);
+      buildInventory(rows);
       offline = false;
       connectionMessage = "";
       lastSync = new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
       });
-      writeCache({ rows: res.data, lastSync });
+      writeCache({ rows, lastSync });
     } catch (error) {
       const cache = readCache();
       if (cache?.rows) buildInventory(cache.rows);

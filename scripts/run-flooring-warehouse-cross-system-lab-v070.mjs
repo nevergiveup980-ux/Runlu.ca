@@ -85,8 +85,17 @@ function bootFloorHandoff(storage,cloud){
   const auth={async getSession(){return{data:{session}}},onAuthStateChange(){return{data:{subscription:{unsubscribe(){}}}}}};
   function rows(name){if(name==='flooring_supplier_tasks')return cloud.tasks;if(name==='flooring_warehouse_work_events')return cloud.events;return[]}
   function query(name){
-    let limitN=null;
-    const chain={select(){return chain},eq(){return chain},order(){return chain},limit(n){limitN=n;return chain},then(resolve,reject){let out=clone(rows(name));if(limitN!=null)out=out.slice(0,limitN);return Promise.resolve({data:out,error:null}).then(resolve,reject)}};
+    let limitN=null,range=null,view=clone(rows(name));
+    const has=k=>view.some(x=>x&&Object.prototype.hasOwnProperty.call(x,k));
+    const chain={
+      select(){return chain},
+      eq(k,v){if(has(k))view=view.filter(x=>String(x?.[k]??'')===String(v??''));return chain},
+      in(k,vals){if(has(k)){const set=new Set((vals||[]).map(String));view=view.filter(x=>set.has(String(x?.[k]??'')))}return chain},
+      order(){return chain},
+      limit(n){limitN=n;return chain},
+      range(a,b){range=[Number(a),Number(b)];return chain},
+      then(resolve,reject){let out=clone(view);if(range)out=out.slice(range[0],range[1]+1);if(limitN!=null)out=out.slice(0,limitN);return Promise.resolve({data:out,error:null}).then(resolve,reject)}
+    };
     return chain;
   }
   const client={auth,async rpc(name,args){if(name!=='flooring_create_supplier_task')return{data:null,error:{message:'Unexpected RPC '+name}};return{data:cloud.createSupplierTask(args),error:null}},from(name){return query(name)}};
@@ -95,7 +104,7 @@ function bootFloorHandoff(storage,cloud){
   box.window=box;box.addEventListener=()=>{};
   vm.createContext(box,{name:'RUNLU Cross-System Flooring Handoff V090'});
   vm.runInContext(floorV090,box,{filename:FLOOR_V090,timeout:2000});
-  must(box.RUNLUWarehouseWorkSyncV090?.version==='0.9.0','Flooring V090 API missing');
+  must(box.RUNLUWarehouseWorkSyncV090?.version==='0.9.0-r2','Flooring V090 API missing');
   return{box,api:box.RUNLUWarehouseWorkSyncV090,network:()=>network.count};
 }
 
@@ -201,7 +210,7 @@ async function scenarios(){
   out.push(await check('Exact cross-system modules load with expected safety contracts',async()=>{
     const storage=memoryStorage(),cloud=sharedCloud();seedFlooring(storage);
     const h=bootFloorHandoff(storage,cloud),s=bootFloorSales(storage),w=bootWarehousePickup(cloud),x=bootWarehouseExecution();
-    must(h.api.version==='0.9.0','V090 version');must(s.review.poStatusImmutable&&s.review.atomicReviewCommit,'V095 safety flags');must(typeof s.drawer.syncPeopleToCall==='function','V066 queue sync');must(typeof w.box.updateFlooringSupplierTask==='function','Build094 update API');must(x.box.applyInventoryTransfer.__build129InternalTransferConservation===true,'Build129 flag');
+    must(h.api.version==='0.9.0-r2','V090 version');must(s.review.poStatusImmutable&&s.review.atomicReviewCommit,'V095 safety flags');must(typeof s.drawer.syncPeopleToCall==='function','V066 queue sync');must(typeof w.box.updateFlooringSupplierTask==='function','Build094 update API');must(x.box.applyInventoryTransfer.__build129InternalTransferConservation===true,'Build129 flag');
     must(h.network()+s.network()+w.network()+x.network()===0,'network attempted');
     return{flooring:{handoff:h.api.version,sales:s.review.version},warehouse:{runtime:`${warehouseVersion.version} Build${warehouseVersion.build}`,build129:true}};
   }));
