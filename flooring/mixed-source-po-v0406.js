@@ -169,7 +169,7 @@ function applyPO(existing,po){
   const merged={...base,...x,items,sourceTypes:sourceTypes(items),mixedSource:isMixedSource(items),purchaseType:legacyPurchaseType(items),supplier:legacySupplier(items,base.supplier),fulfillment:legacyFulfillment(items,base.fulfillment),subtotal:round2(items.reduce((s,v)=>s+lineAmount(v),0)),updatedAt:stamp};
   return merged
 }
-function inventoryHoldKey(po,line){const p=normalizePO(po),x=normalizeLine(line);return 'mixed:'+str(p.id)+'|job:'+str(p.jobId||p.jobNumber)+'|inventory:'+str(x.warehouseRecordId||'unlinked')+'|line:'+str(x.id)}
+function inventoryHoldKey(po,line){const p=po&&po.schemaVersion===2?po:normalizePO(po),x=normalizeLine(line);return 'mixed:'+str(p.id)+'|job:'+str(p.jobId||p.jobNumber)+'|inventory:'+str(x.warehouseRecordId||'unlinked')+'|line:'+str(x.id)}
 function inventoryHoldEligibility(line){
   const x=normalizeLine(line);
   if(x.sourceType!=='INVENTORY')return {ok:false,reason:'Not an INVENTORY line'};
@@ -216,7 +216,7 @@ function linkInventoryLine(po,lineId,item){
 function normExec(v){return str(v).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
 function sameExec(a,b){return !!normExec(a)&&normExec(a)===normExec(b)}
 function materialTaskCandidates(po,line,tasks){
-  const p=normalizePO(po),x=normalizeLine(line);
+  const p=po&&po.schemaVersion===2?po:normalizePO(po),x=normalizeLine(line);
   let xs=(Array.isArray(tasks)?tasks:[]).filter(t=>!p.poNumber||String(t.po_number??t.poNumber??'')===String(p.poNumber));
   if(p.jobNumber)xs=xs.filter(t=>!str(t.job_number??t.jobNumber)||String(t.job_number??t.jobNumber)===String(p.jobNumber));
   if(x.rollNumber){
@@ -239,12 +239,12 @@ function exactMaterialTask(po,line,tasks){
   return {task:xs.length===1?xs[0]:null,count:xs.length,ambiguous:xs.length>1}
 }
 function supplierTaskForLine(po,line,tasks){
-  const p=normalizePO(po),x=normalizeLine(line);
+  const p=po&&po.schemaVersion===2?po:normalizePO(po),x=normalizeLine(line);
   const xs=(Array.isArray(tasks)?tasks:[]).filter(t=>String(t.po_number??t.poNumber??'')===String(p.poNumber||'')).filter(t=>!x.supplier||!str(t.supplier)||sameExec(t.supplier,x.supplier));
   return {task:xs.length===1?xs[0]:null,count:xs.length,ambiguous:xs.length>1}
 }
 function projectionForLine(po,line,evidence={}){
-  const p=normalizePO(po),x=normalizeLine(line),holds=Array.isArray(evidence.holds)?evidence.holds:[],materialTasks=Array.isArray(evidence.materialTasks)?evidence.materialTasks:[],supplierTasks=Array.isArray(evidence.supplierTasks)?evidence.supplierTasks:[];
+  const p=po&&po.schemaVersion===2?po:normalizePO(po),x=normalizeLine(line),holds=Array.isArray(evidence.holds)?evidence.holds:[],materialTasks=Array.isArray(evidence.materialTasks)?evidence.materialTasks:[],supplierTasks=Array.isArray(evidence.supplierTasks)?evidence.supplierTasks:[];
   const out={lineId:x.id,sourceType:x.sourceType,current:x.workflowStatus,proposed:'',confidence:'none',evidence:[],reason:'No authoritative execution change identified'};
   if(x.sourceType==='LABOUR'||x.sourceType==='FEE'){out.reason='Non-material line bypasses Warehouse execution';return out}
   if(x.sourceType==='INVENTORY'){
