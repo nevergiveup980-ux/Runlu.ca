@@ -12,6 +12,7 @@ const cycles=Math.max(50,Number(process.env.RUNLU_BOUNDARY_CYCLES||500));
 const PO_STORE='runlu_deerfoot_supplier_orders_v1';
 const SNAP_STORE='runlu_supplier_pickup_by_po_v1';
 const WAREHOUSE_CACHE='runlu-flooring-warehouse-work-v090';
+const PLAN_FP_STORE='runlu-flooring-warehouse-plan-fingerprints-v0407';
 const MATERIAL_CACHE='runlu-flooring-material-work-v091';
 const FORBIDDEN_KEYS=['runlu_carpet_inventory_v52','runlu_inventory_records_v21','runlu_deerfoot_flooring_jobs_v1','runlu_people_to_call_v066'];
 const must=(c,m)=>{if(!c)throw new Error(m)};
@@ -44,9 +45,16 @@ function dom(){
 }
 
 function queryBuilder(data,error=null){
+  let rows=clone(data),limitN=null,range=null;
+  const has=k=>rows.some(x=>x&&Object.prototype.hasOwnProperty.call(x,k));
   const chain={
-    select(){return chain},eq(){return chain},order(){return chain},limit(){return chain},
-    then(resolve,reject){return Promise.resolve({data:clone(data),error}).then(resolve,reject)}
+    select(){return chain},
+    eq(k,v){if(has(k))rows=rows.filter(x=>String(x?.[k]??'')===String(v??''));return chain},
+    in(k,vals){if(has(k)){const set=new Set((vals||[]).map(String));rows=rows.filter(x=>set.has(String(x?.[k]??'')))}return chain},
+    order(){return chain},
+    limit(n){limitN=Number(n);return chain},
+    range(a,b){range=[Number(a),Number(b)];return chain},
+    then(resolve,reject){let out=clone(rows);if(range)out=out.slice(range[0],range[1]+1);if(Number.isFinite(limitN))out=out.slice(0,limitN);return Promise.resolve({data:out,error}).then(resolve,reject)}
   };
   return chain;
 }
@@ -90,17 +98,17 @@ async function warehouseScenarios(){
   const tests=[];
   tests.push(await check('Actual V090 loads with expected public contract',async()=>{
     const e=boot(warehouseSource,'RUNLUWarehouseWorkSyncV090');
-    must(e.api.version==='0.9.0','version '+e.api.version);must(typeof e.api.refresh==='function','refresh missing');must(typeof e.api.taskByPO==='function','taskByPO missing');
+    must(e.api.version==='0.9.0-r2','version '+e.api.version);must(typeof e.api.refresh==='function','refresh missing');must(typeof e.api.taskByPO==='function','taskByPO missing');
     return{moduleVersion:e.api.version};
   }));
   tests.push(await check('Actual V090 creates plans only for eligible POs and never mutates PO bytes',async()=>{
-    const rows=[{id:'po1',poNumber:'181604',jobId:'j1',jobNumber:'181604',customerName:'Synthetic Customer',status:'Received',supplier:'PROSOL',salesRep:'LAB',fulfillment:'Pickup',requestedDate:'2026-09-20',purchaseType:'Job-specific',items:[{style:'Wall Base',colour:'Brown 47',qty:2,unit:'BOX'}]},{id:'po2',poNumber:'181605',status:'Draft',supplier:'PRIMCO',items:[{style:'Pad',qty:2,unit:'ROLL'}]},{id:'po3',poNumber:'181606',status:'Cancelled',supplier:'TAIGA',items:[]}];
+    const rows=[{id:'po1',poNumber:'181604',jobId:'j1',jobNumber:'181604',customerName:'Synthetic Customer',status:'Confirmed',supplier:'PROSOL',salesRep:'LAB',fulfillment:'Pickup',requestedDate:'2026-09-20',purchaseType:'Job-specific',items:[{style:'Wall Base',colour:'Brown 47',qty:2,unit:'BOX'}]},{id:'po2',poNumber:'181605',status:'Draft',supplier:'PRIMCO',items:[{style:'Pad',qty:2,unit:'ROLL'}]},{id:'po3',poNumber:'181606',status:'Cancelled',supplier:'TAIGA',items:[]},{id:'po4',poNumber:'181607',status:'Received',supplier:'TAIGA',items:[{style:'Old history',qty:1,unit:'BOX'}]}];
     const e=boot(warehouseSource,'RUNLUWarehouseWorkSyncV090',{tables:{flooring_supplier_tasks:[{po_number:181604,status:'Waiting'}],flooring_warehouse_work_events:[]}});e.s.seed(PO_STORE,rows);e.s.seed(SNAP_STORE,{});const before=e.s.raw(PO_STORE);e.s.clearWrites();await e.api.refresh(false);
-    must(e.fake.calls.rpc.length===1,'eligible RPC count '+e.fake.calls.rpc.length);const c=e.fake.calls.rpc[0];must(c.name==='flooring_create_supplier_task','unexpected RPC '+c.name);must(c.args.p_po_number===181604,'wrong PO');must(c.args.p_items?.[0]?.unit==='box','unit not normalized');must(e.s.raw(PO_STORE)===before,'PO bytes mutated');must(e.api.taskByPO('181604')?.status==='Waiting','taskByPO failed');must(e.s.writes().every(k=>k===WAREHOUSE_CACHE),'unexpected local write '+e.s.writes());must(forbiddenWrites(e).length===0,'forbidden write '+forbiddenWrites(e));must(e.network()===0,'real network attempted');
+    must(e.fake.calls.rpc.length===1,'eligible RPC count '+e.fake.calls.rpc.length);const c=e.fake.calls.rpc[0];must(c.name==='flooring_create_supplier_task','unexpected RPC '+c.name);must(c.args.p_po_number===181604,'wrong PO');must(c.args.p_items?.[0]?.unit==='box','unit not normalized');must(e.s.raw(PO_STORE)===before,'PO bytes mutated');must(e.api.taskByPO('181604')?.status==='Waiting','taskByPO failed');must(e.s.writes().every(k=>k===WAREHOUSE_CACHE||k===PLAN_FP_STORE),'unexpected local write '+e.s.writes());must(forbiddenWrites(e).length===0,'forbidden write '+forbiddenWrites(e));must(e.network()===0,'real network attempted');
     return{rpcCalls:e.fake.calls.rpc.length,writes:e.s.writes()};
   }));
   tests.push(await check('Actual V090 successful refresh caches observer data only',async()=>{
-    const e=boot(warehouseSource,'RUNLUWarehouseWorkSyncV090',{tables:{flooring_supplier_tasks:[{po_number:319,status:'In Progress'},{po_number:320,status:'Completed'}],flooring_warehouse_work_events:[{event_type:'Status Changed',to_status:'Completed'}]}});e.s.seed(PO_STORE,[]);e.s.clearWrites();await e.api.refresh(false);const c=e.s.json(WAREHOUSE_CACHE);must(c.tasks.length===2&&c.events.length===1,'cache payload mismatch');must(e.s.writes().every(k=>k===WAREHOUSE_CACHE),'non-cache write');must(e.network()===0,'real network attempted');return{tasks:c.tasks.length,events:c.events.length};
+    const e=boot(warehouseSource,'RUNLUWarehouseWorkSyncV090',{tables:{flooring_supplier_tasks:[{po_number:319,status:'In Progress'},{po_number:320,status:'Completed'}],flooring_warehouse_work_events:[{event_type:'Status Changed',to_status:'Completed'}]}});e.s.seed(PO_STORE,[]);e.s.clearWrites();await e.api.refresh(false);const c=e.s.json(WAREHOUSE_CACHE);must(c.tasks.length===2&&c.events.length===1,'cache payload mismatch');must(e.s.writes().every(k=>k===WAREHOUSE_CACHE||k===PLAN_FP_STORE),'non-cache write');must(e.network()===0,'real network attempted');return{tasks:c.tasks.length,events:c.events.length};
   }));
   tests.push(await check('Actual V090 cloud failure falls back without posting inventory',async()=>{
     const cached={tasks:[{po_number:999,status:'Waiting'}],events:[],lastSync:'LAB'};const e=boot(warehouseSource,'RUNLUWarehouseWorkSyncV090',{tables:{flooring_supplier_tasks:[],flooring_warehouse_work_events:[]},tableErrors:{flooring_supplier_tasks:{message:'LAB injected query failure'}}});e.s.seed(PO_STORE,[]);e.s.seed(WAREHOUSE_CACHE,cached);e.s.clearWrites();await e.api.refresh(false);must(e.api.taskByPO('999')?.status==='Waiting','cache fallback failed');must(forbiddenWrites(e).length===0,'forbidden write');must(e.network()===0,'real network attempted');return{fallback:true};
@@ -133,13 +141,13 @@ async function stress(n){
     const mt=[{task_type:i%2?'Stock Picking':'Carpet Cutting',status:['Waiting','In Progress','Partial','Completed'][i%4],review_required:i%11===0}];
     w.s.seed(PO_STORE,po);w.s.clearWrites();w.fake.setTable('flooring_supplier_tasks',wt);w.fake.setTable('flooring_warehouse_work_events',we);m.s.clearWrites();m.fake.setTable('flooring_warehouse_material_tasks',mt);
     try{
-      await w.api.refresh(false);await m.api.refresh(false);must(w.api.taskByPO(String(num))?.status===wt[0].status,'warehouse task mismatch');must(w.s.writes().every(k=>k===WAREHOUSE_CACHE),'warehouse unexpected write');must(m.s.writes().every(k=>k===MATERIAL_CACHE),'material unexpected write');must(forbiddenWrites(w).length===0&&forbiddenWrites(m).length===0,'forbidden key write');must(w.network()===0&&m.network()===0,'network attempted');must(m.fake.calls.rpc.length===0,'material RPC attempted');
+      await w.api.refresh(false);await m.api.refresh(false);must(w.api.taskByPO(String(num))?.status===wt[0].status,'warehouse task mismatch');must(w.s.writes().every(k=>k===WAREHOUSE_CACHE||k===PLAN_FP_STORE),'warehouse unexpected write');must(m.s.writes().every(k=>k===MATERIAL_CACHE),'material unexpected write');must(forbiddenWrites(w).length===0&&forbiddenWrites(m).length===0,'forbidden key write');must(w.network()===0&&m.network()===0,'network attempted');must(m.fake.calls.rpc.length===0,'material RPC attempted');
     }catch(err){failure={cycle:i,error:err?.message||String(err),warehouseWrites:w.s.writes(),materialWrites:m.s.writes()};break}
   }
   return{pass:!failure,cyclesRequested:n,cyclesCompleted:failure?failure.cycle:n,failure,warehouseRpcCalls:w.fake.calls.rpc.length,realNetworkCalls:w.network()+m.network()};
 }
 
 const warehouseTests=await warehouseScenarios();const materialTests=await materialScenarios();const st=await stress(cycles);const tests=[...warehouseTests,...materialTests];const pass=tests.every(x=>x.pass)&&st.pass;
-const report={schema:'runlu.flooring.actual-operations-boundary.v1',version:'0.6.0',generatedAt:new Date().toISOString(),pass,modules:[{file:WAREHOUSE_FILE,sha256:warehouseSha256,version:warehouseTests[0]?.moduleVersion||null,role:'Flooring supplier-pickup planner/observer; Warehouse execution authority remains external to this module.'},{file:MATERIAL_FILE,sha256:materialSha256,version:materialTests[0]?.moduleVersion||null,role:'Read-only fulfillment observer for Hold-derived Stock Picking / Carpet Cutting work.'}],scenarios:{pass:tests.every(x=>x.pass),passed:tests.filter(x=>x.pass).length,failed:tests.filter(x=>!x.pass).length,tests},stress:st,isolation:{productionSupabaseAccess:false,realNetworkApisBlocked:true,hostLocalStorageAccess:false,storage:'ephemeral in-memory Map',supabase:'in-memory fake transport',allowedLocalWrites:[WAREHOUSE_CACHE,MATERIAL_CACHE],forbiddenLocalWrites:[PO_STORE,SNAP_STORE,...FORBIDDEN_KEYS]},boundaries:['Executes exact repository V090 and V091 module source inside Node VM with fake Supabase and synthetic data.','Verifies Flooring-side planning/observation boundaries; it does not certify Warehouse OS receiving, transfer, shipping, return, or inventory-posting execution code when that execution authority is outside these modules.','Browser rendering and live Supabase RLS/network behavior remain outside this isolated adapter.']};
+const report={schema:'runlu.flooring.actual-operations-boundary.v1',version:'0.6.0',generatedAt:new Date().toISOString(),pass,modules:[{file:WAREHOUSE_FILE,sha256:warehouseSha256,version:warehouseTests[0]?.moduleVersion||null,role:'Flooring supplier-pickup planner/observer; Warehouse execution authority remains external to this module.'},{file:MATERIAL_FILE,sha256:materialSha256,version:materialTests[0]?.moduleVersion||null,role:'Read-only fulfillment observer for Hold-derived Stock Picking / Carpet Cutting work.'}],scenarios:{pass:tests.every(x=>x.pass),passed:tests.filter(x=>x.pass).length,failed:tests.filter(x=>!x.pass).length,tests},stress:st,isolation:{productionSupabaseAccess:false,realNetworkApisBlocked:true,hostLocalStorageAccess:false,storage:'ephemeral in-memory Map',supabase:'in-memory fake transport',allowedLocalWrites:[WAREHOUSE_CACHE,PLAN_FP_STORE,MATERIAL_CACHE],forbiddenLocalWrites:[PO_STORE,SNAP_STORE,...FORBIDDEN_KEYS]},boundaries:['Executes exact repository V090 and V091 module source inside Node VM with fake Supabase and synthetic data.','Verifies Flooring-side planning/observation boundaries; it does not certify Warehouse OS receiving, transfer, shipping, return, or inventory-posting execution code when that execution authority is outside these modules.','Browser rendering and live Supabase RLS/network behavior remain outside this isolated adapter.']};
 fs.writeFileSync('flooring-actual-operations-boundary-v060-report.json',JSON.stringify(report,null,2));
 console.log(`${tests.every(x=>x.pass)?'PASS':'FAIL'} · exact Flooring operations-boundary scenarios · ${tests.filter(x=>x.pass).length}/${tests.length}`);console.log(`${st.pass?'PASS':'FAIL'} · exact V090/V091 boundary stress · ${st.cyclesCompleted}/${st.cyclesRequested} cycles`);console.log(`V090 SHA-256 · ${warehouseSha256}`);console.log(`V091 SHA-256 · ${materialSha256}`);console.log('Isolation · fake Supabase + VM memory only · real network/production data: NONE');console.log('Boundary · Flooring plans/observes; Warehouse execution remains outside V090/V091');if(!pass){for(const x of tests.filter(x=>!x.pass))console.error(x.name+': '+x.error);if(st.failure)console.error(st.failure);console.error('ACTUAL OPERATIONS BOUNDARY V0.6: FAIL');process.exit(1)}console.log('ACTUAL OPERATIONS BOUNDARY V0.6: PASS');
