@@ -16,7 +16,8 @@
   function write(x){localStorage.setItem(STORE,JSON.stringify(x))}
   function activeJob(){try{return typeof active==='function'?active():null}catch(_){return null}}
   function jobKey(j){return j?.id||j?.jobNumber||''}
-  function defaultClaim(j){return {claimNumber:'',type:'Service',status:'Open',openedDate:new Date().toISOString().slice(0,10),supplier:'',relatedPO:j?.supplierPO||'',inspector:'',recoveryCredit:'',notes:'',updatedAt:''}}
+  function today(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+  function defaultClaim(j){return {claimNumber:'',type:'Service',status:'Open',openedDate:today(),supplier:'',relatedPO:j?.supplierPO||'',inspector:'',recoveryCredit:'',notes:'',updatedAt:''}}
   function set(id,v){const el=by(id);if(el)el.value=v??''}
   function get(id){return (by(id)?.value||'').trim()}
 
