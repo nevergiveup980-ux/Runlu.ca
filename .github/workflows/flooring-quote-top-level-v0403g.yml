@@ -1,0 +1,20 @@
+name: Flooring Quote Top-Level V0.4.03g
+on:
+  pull_request:
+    paths:
+      - 'flooring/index-v0403-release.html'
+      - 'flooring/index-v0403-quote.html'
+      - 'scripts/run-flooring-quote-top-level-v0403g.mjs'
+      - '.github/workflows/flooring-quote-top-level-v0403g.yml'
+  workflow_dispatch:
+jobs:
+  quote-top-level:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.4.03g top-level Quote gate
+        run: node scripts/run-flooring-quote-top-level-v0403g.mjs

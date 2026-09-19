@@ -50,7 +50,12 @@ function normalizedView(v){return Object.prototype.hasOwnProperty.call(views,v)?
 function currentView(){return normalizedView((location.hash||'').replace(/^#/,'')||qp.get('view')||'core')}
 function paintButtons(v){document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v))}
 function openView(v,push){
-  v=normalizedView(v);paintButtons(v);boot.classList.remove('ready');
+  v=normalizedView(v);
+  if(mobileSafe&&v==='quote'){
+    const q='index-v0403-quote.html?prod=1&release=0403&mobile=top&from=release&t=0403g';
+    location.assign(q);return
+  }
+  paintButtons(v);boot.classList.remove('ready');
   const sep=views[v].includes('?')?'&':'?';
   const cacheToken=mobileSafe&&v==='core'?'mobile-safe-0403a':Date.now();
   frame.src=views[v]+sep+'t='+cacheToken;
@@ -59,7 +64,7 @@ function openView(v,push){
 
 if(mobileSafe){
   const badge=document.querySelector('.status b'),small=document.querySelector('.brand small'),msg=document.querySelector('#boot small');
-  if(badge)badge.textContent=forceLite?'V0.4.03 LITE':'V0.4.03 SAFE';
+  if(badge)badge.textContent=forceLite?'V0.4.03 LITE':'V0.4.03g SAFE';
   if(small)small.textContent=forceLite?'V0.4.03 · iPhone Lite Core':'V0.4.03 · iPhone Safari Safe Core';
   if(msg)msg.textContent=forceLite?'Opening lightweight Core OS…':'Opening iPhone-safe Core OS without the deep iframe stack…';
 }
