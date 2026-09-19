@@ -5,6 +5,7 @@
 */
 (function(){
 'use strict';
+var localDate=function(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 if(window.__RUNLU_PO_VOID_V084R2__)return;
 window.__RUNLU_PO_VOID_V084R2__=true;
 
@@ -129,7 +130,7 @@ function voidCurrent(){
 }
 
 function subtotal(items){return Math.round((items||[]).reduce(function(s,x){var d=Number(String(x.lineTotal||'').replace(/[$,]/g,'')),q=Number(String(x.qty||'').replace(/[$,]/g,'')),c=Number(String(x.unitCost||'').replace(/[$,]/g,''));return s+(Number.isFinite(d)&&d?d:((Number.isFinite(q)?q:0)*(Number.isFinite(c)?c:0)))},0)*100)/100}
-function payload(r,m){var j=activeJob(),items=Array.isArray(r.items)?r.items:[];return {build:'V0.3.84r2',purpose:'PO / Supplier Pickup',poNumber:r.poNumber||'',poStatus:'VOID',voided:true,voidReason:m.reason||'',voidedAt:m.voidedAt||'',previousStatus:m.previousStatus||'',invoiceNumber:j.invoiceNumber||j.jobNumber||r.jobNumber||'',invoiceDate:r.orderDate||new Date().toISOString().slice(0,10),customerName:j.customerName||r.customerName||'',soldToAddress:j.soldToAddress||'',shipToName:j.shipToName||'',shipToAddress:j.shipToAddress||'',email:j.email||'',cell:j.cell||'',phoneHome:j.phoneHome||'',phoneWork:j.phoneWork||'',pickup:r.requestedDate||j.pickup||'',delivery:j.delivery||'',dateRequired:j.dateRequired||r.expectedDate||'',clerk:r.salesRep||j.clerk||'',notes:r.notes||'',items:items.map(function(x){return {qty:x.qty||'',size:x.size||'',style:x.style||'',colour:x.colour||'',sourceType:x.sourceType||'Supplier',sourceRef:x.sourceRef||x.supplierStock||x.supplier||'',supplier:x.supplier||r.supplier||'',unit:x.unit||'',unitCost:x.unitCost||'',lineTotal:x.lineTotal||''}}),subtotal:r.subtotal||subtotal(items),showCosts:false,isDemo:!!j.isDemo}}
+function payload(r,m){var j=activeJob(),items=Array.isArray(r.items)?r.items:[];return {build:'V0.3.84r2',purpose:'PO / Supplier Pickup',poNumber:r.poNumber||'',poStatus:'VOID',voided:true,voidReason:m.reason||'',voidedAt:m.voidedAt||'',previousStatus:m.previousStatus||'',invoiceNumber:j.invoiceNumber||j.jobNumber||r.jobNumber||'',invoiceDate:r.orderDate||localDate(),customerName:j.customerName||r.customerName||'',soldToAddress:j.soldToAddress||'',shipToName:j.shipToName||'',shipToAddress:j.shipToAddress||'',email:j.email||'',cell:j.cell||'',phoneHome:j.phoneHome||'',phoneWork:j.phoneWork||'',pickup:r.requestedDate||j.pickup||'',delivery:j.delivery||'',dateRequired:j.dateRequired||r.expectedDate||'',clerk:r.salesRep||j.clerk||'',notes:r.notes||'',items:items.map(function(x){return {qty:x.qty||'',size:x.size||'',style:x.style||'',colour:x.colour||'',sourceType:x.sourceType||'Supplier',sourceRef:x.sourceRef||x.supplierStock||x.supplier||'',supplier:x.supplier||r.supplier||'',unit:x.unit||'',unitCost:x.unitCost||'',lineTotal:x.lineTotal||''}}),subtotal:r.subtotal||subtotal(items),showCosts:false,isDemo:!!j.isDemo}}
 function injectWatermark(w,r,m){
  try{
    var d=w.document,inv=d.getElementById('invoice');if(!inv)return false;if(d.getElementById('runluVoidWatermark84r2'))return true;inv.style.position='relative';
