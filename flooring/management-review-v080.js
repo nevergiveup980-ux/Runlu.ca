@@ -23,7 +23,7 @@ const read=(k,f)=>{try{const v=JSON.parse(localStorage.getItem(k)||'null');retur
 const write=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(_){return false}};
 const dateOk=v=>/^\d{4}-\d{2}-\d{2}$/.test(String(v||''));
 const datePart=v=>{const s=String(v||'');return /^\d{4}-\d{2}-\d{2}/.test(s)?s.slice(0,10):''};
-const localDate=x=>`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;const plusDays=(d,k)=>{if(!dateOk(d))return'';const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+Number(k||0));return localDate(x)};
+const localDate=x=>`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;const plusDays=(d,k)=>{if(!dateOk(d))return'';const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+Number(k||0));return localDate(x)};const dayNumber=v=>{if(!dateOk(v))return NaN;const [y,m,d]=String(v).split('-').map(Number);return Date.UTC(y,m-1,d)/86400000};const todayLocal=()=>localDate(new Date());
 const jobs=()=>{const x=read(JOBS,[]);return Array.isArray(x)?x:[]};
 const payDB=()=>{const x=read(PAY,{});return x&&typeof x==='object'?x:{}};
 const sideDB=()=>{const x=read(SIDE,{});return x&&typeof x==='object'?x:{}};
@@ -42,8 +42,8 @@ function lastPayment(j,pdb=payDB()){
 function invoiceCalc(j){try{if(typeof window.calc==='function')return window.calc(j)||{}}catch(_){}const sub=(j?.items||[]).reduce((s,x)=>s+n(x.total),0)+n(j?.deliveryCharge);return {subtotal:r(sub),taxableSubtotal:r(sub),gst:r(sub*.05),total:r(sub*1.05)}}
 function arRow(j,pdb=payDB(),sdb=sideDB()){
   const s=side(j,sdb),c=invoiceCalc(j),p=paid(j,pdb),total=n(c.total),balance=Math.max(0,r(total-p));
-  const due=s.dueDate||plusDays(s.invoiceDate,s.terms),today=new Date();today.setHours(12,0,0,0);let age=0,bucket=balance?'Current':'Paid';
-  if(balance&&dateOk(due)){age=Math.floor((today-new Date(due+'T12:00:00'))/86400000);if(age>90)bucket='90+';else if(age>60)bucket='61–90';else if(age>30)bucket='31–60';else if(age>0)bucket='1–30'}
+  const due=s.dueDate||plusDays(s.invoiceDate,s.terms);let age=0,bucket=balance?'Current':'Paid';
+  if(balance&&dateOk(due)){age=dayNumber(todayLocal())-dayNumber(due);if(age>90)bucket='90+';else if(age>60)bucket='61–90';else if(age>30)bucket='31–60';else if(age>0)bucket='1–30'}
   const lp=lastPayment(j,pdb),missingDate=balance>0&&(!s.invoiceDate||!due),priority=bucket==='90+'?5:bucket==='61–90'?4:bucket==='31–60'?3:bucket==='1–30'?2:missingDate?2:1;
   return {j,total,p,balance,invoiceDate:s.invoiceDate,due,age,bucket,lastPayment:lp,missingDate,priority};
 }
