@@ -15,17 +15,39 @@ const ENV='training';
 const PO_STORE='runlu_deerfoot_supplier_orders_v1';
 const SNAP_STORE='runlu_supplier_pickup_by_po_v1';
 const CACHE='runlu-flooring-warehouse-work-v090';
+const PLAN_FP_STORE='runlu-flooring-warehouse-plan-fingerprints-v0407';
+const ACTIVE_PLAN_STATUSES=['Issued','Pending','Ordered','Confirmed','Backorder','Partially Received'];
+const ACTIVE_TASK_STATUSES=['Waiting','Scheduled','In Progress','Partial','Picked Up','Ready'];
 let sb=null,session=null,tasks=[],events=[],busy=false,lastSync='';
 const by=id=>document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const read=(k,f)=>{try{const v=JSON.parse(localStorage.getItem(k)||'null');return v==null?f:v}catch(_){return f}};
+const write=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(_){return false}};
 const uuid=v=>/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(v||''));
 function uiStatus(s){return s==='Scheduled'?'Waiting':String(s||'Waiting')}
 function pageActive(id){const p=by(id);return !!(p&&(p.classList.contains('active')||!p.classList.contains('hidden')))}
 function pos(){const x=read(PO_STORE,[]);return Array.isArray(x)?x:[]}
 function snaps(){const x=read(SNAP_STORE,{});return x&&typeof x==='object'?x:{}}
 function taskByPO(po){return tasks.find(t=>String(t.po_number)===String(po))||null}
-function compactItems(a){return (Array.isArray(a)?a:[]).map(x=>({style:x?.style||x?.product||x?.description||'',colour:x?.colour||x?.color||'',sku:x?.sku||'',qty:x?.qty??x?.quantity??'',unit:String(x?.unit||'').toLowerCase(),supplier:x?.supplier||'',size:x?.size||''})).filter(x=>x.style||x.sku||x.qty)}
+function supplierLine(x){const s=String(x?.sourceType||'').trim().toLowerCase();return !s||s==='supplier'}
+function compactItems(a){return (Array.isArray(a)?a:[]).filter(supplierLine).map(x=>({style:x?.style||x?.product||x?.description||'',colour:x?.colour||x?.color||'',sku:x?.sku||'',qty:x?.qty??x?.quantity??'',unit:String(x?.unit||'').toLowerCase(),supplier:x?.supplier||'',size:x?.size||''})).filter(x=>x.style||x.sku||x.qty)}
+function planningPO(po){return !!(po?.poNumber&&po?.supplier&&ACTIVE_PLAN_STATUSES.includes(String(po.status||'')))}
+function planArgs(po,snap){
+  const num=Number(String(po.poNumber).replace(/\D/g,''));if(!num)return null;
+  const s=snap[String(po.poNumber)]||{};
+  return {p_environment:ENV,p_po_id:uuid(po.id)?po.id:null,p_po_number:num,p_job_id:po.jobId||'',p_job_number:po.jobNumber||'',p_customer_name:po.customerName||'',p_supplier:po.supplier||'Supplier',p_sales_rep:po.salesRep||'',p_fulfillment_method:/deliver/i.test(String(po.fulfillment||s.fulfillment||''))?'Supplier Delivery':'Pickup',p_requested_date:po.requestedDate||s.requestedDate||po.expectedDate||null,p_purchase_type:/stock/i.test(String(po.purchaseType||s.purchaseType||''))?'Stock':'Job-specific',p_items:compactItems(po.items)}
+}
+function planFingerprint(po,snap){const a=planArgs(po,snap);return a?JSON.stringify(a):''}
+async function fetchSupplierTasks(){
+  const page=500,all=[];
+  for(let from=0;from<50000;from+=page){
+    const q=await sb.from('flooring_supplier_tasks').select('*').eq('environment',ENV).in('status',ACTIVE_TASK_STATUSES).order('requested_date',{ascending:true}).order('created_at',{ascending:true}).range(from,from+page-1);
+    if(q.error)throw q.error;const rows=q.data||[];all.push(...rows);if(rows.length<page)break
+  }
+  const done=await sb.from('flooring_supplier_tasks').select('*').eq('environment',ENV).eq('status','Completed').order('created_at',{ascending:false}).limit(100);
+  if(done.error)throw done.error;
+  const seen=new Set();return [...all,...(done.data||[])].filter(x=>{const k=String(x.id||x.po_number||'')+'|'+String(x.updated_at||x.created_at||'');if(seen.has(k))return false;seen.add(k);return true})
+}
 
 async function client(){
   if(sb)return sb;
@@ -36,29 +58,34 @@ async function client(){
   sb.auth.onAuthStateChange((_e,s)=>{session=s;setTimeout(()=>{paintConnection();if(s)refresh(false)},0)});
   return sb;
 }
-async function enrichPlans(){
-  if(!session)return;
-  const snap=snaps();
-  for(const po of pos().filter(x=>x?.poNumber&&x?.status!=='Draft'&&x?.supplier&&x?.status!=='Cancelled')){
-    const num=Number(String(po.poNumber).replace(/\D/g,''));if(!num)continue;
-    const s=snap[String(po.poNumber)]||{};
-    const args={p_environment:ENV,p_po_id:uuid(po.id)?po.id:null,p_po_number:num,p_job_id:po.jobId||'',p_job_number:po.jobNumber||'',p_customer_name:po.customerName||'',p_supplier:po.supplier||'Supplier',p_sales_rep:po.salesRep||'',p_fulfillment_method:/deliver/i.test(String(po.fulfillment||s.fulfillment||''))?'Supplier Delivery':'Pickup',p_requested_date:po.requestedDate||s.requestedDate||po.expectedDate||null,p_purchase_type:/stock/i.test(String(po.purchaseType||s.purchaseType||''))?'Stock':'Job-specific',p_items:compactItems(po.items)};
+async function enrichPlans(force=false){
+  if(!session)return 0;
+  const snap=snaps(),fps=read(PLAN_FP_STORE,{}),active=pos().filter(planningPO),activeNums=new Set(active.map(x=>String(x.poNumber))),next={};
+  let writes=0;
+  for(const po of active){
+    const key=String(po.poNumber),sig=planFingerprint(po,snap),args=planArgs(po,snap);if(!args)continue;
+    next[key]=sig;
+    if(!force&&fps[key]===sig)continue;
     const r=await sb.rpc('flooring_create_supplier_task',args);if(r.error)throw r.error;
+    writes++
   }
+  Object.keys(fps).forEach(k=>{if(activeNums.has(k)&&next[k]==null)next[k]=fps[k]});
+  write(PLAN_FP_STORE,next);
+  return writes
 }
 async function refresh(manual){
   if(busy)return;busy=true;paintConnection('SYNCING…');
   try{
     await client();session=(await sb.auth.getSession()).data?.session||null;
     if(!session){paintConnection('SIGN IN REQUIRED');return}
-    await enrichPlans();
-    const [tr,er]=await Promise.all([
-      sb.from('flooring_supplier_tasks').select('*').eq('environment',ENV).order('requested_date',{ascending:true}).order('created_at',{ascending:true}),
+    const planWrites=await enrichPlans(!!manual);
+    const [taskRows,er]=await Promise.all([
+      fetchSupplierTasks(),
       sb.from('flooring_warehouse_work_events').select('*').eq('environment',ENV).order('occurred_at',{ascending:false}).limit(100)
     ]);
-    if(tr.error)throw tr.error;if(er.error)throw er.error;
-    tasks=tr.data||[];events=er.data||[];lastSync=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    localStorage.setItem(CACHE,JSON.stringify({tasks,events,lastSync}));
+    if(er.error)throw er.error;
+    tasks=taskRows;events=er.data||[];lastSync=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    localStorage.setItem(CACHE,JSON.stringify({tasks,events,lastSync,planWrites}));
     paintAll();
     if(manual)alert('Warehouse work plan refreshed from cloud.');
   }catch(e){
@@ -118,6 +145,6 @@ function install(){
   setInterval(()=>{if(document.visibilityState==='visible'&&(pageActive('supplierPickupPage')||pageActive('warehouseActivity')))refresh(false)},20000);
   client().then(()=>refresh(false)).catch(()=>paintConnection('CONNECTOR UNAVAILABLE'));
 }
-window.RUNLUWarehouseWorkSyncV090={refresh,taskByPO,version:'0.9.0'};
+window.RUNLUWarehouseWorkSyncV090={refresh,taskByPO,planningPO,planFingerprint,compactItems,version:'0.9.0-r2'};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
