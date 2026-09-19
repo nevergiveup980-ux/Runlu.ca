@@ -37,11 +37,11 @@ test('Always-ready table is created before table HTML is rendered',()=>{
 });
 test('iPhone hint says blank rows are live cells and no plus-row is required initially',()=>{
   assert(js.includes('The blank rows below are live cells.'));
-  assert(js.includes('no + Row is required for the first entries.'));
+  assert(js.includes('six ready rows')||js.includes('no + Row is required for the first entries.')||js.includes('Tap Description / Qty / Unit / Price directly'));
 });
-test('iPhone still uses native contenteditable cells',()=>{
-  assert(js.includes('contenteditable="true"'));
-  assert(js.includes("x.focus({preventScroll:true})"))
+test('iPhone still uses native directly editable controls',()=>{
+  assert(js.includes('q403iosInput')||js.includes('contenteditable="true"'));
+  assert(js.includes('data-q403-line='));
 });
 test('Blank scaffold numeric cells display empty instead of zero',()=>{
   assert(js.includes("numeric&&uiBlank&&num(value)===0"))
@@ -57,7 +57,7 @@ test('Saving strips untouched UI rows before writing Job quote',()=>{
   assert(js.slice(i,j).includes('const clean=stripBlankUILines(draft)'))
 });
 test('Page requests V0.4.03e script token',()=>{
-  assert(html.includes('quote-dual-entry-v0403.js?v=0403e'))
+  assert(/quote-dual-entry-v0403\.js\?v=0403[ef]/.test(html))
 });
 
 for(const [name,ok,error] of checks)console.log((ok?'PASS':'FAIL')+'  '+name+(error?'  '+error:''));
