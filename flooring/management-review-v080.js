@@ -23,7 +23,7 @@ const read=(k,f)=>{try{const v=JSON.parse(localStorage.getItem(k)||'null');retur
 const write=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(_){return false}};
 const dateOk=v=>/^\d{4}-\d{2}-\d{2}$/.test(String(v||''));
 const datePart=v=>{const s=String(v||'');return /^\d{4}-\d{2}-\d{2}/.test(s)?s.slice(0,10):''};
-const plusDays=(d,k)=>{if(!dateOk(d))return'';const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+Number(k||0));return x.toISOString().slice(0,10)};
+const localDate=x=>`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;const plusDays=(d,k)=>{if(!dateOk(d))return'';const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+Number(k||0));return localDate(x)};
 const jobs=()=>{const x=read(JOBS,[]);return Array.isArray(x)?x:[]};
 const payDB=()=>{const x=read(PAY,{});return x&&typeof x==='object'?x:{}};
 const sideDB=()=>{const x=read(SIDE,{});return x&&typeof x==='object'?x:{}};
@@ -117,7 +117,7 @@ function ensureRoot(){
 }
 function render(){const root=ensureRoot();if(!root)return false;root.innerHTML=`<div class="v080head"><div><h2>MANAGEMENT REVIEW</h2><p>Daily A/R first review · Quarterly configurable Commission draft · V0.3.80</p></div><div class="v080tabs"><button type="button" data-v080="tab-ar" class="${tab==='ar'?'on':''}">A/R Review</button><button type="button" data-v080="tab-commission" class="${tab==='commission'?'on':''}">Commission Report</button></div></div><div class="v080body">${tab==='ar'?arHtml():commissionHtml()}</div>`;return true}
 function decorate(){try{document.title='RUNLU Deerfoot Flooring OS V0.3.80 Management Control';const p=document.querySelector('header .pill');if(p)p.textContent='V0.3.80 Management Control';const d=by('command')?.querySelector?.('.demo');if(d)d.textContent='V0.3.80 · A/R first review · configurable quarterly Commission · PO inventory holds.'}catch(_){}}
-function install(){decorate();ensureRoot();render(true);let tries=0;const t=setInterval(()=>{decorate();if(!by('v080management'))render(true);if(++tries>60)clearInterval(t)},500);window.addEventListener('storage',e=>{if([JOBS,PAY,SIDE,SETTINGS].includes(e.key))render(true)});return true}
+function install(){decorate();ensureRoot();render(true);[250,900,2200].forEach(ms=>setTimeout(()=>{decorate();if(!by('v080management'))render(true)},ms));window.addEventListener('storage',e=>{if([JOBS,PAY,SIDE,SETTINGS].includes(e.key))render(true)});return true}
 window.RUNLUManagementReviewV080={install,render,arRows:openReceivables,settings,version:'0.3.80'};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
