@@ -16,7 +16,6 @@ const PO_STORE='runlu_deerfoot_supplier_orders_v1';
 const SNAP_STORE='runlu_supplier_pickup_by_po_v1';
 const CACHE='runlu-flooring-warehouse-work-v090';
 const PLAN_FP_STORE='runlu-flooring-warehouse-plan-fingerprints-v0407';
-const ACTIVE_PLAN_STATUSES=['Issued','Pending','Ordered','Confirmed','Backorder','Partially Received'];
 const ACTIVE_TASK_STATUSES=['Waiting','Scheduled','In Progress','Partial','Picked Up','Ready'];
 let sb=null,session=null,tasks=[],events=[],busy=false,lastSync='';
 const by=id=>document.getElementById(id);
@@ -31,7 +30,7 @@ function snaps(){const x=read(SNAP_STORE,{});return x&&typeof x==='object'?x:{}}
 function taskByPO(po){return tasks.find(t=>String(t.po_number)===String(po))||null}
 function supplierLine(x){const s=String(x?.sourceType||'').trim().toLowerCase();return !s||s==='supplier'}
 function compactItems(a){return (Array.isArray(a)?a:[]).filter(supplierLine).map(x=>({style:x?.style||x?.product||x?.description||'',colour:x?.colour||x?.color||'',sku:x?.sku||'',qty:x?.qty??x?.quantity??'',unit:String(x?.unit||'').toLowerCase(),supplier:x?.supplier||'',size:x?.size||''})).filter(x=>x.style||x.sku||x.qty)}
-function planningPO(po){return !!(po?.poNumber&&po?.supplier&&ACTIVE_PLAN_STATUSES.includes(String(po.status||'')))}
+function planningPO(po){return !!(po?.poNumber&&po?.supplier&&!['Draft','Cancelled','Received','Completed'].includes(String(po.status||'')))}
 function planArgs(po,snap){
   const num=Number(String(po.poNumber).replace(/\D/g,''));if(!num)return null;
   const s=snap[String(po.poNumber)]||{};
