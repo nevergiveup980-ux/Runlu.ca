@@ -224,9 +224,42 @@ test('1000-line reconciliation remains deterministic within pressure budget',()=
   const t0=performance.now(),a=A.reconciliationReport(p,{}),b=A.reconciliationReport(p,{}),ms=performance.now()-t0;
   assert.equal(a.changeCount,0);assert.equal(JSON.stringify(a),JSON.stringify(b));assert(ms<350,'reconciliation too slow: '+ms.toFixed(1)+'ms')
 });
-test('Browser writes are restricted to existing PO Job and active-job keys',()=>{
+test('V0.4.06 uses local business date instead of UTC rollover date',()=>{
+  assert.equal(source.includes("new Date().toISOString().slice(0,10)"),false);
+  assert(source.includes("getFullYear()"));
+  assert(source.includes("getMonth()+1"));
+  assert(source.includes("getDate()"))
+});
+test('V0.4.06 cloud readers have no 500 / 1000 global result cliff',()=>{
+  assert.equal(source.includes(".limit(1000)"),false);
+  assert.equal(source.includes(".limit(500)"),false);
+  assert(source.includes("function pageQuery("));
+  assert(source.includes(".range(from,from+pageSize-1)"))
+});
+test('Reconciliation task reads are scoped to the current PO',()=>{
+  assert(source.includes("fetchCurrentSupplierTasks"));
+  assert(source.includes("fetchCurrentMaterialTasks"));
+  assert(source.includes(".eq('po_number',po)"))
+});
+test('Inventory reads page all live Warehouse records and active Holds',()=>{
+  assert(source.includes("fetchWarehouseRecords"));
+  assert(source.includes("fetchActiveHolds"));
+  assert(source.includes(".eq('status','Held')"));
+  assert(source.includes("pageQuery(()=>c.from('warehouse_records')"))
+});
+test('Corrupt PO or Job local stores are preserved and block unsafe writes',()=>{
+  assert(source.includes("const storeErrors=new Set()"));
+  assert(source.includes("_corrupt_backup_v0407"));
+  assert(source.includes("if(storeErrors.has(PO_STORE))"));
+  assert(source.includes("if(storeErrors.has(JOB_STORE))return"))
+});
+test('Browser writes are restricted to existing PO Job active-job and corrupt-recovery keys',()=>{
   const calls=[...source.matchAll(/localStorage\.setItem\(([^,]+)/g)].map(m=>m[1].trim());
-  assert(calls.length>=3);for(const x of calls)assert(['PO_STORE','JOB_STORE','ACTIVE_JOB'].includes(x),'unexpected write key: '+x)
+  assert(calls.length>=3);
+  for(const x of calls){
+    const allowed=['PO_STORE','JOB_STORE','ACTIVE_JOB'].includes(x)||x==="key+'_corrupt_backup_v0407'";
+    assert(allowed,'unexpected write key: '+x)
+  }
 });
 
 const failed=checks.filter(x=>!x.pass);
