@@ -1,0 +1,80 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+
+const js=fs.readFileSync(new URL('../flooring/quote-dual-entry-v0403.js',import.meta.url),'utf8');
+const html=fs.readFileSync(new URL('../flooring/index-v0403-quote.html',import.meta.url),'utf8');
+const checks=[];
+function test(name,fn){try{fn();checks.push([name,true])}catch(e){checks.push([name,false,e.message])}}
+
+test('Quote engine compiles and keeps public API',()=>{
+  const ctx={globalThis:{},console};ctx.globalThis.globalThis=ctx.globalThis;
+  vm.createContext(ctx.globalThis);vm.runInContext(js,ctx.globalThis);
+  assert(ctx.globalThis.RUNLUQuoteV0403);
+});
+
+test('iPhone detection activates native cell path',()=>{
+  assert(js.includes('const touchIOS='));
+  assert(js.includes('/iPhone|iPad|iPod/i.test(ua)'));
+  assert(js.includes("navigator.maxTouchPoints>1"));
+});
+
+test('iPhone table cells use contenteditable rather than nested inputs',()=>{
+  assert(js.includes('contenteditable="true"'));
+  assert(js.includes('role="textbox"'));
+  assert(js.includes('enterkeyhint="next"'));
+  assert(js.includes('data-q403-line='));
+});
+
+test('Numeric native cells request decimal keyboard',()=>{
+  assert(js.includes("numeric?'decimal':'text'"));
+  assert(js.includes('q403numCell'));
+});
+
+test('Short tap explicitly focuses native editable cell inside Safari',()=>{
+  assert(js.includes("x.addEventListener('touchstart'"));
+  assert(js.includes("x.addEventListener('touchend'"));
+  assert(js.includes('if(moved<9)'));
+  assert(js.includes('x.focus({preventScroll:true})'));
+  assert(js.includes('passive:false'));
+});
+
+test('Native cell edits still update the shared quote draft and totals',()=>{
+  assert(js.includes('draft=updateLine(draft,x.dataset.q403Line,x.dataset.id,x.dataset.key,editValue(x))'));
+  assert(js.includes('renderSummaryAndPreview()'));
+  assert(js.includes('data-q403-total'));
+});
+
+test('Enter advances between native cells',()=>{
+  assert(js.includes("if(e.key==='Enter')"));
+  assert(js.includes('focusNextCell(x)'));
+});
+
+test('iPhone hint exposes active native editor for real-device verification',()=>{
+  assert(js.includes('iPhone Native Cell Editor active.'));
+});
+
+test('Scrollable wrapper no longer uses iOS momentum-scroller mode',()=>{
+  assert(html.includes('-webkit-overflow-scrolling:auto'));
+  assert.equal(html.includes('-webkit-overflow-scrolling:touch'),false);
+});
+
+test('Native editable cells permit direct text selection and manipulation',()=>{
+  assert(html.includes('.q403editCell{'));
+  assert(html.includes('-webkit-user-select:text'));
+  assert(html.includes('touch-action:manipulation'));
+});
+
+test('Native mobile sheet removes sticky Description interference',()=>{
+  assert(html.includes('.q403nativeSheet .sticky-desc{position:static!important'));
+  assert(js.includes("descHead=touchIOS?'':'sticky-desc'"));
+});
+
+test('Page requests V0.4.03d script token',()=>{
+  assert(html.includes('quote-dual-entry-v0403.js?v=0403d'));
+});
+
+for(const [name,ok,error] of checks)console.log((ok?'PASS':'FAIL')+'  '+name+(error?'  '+error:''));
+const failed=checks.filter(x=>!x[1]);
+console.log('\n'+(checks.length-failed.length)+'/'+checks.length+' checks passed.');
+if(failed.length)process.exit(1);
