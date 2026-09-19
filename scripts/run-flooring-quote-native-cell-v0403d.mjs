@@ -30,12 +30,10 @@ test('Numeric native cells request decimal keyboard',()=>{
   assert(js.includes('q403numCell'));
 });
 
-test('Short tap explicitly focuses native editable cell inside Safari',()=>{
-  assert(js.includes("x.addEventListener('touchstart'"));
-  assert(js.includes("x.addEventListener('touchend'"));
-  assert(js.includes('if(moved<9)'));
-  assert(js.includes('x.focus({preventScroll:true})'));
-  assert(js.includes('passive:false'));
+test('iPhone editor preserves native Safari tap-to-keyboard behavior',()=>{
+  assert(js.includes('q403iosInput')||js.includes('contenteditable="true"'));
+  assert.equal(js.includes("x.addEventListener('touchend'"),false);
+  assert.equal(js.includes('e.preventDefault();x.focus'),false);
 });
 
 test('Native cell edits still update the shared quote draft and totals',()=>{
@@ -70,7 +68,7 @@ test('Native mobile sheet removes sticky Description interference',()=>{
 });
 
 test('Page requests V0.4.03d script token',()=>{
-  assert(/quote-dual-entry-v0403\\.js\\?v=0403[def]/.test(html));
+  assert(html.includes('quote-dual-entry-v0403.js?v=0403f')||/quote-dual-entry-v0403\.js\?v=0403[de]/.test(html));
 });
 
 for(const [name,ok,error] of checks)console.log((ok?'PASS':'FAIL')+'  '+name+(error?'  '+error:''));
