@@ -23,7 +23,7 @@ const read=(k,f)=>{try{const v=JSON.parse(localStorage.getItem(k)||'null');retur
 const write=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(_){return false}};
 const dateOk=v=>/^\d{4}-\d{2}-\d{2}$/.test(String(v||''));
 const datePart=v=>{const s=String(v||'');return /^\d{4}-\d{2}-\d{2}/.test(s)?s.slice(0,10):''};
-const plusDays=(d,k)=>{if(!dateOk(d))return'';const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+Number(k||0));return x.toISOString().slice(0,10)};
+const localDate=x=>`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;const plusDays=(d,k)=>{if(!dateOk(d))return'';const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+Number(k||0));return localDate(x)};
 const jobs=()=>{const x=read(JOBS,[]);return Array.isArray(x)?x:[]};
 const payDB=()=>{const x=read(PAY,{});return x&&typeof x==='object'?x:{}};
 const sideDB=()=>{const x=read(SIDE,{});return x&&typeof x==='object'?x:{}};
