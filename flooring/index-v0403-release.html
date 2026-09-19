@@ -39,7 +39,8 @@ const isiOS=/iPhone|iPad|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navi
 const forceFull=qp.get('full')==='1';
 const forceLite=qp.get('lite')==='1';
 const mobileSafe=forceLite||(isiOS&&!forceFull);
-const coreURL=forceLite?'index-v040.html?prod=1&release=0403&mobile=lite':mobileSafe?'index-v071-pricing-workspace.html?prod=1&release=0403&mobile=safe':'index-v090r1-stable-frozen.html?prod=1&release=090r1';
+const desktopCore={core:'index-v090r1-stable-frozen.html?prod=1&release=090r1'};
+const coreURL=forceLite?'index-v040.html?prod=1&release=0403&mobile=lite':mobileSafe?'index-v071-pricing-workspace.html?prod=1&release=0403&mobile=safe':desktopCore.core;
 const views={
   core:coreURL,
   operations:'index-v0403-operations.html?prod=1&release=0403',
