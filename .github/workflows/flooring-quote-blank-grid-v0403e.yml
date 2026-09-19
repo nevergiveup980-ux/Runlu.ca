@@ -1,0 +1,20 @@
+name: Flooring Quote Always-Ready Grid V0.4.03e
+on:
+  pull_request:
+    paths:
+      - 'flooring/quote-dual-entry-v0403.js'
+      - 'flooring/index-v0403-quote.html'
+      - 'scripts/run-flooring-quote-blank-grid-v0403e.mjs'
+      - '.github/workflows/flooring-quote-blank-grid-v0403e.yml'
+  workflow_dispatch:
+jobs:
+  quote-blank-grid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.4.03e always-ready Quote grid gate
+        run: node scripts/run-flooring-quote-blank-grid-v0403e.mjs
