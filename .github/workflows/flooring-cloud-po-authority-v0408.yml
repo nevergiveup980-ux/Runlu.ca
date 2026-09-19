@@ -1,0 +1,21 @@
+name: Flooring Cloud PO Authority V0.4.08
+on:
+  pull_request:
+    paths:
+      - 'flooring/po-safe-v040.js'
+      - 'scripts/run-flooring-cloud-po-authority-v0408.mjs'
+      - '.github/workflows/flooring-cloud-po-authority-v0408.yml'
+  workflow_dispatch:
+jobs:
+  cloud-po-authority:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.4.08 central PO authority gates
+        run: node scripts/run-flooring-cloud-po-authority-v0408.mjs
+      - name: Re-run V0.4.07 aging firewall
+        run: node scripts/run-flooring-stability-v0407.mjs
