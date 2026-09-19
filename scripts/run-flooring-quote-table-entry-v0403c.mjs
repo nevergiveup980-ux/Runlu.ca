@@ -67,12 +67,12 @@ test('Table uses touch-friendly horizontal scrolling',()=>{
 });
 
 test('Visible hint tells user Table Entry is directly editable',()=>{
-  assert(js.includes('The blank rows below are live cells.')||js.includes('Tap any cell to type.'));
+  assert(js.includes('The blank rows below are live cells.')||js.includes('Tap any cell to type.')||js.includes('iPhone Grid Entry active'));
   assert(js.includes('iPhone Native Cell Editor active.')||js.includes('Table Entry is editable.'));
 });
 
 test('Quote page requests a V0.4.03 table-entry hotfix token',()=>{
-  assert(/quote-dual-entry-v0403\.js\?v=0403[cde]/.test(html));
+  assert(html.includes('quote-dual-entry-v0403.js?v=0403f')||/quote-dual-entry-v0403\.js\?v=0403[cde]/.test(html));
 });
 
 for(const [name,ok,error] of checks)console.log((ok?'PASS':'FAIL')+'  '+name+(error?'  '+error:''));
