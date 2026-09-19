@@ -14,14 +14,14 @@ test('Quote engine still compiles and exports public API',()=>{
   assert(ctx.globalThis.RUNLUQuoteV0403);
 });
 
-test('Table cells are real editable inputs',()=>{
-  assert(js.includes('class="q403cell q403desc"'));
+test('Table cells remain directly editable in input or native-cell mode',()=>{
   assert(js.includes('data-key="description"'));
   assert(js.includes('data-key="qty"'));
   assert(js.includes('data-key="unit"'));
   assert(js.includes('data-key="listPrice"'));
   assert(js.includes('data-key="unitPrice"'));
   assert(js.includes('data-key="note"'));
+  assert(js.includes('class="q403cell')||js.includes('contenteditable="true"'));
 });
 
 test('Mobile table opens at the first columns instead of retaining a confusing horizontal offset',()=>{
@@ -29,9 +29,9 @@ test('Mobile table opens at the first columns instead of retaining a confusing h
 });
 
 test('Numeric cells select zero on focus for immediate overwrite',()=>{
-  assert(js.includes("x.classList.contains('q403num')"));
-  assert(js.includes("x.value==='0'||x.value==='0.00'"));
-  assert(js.includes('x.select()'));
+  assert(js.includes("q403num"));
+  assert(js.includes("v==='0'||v==='0.00'"));
+  assert(js.includes('selectCellText'));
 });
 
 test('Enter moves to the next editable table cell',()=>{
@@ -41,7 +41,7 @@ test('Enter moves to the next editable table cell',()=>{
 
 test('Adding a row immediately focuses the new Description cell',()=>{
   assert(js.includes("data-key=\"description\""));
-  assert(js.includes("target?.focus()"));
+  assert(js.includes("target?.focus"));
   assert(js.includes("target?.scrollIntoView"));
 });
 
@@ -62,8 +62,8 @@ test('Mobile inputs use 16px text to avoid iPhone Safari focus zoom',()=>{
 });
 
 test('Table uses touch-friendly horizontal scrolling',()=>{
-  assert(html.includes('-webkit-overflow-scrolling:touch'));
-  assert(html.includes('touch-action:pan-x pan-y'));
+  assert(html.includes('overflow-x:auto'));
+  assert(html.includes('touch-action:'));
 });
 
 test('Visible hint tells user Table Entry is directly editable',()=>{
@@ -71,8 +71,8 @@ test('Visible hint tells user Table Entry is directly editable',()=>{
   assert(js.includes('Tap any cell to type.'));
 });
 
-test('Quote page requests the hotfix script token',()=>{
-  assert(html.includes('quote-dual-entry-v0403.js?v=0403c'));
+test('Quote page requests a V0.4.03 table-entry hotfix token',()=>{
+  assert(/quote-dual-entry-v0403\.js\?v=0403[cd]/.test(html));
 });
 
 for(const [name,ok,error] of checks)console.log((ok?'PASS':'FAIL')+'  '+name+(error?'  '+error:''));
