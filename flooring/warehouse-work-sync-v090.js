@@ -69,7 +69,7 @@ async function enrichPlans(force=false){
     writes++
   }
   Object.keys(fps).forEach(k=>{if(activeNums.has(k)&&next[k]==null)next[k]=fps[k]});
-  write(PLAN_FP_STORE,next);
+  if(JSON.stringify(fps)!==JSON.stringify(next))write(PLAN_FP_STORE,next);
   return writes
 }
 async function refresh(manual){
