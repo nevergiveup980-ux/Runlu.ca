@@ -22,7 +22,7 @@ test('iPhone grid exposes all required editable quote columns',()=>{
   for(const key of ['description','qty','unit','listPrice','unitPrice','note'])assert(js.includes("iosGridCell(group,x,'"+key+"'"));
 });
 test('Numeric iPhone grid cells request decimal keyboard',()=>{
-  assert(js.includes("numeric?'inputmode="decimal"'"));
+  assert(js.includes('inputmode="decimal"'));
 });
 test('iPhone render path does not use HTML table cells',()=>{
   const s=js.slice(js.indexOf('function iosGridGroup('),js.indexOf('function renderTable()'));
