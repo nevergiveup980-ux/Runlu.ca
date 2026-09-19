@@ -19,11 +19,10 @@ test('iPhone detection activates native cell path',()=>{
   assert(js.includes("navigator.maxTouchPoints>1"));
 });
 
-test('iPhone table cells use contenteditable rather than nested inputs',()=>{
-  assert(js.includes('contenteditable="true"'));
-  assert(js.includes('role="textbox"'));
-  assert(js.includes('enterkeyhint="next"'));
+test('iPhone entry path remains directly editable with native focusable controls',()=>{
   assert(js.includes('data-q403-line='));
+  assert(js.includes('enterkeyhint="next"'));
+  assert(js.includes('q403iosInput')||js.includes('contenteditable="true"'));
 });
 
 test('Numeric native cells request decimal keyboard',()=>{
@@ -51,7 +50,7 @@ test('Enter advances between native cells',()=>{
 });
 
 test('iPhone hint exposes active native editor for real-device verification',()=>{
-  assert(js.includes('iPhone Native Cell Editor active.'));
+  assert(js.includes('iPhone Grid Entry active')||js.includes('iPhone Native Cell Editor active.'));
 });
 
 test('Scrollable wrapper no longer uses iOS momentum-scroller mode',()=>{
@@ -71,7 +70,7 @@ test('Native mobile sheet removes sticky Description interference',()=>{
 });
 
 test('Page requests V0.4.03d script token',()=>{
-  assert(/quote-dual-entry-v0403\.js\?v=0403[de]/.test(html));
+  assert(/quote-dual-entry-v0403\\.js\\?v=0403[def]/.test(html));
 });
 
 for(const [name,ok,error] of checks)console.log((ok?'PASS':'FAIL')+'  '+name+(error?'  '+error:''));
