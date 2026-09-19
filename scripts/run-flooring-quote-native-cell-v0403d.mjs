@@ -71,7 +71,7 @@ test('Native mobile sheet removes sticky Description interference',()=>{
 });
 
 test('Page requests V0.4.03d script token',()=>{
-  assert(html.includes('quote-dual-entry-v0403.js?v=0403d'));
+  assert(/quote-dual-entry-v0403\.js\?v=0403[de]/.test(html));
 });
 
 for(const [name,ok,error] of checks)console.log((ok?'PASS':'FAIL')+'  '+name+(error?'  '+error:''));

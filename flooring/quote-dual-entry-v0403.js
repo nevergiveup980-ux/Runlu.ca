@@ -1,4 +1,4 @@
-/* RUNLU Deerfoot Flooring OS · V0.4.03d Native Cell Editor Hotfix */
+/* RUNLU Deerfoot Flooring OS · V0.4.03e Always-Ready Table Grid Hotfix */
 (function(root){
 'use strict';
 const VERSION='0.4.03';
@@ -14,6 +14,20 @@ const attr=v=>esc(v).replace(/"/g,'&quot;');
 const money=n=>'$'+round2(n).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2});
 function id(prefix='line'){return prefix+'-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7)}
 function blankLine(prefix='line'){return {id:id(prefix),description:'',qty:0,unit:'',listPrice:0,unitPrice:0,note:''}}
+function uiBlankLine(prefix='ui'){return {id:'ui-'+prefix+'-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),description:'',qty:0,unit:'',listPrice:0,unitPrice:0,note:''}}
+function meaningfulLine(line){return !!(str(line?.description)||num(line?.qty)||str(line?.unit)||num(line?.listPrice)||num(line?.unitPrice)||str(line?.note))}
+function stripBlankUILines(q){
+  const out=normalizeQuote(q);
+  out.materials=out.materials.filter(x=>!String(x.id||'').startsWith('ui-')||meaningfulLine(x));
+  out.labour=out.labour.filter(x=>!String(x.id||'').startsWith('ui-')||meaningfulLine(x));
+  return out
+}
+function ensureTableRows(q,minMaterials=6,minLabour=3){
+  const out=normalizeQuote(q);
+  while(out.materials.length<minMaterials)out.materials.push(normalizeLine(uiBlankLine('mat'),'mat'));
+  while(out.labour.length<minLabour)out.labour.push(normalizeLine(uiBlankLine('lab'),'lab'));
+  return out
+}
 function lineTotal(line){return round2(num(line&&line.qty)*num(line&&line.unitPrice))}
 function normalizeLine(line,prefix='line'){return {
   id:str(line&&line.id)||id(prefix),
@@ -97,7 +111,7 @@ function applyQuoteToJob(job,q){
   out.updatedAt=stamp;return out
 }
 function canWriteJob(job){return !!job&&!job.isDemo}
-const api={VERSION,JOBS,ACTIVE,GST_DEFAULT,str,num,round2,money,blankLine,lineTotal,normalizeLine,normalizeQuote,quoteFromJob,calcQuote,setQuoteField,updateLine,addLine,removeLine,applyQuoteToJob,canWriteJob};
+const api={VERSION,JOBS,ACTIVE,GST_DEFAULT,str,num,round2,money,blankLine,uiBlankLine,meaningfulLine,stripBlankUILines,ensureTableRows,lineTotal,normalizeLine,normalizeQuote,quoteFromJob,calcQuote,setQuoteField,updateLine,addLine,removeLine,applyQuoteToJob,canWriteJob};
 root.RUNLUQuoteV0403=api;
 if(typeof document==='undefined')return;
 
@@ -112,7 +126,7 @@ function selectCellText(el){
   }catch(_){}
 }
 function sheetEditCell(group,x,key,value,kind='text',placeholder=''){
-  const numeric=kind==='number',v=value==null?'':String(value);
+  const numeric=kind==='number',uiBlank=String(x?.id||'').startsWith('ui-')&&!meaningfulLine(x),v=(numeric&&uiBlank&&num(value)===0)?'':(value==null?'':String(value));
   if(touchIOS){
     return `<td class="q403editCell ${numeric?'q403numCell':''}" contenteditable="true" role="textbox" inputmode="${numeric?'decimal':'text'}" enterkeyhint="next" spellcheck="${numeric?'false':'true'}" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="${key}" data-placeholder="${attr(placeholder)}" aria-label="${attr(key)}">${esc(v)}</td>`
   }
@@ -135,7 +149,7 @@ function selectJob(idValue){
 function saveQuote(){
   const j=activeJob();if(!j){alert('Select or create a Job first.');return}
   if(!canWriteJob(j)){alert('DEMO jobs are read-only. Create a real Draft Job first.');return}
-  const next=applyQuoteToJob(j,draft),idx=jobs.findIndex(x=>x.id===j.id);jobs[idx]=next;draft=quoteFromJob(next);writeJobs();clearDirty();renderAll();alert('Quote saved to the active Flooring Job record.')
+  const clean=stripBlankUILines(draft),next=applyQuoteToJob(j,clean),idx=jobs.findIndex(x=>x.id===j.id);jobs[idx]=next;draft=quoteFromJob(next);writeJobs();clearDirty();renderAll();alert('Quote saved to the active Flooring Job record.')
 }
 function load(){
   jobs=readJobs();activeId=localStorage.getItem(ACTIVE)||jobs.find(j=>!j.isDemo)?.id||jobs[0]?.id||'';
@@ -172,7 +186,8 @@ function fieldLineCards(group,title){
 }
 function renderTable(){
   const el=by('q403table');if(!el)return;
-  el.innerHTML='<div class="q403tableHint"><b>'+(touchIOS?'iPhone Native Cell Editor active.':'Table Entry is editable.')+'</b> '+(touchIOS?'Tap the text or number inside a cell — the iPhone keyboard should open immediately. Swipe on headers / blank table space to move sideways.':'Tap any cell to type. Swipe sideways for pricing / notes. Press Next / Enter to move across cells.')+'</div>'+tableGroup('materials','Materials')+tableGroup('labour','Installation / Labour');
+  draft=ensureTableRows(draft);
+  el.innerHTML='<div class="q403tableHint"><b>'+(touchIOS?'iPhone Native Cell Editor active.':'Table Entry is editable.')+'</b> '+(touchIOS?'The blank rows below are live cells. Tap Description, Qty, Unit or Price directly — no + Row is required for the first entries.':'The blank rows below are live cells. Click any cell and type; use + Row only when you need more rows.')+'</div>'+tableGroup('materials','Materials')+tableGroup('labour','Installation / Labour');
   bindInputs(el);
   el.querySelectorAll('.q403tableWrap').forEach(w=>{w.scrollLeft=0})
 }
@@ -199,13 +214,13 @@ function bindInputs(scope){
     }
   });
   scope.querySelectorAll('[data-q403-add]').forEach(x=>x.onclick=()=>{
-    const group=x.dataset.q403Add;draft=addLine(draft,group);const added=lineGroup(draft,group).at(-1);markDirty();renderEditor();renderSummaryAndPreview();
+    const group=x.dataset.q403Add;draft=stripBlankUILines(draft);draft=addLine(draft,group);const added=lineGroup(draft,group).at(-1);markDirty();renderEditor();renderSummaryAndPreview();
     if(mode==='table'&&added){const target=by('q403table')?.querySelector('[data-q403-line="'+group+'"][data-id="'+CSS.escape(added.id)+'"][data-key="description"]');target?.focus({preventScroll:true});target?.scrollIntoView({block:'nearest',inline:'center'})}
   });
   scope.querySelectorAll('[data-q403-remove]').forEach(x=>x.onclick=()=>{draft=removeLine(draft,x.dataset.q403Remove,x.dataset.id);markDirty();renderEditor();renderSummaryAndPreview()});
 }
 function renderEditor(){by('q403fields').hidden=mode!=='fields';by('q403table').hidden=mode!=='table';if(mode==='fields')renderFields();else renderTable();document.querySelectorAll('[data-q403-mode]').forEach(b=>b.classList.toggle('active',b.dataset.q403Mode===mode))}
-function quoteRows(xs){return xs.map(x=>`<tr><td>${esc(x.description||'—')}${x.note?'<small>'+esc(x.note)+'</small>':''}</td><td>${x.qty||''}</td><td>${esc(x.unit)}</td><td>${x.listPrice?money(x.listPrice):''}</td><td>${money(x.unitPrice)}</td><td>${money(lineTotal(x))}</td></tr>`).join('')}
+function quoteRows(xs){return (Array.isArray(xs)?xs:[]).filter(meaningfulLine).map(x=>`<tr><td>${esc(x.description||'—')}${x.note?'<small>'+esc(x.note)+'</small>':''}</td><td>${x.qty||''}</td><td>${esc(x.unit)}</td><td>${x.listPrice?money(x.listPrice):''}</td><td>${money(x.unitPrice)}</td><td>${money(lineTotal(x))}</td></tr>`).join('')}
 function renderSummaryAndPreview(){
   const c=calcQuote(draft),sum=by('q403summary');if(sum)sum.innerHTML=`<div><small>Materials</small><b>${money(c.materials)}</b></div><div><small>Installation / Labour</small><b>${money(c.labour)}</b></div><div><small>Subtotal</small><b>${money(c.subtotal)}</b></div><div><small>GST</small><b>${money(c.gst)}</b></div><div class="grand"><small>Grand Total</small><b>${money(c.grandTotal)}</b></div>`;
   const p=by('q403preview');if(!p)return;
@@ -221,7 +236,7 @@ function renderSummaryAndPreview(){
 function renderAll(){renderJobPicker();renderEditor();renderSummaryAndPreview();const btn=by('q403save'),j=activeJob();if(btn)btn.disabled=!canWriteJob(j);const d=by('q403dirty');if(d)d.textContent=dirty?'Unsaved changes':(j&&j.quote?'Saved quote loaded':'Draft not saved')}
 function bind(){
   by('q403new').onclick=newQuoteJob;by('q403save').onclick=saveQuote;by('q403print').onclick=()=>window.print();
-  document.querySelectorAll('[data-q403-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.q403Mode;renderEditor();if(mode==='table'){const first=by('q403table')?.querySelector('[data-key="description"]');setTimeout(()=>first?.scrollIntoView({block:'nearest',inline:'start'}),0)}});
+  document.querySelectorAll('[data-q403-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.q403Mode;if(mode==='fields')draft=stripBlankUILines(draft);renderEditor();renderSummaryAndPreview();if(mode==='table'){const first=by('q403table')?.querySelector('[data-key="description"]');setTimeout(()=>first?.scrollIntoView({block:'nearest',inline:'start'}),0)}});
 }
 function boot(){bind();load()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
