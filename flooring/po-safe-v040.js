@@ -12,14 +12,33 @@
   const PO_SETTINGS='runlu_deerfoot_po_settings_v1';
   const META_STORE='runlu_supplier_task_meta_v1';
   const PREVIEW_KEY='runlu_flooring_po_deerfoot_invoice_v040';
-  let records=[],settings={initialized:false,startNumber:null,nextNumber:null,initializedAt:null},editingId=null,poItemsDraft=[];
+  const CORRUPT_BACKUP='runlu_deerfoot_supplier_orders_corrupt_backup_v0407';
+  let records=[],settings={initialized:false,startNumber:null,nextNumber:null,initializedAt:null},editingId=null,poItemsDraft=[],poStoreCorrupt=false,poStoreAlerted=false;
   const by=id=>document.getElementById(id);
   const e=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const a=v=>e(v).replace(/"/g,'&quot;');
   const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
   const money=n=>Number(n||0).toLocaleString('en-CA',{style:'currency',currency:'CAD',minimumFractionDigits:2,maximumFractionDigits:2});
-  const save=()=>{localStorage.setItem(PO_STORE,JSON.stringify(records));localStorage.setItem(PO_SETTINGS,JSON.stringify(settings));};
-  function load(){try{records=JSON.parse(localStorage.getItem(PO_STORE)||'[]')}catch(_){records=[]}try{const s=JSON.parse(localStorage.getItem(PO_SETTINGS)||'null');if(s&&typeof s==='object')settings={...settings,...s}}catch(_){}}
+  function warnCorruptPOStore(){
+    if(!poStoreCorrupt||poStoreAlerted)return;poStoreAlerted=true;
+    setTimeout(()=>alert('PO data could not be read safely. RUNLU preserved the original browser data and blocked PO writes instead of replacing it. Do not clear browser storage; recover / export the preserved data first.'),100)
+  }
+  function save(){
+    if(poStoreCorrupt){warnCorruptPOStore();return false}
+    try{
+      const payload=JSON.stringify(records);localStorage.setItem(PO_STORE,payload);
+      if(localStorage.getItem(PO_STORE)!==payload)throw new Error('PO store verification failed');
+      localStorage.setItem(PO_SETTINGS,JSON.stringify(settings));return true
+    }catch(e){console.error('RUNLU PO save blocked / failed',e);alert('PO save failed. Existing browser data was not intentionally cleared. Stop editing and back up before retrying.');return false}
+  }
+  function load(){
+    const raw=localStorage.getItem(PO_STORE);
+    if(raw==null)records=[];
+    else try{const parsed=JSON.parse(raw);if(!Array.isArray(parsed))throw new Error('PO store is not an array');records=parsed}
+    catch(e){records=[];poStoreCorrupt=true;try{if(!localStorage.getItem(CORRUPT_BACKUP))localStorage.setItem(CORRUPT_BACKUP,raw)}catch(_){}console.error('RUNLU PO store is unreadable; original data preserved and writes blocked.',e)}
+    try{const s=JSON.parse(localStorage.getItem(PO_SETTINGS)||'null');if(s&&typeof s==='object')settings={...settings,...s}}catch(_){}
+    warnCorruptPOStore()
+  }
   function legacyMeta(){try{return JSON.parse(localStorage.getItem(META_STORE)||'{}')}catch(_){return {}}}
   function hasPickupMeta(r){return !!(r&&('fulfillment' in r||'requestedDate' in r||'purchaseType' in r))}
   function migrateLegacyPickupMeta(){const meta=legacyMeta(),unlinked=records.filter(r=>r.poNumber&&r.status!=='Draft'&&!r.jobId&&!hasPickupMeta(r));let changed=false;records.forEach(r=>{if(hasPickupMeta(r))return;let m=meta[r.id]||(r.jobId?meta[r.jobId]:null);if(!m&&!r.jobId&&unlinked.length===1)m=meta['no-job'];if(!m)return;r.fulfillment=m.fulfillment||'Pickup';r.requestedDate=m.requestedDate||'';r.purchaseType=m.purchaseType||'Job-specific';changed=true});if(changed)save();}
