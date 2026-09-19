@@ -200,7 +200,7 @@ function executionRouting(po){
 function buildHoldPayload(po,line,userId){
   const p=normalizePO(po),x=normalizeLine(line),e=inventoryHoldEligibility(x);if(!e.ok)throw new Error(e.reason);
   const stamp=new Date().toISOString();
-  return {user_id:str(userId),environment:ENV,warehouse_dataset_key:x.warehouseDatasetKey,warehouse_record_id:x.warehouseRecordId,item_kind:x.rollNumber?'Carpet Roll':'Stock Item',item_name:x.description||x.style||x.sku||'Inventory',colour:x.colour,roll_number:x.rollNumber,location:x.warehouseLocation,job_id:p.jobId,job_number:p.jobNumber,po_number:p.poNumber,hold_key:inventoryHoldKey(p,x),quantity:x.holdQuantity,unit:x.warehouseUnit,status:'Held',note:['Mixed Source PO V0.4.05',x.note].filter(Boolean).join(' · '),updated_by:str(userId),updated_at:stamp,released_at:null,consumed_at:null}
+  return {user_id:str(userId),environment:ENV,warehouse_dataset_key:x.warehouseDatasetKey,warehouse_record_id:x.warehouseRecordId,item_kind:x.rollNumber?'Carpet Roll':'Stock Item',item_name:x.description||x.style||x.sku||'Inventory',colour:x.colour,roll_number:x.rollNumber,location:x.warehouseLocation,job_id:p.jobId,job_number:p.jobNumber,po_number:p.poNumber,hold_key:inventoryHoldKey(p,x),quantity:x.holdQuantity,unit:x.warehouseUnit,status:'Held',note:['Mixed Source PO V0.4.06',x.note].filter(Boolean).join(' · '),updated_by:str(userId),updated_at:stamp,released_at:null,consumed_at:null}
 }
 function buildSupplierRPC(po){
   const p=normalizePO(po),e=supplierPlanEligibility(p);if(!e.ok||e.skip)throw new Error(e.reason||'No supplier lines');
@@ -571,7 +571,7 @@ function renderDerived(){
   }
   const paper=by('ms404paper');if(paper){
     const rows=draft.items.map(x=>`<tr><td>${x.qty||''}</td><td>${esc(x.unit.toUpperCase())}</td><td>${esc(x.description||'—')}</td><td>${esc(x.colour)}</td><td>${sourceBadge(x)}</td><td>${esc(x.workflowStatus)}</td></tr>`).join('');
-    paper.innerHTML=`<div class="paperTop"><div><b>Deerfoot Carpet & Flooring</b><small>Mixed-Source PO / Material Order · V0.4.05</small></div><div><b>${esc(draft.poNumber||'DRAFT')}</b><small>${esc(draft.orderDate)}</small></div></div><div class="paperMeta"><span>Job: <b>${esc(draft.jobNumber||'—')}</b></span><span>Customer: <b>${esc(draft.customerName||'—')}</b></span><span>Sales: <b>${esc(draft.salesRep||'—')}</b></span></div><table><thead><tr><th>QTY</th><th>UNIT</th><th>STYLE / PRODUCT</th><th>COLOUR</th><th>SUPPLIER / STOCK</th><th>LINE STATUS</th></tr></thead><tbody>${rows||'<tr><td colspan="6">No lines</td></tr>'}</tbody></table><div class="paperNote"><b>Notes:</b> ${esc(draft.notes||'—')}</div>`
+    paper.innerHTML=`<div class="paperTop"><div><b>Deerfoot Carpet & Flooring</b><small>Mixed-Source PO / Material Order · V0.4.06</small></div><div><b>${esc(draft.poNumber||'DRAFT')}</b><small>${esc(draft.orderDate)}</small></div></div><div class="paperMeta"><span>Job: <b>${esc(draft.jobNumber||'—')}</b></span><span>Customer: <b>${esc(draft.customerName||'—')}</b></span><span>Sales: <b>${esc(draft.salesRep||'—')}</b></span></div><table><thead><tr><th>QTY</th><th>UNIT</th><th>STYLE / PRODUCT</th><th>COLOUR</th><th>SUPPLIER / STOCK</th><th>LINE STATUS</th></tr></thead><tbody>${rows||'<tr><td colspan="6">No lines</td></tr>'}</tbody></table><div class="paperNote"><b>Notes:</b> ${esc(draft.notes||'—')}</div>`
   }
   const save=by('ms404save');if(save)save.disabled=!canSavePO(draft)
 }
