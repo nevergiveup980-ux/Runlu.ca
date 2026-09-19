@@ -1,0 +1,19 @@
+name: Flooring Mobile Safari Hotfix V0.4.03a
+on:
+  pull_request:
+    paths:
+      - 'flooring/index-v0403-release.html'
+      - 'scripts/run-flooring-mobile-safari-hotfix-v0403a.mjs'
+      - '.github/workflows/flooring-mobile-safari-hotfix-v0403a.yml'
+  workflow_dispatch:
+jobs:
+  mobile-safari:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run iPhone Safari routing gate
+        run: node scripts/run-flooring-mobile-safari-hotfix-v0403a.mjs

@@ -33,18 +33,35 @@
 (function(){
 'use strict';
 const frame=document.getElementById('releaseFrame'),boot=document.getElementById('boot');
+const qp=new URLSearchParams(location.search);
+const ua=navigator.userAgent||'';
+const isiOS=/iPhone|iPad|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const forceFull=qp.get('full')==='1';
+const forceLite=qp.get('lite')==='1';
+const mobileSafe=forceLite||(isiOS&&!forceFull);
+const desktopCore={core:'index-v090r1-stable-frozen.html?prod=1&release=090r1'};
+const coreURL=forceLite?'index-v040.html?prod=1&release=0403&mobile=lite':mobileSafe?'index-v071-pricing-workspace.html?prod=1&release=0403&mobile=safe':desktopCore.core;
 const views={
-  core:'index-v090r1-stable-frozen.html?prod=1&release=090r1',
+  core:coreURL,
   operations:'index-v0403-operations.html?prod=1&release=0403',
   quote:'index-v0403-quote.html?prod=1&release=0403'
 };
 function normalizedView(v){return Object.prototype.hasOwnProperty.call(views,v)?v:'core'}
-function currentView(){return normalizedView((location.hash||'').replace(/^#/,'')||new URLSearchParams(location.search).get('view')||'core')}
+function currentView(){return normalizedView((location.hash||'').replace(/^#/,'')||qp.get('view')||'core')}
 function paintButtons(v){document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v))}
 function openView(v,push){
   v=normalizedView(v);paintButtons(v);boot.classList.remove('ready');
-  const sep=views[v].includes('?')?'&':'?';frame.src=views[v]+sep+'t='+Date.now();
+  const sep=views[v].includes('?')?'&':'?';
+  const cacheToken=mobileSafe&&v==='core'?'mobile-safe-0403a':Date.now();
+  frame.src=views[v]+sep+'t='+cacheToken;
   if(push&&location.hash!=='#'+v)history.replaceState(null,'','#'+v)
+}
+
+if(mobileSafe){
+  const badge=document.querySelector('.status b'),small=document.querySelector('.brand small'),msg=document.querySelector('#boot small');
+  if(badge)badge.textContent=forceLite?'V0.4.03 LITE':'V0.4.03 SAFE';
+  if(small)small.textContent=forceLite?'V0.4.03 · iPhone Lite Core':'V0.4.03 · iPhone Safari Safe Core';
+  if(msg)msg.textContent=forceLite?'Opening lightweight Core OS…':'Opening iPhone-safe Core OS without the deep iframe stack…';
 }
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>openView(b.dataset.view,true));
 frame.addEventListener('load',()=>setTimeout(()=>boot.classList.add('ready'),80));
