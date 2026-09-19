@@ -129,7 +129,7 @@ function decorateShell(){
 }
 function install(){
   decorateShell();bind();render(true);
-  let tries=0;const timer=setInterval(()=>{decorateShell();render(false);if(++tries>=60)clearInterval(timer)},500);
+  [250,900,2200].forEach(ms=>setTimeout(()=>{decorateShell();render(false)},ms));
   document.documentElement.setAttribute('data-runlu-v078','price-history-cost-control');
   return true;
 }
