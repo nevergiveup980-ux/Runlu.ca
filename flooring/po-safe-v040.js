@@ -16,7 +16,7 @@
   const by=id=>document.getElementById(id);
   const e=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const a=v=>e(v).replace(/"/g,'&quot;');
-  const today=()=>new Date().toISOString().slice(0,10);
+  const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
   const money=n=>Number(n||0).toLocaleString('en-CA',{style:'currency',currency:'CAD',minimumFractionDigits:2,maximumFractionDigits:2});
   const save=()=>{localStorage.setItem(PO_STORE,JSON.stringify(records));localStorage.setItem(PO_SETTINGS,JSON.stringify(settings));};
   function load(){try{records=JSON.parse(localStorage.getItem(PO_STORE)||'[]')}catch(_){records=[]}try{const s=JSON.parse(localStorage.getItem(PO_SETTINGS)||'null');if(s&&typeof s==='object')settings={...settings,...s}}catch(_){}}
