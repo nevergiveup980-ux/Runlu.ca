@@ -5,6 +5,7 @@ const root=new URL('../',import.meta.url);
 const read=p=>fs.readFileSync(new URL(p,root),'utf8');
 const v71=read('flooring/index-v071-pricing-workspace.html');
 const phase5=read('flooring/mobile-safe-phase5-v0403f.js');
+const fastboot=read('flooring/mobile-safe-fastboot-v0403g.js');
 const rcLine=read('flooring/carpet-line-rc-v093-safe.js');
 const historical=read('flooring/carpet-line-rc-v093.js');
 const rcTracking=read('flooring/carpet-rc-tracking-v092-safe.js');
@@ -16,13 +17,13 @@ function test(name,fn){try{fn();checks.push([name,true])}catch(e){checks.push([n
 
 test('Phase 5 launcher compiles',()=>new Function(phase5));
 test('Hardened V0.3.93 module compiles',()=>new Function(rcLine));
-test('Safe Core loads Phase 5 after Phases 1–4',()=>{
-  const ps=['mobile-safe-phase1-v0403b.js?v=0403b','mobile-safe-phase2-v0403c.js?v=0403c','mobile-safe-phase3-v0403d.js?v=0403d','mobile-safe-phase4-v0403e.js?v=0403e','mobile-safe-phase5-v0403f.js?v=0403f'].map(x=>v71.indexOf(x));
+test('Fast Boot registry keeps Phase 5 after Phases 1–4',()=>{
+  const ps=['mobile-safe-phase1-v0403b.js?v=0403b','mobile-safe-phase2-v0403c.js?v=0403c','mobile-safe-phase3-v0403d.js?v=0403d','mobile-safe-phase4-v0403e.js?v=0403e','mobile-safe-phase5-v0403f.js?v=0403f'].map(x=>fastboot.indexOf(x));
   assert(ps.every(x=>x>0));
   for(let i=1;i<ps.length;i++)assert(ps[i]>ps[i-1]);
 });
-test('Safe Core cache token advances to Phase 5',()=>{
-  assert(v71.includes('n=s?"mobile-safe-0403f":Date.now()'));
+test('Safe Core cache token remains compatible through Fast Boot',()=>{
+  assert(v71.includes('n=s?"mobile-safe-0403f":Date.now()')||v71.includes('n=s?"mobile-safe-0403g":Date.now()'));
 });
 test('Phase 5 startup is launcher-only',()=>{
   const install=phase5.slice(phase5.indexOf('function install()'),phase5.indexOf('root.RUNLUMobileSafePhase5V0393'));

@@ -2,6 +2,7 @@ name: Flooring Mobile Safe Phase 2 V0.9.1
 on:
   pull_request:
     paths:
+      - 'flooring/mobile-safe-fastboot-v0403g.js'
       - 'flooring/index-v071-pricing-workspace.html'
       - 'flooring/mobile-safe-phase2-v0403c.js'
       - 'flooring/material-work-sync-v091.js'

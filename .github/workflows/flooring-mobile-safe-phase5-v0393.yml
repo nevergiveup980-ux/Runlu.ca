@@ -2,6 +2,7 @@ name: Flooring Mobile Safe Phase 5 V0.3.93
 on:
   pull_request:
     paths:
+      - 'flooring/mobile-safe-fastboot-v0403g.js'
       - 'flooring/index-v071-pricing-workspace.html'
       - 'flooring/mobile-safe-phase5-v0403f.js'
       - 'flooring/carpet-line-rc-v093-safe.js'

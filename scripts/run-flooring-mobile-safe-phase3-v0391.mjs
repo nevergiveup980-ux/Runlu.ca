@@ -5,6 +5,7 @@ const root=new URL('../',import.meta.url);
 const read=p=>fs.readFileSync(new URL(p,root),'utf8');
 const v71=read('flooring/index-v071-pricing-workspace.html');
 const phase3=read('flooring/mobile-safe-phase3-v0403d.js');
+const fastboot=read('flooring/mobile-safe-fastboot-v0403g.js');
 const routing=read('flooring/mixed-order-routing-v091-safe.js');
 const release=read('flooring/index-v0403-release.html');
 const frozenQuote=read('flooring/quote-dual-entry-v0403i-stable-frozen.js');
@@ -13,14 +14,14 @@ const checks=[];
 function test(name,fn){try{fn();checks.push([name,true])}catch(e){checks.push([name,false,e.message])}}
 
 test('Phase 3 launcher compiles',()=>new Function(phase3));
-test('Safe Core loads Phase 3 only after Phase 1 and Phase 2 launchers',()=>{
-  const p1=v71.indexOf('mobile-safe-phase1-v0403b.js?v=0403b');
-  const p2=v71.indexOf('mobile-safe-phase2-v0403c.js?v=0403c');
-  const p3=v71.indexOf('mobile-safe-phase3-v0403d.js?v=0403d');
+test('Fast Boot registry keeps Phase 3 after Phase 1 and Phase 2 launchers',()=>{
+  const p1=fastboot.indexOf('mobile-safe-phase1-v0403b.js?v=0403b');
+  const p2=fastboot.indexOf('mobile-safe-phase2-v0403c.js?v=0403c');
+  const p3=fastboot.indexOf('mobile-safe-phase3-v0403d.js?v=0403d');
   assert(p1>0&&p2>p1&&p3>p2);
 });
-test('Safe Core cache token advances to Phase 3',()=>{
-  assert(/n=s\?"mobile-safe-0403[def]":Date\.now\(\)/.test(v71));
+test('Safe Core cache token remains compatible through Fast Boot',()=>{
+  assert(/n=s\?"mobile-safe-0403[defg]":Date\.now\(\)/.test(v71));
 });
 test('Phase 3 startup is launcher-only and does not fetch routing module automatically',()=>{
   const install=phase3.slice(phase3.indexOf('function install()'),phase3.indexOf('root.RUNLUMobileSafePhase3V0391'));
