@@ -41,6 +41,6 @@ jobs:
           assert(shell.includes('data-view="core"')&&shell.includes('data-view="operations"')&&shell.includes('data-view="quote"'));
           assert(ops.includes('week-schedule-v0402.js?v=0402'));
           assert(quote.includes('quote-dual-entry-v0403.js?v=0403'));
-          assert(quote.includes('Database Fields')&&quote.includes('Table Entry'));
+          assert(quote.includes('Database Fields')&&(quote.includes('Table Entry')||quote.includes('Quote Form Entry')));
           console.log('PASS unified production routing and module references');
           NODE

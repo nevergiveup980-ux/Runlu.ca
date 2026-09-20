@@ -55,7 +55,7 @@ test('Mobile inputs use 16px native font and CSS grid columns',()=>{
   assert(html.includes('font-size:16px'));
 });
 test('Quote page requests V0.4.03f script token',()=>{
-  assert(/quote-dual-entry-v0403\.js\?v=0403[fh]/.test(html));
+  assert(/quote-dual-entry-v0403\.js\?v=0403[fhi]/.test(html));
 });
 
 for(const [name,ok,error] of checks)console.log((ok?'PASS':'FAIL')+'  '+name+(error?'  '+error:''));
