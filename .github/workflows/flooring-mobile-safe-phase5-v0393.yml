@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'flooring/mobile-safe-fastboot-v0403g.js'
+      - 'flooring/mobile-safe-fastboot-v0403h.js'
       - 'flooring/index-v071-pricing-workspace.html'
       - 'flooring/mobile-safe-phase5-v0403f.js'
       - 'flooring/carpet-line-rc-v093-safe.js'

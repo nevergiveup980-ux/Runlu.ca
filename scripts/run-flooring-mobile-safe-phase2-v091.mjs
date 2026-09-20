@@ -5,7 +5,7 @@ const root=new URL('../',import.meta.url);
 const read=p=>fs.readFileSync(new URL(p,root),'utf8');
 const v71=read('flooring/index-v071-pricing-workspace.html');
 const phase2=read('flooring/mobile-safe-phase2-v0403c.js');
-const fastboot=read('flooring/mobile-safe-fastboot-v0403g.js');
+const fastboot=read('flooring/mobile-safe-fastboot-v0403h.js');
 const material=read('flooring/material-work-sync-v091.js');
 
 const checks=[];
@@ -16,10 +16,10 @@ test('Fast Boot registry loads the tiny Phase 2 launcher after Phase 1',()=>{
   const p1=fastboot.indexOf('mobile-safe-phase1-v0403b.js?v=0403b');
   const p2=fastboot.indexOf('mobile-safe-phase2-v0403c.js?v=0403c');
   assert(p1>0&&p2>p1);
-  assert(v71.includes('mobile-safe-fastboot-v0403g.js?v=0403g'));
+  assert(v71.includes('mobile-safe-fastboot-v0403h.js?v=0403h'));
 });
 test('Safe Core cache token advances for Phase 2',()=>{
-  assert(/n=s\?"mobile-safe-0403[cdefg]":Date\.now\(\)/.test(v71));
+  assert(/n=s\?"mobile-safe-0403[cdefgh]":Date\.now\(\)/.test(v71));
 });
 test('Phase 2 adds only the V0.9.1 Warehouse Fulfillment launcher',()=>{
   assert(phase2.includes("const MODULE_SRC='material-work-sync-v091.js?v=0403c-safe'"));

@@ -5,6 +5,7 @@ on:
       - 'flooring/index-v071-pricing-workspace.html'
       - 'flooring/index-v0403-release.html'
       - 'flooring/mobile-safe-fastboot-v0403g.js'
+      - 'flooring/mobile-safe-fastboot-v0403h.js'
       - 'scripts/run-flooring-mobile-safe-fastboot-v0394.mjs'
       - 'scripts/run-flooring-mobile-safari-hotfix-v0403a.mjs'
       - '.github/workflows/flooring-mobile-safe-fastboot-v0394.yml'
