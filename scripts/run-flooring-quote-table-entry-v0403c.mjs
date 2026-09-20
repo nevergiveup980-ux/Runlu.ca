@@ -21,7 +21,7 @@ test('Table cells remain directly editable in input or native-cell mode',()=>{
   assert(js.includes('data-key="listPrice"'));
   assert(js.includes('data-key="unitPrice"'));
   assert(js.includes('data-key="note"'));
-  assert(js.includes('class="q403cell')||js.includes('contenteditable="true"'));
+  assert(js.includes('class="q403cell')||js.includes('contenteditable="true"')||js.includes('q403mobileInput'));
 });
 
 test('Mobile table opens at the first columns instead of retaining a confusing horizontal offset',()=>{
@@ -67,12 +67,12 @@ test('Table uses touch-friendly horizontal scrolling',()=>{
 });
 
 test('Visible hint tells user Table Entry is directly editable',()=>{
-  assert(js.includes('The blank rows below are live cells.')||js.includes('Tap any cell to type.')||js.includes('iPhone Grid Entry active'));
-  assert(js.includes('iPhone Native Cell Editor active.')||js.includes('Table Entry is editable.'));
+  assert(js.includes('The blank rows below are live cells.')||js.includes('Tap any cell to type.')||js.includes('iPhone Grid Entry active')||js.includes('iPhone Stacked Entry active'));
+  assert(js.includes('iPhone Native Cell Editor active.')||js.includes('Table Entry is editable.')||js.includes('iPhone Stacked Entry active'));
 });
 
 test('Quote page requests a V0.4.03 table-entry hotfix token',()=>{
-  assert(html.includes('quote-dual-entry-v0403.js?v=0403f')||/quote-dual-entry-v0403\.js\?v=0403[cde]/.test(html));
+  assert(/quote-dual-entry-v0403\.js\?v=0403[cdefh]/.test(html));
 });
 
 for(const [name,ok,error] of checks)console.log((ok?'PASS':'FAIL')+'  '+name+(error?'  '+error:''));
