@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="runlu-account-diagnostic.css?v=1">
   <link rel="stylesheet" href="runlu-account-overview.css?v=1">
   <link rel="stylesheet" href="runlu-account-disclosure.css?v=1">
+  <link rel="stylesheet" href="runlu-account-profile.css?v=1">
 </head>
 <body>
   <header class="account-topbar">
@@ -88,7 +89,15 @@
           <button id="signOutButton" class="secondary-button" type="button" data-i18n="sign_out">Sign out</button>
         </div>
 
-        <form id="profileForm" class="account-form profile-form">
+        <section id="profileSummary" class="profile-summary" aria-label="Profile summary">
+          <div class="profile-summary-copy">
+            <strong id="profileSummaryName">—</strong>
+            <span id="profileSummaryLocale">—</span>
+          </div>
+          <button id="editProfileButton" class="profile-edit-button" type="button" data-i18n="edit_profile">Edit profile</button>
+        </section>
+
+        <form id="profileForm" class="account-form profile-form" hidden>
           <div class="field">
             <label for="profileName" data-i18n="display_name">Display name</label>
             <input id="profileName" type="text" maxlength="80" autocomplete="name">
@@ -102,7 +111,10 @@
               <option value="es">Español</option>
             </select>
           </div>
-          <button class="primary-button" type="submit" data-i18n="save_profile">Save profile</button>
+          <div class="profile-form-actions">
+            <button class="primary-button" type="submit" data-i18n="save_profile">Save profile</button>
+            <button id="cancelProfileButton" class="secondary-button" type="button" data-i18n="cancel">Cancel</button>
+          </div>
         </form>
 
         <section class="account-overview">
@@ -182,6 +194,6 @@
   <script src="runlu-account-diagnostic.js?v=1"></script>
   <script src="runlu-account-overview.js?v=1"></script>
   <script src="runlu-account-disclosure.js?v=1"></script>
-  <!-- RUNLU Account pilot build 15 · Progressive Disclosure V1 -->
+  <!-- RUNLU Account pilot build 16 · Profile Summary V1 -->
 </body>
 </html>
