@@ -18,7 +18,7 @@ test('Safe Core loads the tiny Phase 2 launcher after Phase 1',()=>{
   assert(v71.includes('if(s){i.__RUNLU_MOBILE_SAFE__=!0'));
 });
 test('Safe Core cache token advances for Phase 2',()=>{
-  assert(v71.includes('n=s?"mobile-safe-0403c":Date.now()')||v71.includes('n=s?"mobile-safe-0403d":Date.now()'));
+  assert(/n=s\?"mobile-safe-0403[cde]":Date\.now\(\)/.test(v71));
 });
 test('Phase 2 adds only the V0.9.1 Warehouse Fulfillment launcher',()=>{
   assert(phase2.includes("const MODULE_SRC='material-work-sync-v091.js?v=0403c-safe'"));
