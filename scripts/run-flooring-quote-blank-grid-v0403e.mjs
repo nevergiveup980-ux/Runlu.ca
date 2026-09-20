@@ -37,7 +37,7 @@ test('Always-ready table is created before table HTML is rendered',()=>{
 });
 test('iPhone hint says blank rows are live cells and no plus-row is required initially',()=>{
   assert(js.includes('The blank rows below are live cells.'));
-  assert(js.includes('six ready rows')||js.includes('no + Row is required for the first entries.')||js.includes('Tap Description / Qty / Unit / Price directly'));
+  assert(js.includes('six ready rows')||js.includes('no + Row is required for the first entries.')||js.includes('Tap Description / Qty / Unit / Price directly')||js.includes('Tap any field directly.'));
 });
 test('iPhone still uses native directly editable controls',()=>{
   assert(js.includes('q403iosInput')||js.includes('contenteditable="true"')||js.includes('q403mobileInput'));
