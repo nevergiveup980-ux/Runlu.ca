@@ -5,7 +5,7 @@ const root=new URL('../',import.meta.url);
 const read=p=>fs.readFileSync(new URL(p,root),'utf8');
 const v71=read('flooring/index-v071-pricing-workspace.html');
 const phase5=read('flooring/mobile-safe-phase5-v0403f.js');
-const fastboot=read('flooring/mobile-safe-fastboot-v0403g.js');
+const fastboot=read('flooring/mobile-safe-fastboot-v0403h.js');
 const rcLine=read('flooring/carpet-line-rc-v093-safe.js');
 const historical=read('flooring/carpet-line-rc-v093.js');
 const rcTracking=read('flooring/carpet-rc-tracking-v092-safe.js');
@@ -23,7 +23,7 @@ test('Fast Boot registry keeps Phase 5 after Phases 1–4',()=>{
   for(let i=1;i<ps.length;i++)assert(ps[i]>ps[i-1]);
 });
 test('Safe Core cache token remains compatible through Fast Boot',()=>{
-  assert(v71.includes('n=s?"mobile-safe-0403f":Date.now()')||v71.includes('n=s?"mobile-safe-0403g":Date.now()'));
+  assert(/n=s\?"mobile-safe-0403[fgh]":Date\.now\(\)/.test(v71));
 });
 test('Phase 5 startup is launcher-only',()=>{
   const install=phase5.slice(phase5.indexOf('function install()'),phase5.indexOf('root.RUNLUMobileSafePhase5V0393'));
