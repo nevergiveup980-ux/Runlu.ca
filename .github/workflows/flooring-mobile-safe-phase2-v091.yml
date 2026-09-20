@@ -1,0 +1,21 @@
+name: Flooring Mobile Safe Phase 2 V0.9.1
+on:
+  pull_request:
+    paths:
+      - 'flooring/index-v071-pricing-workspace.html'
+      - 'flooring/mobile-safe-phase2-v0403c.js'
+      - 'flooring/material-work-sync-v091.js'
+      - 'scripts/run-flooring-mobile-safe-phase2-v091.mjs'
+      - '.github/workflows/flooring-mobile-safe-phase2-v091.yml'
+  workflow_dispatch:
+jobs:
+  mobile-safe-phase2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.9.1 mobile-safe Phase 2 gate
+        run: node scripts/run-flooring-mobile-safe-phase2-v091.mjs
