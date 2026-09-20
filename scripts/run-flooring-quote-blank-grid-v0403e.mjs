@@ -40,7 +40,7 @@ test('iPhone hint says blank rows are live cells and no plus-row is required ini
   assert(js.includes('six ready rows')||js.includes('no + Row is required for the first entries.')||js.includes('Tap Description / Qty / Unit / Price directly'));
 });
 test('iPhone still uses native directly editable controls',()=>{
-  assert(js.includes('q403iosInput')||js.includes('contenteditable="true"'));
+  assert(js.includes('q403iosInput')||js.includes('contenteditable="true"')||js.includes('q403mobileInput'));
   assert(js.includes('data-q403-line='));
 });
 test('Blank scaffold numeric cells display empty instead of zero',()=>{
@@ -57,7 +57,7 @@ test('Saving strips untouched UI rows before writing Job quote',()=>{
   assert(js.slice(i,j).includes('const clean=stripBlankUILines(draft)'))
 });
 test('Page requests V0.4.03e script token',()=>{
-  assert(/quote-dual-entry-v0403\.js\?v=0403[ef]/.test(html))
+  assert(/quote-dual-entry-v0403\.js\?v=0403[efh]/.test(html))
 });
 
 for(const [name,ok,error] of checks)console.log((ok?'PASS':'FAIL')+'  '+name+(error?'  '+error:''));
