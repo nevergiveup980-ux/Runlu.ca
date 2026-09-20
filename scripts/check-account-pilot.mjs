@@ -50,7 +50,7 @@ requireToken(js, "runlu:account-entitlements-changed", 'Plan Center refresh sign
 requireToken(planJs, "client.rpc('runlu_get_my_plan_transition_state'", 'Plan Center must read the authenticated account transition state.');
 requireToken(planJs, "client.rpc('runlu_get_my_guanshi_cloud_ai_usage'", 'Plan Center must read the authenticated account AI allowance.');
 requireToken(planJs, "Paid checkout remains disabled", 'Plan Center must preserve the paid-checkout lock copy.');
-if (/\\.insert\\(|\\.update\\(|\\.delete\\(|\\.upsert\\(/.test(planJs)) { throw new Error('Account Plan Center must remain read-only until checkout is explicitly enabled.'); }
+if (/\.insert\(|\.update\(|\.delete\(|\.upsert\(/.test(planJs)) { throw new Error('Account Plan Center must remain read-only until checkout is explicitly enabled.'); }
 
 requireToken(commerceJs, "client.from('runlu_account_orders_v1')", 'Account Orders is not reading its own-account view.');
 requireToken(commerceJs, "client.from('runlu_account_subscriptions_v1')", 'Account Subscriptions is not reading its own-account view.');
