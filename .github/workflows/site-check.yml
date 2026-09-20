@@ -28,6 +28,7 @@ jobs:
           node --check runlu-language.js
           node --check runlu-account.js
           node --check runlu-account-access.js
+          node --check runlu-account-diagnostic.js
           node --check forum.js
           node --check forum-live-ai.js
           node --check leave-a-note.js
