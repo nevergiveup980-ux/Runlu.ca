@@ -4,7 +4,7 @@ const html = fs.readFileSync('account.html', 'utf8');
 const js = fs.readFileSync('runlu-account.js', 'utf8');
 const commerceJs = fs.readFileSync('runlu-account-commerce.js', 'utf8');
 const css = fs.readFileSync('runlu-account.css', 'utf8');
-const storeCss = fs.readFileSync('runlu-account-store.css', 'utf8');
+const storeCss = fs.readFileSync('runlu-account-store.css', 'utf8');\nconst planJs = fs.readFileSync('runlu-account-plan.js', 'utf8');\nconst planCss = fs.readFileSync('runlu-account-plan.css', 'utf8');
 const home = fs.readFileSync('index.html', 'utf8');
 
 function requireToken(source, token, message) {
@@ -15,8 +15,8 @@ requireToken(html, 'noindex,nofollow', 'Account pilot must remain noindex/nofoll
 requireToken(html, 'no-cache, no-store, must-revalidate', 'Account pilot cache hardening is missing.');
 requireToken(html, 'runlu-account.css?v=4', 'Account page is not loading the base CSS build.');
 requireToken(html, 'runlu-account-store.css?v=2', 'Account Store preview CSS is missing.');
-requireToken(html, 'runlu-account.js?v=8', 'Account page is not loading the current core JS build.');
-requireToken(html, 'runlu-account-commerce.js?v=1', 'Account commerce-history reader is missing.');
+requireToken(html, 'runlu-account.js?v=9', 'Account page is not loading the current core JS build.');
+requireToken(html, 'runlu-account-commerce.js?v=1', 'Account commerce-history reader is missing.');\nrequireToken(html, 'runlu-account-plan.css?v=1', 'Account Plan Center CSS is missing.');\nrequireToken(html, 'runlu-account-plan.js?v=1', 'Account Plan Center reader is missing.');\nrequireToken(html, 'id="planCenter"', 'Account Plan Center container is missing.');
 requireToken(html, 'id="libraryList"', 'Account Library container is missing.');
 requireToken(html, 'id="storeList"', 'Account Store preview container is missing.');
 requireToken(html, 'id="ordersList"', 'Account Orders container is missing.');
@@ -40,7 +40,7 @@ requireToken(js, 'el.libraryList.replaceChildren(fragment)', 'Account Library mu
 requireToken(js, 'el.storeList.replaceChildren(fragment)', 'Account Store must replace rendered contents atomically.');
 requireToken(js, "row.action_state==='ready_for_checkout'?'checkout_not_enabled':'planned'", 'Paid offers must not silently become clickable before checkout is integrated.');
 requireToken(js, "client.rpc('runlu_activate_free_plan'", 'Eligible free plans must activate through the narrow authenticated RPC.');
-requireToken(js, "ownedProducts.has(row.product_key)", 'Already-entitled products must not create redundant free activation UI.');
+requireToken(js, "ownedProducts.has(row.product_key)", 'Already-entitled products must not create redundant free activation UI.');\nrequireToken(js, "runlu:account-entitlements-changed", 'Plan Center refresh signal after entitlement changes is missing.');\nrequireToken(planJs, "client.rpc('runlu_get_my_plan_transition_state'", 'Plan Center must read the authenticated account transition state.');\nrequireToken(planJs, "client.rpc('runlu_get_my_guanshi_cloud_ai_usage'", 'Plan Center must read the authenticated account AI allowance.');\nrequireToken(planJs, "Paid checkout remains disabled", 'Plan Center must preserve the paid-checkout lock copy.');\nif (/\\.insert\\(|\\.update\\(|\\.delete\\(|\\.upsert\\(/.test(planJs)) { throw new Error('Account Plan Center must remain read-only until checkout is explicitly enabled.'); }
 
 requireToken(commerceJs, "client.from('runlu_account_orders_v1')", 'Account Orders is not reading its own-account view.');
 requireToken(commerceJs, "client.from('runlu_account_subscriptions_v1')", 'Account Subscriptions is not reading its own-account view.');
@@ -50,7 +50,7 @@ if (/\.insert\(|\.update\(|\.delete\(|\.upsert\(/.test(commerceJs)) {
   throw new Error('Account commerce-history reader must remain read-only until checkout is explicitly enabled.');
 }
 
-if (/\bre_[A-Za-z0-9_\-]{20,}\b/.test(html + js + commerceJs + css + storeCss)) {
+if (/\bre_[A-Za-z0-9_\-]{20,}\b/.test(html + js + commerceJs + planJs + css + storeCss + planCss)) {
   throw new Error('A Resend-style secret appears to be embedded in public Account assets.');
 }
 
@@ -58,4 +58,4 @@ if (/href=["'][^"']*account\.html/i.test(home)) {
   throw new Error('Account pilot is linked from the public home page before launch approval.');
 }
 
-console.log('RUNLU Account pilot contract passed: auth, recovery, hardened Library, Store preview, read-only Orders/Subscriptions history, atomic rendering, cache, privacy and private-pilot guards verified.');
+console.log('RUNLU Account pilot contract passed: auth, recovery, hardened Library, Store preview, read-only Plan Center and Orders/Subscriptions history, atomic rendering, cache, privacy and private-pilot guards verified.');
