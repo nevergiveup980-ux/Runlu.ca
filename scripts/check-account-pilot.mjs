@@ -19,8 +19,8 @@ requireToken(html, 'runlu-account.css?v=4', 'Account page is not loading the bas
 requireToken(html, 'runlu-account-store.css?v=2', 'Account Store preview CSS is missing.');
 requireToken(html, 'runlu-account.js?v=9', 'Account page is not loading the current core JS build.');
 requireToken(html, 'runlu-account-commerce.js?v=1', 'Account commerce-history reader is missing.');
-requireToken(html, 'runlu-account-plan.css?v=1', 'Account Plan Center CSS is missing.');
-requireToken(html, 'runlu-account-plan.js?v=1', 'Account Plan Center reader is missing.');
+requireToken(html, 'runlu-account-plan.css?v=2', 'Account Plan Center CSS is missing.');
+requireToken(html, 'runlu-account-plan.js?v=2', 'Account Plan Center reader is missing.');
 requireToken(html, 'id="planCenter"', 'Account Plan Center container is missing.');
 requireToken(html, 'id="libraryList"', 'Account Library container is missing.');
 requireToken(html, 'id="storeList"', 'Account Store preview container is missing.');
@@ -49,6 +49,8 @@ requireToken(js, "ownedProducts.has(row.product_key)", 'Already-entitled product
 requireToken(js, "runlu:account-entitlements-changed", 'Plan Center refresh signal after entitlement changes is missing.');
 requireToken(planJs, "client.rpc('runlu_get_my_plan_transition_state'", 'Plan Center must read the authenticated account transition state.');
 requireToken(planJs, "client.rpc('runlu_get_my_guanshi_cloud_ai_usage'", 'Plan Center must read the authenticated account AI allowance.');
+requireToken(planJs, "client.rpc('runlu_get_user_capabilities'", 'Plan Center must read authenticated entitlement capabilities.');
+requireToken(planJs, "guanshi.deep_reading", 'Capability Center must represent Deep Reading as a separate capability.');
 requireToken(planJs, "Paid checkout remains disabled", 'Plan Center must preserve the paid-checkout lock copy.');
 if (/\.insert\(|\.update\(|\.delete\(|\.upsert\(/.test(planJs)) { throw new Error('Account Plan Center must remain read-only until checkout is explicitly enabled.'); }
 
@@ -68,4 +70,4 @@ if (/href=["'][^"']*account\.html/i.test(home)) {
   throw new Error('Account pilot is linked from the public home page before launch approval.');
 }
 
-console.log('RUNLU Account pilot contract passed: auth, recovery, hardened Library, Store preview, read-only Plan Center and Orders/Subscriptions history, atomic rendering, cache, privacy and private-pilot guards verified.');
+console.log('RUNLU Account pilot contract passed: auth, recovery, hardened Library, Store preview, read-only Plan/Capability Center and Orders/Subscriptions history, atomic rendering, cache, privacy and private-pilot guards verified.');
