@@ -1,0 +1,22 @@
+name: Flooring Mobile Safe Phase 8 V0.3.97
+on:
+  pull_request:
+    paths:
+      - 'flooring/mobile-safe-phase8-v0403j.js'
+      - 'flooring/mobile-safe-fastboot-v0403j.js'
+      - 'flooring/week-schedule-v097-safe.js'
+      - 'flooring/index-v097-installer-workload-preview.html'
+      - 'flooring/index-v071-pricing-workspace.html'
+      - 'scripts/run-flooring-mobile-safe-phase8-v0397.mjs'
+      - '.github/workflows/flooring-mobile-safe-phase8-v0397.yml'
+  workflow_dispatch:
+jobs:
+  mobile-safe-phase8:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/run-flooring-mobile-safe-phase8-v0397.mjs
