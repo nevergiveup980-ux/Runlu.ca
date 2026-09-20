@@ -1,0 +1,21 @@
+name: Flooring Mobile Safe Phase 3 V0.3.91
+on:
+  pull_request:
+    paths:
+      - 'flooring/index-v071-pricing-workspace.html'
+      - 'flooring/mobile-safe-phase3-v0403d.js'
+      - 'flooring/mixed-order-routing-v091-safe.js'
+      - 'scripts/run-flooring-mobile-safe-phase3-v0391.mjs'
+      - '.github/workflows/flooring-mobile-safe-phase3-v0391.yml'
+  workflow_dispatch:
+jobs:
+  mobile-safe-phase3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.3.91 mixed-order routing Phase 3 gate
+        run: node scripts/run-flooring-mobile-safe-phase3-v0391.mjs
