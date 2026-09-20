@@ -16,7 +16,7 @@ test('Fast Boot registry loads the tiny Phase 2 launcher after Phase 1',()=>{
   const p1=fastboot.indexOf('mobile-safe-phase1-v0403b.js?v=0403b');
   const p2=fastboot.indexOf('mobile-safe-phase2-v0403c.js?v=0403c');
   assert(p1>0&&p2>p1);
-  assert(v71.includes('mobile-safe-fastboot-v0403h.js?v=0403h'));
+  assert(v71.includes('mobile-safe-fastboot-v0403i.js?v=0403i'));
 });
 test('Safe Core cache token advances for Phase 2',()=>{
   assert(/n=s\?"mobile-safe-0403[cdefgh]":Date\.now\(\)/.test(v71));
