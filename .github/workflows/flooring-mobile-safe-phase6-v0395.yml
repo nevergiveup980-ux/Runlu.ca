@@ -1,0 +1,23 @@
+name: Flooring Mobile Safe Phase 6 V0.3.95
+on:
+  pull_request:
+    paths:
+      - 'flooring/index-v071-pricing-workspace.html'
+      - 'flooring/index-v0403-release.html'
+      - 'flooring/mobile-safe-fastboot-v0403h.js'
+      - 'flooring/mobile-safe-phase6-v0403h.js'
+      - 'flooring/people-to-call-review-v095-safe.js'
+      - 'scripts/run-flooring-mobile-safe-phase6-v0395.mjs'
+      - '.github/workflows/flooring-mobile-safe-phase6-v0395.yml'
+  workflow_dispatch:
+jobs:
+  mobile-safe-phase6:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.3.95 People To Call Phase 6 gate
+        run: node scripts/run-flooring-mobile-safe-phase6-v0395.mjs
