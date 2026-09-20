@@ -14,8 +14,8 @@ function requireToken(source, token, message) {
 requireToken(html, 'noindex,nofollow', 'Account pilot must remain noindex/nofollow until public launch.');
 requireToken(html, 'no-cache, no-store, must-revalidate', 'Account pilot cache hardening is missing.');
 requireToken(html, 'runlu-account.css?v=4', 'Account page is not loading the base CSS build.');
-requireToken(html, 'runlu-account-store.css?v=1', 'Account Store preview CSS is missing.');
-requireToken(html, 'runlu-account.js?v=7', 'Account page is not loading the current core JS build.');
+requireToken(html, 'runlu-account-store.css?v=2', 'Account Store preview CSS is missing.');
+requireToken(html, 'runlu-account.js?v=8', 'Account page is not loading the current core JS build.');
 requireToken(html, 'runlu-account-commerce.js?v=1', 'Account commerce-history reader is missing.');
 requireToken(html, 'id="libraryList"', 'Account Library container is missing.');
 requireToken(html, 'id="storeList"', 'Account Store preview container is missing.');
@@ -38,7 +38,7 @@ requireToken(js, 'const seen=new Set()', 'Account product/plan-key deduplication
 requireToken(js, 'document.createDocumentFragment()', 'Account atomic rendering is missing.');
 requireToken(js, 'el.libraryList.replaceChildren(fragment)', 'Account Library must replace rendered contents atomically.');
 requireToken(js, 'el.storeList.replaceChildren(fragment)', 'Account Store must replace rendered contents atomically.');
-requireToken(js, "row.action_state==='ready_for_checkout'?'checkout_not_enabled':'planned'", 'Paid offers must not silently become clickable before checkout is integrated.');
+requireToken(js, "row.action_state==='ready_for_checkout'?'checkout_not_enabled':'planned'", 'Paid offers must not silently become clickable before checkout is integrated.');\nrequireToken(js, "client.rpc('runlu_activate_free_plan'", 'Eligible free plans must activate through the narrow authenticated RPC.');\nrequireToken(js, "ownedProducts.has(row.product_key)", 'Already-entitled products must not create redundant free activation UI.');
 
 requireToken(commerceJs, "client.from('runlu_account_orders_v1')", 'Account Orders is not reading its own-account view.');
 requireToken(commerceJs, "client.from('runlu_account_subscriptions_v1')", 'Account Subscriptions is not reading its own-account view.');
