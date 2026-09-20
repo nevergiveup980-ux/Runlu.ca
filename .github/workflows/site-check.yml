@@ -30,6 +30,7 @@ jobs:
           node --check runlu-account-access.js
           node --check runlu-account-diagnostic.js
           node --check runlu-account-overview.js
+          node --check runlu-account-disclosure.js
           node --check forum.js
           node --check forum-live-ai.js
           node --check leave-a-note.js
