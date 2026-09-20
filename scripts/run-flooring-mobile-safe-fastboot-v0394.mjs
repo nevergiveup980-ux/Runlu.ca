@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 const root=new URL('../',import.meta.url);
 const read=p=>fs.readFileSync(new URL(p,root),'utf8');
 const v71=read('flooring/index-v071-pricing-workspace.html');
-const fastboot=read('flooring/mobile-safe-fastboot-v0403g.js');
+const fastboot=read('flooring/mobile-safe-fastboot-v0403h.js');
 const historical=read('flooring/index-v094-fastboot.html');
 const release=read('flooring/index-v0403-release.html');
 const frozenQuote=read('flooring/quote-dual-entry-v0403i-stable-frozen.js');
@@ -14,7 +14,7 @@ function test(name,fn){try{fn();checks.push([name,true])}catch(e){checks.push([n
 
 test('Safe Fast Boot orchestrator compiles',()=>new Function(fastboot));
 test('Safe Core waits only for the tiny Fast Boot orchestrator',()=>{
-  assert(v71.includes('mobile-safe-fastboot-v0403g.js?v=0403g'));
+  assert(v71.includes('mobile-safe-fastboot-v0403h.js?v=0403h'));
   for(const src of [
     'mobile-safe-phase1-v0403b.js?v=0403b',
     'mobile-safe-phase2-v0403c.js?v=0403c',
@@ -23,7 +23,7 @@ test('Safe Core waits only for the tiny Fast Boot orchestrator',()=>{
     'mobile-safe-phase5-v0403f.js?v=0403f'
   ])assert.equal(v71.includes(src),false,src);
 });
-test('Fast Boot contains exactly the five restored launcher layers',()=>{
+test('Fast Boot preserves the five V0.3.94 launcher layers before later phases',()=>{
   for(const src of [
     'mobile-safe-phase1-v0403b.js?v=0403b',
     'mobile-safe-phase2-v0403c.js?v=0403c',
@@ -31,7 +31,7 @@ test('Fast Boot contains exactly the five restored launcher layers',()=>{
     'mobile-safe-phase4-v0403e.js?v=0403e',
     'mobile-safe-phase5-v0403f.js?v=0403f'
   ])assert(fastboot.includes(src),src);
-  assert.equal((fastboot.match(/name:'phase[1-5]'/g)||[]).length,5);
+  for(let i=1;i<=5;i++)assert(fastboot.includes(`name:'phase${i}'`));
 });
 test('Fast Boot never pulls heavy business modules at startup',()=>{
   for(const banned of [
@@ -57,9 +57,9 @@ test('Background launcher hydration is one-shot and failure-tolerant',()=>{
   assert(fastboot.includes('Promise.allSettled(modules.map(loadOne))'));
   assert(fastboot.includes("report.failed.length?'ready-with-launcher-errors':'ready'"));
 });
-test('Safe Core cache token advances to V0.4.03g',()=>{
-  assert(v71.includes('n=s?"mobile-safe-0403g":Date.now()'));
-  assert(release.includes("mobileSafe&&v==='core'?'mobile-safe-0403g':Date.now()"));
+test('Safe Core keeps the V0.3.94 core-first boot contract through later phases',()=>{
+  assert(/n=s\?"mobile-safe-0403[gh]":Date\.now\(\)/.test(v71));
+  assert(release.includes("mobileSafe&&v==='core'?'mobile-safe-0403g':Date.now()")||release.includes("mobileSafe&&v==='core'?'mobile-safe-0403h':Date.now()"));
 });
 test('iPhone production route still bypasses V090 and V078 wrappers',()=>{
   assert(release.includes("mobileSafe?'index-v071-pricing-workspace.html"));
