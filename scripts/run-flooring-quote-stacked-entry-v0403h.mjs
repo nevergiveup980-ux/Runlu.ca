@@ -12,7 +12,7 @@ function test(name,fn){try{fn();checks.push([name,true])}catch(e){checks.push([n
 
 test('Quote engine compiles and keeps shared quote API',()=>{assert(A);assert(A.ensureTableRows);assert(A.stripBlankUILines)});
 test('iPhone stacked entry uses ordinary native inputs',()=>{
-  const i=js.indexOf('function iosStackGroup('),j=js.indexOf('function renderTable()',i);
+  const i=js.indexOf('function iosStackCell('),j=js.indexOf('function renderTable()',i);
   const s=js.slice(i,j);
   assert(s.includes('q403mobileInput'));
   assert(s.includes('type="text"'));
@@ -21,7 +21,7 @@ test('iPhone stacked entry uses ordinary native inputs',()=>{
   assert.equal(s.includes('q403iosWrap'),false);
 });
 test('Stacked path has no horizontal scrolling container dependency',()=>{
-  const i=js.indexOf("if(touchIOS){"),j=js.indexOf("return",i);
+  const r0=js.indexOf('function renderTable()'),i=js.indexOf("if(touchIOS){",r0),j=js.indexOf("return",i);
   const s=js.slice(i,j+100);
   assert(s.includes('iosStackGroup'));
   assert.equal(s.includes('scrollLeft'),false);
