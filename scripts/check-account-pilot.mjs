@@ -11,6 +11,8 @@ const accessJs = fs.readFileSync('runlu-account-access.js', 'utf8');
 const accessCss = fs.readFileSync('runlu-account-access.css', 'utf8');
 const diagnosticJs = fs.readFileSync('runlu-account-diagnostic.js', 'utf8');
 const diagnosticCss = fs.readFileSync('runlu-account-diagnostic.css', 'utf8');
+const overviewJs = fs.readFileSync('runlu-account-overview.js', 'utf8');
+const overviewCss = fs.readFileSync('runlu-account-overview.css', 'utf8');
 const home = fs.readFileSync('index.html', 'utf8');
 
 function requireToken(source, token, message) {
@@ -31,6 +33,9 @@ requireToken(html, 'id="accessCenter"', 'Account Access Center container is miss
 requireToken(html, 'runlu-account-diagnostic.css?v=1', 'Account Access Diagnostic CSS is missing.');
 requireToken(html, 'runlu-account-diagnostic.js?v=1', 'Account Access Diagnostic reader is missing.');
 requireToken(html, 'id="accessDiagnostic"', 'Account Access Diagnostic container is missing.');
+requireToken(html, 'runlu-account-overview.css?v=1', 'Account Overview CSS is missing.');
+requireToken(html, 'runlu-account-overview.js?v=1', 'Account Overview reader is missing.');
+requireToken(html, 'id="accountOverview"', 'Account Overview container is missing.');
 requireToken(html, 'id="planCenter"', 'Account Plan Center container is missing.');
 requireToken(html, 'id="libraryList"', 'Account Library container is missing.');
 requireToken(html, 'id="storeList"', 'Account Store preview container is missing.');
@@ -69,6 +74,10 @@ if (/\.insert\(|\.update\(|\.delete\(|\.upsert\(/.test(accessJs)) { throw new Er
 requireToken(diagnosticJs, "client.rpc('runlu_get_my_access_diagnostic'", 'Access Diagnostic must use the authenticated server diagnostic RPC.');
 requireToken(diagnosticJs, "usage_limit_reached", 'Access Diagnostic must represent usage-limit exhaustion.');
 if (/\.insert\(|\.update\(|\.delete\(|\.upsert\(/.test(diagnosticJs)) { throw new Error('Account Access Diagnostic must remain read-only.'); }
+requireToken(overviewJs, "client.rpc('runlu_get_my_plan_transition_state'", 'Account Overview must use the authenticated plan state.');
+requireToken(overviewJs, "client.rpc('runlu_get_my_access_sources'", 'Account Overview must use authenticated access sources.');
+requireToken(overviewJs, "client.rpc('runlu_get_my_access_diagnostic'", 'Account Overview must use authenticated access diagnostics.');
+if (/\.insert\(|\.update\(|\.delete\(|\.upsert\(/.test(overviewJs)) { throw new Error('Account Overview must remain read-only.'); }
 requireToken(planJs, "Paid checkout remains disabled", 'Plan Center must preserve the paid-checkout lock copy.');
 if (/\.insert\(|\.update\(|\.delete\(|\.upsert\(/.test(planJs)) { throw new Error('Account Plan Center must remain read-only until checkout is explicitly enabled.'); }
 
@@ -80,7 +89,7 @@ if (/\.insert\(|\.update\(|\.delete\(|\.upsert\(/.test(commerceJs)) {
   throw new Error('Account commerce-history reader must remain read-only until checkout is explicitly enabled.');
 }
 
-if (/\bre_[A-Za-z0-9_\-]{20,}\b/.test(html + js + commerceJs + planJs + accessJs + diagnosticJs + css + storeCss + planCss + accessCss + diagnosticCss)) {
+if (/\bre_[A-Za-z0-9_\-]{20,}\b/.test(html + js + commerceJs + planJs + accessJs + diagnosticJs + overviewJs + css + storeCss + planCss + accessCss + diagnosticCss + overviewCss)) {
   throw new Error('A Resend-style secret appears to be embedded in public Account assets.');
 }
 
@@ -88,4 +97,4 @@ if (/href=["'][^"']*account\.html/i.test(home)) {
   throw new Error('Account pilot is linked from the public home page before launch approval.');
 }
 
-console.log('RUNLU Account pilot contract passed: auth, recovery, hardened Library, Store preview, read-only Plan/Capability/Access/Diagnostic Centers and Orders/Subscriptions history, atomic rendering, cache, privacy and private-pilot guards verified.');
+console.log('RUNLU Account pilot contract passed: auth, recovery, hardened Library, Store preview, read-only Overview/Plan/Capability/Access/Diagnostic Centers and Orders/Subscriptions history, atomic rendering, cache, privacy and private-pilot guards verified.');
