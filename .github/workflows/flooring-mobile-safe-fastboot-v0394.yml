@@ -2,6 +2,7 @@ name: Flooring Mobile Safe Fast Boot V0.3.94
 on:
   pull_request:
     paths:
+      - 'flooring/mobile-safe-fastboot-v0403j.js'
       - 'flooring/index-v071-pricing-workspace.html'
       - 'flooring/index-v0403-release.html'
       - 'flooring/mobile-safe-fastboot-v0403g.js'
