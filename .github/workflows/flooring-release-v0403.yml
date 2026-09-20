@@ -6,6 +6,8 @@ on:
       - 'flooring/index-v0403-release.html'
       - 'flooring/index-v0403-operations.html'
       - 'flooring/index-v0403-quote.html'
+      - 'flooring/index-v0403i-quote-stable-frozen.html'
+      - 'flooring/quote-dual-entry-v0403i-stable-frozen.js'
       - 'flooring/week-schedule-v0402.js'
       - 'flooring/quote-dual-entry-v0403.js'
       - 'scripts/run-flooring-week-schedule-v0402.mjs'
@@ -32,15 +34,15 @@ jobs:
           const entry=fs.readFileSync('flooring/index.html','utf8');
           const shell=fs.readFileSync('flooring/index-v0403-release.html','utf8');
           const ops=fs.readFileSync('flooring/index-v0403-operations.html','utf8');
-          const quote=fs.readFileSync('flooring/index-v0403-quote.html','utf8');
+          const quote=fs.readFileSync('flooring/index-v0403i-quote-stable-frozen.html','utf8');
           assert(entry.includes('index-v0403-release.html?prod=1&release=0403'));
           assert(entry.includes("q.has('legacy')"));
           assert(shell.includes("core:'index-v090r1-stable-frozen.html"));
           assert(shell.includes("operations:'index-v0403-operations.html"));
-          assert(shell.includes("quote:'index-v0403-quote.html"));
+          assert(shell.includes("quote:'index-v0403i-quote-stable-frozen.html"));
           assert(shell.includes('data-view="core"')&&shell.includes('data-view="operations"')&&shell.includes('data-view="quote"'));
           assert(ops.includes('week-schedule-v0402.js?v=0402'));
-          assert(quote.includes('quote-dual-entry-v0403.js?v=0403'));
-          assert(quote.includes('Database Fields')&&(quote.includes('Table Entry')||quote.includes('Quote Form Entry')));
+          assert(quote.includes('quote-dual-entry-v0403i-stable-frozen.js?v=0403i-frozen'));
+          assert(quote.includes('Database Fields')&&quote.includes('Quote Form Entry'));
           console.log('PASS unified production routing and module references');
           NODE
