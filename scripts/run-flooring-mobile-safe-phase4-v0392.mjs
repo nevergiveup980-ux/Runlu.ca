@@ -5,7 +5,7 @@ const root=new URL('../',import.meta.url);
 const read=p=>fs.readFileSync(new URL(p,root),'utf8');
 const v71=read('flooring/index-v071-pricing-workspace.html');
 const phase4=read('flooring/mobile-safe-phase4-v0403e.js');
-const fastboot=read('flooring/mobile-safe-fastboot-v0403g.js');
+const fastboot=read('flooring/mobile-safe-fastboot-v0403h.js');
 const rc=read('flooring/carpet-rc-tracking-v092-safe.js');
 const historical=read('flooring/carpet-rc-tracking-v092.js');
 const release=read('flooring/index-v0403-release.html');
@@ -23,7 +23,7 @@ test('Fast Boot registry keeps Phase 4 after Phases 1–3',()=>{
   assert(p1>0&&p2>p1&&p3>p2&&p4>p3);
 });
 test('Safe Core cache token remains compatible through Fast Boot',()=>{
-  assert(/n=s\?"mobile-safe-0403[efg]":Date\.now\(\)/.test(v71));
+  assert(/n=s\?"mobile-safe-0403[efgh]":Date\.now\(\)/.test(v71));
 });
 test('Phase 4 startup is launcher-only',()=>{
   const install=phase4.slice(phase4.indexOf('function install()'),phase4.indexOf('root.RUNLUMobileSafePhase4V0392'));
