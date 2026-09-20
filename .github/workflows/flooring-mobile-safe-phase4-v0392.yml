@@ -1,0 +1,21 @@
+name: Flooring Mobile Safe Phase 4 V0.3.92
+on:
+  pull_request:
+    paths:
+      - 'flooring/index-v071-pricing-workspace.html'
+      - 'flooring/mobile-safe-phase4-v0403e.js'
+      - 'flooring/carpet-rc-tracking-v092-safe.js'
+      - 'scripts/run-flooring-mobile-safe-phase4-v0392.mjs'
+      - '.github/workflows/flooring-mobile-safe-phase4-v0392.yml'
+  workflow_dispatch:
+jobs:
+  mobile-safe-phase4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.3.92 RC Tracking Phase 4 gate
+        run: node scripts/run-flooring-mobile-safe-phase4-v0392.mjs
