@@ -40,12 +40,16 @@ jobs:
           node --check guanshi-library.js
           node --check guanshi-vault.js
           node --check guanshi-consult.js
+          node --check guanshi-access.js
           node --check scripts/check-multilingual.mjs
+          node --check scripts/check-guanshi-access.mjs
           node --check scripts/check-account-pilot.mjs
       - name: Enforce complete four-language pages
         run: node scripts/check-multilingual.mjs
       - name: Check RUNLU Account pilot contract
         run: node scripts/check-account-pilot.mjs
+      - name: Check GUANSHI protected-page access
+        run: node scripts/check-guanshi-access.mjs
       - name: Test GUANSHI local reasoner
         run: node scripts/check-guanshi-local-reasoner.mjs
       - name: Check GUANSHI local knowledge wiring
