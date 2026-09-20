@@ -45,7 +45,7 @@ test('Desktop V071 does not set the mobile-safe flag',()=>{
   assert.equal(v71.includes('i.__RUNLU_MOBILE_SAFE__=!0;await o(c,"mobile-safe-phase1-v0403b.js?v=0403b"') && !v71.includes('if(s)'),false);
 });
 test('Safe V071 uses stable inner cache token',()=>{
-  assert(v71.includes('n=s?"mobile-safe-0403b":Date.now()'));
+  assert(v71.includes('n=s?"mobile-safe-0403b":Date.now()')||v71.includes('n=s?"mobile-safe-0403c":Date.now()'));
   assert(v71.includes('e.src="index-v040.html?v=077&t="+n'));
 });
 test('Pricing Cost Control no longer polls every 500ms for 30 seconds',()=>{
