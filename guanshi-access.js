@@ -1,7 +1,8 @@
 (() => {
 'use strict';
 const SUPABASE_URL='https://ekrnknlawekeoszzkamd.supabase.co',SUPABASE_PUBLISHABLE_KEY='sb_publishable_Jr12gnQ7UrU6Wv9xz4L1aA_bcTZiGqn',PRODUCT_KEY='guanshi';
-const root=document.documentElement;root.classList.add('runlu-access-pending');\nconst REQUIRED_CAPABILITY=root.dataset.runluCapability||'';
+const root=document.documentElement;root.classList.add('runlu-access-pending');
+const REQUIRED_CAPABILITY=root.dataset.runluCapability||'';
 const copy={
 en:{kicker:'RUNLU FORESIGHT · ACCOUNT ACCESS',checking:'Checking access…',checkingBody:'Confirming your RUNLU Account and GUANSHI access.',signin:'Sign in to continue',signinBody:'GUANSHI tools now use RUNLU Account access. Sign in, then activate the free plan if it is not already in your Library.',activate:'Activate GUANSHI Free',activateBody:'Your RUNLU Account is signed in, but GUANSHI access is not active yet. Activate the free plan in Account; no payment is required.',account:'Open RUNLU Account',home:'Back to Foresight',capability:'Feature not included',capabilityBody:'Your GUANSHI access is active, but this feature is not enabled for the current plan.',error:'Access check unavailable',errorBody:'We could not verify GUANSHI access right now. Your data has not been changed.'},
 zh:{kicker:'RUNLU 观势 · 账户权限',checking:'正在检查权限…',checkingBody:'正在确认你的 RUNLU 账户与观势使用权限。',signin:'登录后继续',signinBody:'观势工具现在使用 RUNLU Account 权限。请先登录；如果资料库里还没有观势，再免费激活即可。',activate:'免费激活 GUANSHI',activateBody:'RUNLU 账户已经登录，但观势权限尚未激活。请到 Account 免费激活，不需要付款。',account:'打开 RUNLU Account',home:'返回观势首页',capability:'当前方案未包含此功能',capabilityBody:'你的观势权限有效，但当前方案尚未启用这个功能。',error:'暂时无法检查权限',errorBody:'目前无法确认观势权限；你的任何资料都没有被改动。'},
