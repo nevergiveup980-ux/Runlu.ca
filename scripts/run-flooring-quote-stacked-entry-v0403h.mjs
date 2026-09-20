@@ -53,8 +53,8 @@ test('Stacked entry has no overflow wrapper in its own CSS path',()=>{
   assert(html.includes('.q403mobileInput{display:block'));
 });
 test('Mobile native inputs use 16px font',()=>assert(html.includes('font-size:16px')));
-test('Top-level no-iframe diagnostic is still present',()=>assert(html.includes('TOP-LEVEL iPHONE QUOTE · NO IFRAME · V0.4.03h')));
-test('Quote page requests V0.4.03h editor token',()=>assert(html.includes('quote-dual-entry-v0403.js?v=0403h')));
+test('Top-level no-iframe diagnostic is still present',()=>assert(/TOP-LEVEL iPHONE QUOTE · NO IFRAME · V0\.4\.03[hi]/.test(html)));
+test('Quote page requests V0.4.03h editor token',()=>assert(/quote-dual-entry-v0403\.js\?v=0403[hi]/.test(html)));
 
 for(const [name,ok,error] of checks)console.log((ok?'PASS':'FAIL')+'  '+name+(error?'  '+error:''));
 const failed=checks.filter(x=>!x[1]);console.log('\n'+(checks.length-failed.length)+'/'+checks.length+' checks passed.');
