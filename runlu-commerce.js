@@ -5,8 +5,15 @@
   function validCheckout(url) {
     try {
       const parsed = new URL(url);
-      const hostOk = parsed.hostname === "lemonsqueezy.com" || parsed.hostname.endsWith(".lemonsqueezy.com");
-      return parsed.protocol === "https:" && hostOk && parsed.pathname.includes("/checkout/buy/");
+      if (parsed.protocol !== "https:") return false;
+      if (cfg.provider === "stripe") {
+        return parsed.hostname === "buy.stripe.com";
+      }
+      if (cfg.provider === "lemonsqueezy") {
+        const hostOk = parsed.hostname === "lemonsqueezy.com" || parsed.hostname.endsWith(".lemonsqueezy.com");
+        return hostOk && parsed.pathname.includes("/checkout/buy/");
+      }
+      return false;
     } catch (_) {
       return false;
     }
