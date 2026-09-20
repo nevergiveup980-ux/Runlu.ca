@@ -27,7 +27,7 @@ test('Explicit lite=1 provides emergency base Core fallback',()=>{
   assert(release.includes("index-v040.html?prod=1&release=0403&mobile=lite"));
 });
 test('Mobile Core uses a stable versioned cache token rather than a new URL every reload',()=>{
-  assert(release.includes("'mobile-safe-0403a'")||release.includes("'mobile-safe-0403g'")||release.includes("'mobile-safe-0403h'"));
+  assert(release.includes("'mobile-safe-0403a'")||release.includes("'mobile-safe-0403g'")||release.includes("'mobile-safe-0403h'")||release.includes("'mobile-safe-0403j'"));
 });
 test('Safe route reduces Core nesting from four inner wrappers to two',()=>{
   assert(v90.includes("index-v078-business-cost-control.html"));

@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 const root=new URL('../',import.meta.url);
 const read=p=>fs.readFileSync(new URL(p,root),'utf8');
 const v71=read('flooring/index-v071-pricing-workspace.html');
-const fastboot=read('flooring/mobile-safe-fastboot-v0403h.js');
+const fastboot=read('flooring/mobile-safe-fastboot-v0403j.js');
 const historical=read('flooring/index-v094-fastboot.html');
 const release=read('flooring/index-v0403-release.html');
 const frozenQuote=read('flooring/quote-dual-entry-v0403i-stable-frozen.js');
@@ -14,7 +14,7 @@ function test(name,fn){try{fn();checks.push([name,true])}catch(e){checks.push([n
 
 test('Safe Fast Boot orchestrator compiles',()=>new Function(fastboot));
 test('Safe Core waits only for the tiny Fast Boot orchestrator',()=>{
-  assert(v71.includes('mobile-safe-fastboot-v0403h.js?v=0403h'));
+  assert(v71.includes('mobile-safe-fastboot-v0403j.js?v=0403j'));
   for(const src of [
     'mobile-safe-phase1-v0403b.js?v=0403b',
     'mobile-safe-phase2-v0403c.js?v=0403c',
@@ -43,7 +43,8 @@ test('Fast Boot never pulls heavy business modules at startup',()=>{
     'carpet-rc-tracking-v092-safe.js',
     'carpet-line-rc-v093-safe.js',
     'integration-hub-v079r1.js',
-    'staff-board-v083.js'
+    'staff-board-v083.js',
+    'warehouse-receipt-ack-v098-safe.js'
   ])assert.equal(fastboot.includes(banned),false,banned);
   assert(fastboot.includes('heavyBusinessModulesAtStartup:false'));
 });
@@ -58,8 +59,8 @@ test('Background launcher hydration is one-shot and failure-tolerant',()=>{
   assert(fastboot.includes("report.failed.length?'ready-with-launcher-errors':'ready'"));
 });
 test('Safe Core keeps the V0.3.94 core-first boot contract through later phases',()=>{
-  assert(/n=s\?"mobile-safe-0403[gh]":Date\.now\(\)/.test(v71));
-  assert(release.includes("mobileSafe&&v==='core'?'mobile-safe-0403g':Date.now()")||release.includes("mobileSafe&&v==='core'?'mobile-safe-0403h':Date.now()"));
+  assert(/n=s\?"mobile-safe-0403[ghj]":Date\.now\(\)/.test(v71));
+  assert(release.includes("mobileSafe&&v==='core'?'mobile-safe-0403g':Date.now()")||release.includes("mobileSafe&&v==='core'?'mobile-safe-0403h':Date.now()")||release.includes("mobileSafe&&v==='core'?'mobile-safe-0403j':Date.now()"));
 });
 test('iPhone production route still bypasses V090 and V078 wrappers',()=>{
   assert(release.includes("mobileSafe?'index-v071-pricing-workspace.html"));
