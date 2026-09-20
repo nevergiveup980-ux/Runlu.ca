@@ -26,11 +26,11 @@ test('Top-level Quote page has its own mobile navigation',()=>{
 });
 test('Top-level mode is explicit and diagnostic',()=>{
   assert(quote.includes("q.get('mobile')==='top'"));
-  assert(/TOP-LEVEL iPHONE QUOTE · NO IFRAME · V0\.4\.03[gh]/.test(quote));
+  assert(/TOP-LEVEL iPHONE QUOTE · NO IFRAME · V0\.4\.03[ghi]/.test(quote));
   assert(quote.includes("data-runlu-quote-top-level"));
 });
 test('Quote still loads the proven V0.4.03f native grid engine',()=>{
-  assert(/quote-dual-entry-v0403\.js\?v=0403[fh]/.test(quote));
+  assert(/quote-dual-entry-v0403\.js\?v=0403[fhi]/.test(quote));
 });
 test('No sandboxed iframe is introduced on the Quote page',()=>{
   assert.equal(quote.includes('<iframe'),false);
