@@ -49,7 +49,7 @@ test('Fast Boot never pulls heavy business modules at startup',()=>{
 });
 test('Launcher hydration is deferred so Core can reveal first',()=>{
   assert(fastboot.includes("const kick=()=>setTimeout(()=>start().catch(()=>{}),80)"));
-  assert(fastboot.includes("report.state='scheduled'"));
+  assert(fastboot.includes("state:'scheduled'"));
   assert(fastboot.includes("startup:'core-first-background-launchers'"));
 });
 test('Background launcher hydration is one-shot and failure-tolerant',()=>{
