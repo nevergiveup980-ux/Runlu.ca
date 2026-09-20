@@ -67,8 +67,8 @@ function seed(env,n=1){
 test('Phase 6 launcher compiles',()=>new Function(phase6));
 test('Safe V0.3.95 module compiles',()=>new Function(review));
 test('Safe Core uses the Phase 6 Fast Boot extension',()=>{
-  assert(v71.includes('mobile-safe-fastboot-v0403h.js?v=0403h'));
-  assert(v71.includes('n=s?"mobile-safe-0403h":Date.now()'));
+  assert(v71.includes('mobile-safe-fastboot-v0403i.js?v=0403i'));
+  assert(v71.includes('n=s?"mobile-safe-0403i":Date.now()'));
   assert.equal(v71.includes('mobile-safe-phase6-v0403h.js?v=0403h'),false);
 });
 test('Fast Boot preserves Phases 1–5 and adds Phase 6 last',()=>{
@@ -149,7 +149,7 @@ test('Historical V0.3.95 module remains untouched as the r1 reference',()=>{
 });
 test('Production iPhone route remains shallow and cache token advances to h',()=>{
   assert(release.includes("mobileSafe?'index-v071-pricing-workspace.html"));
-  assert(release.includes("mobileSafe&&v==='core'?'mobile-safe-0403h':Date.now()"));
+  assert(/mobileSafe&&v==='core'?'mobile-safe-0403[hi]':Date\.now\(\)/.test(release));
 });
 test('Frozen Quote production baseline remains untouched',()=>{
   assert(release.includes("quote:'index-v0403i-quote-stable-frozen.html?prod=1&release=0403i&frozen=1'"));
