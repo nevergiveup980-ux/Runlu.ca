@@ -41,8 +41,9 @@ test('Large form totals update without rebuilding focused inputs on each keystro
   assert(js.includes('function refreshPaperTotals()'));
   assert(js.includes('data-paper-sum="grandTotal"'));
   const binder=js.slice(js.indexOf('function bindPaperForm'),js.indexOf('function renderPaperForm'));
-  assert(binder.includes('refreshPaperTotals()'));
-  assert.equal(binder.includes('renderSummaryAndPreview()};'),true)
+  const lineBind=binder.slice(binder.indexOf("p.querySelectorAll('[data-q403-paper-line]')"),binder.indexOf("p.querySelectorAll('[data-q403-paper-add]')"));
+  assert(lineBind.includes('refreshPaperTotals()'));
+  assert.equal(lineBind.includes('renderSummaryAndPreview()'),false)
 });
 test('Ready rows remain six Materials and three Labour and blank rows are not saved',()=>{
   const q=A.ensureTableRows(A.normalizeQuote({}));
