@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="runlu-account-plan.css?v=2">
   <link rel="stylesheet" href="runlu-account-access.css?v=1">
   <link rel="stylesheet" href="runlu-account-diagnostic.css?v=1">
+  <link rel="stylesheet" href="runlu-account-overview.css?v=1">
 </head>
 <body>
   <header class="account-topbar">
@@ -103,6 +104,23 @@
           <button class="primary-button" type="submit" data-i18n="save_profile">Save profile</button>
         </form>
 
+        <section class="account-overview">
+          <div class="overview-head">
+            <div>
+              <h3 data-i18n="overview">Account Overview</h3>
+              <p data-i18n="overview_note">A compact live summary of your RUNLU access.</p>
+            </div>
+          </div>
+          <div id="accountOverview"></div>
+          <nav class="overview-jump" aria-label="Account sections">
+            <a href="#planCenter" data-i18n="overview_plan">Plan</a>
+            <a href="#accessCenter" data-i18n="overview_access">Access</a>
+            <a href="#accessDiagnostic" data-i18n="overview_diagnostic">Diagnostic</a>
+            <a href="#libraryList" data-i18n="overview_library">Library</a>
+            <a href="#storeList" data-i18n="overview_store">Store</a>
+          </nav>
+        </section>
+
         <div class="future-grid">
           <article class="plan-panel">
             <h3 data-i18n="plan_center">Plan Center</h3>
@@ -155,6 +173,7 @@
   <script src="runlu-account-plan.js?v=2"></script>
   <script src="runlu-account-access.js?v=1"></script>
   <script src="runlu-account-diagnostic.js?v=1"></script>
-  <!-- RUNLU Account pilot build 13 · Access Diagnostic V1 -->
+  <script src="runlu-account-overview.js?v=1"></script>
+  <!-- RUNLU Account pilot build 14 · Account Overview V1 -->
 </body>
 </html>
