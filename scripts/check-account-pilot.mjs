@@ -15,6 +15,7 @@ const overviewJs = fs.readFileSync('runlu-account-overview.js', 'utf8');
 const overviewCss = fs.readFileSync('runlu-account-overview.css', 'utf8');
 const disclosureJs = fs.readFileSync('runlu-account-disclosure.js', 'utf8');
 const disclosureCss = fs.readFileSync('runlu-account-disclosure.css', 'utf8');
+const profileCss = fs.readFileSync('runlu-account-profile.css', 'utf8');
 const home = fs.readFileSync('index.html', 'utf8');
 
 function requireToken(source, token, message) {
@@ -42,6 +43,11 @@ requireToken(html, 'runlu-account-disclosure.css?v=1', 'Account progressive-disc
 requireToken(html, 'runlu-account-disclosure.js?v=1', 'Account progressive-disclosure behavior is missing.');
 requireToken(html, '<details id="accountDetails" class="account-details">', 'Technical account details must be collapsed by default.');
 requireToken(html, 'class="account-primary-grid"', 'Library and Store must remain primary account content.');
+requireToken(html, 'runlu-account-profile.css?v=1', 'Compact Account profile CSS is missing.');
+requireToken(html, 'id="profileSummary"', 'Compact Account profile summary is missing.');
+requireToken(html, 'id="editProfileButton"', 'Profile edit control is missing.');
+requireToken(html, '<form id="profileForm" class="account-form profile-form" hidden>', 'Profile edit form must be collapsed by default.');
+requireToken(html, 'id="cancelProfileButton"', 'Profile edit cancel control is missing.');
 requireToken(html, 'id="planCenter"', 'Account Plan Center container is missing.');
 requireToken(html, 'id="libraryList"', 'Account Library container is missing.');
 requireToken(html, 'id="storeList"', 'Account Store preview container is missing.');
@@ -54,6 +60,9 @@ requireToken(js, "const ACCOUNT_RETURN_URL = 'https://runlu.ca/account.html'", '
 requireToken(js, 'resetPasswordForEmail', 'Forgot-password flow is missing.');
 requireToken(js, "event==='PASSWORD_RECOVERY'", 'Password-recovery event handling is missing.');
 requireToken(js, 'recoveryMode', 'Recovery-mode state guard is missing.');
+requireToken(js, 'syncProfileSummary', 'Compact profile summary synchronization is missing.');
+requireToken(js, 'setProfileEditing(false)', 'Profile edit mode must return to the compact summary.');
+requireToken(js, "editProfileButton.addEventListener('click'", 'Profile summary edit action is missing.');
 requireToken(js, 'updateUser({password:el.newPassword.value})', 'Password update flow is missing.');
 requireToken(js, 'signInWithPassword', 'Password sign-in flow is missing.');
 requireToken(js, 'signUp', 'Account creation flow is missing.');
@@ -96,7 +105,7 @@ if (/\.insert\(|\.update\(|\.delete\(|\.upsert\(/.test(commerceJs)) {
   throw new Error('Account commerce-history reader must remain read-only until checkout is explicitly enabled.');
 }
 
-if (/\bre_[A-Za-z0-9_\-]{20,}\b/.test(html + js + commerceJs + planJs + accessJs + diagnosticJs + overviewJs + disclosureJs + css + storeCss + planCss + accessCss + diagnosticCss + overviewCss + disclosureCss)) {
+if (/\bre_[A-Za-z0-9_\-]{20,}\b/.test(html + js + commerceJs + planJs + accessJs + diagnosticJs + overviewJs + disclosureJs + css + storeCss + planCss + accessCss + diagnosticCss + overviewCss + disclosureCss + profileCss)) {
   throw new Error('A Resend-style secret appears to be embedded in public Account assets.');
 }
 
@@ -104,4 +113,4 @@ if (/href=["'][^"']*account\.html/i.test(home)) {
   throw new Error('Account pilot is linked from the public home page before launch approval.');
 }
 
-console.log('RUNLU Account pilot contract passed: auth, recovery, hardened Library, Store preview, progressive disclosure and read-only Overview/Plan/Capability/Access/Diagnostic Centers and Orders/Subscriptions history, atomic rendering, cache, privacy and private-pilot guards verified.');
+console.log('RUNLU Account pilot contract passed: auth, recovery, hardened Library, Store preview, compact profile, progressive disclosure and read-only Overview/Plan/Capability/Access/Diagnostic Centers and Orders/Subscriptions history, atomic rendering, cache, privacy and private-pilot guards verified.');
