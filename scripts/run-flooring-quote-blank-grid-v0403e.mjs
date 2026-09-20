@@ -57,7 +57,7 @@ test('Saving strips untouched UI rows before writing Job quote',()=>{
   assert(js.slice(i,j).includes('const clean=stripBlankUILines(draft)'))
 });
 test('Page requests V0.4.03e script token',()=>{
-  assert(/quote-dual-entry-v0403\.js\?v=0403[efh]/.test(html))
+  assert(/quote-dual-entry-v0403\.js\?v=0403[efhi]/.test(html))
 });
 
 for(const [name,ok,error] of checks)console.log((ok?'PASS':'FAIL')+'  '+name+(error?'  '+error:''));
