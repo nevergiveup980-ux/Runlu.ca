@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="runlu-account-access.css?v=1">
   <link rel="stylesheet" href="runlu-account-diagnostic.css?v=1">
   <link rel="stylesheet" href="runlu-account-overview.css?v=1">
+  <link rel="stylesheet" href="runlu-account-disclosure.css?v=1">
 </head>
 <body>
   <header class="account-topbar">
@@ -121,7 +122,23 @@
           </nav>
         </section>
 
-        <div class="future-grid">
+        <div class="account-primary-grid">
+          <article class="library-panel">
+            <h3 data-i18n="library">Library</h3>
+            <p data-i18n="library_note">Products explicitly linked to this account appear here. Apple-managed purchases are not imported.</p>
+            <div id="libraryList" class="library-list"></div>
+          </article>
+          <article class="store-panel">
+            <h3 data-i18n="store">Store preview</h3>
+            <p data-i18n="store_note">No checkout is active in this pilot. Free plans can be opened; paid plans remain clearly marked until checkout is ready.</p>
+            <div id="storeList" class="store-list"></div>
+          </article>
+        </div>
+
+        <details id="accountDetails" class="account-details">
+          <summary data-i18n="account_details">Account details</summary>
+          <div class="account-details-body">
+            <div class="future-grid">
           <article class="plan-panel">
             <h3 data-i18n="plan_center">Plan Center</h3>
             <p data-i18n="plan_center_note">Your current GUANSHI plan, access period, cloud AI allowance and included capabilities appear here. Paid checkout remains disabled.</p>
@@ -137,18 +154,6 @@
             <p data-i18n="access_diagnostic_note">A read-only health check of the GUANSHI access chain: account, product access, plan, capability and usage limit.</p>
             <div id="accessDiagnostic" class="diagnostic-center"></div>
           </article>
-          <article class="library-panel">
-            <h3 data-i18n="library">Library</h3>
-            <p data-i18n="library_note">Products explicitly linked to this account appear here. Apple-managed purchases are not imported.</p>
-            <div id="libraryList" class="library-list"></div>
-          </article>
-
-          <article class="store-panel">
-            <h3 data-i18n="store">Store preview</h3>
-            <p data-i18n="store_note">No checkout is active in this pilot. Free plans can be opened; paid plans remain clearly marked until checkout is ready.</p>
-            <div id="storeList" class="store-list"></div>
-          </article>
-
           <article>
             <h3 data-i18n="orders">Orders</h3>
             <p data-i18n="orders_note">RUNLU-direct orders will appear here when real checkout is enabled. No sample orders are created.</p>
@@ -159,7 +164,9 @@
             <p data-i18n="subscriptions_note">RUNLU-direct subscriptions will appear here when activated. Apple-managed purchases remain with Apple.</p>
             <div id="subscriptionsList" class="library-list"></div>
           </article>
-        </div>
+            </div>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -174,6 +181,6 @@
   <script src="runlu-account-access.js?v=1"></script>
   <script src="runlu-account-diagnostic.js?v=1"></script>
   <script src="runlu-account-overview.js?v=1"></script>
-  <!-- RUNLU Account pilot build 14 · Account Overview V1 -->
+  <!-- RUNLU Account pilot build 15 · Progressive Disclosure V1 -->
 </body>
 </html>
