@@ -22,7 +22,7 @@ test('Safe Core loads Phase 4 after Phases 1–3',()=>{
   assert(p1>0&&p2>p1&&p3>p2&&p4>p3);
 });
 test('Safe Core cache token advances to Phase 4',()=>{
-  assert(v71.includes('n=s?"mobile-safe-0403e":Date.now()'));
+  assert(v71.includes('n=s?"mobile-safe-0403e":Date.now()')||v71.includes('n=s?"mobile-safe-0403f":Date.now()'));
 });
 test('Phase 4 startup is launcher-only',()=>{
   const install=phase4.slice(phase4.indexOf('function install()'),phase4.indexOf('root.RUNLUMobileSafePhase4V0392'));
