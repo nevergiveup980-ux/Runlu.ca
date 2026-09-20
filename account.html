@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="runlu-account-store.css?v=2">
   <link rel="stylesheet" href="runlu-account-plan.css?v=2">
   <link rel="stylesheet" href="runlu-account-access.css?v=1">
+  <link rel="stylesheet" href="runlu-account-diagnostic.css?v=1">
 </head>
 <body>
   <header class="account-topbar">
@@ -113,6 +114,11 @@
             <p data-i18n="access_center_note">See which RUNLU products this account can use and the active source of that access. This is read-only.</p>
             <div id="accessCenter" class="access-center"></div>
           </article>
+          <article class="diagnostic-panel">
+            <h3 data-i18n="access_diagnostic">Access Diagnostic</h3>
+            <p data-i18n="access_diagnostic_note">A read-only health check of the GUANSHI access chain: account, product access, plan, capability and usage limit.</p>
+            <div id="accessDiagnostic" class="diagnostic-center"></div>
+          </article>
           <article class="library-panel">
             <h3 data-i18n="library">Library</h3>
             <p data-i18n="library_note">Products explicitly linked to this account appear here. Apple-managed purchases are not imported.</p>
@@ -148,6 +154,7 @@
   <script src="runlu-account-commerce.js?v=1"></script>
   <script src="runlu-account-plan.js?v=2"></script>
   <script src="runlu-account-access.js?v=1"></script>
-  <!-- RUNLU Account pilot build 12 · Access Center V1 -->
+  <script src="runlu-account-diagnostic.js?v=1"></script>
+  <!-- RUNLU Account pilot build 13 · Access Diagnostic V1 -->
 </body>
 </html>
