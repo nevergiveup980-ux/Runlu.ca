@@ -1,4 +1,4 @@
-/* RUNLU Deerfoot Flooring OS · V0.4.03h iPhone Stacked Native Entry Hotfix */
+/* RUNLU Deerfoot Flooring OS · V0.4.03i Direct Quote Form Entry */
 (function(root){
 'use strict';
 const VERSION='0.4.03';
@@ -118,6 +118,7 @@ if(typeof document==='undefined')return;
 let jobs=[],activeId='',draft=normalizeQuote(),mode='fields',dirty=false;
 const by=id=>document.getElementById(id);
 const touchIOS=(()=>{const ua=navigator.userAgent||'';return /iPhone|iPad|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)})();
+if(touchIOS)mode='table';
 function editValue(el){return el?.isContentEditable?(el.textContent||'').replace(/\u00a0/g,' ').trim():el?.value}
 function selectCellText(el){
   try{
@@ -274,11 +275,71 @@ function bindInputs(scope){
   });
   scope.querySelectorAll('[data-q403-remove]').forEach(x=>x.onclick=()=>{draft=removeLine(draft,x.dataset.q403Remove,x.dataset.id);markDirty();renderEditor();renderSummaryAndPreview()});
 }
-function renderEditor(){by('q403fields').hidden=mode!=='fields';by('q403table').hidden=mode!=='table';if(mode==='fields')renderFields();else renderTable();document.querySelectorAll('[data-q403-mode]').forEach(b=>b.classList.toggle('active',b.dataset.q403Mode===mode))}
+function renderEditor(){
+  const fields=by('q403fields'),table=by('q403table');
+  if(fields)fields.hidden=mode!=='fields';
+  if(table)table.hidden=mode!=='table';
+  if(mode==='fields')renderFields();
+  else if(table)table.innerHTML='<div class="q403tableHint q403formHint"><b>Quote Form Entry active · V0.4.03i.</b> Enter directly in the large Deerfoot Quote form below. Database Fields and Quote Form Entry are the same draft; there are no separate card-entry records.</div>';
+  document.querySelectorAll('[data-q403-mode]').forEach(b=>b.classList.toggle('active',b.dataset.q403Mode===mode))
+}
 function quoteRows(xs){return (Array.isArray(xs)?xs:[]).filter(meaningfulLine).map(x=>`<tr><td>${esc(x.description||'—')}${x.note?'<small>'+esc(x.note)+'</small>':''}</td><td>${x.qty||''}</td><td>${esc(x.unit)}</td><td>${x.listPrice?money(x.listPrice):''}</td><td>${money(x.unitPrice)}</td><td>${money(lineTotal(x))}</td></tr>`).join('')}
-function renderSummaryAndPreview(){
-  const c=calcQuote(draft),sum=by('q403summary');if(sum)sum.innerHTML=`<div><small>Materials</small><b>${money(c.materials)}</b></div><div><small>Installation / Labour</small><b>${money(c.labour)}</b></div><div><small>Subtotal</small><b>${money(c.subtotal)}</b></div><div><small>GST</small><b>${money(c.gst)}</b></div><div class="grand"><small>Grand Total</small><b>${money(c.grandTotal)}</b></div>`;
-  const p=by('q403preview');if(!p)return;
+function renderSummary(){
+  const c=calcQuote(draft),sum=by('q403summary');if(sum)sum.innerHTML=`<div><small>Materials</small><b>${money(c.materials)}</b></div><div><small>Installation / Labour</small><b>${money(c.labour)}</b></div><div><small>Subtotal</small><b>${money(c.subtotal)}</b></div><div><small>GST</small><b>${money(c.gst)}</b></div><div class="grand"><small>Grand Total</small><b>${money(c.grandTotal)}</b></div>`
+}
+function paperValue(v){return attr(v==null?'':v)}
+function paperField(label,key,value,kind='text',placeholder=''){
+  const numeric=kind==='number';
+  return `<label class="q403paperField"><span>${esc(label)}</span><input data-q403-paper-field="${key}" type="${kind==='date'?'date':'text'}" ${numeric?'inputmode="decimal"':''} value="${paperValue(value)}" placeholder="${attr(placeholder)}"></label>`
+}
+function paperLineField(group,x,key,label,value,kind='text',placeholder=''){
+  const numeric=kind==='number',uiBlank=String(x?.id||'').startsWith('ui-')&&!meaningfulLine(x),v=(numeric&&uiBlank&&num(value)===0)?'':(value==null?'':value);
+  return `<label class="q403paperLineField ${key==='description'||key==='note'?'wide':''}"><span>${esc(label)}</span><input data-q403-paper-line="${group}" data-id="${attr(x.id)}" data-key="${key}" type="text" ${numeric?'inputmode="decimal"':''} enterkeyhint="next" value="${paperValue(v)}" placeholder="${attr(placeholder)}"></label>`
+}
+function paperLineRows(group,title){
+  const xs=lineGroup(draft,group);
+  return `<section class="q403paperEditSection" data-paper-group="${group}"><div class="q403paperEditHead"><h4>${title}</h4><button type="button" data-q403-paper-add="${group}">+ Row</button></div><div class="q403paperRows">${xs.map((x,i)=>`<article class="q403paperRow" data-paper-row="${attr(x.id)}"><div class="q403paperRowTop"><b>${i+1}</b><span data-q403-paper-total="${attr(x.id)}">${money(lineTotal(x))}</span><button type="button" data-q403-paper-remove="${group}" data-id="${attr(x.id)}" aria-label="Remove row">×</button></div><div class="q403paperRowFields">${paperLineField(group,x,'description','Description',x.description,'text','Product / service')}${paperLineField(group,x,'qty','Qty',x.qty,'number','0')}${paperLineField(group,x,'unit','Unit',x.unit,'text','sf / sy / ea')}${paperLineField(group,x,'listPrice','List Price',x.listPrice,'number','0.00')}${paperLineField(group,x,'unitPrice','Quote Price',x.unitPrice,'number','0.00')}${paperLineField(group,x,'note','Note',x.note,'text','Optional note')}</div></article>`).join('')}</div></section>`
+}
+function refreshPaperTotals(){
+  const p=by('q403preview'),c=calcQuote(draft);renderSummary();if(!p)return;
+  for(const group of ['materials','labour'])lineGroup(draft,group).forEach(x=>{const el=p.querySelector('[data-q403-paper-total="'+CSS.escape(x.id)+'"]');if(el)el.textContent=money(lineTotal(x))});
+  const vals={materials:c.materials,labour:c.labour,subtotal:c.subtotal,gst:c.gst,grandTotal:c.grandTotal};
+  Object.entries(vals).forEach(([k,v])=>{const el=p.querySelector('[data-paper-sum="'+k+'"]');if(el)el.textContent=money(v)});
+  const gstLabel=p.querySelector('[data-paper-gst-label]');if(gstLabel)gstLabel.textContent='GST '+round2(draft.gstRate*100)+'%'
+}
+function bindPaperForm(p){
+  p.querySelectorAll('[data-q403-paper-field]').forEach(x=>{
+    x.oninput=()=>{draft=setQuoteField(draft,x.dataset.q403PaperField,x.type==='checkbox'?x.checked:x.value);markDirty();refreshPaperTotals()};
+    x.onfocus=()=>x.closest('.q403paperField')?.classList.add('editing');
+    x.onblur=()=>x.closest('.q403paperField')?.classList.remove('editing')
+  });
+  p.querySelectorAll('[data-q403-paper-line]').forEach(x=>{
+    const update=()=>{draft=updateLine(draft,x.dataset.q403PaperLine,x.dataset.id,x.dataset.key,x.value);markDirty();refreshPaperTotals()};
+    x.oninput=update;
+    x.onfocus=()=>{x.closest('.q403paperLineField')?.classList.add('editing');if(x.inputMode==='decimal'&&(x.value==='0'||x.value==='0.00'))setTimeout(()=>selectCellText(x),0)};
+    x.onblur=()=>{x.closest('.q403paperLineField')?.classList.remove('editing');update()};
+    x.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();const cells=[...p.querySelectorAll('[data-q403-paper-line]')],i=cells.indexOf(x),n=cells[i+1];n?.focus();n?.scrollIntoView({block:'center',inline:'nearest'})}}
+  });
+  p.querySelectorAll('[data-q403-paper-add]').forEach(btn=>btn.onclick=()=>{const group=btn.dataset.q403PaperAdd;draft=stripBlankUILines(draft);draft=addLine(draft,group);draft=ensureTableRows(draft);markDirty();renderSummaryAndPreview();const xs=lineGroup(draft,group),added=xs.at(-1),target=by('q403preview')?.querySelector('[data-q403-paper-line="'+group+'"][data-id="'+CSS.escape(added.id)+'"][data-key="description"]');target?.focus();target?.scrollIntoView({block:'center'})});
+  p.querySelectorAll('[data-q403-paper-remove]').forEach(btn=>btn.onclick=()=>{draft=removeLine(draft,btn.dataset.q403PaperRemove,btn.dataset.id);draft=ensureTableRows(draft);markDirty();renderSummaryAndPreview()});
+  const dep=p.querySelector('[data-q403-paper-check="depositRequired"]');if(dep){dep.checked=!!draft.depositRequired;dep.onchange=()=>{draft=setQuoteField(draft,'depositRequired',dep.checked);markDirty()}}
+  const ful=p.querySelector('[data-q403-paper-select="fulfillment"]');if(ful){ful.value=draft.fulfillment;ful.onchange=()=>{draft=setQuoteField(draft,'fulfillment',ful.value);markDirty()}}
+  const notes=p.querySelector('[data-q403-paper-notes]');if(notes){notes.oninput=()=>{draft=setQuoteField(draft,'notes',notes.value);markDirty()}}
+}
+function renderPaperForm(){
+  const p=by('q403preview');if(!p)return;draft=ensureTableRows(draft);const c=calcQuote(draft);
+  p.classList.add('q403paperEditing');
+  p.innerHTML=`<div class="q403paperEditFlag">EDITING THE ACTUAL QUOTE · V0.4.03i</div>
+    <div class="q403paperHead"><div><div class="dc">DC</div><p><b>Deerfoot Carpet & Flooring Inc.</b><br>6170 12ST SE<br>Calgary, AB T2H2X2<br>403-255-5880</p></div><div class="quoteWord">QUOTE<small>Direct Form Entry</small></div></div>
+    <div class="q403paperHeaderFields">${paperField('Salesperson','salesperson',draft.salesperson)}${paperField('Quote #','quoteNumber',draft.quoteNumber)}${paperField('Quote Date','quoteDate',draft.quoteDate,'date')}</div>
+    <div class="q403quoteMeta q403paperMetaEdit"><div><span>CUSTOMER</span>${paperField('Customer','customerName',draft.customerName)}${paperField('Address','projectAddress',draft.projectAddress)}</div><div><span>QUOTE DETAILS</span>${paperField('Project / Product','projectName',draft.projectName)}${paperField('Installer','installer',draft.installer)}<label class="q403paperField"><span>Fulfillment</span><select data-q403-paper-select="fulfillment"><option value="">—</option><option value="Pickup">Pickup</option><option value="Delivery">Delivery</option></select></label></div></div>
+    ${paperLineRows('materials','Materials')}${paperLineRows('labour','Installation / Labour')}
+    <div class="q403printTotals q403paperLiveTotals"><div>Materials <b data-paper-sum="materials">${money(c.materials)}</b></div><div>Installation / Labour <b data-paper-sum="labour">${money(c.labour)}</b></div><div>Subtotal <b data-paper-sum="subtotal">${money(c.subtotal)}</b></div><div><span data-paper-gst-label>GST ${round2(draft.gstRate*100)}%</span><b data-paper-sum="gst">${money(c.gst)}</b></div><div class="gt">Grand Total <b data-paper-sum="grandTotal">${money(c.grandTotal)}</b></div></div>
+    <div class="q403notes q403paperNotesEdit"><b>Notes / Terms</b><textarea data-q403-paper-notes placeholder="Quote notes / terms">${esc(draft.notes||'')}</textarea><div class="q403paperTerms">${paperField('Valid Days','validDays',draft.validDays,'number')}<label class="q403paperCheck"><input type="checkbox" data-q403-paper-check="depositRequired"><span>Deposit Required</span></label></div></div>`;
+  bindPaperForm(p)
+}
+function renderReadOnlyPreview(){
+  const p=by('q403preview');if(!p)return;const c=calcQuote(draft);p.classList.remove('q403paperEditing');
   p.innerHTML=`<div class="q403paperHead"><div><div class="dc">DC</div><p><b>Deerfoot Carpet & Flooring Inc.</b><br>6170 12ST SE<br>Calgary, AB T2H2X2<br>403-255-5880</p></div><div class="quoteWord">QUOTE<small>Generated ${esc(draft.quoteDate||today())}</small></div></div>
     <div class="q403sales">Salesperson: <b>${esc(draft.salesperson||'—')}</b></div>
     <div class="q403quoteMeta"><div><span>CUSTOMER</span><b>${esc(draft.customerName||'—')}</b><small>${esc(draft.projectAddress||'')}</small></div><div><span>QUOTE DETAILS</span><b>${esc(draft.projectName||draft.quoteNumber||'—')}</b><small>Date: ${esc(draft.quoteDate||'—')} · Installer: ${esc(draft.installer||'—')}</small></div></div>
@@ -288,10 +349,19 @@ function renderSummaryAndPreview(){
     <div class="q403printTotals"><div>Materials <b>${money(c.materials)}</b></div><div>Installation / Labour <b>${money(c.labour)}</b></div><div>Subtotal <b>${money(c.subtotal)}</b></div><div>GST ${round2(draft.gstRate*100)}% <b>${money(c.gst)}</b></div><div class="gt">Grand Total <b>${money(c.grandTotal)}</b></div></div>
     <div class="q403notes"><b>Notes</b><p>${esc(draft.notes||'—')}</p><small>Pricing valid for ${draft.validDays} days unless otherwise noted. ${draft.depositRequired?'A deposit is required to order material and secure installation dates.':'Deposit requirement not marked.'}</small></div>`
 }
+function renderSummaryAndPreview(){renderSummary();if(mode==='table')renderPaperForm();else renderReadOnlyPreview()}
+let restorePaperAfterPrint=false;
+function printQuote(){
+  restorePaperAfterPrint=mode==='table';
+  if(restorePaperAfterPrint)renderReadOnlyPreview();
+  window.print()
+}
+window.addEventListener('afterprint',()=>{if(restorePaperAfterPrint){restorePaperAfterPrint=false;renderPaperForm()}});
+
 function renderAll(){renderJobPicker();renderEditor();renderSummaryAndPreview();const btn=by('q403save'),j=activeJob();if(btn)btn.disabled=!canWriteJob(j);const d=by('q403dirty');if(d)d.textContent=dirty?'Unsaved changes':(j&&j.quote?'Saved quote loaded':'Draft not saved')}
 function bind(){
-  by('q403new').onclick=newQuoteJob;by('q403save').onclick=saveQuote;by('q403print').onclick=()=>window.print();
-  document.querySelectorAll('[data-q403-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.q403Mode;if(mode==='fields')draft=stripBlankUILines(draft);renderEditor();renderSummaryAndPreview();if(mode==='table'){const first=by('q403table')?.querySelector('[data-key="description"]');setTimeout(()=>first?.scrollIntoView({block:'nearest',inline:'start'}),0)}});
+  by('q403new').onclick=newQuoteJob;by('q403save').onclick=saveQuote;by('q403print').onclick=printQuote;by('q403print2')&&(by('q403print2').onclick=printQuote);
+  document.querySelectorAll('[data-q403-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.q403Mode;if(mode==='fields')draft=stripBlankUILines(draft);else draft=ensureTableRows(draft);renderEditor();renderSummaryAndPreview();if(mode==='table')setTimeout(()=>by('q403preview')?.scrollIntoView({block:'start'}),0)});
 }
 function boot(){bind();load()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
