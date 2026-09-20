@@ -5,7 +5,7 @@ const root=new URL('../',import.meta.url);
 const read=p=>fs.readFileSync(new URL(p,root),'utf8');
 const v71=read('flooring/index-v071-pricing-workspace.html');
 const router=read('flooring/mobile-safe-phase1-v0403b.js');
-const fastboot=read('flooring/mobile-safe-fastboot-v0403g.js');
+const fastboot=read('flooring/mobile-safe-fastboot-v0403h.js');
 const pricing=read('flooring/pricing-cost-control-v078.js');
 const management=read('flooring/management-review-v080.js');
 const history=read('flooring/po-history-v085.js');
@@ -39,15 +39,15 @@ test('Purchasing opens PO History on demand',()=>{
 });
 test('Safe Core receives Phase 1 through the Fast Boot background launcher registry',()=>{
   assert(v71.includes('new URLSearchParams(location.search).get("mobile")==="safe"'));
-  assert(v71.includes('mobile-safe-fastboot-v0403g.js?v=0403g'));
+  assert(v71.includes('mobile-safe-fastboot-v0403h.js?v=0403h'));
   assert(fastboot.includes("mobile-safe-phase1-v0403b.js?v=0403b"));
 });
 test('Desktop V071 does not set the mobile-safe flag',()=>{
   assert(v71.includes('if(s){i.__RUNLU_MOBILE_SAFE__=!0'));
-  assert.equal(v71.includes('i.__RUNLU_MOBILE_SAFE__=!0;await o(c,"mobile-safe-fastboot-v0403g.js?v=0403g"') && !v71.includes('if(s)'),false);
+  assert.equal(v71.includes('i.__RUNLU_MOBILE_SAFE__=!0;await o(c,"mobile-safe-fastboot-v0403h.js?v=0403h"') && !v71.includes('if(s)'),false);
 });
 test('Safe V071 uses stable inner cache token',()=>{
-  assert(/n=s\?"mobile-safe-0403[bcdefg]":Date\.now\(\)/.test(v71));
+  assert(/n=s\?"mobile-safe-0403[bcdefgh]":Date\.now\(\)/.test(v71));
   assert(v71.includes('e.src="index-v040.html?v=077&t="+n'));
 });
 test('Pricing Cost Control no longer polls every 500ms for 30 seconds',()=>{
