@@ -22,7 +22,7 @@ test('iPhone detection activates native cell path',()=>{
 test('iPhone entry path remains directly editable with native focusable controls',()=>{
   assert(js.includes('data-q403-line='));
   assert(js.includes('enterkeyhint="next"'));
-  assert(js.includes('q403iosInput')||js.includes('contenteditable="true"'));
+  assert(js.includes('q403iosInput')||js.includes('contenteditable="true"')||js.includes('q403mobileInput'));
 });
 
 test('Numeric native cells request decimal keyboard',()=>{
@@ -31,7 +31,7 @@ test('Numeric native cells request decimal keyboard',()=>{
 });
 
 test('iPhone editor preserves native Safari tap-to-keyboard behavior',()=>{
-  assert(js.includes('q403iosInput')||js.includes('contenteditable="true"'));
+  assert(js.includes('q403iosInput')||js.includes('contenteditable="true"')||js.includes('q403mobileInput'));
   assert.equal(js.includes("x.addEventListener('touchend'"),false);
   assert.equal(js.includes('e.preventDefault();x.focus'),false);
 });
@@ -48,7 +48,7 @@ test('Enter advances between native cells',()=>{
 });
 
 test('iPhone hint exposes active native editor for real-device verification',()=>{
-  assert(js.includes('iPhone Grid Entry active')||js.includes('iPhone Native Cell Editor active.'));
+  assert(js.includes('iPhone Grid Entry active')||js.includes('iPhone Native Cell Editor active.')||js.includes('iPhone Stacked Entry active'));
 });
 
 test('Scrollable wrapper no longer uses iOS momentum-scroller mode',()=>{
@@ -68,7 +68,7 @@ test('Native mobile sheet removes sticky Description interference',()=>{
 });
 
 test('Page requests V0.4.03d script token',()=>{
-  assert(html.includes('quote-dual-entry-v0403.js?v=0403f')||/quote-dual-entry-v0403\.js\?v=0403[de]/.test(html));
+  assert(/quote-dual-entry-v0403\.js\?v=0403[defh]/.test(html));
 });
 
 for(const [name,ok,error] of checks)console.log((ok?'PASS':'FAIL')+'  '+name+(error?'  '+error:''));

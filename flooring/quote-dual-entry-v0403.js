@@ -1,4 +1,4 @@
-/* RUNLU Deerfoot Flooring OS · V0.4.03f iPhone Grid Entry Hotfix */
+/* RUNLU Deerfoot Flooring OS · V0.4.03h iPhone Stacked Native Entry Hotfix */
 (function(root){
 'use strict';
 const VERSION='0.4.03';
@@ -208,14 +208,36 @@ function iosGridGroup(group,title){
     </div>
   </section>`
 }
+function iosStackCell(group,x,key,label,value,kind='text',placeholder=''){
+  const numeric=kind==='number',uiBlank=String(x?.id||'').startsWith('ui-')&&!meaningfulLine(x),v=(numeric&&uiBlank&&num(value)===0)?'':(value==null?'':String(value));
+  return `<label class="q403mobileField ${key==='description'||key==='note'?'wide':''}"><span>${esc(label)}</span><input class="q403mobileInput ${numeric?'q403iosNum':''}" data-q403-line="${group}" data-id="${attr(x.id)}" data-key="${key}" type="text" ${numeric?'inputmode="decimal"':''} enterkeyhint="next" autocomplete="off" autocapitalize="${numeric?'off':'sentences'}" spellcheck="${numeric?'false':'true'}" value="${attr(v)}" placeholder="${attr(placeholder)}"></label>`
+}
+function iosStackGroup(group,title){
+  const xs=lineGroup(draft,group);
+  return `<section class="q403tableBlock q403stackBlock" data-q403-group="${group}">
+    <div class="q403sectHead"><h3>${title}</h3><button type="button" data-q403-add="${group}">+ Row</button></div>
+    <div class="q403stackRows">
+      ${xs.map((x,i)=>`<article class="q403stackRow" data-q403-row="${attr(x.id)}">
+        <div class="q403stackRowHead"><b>Row ${i+1}</b><span data-q403-total="${attr(x.id)}">${money(lineTotal(x))}</span><button type="button" class="danger" data-q403-remove="${group}" data-id="${attr(x.id)}" aria-label="Remove row">×</button></div>
+        <div class="q403stackFields">
+          ${iosStackCell(group,x,'description','Description',x.description,'text','Product / service')}
+          ${iosStackCell(group,x,'qty','Qty',x.qty,'number','0')}
+          ${iosStackCell(group,x,'unit','Unit',x.unit,'text','sf / sy / ea')}
+          ${iosStackCell(group,x,'listPrice','List Price',x.listPrice,'number','0.00')}
+          ${iosStackCell(group,x,'unitPrice','Quote Price',x.unitPrice,'number','0.00')}
+          ${iosStackCell(group,x,'note','Note',x.note,'text','Optional note')}
+        </div>
+      </article>`).join('')}
+    </div>
+  </section>`
+}
 function renderTable(){
   const el=by('q403table');if(!el)return;
   try{
     draft=ensureTableRows(draft);
     if(touchIOS){
-      el.innerHTML='<div class="q403tableHint q403iosHint"><b>iPhone Grid Entry active · V0.4.03f.</b> These are native iPhone inputs in a CSS grid, not HTML table cells. Tap Description / Qty / Unit / Price directly; swipe the blank space or header sideways for later columns.</div>'+iosGridGroup('materials','Materials')+iosGridGroup('labour','Installation / Labour');
+      el.innerHTML='<div class="q403tableHint q403stackHint"><b>iPhone Stacked Entry active · V0.4.03h.</b> Each quote row is now a plain native form with no table, no CSS grid, no horizontal scroller and no iframe dependency. Tap any field directly.</div>'+iosStackGroup('materials','Materials')+iosStackGroup('labour','Installation / Labour');
       bindInputs(el);
-      el.querySelectorAll('.q403iosWrap').forEach(w=>{w.scrollLeft=0});
       return
     }
     el.innerHTML='<div class="q403tableHint"><b>Table Entry is editable.</b> The blank rows below are live cells. Click any cell and type; use + Row only when you need more rows.</div>'+tableGroup('materials','Materials')+tableGroup('labour','Installation / Labour');
@@ -231,16 +253,17 @@ function tableGroup(group,title){
   return `<section class="q403tableBlock" data-q403-group="${group}"><div class="q403sectHead"><h3>${title}</h3><button type="button" data-q403-add="${group}">+ Row</button></div><div class="q403tableWrap"><table class="q403sheet ${touchIOS?'q403nativeSheet':''}"><colgroup><col class="c-num"><col class="c-desc"><col class="c-qty"><col class="c-unit"><col class="c-price"><col class="c-price"><col class="c-total"><col class="c-note"><col class="c-remove"></colgroup><thead><tr><th class="sticky-num">#</th><th class="${descHead}">Description</th><th>Qty</th><th>Unit</th><th>List Price</th><th>Quote Price</th><th>Total</th><th>Note</th><th></th></tr></thead><tbody>${xs.length?xs.map((x,i)=>`<tr data-q403-row="${attr(x.id)}"><td class="sticky-num rowno">${i+1}</td>${sheetEditCell(group,x,'description',x.description,'text','Product / service')}${sheetEditCell(group,x,'qty',x.qty,'number','0')}${sheetEditCell(group,x,'unit',x.unit,'text','sf / sy / ea')}${sheetEditCell(group,x,'listPrice',x.listPrice,'number','0')}${sheetEditCell(group,x,'unitPrice',x.unitPrice,'number','0')}<td class="money q403calc" data-q403-total="${attr(x.id)}">${money(lineTotal(x))}</td>${sheetEditCell(group,x,'note',x.note,'text','Optional note')}<td><button type="button" class="danger" data-q403-remove="${group}" data-id="${attr(x.id)}" aria-label="Remove row">×</button></td></tr>`).join(''):'<tr><td colspan="9" class="q403empty">No rows yet. Tap + Row to start entering directly in the table.</td></tr>'}</tbody></table></div></section>`
 }
 function focusNextCell(input){
-  const cells=[...input.closest('table')?.querySelectorAll('[data-q403-line]')||[]],i=cells.indexOf(input);if(i<0)return;
-  const next=cells[i+1];if(next){next.focus({preventScroll:true});selectCellText(next);next.scrollIntoView({block:'nearest',inline:'nearest'})}
+  const root=by('q403table')||input.closest('section')||document;
+  const cells=[...root.querySelectorAll('[data-q403-line]')],i=cells.indexOf(input);if(i<0)return;
+  const next=cells[i+1];if(next){next.focus();selectCellText(next);next.scrollIntoView({block:'center',inline:'nearest'})}
 }
 function bindInputs(scope){
   scope.querySelectorAll('[data-q403-field]').forEach(x=>x.oninput=()=>{draft=setQuoteField(draft,x.dataset.q403Field,x.type==='checkbox'?x.checked:x.value);markDirty();renderSummaryAndPreview()});
   scope.querySelectorAll('[data-q403-line]').forEach(x=>{
     const update=()=>{draft=updateLine(draft,x.dataset.q403Line,x.dataset.id,x.dataset.key,editValue(x));markDirty();const line=lineGroup(draft,x.dataset.q403Line).find(v=>v.id===x.dataset.id),total=scope.querySelector('[data-q403-total="'+CSS.escape(x.dataset.id)+'"]');if(total&&line){const v=money(lineTotal(line));if(total.tagName==='INPUT')total.value=v;else total.textContent=v}renderSummaryAndPreview()};
     x.oninput=update;
-    x.onfocus=()=>{x.closest('td')?.classList.add('editing');const v=editValue(x);if((x.classList.contains('q403num')||x.classList.contains('q403numCell')||x.classList.contains('q403iosNum'))&&(v==='0'||v==='0.00'))setTimeout(()=>selectCellText(x),0)};
-    x.onblur=()=>{x.closest('td')?.classList.remove('editing');if(x.isContentEditable&&x.dataset.placeholder&&!editValue(x))x.innerHTML='';update()};
+    x.onfocus=()=>{x.closest('td')?.classList.add('editing');x.closest('.q403mobileField')?.classList.add('editing');const v=editValue(x);if((x.classList.contains('q403num')||x.classList.contains('q403numCell')||x.classList.contains('q403iosNum'))&&(v==='0'||v==='0.00'))setTimeout(()=>selectCellText(x),0)};
+    x.onblur=()=>{x.closest('td')?.classList.remove('editing');x.closest('.q403mobileField')?.classList.remove('editing');if(x.isContentEditable&&x.dataset.placeholder&&!editValue(x))x.innerHTML='';update()};
     x.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();focusNextCell(x)}};
     // Native iPhone grid inputs intentionally use Safari's default tap-to-focus behavior.
     // No touchend preventDefault is installed here because it can suppress the software keyboard.
