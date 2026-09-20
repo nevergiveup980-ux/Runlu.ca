@@ -1,0 +1,22 @@
+name: Flooring Mobile Safe Phase 7 V0.3.96
+on:
+  pull_request:
+    paths:
+      - 'flooring/index-v071-pricing-workspace.html'
+      - 'flooring/mobile-safe-fastboot-v0403i.js'
+      - 'flooring/mobile-safe-phase7-v0403i.js'
+      - 'flooring/week-schedule-v096-safe.js'
+      - 'flooring/index-v096-week-schedule-preview.html'
+      - 'scripts/run-flooring-mobile-safe-phase7-v0396.mjs'
+  workflow_dispatch:
+jobs:
+  mobile-safe-phase7:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/run-flooring-week-schedule-v096.mjs
+      - run: node scripts/run-flooring-mobile-safe-phase7-v0396.mjs

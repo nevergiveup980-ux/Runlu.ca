@@ -23,7 +23,7 @@ test('Fast Boot registry keeps Phase 4 after Phases 1–3',()=>{
   assert(p1>0&&p2>p1&&p3>p2&&p4>p3);
 });
 test('Safe Core cache token remains compatible through Fast Boot',()=>{
-  assert(/n=s\?"mobile-safe-0403[efgh]":Date\.now\(\)/.test(v71));
+  assert(/n=s\?"mobile-safe-0403[efghi]":Date\.now\(\)/.test(v71));
 });
 test('Phase 4 startup is launcher-only',()=>{
   const install=phase4.slice(phase4.indexOf('function install()'),phase4.indexOf('root.RUNLUMobileSafePhase4V0392'));

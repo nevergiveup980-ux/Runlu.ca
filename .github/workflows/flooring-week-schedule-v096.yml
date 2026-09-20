@@ -1,0 +1,20 @@
+name: Flooring Week Schedule V0.3.96
+on:
+  pull_request:
+    paths:
+      - 'flooring/week-schedule-v096.js'
+      - 'flooring/index-v096-week-schedule-preview.html'
+      - 'scripts/run-flooring-week-schedule-v096.mjs'
+      - '.github/workflows/flooring-week-schedule-v096.yml'
+  workflow_dispatch:
+jobs:
+  read-only-week-schedule:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.3.96 date, overlap, pressure and read-only gates
+        run: node scripts/run-flooring-week-schedule-v096.mjs
