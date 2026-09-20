@@ -149,7 +149,7 @@ test('Historical V0.3.95 module remains untouched as the r1 reference',()=>{
 });
 test('Production iPhone route remains shallow and cache token advances to h',()=>{
   assert(release.includes("mobileSafe?'index-v071-pricing-workspace.html"));
-  assert(/mobileSafe&&v==='core'?'mobile-safe-0403[hi]':Date\.now\(\)/.test(release));
+  assert(release.includes("mobileSafe&&v==='core'?'mobile-safe-0403h':Date.now()"));
 });
 test('Frozen Quote production baseline remains untouched',()=>{
   assert(release.includes("quote:'index-v0403i-quote-stable-frozen.html?prod=1&release=0403i&frozen=1'"));
