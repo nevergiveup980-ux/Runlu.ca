@@ -44,7 +44,7 @@ const coreURL=forceLite?'index-v040.html?prod=1&release=0403&mobile=lite':mobile
 const views={
   core:coreURL,
   operations:'index-v0403-operations.html?prod=1&release=0403',
-  quote:'index-v0403-quote.html?prod=1&release=0403'
+  quote:'index-v0403i-quote-stable-frozen.html?prod=1&release=0403i&frozen=1'
 };
 function normalizedView(v){return Object.prototype.hasOwnProperty.call(views,v)?v:'core'}
 function currentView(){return normalizedView((location.hash||'').replace(/^#/,'')||qp.get('view')||'core')}
@@ -52,7 +52,7 @@ function paintButtons(v){document.querySelectorAll('[data-view]').forEach(b=>b.c
 function openView(v,push){
   v=normalizedView(v);
   if(mobileSafe&&v==='quote'){
-    const q='index-v0403-quote.html?prod=1&release=0403&mobile=top&from=release&t=0403g';
+    const q='index-v0403i-quote-stable-frozen.html?prod=1&release=0403i&mobile=top&from=release&frozen=1&t=0403i';
     location.assign(q);return
   }
   paintButtons(v);boot.classList.remove('ready');

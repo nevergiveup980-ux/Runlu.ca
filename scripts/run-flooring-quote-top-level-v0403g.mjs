@@ -14,7 +14,7 @@ test('iPhone Quote leaves the release iframe and opens top-level',()=>{
   assert(release.includes("mobile=top"));
 });
 test('Desktop Quote path remains available in the normal views map',()=>{
-  assert(release.includes("quote:'index-v0403-quote.html?prod=1&release=0403'"));
+  assert(release.includes("quote:'index-v0403-quote.html?prod=1&release=0403'")||release.includes("quote:'index-v0403i-quote-stable-frozen.html?prod=1&release=0403i&frozen=1'"));
 });
 test('Core and Operations still use the release iframe path',()=>{
   assert(release.includes("frame.src=views[v]+sep+'t='+cacheToken"));

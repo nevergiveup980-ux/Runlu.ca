@@ -1,0 +1,26 @@
+name: Flooring Quote V0.4.03i Frozen Stable
+on:
+  pull_request:
+    paths:
+      - 'flooring/index-v0403-release.html'
+      - 'flooring/index-v0403i-quote-stable-frozen.html'
+      - 'flooring/quote-dual-entry-v0403i-stable-frozen.js'
+      - 'flooring/QUOTE_V0403I_FROZEN.md'
+      - 'scripts/run-flooring-quote-v0403i-frozen.mjs'
+      - '.github/workflows/flooring-quote-v0403i-frozen.yml'
+  workflow_dispatch:
+jobs:
+  frozen-quote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify frozen blob identities
+        run: |
+          test "$(git hash-object flooring/index-v0403i-quote-stable-frozen.html)" = "db4105a87d1cfc9d25f7c061d395f34792fcde8b"
+          test "$(git hash-object flooring/quote-dual-entry-v0403i-stable-frozen.js)" = "a39540ca0ca85dd11a8ab078be829645dbb425df"
+      - name: Run frozen Quote regression gate
+        run: node scripts/run-flooring-quote-v0403i-frozen.mjs

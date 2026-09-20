@@ -38,9 +38,9 @@ test('Safe route reduces Core nesting from four inner wrappers to two',()=>{
   assert(safeDepth<=2);
   assert(fullDepth-safeDepth>=2);
 });
-test('Operations and Quote routes remain unchanged',()=>{
+test('Operations route stays stable and Quote may use the accepted frozen baseline',()=>{
   assert(release.includes("operations:'index-v0403-operations.html?prod=1&release=0403'"));
-  assert(release.includes("quote:'index-v0403-quote.html?prod=1&release=0403'"));
+  assert(release.includes("quote:'index-v0403-quote.html?prod=1&release=0403'")||release.includes("quote:'index-v0403i-quote-stable-frozen.html?prod=1&release=0403i&frozen=1'"));
 });
 test('Release page remains syntactically closed',()=>{
   assert(release.includes('</script>'));
