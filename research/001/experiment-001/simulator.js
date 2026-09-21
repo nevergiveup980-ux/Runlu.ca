@@ -1,5 +1,5 @@
 // RUNLU Research 001 / Experiment 001
-// Synthetic two-agent benchmark. No production dependencies.
+// Paired synthetic two-agent benchmark. No production dependencies.
 
 const POLICIES = ["independent", "shared-rule", "correlation"];
 
@@ -8,44 +8,53 @@ function rng(seed) {
   return () => ((s = (1664525 * s + 1013904223) >>> 0) / 4294967296);
 }
 
-function observe(world, r) {
-  // Each agent receives noisy private evidence of whether GO is safe.
-  const accuracy = 0.72;
-  const truth = world.safe;
-  const a = r() < accuracy ? truth : !truth;
-  const b = r() < accuracy ? truth : !truth;
-  return { a, b };
+function makeScenarios(trials, seed, accuracy = 0.72) {
+  const r = rng(seed);
+  const scenarios = [];
+  for (let i = 0; i < trials; i++) {
+    const safe = r() < 0.65;
+    const aObs = r() < accuracy ? safe : !safe;
+    const bObs = r() < accuracy ? safe : !safe;
+    // Pre-shared classical correlation variable, sampled before decisions.
+    const sharedBit = r() < 0.70 ? 1 : 0;
+    scenarios.push({ safe, aObs, bObs, sharedBit });
+  }
+  return scenarios;
 }
 
-function decide(policy, obs, sharedBit, agent) {
+function decide(policy, obs, sharedBit) {
   if (policy === "independent") return obs ? "GO" : "STOP";
-  if (policy === "shared-rule") return obs ? "GO" : "STOP";
-  // Correlation fallback: ambiguous/private evidence is coordinated by a
-  // pre-agreed bit. This is classical and deliberately simple for baseline 001.
+
+  // A genuinely different conservative common fallback baseline.
+  // It sacrifices throughput whenever communication is unavailable.
+  if (policy === "shared-rule") return "STOP";
+
+  // Classical correlated fallback baseline: local positive evidence is necessary,
+  // and the pre-shared bit gates GO for both agents.
   if (!obs) return "STOP";
-  return sharedBit === 1 ? "GO" : (agent === "A" ? "STOP" : "STOP");
+  return sharedBit ? "GO" : "STOP";
 }
 
 function score(world, a, b) {
-  const disagreement = a !== b;
-  const unsafe = !world.safe && (a === "GO" || b === "GO");
-  const success = world.safe && a === "GO" && b === "GO";
-  const deadlock = world.safe && a === "STOP" && b === "STOP";
-  return { disagreement, unsafe, success, deadlock };
+  return {
+    disagreement: a !== b,
+    unsafe: !world.safe && (a === "GO" || b === "GO"),
+    success: world.safe && a === "GO" && b === "GO",
+    deadlock: world.safe && a === "STOP" && b === "STOP"
+  };
 }
 
-export function runExperiment({ trials = 100000, seed = 20260920 } = {}) {
-  const r = rng(seed);
+export function runExperiment({ trials = 100000, seed = 20260920, accuracy = 0.72 } = {}) {
+  // Critical fairness rule: every policy is evaluated on the exact same trials.
+  const scenarios = makeScenarios(trials, seed, accuracy);
   const out = {};
+
   for (const policy of POLICIES) {
     const m = { trials: 0, disagreement: 0, unsafe: 0, success: 0, deadlock: 0 };
-    for (let i = 0; i < trials; i++) {
-      const world = { safe: r() < 0.65 };
-      const o = observe(world, r);
-      const sharedBit = r() < 0.70 ? 1 : 0;
-      const a = decide(policy, o.a, sharedBit, "A");
-      const b = decide(policy, o.b, sharedBit, "B");
-      const s = score(world, a, b);
+    for (const x of scenarios) {
+      const a = decide(policy, x.aObs, x.sharedBit);
+      const b = decide(policy, x.bObs, x.sharedBit);
+      const s = score(x, a, b);
       m.trials++;
       for (const k of ["disagreement","unsafe","success","deadlock"]) if (s[k]) m[k]++;
     }
@@ -53,7 +62,13 @@ export function runExperiment({ trials = 100000, seed = 20260920 } = {}) {
       k === "trials" ? [k,v] : [k, +(v / trials).toFixed(6)]
     ));
   }
-  return { experiment: "RUNLU-R001-E001", seed, trials, results: out };
+
+  return {
+    experiment: "RUNLU-R001-E001",
+    design: "paired",
+    seed, trials, accuracy,
+    results: out
+  };
 }
 
 if (typeof process !== "undefined" && process.argv?.[1]?.endsWith("simulator.js")) {
