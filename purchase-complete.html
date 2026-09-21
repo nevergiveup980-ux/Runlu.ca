@@ -40,7 +40,7 @@
   <script>
   (() => {
     const endpoint="https://ekrnknlawekeoszzkamd.supabase.co/functions/v1/runlu-digital-download";
-    const qs=new URLSearchParams(location.search), session=qs.get("session_id")||qs.get("session")||"";
+    const qs=new URLSearchParams(location.search), session=qs.get("session_id")||qs.get("session")||localStorage.getItem("runlu-last-checkout-session")||"";
     const btn=document.getElementById("runluGetDownload"), email=document.getElementById("runluPurchaseEmail"), status=document.getElementById("runluDownloadStatus");
     const msg={
       en:{need:"This purchase page needs your Stripe Checkout session link. Open it from the payment confirmation redirect.",working:"Verifying your purchase…",bad:"We could not verify that purchase. Check the checkout email, or contact hello@runlu.ca.",ready:"Verified. Your private download link is ready for five minutes.",download:"Download SBCC V1.1 ZIP"},
