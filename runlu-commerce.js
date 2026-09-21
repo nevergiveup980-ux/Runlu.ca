@@ -81,7 +81,7 @@
     checkout.textContent=t("checkout");
     const ready=products.length===1 && products[0].enabled && validCheckout(products[0].checkoutUrl);
     checkout.disabled=!ready;
-    checkout.onclick=ready?()=>{ window.location.href=products[0].checkoutUrl; }:null;
+    checkout.onclick=ready?()=>{ localStorage.setItem("runlu-pending-product",products[0].key); window.location.href=products[0].checkoutUrl; }:null;
   }
   function apply(){
     ensureUI();
