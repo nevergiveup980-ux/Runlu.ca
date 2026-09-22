@@ -1,0 +1,23 @@
+name: Research 001 Track A
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research-001-experiment-001]
+    paths:
+      - "research/001/experiment-001/**"
+      - "research/001/experiment-004/**"
+      - "research/001/experiment-005/**"
+      - "research/001/experiment-019/**"
+      - ".github/workflows/research-001-track-a.yml"
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Audit Track A prerequisites
+        run: node research/001/experiment-019/audit.mjs
