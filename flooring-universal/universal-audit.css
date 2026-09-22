@@ -1,0 +1,1 @@
+.uAudit{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid #e5e5e5}.uAudit:first-child{border-top:0}.uAudit b,.uAudit span{display:block}.uAudit span,.uAudit time{font-size:12px;color:#666;margin-top:3px}@media(max-width:600px){.uAudit{flex-direction:column}}
