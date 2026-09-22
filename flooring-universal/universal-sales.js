@@ -1,30 +1,28 @@
-/* RUNLU Flooring OS Universal · U1 Sales / Jobs foundation
-   Ported from proven workflow concepts, without Deerfoot names or staff defaults. */
+/* RUNLU Flooring OS Universal · U1 Sales / Jobs
+   Customer → Job → Items → Estimate / Quote. Tenant-owned from creation. */
 (function(){
 'use strict';
-const JOB_STORE='runlu_flooring_universal_u1_jobs';
-const TEAM_STORE='runlu_flooring_universal_u1_sales_team';
-const WORKSPACE_STORE='runlu_flooring_universal_u0_workspace';
-const $=id=>document.getElementById(id);
-const read=(k,f)=>{try{const v=JSON.parse(localStorage.getItem(k)||'null');return v??f}catch(_){return f}};
-const write=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
-const workspace=()=>read(WORKSPACE_STORE,null);
-const tenant=()=>workspace()?.company?.organizationId||'';
-const locationId=()=>workspace()?.location?.locationId||'';
-const jobs=()=>read(JOB_STORE,[]).filter(j=>j.organizationId===tenant());
-const team=()=>read(TEAM_STORE,[]).filter(r=>r.organizationId===tenant());
-const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const JOB_STORE='runlu_flooring_universal_u1_jobs', TEAM_STORE='runlu_flooring_universal_u1_sales_team', WORKSPACE_STORE='runlu_flooring_universal_u0_workspace';
+const $=id=>document.getElementById(id), read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')??d}catch(_){return d}}, write=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const workspace=()=>read(WORKSPACE_STORE,null), tenant=()=>workspace()?.company?.organizationId||'', locationId=()=>workspace()?.location?.locationId||'';
+const jobs=()=>read(JOB_STORE,[]).filter(j=>j.organizationId===tenant()), team=()=>read(TEAM_STORE,[]).filter(r=>r.organizationId===tenant());
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])), num=v=>Number.isFinite(Number(v))?Number(v):0;
+const money=v=>new Intl.NumberFormat(workspace()?.company?.locale||'en-CA',{style:'currency',currency:workspace()?.company?.currency||'CAD'}).format(num(v));
 function saveJobs(xs){const all=read(JOB_STORE,[]).filter(j=>j.organizationId!==tenant());write(JOB_STORE,[...all,...xs])}
-function id(){return 'job-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7)}
+function uid(prefix){return prefix+'-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7)}
+function totals(j){const subtotal=(j.items||[]).reduce((s,x)=>s+num(x.qty)*num(x.unitPrice),0),discount=num(j.discount),net=Math.max(0,subtotal-discount),taxRate=num(j.taxRate),tax=Math.round(net*taxRate*100)/100;return{subtotal,discount,net,tax,total:net+tax}}
 function render(){
- const w=workspace(), host=$('universalSales'); if(!host)return;
- if(!w){host.innerHTML='<p>Create a company workspace first.</p>';return}
+ const w=workspace(),host=$('universalSales');if(!host)return;if(!w){host.innerHTML='<p>Create a company workspace first.</p>';return}
  const xs=jobs().sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
- host.innerHTML='<div class="card"><div class="statusLine"><div><h2>Sales / Jobs</h2><p class="muted">Tenant-owned Job records · '+esc(w.company.displayName||w.company.legalName)+'</p></div></div><div class="grid"><label>Customer<input id="uSalesCustomer" placeholder="Customer name"></label><label>Job / Order #<input id="uSalesNumber" placeholder="Optional"></label><label>Sales Rep<input id="uSalesRep" list="uSalesRepList" placeholder="Salesperson"><datalist id="uSalesRepList">'+team().map(r=>'<option value="'+esc(r.name)+'">').join('')+'</datalist></label><label>Status<select id="uSalesStatus"><option>Draft</option><option>In Progress</option><option>Completed</option><option>Archived</option></select></label></div><p><button class="primary" id="uSalesAdd">Create Job / Order</button></p></div><div class="card"><h3>Jobs / Orders</h3><div id="uSalesRows">'+(xs.length?xs.map(j=>'<div class="uJob"><div><b>'+esc(j.customerName||'Unnamed customer')+'</b><span>#'+esc(j.jobNumber||'—')+' · '+esc(j.salesRep||'Unassigned')+'</span></div><span>'+esc(j.status)+'</span></div>').join(''):'<p class="muted">No jobs yet for this company.</p>')+'</div></div>';
- $('uSalesAdd')?.addEventListener('click',()=>{
-   const customer=$('uSalesCustomer').value.trim(); if(!customer)return alert('Enter a customer name.');
-   const xs=jobs(); xs.push({id:id(),organizationId:tenant(),locationId:locationId(),customerName:customer,jobNumber:$('uSalesNumber').value.trim(),salesRep:$('uSalesRep').value.trim(),status:$('uSalesStatus').value,createdAt:new Date().toISOString()}); saveJobs(xs); render();
- });
+ host.innerHTML='<div class="card"><h2>Sales / Jobs</h2><p class="muted">Customer → Job → Items → Estimate / Quote · '+esc(w.company.displayName||w.company.legalName)+'</p><div class="grid"><label>Customer<input id="uSalesCustomer" placeholder="Customer name"></label><label>Phone / Email<input id="uSalesContact" placeholder="Contact"></label><label>Job / Order #<input id="uSalesNumber" placeholder="Optional"></label><label>Sales Rep<input id="uSalesRep" list="uSalesRepList" placeholder="Salesperson"><datalist id="uSalesRepList">'+team().map(r=>'<option value="'+esc(r.name)+'">').join('')+'</datalist></label></div><p><button class="primary" id="uSalesAdd">Create Job / Order</button></p></div><div class="card"><h3>Jobs / Orders</h3>'+(xs.length?xs.map(jobCard).join(''):'<p class="muted">No jobs yet for this company.</p>')+'</div>';
+ $('uSalesAdd')?.addEventListener('click',()=>{const customer=$('uSalesCustomer').value.trim();if(!customer)return alert('Enter a customer name.');const a=jobs();a.push({id:uid('job'),organizationId:tenant(),locationId:locationId(),customerName:customer,customerContact:$('uSalesContact').value.trim(),jobNumber:$('uSalesNumber').value.trim(),salesRep:$('uSalesRep').value.trim(),status:'Draft',quoteStatus:'Working',taxRate:0,discount:0,items:[],createdAt:new Date().toISOString()});saveJobs(a);render()});
+ host.querySelectorAll('[data-add-item]').forEach(b=>b.addEventListener('click',()=>addItem(b.dataset.addItem)));
+ host.querySelectorAll('[data-quote]').forEach(b=>b.addEventListener('click',()=>setQuote(b.dataset.quote)));
+ host.querySelectorAll('[data-status]').forEach(s=>s.addEventListener('change',()=>setStatus(s.dataset.status,s.value)));
 }
-window.RUNLUUniversalSales=Object.freeze({render,jobs});
+function jobCard(j){const t=totals(j);return '<div class="uJobCard"><div class="uJobHead"><div><b>'+esc(j.customerName)+'</b><span>#'+esc(j.jobNumber||'—')+' · '+esc(j.salesRep||'Unassigned')+' · '+esc(j.customerContact||'No contact')+'</span></div><select data-status="'+esc(j.id)+'"><option'+(j.status==='Draft'?' selected':'')+'>Draft</option><option'+(j.status==='In Progress'?' selected':'')+'>In Progress</option><option'+(j.status==='Completed'?' selected':'')+'>Completed</option><option'+(j.status==='Archived'?' selected':'')+'>Archived</option></select></div><div class="uItems">'+((j.items||[]).length?(j.items||[]).map(x=>'<div><span>'+esc(x.description)+'</span><span>'+esc(x.qty)+' × '+money(x.unitPrice)+'</span></div>').join(''):'<span class="muted">No items yet.</span>')+'</div><div class="uAddItem"><input id="desc-'+j.id+'" placeholder="Material / service"><input id="qty-'+j.id+'" type="number" min="0" step="0.01" placeholder="Qty"><input id="price-'+j.id+'" type="number" min="0" step="0.01" placeholder="Unit price"><button class="primary" data-add-item="'+j.id+'">Add Item</button></div><div class="uQuote"><span>Estimate: <b>'+money(t.total)+'</b></span><span>Quote: <b>'+esc(j.quoteStatus||'Working')+'</b></span><button data-quote="'+j.id+'">Mark Quote Ready</button></div></div>'}
+function addItem(jobId){const xs=jobs(),j=xs.find(x=>x.id===jobId);if(!j)return;const d=$('desc-'+jobId)?.value.trim(),q=num($('qty-'+jobId)?.value),p=num($('price-'+jobId)?.value);if(!d||q<=0)return alert('Enter an item and quantity.');j.items=j.items||[];j.items.push({id:uid('item'),description:d,qty:q,unitPrice:p});j.status=j.status==='Draft'?'In Progress':j.status;saveJobs(xs);render()}
+function setQuote(jobId){const xs=jobs(),j=xs.find(x=>x.id===jobId);if(!j)return;j.quoteStatus='Ready';j.quoteReadyAt=new Date().toISOString();saveJobs(xs);render()}
+function setStatus(jobId,status){const xs=jobs(),j=xs.find(x=>x.id===jobId);if(!j)return;j.status=status;saveJobs(xs)}
+window.RUNLUUniversalSales=Object.freeze({render,jobs,totals});
 })();
