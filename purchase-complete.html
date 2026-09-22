@@ -43,8 +43,8 @@
     const qs=new URLSearchParams(location.search), session=qs.get("session_id")||qs.get("session")||localStorage.getItem("runlu-last-checkout-session")||"";
     const btn=document.getElementById("runluGetDownload"), email=document.getElementById("runluPurchaseEmail"), status=document.getElementById("runluDownloadStatus");
     const msg={
-      en:{need:"This purchase page needs your Stripe Checkout session link. Open it from the payment confirmation redirect.",working:"Verifying your purchase…",bad:"We could not verify that purchase. Check the checkout email, or contact hello@runlu.ca.",ready:"Verified. Your private download link is ready for five minutes.",download:"Download SBCC V1.1 ZIP"},
-      zh:{need:"这个购买完成页需要 Stripe Checkout 会话信息。请从付款成功后的跳转页面进入。",working:"正在验证购买…",bad:"暂时无法验证这笔购买。请检查结账邮箱，或联系 hello@runlu.ca。",ready:"验证成功。私密下载链接将在五分钟内有效。",download:"下载 SBCC V1.1 ZIP"}
+      en:{need:"This purchase page needs your Stripe Checkout session link. Open it from the payment confirmation redirect.",working:"Verifying your purchase…",bad:"We could not verify that purchase. Check the checkout email, or contact hello@runlu.ca.",ready:"Verified. Your private download link is ready for five minutes.",download:"Download"},
+      zh:{need:"这个购买完成页需要 Stripe Checkout 会话信息。请从付款成功后的跳转页面进入。",working:"正在验证购买…",bad:"暂时无法验证这笔购买。请检查结账邮箱，或联系 hello@runlu.ca。",ready:"验证成功。私密下载链接将在五分钟内有效。",download:"下载"}
     };
     const L=()=>document.documentElement.dataset.runluLanguage==="zh"?msg.zh:msg.en;
     btn.addEventListener("click",async()=>{
@@ -57,7 +57,7 @@
         if(!res.ok||!data.ok||!data.download_url)throw new Error(data.error||"verify_failed");
         status.innerHTML="";
         const p=document.createElement("span");p.textContent=L().ready+" ";status.appendChild(p);
-        const a=document.createElement("a");a.className="text-link";a.href=data.download_url;a.textContent=L().download;a.rel="noopener";status.appendChild(a);
+        const a=document.createElement("a");a.className="text-link";a.href=data.download_url;a.textContent=L().download+" "+(data.filename||"purchase");a.rel="noopener";status.appendChild(a);
       }catch(_){status.textContent=L().bad}finally{btn.disabled=false}
     });
   })();
