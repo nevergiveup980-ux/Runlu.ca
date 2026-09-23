@@ -3,7 +3,7 @@
 (function(){
 'use strict';
 const STORE='runlu_flooring_universal_u1_installations',WS='runlu_flooring_universal_u0_workspace';
-const read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')??d}catch(_){return d}},write=(k,v)=>localStorage.setItem(k,JSON.stringify(v)),esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const read=(k,d)=>window.RUNLUUniversalData.read(k,d),write=(k,v)=>window.RUNLUUniversalData.write(k,v),esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const org=()=>read(WS,null)?.company?.organizationId||'',all=()=>read(STORE,[]),rows=()=>all().filter(x=>x.organizationId===org());
 function save(xs){write(STORE,[...all().filter(x=>x.organizationId!==org()),...xs])}
 function sync(){const xs=rows(),jobs=new Set(xs.map(x=>x.jobId)),tasks=window.RUNLUUniversalInbound?.tasks()||[];const readyJobs=new Map();tasks.filter(t=>t.status==='Ready'||t.status==='Completed').forEach(t=>{if(t.jobId)readyJobs.set(t.jobId,t)});const sales=window.RUNLUUniversalSales?.jobs()||[];sales.forEach(j=>{if(!jobs.has(j.id)&&readyJobs.has(j.id)){const t=readyJobs.get(j.id);xs.unshift({id:'inst-'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),organizationId:j.organizationId,locationId:j.locationId,jobId:j.id,jobNumber:j.jobNumber||'',customerName:j.customerName||'',materialStatus:'Ready',installDate:'',installer:'',status:'Ready to Schedule',notes:'',createdAt:new Date().toISOString()})}});save(xs);return xs}
