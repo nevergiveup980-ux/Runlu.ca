@@ -1,0 +1,6 @@
+{"event_id":"g1","observed_at":"2026-09-23T16:00:00Z","site_context":"NORMAL","side_a_queue":1,"side_b_queue":2,"opportunity":false,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"g2","observed_at":"2026-09-23T16:30:00Z","site_context":"NORMAL","side_a_queue":2,"side_b_queue":1,"opportunity":true,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"g3","observed_at":"2026-09-23T17:00:00Z","site_context":"BUSY","side_a_queue":4,"side_b_queue":6,"opportunity":true,"source_mode":"READ_ONLY_EXPORT","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"g4","observed_at":"2026-09-23T17:30:00Z","site_context":"BUSY","side_a_queue":6,"side_b_queue":5,"opportunity":false,"source_mode":"READ_ONLY_EXPORT","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"g5","observed_at":"2026-09-23T18:00:00Z","site_context":"SURGE","side_a_queue":11,"side_b_queue":13,"opportunity":true,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"g6","observed_at":"2026-09-23T18:30:00Z","site_context":"SURGE","side_a_queue":12,"side_b_queue":10,"opportunity":true,"source_mode":"READ_ONLY_EXPORT","schema_version":"e044-v1","quality":"GOOD"}
