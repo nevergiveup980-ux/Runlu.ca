@@ -4,7 +4,7 @@
 (function(){
 'use strict';
 const BACKEND_STORE='runlu_flooring_universal_data_backend';
-const adapters=new Map();
+const adapters=new Map(),mutationListeners=new Set();
 
 function safeParse(raw,fallback){try{const v=JSON.parse(raw);return v??fallback}catch(_){return fallback}}
 function localAdapter(){
@@ -31,9 +31,11 @@ function current(){
   const cfg=backendConfig(),adapter=adapters.get(cfg.provider)||adapters.get('local');
   return adapter;
 }
+function emitMutation(event){mutationListeners.forEach(fn=>{try{fn(event)}catch(_){}})}
+function onMutation(fn){if(typeof fn!=='function')throw new Error('Mutation listener must be a function');mutationListeners.add(fn);return ()=>mutationListeners.delete(fn)}
 function read(key,fallback){return current().read(key,fallback)}
-function write(key,value){return current().write(key,value)}
-function remove(key){return current().remove?.(key)}
+function write(key,value){const result=current().write(key,value);emitMutation({type:'write',key,value,at:new Date().toISOString(),adapter:current().id});return result}
+function remove(key){const result=current().remove?.(key);emitMutation({type:'remove',key,at:new Date().toISOString(),adapter:current().id});return result}
 function useLocal(){const cfg={mode:'local',provider:'local',configuredAt:new Date().toISOString()};localStorage.setItem(BACKEND_STORE,JSON.stringify(cfg));return cfg}
 function registerCloudProvider(id,adapter){
   if(id==='local')throw new Error('local is reserved');
@@ -48,5 +50,5 @@ function cloudReady(){
     activeProvider:backendConfig().provider||'local'
   });
 }
-window.RUNLUUniversalData=Object.freeze({read,write,remove,current,backendConfig,useLocal,registerCloudProvider,cloudReady});
+window.RUNLUUniversalData=Object.freeze({read,write,remove,current,backendConfig,useLocal,registerCloudProvider,cloudReady,onMutation});
 })();
