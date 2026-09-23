@@ -3,7 +3,7 @@
 (function(){
 'use strict';
 const PO='runlu_flooring_universal_u1_supplier_orders', SETTINGS='runlu_flooring_universal_u1_po_settings', WS='runlu_flooring_universal_u0_workspace';
-const read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')??d}catch(_){return d}},write=(k,v)=>localStorage.setItem(k,JSON.stringify(v)),esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const read=(k,d)=>window.RUNLUUniversalData.read(k,d),write=(k,v)=>window.RUNLUUniversalData.write(k,v),esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const w=()=>read(WS,null),org=()=>w()?.company?.organizationId||'',loc=()=>w()?.location?.locationId||'', all=()=>read(PO,[]), pos=()=>all().filter(x=>x.organizationId===org());
 function save(xs){write(PO,[...all().filter(x=>x.organizationId!==org()),...xs])}
 function uid(){return 'po-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7)}
