@@ -3,7 +3,7 @@
 (function(){
 'use strict';
 const STORE='runlu_flooring_universal_u1_customer_invoices',WS='runlu_flooring_universal_u0_workspace';
-const read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')??d}catch(_){return d}},write=(k,v)=>localStorage.setItem(k,JSON.stringify(v)),esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])),num=v=>Number.isFinite(Number(v))?Number(v):0;
+const read=(k,d)=>window.RUNLUUniversalData.read(k,d),write=(k,v)=>window.RUNLUUniversalData.write(k,v),esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])),num=v=>Number.isFinite(Number(v))?Number(v):0;
 const workspace=()=>read(WS,null),org=()=>workspace()?.company?.organizationId||'',all=()=>read(STORE,[]),rows=()=>all().filter(x=>x.organizationId===org());
 function save(xs){write(STORE,[...all().filter(x=>x.organizationId!==org()),...xs])}
 function salesJob(id){return (window.RUNLUUniversalSales?.jobs()||[]).find(x=>x.id===id)}
