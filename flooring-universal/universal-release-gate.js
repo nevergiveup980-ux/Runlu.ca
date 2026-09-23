@@ -10,6 +10,7 @@ function run(){
  const data=window.RUNLUUniversalData,health=data?.current?.()?.health?.();
  t('Data Adapter · active',!!data&&!!health?.ok,health?.detail||'unavailable');
  t('Data Adapter · default local',data?.backendConfig?.().mode==='local','cloud remains optional');
+ const version=window.RUNLUUniversalDataVersion;
  const exchange=window.RUNLUUniversalDataExchange;
  if(exchange){
   const oid=data?.read?.('runlu_flooring_universal_u0_workspace',null)?.company?.organizationId||'';
@@ -18,7 +19,6 @@ function run(){
   t('Data Exchange · rejects unknown dataset',!exchange.validatePackage({...fixture,datasets:{unknown:[]}}).ok,'unknown dataset blocked');
   t('Data Exchange · rejects foreign organization',!exchange.validatePackage({...fixture,organizationId:'foreign-org'}).ok,'cross-company import blocked');
  }
- const version=window.RUNLUUniversalDataVersion;
  if(version){
   const vs=version.status();
   t('Data Version · compatible',vs.compatible,'workspace v'+vs.workspaceVersion+' / app v'+vs.currentVersion);
