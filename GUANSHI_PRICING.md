@@ -69,3 +69,51 @@ The annual price of CA$59.99 is CA$23.89 lower than twelve monthly payments.
 Never call a planned paid capability “available” merely because the price is configured.
 
 **价格可以先确定；购买按钮必须等真实支付链完成以后再亮。**
+
+
+## Stripe test center
+
+Private owner/admin route: `guanshi-commerce-test.html`
+
+This route is deliberately **not** a public sales page and is not included in the sitemap.
+
+The owner-only test flow is:
+
+1. authenticated RUNLU owner/admin opens the test center;
+2. the test center asks `runlu-stripe-checkout` for readiness;
+3. Stripe test catalog bootstrap is permitted **only** when the configured server secret is a Stripe test secret (`sk_test_...`);
+4. RUNLU creates or verifies one Stripe test Product/Price mapping for each paid GUANSHI plan;
+5. owner/admin starts a Stripe Test Checkout;
+6. the Checkout Session is linked to an immutable RUNLU checkout contract before redirect;
+7. Stripe signs webhook events and `runlu-stripe-webhook` verifies the HMAC;
+8. a correlated `checkout.session.completed` materializes and pays the RUNLU order;
+9. Deep Reading fulfills one consumable credit;
+10. Plus waits for Stripe subscription lifecycle confirmation, then creates/updates the RUNLU subscription and entitlement period;
+11. renewal events extend the subscription entitlement; terminal subscription events revoke/expire it.
+
+Public checkout remains independently controlled by `runlu_checkout_control`. Test readiness must never flip `public_checkout_approved` or `checkout_enabled`.
+
+Current adapter staging:
+- checkout function: owner-only Stripe test catalog + test Checkout supported;
+- webhook: signature verification supported;
+- GUANSHI checkout/order normalization supported;
+- GUANSHI subscription lifecycle normalization supported;
+- public subscription sync is still considered **testing** until an end-to-end Stripe test purchase is observed;
+- refund automation remains separately gated.
+
+### Promotion rule
+
+Do not promote paid GUANSHI plans from `planned` to `available`, and do not enable public checkout, merely because the test center can create a Stripe session.
+
+Promotion requires observed end-to-end evidence for:
+- Plus Monthly test purchase;
+- Plus Annual test purchase;
+- Deep Reading test purchase;
+- signed webhook receipt;
+- paid RUNLU order;
+- correct subscription entitlement or consumable credit;
+- account-side visibility;
+- cancellation / expiry behavior for subscription access;
+- no cross-delivery into the legacy RUNLU DIGITAL path.
+
+Only then may the live-price mapping and public checkout gates be considered.
