@@ -117,3 +117,25 @@ Promotion requires observed end-to-end evidence for:
 - no cross-delivery into the legacy RUNLU DIGITAL path.
 
 Only then may the live-price mapping and public checkout gates be considered.
+
+
+## Live commerce evidence
+
+A real RUNLU live checkout has already provided infrastructure evidence outside the GUANSHI paid plans:
+
+- amount: **CA$10.49**;
+- Stripe Checkout reference used the live environment;
+- RUNLU received a signed `checkout.session.completed` webhook;
+- Stripe signature verification succeeded;
+- the webhook receipt reached processed state;
+- the existing RUNLU DIGITAL fulfillment path remained isolated from GUANSHI plan fulfillment.
+
+This evidence is sufficient to mark the shared Stripe **webhook adapter** and **signature verification** gates as ready.
+
+It is **not** sufficient to mark:
+- bank payout destination ready — wait for an actual Stripe payout to arrive in the bank;
+- legal terms accepted — requires explicit owner acceptance;
+- GUANSHI public sales approved — requires GUANSHI-specific end-to-end paid-plan testing;
+- public checkout enabled — remains a separate final launch decision.
+
+The readiness ledger must follow observed evidence, not optimism.
