@@ -5,8 +5,11 @@
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 function run(){
  const tests=[],t=(name,ok,detail)=>tests.push({name,ok:!!ok,detail});
- const mods=['RUNLUUniversalSales','RUNLUUniversalPO','RUNLUUniversalInbound','RUNLUUniversalInstallation','RUNLUUniversalBilling','RUNLUUniversalAccounting','RUNLUUniversalAudit','RUNLUUniversalLifecycleGate','RUNLUUniversalRecovery','RUNLUUniversalGuards'];
+ const mods=['RUNLUUniversalData','RUNLUUniversalSales','RUNLUUniversalPO','RUNLUUniversalInbound','RUNLUUniversalInstallation','RUNLUUniversalBilling','RUNLUUniversalAccounting','RUNLUUniversalAudit','RUNLUUniversalLifecycleGate','RUNLUUniversalRecovery','RUNLUUniversalGuards'];
  mods.forEach(m=>t('Module · '+m,!!window[m],window[m]?'loaded':'missing'));
+ const data=window.RUNLUUniversalData,health=data?.current?.()?.health?.();
+ t('Data Adapter · active',!!data&&!!health?.ok,health?.detail||'unavailable');
+ t('Data Adapter · default local',data?.backendConfig?.().mode==='local','cloud remains optional');
  const g=window.RUNLUUniversalGuards;
  if(g){
   t('Guard · Paid invoice is terminal',!g.transition('invoice','Paid','Issued').ok,'Paid → Issued must be blocked');
