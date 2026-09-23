@@ -1,0 +1,10 @@
+{"event_id":"u1","observed_at":"2026-09-23T15:00:00Z","site_context":"NORMAL","side_a_queue":0,"side_b_queue":1,"opportunity":true,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"u2","observed_at":"2026-09-23T15:05:00Z","site_context":"NORMAL","side_a_queue":1,"side_b_queue":3,"opportunity":true,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"u3","observed_at":"2026-09-23T15:10:00Z","site_context":"NORMAL","side_a_queue":2,"side_b_queue":4,"opportunity":true,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"u4","observed_at":"2026-09-23T15:15:00Z","site_context":"BUSY","side_a_queue":3,"side_b_queue":6,"opportunity":true,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"u5","observed_at":"2026-09-23T15:20:00Z","site_context":"BUSY","side_a_queue":5,"side_b_queue":8,"opportunity":true,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"u6","observed_at":"2026-09-23T15:25:00Z","site_context":"BUSY","side_a_queue":7,"side_b_queue":4,"opportunity":true,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"u7","observed_at":"2026-09-23T15:30:00Z","site_context":"SURGE","side_a_queue":9,"side_b_queue":12,"opportunity":true,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"u8","observed_at":"2026-09-23T15:35:00Z","site_context":"SURGE","side_a_queue":11,"side_b_queue":15,"opportunity":true,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"u9","observed_at":"2026-09-23T15:40:00Z","site_context":"SURGE","side_a_queue":14,"side_b_queue":10,"opportunity":true,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"u10","observed_at":"2026-09-23T15:45:00Z","site_context":"BUSY","side_a_queue":6,"side_b_queue":7,"opportunity":true,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
