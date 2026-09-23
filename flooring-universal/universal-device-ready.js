@@ -42,6 +42,10 @@ async function requestPersistence(){
  try{const granted=await navigator.storage.persist();return {ok:granted,detail:granted?'Browser granted persistent storage':'Browser kept default storage policy'}}catch(e){return {ok:false,detail:e.message||'Persistence request failed'}}
 }
 function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+async function renderMini(){
+ const host=document.getElementById('deviceReadyMini');if(!host)return;
+ const r=await run();host.className='uReadyMini '+(r.ready?'pass':'hold');host.innerHTML='<b>'+(r.ready?'DEVICE READY ✓':'DEVICE SETUP CHECK')+'</b><span>'+(r.ready?'Local-First protection is ready on this device.':r.failed.length+' required check(s) pending · open Device Readiness')+'</span>';
+}
 async function render(){
  const host=document.getElementById('universalDeviceReady');if(!host)return;
  host.innerHTML='<div class="card"><h2>Device Readiness</h2><p class="muted">Running Local-First preflight…</p></div>';
@@ -50,5 +54,6 @@ async function render(){
  document.getElementById('uReadyRefresh').onclick=render;
  document.getElementById('uReadyPersist').onclick=async()=>{const x=await requestPersistence();alert(x.detail);render()};
 }
-window.RUNLUUniversalDeviceReady=Object.freeze({run,requestPersistence,render});
+window.RUNLUUniversalDeviceReady=Object.freeze({run,requestPersistence,render,renderMini});
+setTimeout(renderMini,900);window.addEventListener('online',renderMini);window.addEventListener('offline',renderMini);
 })();
