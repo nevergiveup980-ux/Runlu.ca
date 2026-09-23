@@ -24,12 +24,13 @@ function exportCSV(key,label){const csv=csvFor(key);if(!csv)throw new Error('No 
 function packageData(){
  const w=workspace();if(!w?.company?.organizationId)throw new Error('Create a company workspace first.');
  const datasets={};DATASETS.forEach(([id,,key])=>datasets[id]=rows(key));
- return {format:FORMAT,version:VERSION,createdAt:new Date().toISOString(),organizationId:w.company.organizationId,companyName:w.company.displayName||w.company.legalName||'',datasets};
+ return {format:FORMAT,version:VERSION,schemaVersion:window.RUNLUUniversalDataVersion?.status?.().workspaceVersion||0,createdAt:new Date().toISOString(),organizationId:w.company.organizationId,companyName:w.company.displayName||w.company.legalName||'',datasets};
 }
 function exportPackage(){const p=packageData();downloadBlob('RUNLU-Flooring-Business-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(p,null,2),'application/json');return p}
 function validatePackage(p){
  if(!p||p.format!==FORMAT)return {ok:false,error:'Not a RUNLU Flooring OS Universal business package.'};
  if(p.version!==VERSION)return {ok:false,error:'Unsupported business package version.'};
+ if(Number(p.schemaVersion||0)>(window.RUNLUUniversalDataVersion?.CURRENT||1))return {ok:false,error:'Business package data is newer than this app.'};
  if(!p.organizationId||p.organizationId!==org())return {ok:false,error:'This package belongs to a different company workspace.'};
  if(!p.datasets||typeof p.datasets!=='object'||Array.isArray(p.datasets))return {ok:false,error:'Business datasets are missing.'};
  const allowed=new Set(DATASETS.map(x=>x[0])),unknown=Object.keys(p.datasets).filter(k=>!allowed.has(k));
