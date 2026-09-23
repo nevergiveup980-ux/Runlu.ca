@@ -22,6 +22,7 @@ function stampExistingV1(){
  return writeMeta(next);
 }
 function migrate(){
+ if(!data().read('runlu_flooring_universal_u0_workspace',null)?.company?.organizationId)return {ok:true,status:'awaiting-workspace',from:0,to:CURRENT,applied:[]};
  let m=meta();
  if(m.schemaVersion>CURRENT)return {ok:false,status:'future',from:m.schemaVersion,to:CURRENT,error:'Workspace data is newer than this app.'};
  if(m.schemaVersion===0)m=stampExistingV1();
