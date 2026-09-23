@@ -5,11 +5,16 @@
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 function run(){
  const tests=[],t=(name,ok,detail)=>tests.push({name,ok:!!ok,detail});
- const mods=['RUNLUUniversalData','RUNLUUniversalPWA','RUNLUUniversalDurableLocal','RUNLUUniversalDataVersion','RUNLUUniversalLocalHealth','RUNLUUniversalBackup','RUNLUUniversalDataExchange','RUNLUUniversalSales','RUNLUUniversalPO','RUNLUUniversalInbound','RUNLUUniversalInstallation','RUNLUUniversalBilling','RUNLUUniversalAccounting','RUNLUUniversalAudit','RUNLUUniversalLifecycleGate','RUNLUUniversalRecovery','RUNLUUniversalGuards'];
+ const mods=['RUNLUUniversalData','RUNLUUniversalDeviceReady','RUNLUUniversalPWA','RUNLUUniversalDurableLocal','RUNLUUniversalDataVersion','RUNLUUniversalLocalHealth','RUNLUUniversalBackup','RUNLUUniversalDataExchange','RUNLUUniversalSales','RUNLUUniversalPO','RUNLUUniversalInbound','RUNLUUniversalInstallation','RUNLUUniversalBilling','RUNLUUniversalAccounting','RUNLUUniversalAudit','RUNLUUniversalLifecycleGate','RUNLUUniversalRecovery','RUNLUUniversalGuards'];
  mods.forEach(m=>t('Module · '+m,!!window[m],window[m]?'loaded':'missing'));
  const data=window.RUNLUUniversalData,health=data?.current?.()?.health?.();
  t('Data Adapter · active',!!data&&!!health?.ok,health?.detail||'unavailable');
  t('Data Adapter · default local',data?.backendConfig?.().mode==='local','cloud remains optional');
+ const ready=window.RUNLUUniversalDeviceReady;
+ if(ready){
+  t('Device Readiness · preflight API',typeof ready.run==='function','async first-run checks ready');
+  t('Device Readiness · persistence API',typeof ready.requestPersistence==='function','browser storage protection request ready');
+ }
  const pwa=window.RUNLUUniversalPWA;
  if(pwa){
   const ps=pwa.status();
