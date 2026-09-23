@@ -31,7 +31,7 @@ async function inspectFile(file){
 function restore(payload){
  const check=validate(payload);if(!check.ok)throw new Error(check.error);
  if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local')throw new Error('Restore is allowed only in Local Device mode.');
- const adapter=window.RUNLUUniversalData.current(),backup=collect(),incoming=payload.data;
+ const adapter=window.RUNLUUniversalData.current(),backup=collect(),incoming=payload.data;window.RUNLUUniversalLocalHealth?.capture('Before full Backup restore',{backupCreatedAt:payload.createdAt||null});
  // Replace Universal business/workspace keys as one controlled operation; backend selection remains local.
  (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!=='runlu_flooring_universal_data_backend').forEach(k=>adapter.remove(k));
  Object.entries(incoming).forEach(([k,v])=>adapter.write(k,v));
