@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#f4efe4">
+  <title>GUANSHI Stripe Test Center · RUNLU</title>
+  <link rel="stylesheet" href="styles.css?v=20260904-1">
+  <link rel="stylesheet" href="guanshi.css?v=20260904-2">
+  <style>
+    .test-shell{max-width:980px;margin:0 auto;padding:36px 20px 72px}.test-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;flex-wrap:wrap}.test-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:24px}.card{padding:20px;border:1px solid rgba(67,56,40,.16);border-radius:18px;background:rgba(255,255,255,.54)}.card h2,.card h3{margin-top:0}.status-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.status-row{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.7);border:1px solid rgba(67,56,40,.1)}.status-row strong{display:block;font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;opacity:.6}.good{color:#245f49}.warn{color:#8a5a15}.bad{color:#8b2f2f}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.btn{border:1px solid rgba(67,56,40,.22);background:white;color:inherit;border-radius:999px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer}.btn.primary{background:#3f3a34;color:white;border-color:#3f3a34}.btn:disabled{opacity:.5;cursor:wait}.plans{display:grid;gap:10px}.plan{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:12px;border:1px solid rgba(67,56,40,.12);border-radius:14px}.plan-copy{display:grid;gap:4px}.plan-copy small{opacity:.65}.log{white-space:pre-wrap;word-break:break-word;min-height:90px;padding:14px;border-radius:14px;background:#292724;color:#f8f4ea;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace}.notice{margin:18px 0;padding:15px 17px;border-left:3px solid rgba(67,56,40,.45);background:rgba(255,255,255,.35);line-height:1.7}.language-select{min-width:110px}@media(max-width:760px){.test-grid,.status-grid{grid-template-columns:1fr}.plan{align-items:flex-start;flex-direction:column}.plan .btn{width:100%}}</style>
+</head>
+<body class="guanshi-page">
+  <header class="gs-header">
+    <a class="brand" href="index.html">RUNLU</a>
+    <nav class="gs-top-nav"><a href="guanshi-pricing.html" data-en="Pricing" data-zh="价格" data-fr="Tarifs" data-es="Precios">Pricing</a><a href="account.html" data-en="Account" data-zh="账户" data-fr="Compte" data-es="Cuenta">Account</a></nav>
+    <select class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select>
+  </header>
+  <main class="test-shell">
+    <div class="test-head"><div><p class="gs-overline">RUNLU FORESIGHT · OWNER TEST</p><h1 data-en="Stripe Test Center" data-zh="Stripe 测试中心" data-fr="Centre de test Stripe" data-es="Centro de pruebas Stripe">Stripe Test Center</h1><p data-en="Owner/admin only. This page never enables public checkout." data-zh="仅限 owner/admin。这个页面不会开启公开结账。" data-fr="Réservé au propriétaire/admin. Cette page n’active jamais le paiement public." data-es="Solo owner/admin. Esta página nunca activa el checkout público.">Owner/admin only. This page never enables public checkout.</p></div></div>
+    <div class="notice" data-en="Goal: verify the full test chain — Stripe test Price → Checkout → signed webhook → RUNLU order → subscription entitlement or Deep Reading credit. Public paid buttons remain locked until this chain is proven." data-zh="目标：把完整测试链跑通——Stripe 测试 Price → Checkout → 已验签 Webhook → RUNLU 订单 → Plus 订阅权限或 Deep Reading 点数。整条链验证完成以前，公开付费按钮继续锁住。" data-fr="Objectif : vérifier toute la chaîne de test — Price Stripe → Checkout → webhook signé → commande RUNLU → abonnement ou crédit Deep Reading. Le paiement public reste verrouillé jusque-là." data-es="Objetivo: verificar toda la cadena de prueba — Price de Stripe → Checkout → webhook firmado → pedido RUNLU → suscripción o crédito Deep Reading. El pago público seguirá bloqueado hasta entonces.">Goal: verify the complete test chain.</div>
+
+    <section class="test-grid">
+      <article class="card">
+        <h2 data-en="Readiness" data-zh="准备状态" data-fr="État de préparation" data-es="Estado">Readiness</h2>
+        <div id="statusGrid" class="status-grid"></div>
+        <div class="actions"><button id="refreshBtn" class="btn" type="button" data-en="Refresh" data-zh="刷新" data-fr="Actualiser" data-es="Actualizar">Refresh</button><button id="bootstrapBtn" class="btn primary" type="button" data-en="Prepare Stripe test catalog" data-zh="准备 Stripe 测试商品" data-fr="Préparer le catalogue Stripe test" data-es="Preparar catálogo Stripe de prueba">Prepare Stripe test catalog</button></div>
+      </article>
+
+      <article class="card">
+        <h2 data-en="Test purchases" data-zh="测试购买" data-fr="Achats de test" data-es="Compras de prueba">Test purchases</h2>
+        <div id="plans" class="plans"></div>
+        <p style="opacity:.65" data-en="Stripe test mode only. No real charge is permitted from this page." data-zh="仅限 Stripe 测试模式。本页不允许真实扣款。" data-fr="Mode test Stripe uniquement. Aucun débit réel n’est autorisé ici." data-es="Solo modo de prueba de Stripe. No se permite ningún cargo real aquí.">Stripe test mode only.</p>
+      </article>
+    </section>
+
+    <section class="card" style="margin-top:16px">
+      <h2 data-en="Test log" data-zh="测试日志" data-fr="Journal de test" data-es="Registro de prueba">Test log</h2>
+      <div id="log" class="log">—</div>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  (()=>{"use strict";
+    const SUPABASE_URL="https://ekrnknlawekeoszzkamd.supabase.co";
+    const KEY="sb_publishable_Jr12gnQ7UrU6Wv9xz4L1aA_bcTZiGqn";
+    const ENDPOINT=SUPABASE_URL+"/functions/v1/runlu-stripe-checkout";
+    const client=window.supabase.createClient(SUPABASE_URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
+    const $=s=>document.querySelector(s), grid=$("#statusGrid"), plans=$("#plans"), log=$("#log"), refresh=$("#refreshBtn"), bootstrap=$("#bootstrapBtn");
+    let session=null,state=null;
+    const language=()=>{const v=String(localStorage.getItem("runlu_site_language")||navigator.language||"en").toLowerCase();return v.startsWith("zh")?"zh":v.startsWith("fr")?"fr":v.startsWith("es")?"es":"en"};
+    const msg={en:{signin:"Sign in to RUNLU Account first.",owner:"This page requires RUNLU owner/admin access.",working:"Working…",ready:"Ready",notReady:"Not ready",test:"Test secret",catalog:"Test catalog",webhook:"Verified webhook",normalizer:"Event normalizer",public:"Public checkout",open:"Open test checkout",catalogNeed:"Prepare the test catalog first.",returned:"Returned from Stripe Checkout. Refresh after the webhook has processed."},zh:{signin:"请先登录 RUNLU Account。",owner:"本页需要 RUNLU owner/admin 权限。",working:"正在处理…",ready:"已就绪",notReady:"未就绪",test:"测试密钥",catalog:"测试商品",webhook:"Webhook 已验签",normalizer:"事件归一化",public:"公开结账",open:"打开测试结账",catalogNeed:"请先准备测试商品。",returned:"已经从 Stripe Checkout 返回。Webhook 处理后请刷新状态。"},fr:{signin:"Connectez-vous d’abord à RUNLU Account.",owner:"Accès owner/admin requis.",working:"Traitement…",ready:"Prêt",notReady:"Non prêt",test:"Clé test",catalog:"Catalogue test",webhook:"Webhook vérifié",normalizer:"Normaliseur",public:"Paiement public",open:"Ouvrir le paiement test",catalogNeed:"Préparez d’abord le catalogue test.",returned:"Retour de Stripe Checkout. Actualisez après traitement du webhook."},es:{signin:"Inicia sesión primero en RUNLU Account.",owner:"Esta página requiere acceso owner/admin.",working:"Procesando…",ready:"Listo",notReady:"No listo",test:"Clave de prueba",catalog:"Catálogo de prueba",webhook:"Webhook verificado",normalizer:"Normalizador",public:"Checkout público",open:"Abrir checkout de prueba",catalogNeed:"Prepara primero el catálogo de prueba.",returned:"Regresaste de Stripe Checkout. Actualiza después de que el webhook se procese."}};
+    const t=k=>msg[language()]?.[k]||msg.en[k]||k;
+    function write(v){log.textContent=typeof v==="string"?v:JSON.stringify(v,null,2)}
+    async function call(action,extra={}){
+      if(!session)throw new Error(t("signin"));
+      const r=await fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+session.access_token,"apikey":KEY},body:JSON.stringify({action,...extra})});
+      const d=await r.json().catch(()=>({}));
+      if(!r.ok||d.ok===false)throw new Error(d.error||("HTTP "+r.status));
+      return d;
+    }
+    function chip(label,ok,value){
+      const d=document.createElement("div");d.className="status-row";
+      const s=document.createElement("strong");s.textContent=label;
+      const v=document.createElement("span");v.className=ok?"good":"warn";v.textContent=value||(ok?t("ready"):t("notReady"));
+      d.append(s,v);return d;
+    }
+    function render(){
+      grid.replaceChildren();
+      if(!state)return;
+      const a=state.adapter||{},c=state.checkout_control||{};
+      grid.append(
+        chip(t("test"),state.stripe_secret_mode==="test",state.stripe_secret_mode),
+        chip(t("catalog"),state.test_catalog_ready),
+        chip(t("webhook"),state.verified_webhook_seen&&a.verify_webhook_ready===true),
+        chip(t("normalizer"),a.normalize_event_ready===true),
+        chip(t("public"),c.checkout_enabled===true&&c.public_checkout_approved===true,(c.checkout_enabled&&c.public_checkout_approved)?t("ready"):"LOCKED")
+      );
+      plans.replaceChildren();
+      for(const p of state.plans||[]){
+        const row=document.createElement("div");row.className="plan";
+        const copy=document.createElement("div");copy.className="plan-copy";
+        const strong=document.createElement("strong");strong.textContent=p.name;
+        const small=document.createElement("small");small.textContent="CA$"+Number(p.price_cad).toFixed(2)+(p.billing_period==="month"?"/mo":p.billing_period==="year"?"/yr":"/reading");
+        copy.append(strong,small);
+        const btn=document.createElement("button");btn.type="button";btn.className="btn";btn.textContent=t("open");btn.disabled=!(state.stripe_secret_mode==="test"&&state.test_catalog_ready);
+        btn.addEventListener("click",()=>startCheckout(p.plan_key,btn));
+        row.append(copy,btn);plans.append(row);
+      }
+    }
+    async function load(){
+      try{
+        write(t("working"));
+        const {data}=await client.auth.getSession();session=data?.session||null;
+        if(!session){write(t("signin")+" https://runlu.ca/account.html");bootstrap.disabled=true;return}
+        state=await call("status");render();write(state);
+      }catch(e){write(e.message||String(e));bootstrap.disabled=true}
+    }
+    async function doBootstrap(){
+      bootstrap.disabled=true;refresh.disabled=true;write(t("working"));
+      try{const d=await call("bootstrap_test_catalog");state=d.status;render();write(d)}
+      catch(e){write(e.message||String(e))}
+      finally{bootstrap.disabled=false;refresh.disabled=false}
+    }
+    async function startCheckout(planKey,btn){
+      btn.disabled=true;write(t("working"));
+      try{
+        const d=await call("create_test_checkout",{plan_key:planKey,idempotency_key:"runlu-test-"+crypto.randomUUID()});
+        write(d);if(d.checkout_url)location.href=d.checkout_url;
+      }catch(e){write(e.message||String(e));btn.disabled=false}
+    }
+    refresh.addEventListener("click",load);bootstrap.addEventListener("click",doBootstrap);
+    const q=new URLSearchParams(location.search);if(q.get("checkout"))write(t("returned"));
+    load();
+  })();
+  </script>
+  <script src="runlu-language.js?v=2.4"></script>
+</body>
+</html>
