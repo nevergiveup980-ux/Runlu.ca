@@ -40,6 +40,7 @@ function validatePackage(p){
 async function inspectFile(file){let p;try{p=JSON.parse(await file.text())}catch(_){throw new Error('Import file is not valid JSON.')}const v=validatePackage(p);if(!v.ok)throw new Error(v.error);return p}
 function importPackage(p){
  const v=validatePackage(p);if(!v.ok)throw new Error(v.error);
+ window.RUNLUUniversalLocalHealth?.capture('Before Business Package import',{sourceCreatedAt:p.createdAt||null});
  const summary={added:0,skipped:0,datasets:{}};
  DATASETS.forEach(([id,,key])=>{
   const all=data().read(key,[])||[],currentIds=new Set(all.filter(x=>x.organizationId===org()).map(x=>x.id)),incoming=p.datasets[id]||[],add=incoming.filter(x=>!currentIds.has(x.id)),skip=incoming.length-add.length;
