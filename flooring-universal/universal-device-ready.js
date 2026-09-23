@@ -6,8 +6,8 @@ const WS='runlu_flooring_universal_u0_workspace';
 async function cacheCheck(){
  if(!('caches' in window))return {ok:false,detail:'Cache Storage unavailable'};
  try{
-  const index=await caches.match('./index.html')||await caches.match(new URL('./index.html',location.href).href);
-  const manifest=await caches.match('./manifest.webmanifest')||await caches.match(new URL('./manifest.webmanifest',location.href).href);
+  const index=await caches.match(new URL('./index.html',location.href).href);
+  const manifest=await caches.match(new URL('./manifest.webmanifest',location.href).href);
   return {ok:!!index&&!!manifest,detail:index&&manifest?'App shell cache found':'Open once online to finish app-shell cache'};
  }catch(e){return {ok:false,detail:e.message||'Cache check failed'}}
 }
