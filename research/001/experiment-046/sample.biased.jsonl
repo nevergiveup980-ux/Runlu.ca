@@ -1,0 +1,4 @@
+{"event_id":"b1","observed_at":"2026-09-23T18:00:00Z","site_context":"SURGE","side_a_queue":12,"side_b_queue":14,"opportunity":true,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"b2","observed_at":"2026-09-23T18:02:00Z","site_context":"SURGE","side_a_queue":13,"side_b_queue":15,"opportunity":true,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"b3","observed_at":"2026-09-23T18:04:00Z","site_context":"SURGE","side_a_queue":11,"side_b_queue":12,"opportunity":true,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
+{"event_id":"b4","observed_at":"2026-09-23T18:06:00Z","site_context":"SURGE","side_a_queue":14,"side_b_queue":13,"opportunity":true,"source_mode":"MANUAL_OBSERVATION","schema_version":"e044-v1","quality":"GOOD"}
