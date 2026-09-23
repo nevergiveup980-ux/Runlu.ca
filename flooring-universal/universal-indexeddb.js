@@ -34,7 +34,7 @@ async function all(){
 }
 async function seed(){
  if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local'||!supported())return {ok:false,reason:'not-local-or-unsupported'};
- const adapter=window.RUNLUUniversalData.current(),keys=(adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP&&k!==SNAP);
+ const adapter=window.RUNLUUniversalData.current(),keys=(adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP);
  for(const key of keys)await put(key,adapter.read(key,null));
  return {ok:true,records:keys.length};
 }
@@ -50,7 +50,7 @@ async function replaceLocalFromMirror(){
  const records=await all();if(!records.length)throw new Error('Durable mirror is empty.');
  window.RUNLUUniversalLocalHealth?.capture?.('Before full IndexedDB mirror restore',{records:records.length});
  const adapter=window.RUNLUUniversalData.current();
- (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND).forEach(k=>adapter.remove(k));
+ (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP).forEach(k=>adapter.remove(k));
  records.forEach(r=>{if(r.key?.startsWith(PREFIX)&&r.key!==BACKEND&&r.key!==SNAP)adapter.write(r.key,r.value)});
  return {restored:records.length};
 }
