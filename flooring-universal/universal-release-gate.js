@@ -5,7 +5,7 @@
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 function run(){
  const tests=[],t=(name,ok,detail)=>tests.push({name,ok:!!ok,detail});
- const mods=['RUNLUUniversalData','RUNLUUniversalLocalHealth','RUNLUUniversalBackup','RUNLUUniversalDataExchange','RUNLUUniversalSales','RUNLUUniversalPO','RUNLUUniversalInbound','RUNLUUniversalInstallation','RUNLUUniversalBilling','RUNLUUniversalAccounting','RUNLUUniversalAudit','RUNLUUniversalLifecycleGate','RUNLUUniversalRecovery','RUNLUUniversalGuards'];
+ const mods=['RUNLUUniversalData','RUNLUUniversalDataVersion','RUNLUUniversalLocalHealth','RUNLUUniversalBackup','RUNLUUniversalDataExchange','RUNLUUniversalSales','RUNLUUniversalPO','RUNLUUniversalInbound','RUNLUUniversalInstallation','RUNLUUniversalBilling','RUNLUUniversalAccounting','RUNLUUniversalAudit','RUNLUUniversalLifecycleGate','RUNLUUniversalRecovery','RUNLUUniversalGuards'];
  mods.forEach(m=>t('Module · '+m,!!window[m],window[m]?'loaded':'missing'));
  const data=window.RUNLUUniversalData,health=data?.current?.()?.health?.();
  t('Data Adapter · active',!!data&&!!health?.ok,health?.detail||'unavailable');
@@ -13,10 +13,17 @@ function run(){
  const exchange=window.RUNLUUniversalDataExchange;
  if(exchange){
   const oid=data?.read?.('runlu_flooring_universal_u0_workspace',null)?.company?.organizationId||'';
-  const fixture={format:'runlu-flooring-universal-business-package',version:1,createdAt:new Date(0).toISOString(),organizationId:oid,companyName:'Test',datasets:{jobs:[]}};
+  const fixture={format:'runlu-flooring-universal-business-package',version:1,schemaVersion:version?.CURRENT||1,createdAt:new Date(0).toISOString(),organizationId:oid,companyName:'Test',datasets:{jobs:[]}};
   t('Data Exchange · valid package',exchange.validatePackage(fixture).ok,'same-company package accepted');
   t('Data Exchange · rejects unknown dataset',!exchange.validatePackage({...fixture,datasets:{unknown:[]}}).ok,'unknown dataset blocked');
   t('Data Exchange · rejects foreign organization',!exchange.validatePackage({...fixture,organizationId:'foreign-org'}).ok,'cross-company import blocked');
+ }
+ const version=window.RUNLUUniversalDataVersion;
+ if(version){
+  const vs=version.status();
+  t('Data Version · compatible',vs.compatible,'workspace v'+vs.workspaceVersion+' / app v'+vs.currentVersion);
+  t('Data Version · migration registry',typeof version.register==='function'&&typeof version.migrate==='function','registry + runner ready');
+  t('Data Version · no downgrade',version.CURRENT>=vs.workspaceVersion,'future data must not be downgraded');
  }
  const localHealth=window.RUNLUUniversalLocalHealth;
  if(localHealth){
@@ -25,7 +32,7 @@ function run(){
  }
  const backup=window.RUNLUUniversalBackup;
  if(backup){
-  const fixture={format:'runlu-flooring-universal-backup',version:1,createdAt:new Date(0).toISOString(),product:'RUNLU Flooring OS Universal',data:{runlu_flooring_universal_test:{ok:true}}};
+  const fixture={format:'runlu-flooring-universal-backup',version:1,schemaVersion:version?.CURRENT||1,createdAt:new Date(0).toISOString(),product:'RUNLU Flooring OS Universal',data:{runlu_flooring_universal_test:{ok:true}}};
   t('Backup · valid Universal payload',backup.validate(fixture).ok,'Universal namespace accepted');
   t('Backup · rejects foreign keys',!backup.validate({...fixture,data:{foreign_key:{}}}).ok,'foreign namespace blocked');
   t('Backup · rejects foreign format',!backup.validate({...fixture,format:'other-product'}).ok,'foreign product blocked');
