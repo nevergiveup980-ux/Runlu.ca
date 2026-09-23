@@ -3,7 +3,7 @@
 (function(){
 'use strict';
 const JOB_STORE='runlu_flooring_universal_u1_jobs', TEAM_STORE='runlu_flooring_universal_u1_sales_team', WORKSPACE_STORE='runlu_flooring_universal_u0_workspace';
-const $=id=>document.getElementById(id), read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')??d}catch(_){return d}}, write=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const $=id=>document.getElementById(id), read=(k,d)=>window.RUNLUUniversalData.read(k,d), write=(k,v)=>window.RUNLUUniversalData.write(k,v);
 const workspace=()=>read(WORKSPACE_STORE,null), tenant=()=>workspace()?.company?.organizationId||'', locationId=()=>workspace()?.location?.locationId||'';
 const jobs=()=>read(JOB_STORE,[]).filter(j=>j.organizationId===tenant()), team=()=>read(TEAM_STORE,[]).filter(r=>r.organizationId===tenant());
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])), num=v=>Number.isFinite(Number(v))?Number(v):0;
