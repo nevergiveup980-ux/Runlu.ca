@@ -9,11 +9,12 @@ function collect(){
  if(!adapter||adapter.id!=='local')throw new Error('Local backup is available only in Local Device mode.');
  const keys=adapter.rawKeys?.()||[],data={};
  keys.filter(k=>k.startsWith(PREFIX)&&k!=='runlu_flooring_universal_data_backend'&&k!==SNAP).forEach(k=>{data[k]=adapter.read(k,null)});
- return {format:FORMAT,version:VERSION,createdAt:new Date().toISOString(),product:'RUNLU Flooring OS Universal',data};
+ return {format:FORMAT,version:VERSION,schemaVersion:window.RUNLUUniversalDataVersion?.status?.().workspaceVersion||0,createdAt:new Date().toISOString(),product:'RUNLU Flooring OS Universal',data};
 }
 function validate(payload){
  if(!payload||payload.format!==FORMAT)return {ok:false,error:'Not a RUNLU Flooring OS Universal backup.'};
  if(payload.version!==VERSION)return {ok:false,error:'Unsupported backup version.'};
+ if(Number(payload.schemaVersion||0)>(window.RUNLUUniversalDataVersion?.CURRENT||1))return {ok:false,error:'Backup data is newer than this app.'};
  if(!payload.data||typeof payload.data!=='object'||Array.isArray(payload.data))return {ok:false,error:'Backup data is missing.'};
  const keys=Object.keys(payload.data);
  if(keys.some(k=>!k.startsWith(PREFIX)))return {ok:false,error:'Backup contains a non-Universal data key.'};
@@ -35,7 +36,8 @@ function restore(payload){
  // Replace Universal business/workspace keys as one controlled operation; backend selection remains local.
  (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!=='runlu_flooring_universal_data_backend'&&k!==SNAP).forEach(k=>adapter.remove(k));
  Object.entries(incoming).forEach(([k,v])=>adapter.write(k,v));
- return {restoredKeys:Object.keys(incoming).length,safetyBackup:backup};
+ const migration=window.RUNLUUniversalDataVersion?.migrate?.();
+ return {restoredKeys:Object.keys(incoming).length,safetyBackup:backup,migration};
 }
 function render(){
  const host=document.getElementById('universalBackup');if(!host)return;
