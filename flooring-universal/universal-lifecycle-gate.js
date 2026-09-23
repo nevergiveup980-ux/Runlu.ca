@@ -2,7 +2,7 @@
    Read-only integrity checks across the local Universal lifecycle. */
 (function(){
 'use strict';
-const WS='runlu_flooring_universal_u0_workspace',read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')??d}catch(_){return d}},esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const WS='runlu_flooring_universal_u0_workspace',read=(k,d)=>window.RUNLUUniversalData.read(k,d),esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 function run(){
  const org=read(WS,null)?.company?.organizationId||'',jobs=window.RUNLUUniversalSales?.jobs()||[],pos=window.RUNLUUniversalPO?.pos()||[],inb=window.RUNLUUniversalInbound?.tasks()||[],inst=window.RUNLUUniversalInstallation?.rows()||[],bills=window.RUNLUUniversalBilling?.rows()||[],acct=window.RUNLUUniversalAccounting?.rows()||[],audit=window.RUNLUUniversalAudit?.events()||[];
  const issues=[],warn=(code,msg)=>issues.push({code,msg});
