@@ -15,6 +15,7 @@ function localAdapter(){
     read(key,fallback){return safeParse(localStorage.getItem(key),fallback)},
     write(key,value){localStorage.setItem(key,JSON.stringify(value));return value},
     remove(key){localStorage.removeItem(key)},
+    raw(key){return localStorage.getItem(key)},
     rawKeys(){const out=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k?.startsWith('runlu_flooring_universal_'))out.push(k)}return out.sort()},
     health(){return {ok:true,adapter:'local',detail:'Local device storage ready'}}
   });
