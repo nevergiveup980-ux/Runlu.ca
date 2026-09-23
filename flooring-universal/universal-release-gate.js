@@ -5,11 +5,19 @@
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 function run(){
  const tests=[],t=(name,ok,detail)=>tests.push({name,ok:!!ok,detail});
- const mods=['RUNLUUniversalData','RUNLUUniversalBackup','RUNLUUniversalSales','RUNLUUniversalPO','RUNLUUniversalInbound','RUNLUUniversalInstallation','RUNLUUniversalBilling','RUNLUUniversalAccounting','RUNLUUniversalAudit','RUNLUUniversalLifecycleGate','RUNLUUniversalRecovery','RUNLUUniversalGuards'];
+ const mods=['RUNLUUniversalData','RUNLUUniversalBackup','RUNLUUniversalDataExchange','RUNLUUniversalSales','RUNLUUniversalPO','RUNLUUniversalInbound','RUNLUUniversalInstallation','RUNLUUniversalBilling','RUNLUUniversalAccounting','RUNLUUniversalAudit','RUNLUUniversalLifecycleGate','RUNLUUniversalRecovery','RUNLUUniversalGuards'];
  mods.forEach(m=>t('Module · '+m,!!window[m],window[m]?'loaded':'missing'));
  const data=window.RUNLUUniversalData,health=data?.current?.()?.health?.();
  t('Data Adapter · active',!!data&&!!health?.ok,health?.detail||'unavailable');
  t('Data Adapter · default local',data?.backendConfig?.().mode==='local','cloud remains optional');
+ const exchange=window.RUNLUUniversalDataExchange;
+ if(exchange){
+  const oid=data?.read?.('runlu_flooring_universal_u0_workspace',null)?.company?.organizationId||'';
+  const fixture={format:'runlu-flooring-universal-business-package',version:1,createdAt:new Date(0).toISOString(),organizationId:oid,companyName:'Test',datasets:{jobs:[]}};
+  t('Data Exchange · valid package',exchange.validatePackage(fixture).ok,'same-company package accepted');
+  t('Data Exchange · rejects unknown dataset',!exchange.validatePackage({...fixture,datasets:{unknown:[]}}).ok,'unknown dataset blocked');
+  t('Data Exchange · rejects foreign organization',!exchange.validatePackage({...fixture,organizationId:'foreign-org'}).ok,'cross-company import blocked');
+ }
  const backup=window.RUNLUUniversalBackup;
  if(backup){
   const fixture={format:'runlu-flooring-universal-backup',version:1,createdAt:new Date(0).toISOString(),product:'RUNLU Flooring OS Universal',data:{runlu_flooring_universal_test:{ok:true}}};
