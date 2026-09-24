@@ -26,7 +26,7 @@ window.RUNLUCommerceConfig = Object.freeze({
     "guanshi-plus-monthly": Object.freeze({
       name: "RUNLU GUANSHI Plus Monthly",
       enabled: false,
-      checkoutUrl: "",
+      checkoutUrl: "https://buy.stripe.com/5kQ4gAaPpdH1gL2cNw6Vq06",
       price: "CAD $6.99 / month",
       version: "1.0",
       delivery: "account-subscription",
@@ -36,15 +36,17 @@ window.RUNLUCommerceConfig = Object.freeze({
     "guanshi-plus-annual": Object.freeze({
       name: "RUNLU GUANSHI Plus Annual",
       enabled: false,
-      checkoutUrl: "",
+      checkoutUrl: "https://buy.stripe.com/bJedRa2iT0UfamE9Bk6Vq05",
       price: "CAD $59.99 / year",
       version: "1.0",
-      delivery: "account-subscription"
+      delivery: "account-subscription",
+      requiresAccount: true,
+      requiresServerReference: true
     }),
     "guanshi-deep-reading": Object.freeze({
       name: "RUNLU GUANSHI Deep Reading",
       enabled: false,
-      checkoutUrl: "",
+      checkoutUrl: "https://buy.stripe.com/fZudRa6z99qLeCU3cW6Vq04",
       price: "CAD $3.99 / reading",
       version: "1.0",
       delivery: "account-credit",
