@@ -10,13 +10,13 @@ The report may include:
 - Recovery Point count,
 - business dataset **counts only**,
 - Device Readiness check results,
-- Release Gate test names/results,
-- sanitized local subsystem error text.
+- aggregate Release Gate passed/failed counts,
+- boolean flags indicating whether a local subsystem reports an error.
 
 The report explicitly excludes:
 - customer names,
 - company identity,
-- job / PO / invoice / record IDs,
+- job / PO / invoice / record IDs or Release Gate test labels that could contain them,
 - prices, payments, addresses, notes, line items, or other business record contents,
 - cloud credentials or secrets.
 
