@@ -4,10 +4,10 @@
 
   const STORAGE_KEY = "runlu-bag-v1";
   const labels = {
-    en:{bag:"Bag",add:"Add to Bag",added:"Added",title:"Your Bag",empty:"Your bag is empty.",subtotal:"Subtotal",checkout:"Checkout",remove:"Remove",close:"Close"},
-    zh:{bag:"购物袋",add:"加入购物袋",added:"已加入",title:"购物袋",empty:"购物袋还是空的。",subtotal:"小计",checkout:"结账",remove:"移除",close:"关闭"},
-    fr:{bag:"Panier",add:"Ajouter au panier",added:"Ajouté",title:"Votre panier",empty:"Votre panier est vide.",subtotal:"Sous-total",checkout:"Paiement",remove:"Retirer",close:"Fermer"},
-    es:{bag:"Bolsa",add:"Añadir a la bolsa",added:"Añadido",title:"Tu bolsa",empty:"Tu bolsa está vacía.",subtotal:"Subtotal",checkout:"Pagar",remove:"Eliminar",close:"Cerrar"}
+    en:{bag:"Bag",add:"Add to Bag",added:"Added",title:"Your Bag",empty:"Your bag is empty.",subtotal:"Subtotal",checkout:"Checkout",remove:"Remove",close:"Close",signin:"Sign in to RUNLU Account to continue.",error:"Could not start checkout. Please try again."},
+    zh:{bag:"购物袋",add:"加入购物袋",added:"已加入",title:"购物袋",empty:"购物袋还是空的。",subtotal:"小计",checkout:"结账",remove:"移除",close:"关闭",signin:"请先登录 RUNLU 账户再继续。",error:"暂时无法开始结账，请再试一次。"},
+    fr:{bag:"Panier",add:"Ajouter au panier",added:"Ajouté",title:"Votre panier",empty:"Votre panier est vide.",subtotal:"Sous-total",checkout:"Paiement",remove:"Retirer",close:"Fermer",signin:"Connectez-vous à RUNLU Account pour continuer.",error:"Impossible de démarrer le paiement. Réessayez."},
+    es:{bag:"Bolsa",add:"Añadir a la bolsa",added:"Añadido",title:"Tu bolsa",empty:"Tu bolsa está vacía.",subtotal:"Subtotal",checkout:"Pagar",remove:"Eliminar",close:"Cerrar",signin:"Inicia sesión en RUNLU Account para continuar.",error:"No se pudo iniciar el checkout. Inténtalo de nuevo."}
   };
 
   function lang(){ return document.documentElement.dataset.runluLanguage || "en"; }
@@ -24,6 +24,54 @@
       return false;
     } catch (_) { return false; }
   }
+  let accountClient=null;
+  function getAccountClient(){
+    if(accountClient) return accountClient;
+    if(!cfg.account || !window.supabase || typeof window.supabase.createClient!=="function") return null;
+    accountClient=window.supabase.createClient(cfg.account.supabaseUrl,cfg.account.publishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
+    return accountClient;
+  }
+  async function buildCheckoutUrl(key,product){
+    if(!product.requiresAccount && !product.requiresServerReference) return product.checkoutUrl;
+    const client=getAccountClient();
+    if(!client) throw new Error("account_client_unavailable");
+    const {data,error}=await client.auth.getSession();
+    if(error) throw error;
+    const session=data?.session||null;
+    if(!session){
+      const signIn=new URL(cfg.account.signInUrl||"account.html",location.href);
+      signIn.searchParams.set("return_to",location.href);
+      alert(t("signin"));
+      location.href=signIn.toString();
+      return null;
+    }
+    const url=new URL(product.checkoutUrl);
+    if(product.requiresServerReference){
+      const res=await fetch(cfg.account.referenceEndpoint,{
+        method:"POST",
+        headers:{"Content-Type":"application/json","Authorization":"Bearer "+session.access_token,"apikey":cfg.account.publishableKey},
+        body:JSON.stringify({action:"prepare_payment_link_reference",plan_key:key})
+      });
+      const data=await res.json().catch(()=>({}));
+      if(!res.ok||!data.ok||!data.client_reference_id) throw new Error(data.error||"reference_prepare_failed");
+      url.searchParams.set("client_reference_id",data.client_reference_id);
+    }
+    return url.toString();
+  }
+  async function startCheckout(key,product,button){
+    if(button)button.disabled=true;
+    try{
+      localStorage.setItem("runlu-pending-product",key);
+      const checkoutUrl=await buildCheckoutUrl(key,product);
+      if(checkoutUrl) location.href=checkoutUrl;
+    }catch(e){
+      console.error("RUNLU checkout start failed",e);
+      alert(t("error"));
+    }finally{
+      if(button&&button.isConnected)button.disabled=false;
+    }
+  }
+
   function getBag(){
     try { const v=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]"); return Array.isArray(v)?v.filter(k=>cfg.products[k]):[]; }
     catch(_){ return []; }
@@ -81,7 +129,7 @@
     checkout.textContent=t("checkout");
     const ready=products.length===1 && products[0].enabled && validCheckout(products[0].checkoutUrl);
     checkout.disabled=!ready;
-    checkout.onclick=ready?()=>{ localStorage.setItem("runlu-pending-product",products[0].key); window.location.href=products[0].checkoutUrl; }:null;
+    checkout.onclick=ready?()=>startCheckout(products[0].key,products[0],checkout):null;
   }
   function apply(){
     ensureUI();
