@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E062 Claim Robustness Ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "claim_id",
+    "claim_text",
+    "scope",
+    "layers",
+    "overall_status",
+    "ledger_version",
+    "schema_version"
+  ],
+  "properties": {
+    "claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "layers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "layer_id",
+          "status",
+          "basis"
+        ],
+        "properties": {
+          "layer_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ROBUST",
+              "SENSITIVE",
+              "UNRESOLVED",
+              "NOT_APPLICABLE"
+            ]
+          },
+          "basis": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "overall_status": {
+      "type": "string",
+      "enum": [
+        "ROBUST",
+        "SENSITIVE",
+        "UNRESOLVED"
+      ]
+    },
+    "ledger_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "const": "e062-v1"
+    }
+  }
+}
