@@ -6,6 +6,16 @@
   const ACCOUNT_RETURN_URL = 'https://runlu.ca/account.html';
   const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
   const queryParams = new URLSearchParams(window.location.search);
+  const requestedCommerceReturn = (() => {
+    const raw = queryParams.get('return_to');
+    if (!raw) return '';
+    try {
+      const url = new URL(raw, window.location.origin);
+      if (url.origin !== window.location.origin) return '';
+      if (url.pathname.endsWith('/account.html')) return '';
+      return url.href;
+    } catch (_) { return ''; }
+  })();
   const initialRecoveryHint = hashParams.get('type') === 'recovery' || queryParams.get('type') === 'recovery' || queryParams.get('recovery') === '1';
 
   if (!window.supabase?.createClient) return;
@@ -147,6 +157,9 @@
     el.authView.hidden=true;el.recoveryView.hidden=true;el.accountView.hidden=false;
     try{await loadProfile(user)}catch(e){showStatus(e?.message||t('generic_error'),true)}
     try{await Promise.all([loadLibrary(generation),loadStore(generation)])}catch(e){showStatus(e?.message||t('generic_error'),true)}
+    if(requestedCommerceReturn && !recoveryMode){
+      window.setTimeout(()=>window.location.replace(requestedCommerceReturn),180);
+    }
   }
 
   el.signInTab.addEventListener('click',()=>setMode('signin'));
