@@ -30,8 +30,8 @@ async function collect(){
   adapter:{id:adapter?.id||null,healthy:!!health?.ok,detail:clean(health?.detail||'')},
   recordCounts:counts(),
   deviceReadiness:ready?{ready:!!ready.ready,checks:ready.checks.map(x=>({id:x.id,ok:!!x.ok,detail:clean(x.detail)}))}:null,
-  releaseGate:gate?{passed:gate.passed,failed:gate.failed,tests:gate.tests.map(x=>({name:clean(x.name),ok:!!x.ok,detail:clean(x.detail)}))}:null,
-  errors:{pwa:clean(pwa?.error||''),durable:clean(durable?.error||'')}
+  releaseGate:gate?{passed:gate.passed,failed:gate.failed,total:(gate.passed||0)+(gate.failed||0)}:null,
+  subsystemErrors:{pwaPresent:!!pwa?.error,durablePresent:!!durable?.error}
  };
 }
 function validate(r){return !!r&&r.format===FORMAT&&r.version===VERSION&&r.privacy?.businessContentsIncluded===false}
