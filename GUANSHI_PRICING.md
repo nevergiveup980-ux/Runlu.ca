@@ -71,44 +71,59 @@ Never call a planned paid capability “available” merely because the price is
 **价格可以先确定；购买按钮必须等真实支付链完成以后再亮。**
 
 
-## Stripe test center
+## Stripe commerce integration center
 
 Private owner/admin route: `guanshi-commerce-test.html`
 
+The historical filename remains for compatibility, but the route now represents **GUANSHI commerce integration**, not a separate Stripe test trunk.
+
 This route is deliberately **not** a public sales page and is not included in the sitemap.
 
-The owner-only test flow is:
+### Reuse rule
 
-1. authenticated RUNLU owner/admin opens the test center;
-2. the test center asks `runlu-stripe-checkout` for readiness;
-3. Stripe test catalog bootstrap is permitted **only** when the configured server secret is a Stripe test secret (`sk_test_...`);
-4. RUNLU creates or verifies one Stripe test Product/Price mapping for each paid GUANSHI plan;
-5. owner/admin starts a Stripe Test Checkout;
-6. the Checkout Session is linked to an immutable RUNLU checkout contract before redirect;
-7. Stripe signs webhook events and `runlu-stripe-webhook` verifies the HMAC;
-8. a correlated `checkout.session.completed` materializes and pays the RUNLU order;
-9. Deep Reading fulfills one consumable credit;
-10. Plus waits for Stripe subscription lifecycle confirmation, then creates/updates the RUNLU subscription and entitlement period;
-11. renewal events extend the subscription entitlement; terminal subscription events revoke/expire it.
+RUNLU already has observed Live Stripe payment evidence. Therefore GUANSHI reuses the proven shared infrastructure:
+- the same Stripe account;
+- the same Live Checkout / Payment Link family;
+- the same webhook endpoint;
+- the same Stripe signature-verification path;
+- the same banking / payout destination.
+
+Do **not** require a separate Stripe test secret merely to re-prove infrastructure that has already processed a real RUNLU Live payment.
+
+GUANSHI still needs its own commercial objects because its prices and fulfillment are different:
+- Plus Monthly · CA$6.99 / month;
+- Plus Annual · CA$59.99 / year;
+- Deep Reading · CA$3.99 / reading.
+
+The remaining validation target is the GUANSHI-specific branch:
+
+1. create three GUANSHI Live Product / Price / Payment Link mappings in the existing Stripe account;
+2. keep public RUNLU Buy buttons locked while the mappings are being connected;
+3. Stripe continues to sign webhook events and `runlu-stripe-webhook` verifies the HMAC;
+4. Deep Reading must resolve to one RUNLU consumable credit;
+5. Plus Monthly / Annual must resolve to a RUNLU subscription and entitlement period;
+6. renewal events must extend entitlement correctly;
+7. cancellation / expiry must stop future subscription access correctly;
+8. no GUANSHI purchase may cross-deliver into the legacy RUNLU DIGITAL download path.
 
 Public checkout remains independently controlled by `runlu_checkout_control`. Test readiness must never flip `public_checkout_approved` or `checkout_enabled`.
 
 Current adapter staging:
-- checkout function: owner-only Stripe test catalog + test Checkout supported;
-- webhook: signature verification supported;
-- GUANSHI checkout/order normalization supported;
-- GUANSHI subscription lifecycle normalization supported;
-- public subscription sync is still considered **testing** until an end-to-end Stripe test purchase is observed;
+- the shared Live Stripe payment trunk has real RUNLU transaction evidence;
+- webhook signature verification is supported and observed;
+- GUANSHI checkout/order normalization is implemented;
+- GUANSHI subscription lifecycle normalization is implemented;
+- GUANSHI Live Product / Price mappings are currently pending;
+- public subscription sync is still considered **testing** until one controlled GUANSHI subscription is observed end to end;
 - refund automation remains separately gated.
 
 ### Promotion rule
 
-Do not promote paid GUANSHI plans from `planned` to `available`, and do not enable public checkout, merely because the test center can create a Stripe session.
+Do not promote paid GUANSHI plans from `planned` to `available`, and do not enable public checkout, merely because the shared Stripe trunk already works for another RUNLU product.
 
-Promotion requires observed end-to-end evidence for:
-- Plus Monthly test purchase;
-- Plus Annual test purchase;
-- Deep Reading test purchase;
+Promotion requires observed GUANSHI-specific end-to-end evidence for:
+- at least one controlled Plus subscription path covering the shared subscription logic (monthly and annual price mappings must both be verified);
+- one controlled Deep Reading purchase;
 - signed webhook receipt;
 - paid RUNLU order;
 - correct subscription entitlement or consumable credit;
