@@ -1,5 +1,11 @@
 window.RUNLUCommerceConfig = Object.freeze({
   provider: "stripe",
+  account: Object.freeze({
+    supabaseUrl: "https://ekrnknlawekeoszzkamd.supabase.co",
+    publishableKey: "sb_publishable_Jr12gnQ7UrU6Wv9xz4L1aA_bcTZiGqn",
+    referenceEndpoint: "https://ekrnknlawekeoszzkamd.supabase.co/functions/v1/runlu-stripe-checkout",
+    signInUrl: "account.html"
+  }),
   products: Object.freeze({
     "sbcc-v1-1": Object.freeze({
       name: "Small Business Command Center V1.1",
@@ -23,7 +29,9 @@ window.RUNLUCommerceConfig = Object.freeze({
       checkoutUrl: "",
       price: "CAD $6.99 / month",
       version: "1.0",
-      delivery: "account-subscription"
+      delivery: "account-subscription",
+      requiresAccount: true,
+      requiresServerReference: true
     }),
     "guanshi-plus-annual": Object.freeze({
       name: "RUNLU GUANSHI Plus Annual",
@@ -39,7 +47,9 @@ window.RUNLUCommerceConfig = Object.freeze({
       checkoutUrl: "",
       price: "CAD $3.99 / reading",
       version: "1.0",
-      delivery: "account-credit"
+      delivery: "account-credit",
+      requiresAccount: true,
+      requiresServerReference: true
     })
   })
 });
