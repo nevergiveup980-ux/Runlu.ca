@@ -16,6 +16,30 @@ window.RUNLUCommerceConfig = Object.freeze({
       price: "CAD $9.99",
       version: "1.0",
       delivery: "order-confirmation"
+    }),
+    "guanshi-plus-monthly": Object.freeze({
+      name: "RUNLU GUANSHI Plus Monthly",
+      enabled: false,
+      checkoutUrl: "",
+      price: "CAD $6.99 / month",
+      version: "1.0",
+      delivery: "account-subscription"
+    }),
+    "guanshi-plus-annual": Object.freeze({
+      name: "RUNLU GUANSHI Plus Annual",
+      enabled: false,
+      checkoutUrl: "",
+      price: "CAD $59.99 / year",
+      version: "1.0",
+      delivery: "account-subscription"
+    }),
+    "guanshi-deep-reading": Object.freeze({
+      name: "RUNLU GUANSHI Deep Reading",
+      enabled: false,
+      checkoutUrl: "",
+      price: "CAD $3.99 / reading",
+      version: "1.0",
+      delivery: "account-credit"
     })
   })
 });
