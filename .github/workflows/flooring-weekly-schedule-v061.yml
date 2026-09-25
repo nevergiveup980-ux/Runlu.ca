@@ -1,0 +1,25 @@
+name: Flooring Weekly Scheduling Board V0.6.1
+
+on:
+  pull_request:
+    paths:
+      - 'flooring/weekly-schedule-v061.js'
+      - 'flooring/index-v061-weekly-schedule.html'
+      - 'scripts/run-flooring-weekly-schedule-v061.mjs'
+      - '.github/workflows/flooring-weekly-schedule-v061.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  weekly-schedule-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run V0.6.1 weekly scheduling engineering gate
+        run: node scripts/run-flooring-weekly-schedule-v061.mjs
