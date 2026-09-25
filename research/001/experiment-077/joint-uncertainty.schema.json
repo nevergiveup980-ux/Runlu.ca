@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E077 Joint Uncertainty",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "comparison_id",
+    "effect_easy_interval",
+    "effect_hard_interval",
+    "target_interval",
+    "minimum_contrast",
+    "maximum_contrast",
+    "status",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "comparison_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "effect_easy_interval": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "number"
+      }
+    },
+    "effect_hard_interval": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "number"
+      }
+    },
+    "target_interval": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      }
+    },
+    "minimum_contrast": {
+      "type": "number"
+    },
+    "maximum_contrast": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ROBUST_A",
+        "ROBUST_B",
+        "EXACT_TIE_ONLY",
+        "SIGN_UNRESOLVED"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e077-v1"
+    }
+  }
+}
