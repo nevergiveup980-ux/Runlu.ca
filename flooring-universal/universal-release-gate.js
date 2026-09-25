@@ -121,6 +121,12 @@ function run(){
   ['Customer Payment · record',window.RUNLUUniversalBilling?.pay,'r.payments.push']
  ];
  orderedActions.forEach(([name,fn,mutation])=>{const src=fn?.toString?.()||'';t('Write-ahead order · '+name,typeof fn==='function'&&src.indexOf("CrashJournal?.begin")>=0&&src.indexOf("CrashJournal?.begin")<src.indexOf(mutation),'journal begins before business mutation')});
+ const terminalContracts=[
+ ['Installation · complete',window.RUNLUUniversalInstallation?.complete,"Guards?.assert","CrashJournal?.begin","r.status='Completed'"],
+ ['Supplier Accounting · paid',window.RUNLUUniversalAccounting?.paid,"Guards?.assert","CrashJournal?.begin","r.status='Paid'"],
+ ['Customer Invoice · issue',window.RUNLUUniversalBilling?.issue,"Guards?.assert","CrashJournal?.begin","r.invoiceNumber=invoiceNumber"]
+ ];
+ terminalContracts.forEach(([name,fn,guard,journal,mutation])=>{const src=fn?.toString?.()||'',g=src.indexOf(guard),j=src.indexOf(journal),m=src.indexOf(mutation);t('Terminal action order · '+name,typeof fn==='function'&&g>=0&&g<j&&j<m,'lifecycle guard precedes journal; journal precedes terminal mutation')});
  const poIssueSrc=window.RUNLUUniversalPO?.recordManual?.toString?.()||'',poDraftCheck=poIssueSrc.indexOf("p.status!=='Draft'"),poJournal=poIssueSrc.indexOf("CrashJournal?.begin"),poMutation=poIssueSrc.indexOf("p.mode='manual'");t('Supplier PO · issue validation before write-ahead',poDraftCheck>=0&&poDraftCheck<poJournal&&poJournal<poMutation&&poIssueSrc.includes("String(x.poNumber)===n.trim()"),'Draft-only + normalized duplicate validation precedes journaled issue mutation');
  const receiveSrc=window.RUNLUUniversalInbound?.receive?.toString?.()||'',receiveJournal=receiveSrc.indexOf("CrashJournal?.begin"),receivePrompt=receiveSrc.indexOf("prompt('Received quantity"),receiveMutation=receiveSrc.indexOf('t.receivedItems=received');t('Receiving · input validation before write-ahead',receivePrompt>=0&&receivePrompt<receiveJournal&&receiveJournal<receiveMutation&&receiveSrc.includes('Received quantity cannot exceed ordered quantity')&&receiveSrc.includes('Damaged quantity cannot exceed received quantity'),'all receiving prompts + quantity bounds finish before journaled mutation');
  const billing=window.RUNLUUniversalBilling;
