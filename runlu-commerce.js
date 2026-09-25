@@ -45,18 +45,17 @@
       location.href=signIn.toString();
       return null;
     }
-    const url=new URL(product.checkoutUrl);
     if(product.requiresServerReference){
       const res=await fetch(cfg.account.referenceEndpoint,{
         method:"POST",
         headers:{"Content-Type":"application/json","Authorization":"Bearer "+session.access_token,"apikey":cfg.account.publishableKey},
-        body:JSON.stringify({action:"prepare_payment_link_reference",plan_key:key})
+        body:JSON.stringify({action:"create_checkout",plan_key:key})
       });
       const data=await res.json().catch(()=>({}));
-      if(!res.ok||!data.ok||!data.client_reference_id) throw new Error(data.error||"reference_prepare_failed");
-      url.searchParams.set("client_reference_id",data.client_reference_id);
+      if(!res.ok||!data.ok||!data.checkout_url) throw new Error(data.error||"checkout_create_failed");
+      return data.checkout_url;
     }
-    return url.toString();
+    return product.checkoutUrl;
   }
   async function startCheckout(key,product,button){
     if(button)button.disabled=true;
