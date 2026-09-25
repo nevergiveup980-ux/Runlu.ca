@@ -46,17 +46,13 @@ function agedTaskText(task){
 async function replanRemaining(){
  const items=personalizeItems(collectPlan(plan)).map(x=>agedTaskText(x.task)).filter(Boolean);
  if(!items.length){plan=null;results.hidden=true;localStorage.removeItem("runlu-next-v02");status.textContent="All clear ✓";return}
- status.textContent="Re-evaluating what comes next…";
- try{
-  const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:items.join("，"),local_time:new Date().toISOString()})});
-  const j=await r.json();if(!r.ok||!j.ok)throw new Error(j.error||"Could not re-plan");
-  plan=j.plan;
-  if(plan?.do_now&&preferencePenalty(plan.do_now.task)>=4){
-   const pool=personalizeItems([...(plan.next||[]),plan.do_now]);const better=pool[0];
-   if(better&&better.task!==plan.do_now.task){plan.next=(plan.next||[]).filter(x=>x.task!==better.task);plan.next.push(plan.do_now);plan.do_now=better}
-  }
-  render();status.textContent=j.cloud_degraded?"Next action re-ranked locally · no paid AI used.":"Next action re-ranked with AI.";
- }catch(e){status.textContent="Saved. Re-ranking unavailable; keeping the current order.";status.className="status error"}
+ status.textContent="Re-evaluating what comes next locally…";
+ plan=localPlan(items.join("，"),new Date());
+ if(plan?.do_now&&preferencePenalty(plan.do_now.task)>=4){
+  const pool=personalizeItems([...(plan.next||[]),plan.do_now]);const better=pool[0];
+  if(better&&better.task!==plan.do_now.task){plan.next=(plan.next||[]).filter(x=>x.task!==better.task);plan.next.push(plan.do_now);plan.do_now=better}
+ }
+ render();status.textContent="Next action re-ranked locally · no paid AI used.";
 }
 function render(){
  const all=plan?collectPlan(plan):[],wait=(plan?.remember||[]).length,proj=(plan?.projects||[]).length,later=(plan?.later||[]).length;
