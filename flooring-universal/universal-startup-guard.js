@@ -41,7 +41,7 @@ async function boot(){
  return startup;
 }
 function ready(){if(!readyPromise)readyPromise=boot();return readyPromise}
-function canProceed(){return !startup?.blocked}
+function canProceed(){return !!startup&&!startup.blocked}
 function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function renderBanner(){
  const host=document.getElementById('startupGuardBanner');if(!host||!startup)return;
@@ -55,7 +55,7 @@ function render(){
  if(!startup){host.innerHTML='<div class="card"><h2>Startup Recovery Guard</h2><p class="muted">Startup inspection is still running…</p></div>';return}
  host.innerHTML='<div class="card"><h2>Startup Recovery Guard</h2><p class="muted">Protects the local workspace before normal startup after an abnormal exit or critical data mismatch.</p><div class="uStartupHero '+(startup.blocked?'block':'pass')+'"><div><b>'+(startup.blocked?'WORKSPACE PAUSED':'STARTUP CLEARED')+'</b><span>'+startup.issues.length+' startup finding(s) · '+startup.critical.length+' critical</span></div><strong>'+(startup.blocked?'REVIEW':'READY')+'</strong></div></div><div class="card"><h3>Startup Findings</h3>'+(startup.issues.length?startup.issues.map(x=>'<div class="uStartupIssue"><div><b>'+esc(x.code)+'</b><span>'+esc(x.detail)+'</span></div><strong>'+esc(x.severity.toUpperCase())+'</strong></div>').join(''):'<p class="muted">No startup findings.</p>')+'<div class="uStartupActions"><button id="uStartupSupport">Support & Recovery</button><button id="uStartupRetry">Run Startup Check Again</button></div><p class="muted">The guard never auto-rewrites business records. Recovery remains an explicit action through the existing recovery tools.</p></div>';
  document.getElementById('uStartupSupport').onclick=()=>{const s=document.getElementById('universalSupportCenter');s.hidden=false;window.RUNLUUniversalSupportCenter?.render();s.scrollIntoView({behavior:'smooth'})};
- document.getElementById('uStartupRetry').onclick=async()=>{startup=await inspect(null);renderBanner();render()};
+ document.getElementById('uStartupRetry').onclick=async()=>{startup=await inspect(startup?.priorUnclean?{sessionOpen:true}:null);const s=previous()||{};write({...s,lastInspection:{checkedAt:startup.checkedAt,blocked:startup.blocked,priorUnclean:startup.priorUnclean,issueCodes:startup.issues.map(x=>x.code)}});renderBanner();render()};
 }
 window.addEventListener('pagehide',()=>markClean('pagehide'));
 window.addEventListener('beforeunload',()=>markClean('beforeunload'));
