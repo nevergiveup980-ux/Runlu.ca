@@ -3,6 +3,7 @@
 (function(){
 'use strict';
 const TOOLS=[
+ {id:'interrupted',title:'Interrupted Operations',desc:'Classify unfinished business writes using current record evidence.',target:'universalInterruptedResolver',api:'RUNLUUniversalInterruptedResolver'},
  {id:'journal',title:'Crash Journal',desc:'Review unfinished write-ahead business operations.',target:'universalCrashJournal',api:'RUNLUUniversalCrashJournal'},
  {id:'startup',title:'Startup Recovery Guard',desc:'Review abnormal-exit and startup integrity findings.',target:'universalStartupGuard',api:'RUNLUUniversalStartupGuard'},
  {id:'device',title:'Device Readiness',desc:'Check whether this device is ready for Local-First work.',target:'universalDeviceReady',api:'RUNLUUniversalDeviceReady'},
