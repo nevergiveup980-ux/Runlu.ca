@@ -22,9 +22,10 @@ async function run(){
  const data=window.RUNLUUniversalData,workspace=data?.read?.(WS,null),schema=window.RUNLUUniversalDataVersion?.status?.();
  const durable=await window.RUNLUUniversalDurableLocal?.status?.().catch?.(()=>null);
  const pwa=window.RUNLUUniversalPWA?.status?.()||{};
- const cache=await cacheCheck(),storage=await storageCheck(),startupOk=window.RUNLUUniversalStartupGuard?.canProceed?.()!==false;
+ const cache=await cacheCheck(),storage=await storageCheck(),startupOk=window.RUNLUUniversalStartupGuard?.canProceed?.()!==false,journal=window.RUNLUUniversalCrashJournal?.inspect?.()||{active:0};
  const checks=[
   {id:'startup',name:'Startup Recovery Guard',ok:startupOk,detail:startupOk?'Startup cleared':'Critical startup condition requires review'},
+  {id:'journal',name:'Interrupted Operations',ok:journal.active===0,detail:journal.active===0?'No unfinished business writes':journal.active+' unfinished operation(s) require review'},
   {id:'workspace',name:'Company Workspace',ok:!!workspace?.company?.organizationId,detail:workspace?.company?.organizationId?'Company identity ready':'Complete Company Setup'},
   {id:'adapter',name:'Data Adapter',ok:!!data?.current?.()?.health?.()?.ok,detail:data?.current?.()?.health?.()?.detail||'Unavailable'},
   {id:'schema',name:'Data Version',ok:!!schema?.compatible&&schema.workspaceVersion>0,detail:schema?'Workspace v'+schema.workspaceVersion+' · App v'+schema.currentVersion:'Schema unavailable'},
@@ -34,7 +35,7 @@ async function run(){
   {id:'backup',name:'Backup / Restore',ok:typeof window.RUNLUUniversalBackup?.collect==='function'&&typeof window.RUNLUUniversalBackup?.restore==='function',detail:'Portable backup contract'},
   {id:'storage',name:'Storage Capacity',ok:storage.ok,detail:storage.detail}
  ];
- const critical=['workspace','adapter','schema','indexeddb','serviceworker','cache','backup','storage'];
+ const critical=['startup','journal','workspace','adapter','schema','indexeddb','serviceworker','cache','backup','storage'];
  const failed=checks.filter(x=>critical.includes(x.id)&&!x.ok);
  return {ready:failed.length===0,checks,failed,online:navigator.onLine!==false,installed:!!pwa.installed,persisted:storage.persisted,checkedAt:new Date().toISOString()};
 }
