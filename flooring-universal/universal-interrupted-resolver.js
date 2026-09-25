@@ -16,6 +16,11 @@ const find=(xs,id)=>id?xs.find(x=>x.id===id):null;
 function auditMatch(tx){
  const events=arr(KEYS.audit),m=tx.meta||{};
  return events.filter(e=>{
+  if(tx.action==='issue'&&e.action!=='issue'&&e.action!=='status')return false;
+  if(tx.action==='record'&&e.action!=='record')return false;
+  if(tx.action==='reconcile'&&e.action!=='reconcile')return false;
+  if(tx.action==='complete'&&e.action!=='status')return false;
+  if(tx.action==='mark-paid'&&e.action!=='status')return false;
   if(tx.type==='Supplier PO')return e.entityType==='Supplier PO'&&!!m.poId&&e.entityId===m.poId;
   if(tx.type==='Receiving')return e.entityType==='Receiving'&&e.entityId===m.inboundId;
   if(tx.type==='Installation')return e.entityType==='Installation'&&e.entityId===m.installationId;
@@ -61,5 +66,5 @@ function render(){
  host.innerHTML='<div class="card"><h2>Interrupted Operation Resolver</h2><p class="muted">Read-only evidence review for operations left open after an unexpected stop. It never replays payments, receiving, PO issue, installation completion, or supplier payment.</p></div><div class="card">'+(rs.length?rs.map(r=>'<div class="uResolverRow '+(r.verdict==='UNCERTAIN'?'review':'ready')+'"><div><b>'+esc(r.type)+' · '+esc(r.action)+'</b><span>'+esc(r.verdict)+' · confidence '+esc(r.confidence)+'</span>'+r.evidence.map(x=>'<small>'+esc(x)+'</small>').join('')+'</div>'+(r.verdict!=='UNCERTAIN'?'<button data-resolve="'+esc(r.txId)+'">Acknowledge Review</button>':'<strong>MANUAL REVIEW</strong>')+'</div>').join(''):'<p class="muted">No interrupted operation needs review.</p>')+'<p class="muted">Acknowledge Review clears only the Crash Journal marker after evidence review. It never changes the business record itself.</p></div>';
  host.querySelectorAll('[data-resolve]').forEach(b=>b.onclick=()=>{if(!confirm('Clear this Crash Journal marker after reviewing the evidence? Business records will not be changed.'))return;acknowledge(b.dataset.resolve);render();window.RUNLUUniversalStartupGuard?.recheck?.().then(()=>window.RUNLUUniversalStartupGuard?.renderBanner?.())});
 }
-window.RUNLUUniversalInterruptedResolver=Object.freeze({classify,scan,acknowledge,render});
+window.RUNLUUniversalInterruptedResolver=Object.freeze({classify,scan,acknowledge,render,auditMatch});
 })();
