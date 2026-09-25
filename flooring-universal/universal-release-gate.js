@@ -22,6 +22,8 @@ function run(){
   t('Interrupted Resolver · acknowledgement API',typeof resolver.acknowledge==='function','reviewed markers can be closed without rewriting business records');
   const resolverSrc=resolver.classify.toString(),billingPaySrc=window.RUNLUUniversalBilling?.pay?.toString?.()||'';
   t('Interrupted Resolver · exact payment audit identity',resolverSrc.includes("e.meta?.paymentId===m.paymentId")&&billingPaySrc.includes('paymentId}'),'payment audit evidence is bound to exact ledger entry');
+  const auditSrc=resolver.auditMatch?.toString?.()||'';
+  t('Interrupted Resolver · action-bound audit evidence',typeof resolver.auditMatch==='function'&&auditSrc.includes("tx.action==='record'")&&auditSrc.includes("tx.action==='reconcile'")&&auditSrc.includes("tx.action==='mark-paid'"),'audit confidence requires the matching business action');
  }
  const crashSim=window.RUNLUUniversalCrashSimulator;
  if(crashSim){
