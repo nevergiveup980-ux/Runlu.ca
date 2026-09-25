@@ -1,0 +1,65 @@
+/* RUNLU Flooring OS Universal · Interrupted Operation Resolver
+   Read-only evidence engine for unfinished Crash Journal operations. Never replays a business mutation. */
+(function(){
+'use strict';
+const data=()=>window.RUNLUUniversalData;
+const KEYS={
+ po:'runlu_flooring_universal_u1_supplier_orders',
+ inbound:'runlu_flooring_universal_u1_inbound_tasks',
+ install:'runlu_flooring_universal_u1_installations',
+ invoice:'runlu_flooring_universal_u1_customer_invoices',
+ accounting:'runlu_flooring_universal_u1_supplier_accounting',
+ audit:'runlu_flooring_universal_u1_audit'
+};
+const arr=k=>data()?.read?.(k,[])||[];
+const find=(xs,id)=>id?xs.find(x=>x.id===id):null;
+function auditMatch(tx){
+ const events=arr(KEYS.audit),m=tx.meta||{};
+ return events.filter(e=>{
+  if(tx.type==='Supplier PO')return e.entityType==='Supplier PO'&&(e.entityId===m.poId||e.meta?.jobId===m.jobId);
+  if(tx.type==='Receiving')return e.entityType==='Receiving'&&e.entityId===m.inboundId;
+  if(tx.type==='Installation')return e.entityType==='Installation'&&e.entityId===m.installationId;
+  if(tx.type==='Customer Invoice')return e.entityType==='Customer Invoice'&&e.entityId===m.invoiceId;
+  if(tx.type==='Customer Payment')return e.entityType==='Customer Payment'&&e.entityId===m.invoiceId;
+  if(tx.type==='Supplier Accounting')return e.entityType==='Supplier Accounting'&&e.entityId===m.accountingId;
+  return false;
+ }).filter(e=>!tx.startedAt||!e.createdAt||e.createdAt>=tx.startedAt);
+}
+function classify(tx){
+ const m=tx.meta||{},audits=auditMatch(tx),base={txId:tx.id,type:tx.type,action:tx.action,startedAt:tx.startedAt,meta:m,auditEvents:audits.length};
+ let record=null,applied=false,notApplied=false,evidence=[];
+ if(tx.type==='Supplier PO'){
+  const xs=arr(KEYS.po);
+  if(tx.action==='create'){record=xs.find(x=>x.jobId===m.jobId);applied=!!record;notApplied=!record;evidence.push(record?'Supplier PO exists for the Job.':'No Supplier PO exists for the Job.')}
+  else {record=find(xs,m.poId);applied=!!record&&record.status!=='Draft';notApplied=!!record&&record.status==='Draft';evidence.push(record?'PO status: '+record.status+'.':'PO record not found.')}
+ }else if(tx.type==='Receiving'){
+  record=find(arr(KEYS.inbound),m.inboundId);applied=!!record?.receivedAt;notApplied=!!record&&!record.receivedAt;evidence.push(record?.receivedAt?'Receiving timestamp exists; status '+record.status+'.':record?'Receiving record has no received timestamp.':'Receiving record not found.');
+ }else if(tx.type==='Installation'){
+  record=find(arr(KEYS.install),m.installationId);applied=record?.status==='Completed'&&!!record.completedAt;notApplied=!!record&&record.status!=='Completed';evidence.push(record?'Installation status: '+record.status+(record.completedAt?' with completion timestamp.':'.'):'Installation record not found.');
+ }else if(tx.type==='Customer Invoice'){
+  record=find(arr(KEYS.invoice),m.invoiceId);applied=!!record?.invoiceNumber&&record.status!=='Draft';notApplied=!!record&&record.status==='Draft';evidence.push(record?'Invoice status: '+record.status+(record.invoiceNumber?' · #'+record.invoiceNumber:' · no invoice number')+'.':'Invoice record not found.');
+ }else if(tx.type==='Customer Payment'){
+  record=find(arr(KEYS.invoice),m.invoiceId);applied=!!record&&(record.payments||[]).some(p=>!tx.startedAt||!p.createdAt||p.createdAt>=tx.startedAt);notApplied=!!record&&!applied;evidence.push(record?(applied?'A payment ledger entry exists at/after operation start.':'No payment ledger entry exists at/after operation start.'):'Invoice record not found.');
+ }else if(tx.type==='Supplier Accounting'){
+  record=find(arr(KEYS.accounting),m.accountingId);applied=record?.status==='Paid'&&!!record.paidAt;notApplied=!!record&&record.status!=='Paid';evidence.push(record?'Supplier accounting status: '+record.status+(record.paidAt?' with paid timestamp.':'.'):'Supplier accounting record not found.');
+ }
+ if(audits.length)evidence.push(audits.length+' matching Audit event(s) exist at/after operation start.');
+ let verdict='UNCERTAIN',confidence='REVIEW';
+ if(applied){verdict='LIKELY_APPLIED';confidence=audits.length?'HIGH':'MEDIUM'}
+ else if(notApplied){verdict='LIKELY_NOT_APPLIED';confidence='MEDIUM'}
+ return {...base,verdict,confidence,evidence};
+}
+function scan(){return (window.RUNLUUniversalCrashJournal?.pending?.()||[]).map(classify)}
+function acknowledge(id,note){
+ const r=scan().find(x=>x.txId===id);if(!r)throw new Error('Interrupted operation not found.');
+ if(r.verdict==='UNCERTAIN')throw new Error('Uncertain operation cannot be cleared automatically. Review business records first.');
+ return window.RUNLUUniversalCrashJournal?.abort?.(id,'Reviewed by Interrupted Operation Resolver · '+r.verdict+(note?' · '+String(note).slice(0,80):''));
+}
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function render(){
+ const host=document.getElementById('universalInterruptedResolver');if(!host)return;const rs=scan();
+ host.innerHTML='<div class="card"><h2>Interrupted Operation Resolver</h2><p class="muted">Read-only evidence review for operations left open after an unexpected stop. It never replays payments, receiving, PO issue, installation completion, or supplier payment.</p></div><div class="card">'+(rs.length?rs.map(r=>'<div class="uResolverRow '+(r.verdict==='UNCERTAIN'?'review':'ready')+'"><div><b>'+esc(r.type)+' · '+esc(r.action)+'</b><span>'+esc(r.verdict)+' · confidence '+esc(r.confidence)+'</span>'+r.evidence.map(x=>'<small>'+esc(x)+'</small>').join('')+'</div>'+(r.verdict!=='UNCERTAIN'?'<button data-resolve="'+esc(r.txId)+'">Acknowledge Review</button>':'<strong>MANUAL REVIEW</strong>')+'</div>').join(''):'<p class="muted">No interrupted operation needs review.</p>')+'<p class="muted">Acknowledge Review clears only the Crash Journal marker after evidence review. It never changes the business record itself.</p></div>';
+ host.querySelectorAll('[data-resolve]').forEach(b=>b.onclick=()=>{if(!confirm('Clear this Crash Journal marker after reviewing the evidence? Business records will not be changed.'))return;acknowledge(b.dataset.resolve);render();window.RUNLUUniversalStartupGuard?.ready?.().then(()=>window.RUNLUUniversalStartupGuard?.renderBanner?.())});
+}
+window.RUNLUUniversalInterruptedResolver=Object.freeze({classify,scan,acknowledge,render});
+})();
