@@ -87,13 +87,13 @@
       .runlu-bag-button{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line,rgba(23,25,21,.12));background:rgba(255,255,255,.72);border-radius:999px;padding:8px 12px;font:inherit;color:inherit;cursor:pointer;white-space:nowrap}
       .runlu-bag-count{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:#122218;color:#fff;font-size:.72rem}
       .runlu-bag-backdrop{position:fixed;inset:0;z-index:198;background:rgba(18,34,24,.22);opacity:0;pointer-events:none;transition:opacity .25s ease}
-      .runlu-bag-drawer{position:fixed;top:0;right:0;z-index:199;width:min(420px,94vw);height:100dvh;background:#fbfaf7;box-shadow:-20px 0 60px rgba(18,34,24,.16);transform:translateX(104%);transition:transform .3s cubic-bezier(.22,.61,.36,1);padding:28px;display:flex;flex-direction:column}
+      .runlu-bag-drawer{position:fixed;top:0;right:0;z-index:199;width:min(420px,94vw);height:100vh;height:100dvh;box-sizing:border-box;background:#fbfaf7;color:#20241f;box-shadow:-20px 0 60px rgba(18,34,24,.16);transform:translateX(104%);transition:transform .3s cubic-bezier(.22,.61,.36,1);padding:calc(22px + env(safe-area-inset-top)) 22px calc(22px + env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow:hidden}
       .runlu-bag-open .runlu-bag-backdrop{opacity:1;pointer-events:auto}.runlu-bag-open .runlu-bag-drawer{transform:none}
-      .runlu-bag-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:20px;border-bottom:1px solid rgba(23,25,21,.12)}.runlu-bag-head h2{margin:0;font-size:1.45rem}
+      .runlu-bag-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(23,25,21,.12);color:#20241f}.runlu-bag-head h2{margin:0;font-size:1.45rem;color:#20241f}
       .runlu-bag-close{border:0;background:transparent;font:inherit;cursor:pointer;padding:8px}
-      .runlu-bag-items{display:grid;gap:12px;padding:22px 0;overflow:auto}.runlu-bag-item{padding:18px;border:1px solid rgba(23,25,21,.12);border-radius:18px;background:#fff}
+      .runlu-bag-items{display:grid;gap:12px;padding:18px 0;overflow:auto;min-height:0;color:#20241f}.runlu-bag-item{padding:18px;border:1px solid rgba(23,25,21,.12);border-radius:18px;background:#fff;color:#20241f}
       .runlu-bag-item strong{display:block;margin-bottom:5px}.runlu-bag-item-row{display:flex;justify-content:space-between;gap:16px;align-items:center}.runlu-bag-remove{border:0;background:transparent;padding:8px 0;color:#6a6f68;text-decoration:underline;cursor:pointer}
-      .runlu-bag-empty{color:#6a6f68;padding:18px 0}.runlu-bag-foot{margin-top:auto;padding-top:20px;border-top:1px solid rgba(23,25,21,.12)}.runlu-bag-total{display:flex;justify-content:space-between;margin-bottom:16px}
+      .runlu-bag-empty{color:#6a6f68;padding:18px 0}.runlu-bag-foot{margin-top:auto;padding-top:16px;border-top:1px solid rgba(23,25,21,.12);background:#fbfaf7;color:#20241f}.runlu-bag-total{display:flex;justify-content:space-between;margin-bottom:16px}
       .runlu-bag-checkout{width:100%;display:flex;justify-content:center;padding:14px 18px;border:0;border-radius:14px;background:#2f6f45;color:#fff;font:inherit;font-weight:600;cursor:pointer}.runlu-bag-checkout:disabled{opacity:.45;cursor:not-allowed}
       @media(max-width:860px){.runlu-bag-button{padding:8px 10px}.runlu-bag-word{display:none}}
     `;
@@ -108,7 +108,7 @@
     }
     const backdrop=document.createElement("div"); backdrop.className="runlu-bag-backdrop"; backdrop.onclick=closeBag;
     const drawer=document.createElement("aside"); drawer.id="runluBagDrawer"; drawer.className="runlu-bag-drawer"; drawer.setAttribute("aria-label","Shopping bag");
-    drawer.innerHTML='<div class="runlu-bag-head"><h2 id="runluBagTitle"></h2><button class="runlu-bag-close" type="button" aria-label="Close">✕</button></div><div id="runluBagItems" class="runlu-bag-items"></div><div class="runlu-bag-foot"><div class="runlu-bag-total"><span id="runluBagSubtotalLabel"></span><strong id="runluBagSubtotal"></strong></div><button id="runluBagCheckout" class="runlu-bag-checkout" type="button"></button></div>';
+    drawer.innerHTML='<div class="runlu-bag-head"><h2 id="runluBagTitle">Your Bag</h2><button class="runlu-bag-close" type="button" aria-label="Close">✕</button></div><div id="runluBagItems" class="runlu-bag-items"><div class="runlu-bag-empty">Your bag is empty.</div></div><div class="runlu-bag-foot"><div class="runlu-bag-total"><span id="runluBagSubtotalLabel">Subtotal</span><strong id="runluBagSubtotal">CAD $0.00</strong></div><button id="runluBagCheckout" class="runlu-bag-checkout" type="button">Checkout</button></div>';
     drawer.querySelector(".runlu-bag-close").onclick=closeBag;
     document.body.append(backdrop,drawer);
     document.addEventListener("keydown",e=>{if(e.key==="Escape") closeBag();});
