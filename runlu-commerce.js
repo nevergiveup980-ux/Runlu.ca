@@ -139,7 +139,7 @@
       el.setAttribute("href","#"); el.removeAttribute("aria-disabled"); el.classList.remove("disabled-buy","disabled"); if(!el.classList.contains("button")) el.classList.add("button","primary");
       el.dataset.en=t("add")+" · "+product.price; el.dataset.zh=labels.zh.add+" · "+product.price; el.dataset.fr=labels.fr.add+" · "+product.price; el.dataset.es=labels.es.add+" · "+product.price;
       el.textContent=el.dataset[lang()]||el.dataset.en;
-      el.onclick=e=>{e.preventDefault();add(key);};
+      el.onclick=e=>{e.preventDefault(); if(key.startsWith("guanshi-")) startCheckout(key,product,el); else add(key);};
     });
     renderBag();
   }
