@@ -1,5 +1,5 @@
 /* RUNLU Flooring OS Universal · Offline App Shell */
-const CACHE='runlu-flooring-universal-shell-v19';
+const CACHE='runlu-flooring-universal-shell-v20';
 const SHELL=[
  './','./index.html','./universal-data-adapter.js','./universal-indexeddb.js','./universal-local-health.js','./universal-data-version.js','./universal-crash-journal.js','./universal-interrupted-resolver.js','./universal-crash-simulator.js','./universal-startup-guard.js',
  './universal-config.js','./role-permissions.js','./universal-audit.js','./universal-lifecycle-guards.js','./universal-sales.js','./universal-po.js',
