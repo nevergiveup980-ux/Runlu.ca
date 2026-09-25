@@ -20,6 +20,8 @@ function run(){
   t('Interrupted Resolver · evidence API',typeof resolver.scan==='function'&&typeof resolver.classify==='function','read-only classification ready');
   t('Interrupted Resolver · conservative legacy policy',resolver.classify({id:'fixture',type:'Customer Payment',action:'record',startedAt:new Date(0).toISOString(),meta:{invoiceId:'missing-fixture'}}).verdict==='UNCERTAIN','legacy payment evidence must not auto-clear');
   t('Interrupted Resolver · acknowledgement API',typeof resolver.acknowledge==='function','reviewed markers can be closed without rewriting business records');
+  const resolverSrc=resolver.classify.toString(),billingPaySrc=window.RUNLUUniversalBilling?.pay?.toString?.()||'';
+  t('Interrupted Resolver · exact payment audit identity',resolverSrc.includes("e.meta?.paymentId===m.paymentId")&&billingPaySrc.includes('paymentId}'),'payment audit evidence is bound to exact ledger entry');
  }
  const crashSim=window.RUNLUUniversalCrashSimulator;
  if(crashSim){
