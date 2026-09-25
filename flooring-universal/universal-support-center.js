@@ -3,6 +3,7 @@
 (function(){
 'use strict';
 const TOOLS=[
+ {id:'crashsim',title:'Crash Simulation',desc:'Run synthetic power-loss and interrupted-write regression tests.',target:'universalCrashSimulator',api:'RUNLUUniversalCrashSimulator'},
  {id:'interrupted',title:'Interrupted Operations',desc:'Classify unfinished business writes using current record evidence.',target:'universalInterruptedResolver',api:'RUNLUUniversalInterruptedResolver'},
  {id:'journal',title:'Crash Journal',desc:'Review unfinished write-ahead business operations.',target:'universalCrashJournal',api:'RUNLUUniversalCrashJournal'},
  {id:'startup',title:'Startup Recovery Guard',desc:'Review abnormal-exit and startup integrity findings.',target:'universalStartupGuard',api:'RUNLUUniversalStartupGuard'},
