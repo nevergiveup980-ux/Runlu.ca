@@ -136,7 +136,7 @@
     document.querySelectorAll("[data-commerce-buy]").forEach(el=>{
       const key=el.dataset.commerceBuy, product=cfg.products[key], live=!!(product&&product.enabled&&validCheckout(product.checkoutUrl));
       if(!live){ el.setAttribute("aria-disabled","true"); if(el.tagName==="A") el.setAttribute("href","#"); el.onclick=e=>e.preventDefault(); return; }
-      el.setAttribute("href","#"); el.removeAttribute("aria-disabled"); el.classList.remove("disabled-buy"); if(!el.classList.contains("button")) el.classList.add("button","primary");
+      el.setAttribute("href","#"); el.removeAttribute("aria-disabled"); el.classList.remove("disabled-buy","disabled"); if(!el.classList.contains("button")) el.classList.add("button","primary");
       el.dataset.en=t("add")+" · "+product.price; el.dataset.zh=labels.zh.add+" · "+product.price; el.dataset.fr=labels.fr.add+" · "+product.price; el.dataset.es=labels.es.add+" · "+product.price;
       el.textContent=el.dataset[lang()]||el.dataset.en;
       el.onclick=e=>{e.preventDefault();add(key);};
