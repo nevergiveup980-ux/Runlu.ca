@@ -12,12 +12,13 @@ function run(){
  t('Data Adapter · default local',data?.backendConfig?.().mode==='local','cloud remains optional');
  const journal=window.RUNLUUniversalCrashJournal;
  if(journal){
-  t('Crash Journal · write-ahead API',typeof journal.begin==='function'&&typeof journal.commit==='function'&&typeof journal.abort==='function','intent lifecycle ready');
+  t('Crash Journal · write-ahead API',typeof journal.begin==='function'&&typeof journal.commit==='function'&&typeof journal.abort==='function'&&typeof journal.get==='function'&&typeof journal.amend==='function','intent lifecycle ready');
   t('Crash Journal · inspection API',typeof journal.inspect==='function'&&Array.isArray(journal.pending()),'unfinished operations can be reviewed');
  }
  const resolver=window.RUNLUUniversalInterruptedResolver;
  if(resolver){
   t('Interrupted Resolver · evidence API',typeof resolver.scan==='function'&&typeof resolver.classify==='function','read-only classification ready');
+  t('Interrupted Resolver · conservative legacy policy',resolver.classify({id:'fixture',type:'Customer Payment',action:'record',startedAt:new Date(0).toISOString(),meta:{invoiceId:'missing-fixture'}}).verdict==='UNCERTAIN','legacy payment evidence must not auto-clear');
   t('Interrupted Resolver · acknowledgement API',typeof resolver.acknowledge==='function','reviewed markers can be closed without rewriting business records');
  }
  const startup=window.RUNLUUniversalStartupGuard;
