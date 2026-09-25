@@ -16,6 +16,11 @@ function commit(id,meta){
  const tx=s.active.splice(i,1)[0],done={...tx,status:'committed',completedAt:new Date().toISOString(),result:meta||{}};
  s.history.unshift(done);write(s);return done;
 }
+function resolve(id,resolution,note){
+ const s=state(),i=s.active.findIndex(x=>x.id===id);if(i<0)return null;
+ const tx=s.active.splice(i,1)[0],done={...tx,status:'resolved',resolution:String(resolution||'REVIEWED').slice(0,80),completedAt:new Date().toISOString(),note:String(note||'').slice(0,160)};
+ s.history.unshift(done);write(s);return done;
+}
 function abort(id,reason){
  const s=state(),i=s.active.findIndex(x=>x.id===id);if(i<0)return null;
  const tx=s.active.splice(i,1)[0],done={...tx,status:'aborted',completedAt:new Date().toISOString(),reason:String(reason||'cancelled').slice(0,160)};
@@ -31,5 +36,5 @@ function render(){
  const host=document.getElementById('universalCrashJournal');if(!host)return;const s=state();
  host.innerHTML='<div class="card"><h2>Crash Journal</h2><p class="muted">Write-ahead intent markers for important local business changes. Record contents are not copied into the journal.</p><div class="uJournalHero '+(s.active.length?'hold':'pass')+'"><div><b>'+(s.active.length?'INCOMPLETE OPERATION':'JOURNAL CLEAR ✓')+'</b><span>'+s.active.length+' active · '+s.history.length+' recent completed/aborted</span></div><strong>'+(s.active.length?'REVIEW':'READY')+'</strong></div></div><div class="card"><h3>Incomplete Operations</h3>'+(s.active.length?s.active.map(x=>'<div class="uJournalRow"><div><b>'+esc(x.type)+' · '+esc(x.action)+'</b><span>'+esc(new Date(x.startedAt).toLocaleString())+'</span></div><strong>OPEN</strong></div>').join(''):'<p class="muted">No incomplete business operation is recorded.</p>')+'<p class="muted">Startup Recovery Guard treats an unfinished journal entry as a critical review condition. Recovery is explicit; the journal never guesses whether a half-finished operation should be replayed.</p></div>';
 }
-window.RUNLUUniversalCrashJournal=Object.freeze({STORE,begin,commit,abort,pending,get,amend,history,inspect,render});
+window.RUNLUUniversalCrashJournal=Object.freeze({STORE,begin,commit,resolve,abort,pending,get,amend,history,inspect,render});
 })();
