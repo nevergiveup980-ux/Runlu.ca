@@ -1,11 +1,11 @@
 /* RUNLU Flooring OS Universal · Offline App Shell */
-const CACHE='runlu-flooring-universal-shell-v6';
+const CACHE='runlu-flooring-universal-shell-v7';
 const SHELL=[
  './','./index.html','./universal-data-adapter.js','./universal-indexeddb.js','./universal-local-health.js','./universal-data-version.js',
  './universal-config.js','./role-permissions.js','./universal-audit.js','./universal-lifecycle-guards.js','./universal-sales.js','./universal-po.js',
  './universal-inbound.js','./universal-warehouse.js','./universal-accounting.js','./universal-installation.js','./universal-billing.js',
  './universal-lifecycle-gate.js','./universal-recovery.js','./universal-release-gate.js','./universal-scenario-simulator.js','./universal-data-status.js',
- './universal-indexeddb-ui.js','./universal-device-ready.js','./universal-diagnostics.js','./universal-backup.js','./universal-data-exchange.js','./universal-support-center.js',
+ './universal-indexeddb-ui.js','./universal-pwa.js','./universal-device-ready.js','./universal-diagnostics.js','./universal-backup.js','./universal-data-exchange.js','./universal-support-center.js','./universal-shell.js',
  './universal-sales.css','./universal-po.css','./universal-inbound.css','./universal-warehouse.css','./universal-accounting.css',
  './universal-installation.css','./universal-billing.css','./universal-lifecycle-gate.css','./universal-audit.css','./universal-recovery.css',
  './universal-release-gate.css','./universal-scenario-simulator.css','./universal-data-status.css','./universal-backup.css',
