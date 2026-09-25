@@ -3,6 +3,7 @@
 (function(){
 'use strict';
 const TOOLS=[
+ {id:'startup',title:'Startup Recovery Guard',desc:'Review abnormal-exit and startup integrity findings.',target:'universalStartupGuard',api:'RUNLUUniversalStartupGuard'},
  {id:'device',title:'Device Readiness',desc:'Check whether this device is ready for Local-First work.',target:'universalDeviceReady',api:'RUNLUUniversalDeviceReady'},
  {id:'health',title:'Data Health',desc:'Inspect local JSON integrity, storage and Recovery Points.',target:'universalLocalHealth',api:'RUNLUUniversalLocalHealth'},
  {id:'backup',title:'Backup / Restore',desc:'Download an independent backup or restore a Universal backup.',target:'universalBackup',api:'RUNLUUniversalBackup'},
