@@ -43,11 +43,13 @@ function run(){
   t('Diagnostics · API available',typeof diagnostics.collect==='function'&&typeof diagnostics.validate==='function','privacy-safe support report ready');
   const fixture={format:diagnostics.FORMAT,version:diagnostics.VERSION,privacy:{businessContentsIncluded:false}};
   t('Diagnostics · privacy contract',diagnostics.validate(fixture),'business contents must be excluded');
+  t('Diagnostics · interrupted-write privacy',diagnostics.collect.toString().includes('activeCount')&&diagnostics.collect.toString().includes('detailsIncluded:false'),'only interrupted-operation count may leave diagnostics');
  }
  const ready=window.RUNLUUniversalDeviceReady;
  if(ready){
   t('Device Readiness · preflight API',typeof ready.run==='function','async first-run checks ready');
   t('Device Readiness · persistence API',typeof ready.requestPersistence==='function','browser storage protection request ready');
+  t('Device Readiness · interrupted-write gate',ready.run.toString().includes("id:'journal'")&&ready.run.toString().includes("'journal'"),'unfinished journal operations are critical');
  }
  const pwa=window.RUNLUUniversalPWA;
  if(pwa){
