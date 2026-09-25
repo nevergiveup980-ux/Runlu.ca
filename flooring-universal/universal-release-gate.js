@@ -12,7 +12,7 @@ function run(){
  t('Data Adapter · default local',data?.backendConfig?.().mode==='local','cloud remains optional');
  const journal=window.RUNLUUniversalCrashJournal;
  if(journal){
-  t('Crash Journal · write-ahead API',typeof journal.begin==='function'&&typeof journal.commit==='function'&&typeof journal.abort==='function'&&typeof journal.get==='function'&&typeof journal.amend==='function','intent lifecycle ready');
+  t('Crash Journal · write-ahead API',typeof journal.begin==='function'&&typeof journal.commit==='function'&&typeof journal.resolve==='function'&&typeof journal.abort==='function'&&typeof journal.get==='function'&&typeof journal.amend==='function','intent lifecycle ready');
   t('Crash Journal · inspection API',typeof journal.inspect==='function'&&Array.isArray(journal.pending()),'unfinished operations can be reviewed');
  }
  const resolver=window.RUNLUUniversalInterruptedResolver;
@@ -30,7 +30,7 @@ function run(){
  }
  const startup=window.RUNLUUniversalStartupGuard;
  if(startup){
-  t('Startup Guard · boot gate API',typeof startup.ready==='function'&&typeof startup.canProceed==='function','startup inspection + gate ready');
+  t('Startup Guard · boot gate API',typeof startup.ready==='function'&&typeof startup.recheck==='function'&&typeof startup.canProceed==='function','startup inspection + gate ready');
   t('Startup Guard · recovery UI',typeof startup.render==='function'&&typeof startup.renderBanner==='function','review path ready');
  }
  const support=window.RUNLUUniversalSupportCenter;
