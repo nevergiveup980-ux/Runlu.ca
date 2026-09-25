@@ -22,8 +22,9 @@ async function run(){
  const data=window.RUNLUUniversalData,workspace=data?.read?.(WS,null),schema=window.RUNLUUniversalDataVersion?.status?.();
  const durable=await window.RUNLUUniversalDurableLocal?.status?.().catch?.(()=>null);
  const pwa=window.RUNLUUniversalPWA?.status?.()||{};
- const cache=await cacheCheck(),storage=await storageCheck();
+ const cache=await cacheCheck(),storage=await storageCheck(),startupOk=window.RUNLUUniversalStartupGuard?.canProceed?.()!==false;
  const checks=[
+  {id:'startup',name:'Startup Recovery Guard',ok:startupOk,detail:startupOk?'Startup cleared':'Critical startup condition requires review'},
   {id:'workspace',name:'Company Workspace',ok:!!workspace?.company?.organizationId,detail:workspace?.company?.organizationId?'Company identity ready':'Complete Company Setup'},
   {id:'adapter',name:'Data Adapter',ok:!!data?.current?.()?.health?.()?.ok,detail:data?.current?.()?.health?.()?.detail||'Unavailable'},
   {id:'schema',name:'Data Version',ok:!!schema?.compatible&&schema.workspaceVersion>0,detail:schema?'Workspace v'+schema.workspaceVersion+' · App v'+schema.currentVersion:'Schema unavailable'},
