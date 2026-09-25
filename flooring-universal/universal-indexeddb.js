@@ -54,6 +54,15 @@ async function replaceLocalFromMirror(){
  records.forEach(r=>{if(r.key?.startsWith(PREFIX)&&r.key!==BACKEND&&r.key!==SNAP)adapter.write(r.key,r.value)});
  return {restored:records.length};
 }
+async function compareWithAdapter(){
+ if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local')return {ok:true,comparable:false,reason:'not-local'};
+ const adapter=window.RUNLUUniversalData.current(),records=await all();
+ const localKeys=(adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP).sort();
+ const mirror=new Map(records.filter(r=>r.key?.startsWith(PREFIX)&&r.key!==BACKEND&&r.key!==SNAP).map(r=>[r.key,r.value]));
+ const mirrorKeys=[...mirror.keys()].sort(),missingLocal=mirrorKeys.filter(k=>adapter.raw(k)===null),missingMirror=localKeys.filter(k=>!mirror.has(k)),different=[];
+ localKeys.filter(k=>mirror.has(k)).forEach(k=>{const local=adapter.read(k,null),remote=mirror.get(k);if(JSON.stringify(local)!==JSON.stringify(remote))different.push(k)});
+ return {ok:missingLocal.length===0&&missingMirror.length===0&&different.length===0,comparable:true,localRecords:localKeys.length,mirrorRecords:mirrorKeys.length,missingLocal:missingLocal.length,missingMirror:missingMirror.length,different:different.length};
+}
 async function status(){
  if(!supported())return {supported:false,ready:false,records:0,pending,lastSyncAt,error:'IndexedDB unsupported'};
  try{const records=await all();return {supported:true,ready:true,records:records.length,pending,lastSyncAt,error:lastError}}catch(e){return {supported:true,ready:false,records:0,pending,lastSyncAt,error:lastError||e.message}}
@@ -63,6 +72,6 @@ function init(){
  window.RUNLUUniversalData?.onMutation?.(e=>{if(e.adapter!=='local'||!e.key?.startsWith(PREFIX)||e.key===BACKEND||e.key===SNAP)return;e.type==='remove'?remove(e.key):put(e.key,e.value)});
  seed().catch(e=>{lastError=e?.message||String(e)});
 }
-window.RUNLUUniversalDurableLocal=Object.freeze({supported,seed,status,recoverMissing,replaceLocalFromMirror});
+window.RUNLUUniversalDurableLocal=Object.freeze({supported,seed,status,compareWithAdapter,recoverMissing,replaceLocalFromMirror});
 init();
 })();
