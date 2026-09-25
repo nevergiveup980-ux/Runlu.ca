@@ -100,6 +100,15 @@ function run(){
  t('Lifecycle Gate executes',!!gate,gate?'issues='+gate.issues.length:'unavailable');
  const rec=window.RUNLUUniversalRecovery?.scan?.();
  t('Recovery scanner executes',Array.isArray(rec),Array.isArray(rec)?'recommendations='+rec.length:'unavailable');
+ const orderedActions=[
+  ['Supplier PO · create',window.RUNLUUniversalPO?.createFromJob,'xs.unshift'],
+  ['Supplier PO · issue',window.RUNLUUniversalPO?.recordManual,"p.mode='manual'"],
+  ['Receiving · reconcile',window.RUNLUUniversalInbound?.receive,'t.receivedItems=received'],
+  ['Installation · complete',window.RUNLUUniversalInstallation?.complete,"r.status='Completed'"],
+  ['Supplier Accounting · paid',window.RUNLUUniversalAccounting?.paid,"r.status='Paid'"],
+  ['Customer Payment · record',window.RUNLUUniversalBilling?.pay,'r.payments.push']
+ ];
+ orderedActions.forEach(([name,fn,mutation])=>{const src=fn?.toString?.()||'';t('Write-ahead order · '+name,typeof fn==='function'&&src.indexOf("CrashJournal?.begin")>=0&&src.indexOf("CrashJournal?.begin")<src.indexOf(mutation),'journal begins before business mutation')});
  const billing=window.RUNLUUniversalBilling;
  if(billing){const src=billing.issue?.toString?.()||'';t('Billing · invoice write-ahead order',typeof billing.issue==='function'&&src.indexOf("CrashJournal?.begin")<src.indexOf('r.invoiceNumber=invoiceNumber'),'journal begins before invoice mutation')}
  const bills=billing?.rows?.()||[];
