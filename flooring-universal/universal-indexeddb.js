@@ -42,7 +42,7 @@ async function recoverMissing(){
  if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local')throw new Error('IndexedDB recovery is available only in Local Device mode.');
  const records=await all(),adapter=window.RUNLUUniversalData.current();let restored=0,skipped=0;
  window.RUNLUUniversalLocalHealth?.capture?.('Before IndexedDB recovery',{records:records.length});
- for(const r of records){if(!r.key?.startsWith(PREFIX)||r.key===BACKEND||r.key===SNAP||r.key===GUARD||r.key===JOURNAL||key===JOURNAL)continue;if(adapter.raw(r.key)===null){adapter.write(r.key,r.value);restored++}else skipped++}
+ for(const r of records){if(!r.key?.startsWith(PREFIX)||r.key===BACKEND||r.key===SNAP||r.key===GUARD||r.key===JOURNAL)continue;if(adapter.raw(r.key)===null){adapter.write(r.key,r.value);restored++}else skipped++}
  return {restored,skipped,total:records.length};
 }
 async function replaceLocalFromMirror(){
@@ -69,7 +69,7 @@ async function status(){
 }
 function init(){
  if(!supported())return;
- window.RUNLUUniversalData?.onMutation?.(e=>{if(e.adapter!=='local'||!e.key?.startsWith(PREFIX)||e.key===BACKEND||e.key===SNAP||e.key===GUARD||e.key===JOURNAL||key===JOURNAL)return;e.type==='remove'?remove(e.key):put(e.key,e.value)});
+ window.RUNLUUniversalData?.onMutation?.(e=>{if(e.adapter!=='local'||!e.key?.startsWith(PREFIX)||e.key===BACKEND||e.key===SNAP||e.key===GUARD||e.key===JOURNAL)return;e.type==='remove'?remove(e.key):put(e.key,e.value)});
  seed().catch(e=>{lastError=e?.message||String(e)});
 }
 window.RUNLUUniversalDurableLocal=Object.freeze({supported,seed,status,compareWithAdapter,recoverMissing,replaceLocalFromMirror});
