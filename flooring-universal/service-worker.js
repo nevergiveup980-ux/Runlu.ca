@@ -1,7 +1,7 @@
 /* RUNLU Flooring OS Universal · Offline App Shell */
-const CACHE='runlu-flooring-universal-shell-v11';
+const CACHE='runlu-flooring-universal-shell-v12';
 const SHELL=[
- './','./index.html','./universal-data-adapter.js','./universal-indexeddb.js','./universal-local-health.js','./universal-data-version.js','./universal-crash-journal.js','./universal-interrupted-resolver.js','./universal-startup-guard.js',
+ './','./index.html','./universal-data-adapter.js','./universal-indexeddb.js','./universal-local-health.js','./universal-data-version.js','./universal-crash-journal.js','./universal-interrupted-resolver.js','./universal-crash-simulator.js','./universal-startup-guard.js',
  './universal-config.js','./role-permissions.js','./universal-audit.js','./universal-lifecycle-guards.js','./universal-sales.js','./universal-po.js',
  './universal-inbound.js','./universal-warehouse.js','./universal-accounting.js','./universal-installation.js','./universal-billing.js',
  './universal-lifecycle-gate.js','./universal-recovery.js','./universal-release-gate.js','./universal-scenario-simulator.js','./universal-data-status.js',
@@ -9,7 +9,7 @@ const SHELL=[
  './universal-sales.css','./universal-po.css','./universal-inbound.css','./universal-warehouse.css','./universal-accounting.css',
  './universal-installation.css','./universal-billing.css','./universal-lifecycle-gate.css','./universal-audit.css','./universal-recovery.css',
  './universal-release-gate.css','./universal-scenario-simulator.css','./universal-data-status.css','./universal-backup.css',
- './universal-data-exchange.css','./universal-local-health.css','./universal-pwa.css','./universal-support-center.css','./universal-startup-guard.css','./universal-crash-journal.css','./universal-interrupted-resolver.css','./universal-device-ready.css','./universal-diagnostics.css','./universal-data-version.css','./universal-indexeddb.css','./manifest.webmanifest','./app-icon.svg'
+ './universal-data-exchange.css','./universal-local-health.css','./universal-pwa.css','./universal-support-center.css','./universal-startup-guard.css','./universal-crash-journal.css','./universal-interrupted-resolver.css','./universal-crash-simulator.css','./universal-device-ready.css','./universal-diagnostics.css','./universal-data-version.css','./universal-indexeddb.css','./manifest.webmanifest','./app-icon.svg'
 ];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('runlu-flooring-universal-shell-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
