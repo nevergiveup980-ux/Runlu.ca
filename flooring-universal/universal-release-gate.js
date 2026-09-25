@@ -5,7 +5,7 @@
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 function run(){
  const tests=[],t=(name,ok,detail)=>tests.push({name,ok:!!ok,detail});
- const mods=['RUNLUUniversalData','RUNLUUniversalCrashJournal','RUNLUUniversalInterruptedResolver','RUNLUUniversalStartupGuard','RUNLUUniversalSupportCenter','RUNLUUniversalDiagnostics','RUNLUUniversalDeviceReady','RUNLUUniversalPWA','RUNLUUniversalDurableLocal','RUNLUUniversalDataVersion','RUNLUUniversalLocalHealth','RUNLUUniversalBackup','RUNLUUniversalDataExchange','RUNLUUniversalSales','RUNLUUniversalPO','RUNLUUniversalInbound','RUNLUUniversalInstallation','RUNLUUniversalBilling','RUNLUUniversalAccounting','RUNLUUniversalAudit','RUNLUUniversalLifecycleGate','RUNLUUniversalRecovery','RUNLUUniversalGuards'];
+ const mods=['RUNLUUniversalData','RUNLUUniversalCrashJournal','RUNLUUniversalInterruptedResolver','RUNLUUniversalCrashSimulator','RUNLUUniversalStartupGuard','RUNLUUniversalSupportCenter','RUNLUUniversalDiagnostics','RUNLUUniversalDeviceReady','RUNLUUniversalPWA','RUNLUUniversalDurableLocal','RUNLUUniversalDataVersion','RUNLUUniversalLocalHealth','RUNLUUniversalBackup','RUNLUUniversalDataExchange','RUNLUUniversalSales','RUNLUUniversalPO','RUNLUUniversalInbound','RUNLUUniversalInstallation','RUNLUUniversalBilling','RUNLUUniversalAccounting','RUNLUUniversalAudit','RUNLUUniversalLifecycleGate','RUNLUUniversalRecovery','RUNLUUniversalGuards'];
  mods.forEach(m=>t('Module · '+m,!!window[m],window[m]?'loaded':'missing'));
  const data=window.RUNLUUniversalData,health=data?.current?.()?.health?.();
  t('Data Adapter · active',!!data&&!!health?.ok,health?.detail||'unavailable');
@@ -21,6 +21,12 @@ function run(){
   t('Interrupted Resolver · conservative legacy policy',resolver.classify({id:'fixture',type:'Customer Payment',action:'record',startedAt:new Date(0).toISOString(),meta:{invoiceId:'missing-fixture'}}).verdict==='UNCERTAIN','legacy payment evidence must not auto-clear');
   t('Interrupted Resolver · acknowledgement API',typeof resolver.acknowledge==='function','reviewed markers can be closed without rewriting business records');
  }
+ const crashSim=window.RUNLUUniversalCrashSimulator;
+ if(crashSim){
+  const cr=crashSim.run();
+  t('Crash Simulation · non-destructive',cr.nonDestructive===true,'synthetic fixtures only');
+  t('Crash Simulation · all scenarios',cr.failed===0,cr.passed+'/'+cr.total+' scenarios passed');
+ }
  const startup=window.RUNLUUniversalStartupGuard;
  if(startup){
   t('Startup Guard · boot gate API',typeof startup.ready==='function'&&typeof startup.canProceed==='function','startup inspection + gate ready');
@@ -28,7 +34,7 @@ function run(){
  }
  const support=window.RUNLUUniversalSupportCenter;
  if(support){
-  t('Support Center · tool registry',Array.isArray(support.TOOLS)&&support.TOOLS.length===10,'10 maintenance tools consolidated');
+  t('Support Center · tool registry',Array.isArray(support.TOOLS)&&support.TOOLS.length===11,'11 maintenance tools consolidated');
   t('Support Center · status API',typeof support.status==='function'&&typeof support.render==='function','customer maintenance hub ready');
  }
  const diagnostics=window.RUNLUUniversalDiagnostics;
