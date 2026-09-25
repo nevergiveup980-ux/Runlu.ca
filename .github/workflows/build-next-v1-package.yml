@@ -1,0 +1,47 @@
+name: Build RUNLU NEXT V1.0 customer package
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "next.html"
+      - "releases/next-v1.0/README.txt"
+      - "releases/next-v1.0/LICENSE.txt"
+      - ".github/workflows/build-next-v1-package.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build standalone customer file
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf dist-next
+          mkdir -p dist-next/RUNLU_NEXT_V1.0
+          cp next.html dist-next/RUNLU_NEXT_V1.0/RUNLU_NEXT_V1.0.html
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("dist-next/RUNLU_NEXT_V1.0/RUNLU_NEXT_V1.0.html")
+          s=p.read_text()
+          s=s.replace('<script src="runlu-language.js?v=2.4"></script>','')
+          s=s.replace('RUNLU NEXT · V1.0 · Release Candidate','RUNLU NEXT · V1.0 · Customer Edition')
+          p.write_text(s)
+          PY
+          cp releases/next-v1.0/README.txt dist-next/RUNLU_NEXT_V1.0/
+          cp releases/next-v1.0/LICENSE.txt dist-next/RUNLU_NEXT_V1.0/
+          cd dist-next
+          zip -r RUNLU_NEXT_V1.0_CUSTOMER_PACKAGE.zip RUNLU_NEXT_V1.0
+          shasum -a 256 RUNLU_NEXT_V1.0_CUSTOMER_PACKAGE.zip > RUNLU_NEXT_V1.0_CUSTOMER_PACKAGE.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RUNLU_NEXT_V1.0_CUSTOMER_PACKAGE
+          path: |
+            dist-next/RUNLU_NEXT_V1.0_CUSTOMER_PACKAGE.zip
+            dist-next/RUNLU_NEXT_V1.0_CUSTOMER_PACKAGE.sha256
+          if-no-files-found: error
