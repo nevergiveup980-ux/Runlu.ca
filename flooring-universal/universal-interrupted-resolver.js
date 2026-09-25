@@ -16,11 +16,11 @@ const find=(xs,id)=>id?xs.find(x=>x.id===id):null;
 function auditMatch(tx){
  const events=arr(KEYS.audit),m=tx.meta||{};
  return events.filter(e=>{
-  if(tx.type==='Supplier PO')return e.entityType==='Supplier PO'&&(e.entityId===m.poId||e.meta?.jobId===m.jobId);
+  if(tx.type==='Supplier PO')return e.entityType==='Supplier PO'&&!!m.poId&&e.entityId===m.poId;
   if(tx.type==='Receiving')return e.entityType==='Receiving'&&e.entityId===m.inboundId;
   if(tx.type==='Installation')return e.entityType==='Installation'&&e.entityId===m.installationId;
   if(tx.type==='Customer Invoice')return e.entityType==='Customer Invoice'&&e.entityId===m.invoiceId;
-  if(tx.type==='Customer Payment')return e.entityType==='Customer Payment'&&e.entityId===m.invoiceId;
+  if(tx.type==='Customer Payment')return e.entityType==='Customer Payment'&&e.entityId===m.invoiceId&&(!m.paymentId||e.meta?.paymentId===m.paymentId);
   if(tx.type==='Supplier Accounting')return e.entityType==='Supplier Accounting'&&e.entityId===m.accountingId;
   return false;
  }).filter(e=>!tx.startedAt||!e.createdAt||e.createdAt>=tx.startedAt);
