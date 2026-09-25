@@ -4,6 +4,7 @@ The Support & Recovery Center is the customer-facing maintenance hub for RUNLU F
 
 It does not replace or merge the underlying safety modules. Instead, it gives customers one entry point to:
 
+- Startup Recovery Guard
 - Device Readiness
 - Local Data Health and Recovery Points
 - Backup / Restore
@@ -12,7 +13,7 @@ It does not replace or merge the underlying safety modules. Instead, it gives cu
 - Data Version / migration history
 - Privacy-safe Diagnostics
 
-The center also summarizes Device, IndexedDB, Schema, Offline, Recovery Point and Release Gate status.
+The center also summarizes Startup Guard, Device, IndexedDB, Schema, Offline, Recovery Point and Release Gate status.
 
 ## Command Center simplification
 Technical maintenance modules are no longer required to occupy separate top-level Command Center buttons. Their underlying sections and APIs remain intact and are opened from Support & Recovery.
