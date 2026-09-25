@@ -5,14 +5,19 @@
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 function run(){
  const tests=[],t=(name,ok,detail)=>tests.push({name,ok:!!ok,detail});
- const mods=['RUNLUUniversalData','RUNLUUniversalSupportCenter','RUNLUUniversalDiagnostics','RUNLUUniversalDeviceReady','RUNLUUniversalPWA','RUNLUUniversalDurableLocal','RUNLUUniversalDataVersion','RUNLUUniversalLocalHealth','RUNLUUniversalBackup','RUNLUUniversalDataExchange','RUNLUUniversalSales','RUNLUUniversalPO','RUNLUUniversalInbound','RUNLUUniversalInstallation','RUNLUUniversalBilling','RUNLUUniversalAccounting','RUNLUUniversalAudit','RUNLUUniversalLifecycleGate','RUNLUUniversalRecovery','RUNLUUniversalGuards'];
+ const mods=['RUNLUUniversalData','RUNLUUniversalStartupGuard','RUNLUUniversalSupportCenter','RUNLUUniversalDiagnostics','RUNLUUniversalDeviceReady','RUNLUUniversalPWA','RUNLUUniversalDurableLocal','RUNLUUniversalDataVersion','RUNLUUniversalLocalHealth','RUNLUUniversalBackup','RUNLUUniversalDataExchange','RUNLUUniversalSales','RUNLUUniversalPO','RUNLUUniversalInbound','RUNLUUniversalInstallation','RUNLUUniversalBilling','RUNLUUniversalAccounting','RUNLUUniversalAudit','RUNLUUniversalLifecycleGate','RUNLUUniversalRecovery','RUNLUUniversalGuards'];
  mods.forEach(m=>t('Module · '+m,!!window[m],window[m]?'loaded':'missing'));
  const data=window.RUNLUUniversalData,health=data?.current?.()?.health?.();
  t('Data Adapter · active',!!data&&!!health?.ok,health?.detail||'unavailable');
  t('Data Adapter · default local',data?.backendConfig?.().mode==='local','cloud remains optional');
+ const startup=window.RUNLUUniversalStartupGuard;
+ if(startup){
+  t('Startup Guard · boot gate API',typeof startup.ready==='function'&&typeof startup.canProceed==='function','startup inspection + gate ready');
+  t('Startup Guard · recovery UI',typeof startup.render==='function'&&typeof startup.renderBanner==='function','review path ready');
+ }
  const support=window.RUNLUUniversalSupportCenter;
  if(support){
-  t('Support Center · tool registry',Array.isArray(support.TOOLS)&&support.TOOLS.length===7,'7 maintenance tools consolidated');
+  t('Support Center · tool registry',Array.isArray(support.TOOLS)&&support.TOOLS.length===8,'8 maintenance tools consolidated');
   t('Support Center · status API',typeof support.status==='function'&&typeof support.render==='function','customer maintenance hub ready');
  }
  const diagnostics=window.RUNLUUniversalDiagnostics;
