@@ -26,6 +26,7 @@ function run(){
   const cr=crashSim.run();
   t('Crash Simulation · non-destructive',cr.nonDestructive===true,'synthetic fixtures only');
   t('Crash Simulation · all scenarios',cr.failed===0,cr.passed+'/'+cr.total+' scenarios passed');
+  t('Crash Simulation · fault injection coverage',cr.faultCount>=9,cr.faultCount+' interruption stages covered');
  }
  const startup=window.RUNLUUniversalStartupGuard;
  if(startup){
