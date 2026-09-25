@@ -22,7 +22,7 @@ async function inspect(prior){
  const schema=window.RUNLUUniversalDataVersion?.status?.()||null;
  let durable=null,comparison=null;
  try{durable=await window.RUNLUUniversalDurableLocal?.status?.();if(durable?.ready){await new Promise(r=>setTimeout(r,120));comparison=await window.RUNLUUniversalDurableLocal?.compareWithAdapter?.()}}catch(_){}
- const journal=window.RUNLUUniversalCrashJournal?.inspect?.()||{active:0,pending:[]};
+ const journal=window.RUNLUUniversalCrashJournal?.inspect?.()||{active:0,pending:[]}; const interrupted=window.RUNLUUniversalInterruptedResolver?.scan?.()||[];
  const issues=[];
  if(journal.active>0)issues.push({code:'INCOMPLETE_BUSINESS_OPERATION',severity:'critical',detail:journal.active+' write-ahead operation(s) were not committed'});
  if(health?.corruptKeys?.length)issues.push({code:'CORRUPT_LOCAL_JSON',severity:'critical',detail:health.corruptKeys.length+' unreadable local data group(s)'});
@@ -31,7 +31,7 @@ async function inspect(prior){
  if(hasWorkspace&&comparison&&!comparison.ok)issues.push({code:'MIRROR_MISMATCH',severity:prior?.sessionOpen?'critical':'review',detail:'Local/mirror mismatch · missing local '+comparison.missingLocal+' · missing mirror '+comparison.missingMirror+' · different '+comparison.different});
  if(prior?.sessionOpen)issues.push({code:'UNCLEAN_EXIT',severity:'review',detail:'Previous session did not record a clean exit'});
  const critical=issues.filter(x=>x.severity==='critical');
- return {hasWorkspace,journal,priorUnclean:!!prior?.sessionOpen,health,schema,durable,comparison,issues,critical,blocked:critical.length>0,checkedAt:new Date().toISOString()};
+ return {hasWorkspace,journal,interrupted,priorUnclean:!!prior?.sessionOpen,health,schema,durable,comparison,issues,critical,blocked:critical.length>0,checkedAt:new Date().toISOString()};
 }
 async function boot(){
  const prior=previous(),hasWorkspace=!!data().read(WS,null)?.company?.organizationId;
