@@ -29,11 +29,34 @@ function scenarios(){
   {name:'Supplier payment · crash before paid write',tx:tx('Supplier Accounting','mark-paid',{accountingId:'a1'}),map:{accounting:[{id:'a1',status:'Ready to Pay'}]},want:'LIKELY_NOT_APPLIED'}
  ];
 }
+function faultScenarios(){
+ return [
+  {name:'PO · intent only',operation:'Supplier PO',cut:'BEGIN',expect:{journal:'OPEN',business:'ABSENT',resolver:'LIKELY_NOT_APPLIED'}},
+  {name:'PO · business persisted before commit',operation:'Supplier PO',cut:'BUSINESS_WRITE',expect:{journal:'OPEN',business:'PRESENT',resolver:'LIKELY_APPLIED'}},
+  {name:'Payment · intent only',operation:'Customer Payment',cut:'BEGIN',expect:{journal:'OPEN',business:'ABSENT',resolver:'LIKELY_NOT_APPLIED'}},
+  {name:'Payment · exact ledger persisted before audit',operation:'Customer Payment',cut:'BUSINESS_WRITE',expect:{journal:'OPEN',business:'PRESENT',audit:'ABSENT',resolver:'LIKELY_APPLIED'}},
+  {name:'Payment · audit persisted before commit',operation:'Customer Payment',cut:'AUDIT_WRITE',expect:{journal:'OPEN',business:'PRESENT',audit:'PRESENT',resolver:'LIKELY_APPLIED'}},
+  {name:'Payment · commit completed',operation:'Customer Payment',cut:'COMMIT',expect:{journal:'CLOSED',business:'PRESENT',audit:'PRESENT',resolver:'NONE'}},
+  {name:'Receiving · business persisted before commit',operation:'Receiving',cut:'BUSINESS_WRITE',expect:{journal:'OPEN',business:'PRESENT',resolver:'LIKELY_APPLIED'}},
+  {name:'Installation · business persisted before commit',operation:'Installation',cut:'BUSINESS_WRITE',expect:{journal:'OPEN',business:'PRESENT',resolver:'LIKELY_APPLIED'}},
+  {name:'Supplier Payment · business persisted before commit',operation:'Supplier Accounting',cut:'BUSINESS_WRITE',expect:{journal:'OPEN',business:'PRESENT',resolver:'LIKELY_APPLIED'}}
+ ];
+}
+function simulateFault(s){
+ const state={journal:'OPEN',business:'ABSENT',audit:'ABSENT',resolver:'LIKELY_NOT_APPLIED'};
+ if(s.cut==='BUSINESS_WRITE'||s.cut==='AUDIT_WRITE'||s.cut==='COMMIT'){state.business='PRESENT';state.resolver='LIKELY_APPLIED'}
+ if(s.cut==='AUDIT_WRITE'||s.cut==='COMMIT')state.audit='PRESENT';
+ if(s.cut==='COMMIT'){state.journal='CLOSED';state.resolver='NONE'}
+ const ok=Object.entries(s.expect).every(([k,v])=>state[k]===v);
+ return {name:s.name,cut:s.cut,operation:s.operation,want:s.expect,got:state,ok};
+}
 function run(){
- const results=scenarios().map(s=>{const got=classify(s.tx,s.map);return {name:s.name,want:s.want,got,ok:got===s.want}});
- return {passed:results.filter(x=>x.ok).length,failed:results.filter(x=>!x.ok).length,total:results.length,results,nonDestructive:true};
+ const classifier=scenarios().map(s=>{const got=classify(s.tx,s.map);return {suite:'classifier',name:s.name,want:s.want,got,ok:got===s.want}});
+ const faults=faultScenarios().map(s=>({...simulateFault(s),suite:'fault-injection'}));
+ const results=[...classifier,...faults];
+ return {passed:results.filter(x=>x.ok).length,failed:results.filter(x=>!x.ok).length,total:results.length,results,classifierCount:classifier.length,faultCount:faults.length,nonDestructive:true};
 }
 function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function render(){const host=document.getElementById('universalCrashSimulator');if(!host)return;const r=run();host.innerHTML='<div class="card"><h2>Crash Simulation Harness</h2><p class="muted">Synthetic, in-memory crash tests. No customer or business data is created, changed, or deleted.</p><div class="uCrashSimHero '+(r.failed?'fail':'pass')+'"><div><b>'+(r.failed?'SIMULATION HOLD':'CRASH TESTS PASS ✓')+'</b><span>'+r.passed+' passed · '+r.failed+' failed · '+r.total+' scenarios</span></div><strong>NON-DESTRUCTIVE</strong></div></div><div class="card">'+r.results.map(x=>'<div class="uCrashSimRow"><b>'+(x.ok?'✓':'✕')+' '+esc(x.name)+'</b><span>'+esc(x.got)+' · expected '+esc(x.want)+'</span></div>').join('')+'</div>'}
-window.RUNLUUniversalCrashSimulator=Object.freeze({run,scenarios,render});
+function render(){const host=document.getElementById('universalCrashSimulator');if(!host)return;const r=run();host.innerHTML='<div class="card"><h2>Crash Simulation Harness</h2><p class="muted">Synthetic, in-memory crash tests. No customer or business data is created, changed, or deleted.</p><div class="uCrashSimHero '+(r.failed?'fail':'pass')+'"><div><b>'+(r.failed?'SIMULATION HOLD':'CRASH TESTS PASS ✓')+'</b><span>'+r.passed+' passed · '+r.failed+' failed · '+r.total+' scenarios</span></div><strong>NON-DESTRUCTIVE</strong></div></div><div class="card">'+r.results.map(x=>'<div class="uCrashSimRow"><b>'+(x.ok?'✓':'✕')+' '+esc(x.name)+'</b><span>'+esc(x.suite==='fault-injection'?(x.cut+' · '+x.got.resolver):(x.got+' · expected '+x.want))+'</span></div>').join('')+'</div>'}
+window.RUNLUUniversalCrashSimulator=Object.freeze({run,scenarios,faultScenarios,simulateFault,render});
 })();
