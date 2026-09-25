@@ -30,7 +30,7 @@ function classify(tx){
  let record=null,applied=false,notApplied=false,evidence=[];
  if(tx.type==='Supplier PO'){
   const xs=arr(KEYS.po);
-  if(tx.action==='create'){record=xs.find(x=>x.jobId===m.jobId);applied=!!record;notApplied=!record;evidence.push(record?'Supplier PO exists for the Job.':'No Supplier PO exists for the Job.')}
+  if(tx.action==='create'){record=m.poId?find(xs,m.poId):null;if(m.poId){applied=!!record;notApplied=!record;evidence.push(record?'The exact Supplier PO created by this operation exists.':'The exact Supplier PO id from this operation is absent.')}else{evidence.push('Legacy journal entry has no exact PO id; Job-level evidence is not sufficient for automatic classification.')}}
   else {record=find(xs,m.poId);applied=!!record&&record.status!=='Draft';notApplied=!!record&&record.status==='Draft';evidence.push(record?'PO status: '+record.status+'.':'PO record not found.')}
  }else if(tx.type==='Receiving'){
   record=find(arr(KEYS.inbound),m.inboundId);applied=!!record?.receivedAt;notApplied=!!record&&!record.receivedAt;evidence.push(record?.receivedAt?'Receiving timestamp exists; status '+record.status+'.':record?'Receiving record has no received timestamp.':'Receiving record not found.');
@@ -39,7 +39,7 @@ function classify(tx){
  }else if(tx.type==='Customer Invoice'){
   record=find(arr(KEYS.invoice),m.invoiceId);applied=!!record?.invoiceNumber&&record.status!=='Draft';notApplied=!!record&&record.status==='Draft';evidence.push(record?'Invoice status: '+record.status+(record.invoiceNumber?' · #'+record.invoiceNumber:' · no invoice number')+'.':'Invoice record not found.');
  }else if(tx.type==='Customer Payment'){
-  record=find(arr(KEYS.invoice),m.invoiceId);applied=!!record&&(record.payments||[]).some(p=>!tx.startedAt||!p.createdAt||p.createdAt>=tx.startedAt);notApplied=!!record&&!applied;evidence.push(record?(applied?'A payment ledger entry exists at/after operation start.':'No payment ledger entry exists at/after operation start.'):'Invoice record not found.');
+  record=find(arr(KEYS.invoice),m.invoiceId);if(m.paymentId){applied=!!record&&(record.payments||[]).some(p=>p.id===m.paymentId);notApplied=!!record&&!applied;evidence.push(record?(applied?'The exact payment ledger entry from this operation exists.':'The exact payment id from this operation is absent.'):'Invoice record not found.')}else{evidence.push(record?'Legacy payment journal has no exact payment id; timestamp evidence is intentionally not used to auto-classify.':'Invoice record not found.');}
  }else if(tx.type==='Supplier Accounting'){
   record=find(arr(KEYS.accounting),m.accountingId);applied=record?.status==='Paid'&&!!record.paidAt;notApplied=!!record&&record.status!=='Paid';evidence.push(record?'Supplier accounting status: '+record.status+(record.paidAt?' with paid timestamp.':'.'):'Supplier accounting record not found.');
  }
