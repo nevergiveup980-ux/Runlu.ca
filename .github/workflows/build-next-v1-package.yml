@@ -11,7 +11,7 @@ on:
       - ".github/workflows/build-next-v1-package.yml"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   package:
@@ -30,7 +30,7 @@ jobs:
           p=Path("dist-next/RUNLU_NEXT_V1.0/RUNLU_NEXT_V1.0.html")
           s=p.read_text()
           s=s.replace('<script src="runlu-language.js?v=2.4"></script>','')
-          s=s.replace('RUNLU NEXT · V1.0 · Release Candidate','RUNLU NEXT · V1.0 · Customer Edition')
+          s=s.replace('RUNLU NEXT · V1.0 · Personal Action Agent','RUNLU NEXT · V1.0 · Customer Edition')
           p.write_text(s)
           PY
           cp releases/next-v1.0/README.txt dist-next/RUNLU_NEXT_V1.0/
@@ -45,3 +45,12 @@ jobs:
             dist-next/RUNLU_NEXT_V1.0_CUSTOMER_PACKAGE.zip
             dist-next/RUNLU_NEXT_V1.0_CUSTOMER_PACKAGE.sha256
           if-no-files-found: error
+      - name: Publish stable package asset
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: next-v1.0-customer
+          name: RUNLU NEXT V1.0 Customer Package
+          prerelease: true
+          files: |
+            dist-next/RUNLU_NEXT_V1.0_CUSTOMER_PACKAGE.zip
+            dist-next/RUNLU_NEXT_V1.0_CUSTOMER_PACKAGE.sha256
