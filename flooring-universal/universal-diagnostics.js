@@ -30,6 +30,7 @@ async function collect(){
   adapter:{id:adapter?.id||null,healthy:!!health?.ok,detail:clean(health?.detail||'')},
   recordCounts:counts(),
   startupGuard:{canProceed:window.RUNLUUniversalStartupGuard?.canProceed?.()!==false,priorSessionWasUnclean:!!window.RUNLUUniversalStartupGuard?.previous?.()?.lastInspection?.priorUnclean},
+  interruptedOperations:{activeCount:window.RUNLUUniversalCrashJournal?.inspect?.().active??null,detailsIncluded:false},
   deviceReadiness:ready?{ready:!!ready.ready,checks:ready.checks.map(x=>({id:x.id,ok:!!x.ok,detail:clean(x.detail)}))}:null,
   releaseGate:gate?{passed:gate.passed,failed:gate.failed,total:(gate.passed||0)+(gate.failed||0)}:null,
   subsystemErrors:{pwaPresent:!!pwa?.error,durablePresent:!!durable?.error}
