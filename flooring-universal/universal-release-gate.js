@@ -68,6 +68,7 @@ function run(){
   t('Backup · valid Universal payload',backup.validate(fixture).ok,'Universal namespace accepted');
   t('Backup · rejects foreign keys',!backup.validate({...fixture,data:{foreign_key:{}}}).ok,'foreign namespace blocked');
   t('Backup · rejects foreign format',!backup.validate({...fixture,format:'other-product'}).ok,'foreign product blocked');
+  t('Backup · rejects runtime metadata',!backup.validate({...fixture,data:{runlu_flooring_universal_u2_startup_guard:{sessionOpen:true}}}).ok,'session metadata blocked from restore');
  }
  const g=window.RUNLUUniversalGuards;
  if(g){
