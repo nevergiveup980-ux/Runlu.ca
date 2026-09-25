@@ -2,13 +2,14 @@
    Portable JSON backup for Universal-owned local data only. */
 (function(){
 'use strict';
-const PREFIX='runlu_flooring_universal_',SNAP='runlu_flooring_universal_u2_recovery_points',FORMAT='runlu-flooring-universal-backup',VERSION=1,GUARD='runlu_flooring_universal_u2_startup_guard';
+const PREFIX='runlu_flooring_universal_',BACKEND='runlu_flooring_universal_data_backend',SNAP='runlu_flooring_universal_u2_recovery_points',FORMAT='runlu-flooring-universal-backup',VERSION=1,GUARD='runlu_flooring_universal_u2_startup_guard';
+const RESERVED=new Set([BACKEND,SNAP,GUARD]);
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 function collect(){
  const adapter=window.RUNLUUniversalData?.current?.();
  if(!adapter||adapter.id!=='local')throw new Error('Local backup is available only in Local Device mode.');
  const keys=adapter.rawKeys?.()||[],data={};
- keys.filter(k=>k.startsWith(PREFIX)&&k!=='runlu_flooring_universal_data_backend'&&k!==SNAP&&k!==GUARD).forEach(k=>{data[k]=adapter.read(k,null)});
+ keys.filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP&&k!==GUARD).forEach(k=>{data[k]=adapter.read(k,null)});
  return {format:FORMAT,version:VERSION,schemaVersion:window.RUNLUUniversalDataVersion?.status?.().workspaceVersion||0,createdAt:new Date().toISOString(),product:'RUNLU Flooring OS Universal',data};
 }
 function validate(payload){
@@ -18,6 +19,7 @@ function validate(payload){
  if(!payload.data||typeof payload.data!=='object'||Array.isArray(payload.data))return {ok:false,error:'Backup data is missing.'};
  const keys=Object.keys(payload.data);
  if(keys.some(k=>!k.startsWith(PREFIX)))return {ok:false,error:'Backup contains a non-Universal data key.'};
+ if(keys.some(k=>RESERVED.has(k)))return {ok:false,error:'Backup contains reserved runtime metadata.'};
  return {ok:true,keys};
 }
 function download(){
@@ -35,7 +37,7 @@ function restore(payload){
  const adapter=window.RUNLUUniversalData.current(),backup=collect(),incoming=payload.data;window.RUNLUUniversalLocalHealth?.capture('Before full Backup restore',{backupCreatedAt:payload.createdAt||null});
  // Replace Universal business/workspace keys as one controlled operation; backend selection remains local.
  (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!=='runlu_flooring_universal_data_backend'&&k!==SNAP&&k!==GUARD).forEach(k=>adapter.remove(k));
- Object.entries(incoming).forEach(([k,v])=>adapter.write(k,v));
+ Object.entries(incoming).forEach(([k,v])=>{if(!RESERVED.has(k))adapter.write(k,v)});
  const migration=window.RUNLUUniversalDataVersion?.migrate?.();
  return {restoredKeys:Object.keys(incoming).length,safetyBackup:backup,migration};
 }
