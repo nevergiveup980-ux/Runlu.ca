@@ -2,13 +2,13 @@
    Bounded local snapshots for audited lifecycle actions. */
 (function(){
 'use strict';
-const SNAP='runlu_flooring_universal_u2_recovery_points',PREFIX='runlu_flooring_universal_',MAX=12,WS='runlu_flooring_universal_u0_workspace',GUARD='runlu_flooring_universal_u2_startup_guard';
+const SNAP='runlu_flooring_universal_u2_recovery_points',PREFIX='runlu_flooring_universal_',MAX=12,WS='runlu_flooring_universal_u0_workspace',GUARD='runlu_flooring_universal_u2_startup_guard',JOURNAL='runlu_flooring_universal_u2_crash_journal';
 const data=()=>window.RUNLUUniversalData, esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 function points(){return data().read(SNAP,[])||[]}
 function capture(reason,meta){
  if(data().backendConfig().mode!=='local')return null;
  const adapter=data().current(),payload={};
- (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==SNAP&&k!==GUARD&&k!=='runlu_flooring_universal_data_backend').forEach(k=>payload[k]=adapter.read(k,null));
+ (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==SNAP&&k!==GUARD&&k!==JOURNAL&&k!=='runlu_flooring_universal_data_backend').forEach(k=>payload[k]=adapter.read(k,null));
  const p={id:'rp-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,5),createdAt:new Date().toISOString(),reason:reason||'Checkpoint',meta:meta||{},organizationId:data().read(WS,null)?.company?.organizationId||'',payload};
  data().write(SNAP,[p,...points()].slice(0,MAX));return p;
 }
@@ -16,8 +16,8 @@ function restore(id){
  if(data().backendConfig().mode!=='local')throw new Error('Recovery Point restore is available only in Local Device mode.');
  const p=points().find(x=>x.id===id);if(!p)throw new Error('Recovery Point not found.');
  const adapter=data().current(),safety=capture('Safety checkpoint before Recovery Point restore',{restorePoint:id});
- (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==SNAP&&k!==GUARD&&k!=='runlu_flooring_universal_data_backend').forEach(k=>adapter.remove(k));
- Object.entries(p.payload||{}).forEach(([k,v])=>{if(k.startsWith(PREFIX)&&k!==SNAP&&k!==GUARD&&k!=='runlu_flooring_universal_data_backend')adapter.write(k,v)});
+ (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==SNAP&&k!==GUARD&&k!==JOURNAL&&k!=='runlu_flooring_universal_data_backend').forEach(k=>adapter.remove(k));
+ Object.entries(p.payload||{}).forEach(([k,v])=>{if(k.startsWith(PREFIX)&&k!==SNAP&&k!==GUARD&&k!==JOURNAL&&k!=='runlu_flooring_universal_data_backend')adapter.write(k,v)});
  return {point:p,safety};
 }
 async function health(){
