@@ -33,6 +33,7 @@ function run(){
   const auditSrc=resolver.auditMatch?.toString?.()||'';
   t('Interrupted Resolver · action-bound audit evidence',typeof resolver.auditMatch==='function'&&auditSrc.includes("tx.action==='record'")&&auditSrc.includes("tx.action==='reconcile'")&&auditSrc.includes("tx.action==='mark-paid'"),'audit confidence requires the matching business action');
  }
+ const audit=window.RUNLUUniversalAudit;if(resolver&&audit)t('Recovery contract · Audit store identity',typeof audit.STORE==='string'&&resolver.KEYS?.audit===audit.STORE,'Resolver and Audit must read the exact same append-only event store');
  const crashSim=window.RUNLUUniversalCrashSimulator;
  if(crashSim){
   const cr=crashSim.run();
