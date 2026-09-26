@@ -20,14 +20,14 @@ test('iOS default Core bypasses V090 and V078 wrappers',()=>{
 });
 test('Explicit full=1 preserves the full desktop stack for diagnostics',()=>{
   assert(release.includes("const forceFull=qp.get('full')==='1'"));
-  assert(release.includes("index-v090r1-stable-frozen.html?prod=1&release=090r1"));
+  assert(release.includes("index-v071-pricing-workspace.html?prod=1&release=0403&mobile=safe&desktop=1"));
 });
 test('Explicit lite=1 provides emergency base Core fallback',()=>{
   assert(release.includes("const forceLite=qp.get('lite')==='1'"));
   assert(release.includes("index-v040.html?prod=1&release=0403&mobile=lite"));
 });
 test('Mobile Core uses a stable versioned cache token rather than a new URL every reload',()=>{
-  assert(release.includes("'mobile-safe-0403a'")||release.includes("'mobile-safe-0403g'")||release.includes("'mobile-safe-0403h'"));
+  assert(release.includes("'desktop-safe-0403l'"));
 });
 test('Safe route reduces Core nesting from four inner wrappers to two',()=>{
   assert(v90.includes("index-v078-business-cost-control.html"));
