@@ -32,7 +32,7 @@ function auditMatchWith(tx,reader){
 }
 function auditMatch(tx){return auditMatchWith(tx,arr)}
 function classifyWith(tx,reader){
- const m=tx.meta||{},audits=auditMatchWith(tx,reader),base={txId:tx.id,type:tx.type,action:tx.action,startedAt:tx.startedAt,meta:m,auditEvents:audits.length};
+ const m=tx.meta||{},audits=auditMatchWith(tx,reader),phase=String(tx.phase||'BEGIN'),base={txId:tx.id,type:tx.type,action:tx.action,startedAt:tx.startedAt,meta:m,auditEvents:audits.length,journalPhase:phase,phaseAt:tx.phaseAt||null};
  let record=null,applied=false,notApplied=false,evidence=[];
  if(tx.type==='Supplier PO'){
   const xs=reader(KEYS.po);
@@ -45,10 +45,11 @@ function classifyWith(tx,reader){
  }else if(tx.type==='Customer Invoice'){
   record=find(reader(KEYS.invoice),m.invoiceId);applied=!!record?.invoiceNumber&&record.status!=='Draft';notApplied=!!record&&record.status==='Draft';evidence.push(record?'Invoice status: '+record.status+(record.invoiceNumber?' · #'+record.invoiceNumber:' · no invoice number')+'.':'Invoice record not found; classification remains uncertain.');
  }else if(tx.type==='Customer Payment'){
-  record=find(arr(KEYS.invoice),m.invoiceId);if(m.paymentId){applied=!!record&&(record.payments||[]).some(p=>p.id===m.paymentId);notApplied=!!record&&!applied;evidence.push(record?(applied?'The exact payment ledger entry from this operation exists.':'The exact payment id from this operation is absent.'):'Invoice record not found; classification remains uncertain.')}else{evidence.push(record?'Legacy payment journal has no exact payment id; timestamp evidence is intentionally not used to auto-classify.':'Invoice record not found.');}
+  record=find(reader(KEYS.invoice),m.invoiceId);if(m.paymentId){applied=!!record&&(record.payments||[]).some(p=>p.id===m.paymentId);notApplied=!!record&&!applied;evidence.push(record?(applied?'The exact payment ledger entry from this operation exists.':'The exact payment id from this operation is absent.'):'Invoice record not found; classification remains uncertain.')}else{evidence.push(record?'Legacy payment journal has no exact payment id; timestamp evidence is intentionally not used to auto-classify.':'Invoice record not found.');}
  }else if(tx.type==='Supplier Accounting'){
   record=find(reader(KEYS.accounting),m.accountingId);applied=record?.status==='Paid'&&!!record.paidAt;notApplied=!!record&&record.status!=='Paid';evidence.push(record?'Supplier accounting status: '+record.status+(record.paidAt?' with paid timestamp.':'.'):'Supplier accounting record not found; classification remains uncertain.');
  }
+ if(phase!=='BEGIN')evidence.push('Crash Journal last persisted milestone: '+phase+'.');
  if(audits.length)evidence.push(audits.length+' matching Audit event(s) exist at/after operation start.');
  let verdict='UNCERTAIN',confidence='REVIEW';
  if(applied){verdict='LIKELY_APPLIED';confidence=audits.length?'HIGH':'MEDIUM'}
