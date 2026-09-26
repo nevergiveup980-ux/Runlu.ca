@@ -1,0 +1,43 @@
+name: Flooring Universal Durability Lab
+on:
+  push:
+    branches: [feature/flooring-os-universal-foundation]
+    paths:
+      - 'flooring-universal/**'
+      - '.github/workflows/flooring-universal-durability-lab.yml'
+  workflow_dispatch:
+    inputs:
+      rounds:
+        description: Stress rounds
+        required: false
+        default: '25000'
+permissions:
+  contents: read
+jobs:
+  durability:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      RUNLU_STRESS_ROUNDS: ${{ github.event.inputs.rounds || '25000' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check Universal runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          for f in flooring-universal/*.js; do node --check "$f"; done
+      - name: Assert no Deerfoot production path or direct Supabase runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -REn "['\"\x60]/flooring/" flooring-universal/*.js; then
+            echo "Universal runtime references Deerfoot production path"; exit 1
+          fi
+          if grep -REn "createClient[[:space:]]*\(|service_role|supabaseUrl" flooring-universal/*.js; then
+            echo "Universal runtime contains direct Supabase runtime wiring"; exit 1
+          fi
+      - name: Hammer Universal durability model
+        run: node flooring-universal/tests/universal-durability-stress.js
