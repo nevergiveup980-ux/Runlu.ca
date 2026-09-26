@@ -1,0 +1,20 @@
+name: Flooring Dispatch Morning V0.3.98
+on:
+  pull_request:
+    paths:
+      - 'flooring/week-schedule-v098-safe.js'
+      - 'flooring/index-v098-dispatch-morning-preview.html'
+      - 'scripts/run-flooring-week-schedule-v098.mjs'
+      - '.github/workflows/flooring-week-schedule-v098.yml'
+  workflow_dispatch:
+jobs:
+  dispatch-morning-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.3.98 dispatch, workload, conflict, pressure and read-only gates
+        run: node scripts/run-flooring-week-schedule-v098.mjs
