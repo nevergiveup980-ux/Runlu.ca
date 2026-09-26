@@ -38,6 +38,16 @@ function run(){
  }
  if(resolver)t('Crash Simulation · shared production classifier',typeof resolver.classifyFixture==='function'&&(window.RUNLUUniversalCrashSimulator?.run?.toString?.()||'').includes('classify(s.tx,s.map)')&&(window.RUNLUUniversalCrashSimulator?.scenarios?.toString?.()||'').includes('missing record stays uncertain'),'synthetic crash fixtures must be judged by the production Resolver core');
  const audit=window.RUNLUUniversalAudit;if(resolver&&audit)t('Recovery contract · Audit store identity',typeof audit.STORE==='string'&&resolver.KEYS?.audit===audit.STORE,'Resolver and Audit must read the exact same append-only event store');
+ const phaseActions=[
+ ['Supplier PO · issue',window.RUNLUUniversalPO?.recordManual,true],
+ ['Receiving · reconcile',window.RUNLUUniversalInbound?.receive,true],
+ ['Installation · complete',window.RUNLUUniversalInstallation?.complete,true],
+ ['Supplier Accounting · paid',window.RUNLUUniversalAccounting?.paid,true],
+ ['Customer Invoice · issue',window.RUNLUUniversalBilling?.issue,true],
+ ['Customer Payment · record',window.RUNLUUniversalBilling?.pay,true],
+ ['Supplier PO · create',window.RUNLUUniversalPO?.createFromJob,false]
+ ];
+ phaseActions.forEach(([name,fn,hasAudit])=>{const src=fn?.toString?.()||'',a=src.indexOf("phase(tx.id,'AUDIT_SAVED')"),b=src.indexOf("phase(tx.id,'BUSINESS_SAVED')"),m=src.indexOf('CrashJournal.commit(tx.id)');t('Persisted phase order · '+name,typeof fn==='function'&&b>=0&&b<m&&(!hasAudit||a>=0&&a<b)&&(hasAudit||a<0),'persisted milestones must match the real write order before commit')});
  const crashSim=window.RUNLUUniversalCrashSimulator;
  if(crashSim){
   const cr=crashSim.run();
