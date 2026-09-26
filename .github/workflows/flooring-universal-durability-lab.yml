@@ -10,7 +10,7 @@ on:
       rounds:
         description: Stress rounds
         required: false
-        default: '25000'
+        default: '100000'
 permissions:
   contents: read
 jobs:
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      RUNLU_STRESS_ROUNDS: ${{ github.event.inputs.rounds || '25000' }}
+      RUNLU_STRESS_ROUNDS: ${{ github.event.inputs.rounds || '100000' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -39,5 +39,15 @@ jobs:
           if grep -REn "createClient[[:space:]]*\(|service_role|supabaseUrl" flooring-universal/*.js; then
             echo "Universal runtime contains direct Supabase runtime wiring"; exit 1
           fi
-      - name: Hammer Universal durability model
+      - name: Hammer Universal durability model · seed A
+        env:
+          RUNLU_STRESS_SEED: '1592594996'
+        run: node flooring-universal/tests/universal-durability-stress.js
+      - name: Hammer Universal durability model · seed B
+        env:
+          RUNLU_STRESS_SEED: '3735928559'
+        run: node flooring-universal/tests/universal-durability-stress.js
+      - name: Hammer Universal durability model · seed C
+        env:
+          RUNLU_STRESS_SEED: '12648430'
         run: node flooring-universal/tests/universal-durability-stress.js
