@@ -67,8 +67,8 @@ function seed(env,n=1){
 test('Phase 6 launcher compiles',()=>new Function(phase6));
 test('Safe V0.3.95 module compiles',()=>new Function(review));
 test('Safe Core uses the Phase 6 Fast Boot extension',()=>{
-  assert(v71.includes('mobile-safe-fastboot-v0403j.js?v=0403j'));
-  assert(v71.includes('n=s?"mobile-safe-0403j":Date.now()'));
+  assert(v71.includes('mobile-safe-fastboot-v0403k.js?v=0403k'));
+  assert(v71.includes('n=s?"mobile-safe-0403k":Date.now()'));
   assert.equal(v71.includes('mobile-safe-phase6-v0403h.js?v=0403h'),false);
 });
 test('Fast Boot preserves Phases 1–5 and adds Phase 6 last',()=>{
