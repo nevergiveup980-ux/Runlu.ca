@@ -33,6 +33,7 @@ function run(){
   const auditSrc=resolver.auditMatch?.toString?.()||'';
   t('Interrupted Resolver · action-bound audit evidence',typeof resolver.auditMatch==='function'&&auditSrc.includes("tx.action==='record'")&&auditSrc.includes("tx.action==='reconcile'")&&auditSrc.includes("tx.action==='mark-paid'"),'audit confidence requires the matching business action');
  }
+ if(resolver)t('Crash Simulation · shared production classifier',typeof resolver.classifyFixture==='function'&&(window.RUNLUUniversalCrashSimulator?.run?.toString?.()||'').includes('classify(s.tx,s.map)')&&(window.RUNLUUniversalCrashSimulator?.scenarios?.toString?.()||'').includes('missing record stays uncertain'),'synthetic crash fixtures must be judged by the production Resolver core');
  const audit=window.RUNLUUniversalAudit;if(resolver&&audit)t('Recovery contract · Audit store identity',typeof audit.STORE==='string'&&resolver.KEYS?.audit===audit.STORE,'Resolver and Audit must read the exact same append-only event store');
  const crashSim=window.RUNLUUniversalCrashSimulator;
  if(crashSim){
