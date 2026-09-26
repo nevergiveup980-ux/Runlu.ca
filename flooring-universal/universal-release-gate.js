@@ -15,6 +15,7 @@ function run(){
   t('Crash Journal · write-ahead API',typeof journal.begin==='function'&&typeof journal.commit==='function'&&typeof journal.resolve==='function'&&typeof journal.abort==='function'&&typeof journal.get==='function'&&typeof journal.amend==='function','intent lifecycle ready');
   t('Crash Journal · inspection API',typeof journal.inspect==='function'&&Array.isArray(journal.pending()),'unfinished operations can be reviewed');
  }
+ t('Crash Journal · persisted phase API',typeof journal?.phase==='function'&&(journal?.inspect?.toString?.()||'').includes("phase:x.phase||'BEGIN'"),'unfinished operations expose last persisted milestone without copying business contents');
  const resolver=window.RUNLUUniversalInterruptedResolver;
  if(resolver){
   t('Interrupted Resolver · evidence API',typeof resolver.scan==='function'&&typeof resolver.classify==='function','read-only classification ready');
