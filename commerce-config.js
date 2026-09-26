@@ -23,6 +23,14 @@ window.RUNLUCommerceConfig = Object.freeze({
       version: "1.0",
       delivery: "order-confirmation"
     }),
+    "next-v1-0": Object.freeze({
+      name: "RUNLU NEXT V1.0 — Personal Action Agent",
+      enabled: true,
+      checkoutUrl: "https://buy.stripe.com/aFa00k9Ll6ez7aseVE6Vq07",
+      price: "CAD $14.99",
+      version: "1.0",
+      delivery: "order-confirmation"
+    }),
     "guanshi-plus-monthly": Object.freeze({
       name: "RUNLU GUANSHI Plus Monthly",
       enabled: true,
@@ -53,5 +61,3 @@ window.RUNLUCommerceConfig = Object.freeze({
       requiresAccount: true,
       requiresServerReference: true
     })
-  })
-});
