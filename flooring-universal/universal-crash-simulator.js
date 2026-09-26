@@ -34,21 +34,22 @@ function scenarios(){
 }
 function faultScenarios(){
  return [
-  {name:'PO · intent only',operation:'Supplier PO',cut:'BEGIN',expect:{journal:'OPEN',business:'ABSENT',resolver:'LIKELY_NOT_APPLIED'}},
-  {name:'PO · business persisted before commit',operation:'Supplier PO',cut:'BUSINESS_WRITE',expect:{journal:'OPEN',business:'PRESENT',resolver:'LIKELY_APPLIED'}},
-  {name:'Payment · intent only',operation:'Customer Payment',cut:'BEGIN',expect:{journal:'OPEN',business:'ABSENT',resolver:'LIKELY_NOT_APPLIED'}},
-  {name:'Payment · exact ledger persisted before audit',operation:'Customer Payment',cut:'BUSINESS_WRITE',expect:{journal:'OPEN',business:'PRESENT',audit:'ABSENT',resolver:'LIKELY_APPLIED'}},
-  {name:'Payment · audit persisted before commit',operation:'Customer Payment',cut:'AUDIT_WRITE',expect:{journal:'OPEN',business:'PRESENT',audit:'PRESENT',resolver:'LIKELY_APPLIED'}},
-  {name:'Payment · commit completed',operation:'Customer Payment',cut:'COMMIT',expect:{journal:'CLOSED',business:'PRESENT',audit:'PRESENT',resolver:'NONE'}},
-  {name:'Receiving · business persisted before commit',operation:'Receiving',cut:'BUSINESS_WRITE',expect:{journal:'OPEN',business:'PRESENT',resolver:'LIKELY_APPLIED'}},
-  {name:'Installation · business persisted before commit',operation:'Installation',cut:'BUSINESS_WRITE',expect:{journal:'OPEN',business:'PRESENT',resolver:'LIKELY_APPLIED'}},
-  {name:'Supplier Payment · business persisted before commit',operation:'Supplier Accounting',cut:'BUSINESS_WRITE',expect:{journal:'OPEN',business:'PRESENT',resolver:'LIKELY_APPLIED'}}
+  {name:'PO create · intent only',operation:'Supplier PO create',cut:'BEGIN',expect:{journal:'OPEN',phase:'BEGIN',business:'ABSENT',audit:'ABSENT',resolver:'LIKELY_NOT_APPLIED'}},
+  {name:'PO create · business saved before commit',operation:'Supplier PO create',cut:'BUSINESS_SAVED',expect:{journal:'OPEN',phase:'BUSINESS_SAVED',business:'PRESENT',audit:'ABSENT',resolver:'LIKELY_APPLIED'}},
+  {name:'Payment · intent only',operation:'Customer Payment',cut:'BEGIN',expect:{journal:'OPEN',phase:'BEGIN',business:'ABSENT',audit:'ABSENT',resolver:'LIKELY_NOT_APPLIED'}},
+  {name:'Payment · audit saved before business save',operation:'Customer Payment',cut:'AUDIT_SAVED',expect:{journal:'OPEN',phase:'AUDIT_SAVED',business:'ABSENT',audit:'PRESENT',resolver:'LIKELY_NOT_APPLIED'}},
+  {name:'Payment · business saved before commit',operation:'Customer Payment',cut:'BUSINESS_SAVED',expect:{journal:'OPEN',phase:'BUSINESS_SAVED',business:'PRESENT',audit:'PRESENT',resolver:'LIKELY_APPLIED'}},
+  {name:'Payment · commit completed',operation:'Customer Payment',cut:'COMMIT',expect:{journal:'CLOSED',phase:'COMMIT',business:'PRESENT',audit:'PRESENT',resolver:'NONE'}},
+  {name:'Receiving · audit saved before business save',operation:'Receiving',cut:'AUDIT_SAVED',expect:{journal:'OPEN',phase:'AUDIT_SAVED',business:'ABSENT',audit:'PRESENT',resolver:'LIKELY_NOT_APPLIED'}},
+  {name:'Receiving · business saved before commit',operation:'Receiving',cut:'BUSINESS_SAVED',expect:{journal:'OPEN',phase:'BUSINESS_SAVED',business:'PRESENT',audit:'PRESENT',resolver:'LIKELY_APPLIED'}},
+  {name:'Installation · business saved before commit',operation:'Installation',cut:'BUSINESS_SAVED',expect:{journal:'OPEN',phase:'BUSINESS_SAVED',business:'PRESENT',audit:'PRESENT',resolver:'LIKELY_APPLIED'}},
+  {name:'Supplier Payment · business saved before commit',operation:'Supplier Accounting',cut:'BUSINESS_SAVED',expect:{journal:'OPEN',phase:'BUSINESS_SAVED',business:'PRESENT',audit:'PRESENT',resolver:'LIKELY_APPLIED'}}
  ];
 }
 function simulateFault(s){
- const state={journal:'OPEN',business:'ABSENT',audit:'ABSENT',resolver:'LIKELY_NOT_APPLIED'};
- if(s.cut==='BUSINESS_WRITE'||s.cut==='AUDIT_WRITE'||s.cut==='COMMIT'){state.business='PRESENT';state.resolver='LIKELY_APPLIED'}
- if(s.cut==='AUDIT_WRITE'||s.cut==='COMMIT')state.audit='PRESENT';
+ const state={journal:'OPEN',phase:'BEGIN',business:'ABSENT',audit:'ABSENT',resolver:'LIKELY_NOT_APPLIED'};
+ if(s.cut==='AUDIT_SAVED'||s.cut==='BUSINESS_SAVED'||s.cut==='COMMIT'){state.phase=s.cut;state.audit=s.operation==='Supplier PO create'?'ABSENT':'PRESENT'}
+ if(s.cut==='BUSINESS_SAVED'||s.cut==='COMMIT'){state.business='PRESENT';state.resolver='LIKELY_APPLIED'}
  if(s.cut==='COMMIT'){state.journal='CLOSED';state.resolver='NONE'}
  const ok=Object.entries(s.expect).every(([k,v])=>state[k]===v);
  return {name:s.name,cut:s.cut,operation:s.operation,want:s.expect,got:state,ok};
