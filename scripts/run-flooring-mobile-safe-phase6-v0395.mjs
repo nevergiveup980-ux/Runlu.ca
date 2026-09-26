@@ -147,9 +147,9 @@ test('Historical V0.3.95 module remains untouched as the r1 reference',()=>{
   assert(historical.includes('setTimeout(attachPeopleObserver,250)'));
   assert(review.includes("version:'0.3.95r2-safe'"));
 });
-test('Production iPhone route remains shallow and cache token advances to h',()=>{
+test('Production safe route remains shallow with stable hotfix cache token',()=>{
   assert(release.includes("mobileSafe?'index-v071-pricing-workspace.html"));
-  assert(release.includes("mobileSafe&&v==='core'?'mobile-safe-0403h':Date.now()"));
+  assert(release.includes("const cacheToken=v==='core'?'desktop-safe-0403l':Date.now()"));
 });
 test('Frozen Quote production baseline remains untouched',()=>{
   assert(release.includes("quote:'index-v0403i-quote-stable-frozen.html?prod=1&release=0403i&frozen=1'"));
