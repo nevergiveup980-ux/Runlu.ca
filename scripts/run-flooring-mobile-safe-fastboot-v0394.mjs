@@ -66,7 +66,7 @@ test('iPhone production route still bypasses V090 and V078 wrappers',()=>{
   assert.equal(release.includes("mobileSafe?'index-v094-fastboot.html"),false);
 });
 test('Desktop full diagnostics still preserve the frozen V090 stack',()=>{
-  assert(release.includes("index-v090r1-stable-frozen.html?prod=1&release=090r1"));
+  assert(release.includes("index-v090r1-stable-frozen.html?prod=1&release=090r1")); // frozen route may append cache-buster
   assert(release.includes("const forceFull=qp.get('full')==='1'"));
 });
 test('Historical V0.3.94 preview remains preserved as an archive/reference',()=>{
