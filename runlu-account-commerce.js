@@ -10,10 +10,10 @@
   });
 
   const copy = {
-    en:{orders_empty:'No RUNLU-direct orders yet.',subscriptions_empty:'No RUNLU-direct subscriptions yet.',items:'items',renewal:'Current period',cancel_end:'Cancels at period end'},
-    zh:{orders_empty:'目前还没有 RUNLU 直售订单。',subscriptions_empty:'目前还没有 RUNLU 直售订阅。',items:'项',renewal:'当前周期',cancel_end:'本周期结束后取消'},
-    fr:{orders_empty:'Aucune commande directe RUNLU pour le moment.',subscriptions_empty:'Aucun abonnement direct RUNLU pour le moment.',items:'articles',renewal:'Période actuelle',cancel_end:'Annulation en fin de période'},
-    es:{orders_empty:'Todavía no hay pedidos directos de RUNLU.',subscriptions_empty:'Todavía no hay suscripciones directas de RUNLU.',items:'artículos',renewal:'Período actual',cancel_end:'Se cancela al final del período'}
+    en:{downloads:'Downloads',download_ready:'Purchased download · private link valid 5 min',orders_empty:'No RUNLU-direct orders yet.',subscriptions_empty:'No RUNLU-direct subscriptions yet.',items:'items',renewal:'Current period',cancel_end:'Cancels at period end'},
+    zh:{downloads:'下载',download_ready:'已购商品下载 · 私密链接有效 5 分钟',orders_empty:'目前还没有 RUNLU 直售订单。',subscriptions_empty:'目前还没有 RUNLU 直售订阅。',items:'项',renewal:'当前周期',cancel_end:'本周期结束后取消'},
+    fr:{downloads:'Télécharger',download_ready:'Téléchargement acheté · lien privé valable 5 min',orders_empty:'Aucune commande directe RUNLU pour le moment.',subscriptions_empty:'Aucun abonnement direct RUNLU pour le moment.',items:'articles',renewal:'Période actuelle',cancel_end:'Annulation en fin de période'},
+    es:{downloads:'Descargar',download_ready:'Descarga comprada · enlace privado válido 5 min',orders_empty:'Todavía no hay pedidos directos de RUNLU.',subscriptions_empty:'Todavía no hay suscripciones directas de RUNLU.',items:'artículos',renewal:'Período actual',cancel_end:'Se cancela al final del período'}
   };
 
   const ordersList = document.getElementById('ordersList');
@@ -47,6 +47,19 @@
     text.append(strong,span);item.append(text);
     if(status){const badge=document.createElement('span');badge.className='store-action planned';badge.textContent=status;item.append(badge)}
     return item;
+  }
+
+  async function loadPurchasedDownloads(session,token){
+    if(!ordersList||!session?.access_token)return;
+    const endpoint='https://ekrnknlawekeoszzkamd.supabase.co/functions/v1/runlu-digital-download';
+    const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'account_downloads'})});
+    const payload=await res.json().catch(()=>({}));
+    if(!res.ok||!payload.ok||token!==generation)return;
+    for(const d of payload.downloads||[]){
+      const card=rowCard(d.filename||d.product_key,t('download_ready'),'');
+      const a=document.createElement('a');a.className='store-action available';a.href=d.download_url;a.rel='noopener';a.textContent=t('downloads');card.append(a);
+      ordersList.prepend(card);
+    }
   }
 
   async function loadOrders(token){
@@ -83,7 +96,7 @@
   async function render(session){
     const token=++generation;
     if(!session?.user){ordersList?.replaceChildren();subscriptionsList?.replaceChildren();return}
-    try{await Promise.all([loadOrders(token),loadSubscriptions(token)])}
+    try{await Promise.all([loadOrders(token),loadSubscriptions(token)]);await loadPurchasedDownloads(session,token)}
     catch{if(token===generation){empty(ordersList,'orders_empty');empty(subscriptionsList,'subscriptions_empty')}}
   }
 
