@@ -1,0 +1,10 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const release=fs.readFileSync(new URL('../flooring/index-v0403-release.html',import.meta.url),'utf8');
+const v71=fs.readFileSync(new URL('../flooring/index-v071-pricing-workspace.html',import.meta.url),'utf8');
+assert(release.includes("index-v071-pricing-workspace.html?prod=1&release=0403&mobile=safe&desktop=1"));
+assert(!release.includes("index-v094-fastboot.html?prod=1&release=094&desktop=1"));
+assert(release.includes("desktop-safe-0403l"));
+assert(v71.includes('r.classList.add("ready");setTimeout'));
+assert(!v71.includes('},440),r.classList.add("ready")'));
+assert(release.includes("quote:'index-v0403i-quote-stable-frozen.html?prod=1&release=0403i&frozen=1'"));
+console.log('PASS desktop freeze hotfix: V094 bypassed; V071 releases UI before deferred refresh; frozen Quote untouched');
