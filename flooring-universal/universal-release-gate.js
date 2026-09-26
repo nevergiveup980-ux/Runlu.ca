@@ -64,6 +64,8 @@ function run(){
  if(support){
   t('Support Center · tool registry',Array.isArray(support.TOOLS)&&support.TOOLS.length===11,'11 maintenance tools consolidated');
   t('Support Center · status API',typeof support.status==='function'&&typeof support.render==='function','customer maintenance hub ready');
+  const wired=(support.TOOLS||[]).every(x=>!!document.getElementById(x.target)&&typeof window[x.api]?.render==='function');
+  t('Support Center · tool wiring',wired,'every maintenance tool must have a DOM target and renderable API');
  }
  const diagnostics=window.RUNLUUniversalDiagnostics;
  if(diagnostics){
