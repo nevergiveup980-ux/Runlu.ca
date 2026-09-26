@@ -1,0 +1,22 @@
+name: Flooring Mobile Safe Phase 9 V0.3.98
+on:
+  pull_request:
+    paths:
+      - 'flooring/mobile-safe-phase9-v0403k.js'
+      - 'flooring/mobile-safe-fastboot-v0403k.js'
+      - 'flooring/week-schedule-v098-safe.js'
+      - 'flooring/index-v098-dispatch-morning-preview.html'
+      - 'flooring/index-v071-pricing-workspace.html'
+      - 'scripts/run-flooring-mobile-safe-phase9-v0398.mjs'
+      - '.github/workflows/flooring-mobile-safe-phase9-v0398.yml'
+  workflow_dispatch:
+jobs:
+  mobile-safe-phase9:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/run-flooring-mobile-safe-phase9-v0398.mjs
