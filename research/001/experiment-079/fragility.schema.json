@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E079 Constraint Fragility",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "constraint_id",
+    "relaxation_model",
+    "epsilon_star",
+    "nominal_minimum_contrast",
+    "status",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "constraint_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "relaxation_model": {
+      "type": "string",
+      "minLength": 1
+    },
+    "epsilon_star": {
+      "type": "number",
+      "minimum": 0
+    },
+    "nominal_minimum_contrast": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ROBUST_A",
+        "BOUNDARY_TOUCHING",
+        "SIGN_UNRESOLVED"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e079-v1"
+    }
+  }
+}
