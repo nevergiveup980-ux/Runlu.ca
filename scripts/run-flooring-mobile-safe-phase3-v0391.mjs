@@ -21,7 +21,7 @@ test('Fast Boot registry keeps Phase 3 after Phase 1 and Phase 2 launchers',()=>
   assert(p1>0&&p2>p1&&p3>p2);
 });
 test('Safe Core cache token remains compatible through Fast Boot',()=>{
-  assert(/n=s\?"mobile-safe-0403[defghij]":Date\.now\(\)/.test(v71));
+  assert(/n=s\?"mobile-safe-0403[defghijk]":Date\.now\(\)/.test(v71));
 });
 test('Phase 3 startup is launcher-only and does not fetch routing module automatically',()=>{
   const install=phase3.slice(phase3.indexOf('function install()'),phase3.indexOf('root.RUNLUMobileSafePhase3V0391'));

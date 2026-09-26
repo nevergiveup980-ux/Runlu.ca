@@ -16,10 +16,10 @@ test('Fast Boot registry loads the tiny Phase 2 launcher after Phase 1',()=>{
   const p1=fastboot.indexOf('mobile-safe-phase1-v0403b.js?v=0403b');
   const p2=fastboot.indexOf('mobile-safe-phase2-v0403c.js?v=0403c');
   assert(p1>0&&p2>p1);
-  assert(v71.includes('mobile-safe-fastboot-v0403j.js?v=0403j'));
+  assert(v71.includes('mobile-safe-fastboot-v0403k.js?v=0403k'));
 });
 test('Safe Core cache token advances for Phase 2',()=>{
-  assert(/n=s\?"mobile-safe-0403[cdefghij]":Date\.now\(\)/.test(v71));
+  assert(/n=s\?"mobile-safe-0403[cdefghijk]":Date\.now\(\)/.test(v71));
 });
 test('Phase 2 adds only the V0.9.1 Warehouse Fulfillment launcher',()=>{
   assert(phase2.includes("const MODULE_SRC='material-work-sync-v091.js?v=0403c-safe'"));

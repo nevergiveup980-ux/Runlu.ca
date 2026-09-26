@@ -9,7 +9,7 @@ t('Phase 8 exposes V0.3.97 launcher only',()=>{assert(phase.includes('RUNLUMobil
 t('Explicit click opens standalone preview synchronously',()=>{assert(phase.includes("root.open(PREVIEW,'_blank','noopener')"));assert(!phase.includes('await '));assert(!phase.includes('week-schedule-v097-safe.js'))});
 t('Preview owns real safe business module',()=>assert(preview.includes('week-schedule-v097-safe.js?v=0403j-safe')));
 t('Fast Boot registers Phase 8 launcher, not business module',()=>{assert(fast.includes('mobile-safe-phase8-v0403j.js?v=0403j'));assert(!fast.includes('week-schedule-v097-safe.js'))});
-t('V071 routes to 0403j Fast Boot/cache',()=>{assert(v71.includes('mobile-safe-fastboot-v0403j.js?v=0403j'));assert(v71.includes('mobile-safe-0403j'))});
+t('V071 routes to 0403j Fast Boot/cache',()=>{assert(v71.includes('mobile-safe-fastboot-v0403k.js?v=0403k'));assert(v71.includes('mobile-safe-0403k'))});
 t('Diagnostics preserve frozen boundaries',()=>{for(const s of ["readOnly:true","networkWrites:false","storageWrites:false","poStatusImmutable:true"])assert(phase.includes(s))});
 t('Safe module remains absolute read-only',()=>{for(const re of [/localStorage\s*\.\s*setItem\s*\(/,/localStorage\s*\.\s*removeItem\s*\(/,/indexedDB\s*\.\s*open\s*\(/,/fetch\s*\(/,/XMLHttpRequest\b/,/WebSocket\b/])assert.equal(re.test(safe),false)});
 t('Safe module exports V0.3.97 API',()=>{assert(safe.includes("const VERSION='0.3.97'"));assert(safe.includes('RUNLUWeekScheduleV097'))});

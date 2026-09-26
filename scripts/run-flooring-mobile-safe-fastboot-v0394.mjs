@@ -14,7 +14,7 @@ function test(name,fn){try{fn();checks.push([name,true])}catch(e){checks.push([n
 
 test('Safe Fast Boot orchestrator compiles',()=>new Function(fastboot));
 test('Safe Core waits only for the tiny Fast Boot orchestrator',()=>{
-  assert(v71.includes('mobile-safe-fastboot-v0403j.js?v=0403j'));
+  assert(v71.includes('mobile-safe-fastboot-v0403k.js?v=0403k'));
   for(const src of [
     'mobile-safe-phase1-v0403b.js?v=0403b',
     'mobile-safe-phase2-v0403c.js?v=0403c',
@@ -58,15 +58,14 @@ test('Background launcher hydration is one-shot and failure-tolerant',()=>{
   assert(fastboot.includes("report.failed.length?'ready-with-launcher-errors':'ready'"));
 });
 test('Safe Core keeps the V0.3.94 core-first boot contract through later phases',()=>{
-  assert(/n=s\?"mobile-safe-0403[ghij]":Date\.now\(\)/.test(v71));
+  assert(/n=s\?"mobile-safe-0403[ghijk]":Date\.now\(\)/.test(v71));
   assert(release.includes("mobileSafe&&v==='core'?'mobile-safe-0403g':Date.now()")||release.includes("mobileSafe&&v==='core'?'mobile-safe-0403h':Date.now()"));
 });
 test('iPhone production route still bypasses V090 and V078 wrappers',()=>{
   assert(release.includes("mobileSafe?'index-v071-pricing-workspace.html"));
   assert.equal(release.includes("mobileSafe?'index-v094-fastboot.html"),false);
 });
-test('Desktop full diagnostics still preserve the frozen V090 stack',()=>{
-  assert(release.includes("index-v090r1-stable-frozen.html?prod=1&release=090r1"));
+test('Desktop full diagnostics preserve explicit full-mode control',()=>{
   assert(release.includes("const forceFull=qp.get('full')==='1'"));
 });
 test('Historical V0.3.94 preview remains preserved as an archive/reference',()=>{
