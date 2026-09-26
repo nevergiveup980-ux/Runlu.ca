@@ -28,6 +28,8 @@ function run(){
    ['Supplier Accounting','mark-paid',{accountingId:'missing-accounting'}]
   ];
   t('Interrupted Resolver · missing records stay uncertain',missingFixtures.every(([type,action,meta])=>resolver.classify({id:'fixture-'+type,type,action,startedAt:new Date(0).toISOString(),meta}).verdict==='UNCERTAIN'),'record absence must not auto-clear interrupted mutations');
+  t('Interrupted Resolver · fixture isolation',!((resolver.classifyFixture?.toString?.()||'')+(resolver.classify?.toString?.()||'')).includes('arr(KEYS.invoice)')&&(resolver.classifyFixture?.toString?.()||'').includes('classifyWith'),'fixture classifier must not fall through to live invoice data');
+  t('Interrupted Resolver · journal phase evidence',(resolver.classifyFixture({id:'phase-fixture',type:'Receiving',action:'reconcile',startedAt:new Date(0).toISOString(),phase:'AUDIT_SAVED',meta:{inboundId:'missing'}},{[resolver.KEYS.inbound]:[],[resolver.KEYS.audit]:[]}).evidence||[]).some(x=>x.includes('AUDIT_SAVED')),'persisted journal milestone is explanatory evidence, not an automatic verdict');
   t('Interrupted Resolver · acknowledgement API',typeof resolver.acknowledge==='function','reviewed markers can be closed without rewriting business records');
   const resolverSrc=resolver.classify.toString(),billingPaySrc=window.RUNLUUniversalBilling?.pay?.toString?.()||'';
   t('Interrupted Resolver · exact payment audit identity',resolverSrc.includes("e.meta?.paymentId===m.paymentId")&&billingPaySrc.includes('paymentId}'),'payment audit evidence is bound to exact ledger entry');
