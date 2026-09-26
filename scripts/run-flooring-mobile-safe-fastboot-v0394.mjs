@@ -14,7 +14,7 @@ function test(name,fn){try{fn();checks.push([name,true])}catch(e){checks.push([n
 
 test('Safe Fast Boot orchestrator compiles',()=>new Function(fastboot));
 test('Safe Core waits only for the tiny Fast Boot orchestrator',()=>{
-  assert(v71.includes('mobile-safe-fastboot-v0403j.js?v=0403j'));
+  assert(v71.includes('mobile-safe-fastboot-v0403k.js?v=0403k'));
   for(const src of [
     'mobile-safe-phase1-v0403b.js?v=0403b',
     'mobile-safe-phase2-v0403c.js?v=0403c',
@@ -58,7 +58,7 @@ test('Background launcher hydration is one-shot and failure-tolerant',()=>{
   assert(fastboot.includes("report.failed.length?'ready-with-launcher-errors':'ready'"));
 });
 test('Safe Core keeps the V0.3.94 core-first boot contract through later phases',()=>{
-  assert(/n=s\?"mobile-safe-0403[ghij]":Date\.now\(\)/.test(v71));
+  assert(/n=s\?"mobile-safe-0403[ghijk]":Date\.now\(\)/.test(v71));
   assert(release.includes("mobileSafe&&v==='core'?'mobile-safe-0403g':Date.now()")||release.includes("mobileSafe&&v==='core'?'mobile-safe-0403h':Date.now()"));
 });
 test('iPhone production route still bypasses V090 and V078 wrappers',()=>{
