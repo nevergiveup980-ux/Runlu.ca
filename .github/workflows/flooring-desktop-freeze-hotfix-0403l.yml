@@ -1,0 +1,18 @@
+name: Flooring Desktop Freeze Hotfix 0403l
+on:
+  pull_request:
+    paths:
+      - 'flooring/index-v0403-release.html'
+      - 'flooring/index-v071-pricing-workspace.html'
+      - 'scripts/run-flooring-desktop-freeze-hotfix-0403l.mjs'
+      - '.github/workflows/flooring-desktop-freeze-hotfix-0403l.yml'
+  workflow_dispatch:
+jobs:
+  hotfix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/run-flooring-desktop-freeze-hotfix-0403l.mjs
