@@ -2,17 +2,16 @@
    In-memory only. Exercises interrupted-operation classification without writing business stores. */
 (function(){
 'use strict';
-function fixtureReader(map){return key=>structuredClone(map[key]||[])}
 function classify(tx,map){
- const m=tx.meta||{},read=fixtureReader(map),audits=read('audit').filter(e=>e.entityId&&(e.entityId===m.poId||e.entityId===m.inboundId||e.entityId===m.installationId||e.entityId===m.invoiceId||e.entityId===m.accountingId));
- let record=null,applied=false,notApplied=false;
- if(tx.type==='Supplier PO'){record=m.poId?read('po').find(x=>x.id===m.poId):null;if(m.poId){applied=!!record;notApplied=!record}}
- else if(tx.type==='Receiving'){record=read('inbound').find(x=>x.id===m.inboundId);applied=!!record?.receivedAt;notApplied=!!record&&!record.receivedAt}
- else if(tx.type==='Installation'){record=read('install').find(x=>x.id===m.installationId);applied=record?.status==='Completed'&&!!record.completedAt;notApplied=!!record&&record.status!=='Completed'}
- else if(tx.type==='Customer Invoice'){record=read('invoice').find(x=>x.id===m.invoiceId);applied=!!record?.invoiceNumber&&record.status!=='Draft';notApplied=!!record&&record.status==='Draft'}
- else if(tx.type==='Customer Payment'){record=read('invoice').find(x=>x.id===m.invoiceId);if(m.paymentId){applied=!!record&&(record.payments||[]).some(p=>p.id===m.paymentId);notApplied=!!record&&!applied}}
- else if(tx.type==='Supplier Accounting'){record=read('accounting').find(x=>x.id===m.accountingId);applied=record?.status==='Paid'&&!!record.paidAt;notApplied=!!record&&record.status!=='Paid'}
- return applied?'LIKELY_APPLIED':notApplied?'LIKELY_NOT_APPLIED':'UNCERTAIN';
+ const r=window.RUNLUUniversalInterruptedResolver;if(!r?.classifyFixture)throw new Error('Production Resolver fixture API unavailable.');
+ const k=r.KEYS||{},fixture={};
+ if(k.po)fixture[k.po]=map.po||[];
+ if(k.inbound)fixture[k.inbound]=map.inbound||[];
+ if(k.install)fixture[k.install]=map.install||[];
+ if(k.invoice)fixture[k.invoice]=map.invoice||[];
+ if(k.accounting)fixture[k.accounting]=map.accounting||[];
+ if(k.audit)fixture[k.audit]=map.audit||[];
+ return r.classifyFixture(tx,fixture).verdict;
 }
 const tx=(type,action,meta)=>({id:'sim',type,action,startedAt:'2026-01-01T00:00:00.000Z',meta});
 function scenarios(){
@@ -26,7 +25,11 @@ function scenarios(){
   {name:'Receiving · crash before reconciliation write',tx:tx('Receiving','reconcile',{inboundId:'in1'}),map:{inbound:[{id:'in1',status:'Pending',receivedAt:null}]},want:'LIKELY_NOT_APPLIED'},
   {name:'Receiving · crash after reconciliation write',tx:tx('Receiving','reconcile',{inboundId:'in1'}),map:{inbound:[{id:'in1',status:'Ready',receivedAt:'2026-01-01T00:00:01Z'}]},want:'LIKELY_APPLIED'},
   {name:'Installation · crash after completion write',tx:tx('Installation','complete',{installationId:'ins1'}),map:{install:[{id:'ins1',status:'Completed',completedAt:'2026-01-01'}]},want:'LIKELY_APPLIED'},
-  {name:'Supplier payment · crash before paid write',tx:tx('Supplier Accounting','mark-paid',{accountingId:'a1'}),map:{accounting:[{id:'a1',status:'Ready to Pay'}]},want:'LIKELY_NOT_APPLIED'}
+  {name:'Supplier payment · crash before paid write',tx:tx('Supplier Accounting','mark-paid',{accountingId:'a1'}),map:{accounting:[{id:'a1',status:'Ready to Pay'}]},want:'LIKELY_NOT_APPLIED'},
+  {name:'Receiving · missing record stays uncertain',tx:tx('Receiving','reconcile',{inboundId:'missing-in'}),map:{inbound:[]},want:'UNCERTAIN'},
+  {name:'Installation · missing record stays uncertain',tx:tx('Installation','complete',{installationId:'missing-ins'}),map:{install:[]},want:'UNCERTAIN'},
+  {name:'Invoice · missing record stays uncertain',tx:tx('Customer Invoice','issue',{invoiceId:'missing-inv'}),map:{invoice:[]},want:'UNCERTAIN'},
+  {name:'Supplier payment · missing record stays uncertain',tx:tx('Supplier Accounting','mark-paid',{accountingId:'missing-acct'}),map:{accounting:[]},want:'UNCERTAIN'}
  ];
 }
 function faultScenarios(){
