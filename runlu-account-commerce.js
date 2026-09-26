@@ -10,14 +10,19 @@
   });
 
   const copy = {
-    en:{downloads:'Downloads',download_ready:'Purchased download · private link valid 5 min',orders_empty:'No RUNLU-direct orders yet.',subscriptions_empty:'No RUNLU-direct subscriptions yet.',items:'items',renewal:'Current period',cancel_end:'Cancels at period end'},
-    zh:{downloads:'下载',download_ready:'已购商品下载 · 私密链接有效 5 分钟',orders_empty:'目前还没有 RUNLU 直售订单。',subscriptions_empty:'目前还没有 RUNLU 直售订阅。',items:'项',renewal:'当前周期',cancel_end:'本周期结束后取消'},
-    fr:{downloads:'Télécharger',download_ready:'Téléchargement acheté · lien privé valable 5 min',orders_empty:'Aucune commande directe RUNLU pour le moment.',subscriptions_empty:'Aucun abonnement direct RUNLU pour le moment.',items:'articles',renewal:'Période actuelle',cancel_end:'Annulation en fin de période'},
-    es:{downloads:'Descargar',download_ready:'Descarga comprada · enlace privado válido 5 min',orders_empty:'Todavía no hay pedidos directos de RUNLU.',subscriptions_empty:'Todavía no hay suscripciones directas de RUNLU.',items:'artículos',renewal:'Período actual',cancel_end:'Se cancela al final del período'}
+    en:{link_title:'Link a past purchase',link_note:'Bought with another email? Verify the purchase once and keep it linked to this account.',purchase_email:'Purchase email',session_id:'Stripe checkout session ID',link_button:'Verify & link',linking:'Verifying…',linked:'Purchase linked. Downloads refreshed.',link_failed:'We could not verify that paid purchase. Check the purchase email and checkout session ID.',downloads:'Downloads',download_ready:'Purchased download · private link valid 5 min',orders_empty:'No RUNLU-direct orders yet.',subscriptions_empty:'No RUNLU-direct subscriptions yet.',items:'items',renewal:'Current period',cancel_end:'Cancels at period end'},
+    zh:{link_title:'绑定历史购买',link_note:'如果购买时使用了另一个邮箱，可验证一次并永久绑定到当前账户。',purchase_email:'购买邮箱',session_id:'Stripe 结账 Session ID',link_button:'验证并绑定',linking:'正在验证…',linked:'购买已绑定，下载已刷新。',link_failed:'未能验证这笔已付款购买，请检查购买邮箱和结账 Session ID。',downloads:'下载',download_ready:'已购商品下载 · 私密链接有效 5 分钟',orders_empty:'目前还没有 RUNLU 直售订单。',subscriptions_empty:'目前还没有 RUNLU 直售订阅。',items:'项',renewal:'当前周期',cancel_end:'本周期结束后取消'},
+    fr:{link_title:'Lier un achat antérieur',link_note:'Achat effectué avec un autre e-mail ? Vérifiez-le une fois pour le lier à ce compte.',purchase_email:'E-mail d’achat',session_id:'ID de session Stripe Checkout',link_button:'Vérifier et lier',linking:'Vérification…',linked:'Achat lié. Téléchargements actualisés.',link_failed:'Impossible de vérifier cet achat payé. Vérifiez l’e-mail et l’ID de session.',downloads:'Télécharger',download_ready:'Téléchargement acheté · lien privé valable 5 min',orders_empty:'Aucune commande directe RUNLU pour le moment.',subscriptions_empty:'Aucun abonnement direct RUNLU pour le moment.',items:'articles',renewal:'Période actuelle',cancel_end:'Annulation en fin de période'},
+    es:{link_title:'Vincular una compra anterior',link_note:'¿Compraste con otro correo? Verifica la compra una vez y quedará vinculada a esta cuenta.',purchase_email:'Correo de compra',session_id:'ID de sesión de Stripe Checkout',link_button:'Verificar y vincular',linking:'Verificando…',linked:'Compra vinculada. Descargas actualizadas.',link_failed:'No pudimos verificar esa compra pagada. Revisa el correo y el ID de sesión.',downloads:'Descargar',download_ready:'Descarga comprada · enlace privado válido 5 min',orders_empty:'Todavía no hay pedidos directos de RUNLU.',subscriptions_empty:'Todavía no hay suscripciones directas de RUNLU.',items:'artículos',renewal:'Período actual',cancel_end:'Se cancela al final del período'}
   };
 
   const ordersList = document.getElementById('ordersList');
   const subscriptionsList = document.getElementById('subscriptionsList');
+  const linkForm=document.getElementById('purchaseLinkForm');
+  const linkEmail=document.getElementById('purchaseLinkEmail');
+  const linkSession=document.getElementById('purchaseLinkSession');
+  const linkStatus=document.getElementById('purchaseLinkStatus');
+  const linkButton=document.getElementById('purchaseLinkButton');
   let generation = 0;
 
   function language(){
@@ -47,6 +52,31 @@
     text.append(strong,span);item.append(text);
     if(status){const badge=document.createElement('span');badge.className='store-action planned';badge.textContent=status;item.append(badge)}
     return item;
+  }
+
+
+  function localizeLinkForm(){
+    const map={purchaseLinkTitle:'link_title',purchaseLinkNote:'link_note',purchaseLinkEmailLabel:'purchase_email',purchaseLinkSessionLabel:'session_id',purchaseLinkButton:'link_button'};
+    for(const [id,key] of Object.entries(map)){const el=document.getElementById(id);if(el)el.textContent=t(key)}
+  }
+  async function linkPurchase(event){
+    event.preventDefault();
+    const purchase_email=String(linkEmail?.value||'').trim().toLowerCase();
+    const session_id=String(linkSession?.value||'').trim();
+    if(!purchase_email||!session_id)return;
+    const {data}=await client.auth.getSession(); const session=data?.session;
+    if(!session?.access_token)return;
+    linkButton.disabled=true; linkButton.textContent=t('linking'); linkStatus.hidden=true;
+    try{
+      const endpoint='https://ekrnknlawekeoszzkamd.supabase.co/functions/v1/runlu-digital-download';
+      const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'link_purchase',purchase_email,session_id})});
+      const payload=await res.json().catch(()=>({}));
+      if(!res.ok||!payload.ok)throw new Error('verify');
+      linkStatus.className='purchase-link-status';linkStatus.textContent=t('linked');linkStatus.hidden=false;
+      linkSession.value=''; await render(session);
+    }catch{
+      linkStatus.className='purchase-link-status error';linkStatus.textContent=t('link_failed');linkStatus.hidden=false;
+    }finally{linkButton.disabled=false;linkButton.textContent=t('link_button')}
   }
 
   async function loadPurchasedDownloads(session,token){
@@ -101,11 +131,14 @@
     catch{if(token===generation){empty(ordersList,'orders_empty');empty(subscriptionsList,'subscriptions_empty')}}
   }
 
+  localizeLinkForm();
+  linkForm?.addEventListener('submit',linkPurchase);
+
   client.auth.onAuthStateChange((event,session)=>{
     if(['SIGNED_IN','INITIAL_SESSION','USER_UPDATED','TOKEN_REFRESHED'].includes(event))setTimeout(()=>render(session),0);
     if(event==='SIGNED_OUT')setTimeout(()=>render(null),0);
   });
 
   client.auth.getSession().then(({data})=>render(data?.session||null));
-  window.addEventListener('storage',e=>{if(e.key==='runlu-account-language')client.auth.getSession().then(({data})=>render(data?.session||null))});
+  window.addEventListener('storage',e=>{if(e.key==='runlu-account-language'){localizeLinkForm();client.auth.getSession().then(({data})=>render(data?.session||null))}});
 })();
