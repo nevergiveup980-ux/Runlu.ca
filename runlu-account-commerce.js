@@ -55,6 +55,7 @@
     const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'account_downloads'})});
     const payload=await res.json().catch(()=>({}));
     if(!res.ok||!payload.ok||token!==generation)return;
+    if((payload.downloads||[]).length) ordersList.querySelectorAll('.library-empty').forEach(n=>n.remove());
     for(const d of payload.downloads||[]){
       const card=rowCard(d.filename||d.product_key,t('download_ready'),'');
       const a=document.createElement('a');a.className='store-action available';a.href=d.download_url;a.rel='noopener';a.textContent=t('downloads');card.append(a);
