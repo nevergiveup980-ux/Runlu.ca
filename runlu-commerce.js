@@ -76,7 +76,13 @@
     catch(_){ return []; }
   }
   function setBag(v){ localStorage.setItem(STORAGE_KEY,JSON.stringify([...new Set(v)])); renderBag(); }
-  function add(key){ if(!cfg.products[key]) return; setBag([...getBag(),key]); openBag(); }
+  function add(key){
+    if(!cfg.products[key]) return;
+    let bag=getBag();
+    if(key==="guanshi-plus-monthly") bag=bag.filter(k=>k!=="guanshi-plus-annual");
+    if(key==="guanshi-plus-annual") bag=bag.filter(k=>k!=="guanshi-plus-monthly");
+    setBag([...bag,key]); openBag();
+  }
   function remove(key){ setBag(getBag().filter(k=>k!==key)); }
 
   function ensureUI(){
@@ -127,6 +133,10 @@
     subtotal.textContent=products.length===1?products[0].price:(products.length?products.map(p=>p.price).join(" + "):"CAD $0.00");
     checkout.textContent=t("checkout");
     const ready=products.length===1 && products[0].enabled && validCheckout(products[0].checkoutUrl);
+    // Subscription variants are mutually exclusive even for bags saved by an older build.
+    if(bag.includes("guanshi-plus-monthly")&&bag.includes("guanshi-plus-annual")){
+      setBag(bag.filter(k=>k!=="guanshi-plus-annual")); return;
+    }
     checkout.disabled=!ready;
     checkout.onclick=ready?()=>startCheckout(products[0].key,products[0],checkout):null;
   }
