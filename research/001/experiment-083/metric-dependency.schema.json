@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E083 Metric Dependency",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "metric_id",
+    "family",
+    "role",
+    "source_id",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "metric_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "family": {
+      "type": "string",
+      "minLength": 1
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "DISTRIBUTION_SUMMARY",
+        "DISTINCT_OBJECTIVE",
+        "PROTECTED_CONSTRAINT"
+      ]
+    },
+    "source_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e083-v1"
+    }
+  }
+}
