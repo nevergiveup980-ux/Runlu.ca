@@ -3,14 +3,14 @@
 (function(){
 'use strict';
 const data=()=>window.RUNLUUniversalData;
-const KEYS={
+const KEYS=Object.freeze({
  po:'runlu_flooring_universal_u1_supplier_orders',
  inbound:'runlu_flooring_universal_u1_inbound_tasks',
  install:'runlu_flooring_universal_u1_installations',
  invoice:'runlu_flooring_universal_u1_customer_invoices',
  accounting:'runlu_flooring_universal_u1_supplier_accounting',
  audit:'runlu_flooring_universal_u1_audit_events'
-};
+});
 const arr=k=>data()?.read?.(k,[])||[];
 const find=(xs,id)=>id?xs.find(x=>x.id===id):null;
 function auditMatch(tx){
@@ -66,5 +66,5 @@ function render(){
  host.innerHTML='<div class="card"><h2>Interrupted Operation Resolver</h2><p class="muted">Read-only evidence review for operations left open after an unexpected stop. It never replays payments, receiving, PO issue, installation completion, or supplier payment.</p></div><div class="card">'+(rs.length?rs.map(r=>'<div class="uResolverRow '+(r.verdict==='UNCERTAIN'?'review':'ready')+'"><div><b>'+esc(r.type)+' · '+esc(r.action)+'</b><span>'+esc(r.verdict)+' · confidence '+esc(r.confidence)+'</span>'+r.evidence.map(x=>'<small>'+esc(x)+'</small>').join('')+'</div>'+(r.verdict!=='UNCERTAIN'?'<button data-resolve="'+esc(r.txId)+'">Acknowledge Review</button>':'<strong>MANUAL REVIEW</strong>')+'</div>').join(''):'<p class="muted">No interrupted operation needs review.</p>')+'<p class="muted">Acknowledge Review clears only the Crash Journal marker after evidence review. It never changes the business record itself.</p></div>';
  host.querySelectorAll('[data-resolve]').forEach(b=>b.onclick=()=>{if(!confirm('Clear this Crash Journal marker after reviewing the evidence? Business records will not be changed.'))return;acknowledge(b.dataset.resolve);render();window.RUNLUUniversalStartupGuard?.recheck?.().then(()=>window.RUNLUUniversalStartupGuard?.renderBanner?.())});
 }
-window.RUNLUUniversalInterruptedResolver=Object.freeze({classify,scan,acknowledge,render,auditMatch});
+window.RUNLUUniversalInterruptedResolver=Object.freeze({classify,scan,acknowledge,render,auditMatch,KEYS});
 })();
