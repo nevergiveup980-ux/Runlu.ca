@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E071 Numeric Context",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "numeric_claim_id",
+    "value",
+    "unit",
+    "denominator",
+    "baseline",
+    "population",
+    "window",
+    "metric",
+    "scope",
+    "status",
+    "schema_version"
+  ],
+  "properties": {
+    "numeric_claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "value": {
+      "type": "number"
+    },
+    "unit": {
+      "type": "string",
+      "minLength": 1
+    },
+    "denominator": {
+      "type": "string",
+      "minLength": 1
+    },
+    "baseline": {
+      "type": "string",
+      "minLength": 1
+    },
+    "population": {
+      "type": "string",
+      "minLength": 1
+    },
+    "window": {
+      "type": "string",
+      "minLength": 1
+    },
+    "metric": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "string",
+      "enum": [
+        "ANALYTIC",
+        "SYNTHETIC",
+        "OBSERVATIONAL",
+        "OPERATIONAL",
+        "PRODUCTION_SAFETY"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PASS_NUMERIC_CONTEXT",
+        "CONTEXT_REVIEW",
+        "NUMERIC_REVIEW"
+      ]
+    },
+    "schema_version": {
+      "const": "e071-v1"
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E069 Dependency Completeness",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "claim_id",
+    "declared_dependencies",
+    "text_derived_candidates",
+    "undeclared_candidates",
+    "status",
+    "schema_version"
+  ],
+  "properties": {
+    "claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "declared_dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "text_derived_candidates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "undeclared_candidates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "NO_UNDECLARED_CANDIDATE",
+        "DEPENDENCY_REVIEW"
+      ]
+    },
+    "schema_version": {
+      "const": "e069-v1"
+    }
+  }
+}

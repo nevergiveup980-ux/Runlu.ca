@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E080 Misspecification Geometry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "geometry_id",
+    "parameter_name",
+    "parameter_units",
+    "critical_parameter",
+    "nominal_model_version",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "geometry_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parameter_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parameter_units": {
+      "type": "string",
+      "minLength": 1
+    },
+    "critical_parameter": {
+      "type": "number",
+      "minimum": 0
+    },
+    "nominal_model_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e080-v1"
+    }
+  }
+}

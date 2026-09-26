@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E054 Horizon Robustness Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "memory_model",
+    "parameter_estimate",
+    "plausible_low",
+    "plausible_high",
+    "flip_boundaries",
+    "decision_robust",
+    "objective_version",
+    "schema_version"
+  ],
+  "properties": {
+    "memory_model": {
+      "type": "string",
+      "enum": [
+        "ROLLING_WINDOW",
+        "EXPONENTIAL_DECAY"
+      ]
+    },
+    "parameter_estimate": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "plausible_low": {
+      "type": "number",
+      "minimum": 0
+    },
+    "plausible_high": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "flip_boundaries": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": 0
+      }
+    },
+    "decision_robust": {
+      "type": "boolean"
+    },
+    "objective_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "const": "e054-v1"
+    }
+  }
+}

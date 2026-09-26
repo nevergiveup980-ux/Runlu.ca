@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E082 Multi-Metric Stress Vector",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "scenario_id",
+    "metrics",
+    "bounds",
+    "failed_metrics",
+    "status",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "scenario_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "metrics": {
+      "type": "object"
+    },
+    "bounds": {
+      "type": "object"
+    },
+    "failed_metrics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "VECTOR_ROBUST",
+        "SCALAR_MASKING",
+        "MULTI_METRIC_FAIL"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e082-v1"
+    }
+  }
+}

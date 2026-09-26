@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E073 Aggregation Reversal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "comparison_id",
+    "strata",
+    "aggregation_rule",
+    "pooled",
+    "reversal",
+    "status",
+    "schema_version"
+  ],
+  "properties": {
+    "comparison_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "strata": {
+      "type": "array",
+      "minItems": 2
+    },
+    "aggregation_rule": {
+      "type": "string",
+      "minLength": 1
+    },
+    "pooled": {
+      "type": "object"
+    },
+    "reversal": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "NO_REVERSAL",
+        "AGGREGATION_REVIEW"
+      ]
+    },
+    "schema_version": {
+      "const": "e073-v1"
+    }
+  }
+}

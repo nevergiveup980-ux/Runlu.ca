@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E066 Claim Provenance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "claim_id",
+    "parent_claim_id",
+    "stage",
+    "evidence_scope",
+    "retained_qualifiers",
+    "transformation_purpose",
+    "review_status",
+    "schema_version"
+  ],
+  "properties": {
+    "claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parent_claim_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "TECHNICAL_RESULT",
+        "ABSTRACT",
+        "EXECUTIVE_SUMMARY",
+        "WEBSITE_CARD",
+        "HEADLINE",
+        "OTHER"
+      ]
+    },
+    "evidence_scope": {
+      "type": "string",
+      "enum": [
+        "ANALYTIC",
+        "SYNTHETIC",
+        "OBSERVATIONAL",
+        "OPERATIONAL",
+        "PRODUCTION_SAFETY"
+      ]
+    },
+    "retained_qualifiers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "transformation_purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "PASS_PROVENANCE",
+        "REVIEW_REQUIRED"
+      ]
+    },
+    "schema_version": {
+      "const": "e066-v1"
+    }
+  }
+}

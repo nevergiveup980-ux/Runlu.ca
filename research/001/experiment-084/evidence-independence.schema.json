@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E084 Evidence Independence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "experiment_id",
+    "scenario_set",
+    "generator_or_simulator",
+    "randomness",
+    "preprocessing",
+    "core_assumptions",
+    "data_origin",
+    "implementation",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "experiment_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scenario_set": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generator_or_simulator": {
+      "type": "string",
+      "minLength": 1
+    },
+    "randomness": {
+      "type": "string",
+      "minLength": 1
+    },
+    "preprocessing": {
+      "type": "string",
+      "minLength": 1
+    },
+    "core_assumptions": {
+      "type": "string",
+      "minLength": 1
+    },
+    "data_origin": {
+      "type": "string",
+      "minLength": 1
+    },
+    "implementation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "string",
+      "enum": [
+        "ANALYTIC",
+        "SYNTHETIC",
+        "OBSERVATIONAL",
+        "OPERATIONAL"
+      ]
+    },
+    "schema_version": {
+      "const": "e084-v1"
+    }
+  }
+}

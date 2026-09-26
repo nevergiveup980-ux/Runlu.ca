@@ -1,0 +1,22 @@
+name: Research 001B E052 Fairness Denominator
+
+on:
+  push:
+    branches: [research-001-experiment-001]
+    paths:
+      - "research/001/experiment-052/**"
+      - ".github/workflows/research-001b-e052.yml"
+  pull_request:
+    paths:
+      - "research/001/experiment-052/**"
+
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run E052 fairness-denominator self-test
+        run: node research/001/experiment-052/selftest.mjs

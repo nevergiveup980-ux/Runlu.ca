@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E085 Transitive Provenance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "node_id",
+    "node_type",
+    "critical",
+    "upstream",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "node_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "node_type": {
+      "type": "string",
+      "enum": [
+        "EXPERIMENT",
+        "IMPLEMENTATION",
+        "SIMULATOR",
+        "LIBRARY",
+        "FIXTURE_GENERATOR",
+        "DATASET",
+        "FORMULA_MODULE",
+        "ROOT_SOURCE",
+        "UNKNOWN"
+      ]
+    },
+    "critical": {
+      "type": "boolean"
+    },
+    "upstream": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e085-v1"
+    }
+  }
+}

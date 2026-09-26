@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E078 Dependence-Aware Uncertainty",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "audit_id",
+    "constraint_id",
+    "constraint_version",
+    "justified",
+    "preregistered",
+    "minimum_contrast",
+    "maximum_contrast",
+    "mathematical_status",
+    "publication_decision",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "audit_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "constraint_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "constraint_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "justified": {
+      "type": "boolean"
+    },
+    "preregistered": {
+      "type": "boolean"
+    },
+    "minimum_contrast": {
+      "type": "number"
+    },
+    "maximum_contrast": {
+      "type": "number"
+    },
+    "mathematical_status": {
+      "type": "string",
+      "enum": [
+        "ROBUST_A",
+        "ROBUST_B",
+        "SIGN_UNRESOLVED",
+        "EXACT_TIE_ONLY"
+      ]
+    },
+    "publication_decision": {
+      "type": "string",
+      "enum": [
+        "ROBUST_A",
+        "ROBUST_B",
+        "SIGN_UNRESOLVED",
+        "EXACT_TIE_ONLY",
+        "REJECT_CONSTRAINT"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e078-v1"
+    }
+  }
+}
