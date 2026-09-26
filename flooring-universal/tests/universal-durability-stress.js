@@ -1,9 +1,10 @@
 'use strict';
-const ROUNDS=Number(process.env.RUNLU_STRESS_ROUNDS||25000);
-let seed=0x5eed1234;
+const ROUNDS=Number(process.env.RUNLU_STRESS_ROUNDS||100000);
+const INITIAL_SEED=Number(process.env.RUNLU_STRESS_SEED||0x5eed1234)>>>0;
+let seed=INITIAL_SEED;
 function rnd(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}
 function pick(a){return a[Math.floor(rnd()*a.length)]}
-function assert(x,m,ctx){if(!x){const e=new Error(m);e.ctx=ctx;throw e}}
+function assert(x,m,ctx){if(!x){const detail={message:m,...ctx,initialSeed:'0x'+INITIAL_SEED.toString(16)};console.error('REPRO '+JSON.stringify(detail));const e=new Error(m);e.ctx=detail;throw e}}
 const terminal={installation:['Completed'],supplier:['Paid'],invoice:['Paid']};
 const forward={installation:['Ready to Schedule','Scheduled','Completed'],supplier:['Pending Match','Ready to Pay','Paid'],invoice:['Draft','Issued','Partially Paid','Paid']};
 function canMove(kind,from,to){const a=forward[kind],i=a.indexOf(from),j=a.indexOf(to);return i>=0&&j>=0&&j>=i&&!(terminal[kind]||[]).includes(from)&&j===i+1}
@@ -51,4 +52,4 @@ for(let n=0;n<ROUNDS;n++){
  const poBusiness=poPhase==='BEGIN'?'ABSENT':'APPLIED';
  assert(poPhase!=='BEGIN'||poBusiness==='ABSENT','PO create applied before business save',ctx);checks++;
 }
-console.log(JSON.stringify({suite:'RUNLU Flooring OS Universal durability',rounds:ROUNDS,checks,simulatedInterruptedWindows:crashes,rejectedInvalidInputs:rejected,seed:'0x5eed1234',result:'PASS'},null,2));
+console.log(JSON.stringify({suite:'RUNLU Flooring OS Universal durability',rounds:ROUNDS,checks,simulatedInterruptedWindows:crashes,rejectedInvalidInputs:rejected,seed:'0x'+INITIAL_SEED.toString(16),result:'PASS'},null,2));
