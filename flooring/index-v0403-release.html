@@ -39,7 +39,7 @@ const isiOS=/iPhone|iPad|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navi
 const forceFull=qp.get('full')==='1';
 const forceLite=qp.get('lite')==='1';
 const mobileSafe=forceLite||(isiOS&&!forceFull);
-const desktopCore={core:'index-v094-fastboot.html?prod=1&release=094&desktop=1'};
+const desktopCore={core:'index-v071-pricing-workspace.html?prod=1&release=0403&mobile=safe&desktop=1'};
 const coreURL=forceLite?'index-v040.html?prod=1&release=0403&mobile=lite':mobileSafe?'index-v071-pricing-workspace.html?prod=1&release=0403&mobile=safe':desktopCore.core;
 const views={
   core:coreURL,
@@ -57,7 +57,7 @@ function openView(v,push){
   }
   paintButtons(v);boot.classList.remove('ready');
   const sep=views[v].includes('?')?'&':'?';
-  const cacheToken=mobileSafe&&v==='core'?'mobile-safe-0403h':Date.now();
+  const cacheToken=v==='core'?'desktop-safe-0403l':Date.now();
   frame.src=views[v]+sep+'t='+cacheToken;
   if(push&&location.hash!=='#'+v)history.replaceState(null,'','#'+v)
 }
