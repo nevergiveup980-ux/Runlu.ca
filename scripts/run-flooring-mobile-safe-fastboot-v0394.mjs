@@ -59,7 +59,7 @@ test('Background launcher hydration is one-shot and failure-tolerant',()=>{
 });
 test('Safe Core keeps the V0.3.94 core-first boot contract through later phases',()=>{
   assert(/n=s\?"mobile-safe-0403[ghijk]":Date\.now\(\)/.test(v71));
-  assert(release.includes("mobileSafe&&v==='core'?'mobile-safe-0403g':Date.now()")||release.includes("mobileSafe&&v==='core'?'mobile-safe-0403h':Date.now()"));
+  assert(release.includes("const cacheToken=v==='core'?'desktop-safe-0403l':Date.now()"));
 });
 test('iPhone production route still bypasses V090 and V078 wrappers',()=>{
   assert(release.includes("mobileSafe?'index-v071-pricing-workspace.html"));
