@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E091 Oracle Provenance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "oracle_id",
+    "target_id",
+    "oracle_class",
+    "upstream",
+    "circular",
+    "status",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "oracle_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "oracle_class": {
+      "type": "string",
+      "enum": [
+        "DERIVED_FROM_SPEC",
+        "INDEPENDENT_ANALYTIC",
+        "EXTERNAL_REFERENCE",
+        "EMPIRICAL_GROUND_TRUTH_CANDIDATE"
+      ]
+    },
+    "upstream": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "circular": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "CIRCULAR_VALIDATION",
+        "NONCIRCULAR_ANALYTIC_ORACLE",
+        "NONCIRCULAR_EXTERNAL_ORACLE",
+        "NONCIRCULAR_EMPIRICAL_CANDIDATE",
+        "ORACLE_INDEPENDENCE_UNRESOLVED"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e091-v1"
+    }
+  }
+}
