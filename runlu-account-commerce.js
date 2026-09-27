@@ -55,30 +55,6 @@
   }
 
 
-  function localizeLinkForm(){
-    const map={purchaseLinkTitle:'link_title',purchaseLinkNote:'link_note',purchaseLinkEmailLabel:'purchase_email',purchaseLinkSessionLabel:'session_id',purchaseLinkButton:'link_button'};
-    for(const [id,key] of Object.entries(map)){const el=document.getElementById(id);if(el)el.textContent=t(key)}
-  }
-  async function linkPurchase(event){
-    event.preventDefault();
-    const purchase_email=String(linkEmail?.value||'').trim().toLowerCase();
-    const session_id=String(linkSession?.value||'').trim();
-    if(!purchase_email||!session_id)return;
-    const {data}=await client.auth.getSession(); const session=data?.session;
-    if(!session?.access_token)return;
-    linkButton.disabled=true; linkButton.textContent=t('linking'); linkStatus.hidden=true;
-    try{
-      const endpoint='https://ekrnknlawekeoszzkamd.supabase.co/functions/v1/runlu-digital-download';
-      const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'link_purchase',purchase_email,session_id})});
-      const payload=await res.json().catch(()=>({}));
-      if(!res.ok||!payload.ok)throw new Error('verify');
-      linkStatus.className='purchase-link-status';linkStatus.textContent=t('linked');linkStatus.hidden=false;
-      linkSession.value=''; await render(session);
-    }catch{
-      linkStatus.className='purchase-link-status error';linkStatus.textContent=t('link_failed');linkStatus.hidden=false;
-    }finally{linkButton.disabled=false;linkButton.textContent=t('link_button')}
-  }
-
   async function autoLinkCheckout(session){
     const params=new URLSearchParams(window.location.search);
     const sessionId=String(params.get('session_id')||'').trim();
@@ -157,8 +133,6 @@
     catch{if(token===generation){empty(ordersList,'orders_empty');empty(subscriptionsList,'subscriptions_empty')}}
   }
 
-  localizeLinkForm();
-  linkForm?.addEventListener('submit',linkPurchase);
 
   client.auth.onAuthStateChange((event,session)=>{
     if(['SIGNED_IN','INITIAL_SESSION','USER_UPDATED','TOKEN_REFRESHED'].includes(event))setTimeout(()=>render(session),0);
@@ -166,5 +140,5 @@
   });
 
   client.auth.getSession().then(({data})=>render(data?.session||null));
-  window.addEventListener('storage',e=>{if(e.key==='runlu-account-language'){localizeLinkForm();client.auth.getSession().then(({data})=>render(data?.session||null))}});
+  window.addEventListener('storage',e=>{if(e.key==='runlu-account-language')client.auth.getSession().then(({data})=>render(data?.session||null))});
 })();
