@@ -170,14 +170,10 @@
             <h3 data-i18n="orders">Orders</h3>
             <p data-i18n="orders_note">RUNLU-direct orders and purchased digital downloads appear here.</p>
             <div id="ordersList" class="library-list"></div>
-            <form id="purchaseLinkForm" class="purchase-link-form">
-              <strong id="purchaseLinkTitle">Link a past purchase</strong>
-              <p id="purchaseLinkNote">Bought with another email? Verify the purchase once and keep it linked to this account.</p>
-              <div class="field"><label id="purchaseLinkEmailLabel" for="purchaseLinkEmail">Purchase email</label><input id="purchaseLinkEmail" type="email" autocomplete="email" required></div>
-              <div class="field"><label id="purchaseLinkSessionLabel" for="purchaseLinkSession">Stripe checkout session ID</label><input id="purchaseLinkSession" type="text" inputmode="text" autocomplete="off" placeholder="cs_…" required></div>
-              <button id="purchaseLinkButton" class="secondary-button" type="submit">Verify &amp; link</button>
-              <p id="purchaseLinkStatus" class="purchase-link-status" hidden></p>
-            </form>
+            <div class="purchase-link-form">
+              <strong>Missing a purchase?</strong>
+              <p>Your RUNLU-direct purchases are linked automatically after checkout. If something is missing, contact <a href="mailto:support@runlu.ca">support@runlu.ca</a> with the email used for payment.</p>
+            </div>
           </article>
           <article>
             <h3 data-i18n="subscriptions">Subscriptions</h3>
@@ -196,12 +192,12 @@
   <script src="runlu-language.js?v=2.2"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="runlu-account.js?v=11"></script>
-  <script src="runlu-account-commerce.js?v=8"></script>
+  <script src="runlu-account-commerce.js?v=9"></script>
   <script src="runlu-account-plan.js?v=2"></script>
   <script src="runlu-account-access.js?v=1"></script>
   <script src="runlu-account-diagnostic.js?v=1"></script>
   <script src="runlu-account-overview.js?v=1"></script>
   <script src="runlu-account-disclosure.js?v=1"></script>
-  <!-- RUNLU Account pilot build 19 · Checkout-session auto-link -->
+  <!-- RUNLU Account pilot build 20 · Customer-safe purchase recovery -->
 </body>
 </html>
