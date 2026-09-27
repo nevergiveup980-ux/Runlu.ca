@@ -82,8 +82,17 @@
   async function loadPurchasedDownloads(session,token){
     if(!ordersList||!session?.access_token)return;
     const endpoint='https://ekrnknlawekeoszzkamd.supabase.co/functions/v1/runlu-digital-download';
-    const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'account_downloads'})});
-    const payload=await res.json().catch(()=>({}));
+    const request=async(accessToken)=>fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+accessToken},body:JSON.stringify({action:'account_downloads'})});
+    let res=await request(session.access_token);
+    let payload=await res.json().catch(()=>({}));
+    if(res.status===401){
+      const refreshed=await client.auth.refreshSession();
+      const freshSession=refreshed?.data?.session;
+      if(freshSession?.access_token){
+        res=await request(freshSession.access_token);
+        payload=await res.json().catch(()=>({}));
+      }
+    }
     if(!res.ok||!payload.ok||token!==generation)return;
     if((payload.downloads||[]).length) ordersList.querySelectorAll('.library-empty').forEach(n=>n.remove());
     for(const d of payload.downloads||[]){
