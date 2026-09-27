@@ -79,6 +79,19 @@
     }finally{linkButton.disabled=false;linkButton.textContent=t('link_button')}
   }
 
+  async function autoLinkCheckout(session){
+    const params=new URLSearchParams(window.location.search);
+    const sessionId=String(params.get('session_id')||'').trim();
+    if(params.get('checkout')!=='success'||!sessionId||!session?.access_token)return false;
+    const endpoint='https://ekrnknlawekeoszzkamd.supabase.co/functions/v1/runlu-digital-download';
+    const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'link_purchase_by_session',session_id:sessionId})});
+    const payload=await res.json().catch(()=>({}));
+    if(!res.ok||!payload.ok)return false;
+    const clean=window.location.pathname+'?checkout=success#orders';
+    window.history.replaceState({},'',clean);
+    return true;
+  }
+
   async function loadPurchasedDownloads(session,token){
     if(!ordersList||!session?.access_token)return;
     const endpoint='https://ekrnknlawekeoszzkamd.supabase.co/functions/v1/runlu-digital-download';
@@ -136,7 +149,11 @@
   async function render(session){
     const token=++generation;
     if(!session?.user){ordersList?.replaceChildren();subscriptionsList?.replaceChildren();return}
-    try{await Promise.all([loadOrders(token),loadSubscriptions(token)]);await loadPurchasedDownloads(session,token)}
+    try{
+      await autoLinkCheckout(session);
+      await Promise.all([loadOrders(token),loadSubscriptions(token)]);
+      await loadPurchasedDownloads(session,token);
+    }
     catch{if(token===generation){empty(ordersList,'orders_empty');empty(subscriptionsList,'subscriptions_empty')}}
   }
 
