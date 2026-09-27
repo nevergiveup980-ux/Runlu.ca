@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f7f4ed"><title>We Came Back to V6 · RUNLU Stories</title><meta name="description" content="A warehouse rebuild, a return to V6, and the working knowledge a new version must preserve."><link rel="canonical" href="https://runlu.ca/notes/we-came-back-to-v6.html"><meta property="og:title" content="We Came Back to V6 · RUNLU Stories"><meta property="og:description" content="A warehouse rebuild, a return to V6, and the working knowledge a new version must preserve."><meta property="og:type" content="article"><meta property="og:url" content="https://runlu.ca/notes/we-came-back-to-v6.html"><meta property="og:image" content="https://runlu.ca/runlu-hero.png"><meta property="article:published_time" content="2026-09-27"><link rel="stylesheet" href="../styles.css?v=20260902-1"><style>.field-article-head h1{line-height:1.06;overflow-wrap:break-word}@media(max-width:480px){.field-article-head h1{font-size:clamp(2.6rem,11.5vw,3.7rem)}}</style></head>
+<body class="field-page"><header class="site-header"><a class="brand" href="../index.html">RUNLU</a><select class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select></header><main><article class="field-article">
+<div class="copy-en" lang="en"><header class="field-article-head"><p class="section-kicker">RUNLU STORIES · STORY 19</p><h1>We Came Back to V6</h1><p class="field-dek"><time datetime="2026-09-27">Work &amp; software · 27 Sep 2026</time></p></header><div class="field-article-body">
+<p><em>What a warehouse software rebuild taught us</em></p>
+<p>We spent a stretch of time trying to move our warehouse software beyond V6.</p>
+<p>We attempted a rebuild of the underlying architecture. We kept working toward V7. We wanted a stronger foundation for the things the system would eventually have to do.</p>
+<p>Then we came back to V6.</p>
+<p>Written down like that, it sounds like a journey that ended where it began. From inside the work, it felt rather different. By the time we returned, we understood more about what we had been trying to replace—and about the cost of discovering that understanding too late.</p>
+<p>This is worth recording while the experience is still fresh. It is easy to remember a decision once everything has settled. It is harder to remember why the other decision once seemed so reasonable.</p>
+<h2>Why We Wanted to Start Again</h2>
+<p>The wish to rebuild was understandable.</p>
+<p>Warehouse OS had grown through use. A working day exposed a problem; we added a function or corrected a rule. Receiving, inventory, cutting, transfers, shipping, and returns gradually became parts of the same system.</p>
+<p>Over time, that kind of growth makes a fresh start attractive. We could rethink the foundation, put the relationships in better order, and make the next additions easier. There was genuine work to do beneath the interface.</p>
+<p>So we tried.</p>
+<p>V6 remained the familiar point behind us. V7 became the destination ahead. As the work continued, it was easy to concentrate on what the new version was supposed to become.</p>
+<p>Meanwhile, the warehouse still needed the things the existing version already did.</p>
+<h2>The Warehouse Kept Its Own Score</h2>
+<p>A warehouse does not experience software as an architecture.</p>
+<p>It experiences a delivery that needs recording, a roll that needs finding, a cut that must leave the right balance, and a transfer that must appear in the right place afterward. Those actions give the system its meaning.</p>
+<p>The attempted replacement did not provide a dependable enough working experience. Features felt reduced compared with the familiar version. There were loading failures and crashes. More development did not automatically produce more confidence at the point of use.</p>
+<p>Eventually, we had to take that experience seriously enough to change direction.</p>
+<p>We already knew that V6 had worked well for us before. That memory mattered. It gave us something concrete to return to, rather than asking the warehouse to keep waiting for the next version to become ready.</p>
+<p>The difficult question became very simple: which version could we actually work with?</p>
+<h2>There Was More in V6 Than We Had Counted</h2>
+<p>A working system holds a great deal of accumulated knowledge.</p>
+<p>Some of it is obvious: the pages, the buttons, the records. Some of it is embedded in the way a task proceeds. An operator knows where to enter something, how to recognize the result, and what to do when the ordinary case does not apply.</p>
+<p>Our warehouse has those exceptions. A numbering rule may have legitimate special cases. A newly received carpet may also be a new product, not merely another roll of an existing one. A transfer may involve a whole roll or only part of it.</p>
+<p>These details are part of the job. A replacement has to carry them forward even when its internal design changes completely.</p>
+<p>We had been looking closely at the foundation we wanted to improve. The experience forced us to look just as closely at the behavior we needed to preserve.</p>
+<p>The value of V6 included the many small agreements it had already reached with the work.</p>
+<h2>Making the Turn</h2>
+<p>We decided to stop pursuing V7 as the immediate replacement and try restoring V6.</p>
+<p>There was an important condition: preserve the data. Returning to an earlier version was not a reason to wipe away the records and begin with an empty warehouse on the screen.</p>
+<p>That decision changed the order of the work. First, recover a usable basis. Then examine the remaining problems from there.</p>
+<p>It can be uncomfortable to make that turn after spending so much effort moving forward. Another fix always seems possible. Another round might be the one that makes everything hold together.</p>
+<p>But the time already spent could not answer the question in front of us. The next decision had to serve the warehouse that still needed to operate.</p>
+<p>We came back.</p>
+<h2>The Old Version Was Not a Time Machine</h2>
+<p>Restoring the software did not instantly restore the whole situation as it had once been.</p>
+<p>We still had to work through questions about the data shown on devices, older local records, and synchronization. The familiar interface could return while uncertainty about the inventory remained.</p>
+<p>This made the recovery more instructive than a simple rollback story.</p>
+<p>A version of the code is only part of a running system. There are also the stored records, the operations waiting to synchronize, and the rules that decide what happens when different copies disagree.</p>
+<p>Returning the code cannot, by itself, settle those questions.</p>
+<p>Our requirement became clearer: the cloud should hold the authoritative inventory. Devices should read from it and send deliberate changes to it. If a connection disappears, temporarily saving an operation must not give an old local inventory copy the authority to replace newer records later.</p>
+<p>An operation sent again must not quietly become a second operation. If the system cannot establish what happened, that uncertainty needs to remain visible until it can be resolved.</p>
+<p>Those are requirements we want to hold the system to. Writing them down does not claim that every possible interruption has already been tested.</p>
+<h2>What We Want the Next Rebuild to Remember</h2>
+<p>The most useful result of this experience is a different starting point for future development.</p>
+<p>Before replacing a working version, we need to describe what already works in terms of actual tasks. Receive a roll. Find it. Cut it. Transfer it. Ship it. Record a return. Check what remains. Include the exceptions that occur in our warehouse, even when they complicate the design.</p>
+<p>That becomes the standard the replacement must meet.</p>
+<p>We also need a smaller distance between a change and its verification. A bounded change is easier to understand when something goes wrong. An isolated trial lets us investigate without making every ordinary working day part of the experiment.</p>
+<p>Recovery needs the same care as construction. We need to know which version we can return to, whether it can still understand the current records, and what will happen to operations that have not finished synchronizing.</p>
+<p>Testing and release checks still matter. Their results answer the questions those checks were designed to ask. Real use adds others: can the operator complete the task on the actual device, and does the result match the physical inventory?</p>
+<p>That last question stays with us:</p>
+<p><strong>The roll on the screen has to match the roll on the rack.</strong></p>
+<p>It is a plain requirement. Every layer beneath the screen exists to help keep it true.</p>
+<h2>Back at V6, With a Different Understanding</h2>
+<p>As we write this on September 26, the recent tangle has largely been worked through from our day-to-day perspective. That is a meaningful place to pause and record the experience. Continued use will still have things to tell us.</p>
+<p>We will keep improving the system. There may be another substantial change to its foundation in the future. We want that work to begin with a fuller account of what must survive it.</p>
+<p>V6 was not suddenly perfect because we returned to it. It was a useful place to stand while we recovered our bearings and put the work back in order.</p>
+<p>The story is simple enough to tell honestly: we tried to rebuild, the replacement did not serve the warehouse well enough, and we came back. Returning took judgment too.</p>
+<p>The next working day will bring another delivery, another order, another roll to find.</p>
+<p>That is where the next version will have to earn our trust.</p>
+<p><strong>— RUNLU</strong></p>
+<nav class="field-article-nav"><a href="the-things-we-build-after-work.html">← Previous story</a><a href="../notes.html">All stories →</a></nav></div></div>
+<div class="copy-zh" lang="zh-CN"><header class="field-article-head"><p class="section-kicker">RUNLU STORIES · 故事 19</p><h1>绕了一圈，我们回到了 V6</h1><p class="field-dek"><time datetime="2026-09-27">工作与软件 · 2026年9月27日</time></p></header><div class="field-article-body">
+<p><em>一次仓库软件重构，教会我们的事</em></p>
+<p>这段时间，我们一直想把仓库系统往前推一步。</p>
+<p>从 V6 出发，尝试推倒重来，重新整理底层架构，再把 V7 做成能够接班的新版本。我们希望地基更扎实，以后的功能能够接得更顺，也少一些补了这里、又要照顾那里的反复。</p>
+<p>折腾了一圈，最后，我们回到了 V6。</p>
+<p>把这几句话摆在一起，似乎很像白走了一段路：出发的时候在这里，回来以后还在这里。但真正经历过这一圈，才知道回来时看见的东西，已经和出发时不完全一样了。</p>
+<p>这件事值得趁现在记下来。等时间过去，我们很容易只记得最后那个决定，却忘了当初为什么那么想走另一条路。</p>
+<h2>当初为什么想重来</h2>
+<p>想重构，并不是没有道理。</p>
+<p>Warehouse OS 是在使用中一点点长起来的。今天收货遇到一个问题，就补一处；明天切割发现一条规则不够准确，再改一下。库存、转移、发货、退回，逐渐连接起来，变成了一个需要照顾许多前后关系的系统。</p>
+<p>做到一定程度，自然会冒出一个念头：既然已经知道了这么多需求，为什么不把底层重新整理一次？把关系放清楚，把基础做扎实，后面也许就会容易很多。</p>
+<p>于是，我们开始往前走。</p>
+<p>V6 成了身后那个熟悉的版本，V7 成了前面那个还在成形的目标。越往前做，注意力越容易放在“新版本以后可以怎么样”上。</p>
+<p>可是，仓库眼前需要的那些事情，并不会因为我们准备了一个更好的未来，就暂时不需要了。</p>
+<p>货照样要收，地毯照样要找，订单照样要往外发。</p>
+<h2>仓库有自己的验收方法</h2>
+<p>对每天操作的人来说，软件首先是一连串很具体的动作。</p>
+<p>一卷地毯收进来，要能录进去；需要的时候，要能找到；切掉一段以后，剩余长度要对；转走以后，相关位置和记录也要跟着变。</p>
+<p>这些事情办得顺，系统才有用。</p>
+<p>而这次尝试接班的新版本，没有给我们足够可靠的使用体验。与原来熟悉的版本相比，有些功能感觉少了；上线使用时，又遇到了加载卡住、系统崩掉之类的问题。继续往前开发，并没有自动换来使用时更多的踏实。</p>
+<p>到后来，这些实际感受已经不能再被放在“下一步会解决”的后面。</p>
+<p>我们记得，V6 以前是好用的。</p>
+<p>这个记忆很重要。它让我们有了一个具体的参照，也有了可以考虑返回的地方。仓库不用一直悬在那里，等下一个版本终于准备妥当。</p>
+<p>最后摆在面前的问题很朴素：眼下，到底哪个版本能让人把活干下去？</p>
+<h2>V6 里面，有些东西起初没有被算进去</h2>
+<p>一个已经用过一段时间的系统，里面积累的东西，比功能列表上写出来的多。</p>
+<p>页面和按钮看得见，记录也看得见。还有一些东西，藏在操作的顺序里：人知道从哪里进去，在哪里填写，做完以后去哪里看结果。遇到平常规则解释不了的情况，也已经有了一些处理经验。</p>
+<p>真实仓库恰恰有这些情况。</p>
+<p>卷号通常遵守一套规则，但也存在合法的特殊编号；新收到的地毯，可能连品种都是新的，系统得允许它第一次出现；转移一卷货，有时是整卷，有时只是一部分。</p>
+<p>这些都属于工作本身。底层可以换一种写法，实际发生的事情仍然需要被接住。</p>
+<p>重构的时候，我们看得很仔细的是“哪里应该重新设计”。这一圈走下来，我们才更加认真地看另一份清单：哪些已经成立的事情，必须原样保留下来。</p>
+<p>V6 的价值里，有很多是它与现场慢慢磨合出来的。那些看起来不起眼的细节，早已经在替每天的操作省力气。</p>
+<h2>决定回来</h2>
+<p>后来，我们决定暂时放下让 V7 立即接班的打算，先尝试恢复 V6。</p>
+<p>这里有一个很重要的要求：保住数据。不能因为要把程序退回去，就顺手把实际工作的记录也清掉，让屏幕上的仓库重新变成一张白纸。</p>
+<p>这个决定改变了接下来做事的顺序。</p>
+<p>先把可以继续使用的基础找回来，再站在这个基础上，把剩下的问题一件件理清楚。</p>
+<p>已经往前做了那么久，再做这个决定，多少会有些不甘心。总觉得再修一轮也许就好了，再补一处也许就通了。前面花掉的时间，似乎也在催着人继续往前。</p>
+<p>可那些已经花掉的时间，不能替我们回答眼前的问题。下一步怎么走，仍然得照顾这个还要继续运转的仓库。</p>
+<p>于是，我们回来了。</p>
+<h2>旧版本，并不是一台时光机</h2>
+<p>回来以后，也没有发生“换回程序，一切就自动回到从前”的事情。</p>
+<p>设备上显示的数据、本地留下的旧记录、与云端同步的关系，仍然需要继续梳理。熟悉的界面可以重新出现，库存到底以哪里为准，却不会因此自动变得清楚。</p>
+<p>这一段，比单纯换回一个版本更让人长记性。</p>
+<p>正在运行的系统里面，有代码，也有已经保存的数据，还有尚未完成的操作。不同地方的记录出现差异时，究竟听谁的，同样是系统的一部分。</p>
+<p>把代码退回去，解决不了所有这些问题。</p>
+<p>我们对自己需要什么，也因此说得更加明确：云端应该保存权威库存，手机和电脑从那里读取，并把明确的操作提交回去。断网时可以暂存操作，但恢复连接以后，设备上保留的一份旧库存，不能随意把云端较新的记录覆盖掉。</p>
+<p>同一个操作再次发送，不能悄悄变成第二次收货、第二次扣减。遇到无法确定是否已经完成的情况，系统也应该把这个不确定摆出来，留待核实。</p>
+<p>这些是我们要守住的要求。把要求写清楚，并不等于所有断网、重启和异常情况都已经验证完毕；它至少让后续该往哪里检查，有了明确的方向。</p>
+<h2>下一次重构，要先记住什么</h2>
+<p>这次经历最值得留下的，是以后开始开发时，我们应该先做些什么。</p>
+<p>首先，把已经好用的部分，用实际任务写下来。收进一卷货，找到它，切掉一段，转走一部分，再看看剩下多少。发货以后查库存，退回以后再查一次。那些只有在我们仓库里才会遇到的例外，也要写进去。</p>
+<p>新版本需要接住的，就是这些具体事情。</p>
+<p>其次，让一次改动与一次验证之间的距离短一点。改动范围清楚，出了问题才更容易知道从哪里找。新想法先在隔离的地方试，普通的工作日就不必跟着每一个实验一起冒险。</p>
+<p>还有，恢复的方法要和建设的方法一起准备。退回哪个版本？那个版本还能不能理解现在的数据？尚未同步完成的操作，回去以后怎么处理？这些问题不能等到系统打不开时，才临时开始想。</p>
+<p>测试与发布检查当然仍然有用。它们能回答自己被设计来检查的问题。到了真实使用中，还要补上现场的那一问：实际设备上，操作能不能完整做完？做完以后，结果能不能与实物对上？</p>
+<p>说到最后，我们想留下的就是一句话：</p>
+<p><strong>软件里的库存，最终必须对得上货架上的那一卷地毯。</strong></p>
+<p>这句话很普通。下面再复杂的架构，也都应该帮助我们把这句话守住。</p>
+<h2>回到了 V6，也多明白了一些事情</h2>
+<p>写下这篇文章的时候，是 9 月 26 日。这段时间的波折，从日常使用的感受来说，已经基本理顺。到了可以稍微停一停、回头记下这一段的时候，后面的实际使用仍然会继续给出反馈。</p>
+<p>系统还会改进。以后也可能再次调整底层。只是下一次开始之前，我们希望先把哪些东西必须保住，看得更完整一些。</p>
+<p>V6 并没有因为我们回来了，就突然成为一个完美版本。它给了我们一个能够站住的地方，让我们重新辨明方向，也把工作的顺序慢慢找回来。</p>
+<p>这件事可以很坦然地说出来：我们尝试重建，新版本没有达到实际工作的要求，于是回到了原来的基础。做出返回的决定，也是一部分开发工作。</p>
+<p>明天，仓库还会来货，还会有订单，还会有人需要找到一卷地毯。</p>
+<p>下一个版本，仍然要在那里，一点点赢得信任。</p>
+<p><strong>— RUNLU · 润庐</strong></p>
+<nav class="field-article-nav"><a href="the-things-we-build-after-work.html">← 上一篇故事</a><a href="../notes.html">全部故事 →</a></nav></div></div>
+<div class="copy-fr" lang="fr"><header class="field-article-head"><p class="section-kicker">RUNLU STORIES · HISTOIRE 19</p><h1>Nous sommes revenus à V6</h1><p class="field-dek"><time datetime="2026-09-27">Travail et logiciel · 27 sept. 2026</time></p></header><div class="field-article-body">
+<p><em>Ce qu’une reconstruction de notre logiciel d’entrepôt nous a appris</em></p>
+<p>Pendant quelque temps, nous avons essayé de faire évoluer notre logiciel d’entrepôt au-delà de V6.</p>
+<p>Nous avons entrepris de reconstruire son architecture. Nous avons continué à avancer vers V7. Nous voulions des fondations plus solides pour tout ce que le système aurait un jour à faire.</p>
+<p>Puis nous sommes revenus à V6.</p>
+<p>Présenté ainsi, le voyage semble s’être terminé à son point de départ. De l’intérieur, l’expérience était bien différente. À notre retour, nous comprenions mieux ce que nous avions essayé de remplacer — et le prix d’une compréhension acquise trop tard.</p>
+<p>Cela mérite d’être consigné pendant que l’expérience est encore fraîche. Il est facile de se souvenir d’une décision une fois les choses apaisées. Il est plus difficile de se rappeler pourquoi l’autre décision avait paru si raisonnable.</p>
+<h2>Pourquoi nous voulions recommencer</h2>
+<p>L’envie de reconstruire était compréhensible.</p>
+<p>Warehouse OS avait grandi au fil de l’usage. Une journée de travail révélait un problème ; nous ajoutions une fonction ou corrigions une règle. Réception, stock, découpe, transferts, expéditions et retours devenaient progressivement les parties d’un même système.</p>
+<p>Avec le temps, cette croissance rend un nouveau départ séduisant. Nous pouvions repenser les fondations, mieux ordonner les relations et faciliter les ajouts suivants. Il y avait un véritable travail à accomplir sous l’interface.</p>
+<p>Nous avons donc essayé.</p>
+<p>V6 restait derrière nous, comme un repère familier. V7 devenait notre destination. À mesure que le travail avançait, il était facile de se concentrer sur ce que la nouvelle version était censée devenir.</p>
+<p>Pendant ce temps, l’entrepôt avait toujours besoin des choses que la version existante faisait déjà.</p>
+<h2>L’entrepôt avait ses propres critères</h2>
+<p>Un entrepôt ne vit pas un logiciel comme une architecture.</p>
+<p>Il le vit à travers une livraison à enregistrer, un rouleau à retrouver, une découpe qui doit laisser le bon solde et un transfert dont le résultat doit apparaître au bon endroit. Ces actions donnent son sens au système.</p>
+<p>La version destinée à prendre le relais n’offrait pas une expérience de travail assez fiable. Les fonctions semblaient réduites par rapport à la version familière. Il y avait des échecs de chargement et des plantages. Poursuivre le développement ne renforçait pas automatiquement la confiance au moment de l’utilisation.</p>
+<p>Nous avons fini par devoir prendre cette expérience assez au sérieux pour changer de direction.</p>
+<p>Nous savions que V6 nous avait bien servis auparavant. Ce souvenir comptait. Il nous donnait un point de retour concret, au lieu de demander à l’entrepôt d’attendre encore que la prochaine version soit prête.</p>
+<p>La question difficile est devenue très simple : avec quelle version pouvions-nous réellement travailler ?</p>
+<h2>V6 contenait plus que nous ne l’avions mesuré</h2>
+<p>Un système qui fonctionne conserve beaucoup de connaissances accumulées.</p>
+<p>Certaines sont évidentes : les pages, les boutons, les enregistrements. D’autres sont inscrites dans le déroulement d’une tâche. La personne qui utilise le système sait où saisir une information, comment reconnaître le résultat et quoi faire lorsque le cas ordinaire ne s’applique pas.</p>
+<p>Notre entrepôt connaît ces exceptions. Une règle de numérotation peut comporter des cas particuliers légitimes. Une moquette reçue peut aussi être un nouveau produit, et pas simplement un rouleau supplémentaire d’un produit existant. Un transfert peut concerner un rouleau entier ou seulement une partie.</p>
+<p>Ces détails font partie du métier. Le système de remplacement doit les préserver, même si sa conception interne change entièrement.</p>
+<p>Nous examinions de près les fondations que nous voulions améliorer. L’expérience nous a obligés à examiner avec autant d’attention les comportements que nous devions conserver.</p>
+<p>La valeur de V6 comprenait les nombreux petits accords déjà établis entre le logiciel et le travail réel.</p>
+<h2>Changer de direction</h2>
+<p>Nous avons décidé de renoncer à faire de V7 le remplacement immédiat et d’essayer de rétablir V6.</p>
+<p>Une condition était essentielle : préserver les données. Revenir à une version antérieure ne justifiait pas d’effacer les enregistrements pour recommencer avec un entrepôt vide à l’écran.</p>
+<p>Cette décision a modifié l’ordre du travail. D’abord retrouver une base utilisable. Puis examiner les problèmes restants à partir de là.</p>
+<p>Il peut être inconfortable de prendre ce virage après tant d’efforts pour avancer. Une correction supplémentaire semble toujours possible. Le prochain essai pourrait être celui qui ferait enfin tenir l’ensemble.</p>
+<p>Mais le temps déjà consacré ne pouvait pas répondre à la question présente. La décision suivante devait servir l’entrepôt qui avait toujours besoin de fonctionner.</p>
+<p>Nous sommes revenus.</p>
+<h2>L’ancienne version n’était pas une machine à remonter le temps</h2>
+<p>Rétablir le logiciel n’a pas instantanément rétabli toute la situation telle qu’elle était auparavant.</p>
+<p>Nous devions encore clarifier les données affichées sur les appareils, les anciens enregistrements locaux et la synchronisation. L’interface familière pouvait revenir alors que l’incertitude sur le stock demeurait.</p>
+<p>Cette étape a rendu la récupération plus instructive qu’un simple retour de version.</p>
+<p>Le code ne constitue qu’une partie d’un système en fonctionnement. Il y a aussi les enregistrements conservés, les opérations en attente de synchronisation et les règles qui déterminent ce qui se passe lorsque plusieurs copies divergent.</p>
+<p>Rétablir le code ne suffit pas, à lui seul, à régler ces questions.</p>
+<p>Notre exigence est devenue plus claire : le cloud doit conserver l’inventaire de référence. Les appareils doivent le consulter et lui transmettre des changements explicites. En cas de perte de connexion, conserver temporairement une opération ne doit pas permettre à une ancienne copie locale de l’inventaire de remplacer ensuite des enregistrements plus récents.</p>
+<p>Une opération renvoyée ne doit pas se transformer silencieusement en une deuxième opération. Si le système ne peut pas établir ce qui s’est passé, cette incertitude doit rester visible jusqu’à sa résolution.</p>
+<p>Ce sont les exigences auxquelles nous voulons tenir le système. Les écrire ne revient pas à prétendre que toutes les interruptions possibles ont déjà été testées.</p>
+<h2>Ce que la prochaine reconstruction devra retenir</h2>
+<p>Le résultat le plus utile de cette expérience est un nouveau point de départ pour les développements futurs.</p>
+<p>Avant de remplacer une version opérationnelle, nous devons décrire ce qui fonctionne déjà en termes de tâches réelles. Recevoir un rouleau. Le retrouver. Le découper. Le transférer. L’expédier. Enregistrer un retour. Vérifier ce qui reste. Inclure les exceptions propres à notre entrepôt, même lorsqu’elles compliquent la conception.</p>
+<p>Cela devient la référence à laquelle le remplacement doit satisfaire.</p>
+<p>Nous devons aussi raccourcir la distance entre une modification et sa vérification. Une modification limitée est plus facile à comprendre lorsque quelque chose tourne mal. Un essai isolé permet d’enquêter sans transformer chaque journée de travail ordinaire en expérience.</p>
+<p>La récupération exige autant de soin que la construction. Nous devons savoir à quelle version revenir, si elle comprend encore les enregistrements actuels et ce qu’il adviendra des opérations dont la synchronisation n’est pas terminée.</p>
+<p>Les tests et les vérifications de publication restent importants. Leurs résultats répondent aux questions que ces contrôles ont été conçus pour poser. L’usage réel en ajoute d’autres : la personne peut-elle terminer la tâche sur son appareil, et le résultat correspond-il au stock physique ?</p>
+<p>Cette dernière question nous accompagne :</p>
+<p><strong>Le rouleau à l’écran doit correspondre au rouleau sur le rayonnage.</strong></p>
+<p>C’est une exigence simple. Chaque couche sous l’écran existe pour aider à la respecter.</p>
+<h2>De retour à V6, avec une autre compréhension</h2>
+<p>Au moment où nous écrivons, le 26 septembre, les difficultés récentes ont été en grande partie démêlées du point de vue de notre usage quotidien. C’est un moment significatif pour faire une pause et consigner l’expérience. L’utilisation continue aura encore des choses à nous apprendre.</p>
+<p>Nous continuerons d’améliorer le système. Ses fondations pourraient connaître une autre transformation importante à l’avenir. Nous voulons que ce travail commence par un inventaire plus complet de ce qui doit y survivre.</p>
+<p>V6 n’est pas soudain devenu parfait parce que nous y sommes revenus. Il nous a offert une base utile pour retrouver nos repères et remettre le travail en ordre.</p>
+<p>L’histoire est assez simple pour être racontée honnêtement : nous avons essayé de reconstruire, le remplacement ne servait pas assez bien l’entrepôt, et nous sommes revenus. Revenir demandait aussi du discernement.</p>
+<p>La prochaine journée de travail apportera une autre livraison, une autre commande, un autre rouleau à retrouver.</p>
+<p>C’est là que la prochaine version devra gagner notre confiance.</p>
+<p><strong>— RUNLU</strong></p>
+<nav class="field-article-nav"><a href="the-things-we-build-after-work.html">← Histoire précédente</a><a href="../notes.html">Toutes les histoires →</a></nav></div></div>
+<div class="copy-es" lang="es"><header class="field-article-head"><p class="section-kicker">RUNLU STORIES · HISTORIA 19</p><h1>Volvimos a V6</h1><p class="field-dek"><time datetime="2026-09-27">Trabajo y software · 27 sep 2026</time></p></header><div class="field-article-body">
+<p><em>Lo que nos enseñó reconstruir un software de almacén</em></p>
+<p>Pasamos una temporada intentando llevar nuestro software de almacén más allá de V6.</p>
+<p>Intentamos reconstruir la arquitectura que lo sustentaba. Seguimos avanzando hacia V7. Queríamos una base más sólida para todo lo que el sistema acabaría teniendo que hacer.</p>
+<p>Después volvimos a V6.</p>
+<p>Escrito así, parece un viaje que terminó donde empezó. Desde dentro del trabajo se sintió de otra manera. Al regresar, comprendíamos mejor lo que habíamos intentado sustituir, y el coste de haber llegado a esa comprensión demasiado tarde.</p>
+<p>Merece la pena dejarlo por escrito mientras la experiencia sigue reciente. Es fácil recordar una decisión cuando todo se ha calmado. Cuesta más recordar por qué la otra decisión había parecido tan razonable.</p>
+<h2>Por qué queríamos empezar de nuevo</h2>
+<p>El deseo de reconstruir era comprensible.</p>
+<p>Warehouse OS había crecido con el uso. Una jornada revelaba un problema; añadíamos una función o corregíamos una regla. La recepción, el inventario, el corte, los traslados, los envíos y las devoluciones fueron convirtiéndose en partes de un mismo sistema.</p>
+<p>Con el tiempo, esa forma de crecer hace atractivo empezar de nuevo. Podíamos replantear la base, ordenar mejor las relaciones y facilitar las siguientes incorporaciones. Había trabajo real que hacer debajo de la interfaz.</p>
+<p>Así que lo intentamos.</p>
+<p>V6 quedó detrás como un punto familiar. V7 se convirtió en el destino. Conforme avanzaba el trabajo, resultaba fácil concentrarse en lo que la nueva versión debía llegar a ser.</p>
+<p>Mientras tanto, el almacén seguía necesitando lo que la versión existente ya hacía.</p>
+<h2>El almacén tenía sus propios criterios</h2>
+<p>Un almacén no vive el software como una arquitectura.</p>
+<p>Lo vive como una entrega que hay que registrar, un rollo que hay que encontrar, un corte que debe dejar el saldo correcto y un traslado cuyo resultado debe aparecer después en el lugar adecuado. Esas acciones dan sentido al sistema.</p>
+<p>La versión que pretendía sustituirlo no ofrecía una experiencia de trabajo suficientemente fiable. Las funciones parecían reducidas frente a la versión conocida. Había fallos de carga y bloqueos. Seguir desarrollando no generaba automáticamente más confianza al utilizarlo.</p>
+<p>Al final tuvimos que tomar esa experiencia lo bastante en serio como para cambiar de rumbo.</p>
+<p>Sabíamos que V6 nos había funcionado bien antes. Ese recuerdo importaba. Nos daba un lugar concreto al que volver, en vez de pedir al almacén que siguiera esperando a que la siguiente versión estuviera lista.</p>
+<p>La pregunta difícil se volvió muy sencilla: ¿con qué versión podíamos trabajar de verdad?</p>
+<h2>V6 contenía más de lo que habíamos contado</h2>
+<p>Un sistema que funciona guarda muchos conocimientos acumulados.</p>
+<p>Algunos son evidentes: las páginas, los botones, los registros. Otros están incorporados en la forma de realizar una tarea. Quien lo utiliza sabe dónde introducir un dato, cómo reconocer el resultado y qué hacer cuando el caso habitual no se aplica.</p>
+<p>Nuestro almacén tiene esas excepciones. Una regla de numeración puede incluir casos especiales legítimos. Una moqueta recién recibida puede ser también un producto nuevo, y no solo otro rollo de uno existente. Un traslado puede afectar a un rollo entero o únicamente a una parte.</p>
+<p>Estos detalles forman parte del trabajo. El sistema que tome el relevo debe conservarlos aunque su diseño interno cambie por completo.</p>
+<p>Habíamos observado con atención la base que queríamos mejorar. La experiencia nos obligó a observar con el mismo cuidado el comportamiento que necesitábamos preservar.</p>
+<p>El valor de V6 incluía los muchos pequeños acuerdos que ya había alcanzado con el trabajo real.</p>
+<h2>Dar la vuelta</h2>
+<p>Decidimos dejar de perseguir V7 como sustituto inmediato e intentar recuperar V6.</p>
+<p>Había una condición importante: conservar los datos. Volver a una versión anterior no justificaba borrar los registros y empezar con un almacén vacío en la pantalla.</p>
+<p>Esa decisión cambió el orden del trabajo. Primero, recuperar una base utilizable. Después, examinar desde allí los problemas pendientes.</p>
+<p>Puede resultar incómodo dar la vuelta tras invertir tanto esfuerzo en avanzar. Siempre parece posible una corrección más. Otra ronda podría ser la que finalmente consiguiera que todo encajara.</p>
+<p>Pero el tiempo ya invertido no podía responder a la pregunta que teníamos delante. La siguiente decisión debía servir al almacén que todavía necesitaba funcionar.</p>
+<p>Volvimos.</p>
+<h2>La versión antigua no era una máquina del tiempo</h2>
+<p>Restaurar el software no restauró de inmediato toda la situación tal como había sido antes.</p>
+<p>Todavía teníamos que aclarar cuestiones sobre los datos mostrados en los dispositivos, los registros locales antiguos y la sincronización. La interfaz conocida podía regresar mientras la incertidumbre sobre el inventario seguía presente.</p>
+<p>Eso hizo que la recuperación fuera más instructiva que una simple vuelta a una versión anterior.</p>
+<p>El código es solo una parte de un sistema en funcionamiento. También están los registros guardados, las operaciones pendientes de sincronizar y las reglas que deciden qué ocurre cuando distintas copias discrepan.</p>
+<p>Restaurar el código no puede resolver por sí solo todas esas cuestiones.</p>
+<p>Nuestro requisito quedó más claro: la nube debía guardar el inventario de referencia. Los dispositivos debían leerlo y enviarle cambios explícitos. Si se pierde la conexión, guardar temporalmente una operación no debe permitir que una copia local antigua del inventario sustituya después registros más recientes.</p>
+<p>Una operación enviada de nuevo no debe convertirse silenciosamente en una segunda operación. Si el sistema no puede determinar qué ocurrió, esa incertidumbre debe permanecer visible hasta que pueda resolverse.</p>
+<p>Estos son los requisitos que queremos exigir al sistema. Ponerlos por escrito no significa afirmar que ya se han probado todas las interrupciones posibles.</p>
+<h2>Lo que queremos recordar en la próxima reconstrucción</h2>
+<p>El resultado más útil de esta experiencia es un punto de partida diferente para el desarrollo futuro.</p>
+<p>Antes de sustituir una versión que funciona, debemos describir lo que ya hace bien mediante tareas reales. Recibir un rollo. Encontrarlo. Cortarlo. Trasladarlo. Enviarlo. Registrar una devolución. Comprobar lo que queda. Incluir las excepciones que se dan en nuestro almacén, aunque compliquen el diseño.</p>
+<p>Eso se convierte en el criterio que debe cumplir el sustituto.</p>
+<p>También necesitamos acortar la distancia entre un cambio y su verificación. Un cambio acotado resulta más fácil de comprender cuando algo sale mal. Una prueba aislada permite investigar sin convertir cada jornada normal en parte del experimento.</p>
+<p>La recuperación necesita tanto cuidado como la construcción. Debemos saber a qué versión podemos volver, si todavía entiende los registros actuales y qué ocurrirá con las operaciones que no hayan terminado de sincronizarse.</p>
+<p>Las pruebas y las comprobaciones de publicación siguen siendo importantes. Sus resultados responden a las preguntas para las que fueron diseñadas. El uso real añade otras: ¿puede la persona completar la tarea en su dispositivo y coincide el resultado con el inventario físico?</p>
+<p>Esa última pregunta se queda con nosotros:</p>
+<p><strong>El rollo de la pantalla tiene que coincidir con el rollo de la estantería.</strong></p>
+<p>Es un requisito sencillo. Cada capa que hay debajo de la pantalla existe para ayudar a cumplirlo.</p>
+<h2>De vuelta a V6, con otra comprensión</h2>
+<p>Al escribir esto, el 26 de septiembre, el enredo reciente se ha aclarado en gran medida desde nuestra experiencia cotidiana. Es un momento significativo para detenernos y dejar constancia de lo vivido. El uso continuado todavía tendrá cosas que enseñarnos.</p>
+<p>Seguiremos mejorando el sistema. Puede que su base vuelva a cambiar de forma importante en el futuro. Queremos que ese trabajo comience con una descripción más completa de lo que debe sobrevivir al cambio.</p>
+<p>V6 no se volvió perfecto de repente porque regresáramos. Fue una base útil desde la que recuperar la orientación y poner el trabajo en orden.</p>
+<p>La historia es lo bastante sencilla como para contarla con honestidad: intentamos reconstruir, el sustituto no servía suficientemente bien al almacén y volvimos. Regresar también exigía criterio.</p>
+<p>La siguiente jornada traerá otra entrega, otro pedido, otro rollo que encontrar.</p>
+<p>Ahí es donde la próxima versión tendrá que ganarse nuestra confianza.</p>
+<p><strong>— RUNLU</strong></p>
+<nav class="field-article-nav"><a href="the-things-we-build-after-work.html">← Historia anterior</a><a href="../notes.html">Todas las historias →</a></nav></div></div>
+</article></main><footer class="site-footer"><div>RUNLU · 润庐</div><div data-en="Real work is part of the design." data-zh="真实工作，本身就是设计的一部分。" data-fr="Le travail réel fait partie de la conception." data-es="El trabajo real forma parte del diseño.">Real work is part of the design.</div><div><a href="../notes.html" data-en="← Stories" data-zh="← 润庐故事" data-fr="← Histoires" data-es="← Historias">← Stories</a></div></footer><script src="../runlu-language.js?v=2.2"></script></body></html>
