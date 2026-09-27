@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RUNLU NEXT License Pilot</title>
+<style>body{font-family:system-ui,-apple-system,sans-serif;max-width:680px;margin:40px auto;padding:20px;background:#f7f7f5;color:#171717}.card{background:white;border:1px solid #ddd;border-radius:18px;padding:24px;margin:16px 0}button,a.btn{display:inline-block;padding:12px 18px;border-radius:10px;border:0;background:#111;color:white;text-decoration:none;font-weight:700}button:disabled{opacity:.5}.muted{color:#666}.ok{color:#176b3a}.bad{color:#a21d1d}code{word-break:break-all}</style></head>
+<body><h1>RUNLU NEXT · License Pilot</h1><p class="muted">Experimental activation shell. The production NEXT file is unchanged.</p>
+<div class="card"><h2 id="state">Checking this device…</h2><p id="detail" class="muted"></p><button id="activate" hidden>Activate this device</button> <a id="open" class="btn" href="next.html" hidden>Open NEXT</a></div>
+<div class="card"><strong>Test goal</strong><p>Activate once while online. Then turn off the network, reopen this page, and confirm this device still recognizes its local activation receipt.</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const URL='https://ekrnknlawekeoszzkamd.supabase.co', KEY='sb_publishable_Jr12gnQ7UrU6Wv9xz4L1aA_bcTZiGqn', STORAGE='runlu-next-license-pilot-v1';
+const state=document.getElementById('state'),detail=document.getElementById('detail'),activate=document.getElementById('activate'),openBtn=document.getElementById('open');
+const client=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
+function local(){try{return JSON.parse(localStorage.getItem(STORAGE)||'null')}catch{return null}}
+function fingerprint(){let id=localStorage.getItem('runlu-next-device-id');if(!id){id=crypto.randomUUID();localStorage.setItem('runlu-next-device-id',id)}return ['next-pilot',id,navigator.platform||'',screen.width+'x'+screen.height].join('|')}
+function showOffline(r){state.textContent='Activated · offline-ready';state.className='ok';detail.textContent='Local activation receipt found for '+(r.license_code||'RUNLU NEXT')+'. NEXT can remain local-first on this device.';openBtn.hidden=false;activate.hidden=true}
+async function boot(){const r=local();if(r?.activation_receipt&&r?.license_code){showOffline(r);return}if(!navigator.onLine){state.textContent='Activation required';state.className='bad';detail.textContent='This copy has not been activated on this device. Connect once and sign in to the RUNLU Account that owns NEXT.';return}
+const {data}=await client.auth.getSession();if(!data?.session){state.textContent='Sign in required';detail.innerHTML='Open <a href="account.html">RUNLU Account</a>, sign in to the account that owns NEXT, then return here.';return}
+state.textContent='Ready to activate';detail.textContent='A valid RUNLU Account session is present. This test will register this browser as one NEXT device.';activate.hidden=false}
+activate.onclick=async()=>{activate.disabled=true;state.textContent='Activating…';const {data}=await client.auth.getSession();const s=data?.session;if(!s){localStorage.removeItem(STORAGE);return boot()}
+try{const res=await fetch(URL+'/functions/v1/runlu-license',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+s.access_token},body:JSON.stringify({action:'activate',product_key:'next-v1-0',device_fingerprint:fingerprint(),device_label:(navigator.platform||'Browser')+' · License Pilot',build:'NEXT-LICENSE-PILOT-1'})});const p=await res.json();if(!res.ok||!p.ok)throw new Error(p.error||'activation_failed');const receipt={license_code:p.license_code,activation_receipt:p.activation_receipt,activated_at:new Date().toISOString(),product_key:'next-v1-0'};localStorage.setItem(STORAGE,JSON.stringify(receipt));showOffline(receipt)}catch(e){state.textContent='Activation failed';state.className='bad';detail.textContent=String(e.message||e);activate.disabled=false;activate.hidden=false}};
+boot();
+</script></body></html>
