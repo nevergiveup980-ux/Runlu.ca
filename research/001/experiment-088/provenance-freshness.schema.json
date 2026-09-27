@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E088 Provenance Freshness",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "edge_id",
+    "artifact_id",
+    "artifact_version",
+    "artifact_digest",
+    "verified_at",
+    "experiment_executed_at",
+    "executed_artifact_version",
+    "executed_artifact_digest",
+    "status",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "edge_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifact_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifact_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifact_digest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "experiment_executed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "executed_artifact_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "executed_artifact_digest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "CURRENT_VERIFICATION",
+        "STALE_VERIFICATION",
+        "FUTURE_VERIFICATION",
+        "MISSING_BINDING"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e088-v1"
+    }
+  }
+}
