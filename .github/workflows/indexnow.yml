@@ -1,0 +1,81 @@
+name: RUNLU IndexNow
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'guanshi-zh.html'
+      - 'guanshi-*.html'
+      - 'guanshi-zh-urls.txt'
+      - 'sitemap.xml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  notify-indexnow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate IndexNow configuration
+        id: config
+        env:
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+        shell: bash
+        run: |
+          if [ -z "$INDEXNOW_KEY" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::INDEXNOW_KEY is not configured. Skipping IndexNow notification."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Verify public key file
+        if: steps.config.outputs.configured == 'true'
+        env:
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+        shell: bash
+        run: |
+          test -f "${INDEXNOW_KEY}.txt" || {
+            echo "::error::Expected public IndexNow key file ${INDEXNOW_KEY}.txt at repository root."
+            exit 1
+          }
+          test "$(tr -d '\r\n' < "${INDEXNOW_KEY}.txt")" = "$INDEXNOW_KEY" || {
+            echo "::error::IndexNow key file content does not match INDEXNOW_KEY."
+            exit 1
+          }
+
+      - name: Submit Chinese Foresight URLs to IndexNow
+        if: steps.config.outputs.configured == 'true'
+        env:
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request
+          key=os.environ["INDEXNOW_KEY"]
+          with open("guanshi-zh-urls.txt", encoding="utf-8") as f:
+              urls=[line.strip() for line in f if line.strip() and not line.startswith("#")]
+          payload=json.dumps({
+              "host":"runlu.ca",
+              "key":key,
+              "keyLocation":f"https://runlu.ca/{key}.txt",
+              "urlList":urls
+          }).encode()
+          req=urllib.request.Request(
+              "https://api.indexnow.org/indexnow",
+              data=payload,
+              headers={"Content-Type":"application/json; charset=utf-8"},
+              method="POST"
+          )
+          try:
+              with urllib.request.urlopen(req, timeout=30) as response:
+                  print("IndexNow response:", response.status)
+          except urllib.error.HTTPError as e:
+              print("IndexNow HTTP response:", e.code)
+              print(e.read().decode("utf-8", "replace"))
+              raise
+          PY
