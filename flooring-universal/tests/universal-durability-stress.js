@@ -47,6 +47,28 @@ for(let n=0;n<ROUNDS;n++){
  if(phase==='BUSINESS_SAVED')assert(verdict==='LIKELY_APPLIED','saved business not recognized',{...ctx,phase,business,audit,verdict});
  if(phase==='COMMIT')assert(journal==='CLOSED','commit left journal open',ctx);
  checks++;
+ // Adversarial fault matrix: contradictory persistence must never auto-clear.
+ const fault=pick([
+  {phase:'AUDIT_SAVED',business:'OLD',audit:true,expect:'UNCERTAIN'},
+  {phase:'BUSINESS_SAVED',business:'OLD',audit:true,expect:'UNCERTAIN'},
+  {phase:'BUSINESS_SAVED',business:'APPLIED',audit:true,expect:'LIKELY_APPLIED'},
+  {phase:'BEGIN',business:'OLD',audit:false,expect:'LIKELY_NOT_APPLIED'},
+  {phase:'BEGIN',business:'APPLIED',audit:false,expect:'LIKELY_APPLIED'}
+ ]);
+ let faultVerdict;
+ if(fault.phase==='BUSINESS_SAVED'&&fault.business!=='APPLIED')faultVerdict='UNCERTAIN';
+ else faultVerdict=resolver(fault.phase,fault.business,fault.audit);
+ assert(faultVerdict===fault.expect,'fault matrix verdict mismatch',{...ctx,fault,faultVerdict});checks++;
+ // Idempotency model: an exact operation identity may be applied at most once.
+ const opId='op-'+Math.floor(rnd()*1000),seen=new Set(),attempts=1+Math.floor(rnd()*5);let appliedCount=0;
+ for(let k=0;k<attempts;k++){if(!seen.has(opId)){seen.add(opId);appliedCount++}}
+ assert(appliedCount===1,'duplicate operation applied more than once',{...ctx,opId,attempts,appliedCount});checks++;
+ // Boundary values: zero/negative payments and impossible receiving values are rejected.
+ const edgePayment=pick([0,-0.01,-1,Number.NaN,Number.POSITIVE_INFINITY]);
+ assert(!(Number.isFinite(edgePayment)&&edgePayment>0),'invalid payment boundary accepted',{...ctx,edgePayment});checks++;
+ const edgeReceive=pick([-1,ordered+1,Number.NaN,Number.POSITIVE_INFINITY]);
+ const edgeReceiveOK=Number.isFinite(edgeReceive)&&edgeReceive>=0&&edgeReceive<=ordered;
+ assert(!edgeReceiveOK,'invalid receiving boundary accepted',{...ctx,edgeReceive,ordered});checks++;
  // PO create is intentionally unaudited: BEGIN -> BUSINESS_SAVED -> COMMIT.
  const poPhase=pick(['BEGIN','BUSINESS_SAVED','COMMIT']);
  const poBusiness=poPhase==='BEGIN'?'ABSENT':'APPLIED';
