@@ -39,6 +39,8 @@ jobs:
           if grep -REn "createClient[[:space:]]*\(|service_role|supabaseUrl" flooring-universal/*.js; then
             echo "Universal runtime contains direct Supabase runtime wiring"; exit 1
           fi
+      - name: Attack production interrupted resolver directly
+        run: node flooring-universal/tests/universal-production-resolver-test.js
       - name: Hammer Universal durability model · seed A
         env:
           RUNLU_STRESS_SEED: '1592594996'
