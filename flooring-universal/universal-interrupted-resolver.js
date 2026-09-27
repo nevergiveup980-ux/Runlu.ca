@@ -52,7 +52,13 @@ function classifyWith(tx,reader){
  if(phase!=='BEGIN')evidence.push('Crash Journal last persisted milestone: '+phase+'.');
  if(audits.length)evidence.push(audits.length+' matching Audit event(s) exist at/after operation start.');
  let verdict='UNCERTAIN',confidence='REVIEW';
- if(applied){verdict='LIKELY_APPLIED';confidence=audits.length?'HIGH':'MEDIUM'}
+ const splitAuditBusiness=phase==='AUDIT_SAVED'&&audits.length>0&&notApplied;
+ const businessMilestoneContradiction=phase==='BUSINESS_SAVED'&&!applied;
+ if(splitAuditBusiness){
+  evidence.push('Audit was persisted but the business record still shows the pre-operation state. This split state requires manual review.');
+ }else if(businessMilestoneContradiction){
+  evidence.push('Crash Journal says BUSINESS_SAVED but persisted business evidence does not confirm the change. This contradiction requires manual review.');
+ }else if(applied){verdict='LIKELY_APPLIED';confidence=audits.length?'HIGH':'MEDIUM'}
  else if(notApplied){verdict='LIKELY_NOT_APPLIED';confidence='MEDIUM'}
  return {...base,verdict,confidence,evidence};
 }
