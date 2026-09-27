@@ -10,7 +10,7 @@ on:
       rounds:
         description: Stress rounds
         required: false
-        default: '100000'
+        default: '250000'
 permissions:
   contents: read
 jobs:
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      RUNLU_STRESS_ROUNDS: ${{ github.event.inputs.rounds || '100000' }}
+      RUNLU_STRESS_ROUNDS: ${{ github.event.inputs.rounds || '250000' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -50,4 +50,8 @@ jobs:
       - name: Hammer Universal durability model · seed C
         env:
           RUNLU_STRESS_SEED: '12648430'
+        run: node flooring-universal/tests/universal-durability-stress.js
+      - name: Hammer Universal durability model · seed D
+        env:
+          RUNLU_STRESS_SEED: '305419896'
         run: node flooring-universal/tests/universal-durability-stress.js
