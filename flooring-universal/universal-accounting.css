@@ -1,1 +1,4 @@
 .uAcct{padding:15px 0;border-top:1px solid #e5e5e5}.uAcct:first-child{border-top:0}.uAcctHead{display:flex;justify-content:space-between;gap:12px}.uAcctHead b,.uAcctHead span{display:block}.uAcctHead span{font-size:12px;color:#666;margin-top:3px}.uAcctGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:11px}.uAcctActions{display:flex;gap:8px;margin-top:10px}@media(max-width:650px){.uAcctGrid{grid-template-columns:1fr}.uAcctHead{flex-direction:column}}
+
+/* Deerfoot-derived operator surface */
+.uAcct{background:#fff;border:1px solid #d7dfdb;border-radius:10px;padding:13px 12px;margin:8px 0}.uAcct:first-child{border-top:1px solid #d7dfdb}.uAcctHead b{color:#173d30}.uAcctHead span{color:#66736d}.uAcctGrid{padding:10px;background:#edf1ef;border-radius:9px}.uAcctActions button{border-radius:8px}#universalAccounting{max-width:1100px;margin:0 auto 12px}@media(max-width:700px){.uAcct{padding:11px 10px}}
