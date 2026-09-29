@@ -1,0 +1,29 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {};
+ objectVersion = 56;
+ objects = {
+  A1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RUNLUNextApp.swift; sourceTree = "<group>";};
+  A2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>";};
+  A3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextWebView.swift; sourceTree = "<group>";};
+  B1 = {isa = PBXBuildFile; fileRef = A1;};
+  B2 = {isa = PBXBuildFile; fileRef = A2;};
+  B3 = {isa = PBXBuildFile; fileRef = A3;};
+  G1 = {isa = PBXGroup; children = (G2, P1,); sourceTree = "<group>";};
+  G2 = {isa = PBXGroup; children = (A1,A2,A3,); path = RUNLUNext; sourceTree = "<group>";};
+  P1 = {isa = PBXFileReference; explicitFileType = "wrapper.application"; path = RUNLUNext.app; sourceTree = BUILT_PRODUCTS_DIR;};
+  S1 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B1,B2,B3,); runOnlyForDeploymentPostprocessing = 0;};
+  F1 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;};
+  R1 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0;};
+  C1 = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_KEY_CFBundleDisplayName = "RUNLU NEXT"; IPHONEOS_DEPLOYMENT_TARGET = 17.0; MARKETING_VERSION = 0.1; PRODUCT_BUNDLE_IDENTIFIER = ca.runlu.next; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2";}; name = Debug;};
+  C2 = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_KEY_CFBundleDisplayName = "RUNLU NEXT"; IPHONEOS_DEPLOYMENT_TARGET = 17.0; MARKETING_VERSION = 0.1; PRODUCT_BUNDLE_IDENTIFIER = ca.runlu.next; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2";}; name = Release;};
+  L1 = {isa = XCConfigurationList; buildConfigurations = (C1,C2,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release;};
+  N1 = {isa = PBXNativeTarget; buildConfigurationList = L1; buildPhases = (S1,F1,R1,); buildRules = (); dependencies = (); name = RUNLUNext; productName = RUNLUNext; productReference = P1; productType = "com.apple.product-type.application";};
+  PC1 = {isa = XCBuildConfiguration; buildSettings = {CLANG_ENABLE_MODULES = YES;}; name = Debug;};
+  PC2 = {isa = XCBuildConfiguration; buildSettings = {CLANG_ENABLE_MODULES = YES;}; name = Release;};
+  PL1 = {isa = XCConfigurationList; buildConfigurations = (PC1,PC2,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release;};
+  PR = {isa = PBXProject; attributes = {LastSwiftUpdateCheck = 2600; LastUpgradeCheck = 2600;}; buildConfigurationList = PL1; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en,Base,); mainGroup = G1; productRefGroup = G1; projectDirPath = ""; projectRoot = ""; targets = (N1,);};
+ };
+ rootObject = PR;
+}
