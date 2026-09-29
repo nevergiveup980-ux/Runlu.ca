@@ -1,0 +1,21 @@
+name: RUNLU NEXT Apple Check
+
+on:
+  push:
+    branches: [runlu-next-apple-v0.1]
+    paths:
+      - 'apple/**'
+  pull_request:
+    paths:
+      - 'apple/**'
+
+jobs:
+  structure:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect Xcode project
+        run: xcodebuild -list -project apple/RUNLUNext.xcodeproj
+      - name: Build for iOS Simulator
+        run: |
+          xcodebuild             -project apple/RUNLUNext.xcodeproj             -scheme RUNLUNext             -sdk iphonesimulator             -configuration Debug             CODE_SIGNING_ALLOWED=NO             build
