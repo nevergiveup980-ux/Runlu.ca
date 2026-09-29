@@ -12,6 +12,7 @@ button{border:0;border-radius:12px;padding:12px 16px;background:#173d30;color:#f
 <div class="head"><h1>RUNLU Local Data Inspector</h1><div class="sub">Read-only · nothing is deleted, changed, merged, or uploaded.</div></div>
 <div class="card"><div class="row"><span class="k">Origin</span><span class="v" id="origin"></span></div><div class="row"><span class="k">Run time</span><span class="v" id="time"></span></div><div class="row"><span class="k">Storage estimate</span><span class="v" id="quota">Checking…</span></div></div>
 <div class="card"><h2>LocalStorage</h2><div id="ls">Checking…</div></div>
+<div class="card"><h2>Data Ownership Map</h2><div id="ownership">Classifying…</div><p class="small">Classification is based on key names and known RUNLU module history. It does not delete, move, merge, or upload anything.</p></div>
 <div class="card"><h2>LocalStorage Structure</h2><div id="structure">Analyzing…</div><p class="small">Read-only structural summary. Values are not uploaded. Keys containing auth, token, license, device-id, account or password are deliberately excluded from content inspection.</p></div>
 <div class="card"><h2>IndexedDB</h2><div id="idb">Checking…</div></div>
 <div class="card"><h2>Cache Storage</h2><div id="cache">Checking…</div></div>
@@ -26,6 +27,25 @@ document.querySelector('#origin').textContent=location.origin; document.querySel
 (async()=>{
 try{if(navigator.storage?.estimate){const e=await navigator.storage.estimate(); document.querySelector('#quota').textContent=((e.usage||0)/1048576).toFixed(2)+' MB used';}else document.querySelector('#quota').textContent='Not exposed by browser';}catch(e){document.querySelector('#quota').textContent='Unavailable';}
 try{let out=''; if(localStorage.length===0) out='<span class="good">No LocalStorage keys</span>'; for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i),v=localStorage.getItem(k)||''; out+=row(k,esc(v.length+' chars'));} document.querySelector('#ls').innerHTML=out;}catch(e){document.querySelector('#ls').innerHTML='<span class="warn">'+esc(e.message)+'</span>';}
+try{
+ const warehouseExact=new Set(['runlu_inventory_v20','runlu_product_master_v21','runlu_inventory_records_v21','runlu_orders_v20','runlu_settings_v20','runlu_count_sessions_v30','runlu_receiving_v50','runlu_tasks_v50','runlu_special_orders_v51','runlu_local_snapshots_v515','runlu_data_protection_v515','runlu_operations_log_v52','runlu_health_history_v518','runlu_carpet_inventory_v52','runlu_cutting_log_v52','runlu_event_history_v52']);
+ const shared=/^(runlu[-_]site[-_]language|runlu[-_]language|runlu[-_]account[-_]language|runlu-next|sb-)/i;
+ const deerfoot=/(deerfoot|flooring|calendar)/i;
+ let groups={warehouse:[],deerfoot:[],shared:[],unknown:[]};
+ for(let i=0;i<localStorage.length;i++){
+   const k=localStorage.key(i);
+   if(warehouseExact.has(k)) groups.warehouse.push(k);
+   else if(shared.test(k)) groups.shared.push(k);
+   else if(deerfoot.test(k)) groups.deerfoot.push(k);
+   else groups.unknown.push(k);
+ }
+ const block=(title,a,cls)=>'<div style="margin:12px 0"><div class="k '+cls+'">'+title+' · '+a.length+'</div>'+(a.length?a.map(k=>'<div class="pill">'+esc(k)+'</div>').join(''):'<div class="small">None detected</div>')+'</div>';
+ document.querySelector('#ownership').innerHTML=
+   block('Warehouse V5 family',groups.warehouse,'good')+
+   block('Deerfoot / Flooring OS',groups.deerfoot,'')+
+   block('Shared / infrastructure',groups.shared,'warn')+
+   block('Unknown / review manually',groups.unknown,'warn');
+}catch(e){document.querySelector('#ownership').innerHTML='<span class="warn">'+esc(e.message)+'</span>';}
 try{
  const sensitive=/auth|token|license|device[-_]?id|account|password|secret|session/i;
  let cards='';
