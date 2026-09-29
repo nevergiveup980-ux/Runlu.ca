@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RUNLU Warehouse OS V8</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f5f5f2;color:#161616}main{max-width:920px;margin:auto;padding:22px}.top{display:flex;justify-content:space-between;align-items:center}.card{background:white;border:1px solid #ddd;border-radius:18px;padding:18px;margin:14px 0}.big{font-size:48px;font-weight:700}.muted{color:#666}.ok{font-weight:700}input{box-sizing:border-box;width:100%;padding:14px;border:1px solid #bbb;border-radius:12px;font-size:16px}.row{padding:12px 0;border-bottom:1px solid #eee}.row:last-child{border-bottom:0}
+</style></head><body><main>
+<div class="top"><div><strong>RUNLU Warehouse OS</strong><div class="muted">V8 · Rebuild Lab</div></div><div id="source">Not loaded</div></div>
+<section class="card"><div class="muted">Carpet Roll Inventory · ACTIVE ROLLS</div><div class="big" id="homeCount">0</div><div id="invariant" class="ok">Waiting for data</div></section>
+<section class="card"><h2>Carpet Inventory</h2><div id="summary" class="muted">0 total · 0 active · 0 shown</div><p><input id="search" placeholder="Search roll, product, color, location…"></p><div id="list"></div></section>
+</main>
+<script src="v8-core.js"></script><script src="v8-cloud.js"></script><script src="v8-provider-config.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+function rollLabel(r){return r.roll||r.rollNumber||r.sourceRoll||r._recordId||'Unnamed roll'}
+function escapeHtml(v){const d=document.createElement('div');d.textContent=String(v||'');return d.innerHTML}
+function render(){const c=RUNLU_V8.counts(),rows=RUNLU_V8.visibleCarpetRolls();$('homeCount').textContent=c.dashboardActive;$('summary').textContent=c.total+' total · '+c.carpetPageActive+' active · '+c.visible+' shown';$('source').textContent=RUNLU_V8.state.source;$('invariant').textContent=c.dashboardActive===c.carpetPageActive?'✓ Same-source count check passed':'✕ Count mismatch';$('list').innerHTML=rows.slice(0,100).map(r=>'<div class="row"><strong>'+escapeHtml(rollLabel(r))+'</strong><div class="muted">'+escapeHtml([r.style||r.productName,r.color,r.location||r.locationName].filter(Boolean).join(' · '))+'</div></div>').join('')}
+$('search').addEventListener('input',e=>{RUNLU_V8.setSearch(e.target.value);render()});window.RUNLU_V8_RENDER=render;render();\n(async()=>{try{if(window.RUNLU_V8_PROVIDER){await RUNLU_V8_CLOUD.loadCarpet(window.RUNLU_V8_PROVIDER)}}catch(e){$('source').textContent='Cloud error';$('invariant').textContent=e.message}})();
+</script></body></html>
