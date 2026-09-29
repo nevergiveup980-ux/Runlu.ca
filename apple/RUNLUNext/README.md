@@ -24,3 +24,13 @@ Node 1 keeps the current RUNLU NEXT engine intact and gives it a native SwiftUI 
 
 ## Next node
 Move selected shell/state features to native SwiftUI only after parity is verified. Do not fork the planning behavior prematurely.
+
+
+## Brand asset checkpoint
+The official App Icon source is the classic RUNLU blue/white oval-waterdrop logo supplied by the project owner.
+Prepared master: `RUNLUNext-1024.png` (1024×1024).
+Expected repository destination:
+`RUNLUNext/Assets.xcassets/AppIcon.appiconset/RUNLUNext-1024.png`
+
+Do not redraw or substitute the RUNLU mark. The asset catalog already references this exact filename.
+Binary PNG upload is intentionally left as the final local-Xcode/Git step because the connected GitHub text-file interface does not upload binary repository files.
