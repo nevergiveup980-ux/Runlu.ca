@@ -14,5 +14,6 @@ const $=id=>document.getElementById(id);
 function rollLabel(r){return r.roll||r.rollNumber||r.sourceRoll||r._recordId||'Unnamed roll'}
 function escapeHtml(v){const d=document.createElement('div');d.textContent=String(v||'');return d.innerHTML}
 function render(){const c=RUNLU_V8.counts(),rows=RUNLU_V8.visibleCarpetRolls();$('homeCount').textContent=c.dashboardActive;$('summary').textContent=c.total+' total · '+c.carpetPageActive+' active · '+c.visible+' shown';$('source').textContent=RUNLU_V8.state.source;$('invariant').textContent=c.dashboardActive===c.carpetPageActive?'✓ Same-source count check passed':'✕ Count mismatch';$('list').innerHTML=rows.slice(0,100).map(r=>'<div class="row"><strong>'+escapeHtml(rollLabel(r))+'</strong><div class="muted">'+escapeHtml([r.style||r.productName,r.color,r.location||r.locationName].filter(Boolean).join(' · '))+'</div></div>').join('')}
-$('search').addEventListener('input',e=>{RUNLU_V8.setSearch(e.target.value);render()});window.RUNLU_V8_RENDER=render;render();\n(async()=>{try{if(window.RUNLU_V8_PROVIDER){await RUNLU_V8_CLOUD.loadCarpet(window.RUNLU_V8_PROVIDER)}}catch(e){$('source').textContent='Cloud error';$('invariant').textContent=e.message}})();
+$('search').addEventListener('input',e=>{RUNLU_V8.setSearch(e.target.value);render()});window.RUNLU_V8_RENDER=render;render();
+(async()=>{try{if(window.RUNLU_V8_PROVIDER){await RUNLU_V8_CLOUD.loadCarpet(window.RUNLU_V8_PROVIDER)}}catch(e){$('source').textContent='Cloud error';$('invariant').textContent=e.message}})();
 </script></body></html>
