@@ -12,6 +12,7 @@ button{border:0;border-radius:12px;padding:12px 16px;background:#173d30;color:#f
 <div class="head"><h1>RUNLU Local Data Inspector</h1><div class="sub">Read-only · nothing is deleted, changed, merged, or uploaded.</div></div>
 <div class="card"><div class="row"><span class="k">Origin</span><span class="v" id="origin"></span></div><div class="row"><span class="k">Run time</span><span class="v" id="time"></span></div><div class="row"><span class="k">Storage estimate</span><span class="v" id="quota">Checking…</span></div></div>
 <div class="card"><h2>LocalStorage</h2><div id="ls">Checking…</div></div>
+<div class="card"><h2>LocalStorage Structure</h2><div id="structure">Analyzing…</div><p class="small">Read-only structural summary. Values are not uploaded. Keys containing auth, token, license, device-id, account or password are deliberately excluded from content inspection.</p></div>
 <div class="card"><h2>IndexedDB</h2><div id="idb">Checking…</div></div>
 <div class="card"><h2>Cache Storage</h2><div id="cache">Checking…</div></div>
 <div class="card"><h2>Service Worker</h2><div id="sw">Checking…</div></div>
@@ -25,6 +26,27 @@ document.querySelector('#origin').textContent=location.origin; document.querySel
 (async()=>{
 try{if(navigator.storage?.estimate){const e=await navigator.storage.estimate(); document.querySelector('#quota').textContent=((e.usage||0)/1048576).toFixed(2)+' MB used';}else document.querySelector('#quota').textContent='Not exposed by browser';}catch(e){document.querySelector('#quota').textContent='Unavailable';}
 try{let out=''; if(localStorage.length===0) out='<span class="good">No LocalStorage keys</span>'; for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i),v=localStorage.getItem(k)||''; out+=row(k,esc(v.length+' chars'));} document.querySelector('#ls').innerHTML=out;}catch(e){document.querySelector('#ls').innerHTML='<span class="warn">'+esc(e.message)+'</span>';}
+try{
+ const sensitive=/auth|token|license|device[-_]?id|account|password|secret|session/i;
+ let cards='';
+ for(let i=0;i<localStorage.length;i++){
+   const k=localStorage.key(i), raw=localStorage.getItem(k)||'';
+   if(sensitive.test(k)){cards+=row(k,'<span class="warn">content inspection skipped</span>');continue;}
+   let summary='text · '+raw.length+' chars';
+   try{
+     const x=JSON.parse(raw);
+     if(Array.isArray(x)) summary='JSON array · '+x.length+' records';
+     else if(x && typeof x==='object'){
+       const keys=Object.keys(x); let counts=[];
+       for(const p of keys.slice(0,30)){ if(Array.isArray(x[p])) counts.push(p+': '+x[p].length); }
+       summary='JSON object · '+keys.length+' top-level fields'+(counts.length?' · '+counts.slice(0,5).join(', '):'');
+     } else summary='JSON '+typeof x+' · '+String(x).length+' chars';
+   }catch(_){ }
+   cards+=row(k,esc(summary));
+ }
+ document.querySelector('#structure').innerHTML=cards||'<span class="good">Nothing to inspect</span>';
+}catch(e){document.querySelector('#structure').innerHTML='<span class="warn">'+esc(e.message)+'</span>';}
+
 let dbs=[]; try{if(indexedDB.databases){dbs=await indexedDB.databases(); document.querySelector('#idb').innerHTML=dbs.length?dbs.map(d=>row(d.name||'(unnamed)',esc('v'+(d.version||'?')))).join(''):'<span class="good">No IndexedDB databases reported</span>';}else document.querySelector('#idb').innerHTML='<span class="warn">This browser does not expose the IndexedDB database list.</span>';}catch(e){document.querySelector('#idb').innerHTML='<span class="warn">'+esc(e.message)+'</span>';}
 document.querySelector('#known').innerHTML=known.map(n=>'<span class="pill">'+esc(n)+' · '+(dbs.some(d=>d.name===n)?'FOUND':'not reported')+'</span>').join('');
 try{if(window.caches){const ks=await caches.keys(); document.querySelector('#cache').innerHTML=ks.length?ks.map(k=>row(k,'FOUND')).join(''):'<span class="good">No Cache Storage names</span>';}else document.querySelector('#cache').innerHTML='Cache Storage API not exposed';}catch(e){document.querySelector('#cache').innerHTML='<span class="warn">'+esc(e.message)+'</span>';}
