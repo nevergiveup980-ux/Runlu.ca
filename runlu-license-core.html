@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="RUNLU License Core milestone record — the reusable licensing foundation established for independently distributed RUNLU software in September 2026.">
+<link rel="canonical" href="https://runlu.ca/runlu-license-core.html">
+<meta property="og:title" content="RUNLU License Core · Milestone 2026">
+<meta property="og:description" content="A reusable licensing foundation for RUNLU software: controlled activation, offline-ready receipts, device release, revocation, and enforced limits.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://runlu.ca/runlu-license-core.html">
+<title>RUNLU License Core · Milestone 2026</title>
+<link rel="stylesheet" href="styles.css?v=20260902-1">
+<style>
+main{background:#f7f4ed;color:#171915}.rlc-hero,.rlc-body{padding:92px 6vw}.rlc-hero{background:#122218;color:#fff}.rlc-wrap{max-width:920px;margin:auto}.rlc-kicker{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;opacity:.65}.rlc-hero h1{font-size:clamp(3rem,7vw,6.4rem);line-height:.95;letter-spacing:-.05em;margin:18px 0 22px;font-weight:500}.rlc-lead{font-size:1.2rem;line-height:1.65;max-width:760px;color:rgba(255,255,255,.72)}.rlc-date{margin-top:34px;font-size:.9rem;color:rgba(255,255,255,.58)}.rlc-body h2{font-size:clamp(2rem,4vw,3.5rem);letter-spacing:-.035em;margin:0 0 22px}.rlc-body p{font-size:1.06rem;line-height:1.8;color:#4d534d}.rlc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:36px 0 58px}.rlc-card{padding:24px;border:1px solid rgba(23,25,21,.12);border-radius:20px;background:#fff}.rlc-card b{display:block;margin-bottom:8px}.rlc-card span{color:#626862;line-height:1.55}.rlc-note{padding:28px;border-left:3px solid #2f6f45;background:#eef4ef;border-radius:0 18px 18px 0;margin:34px 0}.rlc-status{display:inline-flex;padding:8px 12px;border-radius:999px;background:#e9f3eb;color:#24623a;font-weight:600;font-size:.85rem}.rlc-footer-note{margin-top:64px;padding-top:26px;border-top:1px solid rgba(23,25,21,.12);font-size:.9rem!important;color:#777!important}@media(max-width:680px){.rlc-grid{grid-template-columns:1fr}.rlc-hero,.rlc-body{padding:68px 6vw}}
+</style>
+</head>
+<body>
+<header class="site-header"><a class="brand" href="index.html">RUNLU</a><nav class="desktop-nav"><a href="index.html">Home</a><a href="digital.html">Digital</a><a href="timeline.html">Timeline</a><a href="account.html">Account</a></nav></header>
+<main>
+<section class="rlc-hero"><div class="rlc-wrap"><div class="rlc-kicker">RUNLU PLATFORM · MILESTONE 2026</div><h1>RUNLU License Core</h1><p class="rlc-lead">In September 2026, RUNLU established its first reusable licensing foundation for independently distributed software — separating possession of a downloadable file from the right to activate and use the software.</p><div class="rlc-date">September 2026 · RLC foundation established</div></div></section>
+<section class="rlc-body"><div class="rlc-wrap"><span class="rlc-status">Pilot passed</span><h2 style="margin-top:18px">From a download to a licensed product.</h2><p>A license file can state what a customer may do. RUNLU License Core adds a technical layer that can enforce important parts of that agreement while preserving practical offline use.</p>
+<div class="rlc-grid">
+<div class="rlc-card"><b>Purchase-linked entitlement</b><span>A legitimate RUNLU purchase can establish the customer's software entitlement.</span></div>
+<div class="rlc-card"><b>Controlled device activation</b><span>A license can allow a defined number of active devices rather than unlimited copying.</span></div>
+<div class="rlc-card"><b>Offline-ready operation</b><span>After successful activation, a local receipt can preserve licensed use without requiring a permanent network connection.</span></div>
+<div class="rlc-card"><b>Customer-managed release</b><span>Customers can release an old activation and recover a device slot for another device.</span></div>
+<div class="rlc-card"><b>Server-side revocation</b><span>Released activations can be invalidated when the software next verifies its status online.</span></div>
+<div class="rlc-card"><b>Atomic activation limits</b><span>Activation capacity is enforced as a single protected operation so simultaneous requests cannot legitimately exceed the configured limit.</span></div>
+</div>
+<h2>The test that improved the system.</h2><p>During the pilot, repeated activation, release, browser, device, and offline tests exposed a concurrency edge case: a three-device license briefly reached four active records. Instead of treating the display as the problem, the activation path was redesigned at the database boundary. Capacity checking and activation were made atomic, the excess pilot record was released, and the license returned to its intended three-of-three state.</p>
+<div class="rlc-note"><strong>Engineering principle</strong><br>Do not hide an invariant violation in the interface. Fix the layer that allowed the invariant to break.</div>
+<p>The pilot also verified the practical lifecycle around the license: activation, reaching the device ceiling, rejecting an additional device, releasing an activation, reactivating when capacity becomes available, maintaining an offline-ready receipt, and recognizing a released activation when online verification resumes.</p>
+<h2 style="margin-top:58px">A RUNLU platform layer.</h2><p>RLC was born while testing RUNLU NEXT, but it is intentionally broader than one product. The foundation is designed to be reusable by future independently distributed RUNLU software, so each product does not need to invent its own licensing system.</p>
+<p>This public record describes capabilities and lessons, not security-sensitive implementation details. Internal identifiers, token construction, fingerprints, database structure, and operational secrets are intentionally omitted.</p>
+<p class="rlc-footer-note">RUNLU Engineering Record · Public milestone edition · September 2026</p>
+</div></section>
+</main>
+<script src="runlu-language.js"></script>
+</body></html>
