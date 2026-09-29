@@ -1,1 +1,4 @@
 .uPOJobs{display:flex;flex-wrap:wrap;gap:8px}.uPORow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px solid #e5e5e5}.uPORow:first-child{border-top:0}.uPORow b,.uPORow span{display:block}.uPORow span{font-size:12px;color:#666;margin-top:3px}@media(max-width:700px){.uPORow{align-items:flex-start;flex-direction:column}}
+
+/* Deerfoot-derived operator surface */
+.uPORow{background:#fff;border:1px solid #d7dfdb;border-radius:10px;padding:13px 12px;margin:8px 0}.uPORow:first-child{border-top:1px solid #d7dfdb}.uPORow b{color:#173d30}.uPORow span{color:#66736d}.uPOJobs button{border-radius:8px}#universalPO{max-width:1100px;margin:0 auto 12px}@media(max-width:700px){.uPORow{padding:11px 10px}}
