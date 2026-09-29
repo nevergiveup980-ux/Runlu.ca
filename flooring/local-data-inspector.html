@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-store"><title>RUNLU Local Data Inspector</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#173d30;background:#edf1ef}
+body{margin:0;padding:18px}.wrap{max-width:900px;margin:auto}.head{background:#173d30;color:white;border-radius:20px;padding:20px}
+h1{font-size:24px;margin:0 0 6px}.sub{opacity:.8;font-size:14px}.card{background:white;border-radius:18px;padding:16px;margin:14px 0;box-shadow:0 1px 6px #00000012}
+.row{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid #edf1ef}.row:last-child{border:0}.k{font-weight:700}.v{text-align:right;word-break:break-all}
+.good{color:#16734a}.warn{color:#a36200}.small{font-size:12px;color:#66736d}.pill{display:inline-block;background:#e7efe9;border-radius:999px;padding:5px 9px;margin:3px;font-size:12px}
+button{border:0;border-radius:12px;padding:12px 16px;background:#173d30;color:#fff;font-weight:700;font-size:15px}pre{white-space:pre-wrap;word-break:break-word;font-size:12px;background:#f6f7f6;padding:12px;border-radius:12px;max-height:260px;overflow:auto}
+</style></head><body><div class="wrap">
+<div class="head"><h1>RUNLU Local Data Inspector</h1><div class="sub">Read-only · nothing is deleted, changed, merged, or uploaded.</div></div>
+<div class="card"><div class="row"><span class="k">Origin</span><span class="v" id="origin"></span></div><div class="row"><span class="k">Run time</span><span class="v" id="time"></span></div><div class="row"><span class="k">Storage estimate</span><span class="v" id="quota">Checking…</span></div></div>
+<div class="card"><h2>LocalStorage</h2><div id="ls">Checking…</div></div>
+<div class="card"><h2>IndexedDB</h2><div id="idb">Checking…</div></div>
+<div class="card"><h2>Cache Storage</h2><div id="cache">Checking…</div></div>
+<div class="card"><h2>Service Worker</h2><div id="sw">Checking…</div></div>
+<div class="card"><h2>Known RUNLU database names</h2><div id="known"></div><p class="small">Presence is checked against browser-visible IndexedDB names where supported. No database is opened or modified.</p></div>
+<div class="card"><button onclick="location.reload()">Scan Again</button><p class="small">Take screenshots of this page and send them to me. Do not clear website data yet.</p></div>
+</div><script>
+const known=['runlu_inventory_v20','runlu_product_master_v21','runlu_inventory_records_v21','runlu_orders_v20','runlu_settings_v20','runlu_count_sessions_v30','runlu_receiving_v50','runlu_tasks_v50','runlu_special_orders_v51','runlu_local_snapshots_v515','runlu_data_protection_v515','runlu_operations_log_v52','runlu_health_history_v518','runlu_carpet_inventory_v52','runlu_cutting_log_v52','runlu_event_history_v52'];
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const row=(a,b)=>'<div class="row"><span class="k">'+esc(a)+'</span><span class="v">'+b+'</span></div>';
+document.querySelector('#origin').textContent=location.origin; document.querySelector('#time').textContent=new Date().toLocaleString();
+(async()=>{
+try{if(navigator.storage?.estimate){const e=await navigator.storage.estimate(); document.querySelector('#quota').textContent=((e.usage||0)/1048576).toFixed(2)+' MB used';}else document.querySelector('#quota').textContent='Not exposed by browser';}catch(e){document.querySelector('#quota').textContent='Unavailable';}
+try{let out=''; if(localStorage.length===0) out='<span class="good">No LocalStorage keys</span>'; for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i),v=localStorage.getItem(k)||''; out+=row(k,esc(v.length+' chars'));} document.querySelector('#ls').innerHTML=out;}catch(e){document.querySelector('#ls').innerHTML='<span class="warn">'+esc(e.message)+'</span>';}
+let dbs=[]; try{if(indexedDB.databases){dbs=await indexedDB.databases(); document.querySelector('#idb').innerHTML=dbs.length?dbs.map(d=>row(d.name||'(unnamed)',esc('v'+(d.version||'?')))).join(''):'<span class="good">No IndexedDB databases reported</span>';}else document.querySelector('#idb').innerHTML='<span class="warn">This browser does not expose the IndexedDB database list.</span>';}catch(e){document.querySelector('#idb').innerHTML='<span class="warn">'+esc(e.message)+'</span>';}
+document.querySelector('#known').innerHTML=known.map(n=>'<span class="pill">'+esc(n)+' · '+(dbs.some(d=>d.name===n)?'FOUND':'not reported')+'</span>').join('');
+try{if(window.caches){const ks=await caches.keys(); document.querySelector('#cache').innerHTML=ks.length?ks.map(k=>row(k,'FOUND')).join(''):'<span class="good">No Cache Storage names</span>';}else document.querySelector('#cache').innerHTML='Cache Storage API not exposed';}catch(e){document.querySelector('#cache').innerHTML='<span class="warn">'+esc(e.message)+'</span>';}
+try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations(); document.querySelector('#sw').innerHTML=rs.length?rs.map(r=>row(r.scope,esc(r.active?.scriptURL||r.installing?.scriptURL||r.waiting?.scriptURL||'registered'))).join(''):'<span class="good">No Service Worker registrations for this origin</span>';}else document.querySelector('#sw').innerHTML='Service Worker API not exposed';}catch(e){document.querySelector('#sw').innerHTML='<span class="warn">'+esc(e.message)+'</span>';}
+})();</script></body></html>
