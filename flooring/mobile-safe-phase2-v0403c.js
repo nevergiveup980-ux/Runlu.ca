@@ -68,7 +68,7 @@ function ensureLauncher(){
   const grid=document.querySelector('#command .grid3');if(!grid)return;
   const b=document.createElement('button');
   b.id=LAUNCHER;b.type='button';b.className='module';
-  b.innerHTML='<span class="ico">📦</span><strong>Warehouse Fulfillment</strong><small>V0.9.1 · Stock Picking + Carpet Cutting · load on tap.</small>';
+  b.innerHTML='<span class="ico">📦</span><strong>Warehouse Fulfillment</strong><small>Pick & cut work queue · use Warehouse for inventory records.</small>';
   b.addEventListener('click',launch);
   const wa=by('wa711module');wa?wa.insertAdjacentElement('afterend',b):grid.appendChild(b)
 }
