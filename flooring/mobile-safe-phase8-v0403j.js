@@ -10,9 +10,9 @@ function ensureLauncher(){
   if(typeof document==='undefined'||document.querySelector('[data-runlu-mobile-safe-phase8]'))return;
   const b=document.createElement('button');
   b.type='button';b.textContent='Installer Workload';b.setAttribute('data-runlu-mobile-safe-phase8','');
-  b.style.cssText='min-height:48px;font-size:16px;padding:10px 14px;border-radius:10px';
+  b.className=host?.classList?.contains('grid3')?'module':'';b.style.cssText='min-height:48px;font-size:16px;padding:10px 14px;border-radius:10px';
   b.addEventListener('click',launch);
-  const host=document.querySelector('[data-runlu-mobile-safe-launchers]')||document.body;
+  const host=document.querySelector('#command .grid3')||document.querySelector('[data-runlu-mobile-safe-launchers]')||document.querySelector('#command')||document.body;
   if(host)host.appendChild(b);
 }
 function install(){ensureLauncher()}
