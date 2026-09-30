@@ -3,9 +3,11 @@ import WebKit
 
 struct NextWebView: UIViewRepresentable {
     let url: URL
+    let reloadToken: UUID
 
     final class Coordinator: NSObject, WKNavigationDelegate {
         var parent: NextWebView
+        var lastReloadToken: UUID?
         init(_ parent: NextWebView) { self.parent = parent }
 
         func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
@@ -41,8 +43,10 @@ struct NextWebView: UIViewRepresentable {
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
-        guard webView.url == nil else { return }
-        webView.load(URLRequest(url: url, cachePolicy: .reloadRevalidatingCacheData))
+        if context.coordinator.lastReloadToken != reloadToken {
+            context.coordinator.lastReloadToken = reloadToken
+            webView.load(URLRequest(url: url, cachePolicy: .reloadRevalidatingCacheData))
+        }
     }
 }
 
