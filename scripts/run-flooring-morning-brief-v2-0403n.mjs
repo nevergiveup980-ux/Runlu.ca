@@ -1,0 +1,12 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const p=fs.readFileSync(new URL('../flooring/index-v098-dispatch-morning-preview.html',import.meta.url),'utf8');
+assert(p.includes('Morning Brief V2'));
+assert(p.includes('radar, not an operating desk'));
+assert(p.includes('use Pickup for supplier receiving'));
+assert(p.includes('Operations for installation execution'));
+assert(!p.includes('id="ws97workload"'));
+assert(!p.includes('id="ws96board"'));
+assert(p.includes('id="ws98todayInstalls"'));
+assert(p.includes('id="ws98material"'));
+assert(p.includes('id="ws98gaps"'));
+console.log('PASS Morning Brief V2 boundary: exceptions retained, duplicate operating detail removed');
