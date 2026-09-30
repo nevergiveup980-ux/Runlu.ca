@@ -15,6 +15,12 @@ struct NextWebView: UIViewRepresentable {
         }
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+#if DEBUG
+            if let rawOffset = ProcessInfo.processInfo.environment["RUNLU_SCREENSHOT_Y"],
+               let offset = Int(rawOffset), offset > 0 {
+                webView.evaluateJavaScript("window.scrollTo({top: \(offset), behavior: 'instant'});")
+            }
+#endif
             NotificationCenter.default.post(name: .nextLoadingChanged, object: false)
         }
 
