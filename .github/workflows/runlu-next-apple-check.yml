@@ -59,14 +59,14 @@ jobs:
           mkdir -p "$RUNNER_TEMP/runlu-next-screenshots"
           xcrun simctl io "$UDID" screenshot "$RUNNER_TEMP/runlu-next-screenshots/01-next-home.png"
 
-          # Real simulator interaction: swipe through NEXT and capture product sections.
-          xcrun simctl io "$UDID" swipe 410 1450 410 650 0.8
-          sleep 2
-          xcrun simctl io "$UDID" screenshot "$RUNNER_TEMP/runlu-next-screenshots/02-next-middle.png"
-
-          xcrun simctl io "$UDID" swipe 410 1450 410 500 0.8
-          sleep 2
-          xcrun simctl io "$UDID" screenshot "$RUNNER_TEMP/runlu-next-screenshots/03-next-planning.png"
+          for SPEC in "02-next-middle.png:650" "03-next-planning.png:1300"; do
+            FILE="${SPEC%%:*}"
+            Y="${SPEC##*:}"
+            xcrun simctl terminate "$UDID" ca.runlu.next || true
+            SIMCTL_CHILD_RUNLU_SCREENSHOT_Y="$Y" xcrun simctl launch "$UDID" ca.runlu.next
+            sleep 5
+            xcrun simctl io "$UDID" screenshot "$RUNNER_TEMP/runlu-next-screenshots/$FILE"
+          done
 
           xcrun simctl terminate "$UDID" ca.runlu.next
           xcrun simctl launch "$UDID" ca.runlu.next
