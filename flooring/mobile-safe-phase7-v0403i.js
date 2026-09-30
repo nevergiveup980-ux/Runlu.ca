@@ -21,11 +21,12 @@ function load(){
   });
   return loadPromise
 }
-async function launch(){
+function launch(){
   try{
-    await load();
-    root.open('index-v096-week-schedule-preview.html?v=0403i-safe','_blank','noopener');
-  }catch(e){console.error(e);try{root.alert('Week Schedule could not be opened. Core remains unchanged.')}catch(_){}}
+    const w=root.open('index-v096-week-schedule-preview.html?v=0403i-safe','_blank','noopener');
+    if(!w)throw new Error('Week Schedule preview was blocked');
+    return true;
+  }catch(e){console.error(e);try{root.alert('Week Schedule could not be opened. Core remains unchanged.')}catch(_){}return false}
 }
 function ensureLauncher(){
   const d=doc();if(!d||d.querySelector('[data-runlu-v0396-week-schedule]'))return;
