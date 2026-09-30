@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E098 Interaction Failure",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "failure_mode",
+    "mechanism",
+    "source_a",
+    "source_b",
+    "status",
+    "admission_basis",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "failure_mode": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mechanism": {
+      "type": "string",
+      "enum": [
+        "SINGLE_LAYER",
+        "CONJUNCTIVE",
+        "DISJUNCTIVE",
+        "CROSS_LAYER"
+      ]
+    },
+    "source_a": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_b": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "INTERACTION_DEPENDENT",
+        "NO_RELEVANT_DECLARED_INTERACTION",
+        "INTERACTION_MODEL_UNRESOLVED"
+      ]
+    },
+    "admission_basis": {
+      "type": "string",
+      "enum": [
+        "CAUSAL_DERIVATION",
+        "ARCHITECTURE_PATH",
+        "REPRODUCIBLE_FIXTURE",
+        "EMPIRICAL_OBSERVATION",
+        "UNRESOLVED"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e098-v1"
+    }
+  }
+}
