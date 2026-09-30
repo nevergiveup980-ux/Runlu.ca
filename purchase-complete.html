@@ -32,6 +32,14 @@
         <button id="runluGetDownload" class="button primary" type="button" style="margin-top:14px;width:100%" data-en="Verify purchase & get download" data-zh="验证购买并获取下载" data-fr="Vérifier l’achat et télécharger" data-es="Verificar compra y descargar">Verify purchase & get download</button>
         <p id="runluDownloadStatus" role="status" aria-live="polite" style="margin:14px 0 0;color:#535a53"></p>
       </div>
+      <div style="margin:28px 0;padding:24px;border:1px solid rgba(23,25,21,.12);border-radius:20px;background:#fff">
+        <h2 style="margin-top:0" data-en="Keep it in your RUNLU Account" data-zh="保存到你的 RUNLU 账户" data-fr="Conservez-le dans votre compte RUNLU" data-es="Guárdalo en tu cuenta RUNLU">Keep it in your RUNLU Account</h2>
+        <p data-en="An account is not required for this download. Create one or sign in to link this RUNLU-direct purchase to your Library for easier access later." data-zh="本次下载不强制要求账户。你可以创建账户或登录，把这笔 RUNLU 直购记录关联到资料库，方便以后访问。" data-fr="Un compte n’est pas obligatoire pour ce téléchargement. Créez-en un ou connectez-vous pour lier cet achat direct RUNLU à votre bibliothèque." data-es="No necesitas una cuenta para esta descarga. Crea una o inicia sesión para vincular esta compra directa de RUNLU a tu biblioteca.">An account is not required for this download. Create one or sign in to link this RUNLU-direct purchase to your Library for easier access later.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a id="runluCreateAccount" class="button primary" href="account.html" data-en="Create account" data-zh="创建账户" data-fr="Créer un compte" data-es="Crear cuenta">Create account</a>
+          <a id="runluSignIn" class="button secondary" href="account.html" data-en="Sign in" data-zh="登录" data-fr="Se connecter" data-es="Iniciar sesión">Sign in</a>
+        </div>
+      </div>
       <h2 data-en="Need help?" data-zh="需要帮助？" data-fr="Besoin d’aide ?" data-es="¿Necesitas ayuda?">Need help?</h2>
       <p data-en="For product or download support, contact hello@runlu.ca and include the email address used at checkout." data-zh="如需产品或下载支持，请联系 hello@runlu.ca，并附上结账时使用的邮箱地址。" data-fr="Pour toute aide concernant le produit ou le téléchargement, contactez hello@runlu.ca et indiquez l’adresse e-mail utilisée lors du paiement." data-es="Para ayuda con el producto o la descarga, escribe a hello@runlu.ca e incluye la dirección de correo usada en el pago.">For product or download support, contact hello@runlu.ca and include the email address used at checkout.</p>
       <p><a class="text-link" href="digital.html" data-en="Return to RUNLU DIGITAL →" data-zh="返回 RUNLU DIGITAL →" data-fr="Retour à RUNLU DIGITAL →" data-es="Volver a RUNLU DIGITAL →">Return to RUNLU DIGITAL →</a></p>
@@ -42,6 +50,14 @@
     const endpoint="https://ekrnknlawekeoszzkamd.supabase.co/functions/v1/runlu-digital-download";
     const qs=new URLSearchParams(location.search), session=qs.get("session_id")||qs.get("session")||localStorage.getItem("runlu-last-checkout-session")||"";
     const btn=document.getElementById("runluGetDownload"), email=document.getElementById("runluPurchaseEmail"), status=document.getElementById("runluDownloadStatus");
+    const createAccount=document.getElementById("runluCreateAccount"), signIn=document.getElementById("runluSignIn");
+    const accountUrl=()=>{
+      const p=new URLSearchParams();
+      if(session){p.set("checkout","success");p.set("session_id",session)}
+      return "account.html"+(p.toString()?"?"+p.toString():"");
+    };
+    if(createAccount){createAccount.href=accountUrl()+"#create-account"}
+    if(signIn){signIn.href=accountUrl()+"#sign-in"}
     const msg={
       en:{need:"This purchase page needs your Stripe Checkout session link. Open it from the payment confirmation redirect.",working:"Verifying your purchase…",bad:"We could not verify that purchase. Check the checkout email, or contact hello@runlu.ca.",ready:"Verified. Your private download link is ready for five minutes.",download:"Download"},
       zh:{need:"这个购买完成页需要 Stripe Checkout 会话信息。请从付款成功后的跳转页面进入。",working:"正在验证购买…",bad:"暂时无法验证这笔购买。请检查结账邮箱，或联系 hello@runlu.ca。",ready:"验证成功。私密下载链接将在五分钟内有效。",download:"下载"}
