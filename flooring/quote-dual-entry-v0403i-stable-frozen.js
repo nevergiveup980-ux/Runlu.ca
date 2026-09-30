@@ -115,7 +115,7 @@ const api={VERSION,JOBS,ACTIVE,GST_DEFAULT,str,num,round2,money,blankLine,uiBlan
 root.RUNLUQuoteV0403=api;
 if(typeof document==='undefined')return;
 
-let jobs=[],activeId='',draft=normalizeQuote(),mode='fields',dirty=false;
+let jobs=[],activeId='',draft=normalizeQuote(),mode='table',dirty=false;
 const by=id=>document.getElementById(id);
 const touchIOS=(()=>{const ua=navigator.userAgent||'';return /iPhone|iPad|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)})();
 if(touchIOS)mode='table';
