@@ -1,0 +1,20 @@
+name: Flooring Mixed Source Reconciliation V0.4.06
+on:
+  pull_request:
+    paths:
+      - 'flooring/mixed-source-po-v0406.js'
+      - 'flooring/index-v0406-mixed-source-reconciliation-preview.html'
+      - 'scripts/run-flooring-mixed-source-po-v0406.mjs'
+      - '.github/workflows/flooring-mixed-source-po-v0406.yml'
+  workflow_dispatch:
+jobs:
+  mixed-source-reconciliation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.4.06 execution reconciliation, routing and write-boundary gates
+        run: node scripts/run-flooring-mixed-source-po-v0406.mjs

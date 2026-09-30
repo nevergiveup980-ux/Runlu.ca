@@ -1,0 +1,20 @@
+name: Flooring Mixed Source Execution V0.4.05
+on:
+  pull_request:
+    paths:
+      - 'flooring/mixed-source-po-v0405.js'
+      - 'flooring/index-v0405-mixed-source-execution-preview.html'
+      - 'scripts/run-flooring-mixed-source-po-v0405.mjs'
+      - '.github/workflows/flooring-mixed-source-po-v0405.yml'
+  workflow_dispatch:
+jobs:
+  mixed-source-execution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.4.05 routing, hold, supplier-task and write-scope gates
+        run: node scripts/run-flooring-mixed-source-po-v0405.mjs
