@@ -52,3 +52,20 @@ Run these checks on a signed iPhone build before this PR can leave Draft:
 
 ### Storage boundary
 WKWebView uses a persistent website data store inside the app, so data created inside RUNLU NEXT App should persist between app launches. Safari's existing localStorage is a separate browser container and must not be assumed to migrate automatically into the app. V0.1 therefore tests persistence first; any Safari-to-App migration will be designed explicitly rather than guessed.
+
+
+## Mac → iPhone first-run path
+
+Use branch `runlu-next-apple-v0.1`.
+
+1. Open `apple/RUNLUNext.xcodeproj` in Xcode.
+2. Select the `RUNLUNext` target → Signing & Capabilities.
+3. Keep Automatically manage signing enabled and choose the RUNLU/Apple developer Team available on the Mac.
+4. Connect the iPhone (or use a trusted wireless device) and select it as the run destination.
+5. Before the first device run, place the approved classic icon PNG at:
+   `apple/RUNLUNext/Assets.xcassets/AppIcon.appiconset/RUNLUNext-1024.png`
+6. Press Run.
+7. Complete the V0.1 physical-device acceptance gate below.
+8. Keep PR #262 in Draft until device acceptance passes.
+
+If Xcode reports that `ca.runlu.next` is unavailable to the selected Team, change only PRODUCT_BUNDLE_IDENTIFIER to an available RUNLU identifier; do not alter the web engine or production site.
