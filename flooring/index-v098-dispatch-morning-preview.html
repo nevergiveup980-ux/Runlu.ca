@@ -13,10 +13,10 @@
 </head>
 <body>
 <main class="ws96shell">
-  <header class="ws96top"><div><h1>RUNLU Deerfoot Flooring OS · Week Schedule</h1><p>V0.3.98 isolated Preview · Dispatch Morning + weekly schedule + installer workload + conservative conflict warnings · demo fallback only when no schedule task can be read.</p></div><div class="ws96pill">READ ONLY</div></header>
+  <header class="ws96top"><div><h1>RUNLU Deerfoot Flooring OS · Week Schedule</h1><p>V0.3.98 isolated Preview · Morning Brief V2 · exception radar only. Detailed weekly schedule and installer workload stay in their dedicated views.</p></div><div class="ws96pill">READ ONLY</div></header>
   <section class="ws96card"><div id="ws96source" class="ws96source"></div><div id="ws96demoNote" class="ws96demoNote" hidden><b>DEMO FALLBACK:</b> no parseable dated schedule task was found in this browser. Every fallback task is explicitly marked DEMO and is never stored.</div><div class="ws96rule"><b>Safety boundary:</b> this Preview only reads existing browser-local order / calendar / PO data. It contains no save, drag, update, inventory, PO-status or database write path.</div></section>
   <section class="ws98dispatch">
-    <div class="ws98dispatchHead"><div><h2 id="ws98dispatchTitle">Dispatch Morning</h2><p>Read-only daily operating snapshot: scheduled installation assignments, timed overlaps, material attention, roster members with no installation assignment, and near-term schedule gaps.</p></div><div class="ws98dispatchNav"><button id="ws98dispatchPrev">← Day</button><button id="ws98dispatchToday">Today</button><button id="ws98dispatchNext">Day →</button><input id="ws98dispatchDate" type="date" aria-label="Dispatch date"></div></div>
+    <div class="ws98dispatchHead"><div><h2 id="ws98dispatchTitle">Dispatch Morning</h2><p>Read-only exception radar: what needs attention today. Detailed Pickup, Operations, Week Schedule and Installer Workload remain in their dedicated modules.</p></div><div class="ws98dispatchNav"><button id="ws98dispatchPrev">← Day</button><button id="ws98dispatchToday">Today</button><button id="ws98dispatchNext">Day →</button><input id="ws98dispatchDate" type="date" aria-label="Dispatch date"></div></div>
     <div id="ws98dispatchStats" class="ws98dispatchStats"></div>
     <div class="ws98dispatchGrid">
       <div class="ws98panel"><h3>Today's Installation Assignments</h3><div id="ws98todayInstalls" class="ws98panelBody"></div></div>
@@ -26,13 +26,7 @@
     </div>
     <div class="ws98dispatchNote"><b>Interpretation boundary:</b> “No Installation Assigned” means only that this schedule has no installation assignment for that rostered installer on the selected date. It does not claim the person is available, on-site, working, or not working. Material status is based only on linked Flooring PO status; “No linked PO” stays unknown instead of being guessed ready.</div>
   </section>
-  <section class="ws96card">
-    <div class="ws96toolbar"><div class="ws96nav"><button id="ws96prev">← Previous</button><button id="ws96today">Today</button><button id="ws96next">Next →</button><span id="ws96range" class="ws96range"></span></div><div class="ws96actions"><select id="ws96person"></select><select id="ws96density" aria-label="Schedule density"><option value="auto">Density: Auto</option><option value="comfortable">Comfortable</option><option value="compact">Compact</option><option value="dense">Dense</option></select><input id="ws96q" placeholder="Search job, customer, person, PO…"><button id="ws96all">All types</button><button id="ws96none">Clear</button></div></div>
-    <div id="ws96types" class="ws96types"></div><div id="ws96stats" class="ws96stats"></div>
-    <div class="ws97workCard"><div class="ws97workHead"><div><h3>Installer Workload</h3><p>Whole-week installation assignment view. Timed overlap = both single-day jobs have explicit overlapping start/end times. Check = same installer/day but time is incomplete or a multi-day job occupies that date.</p></div><div id="ws97workloadSummary" class="ws97workSummary"></div></div><div class="ws97workWrap"><div id="ws97workload"></div></div><div class="ws97legend"><b>Read-only advisory:</b> workload counts task-days. Known hours are shown only when both start and end times are explicit. The system does not invent working hours for multi-day or untimed jobs.</div></div>
-    <div class="ws96mobileHint">Phone: swipe the workload or schedule left/right. Today jumps to the current day. Density changes are Preview-only and are not saved.</div>
-    <div id="ws96scroll" class="ws96scroll"><div id="ws96board" class="ws96board"></div></div>
-  </section>
+  <section class="ws96card"><div class="ws96rule"><b>Morning Brief V2:</b> this page is a radar, not an operating desk. It summarizes exceptions only; use Pickup for supplier receiving, Operations for installation execution, Week Schedule for calendar detail, and Installer Workload for capacity detail.</div></section>
 </main>
 <div id="ws96modal" class="ws96modal" aria-hidden="true"><div class="ws96box"><div class="ws96boxHead"><b>Task Detail · Read Only</b><button id="ws96close" aria-label="Close">×</button></div><div id="ws96detail" class="ws96detail"></div></div></div>
 <script src="week-schedule-v098-safe.js?v=0403k-safe"></script>
