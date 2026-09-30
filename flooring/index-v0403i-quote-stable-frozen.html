@@ -20,7 +20,7 @@
   <a class="active" href="index-v0403i-quote-stable-frozen.html?mobile=top&t=0403i-frozen">Quote</a>
 </nav>
 <main class="q403shell">
-  <header class="q403top"><div><h1>RUNLU Deerfoot Flooring OS · Quote</h1><p>V0.4.03i production Quote · Deerfoot-style Quote replica · Database Fields + direct Quote Form Entry share one draft and one Job-bound quote record.</p></div><div><span class="q403badge">JOB-BOUND QUOTE</span><div id="q403TopLevelBadge" class="q403topLevelBadge">TOP-LEVEL iPHONE QUOTE · NO IFRAME · V0.4.03i</div></div></header>
+  <header class="q403top"><div><h1>RUNLU Deerfoot Flooring OS · Quote</h1><p>V0.4.03i production Quote · Deerfoot-style Quote replica · Dual Entry · Quote Form Entry and Database Fields are equal editing views of one draft and one Job-bound quote record. This device remembers the last mode used.</p></div><div><span class="q403badge">JOB-BOUND QUOTE</span><div id="q403TopLevelBadge" class="q403topLevelBadge">TOP-LEVEL iPHONE QUOTE · NO IFRAME · V0.4.03i</div></div></header>
   <section class="q403card">
     <div class="q403jobbar"><label><span>Active Flooring Job</span><select id="q403job"></select></label><button id="q403new">+ New Draft Job</button><button id="q403save" class="primary">Save Quote to Job</button><button id="q403print">Print / Save PDF</button></div>
     <div id="q403jobStatus" class="q403jobStatus"></div>
@@ -28,7 +28,7 @@
     <div class="q403writeNotice"><b>Write boundary:</b> unlike the scheduling Preview, this Quote module is intentionally write-enabled only for the selected Flooring Job record in browser-local storage. It does not write inventory, PO status, calendar, warehouse data, Supabase, or any network service.</div>
   </section>
   <section class="q403card">
-    <div class="q403tabs"><button data-q403-mode="fields" class="active">Database Fields</button><button data-q403-mode="table">Quote Form Entry</button><span id="q403dirty" class="q403dirty">Draft not saved</span></div>
+    <div class="q403tabs"><button data-q403-mode="table">Quote Form Entry</button><button data-q403-mode="fields">Database Fields</button><span id="q403dirty" class="q403dirty">Draft not saved</span></div>
     <div id="q403fields"></div>
     <div id="q403table" hidden></div>
   </section>
