@@ -1,0 +1,10 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const js=fs.readFileSync(new URL('../flooring/quote-dual-entry-v0403i-stable-frozen.js',import.meta.url),'utf8');
+const html=fs.readFileSync(new URL('../flooring/index-v0403i-quote-stable-frozen.html',import.meta.url),'utf8');
+assert(js.includes("mode='table'"),'Quote defaults to direct paper form entry');
+assert(js.includes("if(mode==='table')renderPaperForm()"),'paper editor remains the table/form mode');
+assert(js.includes("draft=ensureTableRows(draft)"),'paper mode still ensures editable rows');
+assert(html.includes('data-q403-mode="fields"')&&html.includes('data-q403-mode="table"'),'both editing modes remain available');
+assert(html.includes('quote-dual-entry-v0403i-stable-frozen.js?v=0403i-frozen'),'frozen Quote wiring remains unchanged');
+assert(js.includes("setItem(JOBS_KEY"),'existing Job-bound save path remains present');
+console.log('PASS Quote defaults to direct paper entry; database fields and save path preserved');
