@@ -3,33 +3,55 @@ import SwiftUI
 struct ContentView: View {
     @State private var isLoading = true
     @State private var loadError: String?
+    @State private var reloadToken = UUID()
+    @State private var showLaunch = true
 
     private let nextURL = URL(string: "https://runlu.ca/next.html")!
 
     var body: some View {
         NavigationStack {
             ZStack {
-                NextWebView(url: nextURL)
+                NextWebView(url: nextURL, reloadToken: reloadToken)
 
-                if isLoading {
+                if isLoading && !showLaunch {
                     ProgressView("Opening NEXT…")
                         .padding(18)
                         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
                 }
 
-                if let loadError {
+                if let loadError, !showLaunch {
                     ContentUnavailableView {
                         Label("NEXT is offline", systemImage: "wifi.slash")
                     } description: {
-                        Text("Your existing NEXT data remains on this device. Reconnect and reopen the app.\n\n" + loadError)
+                        Text("Your existing NEXT data remains on this device. Reconnect, then try again.")
+                    } actions: {
+                        Button("Try Again") {
+                            self.loadError = nil
+                            self.isLoading = true
+                            self.reloadToken = UUID()
+                        }
+                        .buttonStyle(.borderedProminent)
                     }
                     .padding()
                     .background(.background)
                 }
+
+                if showLaunch {
+                    LaunchView()
+                        .transition(.opacity)
+                        .zIndex(10)
+                }
             }
             .ignoresSafeArea(edges: .bottom)
-            .navigationTitle("NEXT")
+            .navigationTitle(showLaunch ? "" : "NEXT")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar(showLaunch ? .hidden : .visible, for: .navigationBar)
+        }
+        .task {
+            try? await Task.sleep(for: .milliseconds(850))
+            withAnimation(.easeOut(duration: 0.28)) {
+                showLaunch = false
+            }
         }
         .onReceive(NotificationCenter.default.publisher(for: .nextLoadingChanged)) { note in
             if let value = note.object as? Bool {
