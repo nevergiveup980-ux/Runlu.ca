@@ -63,6 +63,7 @@
     const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'link_purchase_by_session',session_id:sessionId})});
     const payload=await res.json().catch(()=>({}));
     if(!res.ok||!payload.ok)return false;
+    try { sessionStorage.removeItem('runlu-pending-checkout-session'); } catch (_) {}
     const clean=window.location.pathname+'?checkout=success#orders';
     window.history.replaceState({},'',clean);
     return true;
