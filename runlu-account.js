@@ -177,6 +177,8 @@
     }
   }
 
+  if (window.location.hash === '#create-account') setMode('signup');
+  else if (window.location.hash === '#sign-in') setMode('signin');
   el.signInTab.addEventListener('click',()=>setMode('signin'));
   el.signUpTab.addEventListener('click',()=>setMode('signup'));
   el.languageSelect.addEventListener('change',e=>applyLanguage(e.target.value));
