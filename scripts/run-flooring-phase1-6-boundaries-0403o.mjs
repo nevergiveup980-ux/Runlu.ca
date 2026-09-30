@@ -1,0 +1,11 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const read=n=>fs.readFileSync(new URL('../flooring/'+n,import.meta.url),'utf8');
+const p1=read('mobile-safe-phase1-v0403b.js'),p2=read('mobile-safe-phase2-v0403c.js'),p3=read('mobile-safe-phase3-v0403d.js'),p4=read('mobile-safe-phase4-v0403e.js'),p5=read('mobile-safe-phase5-v0403f.js'),p6=read('mobile-safe-phase6-v0403h.js');
+assert(p1.includes("pricing:{src:")&&p1.includes("management:{src:")&&p1.includes("history:{src:"));
+assert(p2.includes('Pick & cut work queue')&&p2.includes('use Warehouse for inventory records'));
+assert(p3.includes('Route saved Job lines only')&&p3.includes('execution stays in Warehouse / Operations / PO'));
+assert(p4.includes('RC registry & roll identity')&&p4.includes('inventory movement stays in Warehouse'));
+assert(p5.includes('Job-line roll sufficiency check')&&p5.includes('no inventory movement here'));
+assert(p6.includes('Sales follow-up routing only')&&p6.includes('Pickup remains the receiving desk'));
+for(const p of [p2,p3,p4,p5,p6])assert(p.includes("startup:'launcher-only'"));
+console.log('PASS Phase 1-6 entry boundaries: one job per launcher, lazy startup preserved');
