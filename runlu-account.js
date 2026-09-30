@@ -17,6 +17,21 @@
     } catch (_) { return ''; }
   })();
   const initialRecoveryHint = hashParams.get('type') === 'recovery' || queryParams.get('type') === 'recovery' || queryParams.get('recovery') === '1';
+  const checkoutSessionKey = 'runlu-pending-checkout-session';
+  const incomingCheckoutSession = String(queryParams.get('session_id') || '').trim();
+  if (queryParams.get('checkout') === 'success' && incomingCheckoutSession) {
+    try { sessionStorage.setItem(checkoutSessionKey, incomingCheckoutSession); } catch (_) {}
+  } else {
+    try {
+      const pending = String(sessionStorage.getItem(checkoutSessionKey) || '').trim();
+      if (pending && !initialRecoveryHint) {
+        const restored = new URL(window.location.href);
+        restored.searchParams.set('checkout', 'success');
+        restored.searchParams.set('session_id', pending);
+        window.history.replaceState({}, '', restored.pathname + restored.search + restored.hash);
+      }
+    } catch (_) {}
+  }
 
   if (!window.supabase?.createClient) return;
 
