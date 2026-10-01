@@ -1,0 +1,14 @@
+'use strict';
+const fs=require('fs'),path=require('path'),root=path.resolve(__dirname,'..'),html=fs.readFileSync(path.join(root,'index.html'),'utf8');let failed=0;
+const ok=(n,c)=>{console.log((c?'PASS ':'FAIL ')+n);if(!c)failed++};
+const scripts=[...html.matchAll(/<script[^>]+src="([^"]+)"/g)].map(x=>x[1].split('?')[0].replace(/^\.\//,''));
+ok('Universal runtime scripts loaded',scripts.length>=30);
+const expected=['universal-data-adapter.js','universal-startup-guard.js','universal-sales.js','universal-po.js','universal-inbound.js','universal-warehouse.js','universal-installation.js','universal-billing.js','universal-accounting.js','universal-support-center.js','universal-shell.js'];
+ok('Critical runtime scripts present',expected.every(x=>scripts.includes(x)));
+ok('Data adapter loads before business modules',scripts.indexOf('universal-data-adapter.js')<scripts.indexOf('universal-sales.js'));
+ok('Startup guard loads before shell boot',scripts.indexOf('universal-startup-guard.js')<scripts.indexOf('universal-shell.js'));
+ok('Business modules load before shell boot',['universal-sales.js','universal-po.js','universal-inbound.js','universal-installation.js','universal-billing.js','universal-accounting.js'].every(x=>scripts.indexOf(x)<scripts.indexOf('universal-shell.js')));
+for(const id of ['saveSetup','command','universalToday','openUniversalSales','openUniversalPO','openUniversalInbound','openUniversalWarehouse','openUniversalInstallation','openUniversalBilling','openUniversalAccounting'])ok('DOM contract #'+id,new RegExp('id=["\\\']'+id+'["\\\']').test(html));
+ok('Workspace verification remains enforced',fs.readFileSync(path.join(root,'universal-shell.js'),'utf8').includes('Workspace verification failed'));
+ok('Startup guard can block workspace changes',fs.readFileSync(path.join(root,'universal-shell.js'),'utf8').includes('Startup Recovery Guard has paused workspace changes'));
+if(failed){console.error('\nUniversal browser contract failed: '+failed);process.exit(1)}console.log('\nUniversal browser contract: PASS');
