@@ -119,3 +119,13 @@
 .editorial-motto-quote{margin:0 auto;max-width:940px;font-size:clamp(1.72rem,3.4vw,3.25rem);line-height:1.28;letter-spacing:-.032em;font-weight:500;text-wrap:balance}
 .editorial-motto-signature{margin:30px 0 0;color:var(--muted);font-size:.78rem;font-weight:600;letter-spacing:.18em}
 @media(max-width:860px){.editorial-motto-section{padding-top:68px;padding-bottom:68px}.editorial-motto-quote{font-size:clamp(1.55rem,7vw,2.35rem);line-height:1.34}.editorial-motto-signature{margin-top:24px}}
+
+
+/* Homepage READ / BUILD path experiment */
+.hero-paths{display:flex;align-items:center;justify-content:center;gap:22px;margin-top:28px}
+.hero-path{display:inline-flex;align-items:center;justify-content:center;min-width:132px;padding:10px 4px;color:inherit;text-decoration:none;font-size:.82rem;font-weight:600;letter-spacing:.18em;transition:opacity .2s ease,transform .2s ease}
+.hero-path:hover{opacity:.68;transform:translateY(-1px)}
+.hero-path-divider{width:1px;height:24px;background:currentColor;opacity:.22}
+.hero-actions-secondary{margin-top:12px}
+.hero-actions-secondary .button{opacity:.78}
+@media(max-width:640px){.hero-paths{gap:15px;margin-top:24px}.hero-path{min-width:108px;font-size:.76rem;letter-spacing:.14em}.hero-path-divider{height:20px}.hero-actions-secondary{margin-top:10px}}
