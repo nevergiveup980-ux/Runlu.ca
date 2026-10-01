@@ -1,0 +1,8 @@
+const fs=require('fs'),path=require('path'),root=path.resolve(__dirname,'..'),read=n=>fs.readFileSync(path.join(root,n),'utf8');const html=read('index.html');let failed=0;function ok(n,c){console.log((c?'PASS ':'FAIL ')+n);if(!c)failed++}
+ok('Today action view exists',html.includes('TODAY · ACTION NEEDED')&&html.includes('universalToday'));
+ok('Seven lifecycle modules represented',['Sales & Jobs','Supplier Orders','Receiving','Warehouse','Installation','Customer Billing','Accounting'].every(x=>html.includes(x)));
+ok('Priority logic covers exception/review/partial',/exception\|attention\|review\|partial/.test(html));
+ok('Direct navigation focus exists',html.includes('todayFocus')&&html.includes('ACTION NEEDED'));
+for(const [file,cls] of [['universal-sales.js','uJobCard'],['universal-po.js','uPORow'],['universal-inbound.js','uInbound'],['universal-warehouse.js','uWHRow'],['universal-installation.js','uInstall'],['universal-billing.js','uBill'],['universal-accounting.js','uAcct']]){const s=read(file);ok(file+' runtime API',s.includes('window.RUNLUUniversal'));ok(file+' record identity',s.includes('data-record-id='));ok(file+' record status',s.includes('data-record-status='))}
+ok('Sales quote state exposed',read('universal-sales.js').includes('data-quote-status='));
+if(failed){console.error('\nUniversal lifecycle acceptance failed: '+failed);process.exit(1)}console.log('\nUniversal lifecycle acceptance: PASS');
