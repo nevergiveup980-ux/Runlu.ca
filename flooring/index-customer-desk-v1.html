@@ -3,7 +3,7 @@
 const pp=document.getElementById('pickerPanel'),ps=document.getElementById('pickerSearch'),pr=document.getElementById('pickerResults');
 document.getElementById('picker').onclick=()=>{pp.classList.remove('hidden');ps.value='';drawPicker('');ps.focus()};
 document.getElementById('pickerClose').onclick=()=>pp.classList.add('hidden');
-function drawPicker(q){const rows=window.RUNLUCustomerMasterV1.pickCustomer(q);pr.innerHTML=rows.map(c=>'<div class="card" data-pick="'+c.id+'"><b>'+c.name+'</b><div>'+c.phone+' '+c.email+'</div><div class="muted">'+c.address+'</div></div>').join('')||'<div class="muted">No matching customers on this Desk.</div>'}
+function drawPicker(q){const rows=window.RUNLUCustomerMasterV1.pickCustomer(q);pr.innerHTML=rows.map(c=>'<div class="card" data-pick="'+c.id+'"><b>'+c.name+'</b><div>'+c.phone+' '+c.email+'</div><div class="muted">'+c.address+'</div></div>').join('')||'<div class="muted">No matching customers on this Desk.</div>'+(q?'<button id="pickerNew">Create New Customer</button>':'');const n=document.getElementById('pickerNew');if(n)n.onclick=()=>{pp.classList.add('hidden');document.getElementById('new').click()}}
 ps.oninput=()=>drawPicker(ps.value);
 pr.onclick=e=>{const x=e.target.closest('[data-pick]');if(!x)return;const c=window.RUNLUCustomerMasterV1.pickCustomer().find(v=>v.id===x.dataset.pick);window.dispatchEvent(new CustomEvent('runlu:customer-picked',{detail:c}));pp.classList.add('hidden')};
 </script></body></html>
