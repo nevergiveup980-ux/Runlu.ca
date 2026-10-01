@@ -17,17 +17,18 @@ const disclosureJs = fs.readFileSync('runlu-account-disclosure.js', 'utf8');
 const disclosureCss = fs.readFileSync('runlu-account-disclosure.css', 'utf8');
 const profileCss = fs.readFileSync('runlu-account-profile.css', 'utf8');
 const home = fs.readFileSync('index.html', 'utf8');
+const purchaseComplete = fs.readFileSync('purchase-complete.html', 'utf8');
 
 function requireToken(source, token, message) {
   if (!source.includes(token)) throw new Error(message);
 }
 
-requireToken(html, 'noindex,nofollow', 'Account pilot must remain noindex/nofollow until public launch.');
+requireToken(html, 'index,follow', 'Public Account page must be indexable after launch.');
 requireToken(html, 'no-cache, no-store, must-revalidate', 'Account pilot cache hardening is missing.');
 requireToken(html, 'runlu-account.css?v=4', 'Account page is not loading the base CSS build.');
 requireToken(html, 'runlu-account-store.css?v=2', 'Account Store preview CSS is missing.');
-requireToken(html, 'runlu-account.js?v=10', 'Account page is not loading the current core JS build.');
-requireToken(html, 'runlu-account-commerce.js?v=1', 'Account commerce-history reader is missing.');
+requireToken(html, 'runlu-account.js?v=12', 'Account page is not loading the public-launch core JS build.');
+requireToken(html, 'runlu-account-commerce.js?v=10', 'Account commerce-history reader is missing.');
 requireToken(html, 'runlu-account-plan.css?v=2', 'Account Plan Center CSS is missing.');
 requireToken(html, 'runlu-account-plan.js?v=2', 'Account Plan Center reader is missing.');
 requireToken(html, 'runlu-account-access.css?v=1', 'Account Access Center CSS is missing.');
@@ -109,8 +110,11 @@ if (/\bre_[A-Za-z0-9_\-]{20,}\b/.test(html + js + commerceJs + planJs + accessJs
   throw new Error('A Resend-style secret appears to be embedded in public Account assets.');
 }
 
-if (/href=["'][^"']*account\.html/i.test(home)) {
-  throw new Error('Account pilot is linked from the public home page before launch approval.');
-}
+requireToken(home, 'href="account.html"', 'Public home page must expose the RUNLU Account entry.');
+requireToken(purchaseComplete, 'id="runluCreateAccount"', 'Purchase completion must offer Create Account.');
+requireToken(purchaseComplete, 'id="runluSignIn"', 'Purchase completion must offer Sign in.');
+requireToken(purchaseComplete, 'p.set("session_id",session)', 'Purchase completion must carry the checkout session into Account.');
+requireToken(js, "runlu-pending-checkout-session", 'Account must preserve pending checkout context through email verification.');
+requireToken(commerceJs, "sessionStorage.removeItem('runlu-pending-checkout-session')", 'Account must clear pending checkout context after successful linking.');
 
-console.log('RUNLU Account pilot contract passed: auth, recovery, hardened Library, Store preview, compact profile, progressive disclosure and read-only Overview/Plan/Capability/Access/Diagnostic Centers and Orders/Subscriptions history, atomic rendering, cache, privacy and private-pilot guards verified.');
+console.log('RUNLU Account public contract passed: public discovery, auth, recovery, hardened Library, Store preview, purchase linking, compact profile, progressive disclosure and read-only Overview/Plan/Capability/Access/Diagnostic Centers and Orders/Subscriptions history verified.');
