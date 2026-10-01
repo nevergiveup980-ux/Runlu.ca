@@ -11,8 +11,8 @@ const js=read(frozenJsPath);
 const release=read('flooring/index-v0403-release.html');
 const manifest=read('flooring/QUOTE_V0403I_FROZEN.md');
 
-const EXPECTED_HTML_BLOB='db4105a87d1cfc9d25f7c061d395f34792fcde8b';
-const EXPECTED_JS_BLOB='a39540ca0ca85dd11a8ab078be829645dbb425df';
+const EXPECTED_HTML_BLOB='f6adde9851d24af4ae45cacff2952e771f9dc74a';
+const EXPECTED_JS_BLOB='79a86661d19f30caa6b34cfd6accf5849d659a82';
 const blob=p=>execFileSync('git',['hash-object',p],{encoding:'utf8'}).trim();
 
 const checks=[];
@@ -43,7 +43,9 @@ test('Frozen page remains top-level iPhone Quote with no iframe',()=>{
 test('Frozen Quote keeps direct large-form entry',()=>{
   assert(html.includes('Quote Form Entry'));
   assert(js.includes('EDITING THE ACTUAL QUOTE · V0.4.03i'));
-  assert(js.includes("if(touchIOS)mode='table'"));
+  assert(js.includes("MODE_KEY='runlu_quote_entry_mode_v0403'"));
+  assert(js.includes("return v==='fields'||v==='table'?v:'table'"));
+  assert(js.includes('savePreferredMode(mode)'));
   assert(js.includes('function renderPaperForm()'));
 });
 test('Frozen Quote keeps one Job-bound source of truth',()=>{
