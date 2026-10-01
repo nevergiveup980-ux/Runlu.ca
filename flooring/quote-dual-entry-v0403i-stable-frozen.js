@@ -115,10 +115,12 @@ const api={VERSION,JOBS,ACTIVE,GST_DEFAULT,str,num,round2,money,blankLine,uiBlan
 root.RUNLUQuoteV0403=api;
 if(typeof document==='undefined')return;
 
-let jobs=[],activeId='',draft=normalizeQuote(),mode='fields',dirty=false;
+const MODE_KEY='runlu_quote_entry_mode_v0403';
+function loadPreferredMode(){try{const v=localStorage.getItem(MODE_KEY);return v==='fields'||v==='table'?v:'table'}catch(_){return 'table'}}
+function savePreferredMode(v){try{localStorage.setItem(MODE_KEY,v)}catch(_){}}
+let jobs=[],activeId='',draft=normalizeQuote(),mode=loadPreferredMode(),dirty=false;
 const by=id=>document.getElementById(id);
 const touchIOS=(()=>{const ua=navigator.userAgent||'';return /iPhone|iPad|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)})();
-if(touchIOS)mode='table';
 function editValue(el){return el?.isContentEditable?(el.textContent||'').replace(/\u00a0/g,' ').trim():el?.value}
 function selectCellText(el){
   try{
@@ -361,7 +363,7 @@ window.addEventListener('afterprint',()=>{if(restorePaperAfterPrint){restorePape
 function renderAll(){renderJobPicker();renderEditor();renderSummaryAndPreview();const btn=by('q403save'),j=activeJob();if(btn)btn.disabled=!canWriteJob(j);const d=by('q403dirty');if(d)d.textContent=dirty?'Unsaved changes':(j&&j.quote?'Saved quote loaded':'Draft not saved')}
 function bind(){
   by('q403new').onclick=newQuoteJob;by('q403save').onclick=saveQuote;by('q403print').onclick=printQuote;by('q403print2')&&(by('q403print2').onclick=printQuote);
-  document.querySelectorAll('[data-q403-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.q403Mode;if(mode==='fields')draft=stripBlankUILines(draft);else draft=ensureTableRows(draft);renderEditor();renderSummaryAndPreview();if(mode==='table')setTimeout(()=>by('q403preview')?.scrollIntoView({block:'start'}),0)});
+  document.querySelectorAll('[data-q403-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.q403Mode;savePreferredMode(mode);if(mode==='fields')draft=stripBlankUILines(draft);else draft=ensureTableRows(draft);renderEditor();renderSummaryAndPreview();if(mode==='table')setTimeout(()=>by('q403preview')?.scrollIntoView({block:'start'}),0)});
 }
 function boot(){bind();load()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();

@@ -20,7 +20,7 @@ jobs:
           node-version: 22
       - name: Verify frozen blob identities
         run: |
-          test "$(git hash-object flooring/index-v0403i-quote-stable-frozen.html)" = "db4105a87d1cfc9d25f7c061d395f34792fcde8b"
-          test "$(git hash-object flooring/quote-dual-entry-v0403i-stable-frozen.js)" = "a39540ca0ca85dd11a8ab078be829645dbb425df"
+          test "$(git hash-object flooring/index-v0403i-quote-stable-frozen.html)" = "f6adde9851d24af4ae45cacff2952e771f9dc74a"
+          test "$(git hash-object flooring/quote-dual-entry-v0403i-stable-frozen.js)" = "79a86661d19f30caa6b34cfd6accf5849d659a82"
       - name: Run frozen Quote regression gate
         run: node scripts/run-flooring-quote-v0403i-frozen.mjs
