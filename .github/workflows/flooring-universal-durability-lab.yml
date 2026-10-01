@@ -41,6 +41,8 @@ jobs:
           fi
       - name: Attack production interrupted resolver directly
         run: node flooring-universal/tests/universal-production-resolver-test.js
+      - name: Verify Universal lifecycle acceptance surface
+        run: node flooring-universal/tests/universal-lifecycle-acceptance.js
       - name: Hammer Universal durability model · seed A
         env:
           RUNLU_STRESS_SEED: '1592594996'
