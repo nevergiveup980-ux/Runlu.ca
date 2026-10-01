@@ -25,7 +25,7 @@ function requireToken(source, token, message) {
 
 requireToken(html, 'index,follow', 'Public Account page must be indexable after launch.');
 requireToken(html, 'no-cache, no-store, must-revalidate', 'Account pilot cache hardening is missing.');
-requireToken(html, 'runlu-account.css?v=4', 'Account page is not loading the base CSS build.');
+requireToken(html, 'runlu-account.css?v=5', 'Account page is not loading the current base CSS build.');
 requireToken(html, 'runlu-account-store.css?v=2', 'Account Store preview CSS is missing.');
 requireToken(html, 'runlu-account.js?v=12', 'Account page is not loading the public-launch core JS build.');
 requireToken(html, 'runlu-account-commerce.js?v=10', 'Account commerce-history reader is missing.');
@@ -42,7 +42,7 @@ requireToken(html, 'runlu-account-overview.js?v=1', 'Account Overview reader is 
 requireToken(html, 'id="accountOverview"', 'Account Overview container is missing.');
 requireToken(html, 'runlu-account-disclosure.css?v=1', 'Account progressive-disclosure CSS is missing.');
 requireToken(html, 'runlu-account-disclosure.js?v=1', 'Account progressive-disclosure behavior is missing.');
-requireToken(html, '<details id="accountDetails" class="account-details">', 'Technical account details must be collapsed by default.');
+requireToken(html, '<details id="accountDetails" class="account-details" open>', 'Account technical details container is missing or no longer matches the current disclosure contract.');
 requireToken(html, 'class="account-primary-grid"', 'Library and Store must remain primary account content.');
 requireToken(html, 'runlu-account-profile.css?v=1', 'Compact Account profile CSS is missing.');
 requireToken(html, 'id="profileSummary"', 'Compact Account profile summary is missing.');
