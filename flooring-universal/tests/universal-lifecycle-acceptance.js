@@ -6,3 +6,9 @@ ok('Direct navigation focus exists',html.includes('todayFocus')&&html.includes('
 for(const [file,cls] of [['universal-sales.js','uJobCard'],['universal-po.js','uPORow'],['universal-inbound.js','uInbound'],['universal-warehouse.js','uWHRow'],['universal-installation.js','uInstall'],['universal-billing.js','uBill'],['universal-accounting.js','uAcct']]){const s=read(file);ok(file+' runtime API',s.includes('window.RUNLUUniversal'));ok(file+' record identity',s.includes('data-record-id='));ok(file+' record status',s.includes('data-record-status='))}
 ok('Sales quote state exposed',read('universal-sales.js').includes('data-quote-status='));
 if(failed){console.error('\nUniversal lifecycle acceptance failed: '+failed);process.exit(1)}console.log('\nUniversal lifecycle acceptance: PASS');
+// Static shell closure: every local script/style referenced by index must exist in the Universal tree.
+const refs=[...html.matchAll(/<(?:script|link)[^>]+(?:src|href)="([^"]+)"/g)].map(x=>x[1]).filter(x=>!/^https?:|^data:|^#/.test(x));
+for(const ref of refs){const clean=ref.split('?')[0].replace(/^\.\//,'');ok('Shell asset exists: '+clean,fs.existsSync(path.join(root,clean)))}
+const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]),dupes=ids.filter((x,i)=>ids.indexOf(x)!==i);ok('No duplicate DOM ids',dupes.length===0);
+ok('Universal shell has no Deerfoot production route',!/[\x27\x22\x60]\/flooring\//.test(html));
+if(failed){console.error('\nUniversal lifecycle acceptance failed after shell closure: '+failed);process.exit(1)}
