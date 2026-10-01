@@ -45,6 +45,8 @@ jobs:
         run: node flooring-universal/tests/universal-lifecycle-acceptance.js
       - name: Run North Star full lifecycle scenario
         run: node flooring-universal/tests/universal-north-star-lifecycle.js
+      - name: Verify Universal browser runtime contract
+        run: node flooring-universal/tests/universal-browser-contract.js
       - name: Hammer Universal durability model · seed A
         env:
           RUNLU_STRESS_SEED: '1592594996'
