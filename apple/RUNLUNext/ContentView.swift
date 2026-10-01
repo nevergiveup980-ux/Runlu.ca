@@ -6,7 +6,12 @@ struct ContentView: View {
     @State private var reloadToken = UUID()
     @State private var showLaunch = true
 
-    private let nextURL = URL(string: "https://runlu.ca/next.html")!
+    private var nextURL: URL {
+#if DEBUG
+        if let preview = Bundle.main.url(forResource: "next-preview", withExtension: "html") { return preview }
+#endif
+        return URL(string: "https://runlu.ca/next.html")!
+    }
 
     var body: some View {
         NavigationStack {
