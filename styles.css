@@ -129,3 +129,15 @@
 .hero-actions-secondary{margin-top:12px}
 .hero-actions-secondary .button{opacity:.78}
 @media(max-width:640px){.hero-paths{gap:15px;margin-top:24px}.hero-path{min-width:108px;font-size:.76rem;letter-spacing:.14em}.hero-path-divider{height:20px}.hero-actions-secondary{margin-top:10px}}
+
+
+/* RUNLU dual-state experiment · READ quiet / BUILD precise */
+.hero-paths{position:relative;z-index:3}
+.hero-path{font-family:Georgia,"Times New Roman",serif;font-size:.98rem;font-weight:500;letter-spacing:.14em}
+.hero-path:first-child{color:#2f312d}.hero-path:last-child{color:#14212b}
+.dual-shell{min-height:100vh;background:#f7f3ea;color:#20211e}
+.dual-shell.build-mode{background:#f2f5f6;color:#14202a}
+.dual-top{display:flex;justify-content:space-between;align-items:center;padding:24px 6vw;border-bottom:1px solid rgba(20,30,25,.1)}
+.dual-brand{font-weight:700;letter-spacing:.08em}.dual-switch{display:flex;gap:18px;font-size:.78rem;letter-spacing:.12em}.dual-switch a{opacity:.55}.dual-switch a[aria-current="page"]{opacity:1}
+.dual-hero{padding:11vh 6vw 9vh;max-width:1180px;margin:auto}.dual-kicker{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;opacity:.55}.dual-hero h1{max-width:900px;margin:18px 0 24px;font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(3.2rem,7vw,7.2rem);line-height:.98;letter-spacing:-.045em}.build-mode .dual-hero h1{font-family:Inter,"Noto Sans SC",sans-serif;font-weight:500}.dual-lead{max-width:650px;font-size:1.12rem;opacity:.7}.dual-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:1180px;margin:0 auto;padding:0 6vw 10vh}.dual-card{display:block;padding:34px;min-height:260px;border-top:1px solid rgba(20,30,25,.14);transition:transform .25s ease,background .25s ease}.dual-card:hover{transform:translateY(-3px)}.read-mode .dual-card{font-family:Georgia,"Times New Roman",serif}.build-mode .dual-card{border:1px solid rgba(20,30,40,.1);border-radius:18px;background:rgba(255,255,255,.58)}.dual-card small{font-family:Inter,"Noto Sans SC",sans-serif;letter-spacing:.14em;text-transform:uppercase;opacity:.5}.dual-card h2{font-size:clamp(2rem,4vw,3.6rem);line-height:1.02;margin:34px 0 12px;font-weight:400}.build-mode .dual-card h2{font-family:Inter,"Noto Sans SC",sans-serif;font-weight:500;font-size:clamp(1.8rem,3vw,2.8rem)}.dual-card p{max-width:540px;opacity:.68}.dual-arrow{display:inline-block;margin-top:20px}.dual-footer{padding:30px 6vw;border-top:1px solid rgba(20,30,25,.1);font-size:.8rem;opacity:.55}
+@media(max-width:700px){.dual-top{padding:20px}.dual-hero{padding:9vh 22px 7vh}.dual-grid{grid-template-columns:1fr;padding:0 22px 8vh}.dual-card{min-height:220px;padding:28px 4px}.build-mode .dual-card{padding:26px}.dual-hero h1{font-size:clamp(3rem,15vw,4.7rem)}}
