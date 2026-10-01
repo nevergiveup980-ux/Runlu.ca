@@ -50,7 +50,7 @@ jobs:
           node --check scripts/check-account-pilot.mjs
       - name: Enforce complete four-language pages
         run: node scripts/check-multilingual.mjs
-      - name: Check RUNLU Account pilot contract
+      - name: Check RUNLU Account public contract
         run: node scripts/check-account-pilot.mjs
       - name: Check GUANSHI protected-page access
         run: node scripts/check-guanshi-access.mjs
