@@ -63,6 +63,33 @@ async function compareWithAdapter(){
  localKeys.filter(k=>mirror.has(k)).forEach(k=>{const local=adapter.read(k,null),remote=mirror.get(k);if(JSON.stringify(local)!==JSON.stringify(remote))different.push(k)});
  return {ok:missingLocal.length===0&&missingMirror.length===0&&different.length===0,comparable:true,localRecords:localKeys.length,mirrorRecords:mirrorKeys.length,missingLocal:missingLocal.length,missingMirror:missingMirror.length,different:different.length};
 }
+async function waitForIdle(timeoutMs=5000){
+ const started=Date.now();
+ while(pending>0){
+  if(Date.now()-started>timeoutMs)throw new Error('Timed out waiting for IndexedDB mirror writes to finish.');
+  await new Promise(r=>setTimeout(r,25));
+ }
+ return true;
+}
+async function replaceMirrorFromLocal(){
+ if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local')throw new Error('Mirror reconciliation is available only in Local Device mode.');
+ await waitForIdle();
+ const adapter=window.RUNLUUniversalData.current(),keys=(adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP&&k!==GUARD&&k!==JOURNAL);
+ pending++;
+ try{
+  const db=await open(),now=new Date().toISOString();
+  await new Promise((resolve,reject)=>{
+   const tx=db.transaction(STORE,'readwrite'),store=tx.objectStore(STORE);
+   store.clear();
+   keys.forEach(key=>store.put({key,value:adapter.read(key,null),updatedAt:now}));
+   tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||new Error('IndexedDB mirror reconciliation aborted'));
+  });
+  lastSyncAt=new Date().toISOString();lastError=null;
+ }catch(e){lastError=e?.message||String(e);throw e}finally{pending--}
+ const comparison=await compareWithAdapter();
+ if(!comparison.ok)throw new Error('Durable mirror reconciliation did not reach parity with local data.');
+ return {ok:true,records:keys.length,comparison};
+}
 async function status(){
  if(!supported())return {supported:false,ready:false,records:0,pending,lastSyncAt,error:'IndexedDB unsupported'};
  try{const records=await all();return {supported:true,ready:true,records:records.length,pending,lastSyncAt,error:lastError}}catch(e){return {supported:true,ready:false,records:0,pending,lastSyncAt,error:lastError||e.message}}
@@ -74,6 +101,6 @@ function init(){
  // Never overwrite a newer durable mirror with stale/empty local data before the startup guard compares both sides.
 }
 function seedFromLocal(){return seed()}
-window.RUNLUUniversalDurableLocal=Object.freeze({supported,seed:seedFromLocal,status,compareWithAdapter,recoverMissing,replaceLocalFromMirror});
+window.RUNLUUniversalDurableLocal=Object.freeze({supported,seed:seedFromLocal,status,compareWithAdapter,recoverMissing,replaceLocalFromMirror,waitForIdle,replaceMirrorFromLocal});
 init();
 })();
