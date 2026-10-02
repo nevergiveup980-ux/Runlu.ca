@@ -1,0 +1,33 @@
+name: Flooring Customer Master V1
+
+on:
+  pull_request:
+    paths:
+      - 'flooring/index-customer-desk-v1.html'
+      - 'flooring/customer-master-v1.js'
+      - 'flooring/staff-identity-v1.js'
+      - 'scripts/run-flooring-customer-master-v1.mjs'
+      - '.github/workflows/flooring-customer-master-v1.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'flooring/index-customer-desk-v1.html'
+      - 'flooring/customer-master-v1.js'
+      - 'flooring/staff-identity-v1.js'
+      - 'scripts/run-flooring-customer-master-v1.mjs'
+      - '.github/workflows/flooring-customer-master-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  customer-master-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Customer Master regression gate
+        run: node scripts/run-flooring-customer-master-v1.mjs
