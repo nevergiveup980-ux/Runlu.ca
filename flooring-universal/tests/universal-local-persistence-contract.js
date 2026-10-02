@@ -1,0 +1,15 @@
+'use strict';
+const fs=require('fs'),path=require('path'),root=path.resolve(__dirname,'..'),read=n=>fs.readFileSync(path.join(root,n),'utf8');let failed=0;
+const ok=(n,c)=>{console.log((c?'PASS ':'FAIL ')+n);if(!c)failed++};
+const data=read('universal-data-adapter.js'),mirror=read('universal-indexeddb.js'),shell=read('universal-shell.js'),html=read('index.html');
+ok('Local adapter persists JSON to localStorage',data.includes('localStorage.setItem(key,JSON.stringify(value))'));
+ok('Adapter emits write mutations after persistence',/function write\(key,value\)\{const result=current\(\)\.write\(key,value\);emitMutation/.test(data));
+ok('Adapter emits remove mutations after persistence',/function remove\(key\)\{const result=current\(\)\.remove/.test(data)&&data.includes("emitMutation({type:'remove'"));
+ok('Durable mirror subscribes to adapter mutations',mirror.includes('RUNLUUniversalData?.onMutation?.'));
+ok('Durable mirror seeds from local source',mirror.includes('seed().catch'));
+ok('Durable mirror can compare with local adapter',mirror.includes('compareWithAdapter'));
+ok('Runtime metadata excluded from durable mirror',["key===BACKEND","key===SNAP","key===GUARD","key===JOURNAL"].every(x=>mirror.includes(x)));
+ok('Workspace reload reads persisted config',shell.includes('const current=read();fill(current)'));
+ok('Workspace save reads back persisted config',shell.includes('const persisted=read();'));
+ok('Today refresh subscribes to persisted data mutations',html.includes('RUNLUUniversalData?.onMutation?.(schedule)'));
+if(failed){console.error('\nUniversal local persistence contract failed: '+failed);process.exit(1)}console.log('\nUniversal local persistence contract: PASS');
