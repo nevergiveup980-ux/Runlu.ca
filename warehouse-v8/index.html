@@ -1,19 +1,23 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>RUNLU Warehouse OS V8</title>
 <style>
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f5f5f2;color:#161616}main{max-width:920px;margin:auto;padding:22px}.top{display:flex;justify-content:space-between;align-items:center}.card{background:white;border:1px solid #ddd;border-radius:18px;padding:18px;margin:14px 0}.big{font-size:48px;font-weight:700}.muted{color:#666}.ok{font-weight:700}input{box-sizing:border-box;width:100%;padding:14px;border:1px solid #bbb;border-radius:12px;font-size:16px}.row{padding:12px 0;border-bottom:1px solid #eee}.row:last-child{border-bottom:0}
-</style></head><body><main>
-<div class="top"><div><strong>RUNLU Warehouse OS</strong><div class="muted">V8 · Rebuild Lab</div></div><div id="source">Not loaded</div></div>
-<section class="card"><div class="muted">Carpet Roll Inventory · ACTIVE ROLLS</div><div class="big" id="homeCount">0</div><div id="invariant" class="ok">Waiting for data</div></section>
-<section class="card"><h2>Carpet Inventory</h2><div id="summary" class="muted">0 total · 0 active · 0 shown</div><p><input id="search" placeholder="Search roll, product, color, location…"></p><div id="list"></div></section>
+</style><link href="../runlu-language-pages.css?v=20261002" rel="stylesheet"/></head><body><main><div class="runlu-language-bar"><select aria-label="Language" data-runlu-language-select=""><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select></div>
+<div class="top"><div><strong>RUNLU Warehouse OS</strong><div class="muted" data-en="V8 · Rebuild Lab" data-es="V8 · Laboratorio de reconstrucción" data-fr="V8 · Laboratoire de reconstruction" data-zh="V8 · 重建实验室">V8 · Rebuild Lab</div></div><div data-en="Not loaded" data-es="Sin cargar" data-fr="Non chargé" data-zh="尚未加载" id="source">Not loaded</div></div>
+<section class="card"><div class="muted" data-en="Carpet Roll Inventory · ACTIVE ROLLS" data-es="INVENTARIO DE ALFOMBRA · ROLLOS ACTIVOS" data-fr="STOCK DE MOQUETTE · ROULEAUX ACTIFS" data-zh="地毯卷料库存 · 在用卷料">Carpet Roll Inventory · ACTIVE ROLLS</div><div class="big" id="homeCount">0</div><div class="ok" data-en="Waiting for data" data-es="Esperando datos" data-fr="En attente de données" data-zh="等待数据" id="invariant">Waiting for data</div></section>
+<section class="card"><h2 data-en="Carpet Inventory" data-es="Inventario de alfombra" data-fr="Stock de moquette" data-zh="地毯库存">Carpet Inventory</h2><div class="muted" data-en="0 total · 0 active · 0 shown" data-es="0 total · 0 activos · 0 mostrados" data-fr="0 au total · 0 actifs · 0 affichés" data-zh="共 0 · 在用 0 · 显示 0" id="summary">0 total · 0 active · 0 shown</div><p><input id="search" placeholder="Search roll, product, color, location…"/></p><div id="list"></div></section>
 </main>
 <script src="v8-core.js"></script><script src="v8-cloud.js"></script><script src="v8-provider-config.js"></script>
-<script>
+<script src="../runlu-tool-messages.js?v=20261002"></script><script>const ui=window.RUNLUToolMessages;let cloudError=null;
+
 const $=id=>document.getElementById(id);
-function rollLabel(r){return r.roll||r.rollNumber||r.sourceRoll||r._recordId||'Unnamed roll'}
+function rollLabel(r){return r.roll||r.rollNumber||r.sourceRoll||r._recordId||ui.text('Unnamed roll')}
 function escapeHtml(v){const d=document.createElement('div');d.textContent=String(v||'');return d.innerHTML}
-function render(){const c=RUNLU_V8.counts(),rows=RUNLU_V8.visibleCarpetRolls();$('homeCount').textContent=c.dashboardActive;$('summary').textContent=c.total+' total · '+c.carpetPageActive+' active · '+c.visible+' shown';$('source').textContent=RUNLU_V8.state.source;$('invariant').textContent=c.dashboardActive===c.carpetPageActive?'✓ Same-source count check passed':'✕ Count mismatch';$('list').innerHTML=rows.slice(0,100).map(r=>'<div class="row"><strong>'+escapeHtml(rollLabel(r))+'</strong><div class="muted">'+escapeHtml([r.style||r.productName,r.color,r.location||r.locationName].filter(Boolean).join(' · '))+'</div></div>').join('')}
+function render(){const c=RUNLU_V8.counts(),rows=RUNLU_V8.visibleCarpetRolls();$('homeCount').textContent=c.dashboardActive;ui.set($('summary'),'{total} total · {active} active · {shown} shown',{total:c.total,active:c.carpetPageActive,shown:c.visible});ui.set($('source'),({'not-loaded':'Not loaded',Cloud:'Cloud inventory',cloud:'Cloud inventory',provider:'Data provider'})[RUNLU_V8.state.source]||RUNLU_V8.state.source);ui.set($('invariant'),c.dashboardActive===c.carpetPageActive?'✓ Same-source count check passed':'✕ Count mismatch');$('search').placeholder=ui.text('Search roll, product, color, location…');$('search').setAttribute('aria-label',$('search').placeholder);if(cloudError){ui.set($('source'),'Cloud error');ui.set($('invariant'),'Error details: {error}',{error:cloudError});}$('list').innerHTML=rows.slice(0,100).map(r=>'<div class="row"><strong>'+escapeHtml(rollLabel(r))+'</strong><div class="muted">'+escapeHtml([r.style||r.productName,r.color,r.location||r.locationName].filter(Boolean).join(' · '))+'</div></div>').join('')}
 $('search').addEventListener('input',e=>{RUNLU_V8.setSearch(e.target.value);render()});window.RUNLU_V8_RENDER=render;render();
-(async()=>{try{if(window.RUNLU_V8_PROVIDER){await RUNLU_V8_CLOUD.loadCarpet(window.RUNLU_V8_PROVIDER)}}catch(e){$('source').textContent='Cloud error';$('invariant').textContent=e.message}})();
-</script></body></html>
+(async()=>{try{if(window.RUNLU_V8_PROVIDER){await RUNLU_V8_CLOUD.loadCarpet(window.RUNLU_V8_PROVIDER)}}catch(e){cloudError=e.message||String(e);render()}})();
+
+window.addEventListener('runlu:languagechange',render);document.addEventListener('DOMContentLoaded',render,{once:true});
+</script><script src="../runlu-language.js?v=2.2"></script></body></html>

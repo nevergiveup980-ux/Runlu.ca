@@ -26,6 +26,7 @@ jobs:
         run: |
           node --check script.js
           node --check runlu-language.js
+          node --check runlu-tool-messages.js
           node --check runlu-account.js
           node --check runlu-account-access.js
           node --check runlu-account-diagnostic.js

@@ -1,0 +1,6 @@
+/* Language controls for guides and focused tools. */
+.runlu-language-bar{display:flex;justify-content:flex-end;align-items:center;flex-shrink:0;margin:0 0 1rem}
+.runlu-language-bar select{font:inherit;font-size:1rem;max-width:100%;min-height:44px;padding:.5rem .75rem;border:1px solid #84988a;border-radius:12px;background:#eef3ed;color:#173b2c}
+.product-topnav .runlu-language-bar,.n .runlu-language-bar,.gs-nav .runlu-language-bar{margin:0}
+.n,.product-topnav{flex-wrap:wrap;align-items:center}
+@media(max-width:600px){.product-topbar{flex-wrap:wrap;gap:1rem}.product-topnav{gap:.75rem}.n{gap:1rem}.top{flex-wrap:wrap;gap:1rem}}
