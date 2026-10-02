@@ -38,21 +38,30 @@ async function seed(){
  for(const key of keys)await put(key,adapter.read(key,null));
  return {ok:true,records:keys.length};
 }
+function validMirrorRecord(r){
+ if(!r?.key?.startsWith(PREFIX)||r.key===BACKEND||r.key===SNAP||r.key===GUARD||r.key===JOURNAL)return false;
+ try{return JSON.stringify(r.value)!==undefined}catch(_){return false}
+}
 async function recoverMissing(){
  if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local')throw new Error('IndexedDB recovery is available only in Local Device mode.');
- const records=await all(),adapter=window.RUNLUUniversalData.current();let restored=0,skipped=0;
+ await waitForIdle();
+ const records=(await all()).filter(validMirrorRecord),adapter=window.RUNLUUniversalData.current();let restored=0,skipped=0;
  window.RUNLUUniversalLocalHealth?.capture?.('Before IndexedDB recovery',{records:records.length});
- for(const r of records){if(!r.key?.startsWith(PREFIX)||r.key===BACKEND||r.key===SNAP||r.key===GUARD||r.key===JOURNAL)continue;if(adapter.raw(r.key)===null){adapter.write(r.key,r.value);restored++}else skipped++}
- return {restored,skipped,total:records.length};
+ for(const r of records){if(adapter.raw(r.key)===null){adapter.write(r.key,r.value);restored++}else skipped++}
+ const comparison=await compareWithAdapter();
+ return {restored,skipped,total:records.length,comparison};
 }
 async function replaceLocalFromMirror(){
  if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local')throw new Error('IndexedDB recovery is available only in Local Device mode.');
- const records=await all();if(!records.length)throw new Error('Durable mirror is empty.');
+ await waitForIdle();
+ const records=(await all()).filter(validMirrorRecord);if(!records.length)throw new Error('Durable mirror is empty.');
  window.RUNLUUniversalLocalHealth?.capture?.('Before full IndexedDB mirror restore',{records:records.length});
  const adapter=window.RUNLUUniversalData.current();
  (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP&&k!==GUARD&&k!==JOURNAL).forEach(k=>adapter.remove(k));
- records.forEach(r=>{if(r.key?.startsWith(PREFIX)&&r.key!==BACKEND&&r.key!==SNAP&&r.key!==GUARD&&r.key!==JOURNAL)adapter.write(r.key,r.value)});
- return {restored:records.length};
+ records.forEach(r=>adapter.write(r.key,r.value));
+ const comparison=await compareWithAdapter();
+ if(!comparison.ok)throw new Error('Local recovery from durable mirror did not reach parity.');
+ return {restored:records.length,comparison};
 }
 async function compareWithAdapter(){
  if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local')return {ok:true,comparable:false,reason:'not-local'};
