@@ -12,13 +12,15 @@ function capture(reason,meta){
  const p={id:'rp-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,5),createdAt:new Date().toISOString(),reason:reason||'Checkpoint',meta:meta||{},organizationId:data().read(WS,null)?.company?.organizationId||'',payload};
  data().write(SNAP,[p,...points()].slice(0,MAX));return p;
 }
-function restore(id){
+async function restore(id){
  if(data().backendConfig().mode!=='local')throw new Error('Recovery Point restore is available only in Local Device mode.');
  const p=points().find(x=>x.id===id);if(!p)throw new Error('Recovery Point not found.');
  const adapter=data().current(),safety=capture('Safety checkpoint before Recovery Point restore',{restorePoint:id});
+ // Controlled local replacement first; then explicitly reconcile the durable mirror before reload.
  (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==SNAP&&k!==GUARD&&k!==JOURNAL&&k!=='runlu_flooring_universal_data_backend').forEach(k=>adapter.remove(k));
  Object.entries(p.payload||{}).forEach(([k,v])=>{if(k.startsWith(PREFIX)&&k!==SNAP&&k!==GUARD&&k!==JOURNAL&&k!=='runlu_flooring_universal_data_backend')adapter.write(k,v)});
- return {point:p,safety};
+ const mirror=await window.RUNLUUniversalDurableLocal?.replaceMirrorFromLocal?.();
+ return {point:p,safety,mirror};
 }
 async function health(){
  const adapter=data().current(),keys=adapter.rawKeys?.()||[],bad=[],sizes=[];
@@ -34,7 +36,7 @@ async function render(){
  const h=await health(),ps=points(),quota=h.storage?.quota,usage=h.storage?.usage;
  host.innerHTML='<div class="card"><h2>Local Data Health</h2><div class="uHealth '+(h.ok?'pass':'fail')+'"><b>'+(h.ok?'HEALTHY':'CHECK')+'</b><span>'+h.keys+' Universal data groups · '+fmtBytes(h.bytes)+'</span></div><div class="uHealthFacts"><span>Workspace <b>'+(h.workspaceReady?'Ready':'Missing')+'</b></span><span>JSON integrity <b>'+(h.corruptKeys.length?'Review':'Pass')+'</b></span><span>Recovery Points <b>'+h.recoveryPoints+'/'+MAX+'</b></span><span>Browser storage <b>'+(quota?fmtBytes(usage)+' / '+fmtBytes(quota):'Estimate unavailable')+'</b></span></div>'+(h.corruptKeys.length?'<p class="uHealthWarn">Unreadable: '+h.corruptKeys.map(esc).join(', ')+'</p>':'')+'</div><div class="card"><div class="uHealthHead"><div><h3>Recovery Points</h3><p class="muted">Created before audited lifecycle changes. Maximum '+MAX+' rolling checkpoints.</p></div><button id="uHealthCheckpoint">Create Checkpoint</button></div>'+(ps.length?ps.map(p=>'<div class="uPoint"><div><b>'+esc(p.reason)+'</b><span>'+esc(new Date(p.createdAt).toLocaleString())+'</span></div><button data-restore-point="'+esc(p.id)+'">Restore</button></div>').join(''):'<p class="muted">No Recovery Points yet.</p>')+'</div>';
  document.getElementById('uHealthCheckpoint').onclick=()=>{capture('Manual checkpoint');render()};
- host.querySelectorAll('[data-restore-point]').forEach(b=>b.onclick=()=>{if(!confirm('Restore this Recovery Point? A safety checkpoint of the current state will be created first.'))return;try{restore(b.dataset.restorePoint);alert('Recovery Point restored. The app will reload.');location.reload()}catch(e){alert(e.message)}});
+ host.querySelectorAll('[data-restore-point]').forEach(b=>b.onclick=async()=>{if(!confirm('Restore this Recovery Point? A safety checkpoint of the current state will be created first.'))return;try{await restore(b.dataset.restorePoint);alert('Recovery Point restored and durable mirror reconciled. The app will reload.');location.reload()}catch(e){alert(e.message)}});
 }
 window.RUNLUUniversalLocalHealth=Object.freeze({capture,points,restore,health,render,MAX});
 })();
