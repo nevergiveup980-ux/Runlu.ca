@@ -1,0 +1,29 @@
+name: Flooring Sales Desk Customer Master V1
+on:
+  pull_request:
+    paths:
+      - 'flooring/sales-desk-v037.js'
+      - 'flooring/customer-master-v1.js'
+      - 'flooring/index-customer-desk-v1.html'
+      - 'scripts/run-flooring-sales-desk-customer-master-v1.mjs'
+      - '.github/workflows/flooring-sales-desk-customer-master-v1.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'flooring/sales-desk-v037.js'
+      - 'flooring/customer-master-v1.js'
+      - 'flooring/index-customer-desk-v1.html'
+      - 'scripts/run-flooring-sales-desk-customer-master-v1.mjs'
+      - '.github/workflows/flooring-sales-desk-customer-master-v1.yml'
+permissions:
+  contents: read
+jobs:
+  sales-desk-customer-master:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/run-flooring-sales-desk-customer-master-v1.mjs
