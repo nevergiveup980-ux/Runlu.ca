@@ -77,7 +77,7 @@ function ensureLauncher(){
   if(by(LAUNCHER))return;
   const grid=document.querySelector('#command .grid3');if(!grid)return;
   const b=document.createElement('button');b.id=LAUNCHER;b.type='button';b.className='module';
-  b.innerHTML='<span class="ico">📞</span><strong>People TO Call Review</strong><small>V0.3.95 · Sales routes received-pickup Orders to Active / Pick Up / keep for follow-up.</small>';
+  b.innerHTML='<span class="ico">📞</span><strong>People TO Call Review</strong><small>Sales follow-up routing only · Pickup remains the receiving desk.</small>';
   b.addEventListener('click',launch);
   const anchor=by('rc093safeLauncher')||by('rc092safeLauncher')||by('r091safeLauncher');
   anchor?anchor.insertAdjacentElement('afterend',b):grid.appendChild(b)
