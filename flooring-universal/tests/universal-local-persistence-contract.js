@@ -1,7 +1,7 @@
 'use strict';
 const fs=require('fs'),path=require('path'),root=path.resolve(__dirname,'..'),read=n=>fs.readFileSync(path.join(root,n),'utf8');let failed=0;
 const ok=(n,c)=>{console.log((c?'PASS ':'FAIL ')+n);if(!c)failed++};
-const data=read('universal-data-adapter.js'),mirror=read('universal-indexeddb.js'),shell=read('universal-shell.js'),html=read('index.html');
+const data=read('universal-data-adapter.js'),mirror=read('universal-indexeddb.js'),guard=read('universal-startup-guard.js'),shell=read('universal-shell.js'),html=read('index.html');
 ok('Local adapter persists JSON to localStorage',data.includes('localStorage.setItem(key,JSON.stringify(value))'));
 ok('Adapter emits write mutations after persistence',/function write\(key,value\)\{const result=current\(\)\.write\(key,value\);emitMutation/.test(data));
 ok('Adapter emits remove mutations after persistence',/function remove\(key\)\{const result=current\(\)\.remove/.test(data)&&data.includes("emitMutation({type:'remove'"));
@@ -10,6 +10,8 @@ ok('Durable mirror does not overwrite itself during startup',!mirror.includes('s
 ok('Durable mirror keeps explicit seed/recovery API',mirror.includes('function seedFromLocal(){return seed()}'));
 ok('Durable mirror can compare with local adapter',mirror.includes('compareWithAdapter'));
 ok('Runtime metadata excluded from durable mirror',["key===BACKEND","key===SNAP","key===GUARD","key===JOURNAL"].every(x=>mirror.includes(x)));
+ok('Startup guard fails closed on missing/different local data',guard.includes('comparison.missingLocal>0||comparison.different>0')&&guard.includes("?'critical':'review'"));
+ok('Mirror-only lag remains reviewable after a clean exit',guard.includes("(prior?.sessionOpen||localLoss)?'critical':'review'"));
 ok('Workspace reload reads persisted config',shell.includes('const current=read();fill(current)'));
 ok('Workspace save reads back persisted config',shell.includes('const persisted=read();'));
 ok('Today refresh subscribes to persisted data mutations',html.includes('RUNLUUniversalData?.onMutation?.(schedule)'));
