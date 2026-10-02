@@ -1,0 +1,15 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const js=fs.readFileSync('flooring/sales-desk-v037.js','utf8');
+assert(js.includes("CUSTOMER_STORE='runlu_flooring_customer_master_v1'"));
+assert(js.includes("CURRENT_SALES='runlu_flooring_current_salesperson_v1'"));
+assert(js.includes('function masterCustomersForRep'));
+assert(js.includes("assignedSalesperson"));
+assert(js.includes('function openCustomerMaster'));
+assert(js.includes("index-customer-desk-v1.html?prod=1&release=0403&from=salesdesk"));
+assert(js.includes('data-open-master'));
+assert(js.includes('data-new-master'));
+assert(js.includes('data-master-customer'));
+assert(js.includes('Company Customer Master · this Sales Desk shows only customers assigned to'));
+assert(js.includes("localStorage.setItem(CURRENT_SALES,currentRep)"));
+assert(!js.includes("localStorage.setItem(CUSTOMER_STORE"));
+console.log('PASS Sales Desk → Customer Master bridge');
