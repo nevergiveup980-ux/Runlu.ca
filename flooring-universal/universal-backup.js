@@ -34,13 +34,16 @@ async function inspectFile(file){
 async function restore(payload){
  const check=validate(payload);if(!check.ok)throw new Error(check.error);
  if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local')throw new Error('Restore is allowed only in Local Device mode.');
- const adapter=window.RUNLUUniversalData.current(),backup=collect(),incoming=payload.data;window.RUNLUUniversalLocalHealth?.capture('Before full Backup restore',{backupCreatedAt:payload.createdAt||null});
+ const adapter=window.RUNLUUniversalData.current(),backup=collect(),incoming=payload.data,safety=window.RUNLUUniversalLocalHealth?.capture('Before full Backup restore',{backupCreatedAt:payload.createdAt||null});
+ const journal=window.RUNLUUniversalCrashJournal,tx=journal?.begin?.('Recovery','backup-restore',{backupCreatedAt:payload.createdAt||null,safetyPoint:safety?.id||null});
  // Replace Universal business/workspace keys as one controlled operation; backend selection remains local.
  (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!=='runlu_flooring_universal_data_backend'&&k!==SNAP&&k!==GUARD&&k!==JOURNAL).forEach(k=>adapter.remove(k));
  Object.entries(incoming).forEach(([k,v])=>{if(!RESERVED.has(k))adapter.write(k,v)});
+ if(tx)journal.phase(tx.id,'LOCAL_REPLACED');
  const migration=window.RUNLUUniversalDataVersion?.migrate?.();
  const mirror=await window.RUNLUUniversalDurableLocal?.replaceMirrorFromLocal?.();
- return {restoredKeys:Object.keys(incoming).length,safetyBackup:backup,migration,mirror};
+ if(tx){journal.phase(tx.id,'MIRROR_RECONCILED');journal.commit(tx.id,{restoredKeys:Object.keys(incoming).length})}
+ return {restoredKeys:Object.keys(incoming).length,safetyBackup:backup,safety,migration,mirror};
 }
 function render(){
  const host=document.getElementById('universalBackup');if(!host)return;
