@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E105 Conflicting Boundary Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "channel",
+    "depth",
+    "strong",
+    "bound",
+    "fresh",
+    "mechanism_relevant",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "channel": {
+      "type": "string",
+      "enum": [
+        "ARCHITECTURE",
+        "REPRODUCIBLE_PROPAGATION",
+        "EMPIRICAL_CANDIDATE"
+      ]
+    },
+    "depth": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "strong": {
+      "type": "boolean"
+    },
+    "bound": {
+      "type": "boolean"
+    },
+    "fresh": {
+      "type": "boolean"
+    },
+    "mechanism_relevant": {
+      "type": "boolean"
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e105-v1"
+    }
+  }
+}
