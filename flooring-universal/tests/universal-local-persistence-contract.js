@@ -6,7 +6,8 @@ ok('Local adapter persists JSON to localStorage',data.includes('localStorage.set
 ok('Adapter emits write mutations after persistence',/function write\(key,value\)\{const result=current\(\)\.write\(key,value\);emitMutation/.test(data));
 ok('Adapter emits remove mutations after persistence',/function remove\(key\)\{const result=current\(\)\.remove/.test(data)&&data.includes("emitMutation({type:'remove'"));
 ok('Durable mirror subscribes to adapter mutations',mirror.includes('RUNLUUniversalData?.onMutation?.'));
-ok('Durable mirror seeds from local source',mirror.includes('seed().catch'));
+ok('Durable mirror does not overwrite itself during startup',!mirror.includes('seed().catch'));
+ok('Durable mirror keeps explicit seed/recovery API',mirror.includes('function seedFromLocal(){return seed()}'));
 ok('Durable mirror can compare with local adapter',mirror.includes('compareWithAdapter'));
 ok('Runtime metadata excluded from durable mirror',["key===BACKEND","key===SNAP","key===GUARD","key===JOURNAL"].every(x=>mirror.includes(x)));
 ok('Workspace reload reads persisted config',shell.includes('const current=read();fill(current)'));
