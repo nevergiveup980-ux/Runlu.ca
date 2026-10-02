@@ -1,0 +1,19 @@
+/* RUNLU sage refinement: scoped to the homepage and READ / BUILD. */
+.runlu-home .hero{background:#ccdccc}
+.runlu-home .hero-overlay{background:linear-gradient(180deg,rgba(221,233,216,.16),rgba(206,224,205,.32))}
+.runlu-home .site-header{background:rgba(240,245,236,.94)}
+.runlu-home .site-header.is-scrolled,.runlu-home .mobile-menu{background:rgba(240,245,236,.98)}
+.runlu-home .glass-panel{background:rgba(247,245,233,.78);border-color:rgba(255,255,245,.5)}
+.runlu-home .hero-path{color:#28543b}
+.runlu-home .hero-paths{border-color:rgba(47,91,62,.24)}
+.runlu-home .hero-actions-secondary .button{background:rgba(237,243,230,.88);border-color:rgba(67,105,74,.15);color:#34503c;opacity:1}
+.dual-shell.read-mode{background:#e5ecdf;color:#202a22}
+.read-mode .dual-top{background:rgba(229,236,223,.94)}
+.read-mode .dual-card{border-color:rgba(52,80,60,.2)}
+.read-mode .dual-card:hover{background:rgba(248,246,235,.48)}
+.dual-shell.build-mode{background:#f1f5ef;color:#1c2c24}
+.build-mode .dual-top{background:rgba(241,245,239,.94)}
+.build-mode .dual-card{background:#fafbf7;border-color:rgba(52,80,60,.17)}
+.build-mode .dual-card:hover{background:#e8f0e3;border-color:rgba(52,80,60,.32)}
+.dual-switch a[aria-current="page"],.dual-arrow{color:#2d6342}
+.dual-switch a[aria-current="page"]{text-decoration:underline;text-decoration-color:#86a17b;text-underline-offset:7px;text-decoration-thickness:2px}
