@@ -1,7 +1,7 @@
 'use strict';
 const fs=require('fs'),path=require('path'),root=path.resolve(__dirname,'..'),read=n=>fs.readFileSync(path.join(root,n),'utf8');let failed=0;
 const ok=(n,c)=>{console.log((c?'PASS ':'FAIL ')+n);if(!c)failed++};
-const data=read('universal-data-adapter.js'),mirror=read('universal-indexeddb.js'),guard=read('universal-startup-guard.js'),health=read('universal-local-health.js'),backup=read('universal-backup.js'),shell=read('universal-shell.js'),html=read('index.html');
+const data=read('universal-data-adapter.js'),mirror=read('universal-indexeddb.js'),mirrorUi=read('universal-indexeddb-ui.js'),guard=read('universal-startup-guard.js'),health=read('universal-local-health.js'),backup=read('universal-backup.js'),shell=read('universal-shell.js'),html=read('index.html');
 ok('Local adapter persists JSON to localStorage',data.includes('localStorage.setItem(key,JSON.stringify(value))'));
 ok('Adapter emits write mutations after persistence',/function write\(key,value\)\{const result=current\(\)\.write\(key,value\);emitMutation/.test(data));
 ok('Adapter emits remove mutations after persistence',/function remove\(key\)\{const result=current\(\)\.remove/.test(data)&&data.includes("emitMutation({type:'remove'"));
@@ -11,6 +11,11 @@ ok('Durable mirror keeps explicit seed/recovery API',mirror.includes('function s
 ok('Durable mirror can compare with local adapter',mirror.includes('compareWithAdapter'));
 ok('Durable mirror can wait for pending writes before reconciliation',mirror.includes('async function waitForIdle')&&mirror.includes('await waitForIdle()'));
 ok('Durable mirror can atomically replace its record store from local data',mirror.includes('async function replaceMirrorFromLocal')&&mirror.includes('store.clear()'));
+ok('Reverse recovery waits for pending mirror writes',/async function recoverMissing\(\)[\s\S]*?await waitForIdle\(\)/.test(mirror)&&/async function replaceLocalFromMirror\(\)[\s\S]*?await waitForIdle\(\)/.test(mirror));
+ok('Reverse recovery rejects unusable mirror records',mirror.includes('function validMirrorRecord')&&mirror.includes('JSON.stringify(r.value)!==undefined'));
+ok('Full mirror-to-local restore verifies parity',mirror.includes("throw new Error('Local recovery from durable mirror did not reach parity.')"));
+ok('Missing-only recovery reports remaining parity state',mirror.includes('return {restored,skipped,total:records.length,comparison}'));
+ok('Durable Local UI catches recovery failures',mirrorUi.includes("try{const r=await d.replaceLocalFromMirror()")&&mirrorUi.includes("Startup Guard will keep reviewing this state."));
 ok('Recovery Point restore reconciles mirror before reload',health.includes('await window.RUNLUUniversalDurableLocal?.replaceMirrorFromLocal?.()')&&health.includes('await restore(b.dataset.restorePoint)'));
 ok('Backup restore reconciles mirror before reload',backup.includes('await window.RUNLUUniversalDurableLocal?.replaceMirrorFromLocal?.()')&&backup.includes('const r=await restore(payload)'));
 ok('Runtime metadata excluded from durable mirror',["key===BACKEND","key===SNAP","key===GUARD","key===JOURNAL"].every(x=>mirror.includes(x)));
