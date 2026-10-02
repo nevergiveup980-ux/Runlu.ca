@@ -9,6 +9,8 @@ ok('Data adapter loads before business modules',scripts.indexOf('universal-data-
 ok('Startup guard loads before shell boot',scripts.indexOf('universal-startup-guard.js')<scripts.indexOf('universal-shell.js'));
 ok('Business modules load before shell boot',['universal-sales.js','universal-po.js','universal-inbound.js','universal-installation.js','universal-billing.js','universal-accounting.js'].every(x=>scripts.indexOf(x)<scripts.indexOf('universal-shell.js')));
 for(const id of ['saveSetup','command','universalToday','openUniversalSales','openUniversalPO','openUniversalInbound','openUniversalWarehouse','openUniversalInstallation','openUniversalBilling','openUniversalAccounting'])ok('DOM contract #'+id,new RegExp('id=["\\\']'+id+'["\\\']').test(html));
+ok('Today subscribes to Data Adapter mutations',html.includes('RUNLUUniversalData?.onMutation?.(schedule)'));
+ok('Today observer ignores its own render subtree',html.includes('!m.target.closest?.("#universalToday")'));
 ok('Workspace verification remains enforced',fs.readFileSync(path.join(root,'universal-shell.js'),'utf8').includes('Workspace verification failed'));
 ok('Startup guard can block workspace changes',fs.readFileSync(path.join(root,'universal-shell.js'),'utf8').includes('Startup Recovery Guard has paused workspace changes'));
 if(failed){console.error('\nUniversal browser contract failed: '+failed);process.exit(1)}console.log('\nUniversal browser contract: PASS');
