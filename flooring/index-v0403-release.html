@@ -23,6 +23,7 @@
   <nav class="tabs" aria-label="Flooring OS modules">
     <button data-view="core">Core OS</button>
     <button data-view="operations">Operations</button>
+    <button data-view="customers">Customers</button>
     <button data-view="quote">Quote</button>
   </nav>
   <div class="status"><span>Release</span><b>V0.4.03</b></div>
@@ -44,6 +45,7 @@ const coreURL=forceLite?'index-v040.html?prod=1&release=0403&mobile=lite':mobile
 const views={
   core:coreURL,
   operations:'index-v0403-operations.html?prod=1&release=0403',
+  customers:'index-customer-desk-v1.html?prod=1&release=0403&from=release',
   quote:'index-v0403i-quote-stable-frozen.html?prod=1&release=0403i&frozen=1'
 };
 function normalizedView(v){return Object.prototype.hasOwnProperty.call(views,v)?v:'core'}
