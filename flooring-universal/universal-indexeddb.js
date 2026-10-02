@@ -55,13 +55,16 @@ async function replaceLocalFromMirror(){
  if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local')throw new Error('IndexedDB recovery is available only in Local Device mode.');
  await waitForIdle();
  const records=(await all()).filter(validMirrorRecord);if(!records.length)throw new Error('Durable mirror is empty.');
- window.RUNLUUniversalLocalHealth?.capture?.('Before full IndexedDB mirror restore',{records:records.length});
+ const safety=window.RUNLUUniversalLocalHealth?.capture?.('Before full IndexedDB mirror restore',{records:records.length});
+ const journal=window.RUNLUUniversalCrashJournal,tx=journal?.begin?.('Recovery','mirror-to-local-restore',{records:records.length,safetyPoint:safety?.id||null});
  const adapter=window.RUNLUUniversalData.current();
  (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP&&k!==GUARD&&k!==JOURNAL).forEach(k=>adapter.remove(k));
  records.forEach(r=>adapter.write(r.key,r.value));
+ if(tx)journal.phase(tx.id,'LOCAL_REPLACED');
  const comparison=await compareWithAdapter();
  if(!comparison.ok)throw new Error('Local recovery from durable mirror did not reach parity.');
- return {restored:records.length,comparison};
+ if(tx){journal.phase(tx.id,'PARITY_VERIFIED');journal.commit(tx.id,{restored:records.length})}
+ return {restored:records.length,comparison,safety};
 }
 async function compareWithAdapter(){
  if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local')return {ok:true,comparable:false,reason:'not-local'};
