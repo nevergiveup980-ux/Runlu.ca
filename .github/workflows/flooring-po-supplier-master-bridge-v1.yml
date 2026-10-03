@@ -1,0 +1,21 @@
+name: Flooring PO Supplier Master Bridge V1
+on:
+  pull_request:
+    paths:
+      - 'flooring/po-safe-v040.js'
+      - 'scripts/run-flooring-po-supplier-master-bridge-v1.mjs'
+      - '.github/workflows/flooring-po-supplier-master-bridge-v1.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'flooring/po-safe-v040.js'
+      - 'scripts/run-flooring-po-supplier-master-bridge-v1.mjs'
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/run-flooring-po-supplier-master-bridge-v1.mjs
