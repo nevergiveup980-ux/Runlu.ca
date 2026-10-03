@@ -17,6 +17,7 @@ function attachSupplierToPO(po,s){if(!po||!s)return po;return {...po,...supplier
 function find(q=''){const n=str(q).toLowerCase();return suppliers.filter(s=>String(s.status||'active').toLowerCase()!=='inactive').filter(s=>!n||[s.name,s.phone,s.email,s.address].some(v=>str(v).toLowerCase().includes(n))).sort((a,b)=>str(a.name).localeCompare(str(b.name)))}
 function pickSupplier(q=''){return find(q).map(s=>({id:s.id,name:s.name,phone:s.phone||'',email:s.email||'',portalUrl:safePortalUrl(s.portalUrl)}))}
 function render(){const rows=find($('#search')?.value||'');$('#list').innerHTML=rows.length?rows.map(s=>`<article class="card" data-id="${esc(s.id)}"><b>${esc(s.name)}</b><span class="pill">${esc(s.status||'active')}</span><div>${esc(s.phone||'')} ${esc(s.email||'')}</div><div class="muted">${relatedPOs(s).length} PO record(s) · ${esc(s.freightRule||'No freight rule')}</div></article>`).join(''):'<div class="card muted">No suppliers yet. Supplier names from existing PO records are discovered automatically.</div>'}
+function openSupplier(id){const s=suppliers.find(x=>x.id===id);if(!s)return false;activeId=s.id;renderProfile();return true}
 function renderProfile(){
   const s=suppliers.find(x=>x.id===activeId);if(!s)return;
   const ps=relatedPOs(s),contacts=Array.isArray(s.contacts)?s.contacts:[],portal=safePortalUrl(s.portalUrl);
@@ -30,5 +31,6 @@ function renderProfile(){
 }
 $('#list').onclick=e=>{const c=e.target.closest('[data-id]');if(c){activeId=c.dataset.id;renderProfile()}};
 $('#search').oninput=render;ensureFromPOs();render();
-window.RUNLUSupplierMasterV1={find,pickSupplier,createSupplier,addContact,supplierSnapshot,attachSupplierToPO,relatedPOs};
+const deepLinkId=new URLSearchParams(location.search).get('supplier')||'';if(deepLinkId)openSupplier(deepLinkId);
+window.RUNLUSupplierMasterV1={find,pickSupplier,createSupplier,addContact,supplierSnapshot,attachSupplierToPO,relatedPOs,openSupplier};
 })();
