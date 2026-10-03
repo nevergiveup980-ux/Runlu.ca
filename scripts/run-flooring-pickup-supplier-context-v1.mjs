@@ -1,0 +1,8 @@
+import fs from'node:fs';import assert from'node:assert/strict';import{spawnSync}from'node:child_process';
+for(const p of ['flooring/supplier-master-v1.js','flooring/supplier-pickup-safe-v017.js']){const r=spawnSync(process.execPath,['--check',p],{encoding:'utf8'});assert.equal(r.status,0,r.stderr)}
+const sm=fs.readFileSync('flooring/supplier-master-v1.js','utf8'),pickup=fs.readFileSync('flooring/supplier-pickup-safe-v017.js','utf8');
+assert(sm.includes('function openSupplier(id)'));assert(sm.includes("new URLSearchParams(location.search).get('supplier')"));assert(sm.includes('openSupplier};'));
+assert(pickup.includes("SUPPLIER_STORE='runlu_flooring_supplier_master_v1'"));assert(pickup.includes('function supplierForPO(po)'));assert(pickup.includes('if(po?.supplierId)'));assert(pickup.includes('function supplierContext(po)'));assert(pickup.includes('data-supplier-profile'));assert(pickup.includes('Supplier Profile'));assert(pickup.includes("noopener,noreferrer"));
+assert(pickup.includes("freightRule:s.freightRule||''"));assert(pickup.includes("minimumOrder:s.minimumOrder||''"));assert(pickup.includes("discountRule:s.discountRule||''"));
+assert(!pickup.includes('localStorage.setItem(SUPPLIER_STORE'));assert(!pickup.includes('password'));assert(!pickup.includes('credential'));
+console.log('PASS Pickup ↔ Supplier context: stable-ID-first lookup, read-only ordering rules, safe profile deep link, no Supplier Master writes or credentials');
