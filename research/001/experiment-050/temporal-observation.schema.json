@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E050 Temporal Aggregate Observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "observed_at",
+    "side_a_queue",
+    "side_b_queue",
+    "opportunity",
+    "objective_id",
+    "schema_version"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "side_a_queue": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "side_b_queue": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "opportunity": {
+      "type": "boolean"
+    },
+    "objective_id": {
+      "type": "string",
+      "enum": [
+        "J_MAX",
+        "J_SUM",
+        "J_TAU"
+      ]
+    },
+    "oldest_wait_seconds_a": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "oldest_wait_seconds_b": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "queue_wait_sum_seconds_a": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "queue_wait_sum_seconds_b": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "overdue_threshold_seconds": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "overdue_count_a": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "overdue_count_b": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "schema_version": {
+      "const": "e050-v1"
+    }
+  }
+}

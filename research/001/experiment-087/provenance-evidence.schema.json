@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E087 Provenance Evidence Strength",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "edge_id",
+    "from",
+    "to",
+    "critical",
+    "evidence_grade",
+    "evidence_locator",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "edge_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "from": {
+      "type": "string",
+      "minLength": 1
+    },
+    "to": {
+      "type": "string",
+      "minLength": 1
+    },
+    "critical": {
+      "type": "boolean"
+    },
+    "evidence_grade": {
+      "type": "string",
+      "enum": [
+        "VERIFIED_ARTIFACT",
+        "MACHINE_DECLARED",
+        "HUMAN_DECLARED",
+        "INFERRED"
+      ]
+    },
+    "evidence_locator": {
+      "type": "string"
+    },
+    "artifact_digest": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "verified_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e087-v1"
+    }
+  }
+}

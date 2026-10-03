@@ -1,0 +1,22 @@
+name: Research 001B E049 Loss Sensitivity
+
+on:
+  push:
+    branches: [research-001-experiment-001]
+    paths:
+      - "research/001/experiment-049/**"
+      - ".github/workflows/research-001b-e049.yml"
+  pull_request:
+    paths:
+      - "research/001/experiment-049/**"
+
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run E049 loss-sensitivity self-test
+        run: node research/001/experiment-049/selftest.mjs

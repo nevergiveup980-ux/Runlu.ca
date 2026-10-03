@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E094 Shared Bias Provenance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "group_id",
+    "truth",
+    "observers",
+    "shared_roots",
+    "provenance",
+    "evidence_status",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "group_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "truth": {
+      "type": "number"
+    },
+    "observers": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "observer_id",
+          "root_id",
+          "value"
+        ],
+        "properties": {
+          "observer_id": {
+            "type": "string"
+          },
+          "root_id": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "shared_roots": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "provenance": {
+      "type": "string",
+      "enum": [
+        "SEPARATE_ROOTS",
+        "SHARED_CALIBRATION_ROOT",
+        "SHARED_LABEL_ROOT",
+        "MIXED_DEPENDENCE"
+      ]
+    },
+    "evidence_status": {
+      "type": "string",
+      "enum": [
+        "CORRELATED_EVIDENCE",
+        "NO_DECLARED_SHARED_ROOT"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e094-v1"
+    }
+  }
+}

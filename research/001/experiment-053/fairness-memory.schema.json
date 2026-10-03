@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E053 Fairness Memory State",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "objective_version",
+    "denominator_semantics",
+    "memory_model",
+    "memory_parameter",
+    "session_id",
+    "fairness_debt",
+    "schema_version"
+  ],
+  "properties": {
+    "objective_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "denominator_semantics": {
+      "type": "string",
+      "minLength": 1
+    },
+    "memory_model": {
+      "type": "string",
+      "enum": [
+        "CUMULATIVE_SESSION",
+        "ROLLING_WINDOW",
+        "EXPONENTIAL_DECAY"
+      ]
+    },
+    "memory_parameter": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "session_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fairness_debt": {
+      "type": "number"
+    },
+    "schema_version": {
+      "const": "e053-v1"
+    }
+  }
+}

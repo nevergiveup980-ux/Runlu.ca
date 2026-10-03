@@ -1,0 +1,1 @@
+{"name":"runlu-research-001-experiment-001","private":true,"type":"module","scripts":{"experiment":"node simulator.js"}}

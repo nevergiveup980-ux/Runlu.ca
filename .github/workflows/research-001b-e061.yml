@@ -1,0 +1,19 @@
+name: Research 001B E061 Vocabulary Sensitivity
+on:
+  push:
+    branches: [research-001-experiment-001]
+    paths:
+      - "research/001/experiment-061/**"
+      - ".github/workflows/research-001b-e061.yml"
+  pull_request:
+    paths:
+      - "research/001/experiment-061/**"
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node research/001/experiment-061/selftest.mjs

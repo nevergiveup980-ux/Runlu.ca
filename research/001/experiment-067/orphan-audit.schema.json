@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E067 Orphan Claim Audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "claim_id",
+    "claim_version",
+    "text_hash",
+    "parent_claim_id",
+    "reviewed_parent_version",
+    "status",
+    "schema_version"
+  ],
+  "properties": {
+    "claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "text_hash": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parent_claim_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reviewed_parent_version": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "SOURCE_ROOT",
+        "VALID_LINEAGE",
+        "ORPHAN",
+        "MISSING_PARENT",
+        "STALE_PARENT",
+        "UNREVIEWED_MUTATION"
+      ]
+    },
+    "schema_version": {
+      "const": "e067-v1"
+    }
+  }
+}

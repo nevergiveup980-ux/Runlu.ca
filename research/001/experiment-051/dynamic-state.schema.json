@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E051 Dynamic Aggregate State",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "observed_at",
+    "objective_id",
+    "side_a_queue",
+    "side_b_queue",
+    "fairness_balance",
+    "fairness_target_version",
+    "schema_version"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "objective_id": {
+      "const": "EQUAL_SHARE_FAIRNESS_V1"
+    },
+    "side_a_queue": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "side_b_queue": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "fairness_balance": {
+      "type": "integer"
+    },
+    "fairness_target_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "oldest_wait_seconds_a": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "oldest_wait_seconds_b": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "queue_wait_sum_seconds_a": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "queue_wait_sum_seconds_b": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "schema_version": {
+      "const": "e051-v1"
+    }
+  }
+}

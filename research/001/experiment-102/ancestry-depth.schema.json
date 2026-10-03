@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E102 Ancestry Depth Sensitivity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "depth",
+    "family_count",
+    "groups",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "depth": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "family_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "groups": {
+      "type": "object"
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e102-v1"
+    }
+  }
+}

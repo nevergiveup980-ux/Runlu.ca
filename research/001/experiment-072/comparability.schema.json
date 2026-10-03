@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E072 Numeric Comparability",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "left_claim_id",
+    "right_claim_id",
+    "checks",
+    "status",
+    "schema_version"
+  ],
+  "properties": {
+    "left_claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "right_claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "checks": {
+      "type": "object",
+      "required": [
+        "SAME_METRIC",
+        "COMPATIBLE_DENOMINATOR",
+        "COMPATIBLE_POPULATION",
+        "COMPATIBLE_WINDOW",
+        "COMPATIBLE_SCOPE"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "SAME_METRIC": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "COMPATIBLE_DENOMINATOR": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "COMPATIBLE_POPULATION": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "COMPATIBLE_WINDOW": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "COMPATIBLE_SCOPE": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "COMPARABLE",
+        "NOT_COMPARABLE",
+        "REVIEW_REQUIRED"
+      ]
+    },
+    "schema_version": {
+      "const": "e072-v1"
+    }
+  }
+}

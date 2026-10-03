@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E086 Provenance Completeness",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "experiment_id",
+    "coverage_status",
+    "known_roots",
+    "unknown_critical_paths",
+    "unresolved_critical_paths",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "experiment_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "coverage_status": {
+      "type": "string",
+      "enum": [
+        "COMPLETE_DECLARED_PATHS",
+        "PARTIAL_PROVENANCE",
+        "UNKNOWN_CRITICAL_PATH"
+      ]
+    },
+    "known_roots": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unknown_critical_paths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unresolved_critical_paths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e086-v1"
+    }
+  }
+}

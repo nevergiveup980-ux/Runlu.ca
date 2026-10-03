@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E090 Dual Verifier Audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "fixture_id",
+    "specification_id",
+    "oracle_expected",
+    "verifier_a",
+    "verifier_b",
+    "verifier_outcome",
+    "spec_risk",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "fixture_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "specification_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "oracle_expected": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ]
+    },
+    "verifier_a": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ]
+    },
+    "verifier_b": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ]
+    },
+    "verifier_outcome": {
+      "type": "string",
+      "enum": [
+        "AGREEMENT_PASS",
+        "AGREEMENT_FAIL",
+        "VERIFIER_DISAGREEMENT"
+      ]
+    },
+    "spec_risk": {
+      "type": "string",
+      "enum": [
+        "SHARED_SPECIFICATION_RISK",
+        "NO_SHARED_SPEC_RISK_DETECTED"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e090-v1"
+    }
+  }
+}

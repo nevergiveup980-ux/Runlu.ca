@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E044 Observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "observed_at",
+    "site_context",
+    "side_a_queue",
+    "side_b_queue",
+    "opportunity",
+    "source_mode",
+    "schema_version"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "site_context": {
+      "type": "string",
+      "enum": [
+        "NORMAL",
+        "BUSY",
+        "SURGE",
+        "UNKNOWN"
+      ]
+    },
+    "side_a_queue": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "side_b_queue": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "opportunity": {
+      "type": "boolean"
+    },
+    "source_mode": {
+      "type": "string",
+      "enum": [
+        "MANUAL_OBSERVATION",
+        "READ_ONLY_EXPORT"
+      ]
+    },
+    "schema_version": {
+      "const": "e044-v1"
+    },
+    "time_bucket": {
+      "type": "string"
+    },
+    "zone_class": {
+      "type": "string"
+    },
+    "quality": {
+      "type": "string",
+      "enum": [
+        "GOOD",
+        "UNCERTAIN"
+      ]
+    }
+  }
+}

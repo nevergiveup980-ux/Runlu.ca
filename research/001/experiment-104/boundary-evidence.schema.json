@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E104 Boundary Evidence Strength",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evidence_level",
+    "auditable",
+    "artifact_bound",
+    "fresh",
+    "mechanism_relevant",
+    "status",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "evidence_level": {
+      "type": "string",
+      "enum": [
+        "ASSERTED",
+        "DOCUMENTED",
+        "MACHINE_VERIFIED",
+        "REPRODUCIBLE_PROPAGATION",
+        "EMPIRICAL_CANDIDATE"
+      ]
+    },
+    "auditable": {
+      "type": "boolean"
+    },
+    "artifact_bound": {
+      "type": "boolean"
+    },
+    "fresh": {
+      "type": "boolean"
+    },
+    "mechanism_relevant": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "WEAK_BOUNDARY_SUPPORT",
+        "LIMITED_BOUNDARY_SUPPORT",
+        "STRONG_BOUNDARY_SUPPORT",
+        "ARTIFACT_BINDING_FAILED",
+        "EVIDENCE_STALE",
+        "MECHANISM_RELEVANCE_UNRESOLVED",
+        "EVIDENCE_UNRESOLVED"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e104-v1"
+    }
+  }
+}

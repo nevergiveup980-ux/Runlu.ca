@@ -1,0 +1,19 @@
+name: Research 001B E073 Aggregation Reversal
+on:
+  push:
+    branches: [research-001-experiment-001]
+    paths:
+      - "research/001/experiment-073/**"
+      - ".github/workflows/research-001b-e073.yml"
+  pull_request:
+    paths:
+      - "research/001/experiment-073/**"
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node research/001/experiment-073/selftest.mjs

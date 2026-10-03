@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E075 Target Weight Boundary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "comparison_id",
+    "stratum_effects",
+    "boundary",
+    "target_weight",
+    "difference",
+    "direction",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "comparison_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stratum_effects": {
+      "type": "object"
+    },
+    "boundary": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "target_weight": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "difference": {
+      "type": "number"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "A>B",
+        "A<B",
+        "TIE"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e075-v1"
+    }
+  }
+}
