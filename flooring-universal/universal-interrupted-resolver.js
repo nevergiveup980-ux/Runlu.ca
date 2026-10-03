@@ -34,7 +34,11 @@ function auditMatch(tx){return auditMatchWith(tx,arr)}
 function classifyWith(tx,reader){
  const m=tx.meta||{},audits=auditMatchWith(tx,reader),phase=String(tx.phase||'BEGIN'),base={txId:tx.id,type:tx.type,action:tx.action,startedAt:tx.startedAt,meta:m,auditEvents:audits.length,journalPhase:phase,phaseAt:tx.phaseAt||null};
  let record=null,applied=false,notApplied=false,evidence=[];
- if(tx.type==='Supplier PO'){
+ if(tx.type==='Recovery'){
+  const verified=phase==='MIRROR_RECONCILED'||phase==='PARITY_VERIFIED';
+  applied=verified;
+  evidence.push(verified?'Recovery reached its persisted verification milestone before interruption.':'Recovery did not reach a persisted verification milestone; current data must be reviewed before clearing this marker.');
+ }else if(tx.type==='Supplier PO'){
   const xs=reader(KEYS.po);
   if(tx.action==='create'){record=m.poId?find(xs,m.poId):null;if(m.poId){applied=!!record;notApplied=!record;evidence.push(record?'The exact Supplier PO created by this operation exists.':'The exact Supplier PO id from this operation is absent.')}else{evidence.push('Legacy journal entry has no exact PO id; Job-level evidence is not sufficient for automatic classification.')}}
   else {record=find(xs,m.poId);applied=!!record&&record.status!=='Draft';notApplied=!!record&&record.status==='Draft';evidence.push(record?'PO status: '+record.status+'.':'PO record not found; absence alone is not enough to prove an interrupted issue did not apply.')}
@@ -60,6 +64,7 @@ function classifyWith(tx,reader){
   evidence.push('Crash Journal says BUSINESS_SAVED but persisted business evidence does not confirm the change. This contradiction requires manual review.');
  }else if(applied){verdict='LIKELY_APPLIED';confidence=audits.length?'HIGH':'MEDIUM'}
  else if(notApplied){verdict='LIKELY_NOT_APPLIED';confidence='MEDIUM'}
+ if(tx.type==='Recovery'&&applied)confidence='HIGH';
  return {...base,verdict,confidence,evidence};
 }
 function classify(tx){return classifyWith(tx,arr)}
