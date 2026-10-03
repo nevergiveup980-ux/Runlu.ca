@@ -29,6 +29,7 @@
 - [RUNLU Ledger](https://runlu.ca/runlu-ledger.html): Privacy-first personal income and expense ledger; iOS 1.0 Ready for Distribution as of 2026-09-14.
 - [Life Ledger project background](https://runlu.ca/life-ledger.html): Earlier public project page describing the design origins of RUNLU Ledger.
 - [RUNLU Field Calculator](https://runlu.ca/field-calculator-app.html): Flooring-focused iPhone calculation and planning toolbox; iOS 1.0 Waiting for Review as of 2026-09-14.
+- [RUNLU LIST](https://runlu.ca/runlu-list.html): Local-first iPhone list with Memory, Quick Picks, duplicate protection, smart quantities, and autocomplete; iOS 1.0 submitted to Apple App Review on 2026-10-03 at US$1.99 one-time purchase.
 - [LINGGUANG Health OS](https://runlu.ca/lingguang-health-os.html): RUNLU public project page.
 
 ## Books and publishing
@@ -63,4 +64,4 @@
 - Website: https://runlu.ca/
 - Email: hello@runlu.ca
 
-Last reviewed: 2026-09-14
+Last reviewed: 2026-10-03
