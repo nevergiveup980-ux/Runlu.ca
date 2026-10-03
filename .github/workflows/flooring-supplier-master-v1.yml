@@ -1,0 +1,23 @@
+name: Flooring Supplier Master V1
+on:
+  pull_request:
+    paths:
+      - 'flooring/supplier-master-v1.js'
+      - 'flooring/index-supplier-master-v1.html'
+      - 'scripts/run-flooring-supplier-master-v1.mjs'
+      - '.github/workflows/flooring-supplier-master-v1.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'flooring/supplier-master-v1.js'
+      - 'flooring/index-supplier-master-v1.html'
+      - 'scripts/run-flooring-supplier-master-v1.mjs'
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/run-flooring-supplier-master-v1.mjs
