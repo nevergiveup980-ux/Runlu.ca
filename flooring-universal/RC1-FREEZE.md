@@ -1,44 +1,51 @@
-# RUNLU Flooring OS Universal — RC1 Freeze
+# RUNLU Flooring OS Universal — Local-First RC1 Freeze
 
-Status: **ENGINEERING FROZEN**
-Freeze date: 2026-09-26
-Branch: `feature/flooring-os-universal-foundation`
+Status: **ENGINEERING FROZEN · REAL-DEVICE ACCEPTANCE NEXT**  
+Branch: `feature/flooring-os-universal-foundation`  
+Validated candidate runtime: `79cadf9bade653c79859b5c231de4295cb027a14`  
+Runtime cache: **v54**
 
-## Frozen scope
+## Freeze rule
 
-RC1 freezes the current Universal local-first engineering baseline. No new product features should be added to this RC unless a release-blocking defect is found.
+RC1 is feature-frozen. Until physical-device acceptance completes, changes are limited to release-blocking defects found by acceptance testing. No feature additions, no merge to `main`, no Deerfoot production changes, and no production Supabase changes.
 
-The preserved Deerfoot production edition remains outside this freeze and must not be modified as part of Universal release work.
+## Automated evidence at freeze
 
-## Evidence at freeze
+- Cloudflare Pages: PASS.
+- Site integrity / check: PASS.
+- Flooring Universal Durability Lab: PASS.
+- Same candidate was run through the durability lab a second time unchanged: PASS.
+- Production interrupted resolver fixture matrix: PASS, including Recovery interruption states.
+- Lifecycle acceptance: PASS.
+- North Star full lifecycle model scenario: PASS.
+- Browser runtime contract: PASS.
+- Local-First persistence contract: PASS.
+- Recovery interruption gate: PASS.
+- Durability model: 4 seeds × 250,000 rounds per run. Two successful unchanged-candidate runs = **2,000,000 modeled stress rounds**.
 
-- Universal durability lab completed successfully at 1,000,000 deterministic stress rounds (4 seeds × 250,000 rounds).
-- Production `universal-interrupted-resolver.js` is exercised directly by the resolver fixture matrix.
-- Split persistence contradictions fail closed to `UNCERTAIN / REVIEW`.
-- Repository site check completed successfully after aligning Flooring Universal with the existing app-owned localization boundary.
-- Universal runtime remains isolated from `/flooring/` and direct Supabase runtime/client wiring in the durability gate.
-- RC1 remains on the feature branch. It is not merged to `main` and is not a production deployment.
+These are automated/model/contract gates. They do not substitute for physical iPhone Safari/PWA acceptance or true process/power-loss testing.
 
-## Release boundary
+## Physical iPhone acceptance gate
 
-**Freeze does not mean production release.**
+Use clearly synthetic data and run the frozen candidate without adding features:
 
-Before merge/deployment, RC1 still requires real-device acceptance on iPhone/PWA, including:
+1. Open Universal online and confirm workspace identity plus Device Ready.
+2. Create a synthetic customer/job.
+3. Advance the chain: Sales/Job → Supplier PO → Receiving → Warehouse → Installation → Customer Invoice → Payment.
+4. Reload after key transitions and verify persistence.
+5. Close/reopen Safari/PWA and verify normal startup.
+6. Add/open from Home Screen where applicable.
+7. After loading online, disable Wi-Fi/cellular and reopen; verify shell and existing local data remain available.
+8. Restore connectivity and verify Local/Mirror health.
+9. Exercise one Recovery Point or backup/restore using synthetic data.
+10. Confirm successful recovery leaves no active Crash Journal marker and Device Ready returns clear.
 
-1. Preview opens and core modules are reachable.
-2. Install/Add to Home Screen behavior is acceptable.
-3. Launch online, then operate offline.
-4. Create/edit representative local records while offline.
-5. Force-close and relaunch while offline.
-6. Confirm local data survives relaunch.
-7. Restore network and confirm the app remains healthy.
-8. Exercise interrupted-operation review/recovery on device.
-9. Confirm no Deerfoot production data is read or changed.
+## Promotion rule
 
-Any failure above reopens RC1 only for the smallest release-blocking fix plus regression coverage.
+Promote RC1 to **V1.0 Local-First** only after the physical-device gate passes. Any acceptance defect reopens RC1 only for the smallest targeted fix, followed by the automated gates again.
 
 ## Frozen principle
 
 > Preserve the mother version. Grow a new branch.
 
-RC1 is the engineering candidate for physical-device acceptance. Merge, deployment, cloud migration, and production release require separate explicit approval.
+RC1 remains isolated from Deerfoot. Merge to `main`, cloud migration, and production release require separate approval.
