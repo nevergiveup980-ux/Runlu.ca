@@ -35,6 +35,7 @@ jobs:
           node --check forum.js
           node --check forum-live-ai.js
           node --check leave-a-note.js
+          node --check flooring-interest.js
           node --check core/runlu-core.js
           node --check core/runlu-cloud.js
           node --check evidence/reader.js
