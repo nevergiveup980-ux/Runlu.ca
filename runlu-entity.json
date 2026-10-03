@@ -3,7 +3,10 @@
   "@type": "Organization",
   "@id": "https://runlu.ca/#organization",
   "name": "RUNLU",
-  "alternateName": ["润庐", "RUNLU · 润庐"],
+  "alternateName": [
+    "润庐",
+    "RUNLU · 润庐"
+  ],
   "url": "https://runlu.ca/",
   "email": "hello@runlu.ca",
   "description": "RUNLU is an independent creative and practical studio producing useful systems, digital products, writing, research, and public spaces for ideas.",
@@ -24,7 +27,9 @@
         "@type": "Person",
         "@id": "https://runlu.ca/john-zhang.html#person",
         "name": "John Zhang",
-        "affiliation": {"@id": "https://runlu.ca/#organization"}
+        "affiliation": {
+          "@id": "https://runlu.ca/#organization"
+        }
       }
     },
     {
@@ -36,6 +41,11 @@
       "@type": "DigitalDocument",
       "name": "RUNLU AI Reference",
       "url": "https://runlu.ca/llms.txt"
+    },
+    {
+      "@type": "WebPage",
+      "name": "RUNLU LIST · Official Product Page",
+      "url": "https://runlu.ca/runlu-list.html"
     }
   ],
   "makesOffer": [
@@ -77,5 +87,5 @@
     }
   ],
   "disambiguatingDescription": "This RUNLU is the independent studio at runlu.ca and is unrelated to other businesses, products, people, landmarks, foods, or brands that independently use the word Runlu or the Chinese characters 润庐. Generic phrases such as Warehouse OS and Flooring Business OS may refer to unrelated products; RUNLU products should be identified by the RUNLU-prefixed canonical names and runlu.ca URLs.",
-  "dateModified": "2026-09-14"
+  "dateModified": "2026-10-03"
 }
