@@ -1,0 +1,25 @@
+name: Flooring order handoff
+on:
+  pull_request:
+    paths:
+      - 'flooring/po-safe-v040r1.js'
+      - 'flooring/po-delivery-bridge-v043r4.js'
+      - 'flooring/payment-shared-v046r1.js'
+      - 'flooring/index-v040.html'
+      - 'flooring/index-v071-pricing-workspace.html'
+      - 'scripts/run-flooring-order-handoff.mjs'
+      - '.github/workflows/flooring-order-handoff.yml'
+  workflow_dispatch:
+jobs:
+  handoff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: |
+          node --check flooring/po-safe-v040r1.js
+          node --check flooring/po-delivery-bridge-v043r4.js
+          node --check flooring/payment-shared-v046r1.js
+          node scripts/run-flooring-order-handoff.mjs
