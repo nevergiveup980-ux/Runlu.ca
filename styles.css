@@ -248,3 +248,18 @@
   .runlu-home .hero-brand-intro{margin-bottom:14px}
   .runlu-home .hero h1{margin-top:4px}
 }
+
+/* RUNLU Navigation V2 · grouped, quiet, scalable */
+.desktop-nav-v2{align-items:center;gap:22px}
+.desktop-nav-v2>a,.nav-group-toggle{font:inherit;font-size:.92rem;color:inherit;opacity:.72}
+.nav-group{position:relative;display:flex;align-items:center}
+.nav-group-toggle{display:inline-flex;align-items:center;gap:5px;padding:26px 0;border:0;background:transparent;cursor:pointer;transition:opacity .2s}
+.nav-group-toggle:hover,.nav-group:focus-within .nav-group-toggle{opacity:1}
+.nav-chevron{font-size:.8em;transform:translateY(-1px);transition:transform .2s}
+.nav-group:hover .nav-chevron,.nav-group:focus-within .nav-chevron{transform:translateY(1px) rotate(180deg)}
+.nav-dropdown{position:absolute;top:calc(100% - 8px);left:-22px;min-width:190px;padding:10px;border:1px solid rgba(23,25,21,.10);border-radius:18px;background:rgba(255,255,255,.97);box-shadow:0 18px 48px rgba(18,34,24,.12);backdrop-filter:blur(18px);opacity:0;visibility:hidden;transform:translateY(-5px);transition:opacity .18s ease,transform .18s ease,visibility .18s;z-index:80}
+.nav-dropdown-right{left:auto;right:-16px}
+.nav-dropdown a{display:block;padding:10px 12px;border-radius:10px;white-space:nowrap;color:#343a34;opacity:.78}
+.nav-dropdown a:hover,.nav-dropdown a:focus-visible{background:#f4f5f0;opacity:1;outline:none}
+.nav-group:hover .nav-dropdown,.nav-group:focus-within .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+@media(min-width:861px) and (max-width:1120px){.desktop-nav-v2{gap:14px}.desktop-nav-v2>a,.nav-group-toggle{font-size:.82rem}}
