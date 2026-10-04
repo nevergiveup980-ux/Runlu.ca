@@ -62,7 +62,7 @@ function run(){
  }
  const support=window.RUNLUUniversalSupportCenter;
  if(support){
-  t('Support Center · tool registry',Array.isArray(support.TOOLS)&&support.TOOLS.length===11,'11 maintenance tools consolidated');
+  t('Support Center · tool registry',Array.isArray(support.TOOLS)&&support.TOOLS.length===12&&support.TOOLS.some(x=>x.id==='release'),'12 maintenance tools consolidated, including Release Gate');
   t('Support Center · status API',typeof support.status==='function'&&typeof support.render==='function','customer maintenance hub ready');
   const wired=(support.TOOLS||[]).every(x=>!!document.getElementById(x.target)&&typeof window[x.api]?.render==='function');
   t('Support Center · tool wiring',wired,'every maintenance tool must have a DOM target and renderable API');
