@@ -35,9 +35,11 @@ async function run(){
   {id:'backup',name:'Backup / Restore',ok:typeof window.RUNLUUniversalBackup?.collect==='function'&&typeof window.RUNLUUniversalBackup?.restore==='function',detail:'Portable backup contract'},
   {id:'storage',name:'Storage Capacity',ok:storage.ok,detail:storage.detail}
  ];
- const critical=['startup','journal','workspace','adapter','schema','indexeddb','serviceworker','cache','backup','storage'];
+ const workspaceReady=!!workspace?.company?.organizationId;
+ const critical=workspaceReady?['startup','journal','workspace','adapter','schema','indexeddb','serviceworker','cache','backup','storage']:['startup','journal','adapter','indexeddb','serviceworker','cache','backup','storage'];
  const failed=checks.filter(x=>critical.includes(x.id)&&!x.ok);
- return {ready:failed.length===0,checks,failed,online:navigator.onLine!==false,installed:!!pwa.installed,persisted:storage.persisted,checkedAt:new Date().toISOString()};
+ const setupPending=checks.filter(x=>['workspace','schema'].includes(x.id)&&!x.ok);
+ return {ready:failed.length===0&&setupPending.length===0,deviceReady:failed.length===0,workspaceReady,checks,failed,setupPending,online:navigator.onLine!==false,installed:!!pwa.installed,persisted:storage.persisted,checkedAt:new Date().toISOString()};
 }
 async function requestPersistence(){
  if(!navigator.storage?.persist)return {ok:false,detail:'Persistent storage request unavailable'};
@@ -52,7 +54,7 @@ async function render(){
  const host=document.getElementById('universalDeviceReady');if(!host)return;
  host.innerHTML='<div class="card"><h2>Device Readiness</h2><p class="muted">Running Local-First preflight…</p></div>';
  const r=await run();
- host.innerHTML='<div class="card"><h2>Device Readiness</h2><p class="muted">One screen to confirm this device can operate the Universal Local-First workspace.</p><div class="uReadyHero '+(r.ready?'pass':'hold')+'"><div><b>'+(r.ready?'DEVICE READY ✓':'SETUP CHECK')+'</b><span>'+(r.ready?'Local workspace, durable data, offline shell and recovery are ready.':r.failed.length+' required check(s) need attention.')+'</span></div><strong>'+(r.online?'ONLINE':'OFFLINE')+'</strong></div></div><div class="card">'+r.checks.map(x=>'<div class="uReadyRow"><div><b>'+(x.ok?'✓':'○')+' '+esc(x.name)+'</b><span>'+esc(x.detail)+'</span></div><strong class="'+(x.ok?'good':'wait')+'">'+(x.ok?'READY':'CHECK')+'</strong></div>').join('')+'<div class="uReadyActions"><button id="uReadyRefresh">Run Check Again</button><button id="uReadyPersist">Protect Local Storage</button></div><p class="muted">Persistent-storage protection depends on browser policy. Downloaded backups remain the independent disaster-recovery copy.</p></div>';
+ const preSetup=r.deviceReady&&!r.workspaceReady;host.innerHTML='<div class="card"><h2>Device Readiness</h2><p class="muted">One screen to confirm this device can operate the Universal Local-First workspace.</p><div class="uReadyHero '+(r.ready?'pass':preSetup?'pass':'hold')+'"><div><b>'+(r.ready?'DEVICE READY ✓':preSetup?'DEVICE READY · SETUP PENDING':'SETUP CHECK')+'</b><span>'+(r.ready?'Local workspace, durable data, offline shell and recovery are ready.':preSetup?'Device protection is ready. Company Workspace and Data Version will complete after Company Setup.':r.failed.length+' device protection check(s) need attention.')+'</span></div><strong>'+(r.online?'ONLINE':'OFFLINE')+'</strong></div></div><div class="card">'+r.checks.map(x=>'<div class="uReadyRow"><div><b>'+(x.ok?'✓':'○')+' '+esc(x.name)+'</b><span>'+esc(x.detail)+'</span></div><strong class="'+(x.ok?'good':'wait')+'">'+(x.ok?'READY':'CHECK')+'</strong></div>').join('')+'<div class="uReadyActions"><button id="uReadyRefresh">Run Check Again</button><button id="uReadyPersist">Protect Local Storage</button></div><p class="muted">Company Workspace and Data Version are setup-state checks, not device failures. Persistent-storage protection depends on browser policy. Downloaded backups remain the independent disaster-recovery copy.</p></div>';
  document.getElementById('uReadyRefresh').onclick=render;
  document.getElementById('uReadyPersist').onclick=async()=>{const x=await requestPersistence();alert(x.detail);render()};
 }
