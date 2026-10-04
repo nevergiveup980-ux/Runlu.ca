@@ -377,7 +377,8 @@ const tests = [];
 
 tests.push(check('Candidate exposes fail-closed safety contract', () => {
   const env = bootFlooring();
-  must(env.ack.version === '0.9.8', 'candidate version mismatch');
+  must(env.ack.version === '0.9.9', 'candidate version mismatch');
+  must(env.ack.supportsPostedInventoryEvidence, 'Posted inventory evidence flag missing');
   must(env.ack.requiresInventoryCertificate, 'inventory certificate flag missing');
   must(env.ack.requiresFullReceipt, 'full receipt flag missing');
   must(env.ack.duplicateEvidenceFailsClosed, 'duplicate evidence flag missing');
@@ -401,6 +402,38 @@ tests.push(check('Exact Warehouse receipt creates inventory proof for one PO ack
   must(queue?.status === 'Not Called' && queue.sourcePOs.includes('181700'), 'People TO Call not created');
   must(warehouse.network() === 0 && flooring.network() === 0, 'network attempted');
   return { warehouseQty: 10, poStatus: 'Received', peopleToCall: queue.status };
+}));
+
+tests.push(check('Actual cloud Posted inventory evidence can acknowledge a full final receipt', () => {
+  const env = bootFlooring();
+  const task = makeTask(181720);
+  task.status = 'Ready';
+  task.inventory_post_status = 'Posted';
+  task.inventory_posted_at = '2026-10-04T18:00:00.000Z';
+  task.inventory_postings = [{line:1,unit:'Box',product:'LAB TILE',colour:'GREY',location:'A1',quantity:10,inventory_id:'INV-POSTED-1',received_qty:'10',before_quantity:4,after_quantity:14}];
+  seedFlooring(env, { jobs: [makeJob('J1', 181720)], pos: [makePO('PO1', 'J1', 181720, 181720)], tasks: [task] });
+  const result = env.ack.acknowledgePO(181720);
+  must(result.ok && result.changed && result.code === 'ACKNOWLEDGED', 'Posted evidence acknowledgement failed');
+  const po = env.localStorage.json(F.PO)[0];
+  must(po.status === 'Received', 'PO not Received');
+  must(po.warehouseReceiptInventoryEvidenceKind === 'inventory-posting', 'evidence kind not recorded');
+  must(po.warehouseReceiptInventoryEvidenceIds?.[0] === 'INV-POSTED-1', 'posting evidence ID not recorded');
+  return { poStatus: po.status, evidence: po.warehouseReceiptInventoryEvidenceKind };
+}));
+
+tests.push(check('Posted evidence with impossible stock delta fails closed', () => {
+  const env = bootFlooring();
+  const task = makeTask(181721);
+  task.status = 'Ready';
+  task.inventory_post_status = 'Posted';
+  task.inventory_posted_at = '2026-10-04T18:00:00.000Z';
+  task.inventory_postings = [{line:1,quantity:10,inventory_id:'INV-BAD',received_qty:'10',before_quantity:4,after_quantity:13}];
+  seedFlooring(env, { jobs: [makeJob('J1', 181721)], pos: [makePO('PO1', 'J1', 181721, 181721)], tasks: [task] });
+  const before = JSON.stringify(env.localStorage.snapshot());
+  const result = env.ack.acknowledgePO(181721);
+  must(!result.ok && result.code === 'POSTED_STOCK_DELTA_MISMATCH', 'bad stock delta accepted');
+  must(JSON.stringify(env.localStorage.snapshot()) === before, 'bad Posted evidence mutated state');
+  return { blocked: result.code };
 }));
 
 const blockedCases = [
@@ -575,7 +608,7 @@ const report = {
   gate: 'RUNLU Flooring ↔ Warehouse Verified Receipt Ack LAB V0.8',
   pass,
   generatedAt: new Date().toISOString(),
-  candidate: { file: ACK_FILE, version: '0.9.8', sha256: sha(ackSource), productionAutoInstall: false },
+  candidate: { file: ACK_FILE, version: '0.9.9', sha256: sha(ackSource), productionAutoInstall: false },
   warehouse: {
     runtime: `${warehouseVersion.version} Build${warehouseVersion.build}`,
     indexSha256: sha(warehouseIndex),
@@ -592,7 +625,7 @@ const report = {
   contract: [
     'A Flooring PO may auto-ack Received only from one exact shared Warehouse task.',
     'Task must be Ready/Completed with every received quantity exactly equal to ordered quantity.',
-    'Task must carry a second inventory-verification certificate tied to the same PO and one or more applied Warehouse operation IDs.',
+    'Task must carry verified inventory evidence: either the legacy certificate or actual Posted inventory rows with exact line quantities, inventory IDs, timestamp, and stock deltas.',
     'PO Received and People TO Call routing commit together or both stores restore.',
     'Sales Review remains unable to mutate Received PO status.',
     'This LAB verifies the certificate consumer contract; it does not publish the certificate to production Supabase or load V098 in production.'
