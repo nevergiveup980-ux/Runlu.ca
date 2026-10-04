@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E065 Semantic Scope Review",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "claim_id",
+    "declared_scope",
+    "text",
+    "checks",
+    "status",
+    "review_version",
+    "schema_version"
+  ],
+  "properties": {
+    "claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "declared_scope": {
+      "type": "string",
+      "enum": [
+        "ANALYTIC",
+        "SYNTHETIC",
+        "OBSERVATIONAL",
+        "OPERATIONAL",
+        "PRODUCTION_SAFETY"
+      ]
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "S1_REALITY_TRANSFER",
+          "S2_DEPLOYMENT_READINESS",
+          "S3_SAFETY_TRANSFER",
+          "S4_VALIDATION_TRANSFER",
+          "S5_CAUSAL_TRANSFER",
+          "S6_SCOPE_OMISSION"
+        ]
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PASS_BOUNDED",
+        "REVIEW_REQUIRED"
+      ]
+    },
+    "review_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "const": "e065-v1"
+    }
+  }
+}

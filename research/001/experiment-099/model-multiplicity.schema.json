@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E099 Model Multiplicity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "model_id",
+    "admitted",
+    "admission_basis",
+    "verdict",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "model_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "admitted": {
+      "type": "boolean"
+    },
+    "admission_basis": {
+      "type": "string",
+      "enum": [
+        "CAUSAL_DERIVATION",
+        "ARCHITECTURE_PATH",
+        "REPRODUCIBLE_FIXTURE",
+        "EMPIRICAL_OBSERVATION",
+        "UNRESOLVED"
+      ]
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "DEPENDENT",
+        "SEPARATE"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e099-v1"
+    }
+  }
+}

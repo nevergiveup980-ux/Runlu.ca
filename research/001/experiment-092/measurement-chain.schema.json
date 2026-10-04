@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E092 Measurement Chain Audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "oracle_id",
+    "calibration_valid",
+    "temporally_aligned",
+    "label_independent",
+    "missingness_acceptable",
+    "representative_for_scope",
+    "status",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "oracle_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "calibration_valid": {
+      "type": "boolean"
+    },
+    "temporally_aligned": {
+      "type": "boolean"
+    },
+    "label_independent": {
+      "type": "boolean"
+    },
+    "missingness_acceptable": {
+      "type": "boolean"
+    },
+    "representative_for_scope": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "EMPIRICAL_ORACLE_CANDIDATE",
+        "MEASUREMENT_CHAIN_REVIEW",
+        "GROUND_TRUTH_NOT_ESTABLISHED"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e092-v1"
+    }
+  }
+}

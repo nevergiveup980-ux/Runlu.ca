@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E095 Evidence Census",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "partition_id",
+    "raw_observer_count",
+    "cluster_sizes",
+    "unique_critical_root_count",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "partition_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "raw_observer_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "cluster_sizes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "unique_critical_root_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e095-v1"
+    }
+  }
+}

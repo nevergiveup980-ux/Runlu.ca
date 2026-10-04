@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E101 Transitive Model Ancestry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "model_root",
+    "ancestors",
+    "ancestry_complete",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "model_root": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ancestors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "ancestry_complete": {
+      "type": "boolean"
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e101-v1"
+    }
+  }
+}

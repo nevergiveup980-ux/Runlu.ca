@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E059 Model Family Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "model_id",
+    "family_id",
+    "family_definition_version",
+    "action",
+    "model_set_version",
+    "schema_version"
+  ],
+  "properties": {
+    "model_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "family_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "family_definition_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "A",
+        "B",
+        "TIE"
+      ]
+    },
+    "model_set_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "const": "e059-v1"
+    }
+  }
+}

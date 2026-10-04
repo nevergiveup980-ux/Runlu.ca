@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E103 Depth Selection Provenance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "depth",
+    "selection_basis",
+    "precommitted",
+    "auditable",
+    "selection_status",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "depth": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "selection_basis": {
+      "type": "string",
+      "enum": [
+        "ARCHITECTURE",
+        "CAUSAL_MECHANISM",
+        "CONVENTION",
+        "DATA_AVAILABILITY",
+        "POST_HOC_RESULT",
+        "UNKNOWN"
+      ]
+    },
+    "precommitted": {
+      "type": "boolean"
+    },
+    "auditable": {
+      "type": "boolean"
+    },
+    "selection_status": {
+      "type": "string",
+      "enum": [
+        "MECHANISM_JUSTIFIED_BOUNDARY",
+        "CONVENTION_JUSTIFIED_BOUNDARY",
+        "AVAILABILITY_LIMITED_BOUNDARY",
+        "POST_HOC_DEPTH_SELECTION",
+        "DEPTH_SELECTION_UNRESOLVED"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e103-v1"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E081 Outcome-Normalized Stress",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "audit_id",
+    "outcome_metric",
+    "impact_budget",
+    "worst_contrast",
+    "status",
+    "native_parameters",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "audit_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "outcome_metric": {
+      "type": "string",
+      "minLength": 1
+    },
+    "impact_budget": {
+      "type": "number",
+      "minimum": 0
+    },
+    "worst_contrast": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ROBUST_A",
+        "BOUNDARY_TOUCHING",
+        "SIGN_UNRESOLVED"
+      ]
+    },
+    "native_parameters": {
+      "type": "object"
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e081-v1"
+    }
+  }
+}

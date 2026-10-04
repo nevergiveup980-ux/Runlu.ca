@@ -1,0 +1,19 @@
+name: Research 001B E074 Standardization Target
+on:
+  push:
+    branches: [research-001-experiment-001]
+    paths:
+      - "research/001/experiment-074/**"
+      - ".github/workflows/research-001b-e074.yml"
+  pull_request:
+    paths:
+      - "research/001/experiment-074/**"
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node research/001/experiment-074/selftest.mjs

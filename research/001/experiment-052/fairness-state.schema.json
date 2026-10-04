@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E052 Fairness Accounting State",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "window_id",
+    "objective_id",
+    "served_a",
+    "served_b",
+    "denominator_semantics",
+    "objective_version",
+    "schema_version"
+  ],
+  "properties": {
+    "window_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "objective_id": {
+      "type": "string",
+      "enum": [
+        "RAW_EQUAL_SHARE",
+        "ELIGIBLE_DEMAND_NORMALIZED",
+        "ELIGIBLE_OPPORTUNITY_NORMALIZED"
+      ]
+    },
+    "served_a": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "served_b": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "eligible_demand_a": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "eligible_demand_b": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "eligible_opportunities_a": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "eligible_opportunities_b": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "denominator_semantics": {
+      "type": "string",
+      "minLength": 1
+    },
+    "objective_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "const": "e052-v1"
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E076 Target Weight Uncertainty",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "comparison_id",
+    "weight_low",
+    "weight_high",
+    "boundary",
+    "contrast_low",
+    "contrast_high",
+    "status",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "comparison_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "weight_low": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "weight_high": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "boundary": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "contrast_low": {
+      "type": "number"
+    },
+    "contrast_high": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ROBUST_A",
+        "ROBUST_B",
+        "BOUNDARY_CROSSING",
+        "BOUNDARY_TOUCHING",
+        "POINT_TIE"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e076-v1"
+    }
+  }
+}

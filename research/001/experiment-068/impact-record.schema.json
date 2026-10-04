@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E068 Impact Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "source_claim_id",
+    "source_version",
+    "change_class",
+    "changed_propositions",
+    "descendant_claim_id",
+    "action",
+    "reason",
+    "schema_version"
+  ],
+  "properties": {
+    "source_claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "change_class": {
+      "type": "string",
+      "enum": [
+        "NON_SUBSTANTIVE",
+        "NARROWED_SCOPE",
+        "NUMERIC_CORRECTION",
+        "CONCLUSION_REVERSED",
+        "RETRACTED"
+      ]
+    },
+    "changed_propositions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "descendant_claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "UNAFFECTED",
+        "RE_REVIEW",
+        "BLOCK"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "const": "e068-v1"
+    }
+  }
+}

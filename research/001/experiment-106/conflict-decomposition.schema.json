@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E106 Conflict Decomposition",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "channel",
+    "depth",
+    "failure_mode",
+    "timescale",
+    "operating_regime",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "channel": {
+      "type": "string",
+      "minLength": 1
+    },
+    "depth": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "failure_mode": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timescale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "operating_regime": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e106-v1"
+    }
+  }
+}

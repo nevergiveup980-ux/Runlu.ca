@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E107 Conditioning Granularity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "granularity_id",
+    "fields",
+    "admitted",
+    "status",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "granularity_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "admitted": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "CONFLICT_PRESENT",
+        "NO_WITHIN_CONTEXT_CONFLICT"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e107-v1"
+    }
+  }
+}

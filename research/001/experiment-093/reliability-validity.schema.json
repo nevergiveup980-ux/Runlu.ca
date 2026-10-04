@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E093 Reliability vs Validity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "measurement_id",
+    "reference_value",
+    "values",
+    "mean",
+    "sd",
+    "bias",
+    "reliable",
+    "valid",
+    "status",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "measurement_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reference_value": {
+      "type": "number"
+    },
+    "values": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "number"
+      }
+    },
+    "mean": {
+      "type": "number"
+    },
+    "sd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "bias": {
+      "type": "number"
+    },
+    "reliable": {
+      "type": "boolean"
+    },
+    "valid": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RELIABLE_AND_VALID",
+        "RELIABLE_BUT_BIASED",
+        "NOISY_BUT_UNBIASED",
+        "UNRELIABLE_AND_BIASED"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e093-v1"
+    }
+  }
+}

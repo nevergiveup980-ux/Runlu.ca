@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Research 001B E074 Standardization Target",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "target_id",
+    "weights",
+    "standardized_A",
+    "standardized_B",
+    "difference",
+    "direction",
+    "scope",
+    "schema_version"
+  ],
+  "properties": {
+    "target_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "weights": {
+      "type": "object",
+      "required": [
+        "EASY",
+        "HARD"
+      ],
+      "properties": {
+        "EASY": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "HARD": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "standardized_A": {
+      "type": "number"
+    },
+    "standardized_B": {
+      "type": "number"
+    },
+    "difference": {
+      "type": "number"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "A>B",
+        "A<B",
+        "TIE"
+      ]
+    },
+    "scope": {
+      "const": "SYNTHETIC"
+    },
+    "schema_version": {
+      "const": "e074-v1"
+    }
+  }
+}
