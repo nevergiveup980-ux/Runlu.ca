@@ -31,6 +31,7 @@ async function status(){
   schema:!!schema?.compatible&&schema.workspaceVersion>0,
   offline:!!pwa?.supported&&!!pwa?.registered,
   recoveryPoints:points.length,
+  recoveryReady:points.length>0,
   releasePass:!!gate&&gate.failed===0,
   releaseFailed:gate?.failed??null
  };
@@ -45,8 +46,9 @@ async function openTool(item){
 async function render(){
  const host=document.getElementById('universalSupportCenter');if(!host)return;
  host.innerHTML='<div class="card"><h2>Support & Recovery</h2><p class="muted">Running maintenance checks…</p></div>';
- const s=await status(),healthy=s.startup&&s.ready&&s.durable&&s.schema&&s.offline&&s.releasePass;
- host.innerHTML='<div class="card"><h2>Support & Recovery Center</h2><p class="muted">One maintenance station for device checks, recovery, backups, offline support and diagnostics.</p><div class="uSupportHero '+(healthy?'pass':'hold')+'"><div><b>'+(healthy?'SYSTEM PROTECTED ✓':'MAINTENANCE CHECK')+'</b><span>'+(healthy?'Core Local-First protection layers are ready.':'One or more protection layers need review.')+'</span></div><strong>'+(navigator.onLine!==false?'ONLINE':'OFFLINE')+'</strong></div><div class="uSupportStrip"><span>Startup <b>'+(s.startup?'READY':'REVIEW')+'</b></span><span>Device <b>'+(s.ready?'READY':'CHECK')+'</b></span><span>IndexedDB <b>'+(s.durable?'READY':'CHECK')+'</b></span><span>Schema <b>'+(s.schema?'READY':'CHECK')+'</b></span><span>Offline <b>'+(s.offline?'READY':'CHECK')+'</b></span><span>Recovery Points <b>'+esc(s.recoveryPoints)+'</b></span><span>Release Gate <b>'+(s.releasePass?'PASS':s.releaseFailed===null?'CHECK':'HOLD')+'</b></span></div></div><div class="card"><h3>Maintenance Tools</h3><div class="uSupportTools">'+TOOLS.map(x=>'<button class="uSupportTool" data-support="'+esc(x.id)+'"><b>'+esc(x.title)+'</b><span>'+esc(x.desc)+'</span></button>').join('')+'</div><p class="muted">These tools stay separate internally, but customers reach them through one support center.</p></div>';
+ const s=await status(),healthy=s.startup&&s.ready&&s.durable&&s.schema&&s.offline&&s.recoveryReady&&s.releasePass;
+ host.innerHTML='<div class="card"><h2>Support & Recovery Center</h2><p class="muted">One maintenance station for device checks, recovery, backups, offline support and diagnostics.</p><div class="uSupportHero '+(healthy?'pass':'hold')+'"><div><b>'+(healthy?'SYSTEM PROTECTED ✓':'MAINTENANCE CHECK')+'</b><span>'+(healthy?'Core Local-First protection layers are ready.':'One or more protection layers need review.')+'</span></div><strong>'+(navigator.onLine!==false?'ONLINE':'OFFLINE')+'</strong></div><div class="uSupportStrip"><span>Startup <b>'+(s.startup?'READY':'REVIEW')+'</b></span><span>Device <b>'+(s.ready?'READY':'CHECK')+'</b></span><span>IndexedDB <b>'+(s.durable?'READY':'CHECK')+'</b></span><span>Schema <b>'+(s.schema?'READY':'CHECK')+'</b></span><span>Offline <b>'+(s.offline?'READY':'CHECK')+'</b></span><span>Recovery Points <b>'+esc(s.recoveryPoints)+'</b></span><span>Release Gate <b>'+(s.releasePass?'PASS':s.releaseFailed===null?'CHECK':'HOLD')+'</b></span></div></div><div class="card"><h3>Maintenance Tools</h3><div class="uSupportTools">'+TOOLS.map(x=>'<button class="uSupportTool" data-support="'+esc(x.id)+'"><b>'+esc(x.title)+'</b><span>'+esc(x.desc)+'</span></button>').join('')+'</div><p class="muted">These tools stay separate internally, but customers reach them through one support center.</p><p><button id="uSupportRefresh">Refresh Status</button></p></div>';
+ const refresh=document.getElementById('uSupportRefresh');if(refresh)refresh.onclick=render;
  host.querySelectorAll('[data-support]').forEach(btn=>btn.onclick=()=>openTool(TOOLS.find(x=>x.id===btn.dataset.support)));
 }
 window.RUNLUUniversalSupportCenter=Object.freeze({TOOLS,status,render});
