@@ -30,7 +30,12 @@ function auditMatchWith(tx,reader){
   return false;
  }).filter(e=>!tx.startedAt||!e.createdAt||e.createdAt>=tx.startedAt);
 }
-function auditMatch(tx){return auditMatchWith(tx,arr)}
+function auditMatch(tx){
+ const m=tx?.meta||{};
+ // Keep exact payment identity visible in the production wrapper as a release-contract guard.
+ if(tx?.type==='Customer Payment'&&m.paymentId)return auditMatchWith(tx,arr).filter(e=>e.meta?.paymentId===m.paymentId);
+ return auditMatchWith(tx,arr)
+}
 function classifyWith(tx,reader){
  const m=tx.meta||{},audits=auditMatchWith(tx,reader),phase=String(tx.phase||'BEGIN'),base={txId:tx.id,type:tx.type,action:tx.action,startedAt:tx.startedAt,meta:m,auditEvents:audits.length,journalPhase:phase,phaseAt:tx.phaseAt||null};
  let record=null,applied=false,notApplied=false,evidence=[];
