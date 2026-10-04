@@ -35,10 +35,11 @@ async function inspect(prior){
 }
 async function boot(){
  const prior=previous(),hasWorkspace=!!data().read(WS,null)?.company?.organizationId;
- if(prior?.sessionOpen&&hasWorkspace)window.RUNLUUniversalLocalHealth?.capture?.('Startup Guard · prior session ended unexpectedly',{priorSessionId:prior.sessionId||null,priorOpenedAt:prior.openedAt||null});
+ let startupRecoveryPoint=null;
+ if(prior?.sessionOpen&&hasWorkspace)startupRecoveryPoint=window.RUNLUUniversalLocalHealth?.capture?.('Startup Guard · prior session ended unexpectedly',{priorSessionId:prior.sessionId||null,priorOpenedAt:prior.openedAt||null})||null;
  markOpen(prior);
- startup=await inspect(prior);
- const s=previous()||{};write({...s,lastInspection:{checkedAt:startup.checkedAt,blocked:startup.blocked,priorUnclean:startup.priorUnclean,issueCodes:startup.issues.map(x=>x.code)}});
+ startup={...(await inspect(prior)),recoveryPointCaptured:!!startupRecoveryPoint};
+ const s=previous()||{};write({...s,lastInspection:{checkedAt:startup.checkedAt,blocked:startup.blocked,priorUnclean:startup.priorUnclean,recoveryPointCaptured:startup.recoveryPointCaptured,issueCodes:startup.issues.map(x=>x.code)}});
  renderBanner();
  return startup;
 }
@@ -50,7 +51,8 @@ function renderBanner(){
  const host=document.getElementById('startupGuardBanner');if(!host||!startup)return;
  if(!startup.hasWorkspace&&!startup.issues.length){host.hidden=true;return}
  host.hidden=false;host.className='uStartupBanner '+(startup.blocked?'block':startup.priorUnclean?'review':'pass');
- host.innerHTML='<div><b>'+(startup.blocked?'STARTUP PROTECTED':startup.priorUnclean?'RECOVERY CHECK COMPLETE':'STARTUP CHECK ✓')+'</b><span>'+(startup.blocked?'Normal workspace opening is paused until critical local-data conditions are reviewed.':startup.priorUnclean?'An unexpected prior exit was detected; a Recovery Point was captured before startup.':'No critical startup condition detected.')+'</span></div><button id="uStartupOpen">Open Recovery Center</button>';
+ const priorExitMessage=startup.recoveryPointCaptured?'An unexpected prior exit was detected; a Recovery Point was captured before startup.':startup.hasWorkspace?'An unexpected prior exit was detected; no Recovery Point was captured. Review startup findings before continuing.':'An unexpected prior exit was detected; no workspace data was present, so no Recovery Point was needed.';
+ host.innerHTML='<div><b>'+(startup.blocked?'STARTUP PROTECTED':startup.priorUnclean?'RECOVERY CHECK COMPLETE':'STARTUP CHECK ✓')+'</b><span>'+(startup.blocked?'Normal workspace opening is paused until critical local-data conditions are reviewed.':startup.priorUnclean?priorExitMessage:'No critical startup condition detected.')+'</span></div><button id="uStartupOpen">Open Recovery Center</button>';
  document.getElementById('uStartupOpen').onclick=()=>{const s=document.getElementById('universalStartupGuard');s.hidden=false;render();s.scrollIntoView({behavior:'smooth'})};
 }
 function render(){
