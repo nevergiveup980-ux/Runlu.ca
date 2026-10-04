@@ -336,7 +336,7 @@ function seedFlooring(env, { jobs, pos, tasks }) {
   env.localStorage.seed(F.JOB, jobs);
   env.localStorage.seed(F.PO, pos);
   env.localStorage.seed(F.CALL, []);
-  env.localStorage.seed(F.CACHE, { tasks, events: [], lastSync: 'LAB' });
+  env.localStorage.seed(F.CACHE, { tasks, events: [], lastSync: 'LAB', syncedAt: new Date().toISOString() });
   env.localStorage.clearWrites();
 }
 
@@ -377,7 +377,8 @@ const tests = [];
 
 tests.push(check('Candidate exposes fail-closed safety contract', () => {
   const env = bootFlooring();
-  must(env.ack.version === '0.9.9', 'candidate version mismatch');
+  must(env.ack.version === '0.10.0', 'candidate version mismatch');
+  must(env.ack.requiresFreshWarehouseCache && env.ack.maxWarehouseCacheAgeMs === 300000, 'fresh Warehouse cache guard missing');
   must(env.ack.supportsPostedInventoryEvidence, 'Posted inventory evidence flag missing');
   must(env.ack.requiresInventoryCertificate, 'inventory certificate flag missing');
   must(env.ack.requiresFullReceipt, 'full receipt flag missing');
@@ -402,6 +403,28 @@ tests.push(check('Exact Warehouse receipt creates inventory proof for one PO ack
   must(queue?.status === 'Not Called' && queue.sourcePOs.includes('181700'), 'People TO Call not created');
   must(warehouse.network() === 0 && flooring.network() === 0, 'network attempted');
   return { warehouseQty: 10, poStatus: 'Received', peopleToCall: queue.status };
+}));
+
+tests.push(check('Missing Warehouse cache timestamp fails closed before receipt evaluation', () => {
+  const env = bootFlooring();
+  const task = certifiedTask(181717);
+  seedFlooring(env, { jobs: [makeJob('J1', 181717)], pos: [makePO('PO1', 'J1', 181717, 181717)], tasks: [task] });
+  const cache=env.localStorage.json(F.CACHE);delete cache.syncedAt;env.localStorage.seed(F.CACHE,cache);
+  const before=JSON.stringify(env.localStorage.snapshot()),result=env.ack.acknowledgePO(181717);
+  must(!result.ok && result.code === 'WAREHOUSE_CACHE_TIME_MISSING', 'missing cache time accepted');
+  must(JSON.stringify(env.localStorage.snapshot())===before, 'missing cache time mutated state');
+  return {blocked:result.code};
+}));
+
+tests.push(check('Stale Warehouse cache fails closed before receipt evaluation', () => {
+  const env = bootFlooring();
+  const task = certifiedTask(181718);
+  seedFlooring(env, { jobs: [makeJob('J1', 181718)], pos: [makePO('PO1', 'J1', 181718, 181718)], tasks: [task] });
+  const cache=env.localStorage.json(F.CACHE);cache.syncedAt=new Date(Date.now()-301000).toISOString();env.localStorage.seed(F.CACHE,cache);
+  const before=JSON.stringify(env.localStorage.snapshot()),result=env.ack.acknowledgePO(181718);
+  must(!result.ok && result.code === 'WAREHOUSE_CACHE_STALE', 'stale cache accepted');
+  must(JSON.stringify(env.localStorage.snapshot())===before, 'stale cache mutated state');
+  return {blocked:result.code};
 }));
 
 tests.push(check('Posted inventory alone cannot acknowledge while Warehouse task is still In Progress', () => {
@@ -623,7 +646,7 @@ const report = {
   gate: 'RUNLU Flooring ↔ Warehouse Verified Receipt Ack LAB V0.8',
   pass,
   generatedAt: new Date().toISOString(),
-  candidate: { file: ACK_FILE, version: '0.9.9', sha256: sha(ackSource), productionAutoInstall: false },
+  candidate: { file: ACK_FILE, version: '0.10.0', sha256: sha(ackSource), productionAutoInstall: false },
   warehouse: {
     runtime: `${warehouseVersion.version} Build${warehouseVersion.build}`,
     indexSha256: sha(warehouseIndex),
@@ -640,7 +663,8 @@ const report = {
   contract: [
     'A Flooring PO may auto-ack Received only from one exact shared Warehouse task.',
     'Task must be Ready/Completed with every received quantity exactly equal to ordered quantity.',
-    'Task must carry verified inventory evidence: either the legacy certificate or actual Posted inventory rows with exact line quantities, inventory IDs, timestamp, and stock deltas.',
+    'Warehouse cloud cache must have an exact syncedAt timestamp no older than five minutes.',
+  'Task must carry verified inventory evidence: either the legacy certificate or actual Posted inventory rows with exact line quantities, inventory IDs, timestamp, and stock deltas.',
     'PO Received and People TO Call routing commit together or both stores restore.',
     'Sales Review remains unable to mutate Received PO status.',
     'This LAB verifies the certificate consumer contract; it does not publish the certificate to production Supabase or load V098 in production.'

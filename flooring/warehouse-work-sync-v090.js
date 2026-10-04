@@ -58,7 +58,7 @@ async function refresh(manual){
     ]);
     if(tr.error)throw tr.error;if(er.error)throw er.error;
     tasks=tr.data||[];events=er.data||[];lastSync=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    localStorage.setItem(CACHE,JSON.stringify({tasks,events,lastSync}));
+    localStorage.setItem(CACHE,JSON.stringify({tasks,events,lastSync,syncedAt:new Date().toISOString()}));
     paintAll();
     if(manual)alert('Warehouse work plan refreshed from cloud.');
   }catch(e){
