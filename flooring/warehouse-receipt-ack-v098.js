@@ -1,4 +1,4 @@
-/* RUNLU Flooring OS · Warehouse Receipt Acknowledgement V0.9.8 CANDIDATE
+/* RUNLU Flooring OS · Warehouse Receipt Acknowledgement V0.9.9 CANDIDATE
    Cross-system safety contract:
    - Warehouse remains physical execution authority.
    - Flooring PO becomes Received only from one unambiguous FULL receipt task carrying
@@ -11,7 +11,7 @@
 if(window.__runluWarehouseReceiptAckV098)return;
 window.__runluWarehouseReceiptAckV098=true;
 
-const VERSION='0.9.8';
+const VERSION='0.9.9';
 const PO_STORE='runlu_deerfoot_supplier_orders_v1';
 const CALL_STORE='runlu_people_to_call_v066';
 const CACHE='runlu-flooring-warehouse-work-v090';
@@ -55,7 +55,7 @@ function validateFullReceipt(po,task){
   return {ok:true,ordered,received};
 }
 
-function validateInventoryCertificate(po,task,full){
+function validateLegacyInventoryCertificate(po,task,full){
   if(task?.inventory_verified!==true)return {ok:false,code:'INVENTORY_NOT_VERIFIED'};
   if(poKey(task?.inventory_verified_po_number)!==poKey(po?.poNumber))return {ok:false,code:'CERT_PO_MISMATCH'};
   if(!String(task?.inventory_verified_at||'').trim())return {ok:false,code:'CERT_TIME_MISSING'};
@@ -67,7 +67,29 @@ function validateInventoryCertificate(po,task,full){
     const expected=qtyOf(full.ordered[i]),oq=num(items[i]?.ordered_qty),rq=num(items[i]?.received_qty);
     if(!(oq>0&&rq>0)||!equalQty(expected,oq)||!equalQty(oq,rq))return {ok:false,code:'CERT_QUANTITY_MISMATCH',line:i};
   }
-  return {ok:true,operationIds:ids.map(String),verifiedAt:String(task.inventory_verified_at),items};
+  return {ok:true,evidenceKind:'legacy-certificate',evidenceIds:ids.map(String),operationIds:ids.map(String),verifiedAt:String(task.inventory_verified_at),items};
+}
+
+function validatePostedInventoryEvidence(po,task,full){
+  if(String(task?.inventory_post_status||'')!=='Posted')return {ok:false,code:'INVENTORY_NOT_VERIFIED'};
+  if(!String(task?.inventory_posted_at||'').trim())return {ok:false,code:'POSTED_TIME_MISSING'};
+  const rows=Array.isArray(task?.inventory_postings)?task.inventory_postings:[];
+  if(rows.length!==full.ordered.length)return {ok:false,code:'POSTED_LINE_COUNT'};
+  const ids=[];
+  for(let i=0;i<rows.length;i++){
+    const expected=qtyOf(full.ordered[i]),q=num(rows[i]?.quantity),rq=num(rows[i]?.received_qty);
+    const before=num(rows[i]?.before_quantity),after=num(rows[i]?.after_quantity),id=String(rows[i]?.inventory_id||'').trim();
+    if(!id)return {ok:false,code:'POSTED_INVENTORY_ID_MISSING',line:i};
+    if(!(q>0&&rq>0)||!equalQty(expected,q)||!equalQty(q,rq))return {ok:false,code:'POSTED_QUANTITY_MISMATCH',line:i};
+    if(before==null||after==null||!equalQty(after-before,q))return {ok:false,code:'POSTED_STOCK_DELTA_MISMATCH',line:i};
+    ids.push(id);
+  }
+  return {ok:true,evidenceKind:'inventory-posting',evidenceIds:ids,operationIds:ids,verifiedAt:String(task.inventory_posted_at),items:rows};
+}
+
+function validateInventoryCertificate(po,task,full){
+  if(String(task?.inventory_post_status||'')==='Posted')return validatePostedInventoryEvidence(po,task,full);
+  return validateLegacyInventoryCertificate(po,task,full);
 }
 
 function evaluatePO(poNumber){
@@ -99,8 +121,9 @@ function acknowledgePO(poNumber){
   if(idx<0)return {ok:false,code:'LOCAL_PO_CHANGED'};
   const at=now(),audit={at,taskId:String(task.id),taskStatus:String(task.status||''),inventoryVerifiedAt:cert.verifiedAt,inventoryOperationIds:cert.operationIds.slice(),decision:'WAREHOUSE_VERIFIED_FULL_RECEIPT'};
   const history=Array.isArray(all[idx].warehouseReceiptHistory)?all[idx].warehouseReceiptHistory.slice():[];
+  audit.inventoryEvidenceKind=cert.evidenceKind||'legacy-certificate';audit.inventoryEvidenceIds=(cert.evidenceIds||cert.operationIds||[]).slice();
   history.push(audit);
-  all[idx]={...all[idx],status:'Received',receivedDate:all[idx].receivedDate||at.slice(0,10),warehouseReceiptAcknowledgedAt:at,warehouseReceiptTaskId:String(task.id),warehouseReceiptStatus:String(task.status||''),warehouseReceiptInventoryVerifiedAt:cert.verifiedAt,warehouseReceiptInventoryOperationIds:cert.operationIds.slice(),warehouseReceiptHistory:history.slice(-MAX_HISTORY),updatedAt:at};
+  all[idx]={...all[idx],status:'Received',receivedDate:all[idx].receivedDate||at.slice(0,10),warehouseReceiptAcknowledgedAt:at,warehouseReceiptTaskId:String(task.id),warehouseReceiptStatus:String(task.status||''),warehouseReceiptInventoryVerifiedAt:cert.verifiedAt,warehouseReceiptInventoryOperationIds:cert.operationIds.slice(),warehouseReceiptInventoryEvidenceKind:cert.evidenceKind||'legacy-certificate',warehouseReceiptInventoryEvidenceIds:(cert.evidenceIds||cert.operationIds||[]).slice(),warehouseReceiptHistory:history.slice(-MAX_HISTORY),updatedAt:at};
   try{localStorage.setItem(PO_STORE,JSON.stringify(all))}catch(e){restore(PO_STORE,beforePO);return {ok:false,code:'PO_WRITE_FAILED',error:e?.message||String(e)}}
   try{
     window.RUNLUOrdersDrawerV066.syncPeopleToCall();
@@ -123,7 +146,7 @@ function reconcile(){
 
 window.RUNLUWarehouseReceiptAckV098={
   version:VERSION,evaluatePO,acknowledgePO,reconcile,poKey,
-  requiresInventoryCertificate:true,requiresFullReceipt:true,duplicateEvidenceFailsClosed:true,
+  requiresInventoryCertificate:true,supportsPostedInventoryEvidence:true,requiresFullReceipt:true,duplicateEvidenceFailsClosed:true,
   atomicPOAndPeopleToCall:true,warehouseReadOnly:true,jobStateReadOnly:true,salesStateReadOnly:true,
   productionAutoInstall:false
 };
