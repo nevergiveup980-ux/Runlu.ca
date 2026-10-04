@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 190" role="img" aria-labelledby="title desc">
+<title id="title">RUNLU rising drop</title><desc id="desc">A blue rising water drop above two quiet golden curves.</desc>
+<defs><linearGradient id="drop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#69BCEB"/><stop offset=".55" stop-color="#258FD0"/><stop offset="1" stop-color="#176AA8"/></linearGradient></defs>
+<path d="M120 15C101 41 91 57 91 75c0 18 13 31 29 31s29-13 29-31c0-18-10-34-29-60Z" fill="url(#drop)"/>
+<path d="M26 121c34-12 65-8 94 11 29-19 60-23 94-11" fill="none" stroke="#B68A35" stroke-width="7" stroke-linecap="round"/>
+<path d="M39 145c29-9 56-5 81 11 25-16 52-20 81-11" fill="none" stroke="#D0A64D" stroke-width="6" stroke-linecap="round"/>
+</svg>
