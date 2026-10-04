@@ -4,6 +4,7 @@
 (function(){
   'use strict';
   const PO_STORE='runlu_deerfoot_supplier_orders_v1';
+  const SUPPLIER_STORE='runlu_flooring_supplier_master_v1';
   const META_STORE='runlu_supplier_task_meta_v1';
   const SNAP_STORE='runlu_supplier_pickup_by_po_v1';
   const INVOICE_STORE='runlu_flooring_active_invoice_v1';
@@ -16,6 +17,10 @@
   function writeObj(key,obj){try{localStorage.setItem(key,JSON.stringify(obj));return true}catch(_){return false}}
   function loadPOs(){try{records=JSON.parse(localStorage.getItem(PO_STORE)||'[]')}catch(_){records=[]}}
   function savePOs(){try{localStorage.setItem(PO_STORE,JSON.stringify(records));return true}catch(_){return false}}
+  function supplierMaster(){try{const x=JSON.parse(localStorage.getItem(SUPPLIER_STORE)||'[]');return Array.isArray(x)?x:[]}catch(_){return []}}
+  function supplierForPO(po){const xs=supplierMaster();if(po?.supplierId){const byId=xs.find(s=>s.id===po.supplierId);if(byId)return byId}const n=String(po?.supplier||'').trim().toLowerCase();return n?xs.find(s=>String(s?.name||'').trim().toLowerCase()===n)||null:null}
+  function supplierContext(po){const s=supplierForPO(po);return s?{id:s.id,name:s.name||po.supplier||'',freightRule:s.freightRule||'',minimumOrder:s.minimumOrder||'',discountRule:s.discountRule||'',phone:s.phone||'',email:s.email||''}:null}
+  function openSupplierProfile(id){if(!id)return;window.open('index-supplier-master-v1.html?supplier='+encodeURIComponent(id)+'&from=pickup','_blank','noopener,noreferrer')}
   function isoDate(v){return /^\d{4}-\d{2}-\d{2}$/.test(String(v||''))}
   function prettyDate(v){if(!v)return '';if(!isoDate(v))return String(v);const d=new Date(v+'T12:00:00');return Number.isNaN(d.getTime())?String(v):d.toLocaleDateString('en-CA',{year:'numeric',month:'short',day:'numeric'})}
 
@@ -105,10 +110,11 @@
     const el=by('pickupScheduleSafe');if(!el)return;
     if(!xs.length){el.innerHTML='<div class="muted">No issued PO records match this view.</div>';return}
     const groups={};xs.forEach(x=>(groups[monthLabel(x.requestedDate)]||(groups[monthLabel(x.requestedDate)]=[])).push(x));
-    el.innerHTML=Object.entries(groups).map(([month,items])=>`<div class="pickupSafeMonth">${esc(month)}</div>${items.map(x=>`<div class="pickupSafeRow"><div><b>#${esc(x.poNumber)} · ${esc(x.supplier||'Supplier not set')}</b><small>${esc(dateLabel(x.requestedDate))} · ${esc(x.fulfillment)} · ${esc(x.purchaseType)}</small>${x.requestedDate?'':`<small style="display:block;margin-top:4px;color:#8a5a2b">Diagnostic: editor ${esc(x._diag.editor||'—')} · snapshot ${esc(x._diag.snapshot||'—')} · PO ${esc(x._diag.record||'—')} · legacy ${esc(x._diag.legacy||'—')}</small>`}</div><div><b>${esc(x.jobNumber||'No Job #')} · ${esc(x.customerName||'')}</b><small>${esc(x.salesRep||'Sales rep not set')}</small></div><div><span class="pickupSafeStatus ${x.pickupStatus==='Cancelled'?'cancelled':(['Ready','Completed'].includes(x.pickupStatus)?'ready':'')}">${esc(x.pickupStatus)}</span></div></div>`).join('')}`).join('');
+    el.innerHTML=Object.entries(groups).map(([month,items])=>`<div class="pickupSafeMonth">${esc(month)}</div>${items.map(x=>`<div class="pickupSafeRow"><div><b>#${esc(x.poNumber)} · ${esc(x.supplier||'Supplier not set')}</b><small>${esc(dateLabel(x.requestedDate))} · ${esc(x.fulfillment)} · ${esc(x.purchaseType)}</small>${(()=>{const s=supplierContext(x);return s?`<small style="display:block;margin-top:4px">${esc(s.freightRule||'No freight rule')} · ${esc(s.minimumOrder||'No minimum noted')} · ${esc(s.discountRule||'No discount noted')}</small><button class="action" type="button" data-supplier-profile="${esc(s.id)}">Supplier Profile</button>`:''})()}${x.requestedDate?'':`<small style="display:block;margin-top:4px;color:#8a5a2b">Diagnostic: editor ${esc(x._diag.editor||'—')} · snapshot ${esc(x._diag.snapshot||'—')} · PO ${esc(x._diag.record||'—')} · legacy ${esc(x._diag.legacy||'—')}</small>`}</div><div><b>${esc(x.jobNumber||'No Job #')} · ${esc(x.customerName||'')}</b><small>${esc(x.salesRep||'Sales rep not set')}</small></div><div><span class="pickupSafeStatus ${x.pickupStatus==='Cancelled'?'cancelled':(['Ready','Completed'].includes(x.pickupStatus)?'ready':'')}">${esc(x.pickupStatus)}</span></div></div>`).join('')}`).join('');
+    el.querySelectorAll('[data-supplier-profile]').forEach(b=>b.addEventListener('click',()=>openSupplierProfile(b.dataset.supplierProfile)));
   }
 
   function openPickup(){persistEditorMeta();ensurePage();ensureNav();switchToPickup();render()}
-  function boot(){ensureCustomerPickupDateField();ensureInvoicePickupHook();ensurePage();ensureNav();render();window.runluPickupSafeRender=render;window.openSupplierPickupSafe=openPickup;window.runluPersistPickupEditor=persistEditorMeta;['input','change'].forEach(type=>document.addEventListener(type,ev=>{if(['pickupFulfillmentSafe','pickupRequestedDateSafe','pickupPurchaseTypeSafe'].includes(ev.target?.id)){persistEditorMeta()}}));window.addEventListener('storage',ev=>{if([PO_STORE,META_STORE,SNAP_STORE,INVOICE_STORE].includes(ev.key)){render();renderInvoicePickupDate()}})}
+  function boot(){ensureCustomerPickupDateField();ensureInvoicePickupHook();ensurePage();ensureNav();render();window.runluPickupSafeRender=render;window.openSupplierPickupSafe=openPickup;window.runluPersistPickupEditor=persistEditorMeta;['input','change'].forEach(type=>document.addEventListener(type,ev=>{if(['pickupFulfillmentSafe','pickupRequestedDateSafe','pickupPurchaseTypeSafe'].includes(ev.target?.id)){persistEditorMeta()}}));window.addEventListener('storage',ev=>{if([PO_STORE,SUPPLIER_STORE,META_STORE,SNAP_STORE,INVOICE_STORE].includes(ev.key)){render();renderInvoicePickupDate()}})}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
