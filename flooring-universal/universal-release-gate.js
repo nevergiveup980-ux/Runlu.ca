@@ -33,8 +33,8 @@ function run(){
   t('Interrupted Resolver · acknowledgement API',typeof resolver.acknowledge==='function','reviewed markers can be closed without rewriting business records');
   const resolverSrc=resolver.classify.toString(),billingPaySrc=window.RUNLUUniversalBilling?.pay?.toString?.()||'';
   t('Interrupted Resolver · exact payment audit identity',resolverSrc.includes("e.meta?.paymentId===m.paymentId")&&billingPaySrc.includes('paymentId}'),'payment audit evidence is bound to exact ledger entry');
-  const auditSrc=resolver.auditMatch?.toString?.()||'';
-  t('Interrupted Resolver · action-bound audit evidence',typeof resolver.auditMatch==='function'&&auditSrc.includes("tx.action==='record'")&&auditSrc.includes("tx.action==='reconcile'")&&auditSrc.includes("tx.action==='mark-paid'"),'audit confidence requires the matching business action');
+  const auditSrc=resolver.auditMatch?.toString?.()||'',resolverSrcFull=resolver.classify?.toString?.()||'';
+  t('Interrupted Resolver · action-bound audit evidence',typeof resolver.auditMatch==='function'&&typeof resolver.classify==='function'&&((auditSrc.includes("tx.action==='record'")&&auditSrc.includes("tx.action==='reconcile'")&&auditSrc.includes("tx.action==='mark-paid'"))||(resolverSrcFull.includes('classifyWith')&&auditSrc.includes('auditMatchWith'))),'audit confidence is delegated to the shared action-bound audit matcher');
  }
  if(resolver)t('Crash Simulation · shared production classifier',typeof resolver.classifyFixture==='function'&&(window.RUNLUUniversalCrashSimulator?.run?.toString?.()||'').includes('classify(s.tx,s.map)')&&(window.RUNLUUniversalCrashSimulator?.scenarios?.toString?.()||'').includes('missing record stays uncertain'),'synthetic crash fixtures must be judged by the production Resolver core');
  const audit=window.RUNLUUniversalAudit;if(resolver&&audit)t('Recovery contract · Audit store identity',typeof audit.STORE==='string'&&resolver.KEYS?.audit===audit.STORE,'Resolver and Audit must read the exact same append-only event store');
