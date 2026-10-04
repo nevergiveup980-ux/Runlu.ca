@@ -206,3 +206,19 @@
 .build-mode .dual-card:hover{background:#e8f0e3;border-color:rgba(52,80,60,.32)}
 .dual-switch a[aria-current="page"],.dual-arrow{color:#2d6342}
 .dual-switch a[aria-current="page"]{text-decoration:underline;text-decoration-color:#86a17b;text-underline-offset:7px;text-decoration-thickness:2px}
+
+
+/* RUNLU rising drop identity · 2026-10-04 */
+.brand-lockup{display:inline-flex;align-items:center;gap:9px;white-space:nowrap}
+.brand-lockup .brand-mark{width:35px;height:30px;object-fit:contain}
+.hero-brand-intro{display:flex;flex-direction:column;align-items:center;margin:0 auto 24px}
+.hero-brand-mark{width:clamp(78px,9vw,116px);height:auto;filter:drop-shadow(0 8px 14px rgba(36,67,46,.10))}
+.hero-brand-name{margin:9px 0 0;font-size:clamp(1rem,1.4vw,1.2rem);font-weight:700;letter-spacing:.22em;text-indent:.22em}
+.hero-brand-tagline{margin:4px 0 0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(.9rem,1.25vw,1.05rem);font-style:italic;letter-spacing:.035em;color:#365b43}
+.brand-poem{max-width:900px;margin:30px auto 70px;padding:34px 36px;text-align:center;border-top:1px solid rgba(47,111,69,.16);border-bottom:1px solid rgba(47,111,69,.16)}
+.brand-poem p{margin:0 0 8px;font-family:Georgia,"Times New Roman","Noto Sans SC",serif;font-size:clamp(1.05rem,1.8vw,1.35rem);line-height:1.6;color:#485349}
+.brand-poem .brand-poem-closing{margin-top:18px;margin-bottom:0;font-size:clamp(1.2rem,2vw,1.55rem);color:#234f35}
+.js-enabled .hero .hero-brand-intro{opacity:0}
+.js-enabled .hero.is-ready .hero-brand-intro{animation:runluFadeUp .8s var(--ease-runlu) .02s forwards}
+@media(max-width:860px){.hero-brand-mark{width:76px}.hero-brand-intro{margin-bottom:18px}.brand-poem{margin:24px auto 52px;padding:26px 8px}}
+@media(max-width:480px){.brand-lockup{gap:7px}.brand-lockup .brand-mark{width:31px;height:27px}.brand-lockup span{font-size:.92rem}.hero-brand-mark{width:68px}.hero-brand-name{font-size:.92rem}.hero-brand-tagline{font-size:.86rem}.brand-poem{margin-bottom:44px}}
