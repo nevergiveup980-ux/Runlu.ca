@@ -13,7 +13,8 @@ const TOOLS=[
  {id:'durable',title:'Durable Local',desc:'Check IndexedDB mirror and local recovery options.',target:'universalDurableLocal',api:'RUNLUUniversalDurableLocalUI'},
  {id:'offline',title:'Offline / Install',desc:'Check PWA installation and offline app-shell status.',target:'universalOffline',api:'RUNLUUniversalPWA'},
  {id:'version',title:'Data Version',desc:'View schema compatibility and migration history.',target:'universalDataVersion',api:'RUNLUUniversalDataVersion'},
- {id:'diagnostics',title:'Diagnostics',desc:'Generate a privacy-safe support report.',target:'universalDiagnostics',api:'RUNLUUniversalDiagnostics'}
+ {id:'diagnostics',title:'Diagnostics',desc:'Generate a privacy-safe support report.',target:'universalDiagnostics',api:'RUNLUUniversalDiagnostics'},
+ {id:'release',title:'Release Gate',desc:'Run final non-destructive regression checks before release.',target:'universalReleaseGate',api:'RUNLUUniversalReleaseGate'}
 ];
 function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 async function status(){
