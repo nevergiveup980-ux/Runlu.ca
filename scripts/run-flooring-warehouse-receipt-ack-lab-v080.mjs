@@ -404,6 +404,21 @@ tests.push(check('Exact Warehouse receipt creates inventory proof for one PO ack
   return { warehouseQty: 10, poStatus: 'Received', peopleToCall: queue.status };
 }));
 
+tests.push(check('Posted inventory alone cannot acknowledge while Warehouse task is still In Progress', () => {
+  const env = bootFlooring();
+  const task = makeTask(181719);
+  task.status = 'In Progress';
+  task.inventory_post_status = 'Posted';
+  task.inventory_posted_at = '2026-10-04T18:00:00.000Z';
+  task.inventory_postings = [{line:1,unit:'Box',product:'LAB TILE',colour:'GREY',location:'A1',quantity:10,inventory_id:'INV-POSTED-INPROGRESS',received_qty:'10',before_quantity:4,after_quantity:14}];
+  seedFlooring(env, { jobs: [makeJob('J1', 181719)], pos: [makePO('PO1', 'J1', 181719, 181719)], tasks: [task] });
+  const before = JSON.stringify(env.localStorage.snapshot());
+  const result = env.ack.acknowledgePO(181719);
+  must(!result.ok && result.code === 'TASK_NOT_RECEIVED', 'Posted inventory bypassed final Warehouse status');
+  must(JSON.stringify(env.localStorage.snapshot()) === before, 'In Progress Posted task mutated local state');
+  return { blocked: result.code, warehouseStatus: task.status, inventoryPostStatus: task.inventory_post_status };
+}));
+
 tests.push(check('Actual cloud Posted inventory evidence can acknowledge a full final receipt', () => {
   const env = bootFlooring();
   const task = makeTask(181720);
