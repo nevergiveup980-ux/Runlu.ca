@@ -240,3 +240,11 @@
   .runlu-home .hero::before{background-position:50% center}
   .runlu-home .hero-overlay{background:linear-gradient(180deg,rgba(247,244,237,.14),rgba(231,241,227,.26))}
 }
+
+/* RUNLU hero hierarchy refinement · 2026-10-04 */
+.runlu-home .hero-brand-intro{margin-bottom:18px}
+.runlu-home .hero h1{margin-top:8px}
+@media(max-width:860px){
+  .runlu-home .hero-brand-intro{margin-bottom:14px}
+  .runlu-home .hero h1{margin-top:4px}
+}
