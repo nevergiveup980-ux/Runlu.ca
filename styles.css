@@ -222,3 +222,21 @@
 .js-enabled .hero.is-ready .hero-brand-intro{animation:runluFadeUp .8s var(--ease-runlu) .02s forwards}
 @media(max-width:860px){.hero-brand-mark{width:76px}.hero-brand-intro{margin-bottom:18px}.brand-poem{margin:24px auto 52px;padding:26px 8px}}
 @media(max-width:480px){.brand-lockup{gap:7px}.brand-lockup .brand-mark{width:31px;height:27px}.brand-lockup span{font-size:.92rem}.hero-brand-mark{width:68px}.hero-brand-name{font-size:.92rem}.hero-brand-tagline{font-size:.86rem}.brand-poem{margin-bottom:44px}}
+
+
+/* RUNLU sunrise hero background · 2026-10-04 */
+.runlu-home .hero::before{
+  background-image:url("assets/runlu-hero-sunrise-1200.jpg");
+  background-position:center 52%;
+  background-size:cover;
+  background-repeat:no-repeat;
+}
+.runlu-home .hero-overlay{
+  background:linear-gradient(180deg,rgba(247,244,237,.10) 0%,rgba(236,244,231,.16) 44%,rgba(227,239,224,.24) 100%);
+}
+.runlu-home .hero h1{color:#13261a;text-shadow:0 1px 18px rgba(255,255,255,.38)}
+.runlu-home .hero-brand-tagline{color:#214c32}
+@media(max-width:860px){
+  .runlu-home .hero::before{background-position:50% center}
+  .runlu-home .hero-overlay{background:linear-gradient(180deg,rgba(247,244,237,.14),rgba(231,241,227,.26))}
+}
