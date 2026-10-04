@@ -35,12 +35,12 @@ async function status(){
   releaseFailed:gate?.failed??null
  };
 }
-function openTool(item){
+async function openTool(item){
  const section=document.getElementById(item.target);if(!section)return;
  section.hidden=false;
  const api=window[item.api];
- if(item.id==='durable')api?.render?.();else api?.render?.();
- section.scrollIntoView({behavior:'smooth'});
+ await Promise.resolve(api?.render?.());
+ requestAnimationFrame(()=>section.scrollIntoView({behavior:'smooth',block:'start'}));
 }
 async function render(){
  const host=document.getElementById('universalSupportCenter');if(!host)return;
