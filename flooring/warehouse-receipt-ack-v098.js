@@ -1,4 +1,4 @@
-/* RUNLU Flooring OS · Warehouse Receipt Acknowledgement V0.9.9 CANDIDATE
+/* RUNLU Flooring OS · Warehouse Receipt Acknowledgement V0.10.0 CANDIDATE
    Cross-system safety contract:
    - Warehouse remains physical execution authority.
    - Flooring PO becomes Received only from one unambiguous FULL receipt task carrying
@@ -11,11 +11,12 @@
 if(window.__runluWarehouseReceiptAckV098)return;
 window.__runluWarehouseReceiptAckV098=true;
 
-const VERSION='0.9.9';
+const VERSION='0.10.0';
 const PO_STORE='runlu_deerfoot_supplier_orders_v1';
 const CALL_STORE='runlu_people_to_call_v066';
 const CACHE='runlu-flooring-warehouse-work-v090';
 const MAX_HISTORY=50;
+const MAX_CACHE_AGE_MS=5*60*1000;
 const now=()=>new Date().toISOString();
 const raw=k=>{try{return localStorage.getItem(k)}catch(_){return null}};
 const read=(k,f)=>{try{const v=JSON.parse(localStorage.getItem(k)||'null');return v==null?f:v}catch(_){return f}};
@@ -26,7 +27,9 @@ const norm=v=>String(v??'').trim().replace(/\s+/g,' ').toLowerCase();
 const qtyOf=x=>num(x?.qty??x?.quantity);
 const clone=x=>JSON.parse(JSON.stringify(x));
 
-function tasks(){const c=read(CACHE,{});return Array.isArray(c?.tasks)?c.tasks:[]}
+function cacheState(){const c=read(CACHE,{});return c&&typeof c==='object'?c:{}}
+function cacheFresh(){const c=cacheState(),t=Date.parse(String(c.syncedAt||''));if(!Number.isFinite(t))return {ok:false,code:'WAREHOUSE_CACHE_TIME_MISSING'};const age=Date.now()-t;if(age<0||age>MAX_CACHE_AGE_MS)return {ok:false,code:'WAREHOUSE_CACHE_STALE',ageMs:age};return {ok:true,ageMs:age,syncedAt:String(c.syncedAt)}}
+function tasks(){const c=cacheState();return Array.isArray(c?.tasks)?c.tasks:[]}
 function pos(){const x=read(PO_STORE,[]);return Array.isArray(x)?x:[]}
 function calls(){const x=read(CALL_STORE,[]);return Array.isArray(x)?x:[]}
 function taskMatches(po){const k=poKey(po);return k?tasks().filter(t=>poKey(t?.po_number)===k):[]}
@@ -93,6 +96,7 @@ function validateInventoryCertificate(po,task,full){
 }
 
 function evaluatePO(poNumber){
+  const freshness=cacheFresh();if(!freshness.ok)return freshness;
   const k=poKey(poNumber);if(!k)return {ok:false,code:'INVALID_PO'};
   const ps=poMatches(k);if(ps.length!==1)return {ok:false,code:ps.length?'DUPLICATE_LOCAL_PO':'LOCAL_PO_NOT_FOUND',count:ps.length};
   const po=ps[0];
@@ -146,7 +150,7 @@ function reconcile(){
 
 window.RUNLUWarehouseReceiptAckV098={
   version:VERSION,evaluatePO,acknowledgePO,reconcile,poKey,
-  requiresInventoryCertificate:true,supportsPostedInventoryEvidence:true,requiresFullReceipt:true,duplicateEvidenceFailsClosed:true,
+  requiresInventoryCertificate:true,supportsPostedInventoryEvidence:true,requiresFreshWarehouseCache:true,maxWarehouseCacheAgeMs:MAX_CACHE_AGE_MS,requiresFullReceipt:true,duplicateEvidenceFailsClosed:true,
   atomicPOAndPeopleToCall:true,warehouseReadOnly:true,jobStateReadOnly:true,salesStateReadOnly:true,
   productionAutoInstall:false
 };
