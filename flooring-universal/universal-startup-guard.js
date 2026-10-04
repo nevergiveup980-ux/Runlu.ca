@@ -47,20 +47,21 @@ function ready(){if(!readyPromise)readyPromise=boot();return readyPromise}
 async function recheck(){startup=await inspect(startup?.priorUnclean?{sessionOpen:true}:null);const s=previous()||{};write({...s,lastInspection:{checkedAt:startup.checkedAt,blocked:startup.blocked,priorUnclean:startup.priorUnclean,issueCodes:startup.issues.map(x=>x.code)}});renderBanner();return startup}
 function canProceed(){return !!startup&&!startup.blocked}
 function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function openSupportCenter(){const s=document.getElementById('universalSupportCenter');if(!s)return;s.hidden=false;Promise.resolve(window.RUNLUUniversalSupportCenter?.render?.()).finally(()=>requestAnimationFrame(()=>s.scrollIntoView({behavior:'smooth',block:'start'})))}
 function renderBanner(){
  const host=document.getElementById('startupGuardBanner');if(!host||!startup)return;
  if(!startup.hasWorkspace&&!startup.issues.length){host.hidden=true;return}
  host.hidden=false;host.className='uStartupBanner '+(startup.blocked?'block':startup.priorUnclean?'review':'pass');
  const priorExitMessage=startup.recoveryPointCaptured?'An unexpected prior exit was detected; a Recovery Point was captured before startup.':startup.hasWorkspace?'An unexpected prior exit was detected; no Recovery Point was captured. Review startup findings before continuing.':'An unexpected prior exit was detected; no workspace data was present, so no Recovery Point was needed.';
  host.innerHTML='<div><b>'+(startup.blocked?'STARTUP PROTECTED':startup.priorUnclean?'RECOVERY CHECK COMPLETE':'STARTUP CHECK ✓')+'</b><span>'+(startup.blocked?'Normal workspace opening is paused until critical local-data conditions are reviewed.':startup.priorUnclean?priorExitMessage:'No critical startup condition detected.')+'</span></div><button id="uStartupOpen">Open Recovery Center</button>';
- document.getElementById('uStartupOpen').onclick=()=>{const s=document.getElementById('universalStartupGuard');s.hidden=false;render();s.scrollIntoView({behavior:'smooth'})};
+ document.getElementById('uStartupOpen').onclick=openSupportCenter;
 }
 function render(){
  const host=document.getElementById('universalStartupGuard');if(!host)return;
  if(!startup){host.innerHTML='<div class="card"><h2>Startup Recovery Guard</h2><p class="muted">Startup inspection is still running…</p></div>';return}
  host.innerHTML='<div class="card"><h2>Startup Recovery Guard</h2><p class="muted">Protects the local workspace before normal startup after an abnormal exit or critical data mismatch.</p><div class="uStartupHero '+(startup.blocked?'block':'pass')+'"><div><b>'+(startup.blocked?'WORKSPACE PAUSED':'STARTUP CLEARED')+'</b><span>'+startup.issues.length+' startup finding(s) · '+startup.critical.length+' critical</span></div><strong>'+(startup.blocked?'REVIEW':'READY')+'</strong></div></div><div class="card"><h3>Startup Findings</h3>'+(startup.issues.length?startup.issues.map(x=>'<div class="uStartupIssue"><div><b>'+esc(x.code)+'</b><span>'+esc(x.detail)+'</span></div><strong>'+esc(x.severity.toUpperCase())+'</strong></div>').join(''):'<p class="muted">No startup findings.</p>')+'<div class="uStartupActions">'+(startup.journal?.active?'<button id="uStartupInterrupted">Review Interrupted Operations</button>':'')+'<button id="uStartupSupport">Support & Recovery</button><button id="uStartupRetry">Run Startup Check Again</button></div><p class="muted">The guard never auto-rewrites business records. Recovery remains an explicit action through the existing recovery tools.</p></div>';
  const interruptedButton=document.getElementById('uStartupInterrupted');if(interruptedButton)interruptedButton.onclick=()=>{const s=document.getElementById('universalInterruptedResolver');s.hidden=false;window.RUNLUUniversalInterruptedResolver?.render();s.scrollIntoView({behavior:'smooth'})};
- document.getElementById('uStartupSupport').onclick=()=>{const s=document.getElementById('universalSupportCenter');s.hidden=false;window.RUNLUUniversalSupportCenter?.render();s.scrollIntoView({behavior:'smooth'})};
+ document.getElementById('uStartupSupport').onclick=openSupportCenter;
  document.getElementById('uStartupRetry').onclick=async()=>{await recheck();render()};
 }
 window.addEventListener('pagehide',()=>markClean('pagehide'));
