@@ -13,4 +13,7 @@ ok('Today subscribes to Data Adapter mutations',html.includes('RUNLUUniversalDat
 ok('Today observer ignores its own render subtree',html.includes('!m.target.closest?.("#universalToday")'));
 ok('Workspace verification remains enforced',fs.readFileSync(path.join(root,'universal-shell.js'),'utf8').includes('Workspace verification failed'));
 ok('Startup guard can block workspace changes',fs.readFileSync(path.join(root,'universal-shell.js'),'utf8').includes('Startup Recovery Guard has paused workspace changes'));
+const support=fs.readFileSync(path.join(root,'universal-support-center.js'),'utf8');
+ok('Support tools wait for async render before scrolling',support.includes('await Promise.resolve(api?.render?.())'));
+ok('Support tools scroll after render',support.includes("requestAnimationFrame(()=>section.scrollIntoView({behavior:'smooth',block:'start'}))"));
 if(failed){console.error('\nUniversal browser contract failed: '+failed);process.exit(1)}console.log('\nUniversal browser contract: PASS');
