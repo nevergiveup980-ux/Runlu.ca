@@ -43,29 +43,49 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261004-hero-refine2" />
+  <link rel="stylesheet" href="styles.css?v=20261004-nav-v2" />
   <link rel="stylesheet" href="runlu-sage.css?v=20261002" />
 </head>
 <body class="runlu-home">
   <header class="site-header">
     <a class="brand brand-lockup" href="#top" aria-label="RUNLU home"><img class="brand-mark" src="assets/runlu-rising-drop.svg" alt="" aria-hidden="true"><span>RUNLU</span></a>
-    <nav class="desktop-nav" aria-label="Primary navigation">
-      <a href="#studio" data-en="Studio" data-zh="作品">Studio</a>
-      <a href="book/" data-en="Books" data-zh="书籍" data-fr="Livres" data-es="Libros">Books</a>
-      <a href="digital.html" data-en="Digital" data-zh="数字产品" data-fr="Numérique" data-es="Digital">Digital</a>
-      <a href="goods.html" data-en="Goods" data-zh="润庐物件" data-fr="Objets" data-es="Objetos">Goods</a>
-      <a href="#current" data-en="Now" data-zh="此刻">Now</a>
-      <a href="frontiers.html" data-en="View" data-zh="前沿">View</a>
-      <a href="lab.html" data-en="Lab" data-zh="实验室">Lab</a>
-      <a href="guanshi.html" data-en="Foresight" data-zh="观势" data-fr="Foresight" data-es="Foresight">Foresight</a>
-      <a href="health.html" data-en="Health" data-zh="健康">Health</a>
-      <a href="timeline.html" data-en="Timeline" data-zh="时间线" data-fr="Chronologie" data-es="Cronología">Timeline</a>
-
-    <a href="notes.html" data-en="Stories" data-zh="润庐故事" data-fr="Histoires" data-es="Historias">Stories</a>
-      <a href="forum.html" data-en="Forum" data-zh="论坛">Forum</a>
-      <a href="#about" data-en="About" data-zh="关于">About</a>
-      <a href="#contact" data-en="Contact" data-zh="联系">Contact</a>
-      <a class="account-nav-link" href="account.html" data-en="Sign in" data-zh="登录" data-fr="Connexion" data-es="Iniciar sesión">Sign in</a>
+    <nav class="desktop-nav desktop-nav-v2" aria-label="Primary navigation">
+      <a href="#about" data-en="Philosophy" data-zh="润庐哲学" data-fr="Philosophie" data-es="Filosofía">Philosophy</a>
+      <div class="nav-group">
+        <button class="nav-group-toggle" type="button" aria-expanded="false"><span data-en="Read" data-zh="阅读" data-fr="Lire" data-es="Leer">Read</span><span class="nav-chevron">⌄</span></button>
+        <div class="nav-dropdown">
+          <a href="book/" data-en="Books" data-zh="书籍" data-fr="Livres" data-es="Libros">Books</a>
+          <a href="notes.html" data-en="Stories" data-zh="润庐故事" data-fr="Histoires" data-es="Historias">Stories</a>
+          <a href="frontiers.html" data-en="RUNLU View" data-zh="RUNLU 观察" data-fr="RUNLU View" data-es="RUNLU View">RUNLU View</a>
+        </div>
+      </div>
+      <div class="nav-group">
+        <button class="nav-group-toggle" type="button" aria-expanded="false"><span data-en="Explore" data-zh="探索" data-fr="Explorer" data-es="Explorar">Explore</span><span class="nav-chevron">⌄</span></button>
+        <div class="nav-dropdown">
+          <a href="frontiers.html" data-en="Frontiers" data-zh="前沿" data-fr="Frontières" data-es="Fronteras">Frontiers</a>
+          <a href="guanshi.html" data-en="Foresight" data-zh="观势" data-fr="Foresight" data-es="Foresight">Foresight</a>
+          <a href="lab.html" data-en="Lab" data-zh="实验室">Lab</a>
+          <a href="health.html" data-en="Health" data-zh="健康">Health</a>
+        </div>
+      </div>
+      <div class="nav-group">
+        <button class="nav-group-toggle" type="button" aria-expanded="false"><span data-en="Build" data-zh="创造" data-fr="Créer" data-es="Crear">Build</span><span class="nav-chevron">⌄</span></button>
+        <div class="nav-dropdown">
+          <a href="#studio" data-en="Studio" data-zh="作品">Studio</a>
+          <a href="digital.html" data-en="Digital" data-zh="数字产品" data-fr="Numérique" data-es="Digital">Digital</a>
+          <a href="goods.html" data-en="Goods" data-zh="润庐物件" data-fr="Objets" data-es="Objetos">Goods</a>
+          <a href="#current" data-en="Now" data-zh="此刻">Now</a>
+        </div>
+      </div>
+      <div class="nav-group">
+        <button class="nav-group-toggle" type="button" aria-expanded="false"><span data-en="More" data-zh="更多" data-fr="Plus" data-es="Más">More</span><span class="nav-chevron">⌄</span></button>
+        <div class="nav-dropdown nav-dropdown-right">
+          <a href="timeline.html" data-en="Timeline" data-zh="时间线" data-fr="Chronologie" data-es="Cronología">Timeline</a>
+          <a href="forum.html" data-en="Forum" data-zh="论坛">Forum</a>
+          <a href="#contact" data-en="Contact" data-zh="联系">Contact</a>
+          <a class="account-nav-link" href="account.html" data-en="Sign in" data-zh="登录" data-fr="Connexion" data-es="Iniciar sesión">Sign in</a>
+        </div>
+      </div>
     </nav>
     <div class="header-actions">
       <select id="languageToggle" class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select>
