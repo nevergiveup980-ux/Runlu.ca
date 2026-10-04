@@ -1,4 +1,4 @@
-/* RUNLU Flooring OS · Warehouse Receipt Acknowledgement V0.10.0 CANDIDATE
+/* RUNLU Flooring OS · Warehouse Receipt Acknowledgement V0.10.1 CANDIDATE
    Cross-system safety contract:
    - Warehouse remains physical execution authority.
    - Flooring PO becomes Received only from one unambiguous FULL receipt task carrying
@@ -11,7 +11,7 @@
 if(window.__runluWarehouseReceiptAckV098)return;
 window.__runluWarehouseReceiptAckV098=true;
 
-const VERSION='0.10.0';
+const VERSION='0.10.1';
 const PO_STORE='runlu_deerfoot_supplier_orders_v1';
 const CALL_STORE='runlu_people_to_call_v066';
 const CACHE='runlu-flooring-warehouse-work-v090';
@@ -40,7 +40,10 @@ function lineColour(x){return norm(x?.colour||x?.color||'')}
 
 function validateFullReceipt(po,task){
   if(!task?.id)return {ok:false,code:'TASK_ID_MISSING'};
-  if(!['Ready','Completed'].includes(String(task.status||'')))return {ok:false,code:'TASK_NOT_RECEIVED'};
+  const terminalStatus=String(task.status||'');
+  if(!['Ready','Completed'].includes(terminalStatus))return {ok:false,code:'TASK_NOT_RECEIVED'};
+  const terminalAt=terminalStatus==='Completed'?String(task.completed_at||''):String(task.received_at||'');
+  if(!terminalAt.trim()||!Number.isFinite(Date.parse(terminalAt)))return {ok:false,code:terminalStatus==='Completed'?'COMPLETED_TIME_MISSING':'RECEIVED_TIME_MISSING'};
   const ordered=Array.isArray(task.items)?task.items:[],received=Array.isArray(task.received_items)?task.received_items:[];
   if(!ordered.length||received.length!==ordered.length)return {ok:false,code:'RECEIPT_LINE_COUNT'};
   const local=Array.isArray(po?.items)?po.items:[];
@@ -55,7 +58,7 @@ function validateFullReceipt(po,task){
       const lc=lineColour(local[i]),tc=lineColour(ordered[i]);if(lc&&tc&&lc!==tc)return {ok:false,code:'LOCAL_COLOUR_MISMATCH',line:i};
     }
   }
-  return {ok:true,ordered,received};
+  return {ok:true,ordered,received,terminalStatus,terminalAt};
 }
 
 function validateLegacyInventoryCertificate(po,task,full){
@@ -150,7 +153,7 @@ function reconcile(){
 
 window.RUNLUWarehouseReceiptAckV098={
   version:VERSION,evaluatePO,acknowledgePO,reconcile,poKey,
-  requiresInventoryCertificate:true,supportsPostedInventoryEvidence:true,requiresFreshWarehouseCache:true,maxWarehouseCacheAgeMs:MAX_CACHE_AGE_MS,requiresFullReceipt:true,duplicateEvidenceFailsClosed:true,
+  requiresInventoryCertificate:true,supportsPostedInventoryEvidence:true,requiresTerminalWarehouseTimestamp:true,requiresFreshWarehouseCache:true,maxWarehouseCacheAgeMs:MAX_CACHE_AGE_MS,requiresFullReceipt:true,duplicateEvidenceFailsClosed:true,
   atomicPOAndPeopleToCall:true,warehouseReadOnly:true,jobStateReadOnly:true,salesStateReadOnly:true,
   productionAutoInstall:false
 };
