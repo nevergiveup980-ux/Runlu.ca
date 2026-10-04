@@ -1,0 +1,21 @@
+name: Flooring Warehouse Supplier Context V1
+on:
+  pull_request:
+    paths:
+      - 'flooring/warehouse-po-handoff-v001.js'
+      - 'scripts/run-flooring-warehouse-supplier-context-v1.mjs'
+      - '.github/workflows/flooring-warehouse-supplier-context-v1.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'flooring/warehouse-po-handoff-v001.js'
+      - 'scripts/run-flooring-warehouse-supplier-context-v1.mjs'
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/run-flooring-warehouse-supplier-context-v1.mjs
