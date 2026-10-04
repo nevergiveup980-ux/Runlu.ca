@@ -297,6 +297,7 @@ function makeTask(poNumber, quantity = 10, extra = {}) {
     id: 'TASK-' + poNumber,
     po_number: Number(poNumber),
     status: 'Ready',
+    received_at: new Date().toISOString(),
     fulfillment_method: 'Pickup',
     items: [{ style: 'LAB TILE', colour: 'GREY', qty: quantity, unit: 'box' }],
     received_items: [{ style: 'LAB TILE', colour: 'GREY', ordered_qty: String(quantity), received_qty: String(quantity), condition: 'OK' }],
@@ -377,7 +378,8 @@ const tests = [];
 
 tests.push(check('Candidate exposes fail-closed safety contract', () => {
   const env = bootFlooring();
-  must(env.ack.version === '0.10.0', 'candidate version mismatch');
+  must(env.ack.version === '0.10.1', 'candidate version mismatch');
+  must(env.ack.requiresTerminalWarehouseTimestamp, 'terminal Warehouse timestamp guard missing');
   must(env.ack.requiresFreshWarehouseCache && env.ack.maxWarehouseCacheAgeMs === 300000, 'fresh Warehouse cache guard missing');
   must(env.ack.supportsPostedInventoryEvidence, 'Posted inventory evidence flag missing');
   must(env.ack.requiresInventoryCertificate, 'inventory certificate flag missing');
@@ -403,6 +405,24 @@ tests.push(check('Exact Warehouse receipt creates inventory proof for one PO ack
   must(queue?.status === 'Not Called' && queue.sourcePOs.includes('181700'), 'People TO Call not created');
   must(warehouse.network() === 0 && flooring.network() === 0, 'network attempted');
   return { warehouseQty: 10, poStatus: 'Received', peopleToCall: queue.status };
+}));
+
+tests.push(check('Ready task without received_at cannot acknowledge', () => {
+  const env=bootFlooring(),task=certifiedTask(181715);delete task.received_at;
+  seedFlooring(env,{jobs:[makeJob('J1',181715)],pos:[makePO('PO1','J1',181715,181715)],tasks:[task]});
+  const before=JSON.stringify(env.localStorage.snapshot()),result=env.ack.acknowledgePO(181715);
+  must(!result.ok&&result.code==='RECEIVED_TIME_MISSING','Ready without received_at accepted');
+  must(JSON.stringify(env.localStorage.snapshot())===before,'missing received_at mutated state');
+  return {blocked:result.code};
+}));
+
+tests.push(check('Completed task without completed_at cannot acknowledge', () => {
+  const env=bootFlooring(),task=certifiedTask(181716);task.status='Completed';delete task.completed_at;
+  seedFlooring(env,{jobs:[makeJob('J1',181716)],pos:[makePO('PO1','J1',181716,181716)],tasks:[task]});
+  const before=JSON.stringify(env.localStorage.snapshot()),result=env.ack.acknowledgePO(181716);
+  must(!result.ok&&result.code==='COMPLETED_TIME_MISSING','Completed without completed_at accepted');
+  must(JSON.stringify(env.localStorage.snapshot())===before,'missing completed_at mutated state');
+  return {blocked:result.code};
 }));
 
 tests.push(check('Missing Warehouse cache timestamp fails closed before receipt evaluation', () => {
@@ -646,7 +666,7 @@ const report = {
   gate: 'RUNLU Flooring ↔ Warehouse Verified Receipt Ack LAB V0.8',
   pass,
   generatedAt: new Date().toISOString(),
-  candidate: { file: ACK_FILE, version: '0.10.0', sha256: sha(ackSource), productionAutoInstall: false },
+  candidate: { file: ACK_FILE, version: '0.10.1', sha256: sha(ackSource), productionAutoInstall: false },
   warehouse: {
     runtime: `${warehouseVersion.version} Build${warehouseVersion.build}`,
     indexSha256: sha(warehouseIndex),
@@ -663,7 +683,8 @@ const report = {
   contract: [
     'A Flooring PO may auto-ack Received only from one exact shared Warehouse task.',
     'Task must be Ready/Completed with every received quantity exactly equal to ordered quantity.',
-    'Warehouse cloud cache must have an exact syncedAt timestamp no older than five minutes.',
+    'Warehouse Ready must carry received_at; Completed must carry completed_at, so a status label alone can never acknowledge a PO.',
+  'Warehouse cloud cache must have an exact syncedAt timestamp no older than five minutes.',
   'Task must carry verified inventory evidence: either the legacy certificate or actual Posted inventory rows with exact line quantities, inventory IDs, timestamp, and stock deltas.',
     'PO Received and People TO Call routing commit together or both stores restore.',
     'Sales Review remains unable to mutate Received PO status.',
