@@ -6,8 +6,12 @@
   'use strict';
   const PO_STORE='runlu_deerfoot_supplier_orders_v1';
   const LAST_PO='runlu_deerfoot_last_po_v1';
+  const SUPPLIER_STORE='runlu_flooring_supplier_master_v1';
   const by=id=>document.getElementById(id);
   const readPOs=()=>{try{const x=JSON.parse(localStorage.getItem(PO_STORE)||'[]');return Array.isArray(x)?x:[]}catch(_){return []}};
+  const readSuppliers=()=>{try{const x=JSON.parse(localStorage.getItem(SUPPLIER_STORE)||'[]');return Array.isArray(x)?x:[]}catch(_){return []}};
+  const supplierForPO=po=>{const xs=readSuppliers();if(po?.supplierId){const s=xs.find(x=>x.id===po.supplierId);if(s)return s}const n=String(po?.supplier||'').trim().toLowerCase();return n?xs.find(x=>String(x?.name||'').trim().toLowerCase()===n)||null:null};
+  const supplierContext=po=>{const s=supplierForPO(po);return s?{supplierId:s.id,supplierName:s.name||po?.supplier||'',freightRule:s.freightRule||'',minimumOrder:s.minimumOrder||'',discountRule:s.discountRule||''}:{supplierId:po?.supplierId||'',supplierName:po?.supplier||'',freightRule:'',minimumOrder:'',discountRule:''}};
   const statusFor=po=>{if(!po)return '';if(po.status==='Cancelled')return 'Cancelled';if(po.status==='Completed')return 'Completed';if(po.status==='Received')return 'Ready';if(po.status==='Partially Received')return 'In Progress';return po.poNumber&&po.status!=='Draft'?'Scheduled':'Draft'};
   function rememberPO(num){if(num)localStorage.setItem(LAST_PO,String(num))}
   function visiblePONumber(){return (by('poNumberSafe')?.value||'').trim()}
@@ -37,12 +41,16 @@
     })).filter(x=>x.style||x.sku||x.qty);
   }
   function handoffTextPO(){
-    const {po,j,items}=handoffData();
+    const {po,j,items}=handoffData(),supplier=supplierContext(po);
     if(!po&&!j)return 'No active Job or supplier PO.';
     return [
       'RUNLU DEERFOOT FLOORING → WAREHOUSE RECEIVING',
       'PO: '+(po?.poNumber||j?.supplierPO||''),
-      'Supplier: '+(po?.supplier||''),
+      'Supplier: '+(supplier.supplierName||po?.supplier||''),
+      'Supplier ID: '+(supplier.supplierId||''),
+      'Freight Rule: '+(supplier.freightRule||''),
+      'Minimum Order: '+(supplier.minimumOrder||''),
+      'Discount Rule: '+(supplier.discountRule||''),
       'PO Status: '+(po?.status||''),
       'Pickup Status: '+statusFor(po),
       'Supplier Pickup / Receiving Date: '+(po?.requestedDate||''),
@@ -57,11 +65,15 @@
   }
   function warehouseUrlPO(){
     const {po,j,items}=handoffData();
-    const itemPayload=compactItems(items,po);
+    const supplier=supplierContext(po),itemPayload=compactItems(items,po);
     const p=new URLSearchParams({
       from:'flooring',
       po:po?.poNumber||j?.supplierPO||'',
-      supplier:po?.supplier||'',
+      supplier:supplier.supplierName||po?.supplier||'',
+      supplierId:supplier.supplierId||'',
+      freightRule:supplier.freightRule||'',
+      minimumOrder:supplier.minimumOrder||'',
+      discountRule:supplier.discountRule||'',
       pickup:po?.requestedDate||'',
       poStatus:po?.status||'',
       pickupStatus:statusFor(po),
@@ -105,7 +117,7 @@
       if(nav?.dataset?.page==='warehouse'||nav?.textContent?.trim()==='Warehouse')setTimeout(renderWarehousePO,0);
     },true);
     ['change','input'].forEach(type=>document.addEventListener(type,ev=>{if(ev.target?.id==='poNumberSafe')rememberPO(ev.target.value)},true));
-    window.addEventListener('storage',ev=>{if(ev.key===PO_STORE){ensureCompletedStat();renderWarehousePO()}});
+    window.addEventListener('storage',ev=>{if([PO_STORE,SUPPLIER_STORE].includes(ev.key)){ensureCompletedStat();renderWarehousePO()}});
     const oldRender=window.runluPickupSafeRender;if(typeof oldRender==='function')window.runluPickupSafeRender=function(){oldRender();ensureCompletedStat()};
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
