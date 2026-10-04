@@ -378,7 +378,8 @@ const tests = [];
 
 tests.push(check('Candidate exposes fail-closed safety contract', () => {
   const env = bootFlooring();
-  must(env.ack.version === '0.10.1', 'candidate version mismatch');
+  must(env.ack.version === '0.10.2', 'candidate version mismatch');
+  must(env.ack.purchaseTypeAwareEvidence && env.ack.jobSpecificInventoryPostingRequired === false, 'purchase-type evidence contract missing');
   must(env.ack.requiresTerminalWarehouseTimestamp, 'terminal Warehouse timestamp guard missing');
   must(env.ack.requiresFreshWarehouseCache && env.ack.maxWarehouseCacheAgeMs === 300000, 'fresh Warehouse cache guard missing');
   must(env.ack.supportsPostedInventoryEvidence, 'Posted inventory evidence flag missing');
@@ -405,6 +406,26 @@ tests.push(check('Exact Warehouse receipt creates inventory proof for one PO ack
   must(queue?.status === 'Not Called' && queue.sourcePOs.includes('181700'), 'People TO Call not created');
   must(warehouse.network() === 0 && flooring.network() === 0, 'network attempted');
   return { warehouseQty: 10, poStatus: 'Received', peopleToCall: queue.status };
+}));
+
+tests.push(check('Job-specific full receipt uses terminal Warehouse proof without stock posting', () => {
+  const env=bootFlooring(),task=makeTask(181713,10,{purchase_type:'Job-specific'});
+  seedFlooring(env,{jobs:[makeJob('J1',181713)],pos:[makePO('PO1','J1',181713,181713)],tasks:[task]});
+  const result=env.ack.acknowledgePO(181713);
+  must(result.ok&&result.changed&&result.code==='ACKNOWLEDGED','Job-specific full receipt was blocked');
+  const po=env.localStorage.json(F.PO)[0];
+  must(po.status==='Received','Job-specific PO not Received');
+  must(po.warehouseReceiptInventoryEvidenceKind==='warehouse-terminal-receipt','wrong Job-specific evidence kind');
+  return {poStatus:po.status,evidence:po.warehouseReceiptInventoryEvidenceKind};
+}));
+
+tests.push(check('Stock receipt cannot acknowledge before inventory is Posted', () => {
+  const env=bootFlooring(),task=makeTask(181714,10,{purchase_type:'Stock',inventory_post_status:'Pending'});
+  seedFlooring(env,{jobs:[makeJob('J1',181714)],pos:[makePO('PO1','J1',181714,181714)],tasks:[task]});
+  const before=JSON.stringify(env.localStorage.snapshot()),result=env.ack.acknowledgePO(181714);
+  must(!result.ok&&result.code==='STOCK_INVENTORY_NOT_POSTED','Stock receipt bypassed inventory posting');
+  must(JSON.stringify(env.localStorage.snapshot())===before,'unposted Stock receipt mutated state');
+  return {blocked:result.code};
 }));
 
 tests.push(check('Ready task without received_at cannot acknowledge', () => {
@@ -666,7 +687,7 @@ const report = {
   gate: 'RUNLU Flooring ↔ Warehouse Verified Receipt Ack LAB V0.8',
   pass,
   generatedAt: new Date().toISOString(),
-  candidate: { file: ACK_FILE, version: '0.10.1', sha256: sha(ackSource), productionAutoInstall: false },
+  candidate: { file: ACK_FILE, version: '0.10.2', sha256: sha(ackSource), productionAutoInstall: false },
   warehouse: {
     runtime: `${warehouseVersion.version} Build${warehouseVersion.build}`,
     indexSha256: sha(warehouseIndex),
@@ -683,7 +704,8 @@ const report = {
   contract: [
     'A Flooring PO may auto-ack Received only from one exact shared Warehouse task.',
     'Task must be Ready/Completed with every received quantity exactly equal to ordered quantity.',
-    'Warehouse Ready must carry received_at; Completed must carry completed_at, so a status label alone can never acknowledge a PO.',
+    'Evidence is purchase-type aware: Stock requires actual Posted inventory evidence; Job-specific material uses the terminal Warehouse receipt plus full received quantities and is not forced through Stock Inventory.',
+  'Warehouse Ready must carry received_at; Completed must carry completed_at, so a status label alone can never acknowledge a PO.',
   'Warehouse cloud cache must have an exact syncedAt timestamp no older than five minutes.',
   'Task must carry verified inventory evidence: either the legacy certificate or actual Posted inventory rows with exact line quantities, inventory IDs, timestamp, and stock deltas.',
     'PO Received and People TO Call routing commit together or both stores restore.',
