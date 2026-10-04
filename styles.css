@@ -263,3 +263,27 @@
 .nav-dropdown a:hover,.nav-dropdown a:focus-visible{background:#f4f5f0;opacity:1;outline:none}
 .nav-group:hover .nav-dropdown,.nav-group:focus-within .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0)}
 @media(min-width:861px) and (max-width:1120px){.desktop-nav-v2{gap:14px}.desktop-nav-v2>a,.nav-group-toggle{font-size:.82rem}}
+
+/* Keep homepage controls above the fold across translated desktop copy · 2026-10-04 */
+@media(min-width:861px) and (max-height:900px){
+  .runlu-home .hero-content{padding-top:34px;padding-bottom:28px}
+  .runlu-home .hero-brand-mark{width:74px}
+  .runlu-home .hero-brand-name{margin-top:5px}
+  .runlu-home .hero-brand-tagline{margin-top:2px}
+  .runlu-home .hero-brand-intro{margin-bottom:8px}
+  .runlu-home .hero h1{font-size:clamp(3rem,5.5vw,5.35rem);line-height:.96;margin:4px auto 16px}
+  .runlu-home .glass-panel{padding:18px 28px}
+  .runlu-home .hero-copy p{margin-bottom:9px;font-size:clamp(.9rem,1.15vw,1rem);line-height:1.45}
+  .runlu-home .hero-paths{margin-top:16px}
+  .runlu-home .hero-actions-secondary{margin-top:8px}
+}
+@media(min-width:861px) and (max-height:760px){
+  .runlu-home .hero-content{padding-top:22px;padding-bottom:18px}
+  .runlu-home .hero-brand-mark{width:62px}
+  .runlu-home .hero-brand-intro{margin-bottom:5px}
+  .runlu-home .hero h1{font-size:clamp(2.7rem,5vw,4.7rem);margin-bottom:11px}
+  .runlu-home .glass-panel{padding:14px 24px}
+  .runlu-home .hero-copy p{margin-bottom:6px;font-size:.9rem;line-height:1.35}
+  .runlu-home .hero-paths{margin-top:10px}
+  .runlu-home .hero-actions-secondary{margin-top:6px}
+}
