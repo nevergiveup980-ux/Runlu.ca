@@ -149,6 +149,23 @@ function run(){
  const billing=window.RUNLUUniversalBilling;
  if(billing){const src=billing.issue?.toString?.()||'';t('Billing · invoice write-ahead order',typeof billing.issue==='function'&&src.indexOf("CrashJournal?.begin")<src.indexOf('r.invoiceNumber=invoiceNumber'),'journal begins before invoice mutation')}
  if(billing){const paySrc=billing.pay?.toString?.()||'',guardAt=paySrc.indexOf("Guards?.assert"),journalAt=paySrc.indexOf("CrashJournal?.begin"),mutationAt=paySrc.indexOf('r.payments.push');t('Billing · payment validation before write-ahead',guardAt>=0&&guardAt<journalAt&&journalAt<mutationAt&&paySrc.includes('Payment exceeds the remaining invoice balance'),'guard + overpayment check run before journaled payment mutation')}
+ const salesConfirm=window.RUNLUUniversalSales?.confirmOrder?.toString?.()||'';
+ t('U2 Contract · confirmed-order transition',salesConfirm.includes("orderStatus='Confirmed'")&&salesConfirm.includes("status='In Progress'"),'sales must explicitly confirm the customer order before procurement');
+ const poCreate=window.RUNLUUniversalPO?.createFromJob?.toString?.()||'';
+ t('U2 Contract · purchasing requires confirmed order',poCreate.includes("orderStatus!=='Confirmed'"),'supplier PO creation must reject unconfirmed customer orders');
+ const inboundRender=window.RUNLUUniversalInbound?.render?.toString?.()||'',inboundReceive=window.RUNLUUniversalInbound?.receive?.toString?.()||'';
+ t('U2 Contract · receiving module active',!!window.RUNLUUniversalInbound&&typeof window.RUNLUUniversalInbound.tasks==='function'&&typeof window.RUNLUUniversalInbound.receive==='function','receiving contracts available');
+ const whContract=window.RUNLUUniversalWarehouse?.jobReadiness?.toString?.()||'';
+ t('U2 Contract · whole-job readiness requires issued POs',whContract.includes("p.status==='Issued'")&&whContract.includes("issued.length===orders.length"),'draft supplier orders must prevent whole-job readiness');
+ t('U2 Contract · whole-job readiness requires every inbound task ready',whContract.includes("states.every")&&whContract.includes("x==='Ready'"),'partial receipt or exception must block installation readiness');
+ const installModule=window.RUNLUUniversalInstallation;
+ t('U2 Contract · installation consumes warehouse readiness',typeof installModule?.render==='function'&&typeof window.RUNLUUniversalWarehouse?.readyJobs==='function','installation eligibility is sourced from the warehouse whole-job gate');
+ const billingPay=window.RUNLUUniversalBilling?.pay?.toString?.()||'';
+ t('U2 Contract · paid customer invoice closes sales job',billingPay.includes("status==='Paid'")&&billingPay.includes('closePaidJob'),'full customer payment must invoke the sales close transition');
+ const salesClose=window.RUNLUUniversalSales?.closePaidJob?.toString?.()||'';
+ t('U2 Contract · sales close stamps financial completion',salesClose.includes("financialStatus='Paid'")&&salesClose.includes("status='Completed'")&&salesClose.includes('closedAt'),'job close must record paid + completed + close timestamp');
+ const acctPaid=window.RUNLUUniversalAccounting?.paid?.toString?.()||'';
+ t('U2 Contract · supplier payment stamps close time',acctPaid.includes("status='Paid'")&&acctPaid.includes('closedAt'),'supplier accounting payment must retain financial closure evidence');
  const sim=window.RUNLUUniversalScenarioSimulator?.run?.();
  t('U2 Business Chain · simulator executes',!!sim,sim?'scenarios='+sim.scenarios.length:'unavailable');
  t('U2 Business Chain · all scenarios pass',!!sim&&sim.failed===0,sim?sim.passed+' passed · '+sim.failed+' failed':'simulator unavailable');
