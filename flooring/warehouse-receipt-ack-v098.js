@@ -1,4 +1,4 @@
-/* RUNLU Flooring OS · Warehouse Receipt Acknowledgement V0.10.2 CANDIDATE
+/* RUNLU Flooring OS · Warehouse Receipt Acknowledgement V0.10.3 CANDIDATE
    Cross-system safety contract:
    - Warehouse remains physical execution authority.
    - Flooring PO becomes Received only from one unambiguous FULL receipt task carrying
@@ -11,7 +11,7 @@
 if(window.__runluWarehouseReceiptAckV098)return;
 window.__runluWarehouseReceiptAckV098=true;
 
-const VERSION='0.10.2';
+const VERSION='0.10.3';
 const PO_STORE='runlu_deerfoot_supplier_orders_v1';
 const CALL_STORE='runlu_people_to_call_v066';
 const CACHE='runlu-flooring-warehouse-work-v090';
@@ -95,6 +95,8 @@ function validatePostedInventoryEvidence(po,task,full){
 
 function validateInventoryCertificate(po,task,full){
   const purchaseType=String(task?.purchase_type||'').trim();
+  const localPurchaseType=String(po?.purchaseType||'').trim();
+  if(localPurchaseType&&purchaseType&&norm(localPurchaseType)!==norm(purchaseType))return {ok:false,code:'PURCHASE_TYPE_MISMATCH',localPurchaseType,warehousePurchaseType:purchaseType};
   if(purchaseType==='Job-specific'){
     return {ok:true,evidenceKind:'warehouse-terminal-receipt',evidenceIds:[String(task.id)],operationIds:[],verifiedAt:full.terminalAt,items:full.received};
   }
@@ -161,7 +163,7 @@ function reconcile(){
 
 window.RUNLUWarehouseReceiptAckV098={
   version:VERSION,evaluatePO,acknowledgePO,reconcile,poKey,
-  requiresInventoryCertificate:true,supportsPostedInventoryEvidence:true,purchaseTypeAwareEvidence:true,jobSpecificInventoryPostingRequired:false,requiresTerminalWarehouseTimestamp:true,requiresFreshWarehouseCache:true,maxWarehouseCacheAgeMs:MAX_CACHE_AGE_MS,requiresFullReceipt:true,duplicateEvidenceFailsClosed:true,
+  requiresInventoryCertificate:true,supportsPostedInventoryEvidence:true,purchaseTypeAwareEvidence:true,requiresPurchaseTypeAgreement:true,jobSpecificInventoryPostingRequired:false,requiresTerminalWarehouseTimestamp:true,requiresFreshWarehouseCache:true,maxWarehouseCacheAgeMs:MAX_CACHE_AGE_MS,requiresFullReceipt:true,duplicateEvidenceFailsClosed:true,
   atomicPOAndPeopleToCall:true,warehouseReadOnly:true,jobStateReadOnly:true,salesStateReadOnly:true,
   productionAutoInstall:false
 };
