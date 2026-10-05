@@ -1,0 +1,16 @@
+import fs from 'node:fs';import vm from 'node:vm';
+const src=fs.readFileSync('flooring/warehouse-receipt-shadow-v0105.js','utf8');
+const must=(x,m)=>{if(!x)throw new Error(m)};
+must(!/localStorage\.setItem|localStorage\.removeItem|\.acknowledgePO\s*\(/.test(src),'shadow contains a write/ack path');
+const store=new Map(),localStorage={getItem:k=>store.has(k)?store.get(k):null};
+store.set('runlu_deerfoot_supplier_orders_v1',JSON.stringify([{id:'P1',poNumber:'181800',purchaseType:'Stock'}]));
+store.set('runlu-flooring-warehouse-work-v090',JSON.stringify({syncedAt:new Date().toISOString(),tasks:[{id:'T1',po_number:181800,status:'Ready',purchase_type:'Stock'}]}));
+let evaluateCalls=0;
+const window={RUNLUWarehouseReceiptAckV098:{evaluatePO:n=>{evaluateCalls++;return {ok:false,code:'STOCK_INVENTORY_NOT_POSTED',task:{status:'Ready',purchase_type:'Stock'}}}}};
+const context={window,localStorage,console:{table:()=>{}}};vm.createContext(context);vm.runInContext(src,context);
+const api=window.RUNLUWarehouseReceiptShadowV0105,r=api.report();
+must(api.readOnly===true&&api.version==='0.10.5','shadow contract missing');
+must(evaluateCalls===1,'pure evaluator not called exactly once');
+must(r.rows.length===1&&r.rows[0].code==='STOCK_INVENTORY_NOT_POSTED'&&!r.rows[0].ready,'blocked result incorrect');
+must(store.size===2,'shadow mutated storage');
+console.log('Warehouse receipt shadow V0.10.5: PASS');
