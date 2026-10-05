@@ -10,14 +10,19 @@ main{max-width:860px;margin:2vh auto 8vh;padding:0 22px;text-align:center}.eyebr
 .status{margin:20px auto 0;max-width:610px;padding:14px 18px;border-top:1px solid var(--line);font:500 11px ui-monospace,SFMono-Regular,monospace;color:var(--muted);line-height:1.7}.status b{color:#b8d6c8}.note{max-width:620px;margin:28px auto;color:#6f897e;font-size:12px;line-height:1.7}
 </style></head><body><header class="top"><a class="brand" href="index.html">RUNLU</a><a class="back" href="lab.html">← LAB</a></header><main>
 <div class="eyebrow">RUNLU LAB · INTERACTIVE EXPERIMENT 002</div><h1>Garden Pulse.</h1><p class="lead">What if anonymous traffic felt less like analytics—and more like life moving quietly through a digital garden?</p>
-<section class="garden" id="garden"><i class="reed" style="left:8%"></i><i class="reed"></i><i class="reed"></i><i class="reed"></i><div class="water"></div><div class="center"><strong>THE GARDEN IS QUIET, NOT EMPTY.</strong><span id="mode">Pulse source · DEMO</span></div></section>
+<section class="garden" id="garden"><i class="reed" style="left:8%"></i><i class="reed"></i><i class="reed"></i><i class="reed"></i><div class="water"></div><div class="center"><strong>THE GARDEN IS QUIET, NOT EMPTY.</strong><span id="mode">Pulse source · CHECKING…</span></div></section>
 <div class="controls"><button class="listen" id="listen">Listen to the garden ○</button><button class="demo" id="demo">Send a demo ripple</button></div>
 <div class="status"><b>PRIVACY BOUNDARY</b><br>Garden Pulse is designed to receive anonymous, aggregated intensity only—never raw IP addresses, precise locations, visitor identities, or analytics credentials.</div>
-<p class="note">This first experiment is intentionally in DEMO mode until RUNLU Pulse's read-only aggregate feed is connected. Demo ripples are simulated and are never presented as real visitors.</p>
+<p class="note" id="feedNote">Checking for RUNLU Pulse's privacy-safe, read-only aggregate feed. If unavailable, this experiment stays in clearly labelled DEMO mode; simulated ripples are never presented as real visitors.</p>
 </main><script>
 let ctx=null,enabled=false;const garden=document.getElementById('garden'),listen=document.getElementById('listen');
 function ripple(sound=true){const r=document.createElement('i');r.className='pulse go';r.style.left=(28+Math.random()*44)+'%';r.style.top=(48+Math.random()*25)+'%';garden.appendChild(r);setTimeout(()=>r.remove(),4100);if(sound&&enabled)drop()}
 function drop(){if(!ctx)return;const t=ctx.currentTime,o=ctx.createOscillator(),g=ctx.createGain(),f=ctx.createBiquadFilter();o.type='sine';o.frequency.setValueAtTime(620+Math.random()*140,t);o.frequency.exponentialRampToValueAtTime(310,t+.38);f.type='lowpass';f.frequency.value=1100;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.022,t+.018);g.gain.exponentialRampToValueAtTime(.0001,t+.55);o.connect(f).connect(g).connect(ctx.destination);o.start(t);o.stop(t+.58)}
 listen.onclick=async()=>{if(!ctx)ctx=new (window.AudioContext||window.webkitAudioContext)();await ctx.resume();enabled=!enabled;listen.classList.toggle('on',enabled);listen.textContent=enabled?'Garden audio · ON ●':'Listen to the garden ○';if(enabled)ripple(true)}
 document.getElementById('demo').onclick=()=>ripple(true);
-</script></body></html>
+
+const FEED='https://pulse.runlu.ca/garden-feed',mode=document.getElementById('mode'),feedNote=document.getElementById('feedNote');let lastBucket=null;
+function demoMode(){mode.textContent='Pulse source · DEMO';feedNote.textContent="RUNLU Pulse's anonymous Garden Feed is not available yet. Demo ripples are simulated and are never presented as real visitors.";document.getElementById('demo').hidden=false}
+function liveMode(d){mode.textContent='Pulse source · LIVE · ANONYMOUS';feedNote.textContent='Live mode receives only coarse, anonymous activity signals from RUNLU Pulse. No visitor identity, IP address, precise location, page history, or analytics credential is exposed.';document.getElementById('demo').hidden=true;if(d.bucket&&d.bucket!==lastBucket&&d.recent){lastBucket=d.bucket;ripple(true)}}
+async function checkFeed(){try{const c=new AbortController(),t=setTimeout(()=>c.abort(),2500);const res=await fetch(FEED,{cache:'no-store',signal:c.signal,credentials:'omit'});clearTimeout(t);if(!res.ok)throw 0;const d=await res.json();if(d&&d.schema==='runlu.garden-pulse.v1'&&typeof d.activity==='number'&&typeof d.recent==='boolean'){liveMode(d);return}}catch(e){}demoMode()}
+checkFeed();setInterval(checkFeed,30000);</script></body></html>
