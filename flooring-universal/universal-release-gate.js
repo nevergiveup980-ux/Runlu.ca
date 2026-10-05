@@ -149,11 +149,18 @@ function run(){
  const billing=window.RUNLUUniversalBilling;
  if(billing){const src=billing.issue?.toString?.()||'';t('Billing · invoice write-ahead order',typeof billing.issue==='function'&&src.indexOf("CrashJournal?.begin")<src.indexOf('r.invoiceNumber=invoiceNumber'),'journal begins before invoice mutation')}
  if(billing){const paySrc=billing.pay?.toString?.()||'',guardAt=paySrc.indexOf("Guards?.assert"),journalAt=paySrc.indexOf("CrashJournal?.begin"),mutationAt=paySrc.indexOf('r.payments.push');t('Billing · payment validation before write-ahead',guardAt>=0&&guardAt<journalAt&&journalAt<mutationAt&&paySrc.includes('Payment exceeds the remaining invoice balance'),'guard + overpayment check run before journaled payment mutation')}
+ const sim=window.RUNLUUniversalScenarioSimulator?.run?.();
+ t('U2 Business Chain · simulator executes',!!sim,sim?'scenarios='+sim.scenarios.length:'unavailable');
+ t('U2 Business Chain · all scenarios pass',!!sim&&sim.failed===0,sim?sim.passed+' passed · '+sim.failed+' failed':'simulator unavailable');
+ const wh=window.RUNLUUniversalWarehouse;
+ t('U2 Business Chain · whole-job material gate',typeof wh?.jobReadiness==='function'&&typeof wh?.readyJobs==='function','installation readiness must aggregate the entire job');
+ const installSync=window.RUNLUUniversalInstallation?.render?.toString?.()||'';
+ t('U2 Business Chain · installation module present',!!window.RUNLUUniversalInstallation,'whole-job readiness consumer loaded');
  const bills=billing?.rows?.()||[];
  bills.forEach(b=>{const paid=(b.payments||[]).reduce((s,p)=>s+Number(p.amount||0),0);t('Invoice ledger · '+(b.invoiceNumber||b.id),Math.abs(paid-Number(b.paidAmount||0))<=.01,'payment ledger equals paid amount')});
  const pos=window.RUNLUUniversalPO?.pos?.()||[],seen=new Set();pos.filter(p=>p.poNumber).forEach(p=>{const unique=!seen.has(p.poNumber);t('PO number · '+p.poNumber,unique,'issued number unique in workspace');seen.add(p.poNumber)});
  return {passed:tests.filter(x=>x.ok).length,failed:tests.filter(x=>!x.ok).length,tests};
 }
-function render(){const host=document.getElementById('universalReleaseGate');if(!host)return;const r=run(),ok=r.failed===0;host.innerHTML='<div class="card"><h2>U1 Release Gate</h2><p class="muted">Non-destructive regression harness. Runs module, lifecycle, ledger, and recovery contract checks.</p><div class="uRelease '+(ok?'pass':'fail')+'"><b>'+(ok?'PASS':'HOLD')+'</b><span>'+r.passed+' passed · '+r.failed+' failed</span></div></div><div class="card">'+r.tests.map(x=>'<div class="uReleaseTest"><b>'+(x.ok?'✓':'✕')+' '+esc(x.name)+'</b><span>'+esc(x.detail)+'</span></div>').join('')+'</div>'}
+function render(){const host=document.getElementById('universalReleaseGate');if(!host)return;const r=run(),ok=r.failed===0;host.innerHTML='<div class="card"><h2>U2 Release Gate</h2><p class="muted">Non-destructive regression harness. Runs foundation, lifecycle, recovery, ledger, and U2 end-to-end business-chain checks.</p><div class="uRelease '+(ok?'pass':'fail')+'"><b>'+(ok?'PASS':'HOLD')+'</b><span>'+r.passed+' passed · '+r.failed+' failed</span></div></div><div class="card">'+r.tests.map(x=>'<div class="uReleaseTest"><b>'+(x.ok?'✓':'✕')+' '+esc(x.name)+'</b><span>'+esc(x.detail)+'</span></div>').join('')+'</div>'}
 window.RUNLUUniversalReleaseGate=Object.freeze({run,render});
 })();
