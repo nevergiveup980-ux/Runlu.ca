@@ -1,4 +1,4 @@
-/* RUNLU Flooring OS · Warehouse Receipt Acknowledgement V0.10.3 CANDIDATE
+/* RUNLU Flooring OS · Warehouse Receipt Acknowledgement V0.10.4 CANDIDATE
    Cross-system safety contract:
    - Warehouse remains physical execution authority.
    - Flooring PO becomes Received only from one unambiguous FULL receipt task carrying
@@ -11,7 +11,7 @@
 if(window.__runluWarehouseReceiptAckV098)return;
 window.__runluWarehouseReceiptAckV098=true;
 
-const VERSION='0.10.3';
+const VERSION='0.10.4';
 const PO_STORE='runlu_deerfoot_supplier_orders_v1';
 const CALL_STORE='runlu_people_to_call_v066';
 const CACHE='runlu-flooring-warehouse-work-v090';
@@ -90,6 +90,14 @@ function validatePostedInventoryEvidence(po,task,full){
     if(before==null||after==null||!equalQty(after-before,q))return {ok:false,code:'POSTED_STOCK_DELTA_MISMATCH',line:i};
     ids.push(id);
   }
+  const chains=new Map();
+  for(let i=0;i<rows.length;i++){
+    const id=String(rows[i]?.inventory_id||'').trim(),before=num(rows[i]?.before_quantity),after=num(rows[i]?.after_quantity);
+    if(!chains.has(id)){chains.set(id,{after,index:i});continue}
+    const prev=chains.get(id);
+    if(!equalQty(prev.after,before))return {ok:false,code:'POSTED_INVENTORY_CHAIN_MISMATCH',line:i,previousLine:prev.index,inventoryId:id};
+    chains.set(id,{after,index:i});
+  }
   return {ok:true,evidenceKind:'inventory-posting',evidenceIds:ids,operationIds:ids,verifiedAt:String(task.inventory_posted_at),items:rows};
 }
 
@@ -163,7 +171,7 @@ function reconcile(){
 
 window.RUNLUWarehouseReceiptAckV098={
   version:VERSION,evaluatePO,acknowledgePO,reconcile,poKey,
-  requiresInventoryCertificate:true,supportsPostedInventoryEvidence:true,purchaseTypeAwareEvidence:true,requiresPurchaseTypeAgreement:true,jobSpecificInventoryPostingRequired:false,requiresTerminalWarehouseTimestamp:true,requiresFreshWarehouseCache:true,maxWarehouseCacheAgeMs:MAX_CACHE_AGE_MS,requiresFullReceipt:true,duplicateEvidenceFailsClosed:true,
+  requiresInventoryCertificate:true,supportsPostedInventoryEvidence:true,purchaseTypeAwareEvidence:true,requiresPurchaseTypeAgreement:true,requiresPostingChainContinuity:true,jobSpecificInventoryPostingRequired:false,requiresTerminalWarehouseTimestamp:true,requiresFreshWarehouseCache:true,maxWarehouseCacheAgeMs:MAX_CACHE_AGE_MS,requiresFullReceipt:true,duplicateEvidenceFailsClosed:true,
   atomicPOAndPeopleToCall:true,warehouseReadOnly:true,jobStateReadOnly:true,salesStateReadOnly:true,
   productionAutoInstall:false
 };
