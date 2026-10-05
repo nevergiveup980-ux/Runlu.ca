@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="RUNLU LAB — a lightweight offline license activation simulator.">
+<meta name="theme-color" content="#07111f"><link rel="canonical" href="https://runlu.ca/lab-offline-license.html">
+<title>RUNLU LAB · Offline License Simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07111f;--panel:#0d1b2b;--line:#20334a;--text:#edf6ff;--muted:#8fa5bc;--blue:#61b7ff;--green:#67e8a5;--red:#ff7d8a}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% 0,#102842 0,#07111f 48%);color:var(--text);font-family:Inter,sans-serif;min-height:100vh}
+a{color:inherit}.top{max-width:960px;margin:auto;padding:26px 24px;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:700;letter-spacing:.14em;text-decoration:none}.back{font-size:13px;color:var(--muted);text-decoration:none}
+main{max-width:820px;margin:4vh auto 10vh;padding:0 22px}.eyebrow{font:600 12px/1 JetBrains Mono,monospace;letter-spacing:.14em;color:var(--blue)}
+h1{font-size:clamp(38px,7vw,72px);line-height:.98;margin:18px 0 18px;letter-spacing:-.05em}.lead{max-width:650px;color:var(--muted);font-size:17px;line-height:1.7}
+.flow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:30px 0;color:var(--muted);font:500 12px JetBrains Mono,monospace}.flow b{color:var(--green)}
+.card{background:rgba(13,27,43,.88);border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 30px 80px rgba(0,0,0,.25);backdrop-filter:blur(16px)}
+.row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end;margin:18px 0}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:8px}.value,input{width:100%;min-height:48px;border:1px solid var(--line);background:#091522;color:var(--text);border-radius:12px;padding:14px;font:500 13px JetBrains Mono,monospace}
+button{border:0;border-radius:12px;padding:15px 18px;background:var(--blue);color:#04101c;font-weight:700;cursor:pointer;min-height:48px}button.secondary{background:#15273a;color:var(--text);border:1px solid var(--line)}button.danger{background:transparent;color:var(--red);border:1px solid #59313b}
+.status{margin:22px 0 4px;padding:18px;border:1px solid var(--line);border-radius:14px;display:flex;gap:12px;align-items:center}.dot{width:10px;height:10px;border-radius:50%;background:#53677b;box-shadow:0 0 0 5px rgba(83,103,123,.1)}.status.active .dot{background:var(--green);box-shadow:0 0 18px var(--green)}.status strong{font:600 13px JetBrains Mono,monospace}.status small{display:block;color:var(--muted);margin-top:5px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.offline{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}.switch{position:relative;width:54px;height:30px;border-radius:99px;background:#24405a;cursor:pointer}.switch:after{content:"";position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;background:white;transition:.2s}.switch.off{background:#4a3340}.switch.off:after{transform:translateX(24px)}
+.explain{margin-top:24px;color:var(--muted);font-size:14px;line-height:1.7}.explain summary{color:var(--text);cursor:pointer;font-weight:600}.quote{margin:44px 0 0;font-size:21px;line-height:1.5;color:#dcecff}
+.note{margin-top:18px;font-size:11px;color:#6f8499;line-height:1.6}code{font-family:JetBrains Mono,monospace}
+@media(max-width:620px){.row{grid-template-columns:1fr}.row button{width:100%}.card{padding:18px}h1{font-size:46px}}
+</style></head>
+<body><header class="top"><a class="brand" href="index.html">RUNLU</a><a class="back" href="lab.html">← LAB</a></header>
+<main><div class="eyebrow">RUNLU LAB · INTERACTIVE EXPERIMENT 001</div><h1>Offline License.</h1>
+<p class="lead">A tiny browser simulation of the idea behind RUNLU License Core: activate once, verify locally, keep working offline, and release the device when you are done.</p>
+<div class="flow"><span>ONLINE ●</span><span>→</span><span>ACTIVATE</span><span>→</span><b>VERIFIED ✓</b><span>→</span><span>OFFLINE ○</span><span>→</span><b>STILL VALID ✓</b></div>
+<section class="card">
+<div class="row"><div class="field"><label>DEMO DEVICE ID</label><div id="device" class="value">Generating…</div></div><button id="newDevice" class="secondary">New Device ID</button></div>
+<div class="row"><div class="field"><label>DEMO LICENSE KEY</label><input id="key" value="" placeholder="RUNLU-DEMO-XXXX-XXXX" autocomplete="off" spellcheck="false"></div><button id="demoKey" class="secondary">Use Demo Key</button></div>
+<div id="status" class="status"><span class="dot"></span><div><strong id="statusTitle">NOT ACTIVATED</strong><small id="statusText">No local activation receipt found.</small></div></div>
+<div class="actions"><button id="activate">Activate Offline</button><button id="release" class="danger">Release This Device</button></div>
+<div class="offline"><div><strong>Network simulation</strong><div id="networkText" style="color:var(--muted);font-size:12px;margin-top:5px">ONLINE · activation allowed</div></div><div id="network" class="switch" role="switch" aria-checked="true" tabindex="0"></div></div>
+<details class="explain"><summary>What just happened?</summary><p>No password was sent. No permanent connection is required. This demo creates a local activation receipt in your browser and verifies that receipt locally when the simulated network is off. Releasing the device removes the local receipt.</p><p><strong>This is a safe simulation.</strong> It uses a demo key, a virtual device ID, and browser storage only. RUNLU production signing keys, customer data, activation APIs, and private license rules are not included.</p></details>
+<div class="note">Tip: activate, switch the network to OFFLINE, then refresh this page. The demo receipt should remain valid on this browser.</div>
+</section>
+<p class="quote">“A license shouldn't need the internet to remember that you own it.”</p>
+</main>
+<script>
+const $=id=>document.getElementById(id); const RECEIPT='runlu_lab_demo_receipt_v1'; const DEVICE='runlu_lab_demo_device_v1'; let online=true;
+function hex(n){const a=new Uint8Array(n);crypto.getRandomValues(a);return [...a].map(x=>x.toString(16).padStart(2,'0')).join('').toUpperCase()}
+function device(){let d=localStorage.getItem(DEVICE);if(!d){d='RNL-'+hex(2)+'-'+hex(2);localStorage.setItem(DEVICE,d)}$('device').textContent=d;return d}
+function demo(){return 'RUNLU-DEMO-'+hex(2)+'-'+hex(2)}
+function render(){const r=JSON.parse(localStorage.getItem(RECEIPT)||'null'), d=device(); const ok=r&&r.device===d&&r.key&&r.key.startsWith('RUNLU-DEMO-');$('status').classList.toggle('active',!!ok);$('statusTitle').textContent=ok?(online?'ACTIVATED · OFFLINE READY':'VERIFIED · STILL VALID'):'NOT ACTIVATED';$('statusText').textContent=ok?(online?'Local receipt verified. You can go offline.':'Local verification succeeded with simulated network offline.'):'No valid local activation receipt found.'}
+$('demoKey').onclick=()=>{$('key').value=demo()}; $('newDevice').onclick=()=>{localStorage.setItem(DEVICE,'RNL-'+hex(2)+'-'+hex(2));render()};
+$('activate').onclick=()=>{if(!online){$('statusText').textContent='Activation requires the simulated network to be ONLINE.';return}const k=$('key').value.trim().toUpperCase();if(!/^RUNLU-DEMO-[A-F0-9]{4}-[A-F0-9]{4}$/.test(k)){$('statusText').textContent='Use a RUNLU demo key first.';return}localStorage.setItem(RECEIPT,JSON.stringify({device:device(),key:k,issued:new Date().toISOString(),demo:true}));render()};
+$('release').onclick=()=>{localStorage.removeItem(RECEIPT);render()};
+function toggle(){online=!online;$('network').classList.toggle('off',!online);$('network').setAttribute('aria-checked',String(online));$('networkText').textContent=online?'ONLINE · activation allowed':'OFFLINE · local verification only';render()}
+$('network').onclick=toggle;$('network').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}};device();render();
+</script></body></html>
