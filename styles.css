@@ -301,3 +301,23 @@
  .goods-signature-preview-head p{margin-top:5px}
  .goods-signature-preview img{border-radius:18px}
 }
+
+/* Signature Goods live section · 2026-10-04 */
+.goods-signature-preview{max-width:1180px;margin:18px auto 88px;padding:0 22px}
+.goods-signature-preview-head{display:grid;grid-template-columns:minmax(0,.9fr) minmax(280px,1.1fr);gap:42px;align-items:end;margin-bottom:22px}
+.goods-signature-preview-head h2{margin:8px 0 0;font-size:clamp(2.2rem,4vw,4.8rem);line-height:.98;letter-spacing:-.045em}
+.goods-signature-preview-head p{margin:0;color:#69716b;line-height:1.7}
+.goods-signature-preview>img{display:block;width:100%;height:auto;border-radius:28px;box-shadow:0 20px 55px rgba(37,38,31,.08)}
+.goods-signature-status{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.goods-signature-status>div{display:flex;justify-content:space-between;gap:16px;padding:15px 18px;border:1px solid rgba(40,54,45,.13);border-radius:16px;background:rgba(255,255,255,.34)}
+.goods-signature-status span{color:#727973;text-align:right}
+.goods-preview-note{margin:13px 3px 0;color:#858a85;font-size:.82rem;line-height:1.55}
+@media(max-width:760px){
+.goods-signature-preview{margin:8px auto 58px;padding:0 16px}
+.goods-signature-preview-head{grid-template-columns:1fr;gap:14px;margin-bottom:15px}
+.goods-signature-preview-head h2{font-size:clamp(2.35rem,11vw,3.7rem)}
+.goods-signature-preview>img{border-radius:19px}
+.goods-signature-status{grid-template-columns:1fr}
+.goods-signature-status>div{display:block}
+.goods-signature-status span{display:block;margin-top:5px;text-align:left}
+}
