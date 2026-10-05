@@ -378,7 +378,8 @@ const tests = [];
 
 tests.push(check('Candidate exposes fail-closed safety contract', () => {
   const env = bootFlooring();
-  must(env.ack.version === '0.10.3', 'candidate version mismatch');
+  must(env.ack.version === '0.10.4', 'candidate version mismatch');
+  must(env.ack.requiresPostingChainContinuity, 'posting chain continuity guard missing');
   must(env.ack.requiresPurchaseTypeAgreement, 'purchase-type agreement guard missing');
   must(env.ack.purchaseTypeAwareEvidence && env.ack.jobSpecificInventoryPostingRequired === false, 'purchase-type evidence contract missing');
   must(env.ack.requiresTerminalWarehouseTimestamp, 'terminal Warehouse timestamp guard missing');
@@ -407,6 +408,39 @@ tests.push(check('Exact Warehouse receipt creates inventory proof for one PO ack
   must(queue?.status === 'Not Called' && queue.sourcePOs.includes('181700'), 'People TO Call not created');
   must(warehouse.network() === 0 && flooring.network() === 0, 'network attempted');
   return { warehouseQty: 10, poStatus: 'Received', peopleToCall: queue.status };
+}));
+
+tests.push(check('Repeated Inventory ID must form one continuous stock chain', () => {
+  const env=bootFlooring(),task=makeTask(181710,10,{purchase_type:'Stock'});
+  task.items=[{style:'LAB TILE',colour:'GREY',qty:5,unit:'box'},{style:'LAB TILE',colour:'GREY',qty:5,unit:'box'}];
+  task.received_items=[{ordered_qty:'5',received_qty:'5'},{ordered_qty:'5',received_qty:'5'}];
+  task.inventory_post_status='Posted';task.inventory_posted_at=new Date().toISOString();
+  task.inventory_postings=[
+    {inventory_id:'INV-SAME',quantity:5,received_qty:'5',before_quantity:10,after_quantity:15},
+    {inventory_id:'INV-SAME',quantity:5,received_qty:'5',before_quantity:10,after_quantity:15}
+  ];
+  const po=makePO('PO1','J1',181710,181710,10,{purchaseType:'Stock',items:task.items});
+  seedFlooring(env,{jobs:[makeJob('J1',181710)],pos:[po],tasks:[task]});
+  const before=JSON.stringify(env.localStorage.snapshot()),result=env.ack.acknowledgePO(181710);
+  must(!result.ok&&result.code==='POSTED_INVENTORY_CHAIN_MISMATCH','duplicate stock delta was double-counted');
+  must(JSON.stringify(env.localStorage.snapshot())===before,'broken inventory chain mutated state');
+  return {blocked:result.code};
+}));
+
+tests.push(check('Repeated Inventory ID accepts a continuous sequential stock chain', () => {
+  const env=bootFlooring(),task=makeTask(181711,10,{purchase_type:'Stock'});
+  task.items=[{style:'LAB TILE',colour:'GREY',qty:5,unit:'box'},{style:'LAB TILE',colour:'GREY',qty:5,unit:'box'}];
+  task.received_items=[{ordered_qty:'5',received_qty:'5'},{ordered_qty:'5',received_qty:'5'}];
+  task.inventory_post_status='Posted';task.inventory_posted_at=new Date().toISOString();
+  task.inventory_postings=[
+    {inventory_id:'INV-SAME',quantity:5,received_qty:'5',before_quantity:10,after_quantity:15},
+    {inventory_id:'INV-SAME',quantity:5,received_qty:'5',before_quantity:15,after_quantity:20}
+  ];
+  const po=makePO('PO1','J1',181711,181711,10,{purchaseType:'Stock',items:task.items});
+  seedFlooring(env,{jobs:[makeJob('J1',181711)],pos:[po],tasks:[task]});
+  const result=env.ack.acknowledgePO(181711);
+  must(result.ok&&result.changed,'continuous stock chain was rejected');
+  return {acknowledged:true};
 }));
 
 tests.push(check('Warehouse cannot downgrade a Stock PO to Job-specific to bypass inventory posting', () => {
@@ -698,7 +732,7 @@ const report = {
   gate: 'RUNLU Flooring ↔ Warehouse Verified Receipt Ack LAB V0.8',
   pass,
   generatedAt: new Date().toISOString(),
-  candidate: { file: ACK_FILE, version: '0.10.3', sha256: sha(ackSource), productionAutoInstall: false },
+  candidate: { file: ACK_FILE, version: '0.10.4', sha256: sha(ackSource), productionAutoInstall: false },
   warehouse: {
     runtime: `${warehouseVersion.version} Build${warehouseVersion.build}`,
     indexSha256: sha(warehouseIndex),
@@ -715,7 +749,8 @@ const report = {
   contract: [
     'A Flooring PO may auto-ack Received only from one exact shared Warehouse task.',
     'Task must be Ready/Completed with every received quantity exactly equal to ordered quantity.',
-    'When both systems carry purchase type, Flooring PO and Warehouse task must agree; a Stock PO can never be downgraded to Job-specific to bypass inventory posting.',
+    'Repeated inventory IDs must form a continuous before→after chain across posting rows, preventing the same stock delta from being counted twice.',
+  'When both systems carry purchase type, Flooring PO and Warehouse task must agree; a Stock PO can never be downgraded to Job-specific to bypass inventory posting.',
   'Evidence is purchase-type aware: Stock requires actual Posted inventory evidence; Job-specific material uses the terminal Warehouse receipt plus full received quantities and is not forced through Stock Inventory.',
   'Warehouse Ready must carry received_at; Completed must carry completed_at, so a status label alone can never acknowledge a PO.',
   'Warehouse cloud cache must have an exact syncedAt timestamp no older than five minutes.',
