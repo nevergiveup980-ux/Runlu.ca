@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+const p='flooring/index-customer-desk-v1.html',s=fs.readFileSync(p,'utf8');
+const must=(x,m)=>{if(!x)throw new Error(m)};
+must(/id="backOS"/.test(s),'Back button missing');
+must(/← Back to Flooring OS/.test(s),'Back label missing');
+must(/window\.parent\.location\.hash='#core'/.test(s),'iframe return route missing');
+must(/from==='release'/.test(s),'release-origin fallback missing');
+must(/history\.back\(\)/.test(s),'browser-history fallback missing');
+must(/index-v0403-release\.html#core/.test(s),'safe Core fallback missing');
+console.log('Customer Desk back navigation: PASS');
