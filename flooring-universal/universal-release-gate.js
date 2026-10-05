@@ -149,6 +149,8 @@ function run(){
  const billing=window.RUNLUUniversalBilling;
  if(billing){const src=billing.issue?.toString?.()||'';t('Billing · invoice write-ahead order',typeof billing.issue==='function'&&src.indexOf("CrashJournal?.begin")<src.indexOf('r.invoiceNumber=invoiceNumber'),'journal begins before invoice mutation')}
  if(billing){const paySrc=billing.pay?.toString?.()||'',guardAt=paySrc.indexOf("Guards?.assert"),journalAt=paySrc.indexOf("CrashJournal?.begin"),mutationAt=paySrc.indexOf('r.payments.push');t('Billing · payment validation before write-ahead',guardAt>=0&&guardAt<journalAt&&journalAt<mutationAt&&paySrc.includes('Payment exceeds the remaining invoice balance'),'guard + overpayment check run before journaled payment mutation')}
+ const u2Modules=['RUNLUUniversalSales','RUNLUUniversalPO','RUNLUUniversalInbound','RUNLUUniversalWarehouse','RUNLUUniversalInstallation','RUNLUUniversalBilling','RUNLUUniversalAccounting','RUNLUUniversalScenarioSimulator'];
+ t('U2 Contract · required modules loaded',u2Modules.every(m=>!!window[m]),u2Modules.filter(m=>!window[m]).join(', ')||'all U2 business modules loaded');
  const salesConfirm=window.RUNLUUniversalSales?.confirmOrder?.toString?.()||'';
  t('U2 Contract · confirmed-order transition',salesConfirm.includes("orderStatus='Confirmed'")&&salesConfirm.includes("status='In Progress'"),'sales must explicitly confirm the customer order before procurement');
  const poCreate=window.RUNLUUniversalPO?.createFromJob?.toString?.()||'';
