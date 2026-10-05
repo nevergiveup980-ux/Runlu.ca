@@ -1,0 +1,20 @@
+name: Flooring Warehouse Receipt Shadow V0.10.5
+on:
+  pull_request:
+    paths:
+      - 'flooring/warehouse-receipt-shadow-v0105.js'
+      - 'scripts/run-flooring-warehouse-receipt-shadow-v0105.mjs'
+      - '.github/workflows/flooring-warehouse-receipt-shadow-v0105.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'flooring/warehouse-receipt-shadow-v0105.js'
+      - 'scripts/run-flooring-warehouse-receipt-shadow-v0105.mjs'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: node scripts/run-flooring-warehouse-receipt-shadow-v0105.mjs
