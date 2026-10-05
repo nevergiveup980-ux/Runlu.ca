@@ -1,7 +1,7 @@
 import fs from 'node:fs';import vm from 'node:vm';
-const files=['flooring/warehouse-po-handoff-v001.js','flooring/warehouse-work-sync-v090.js'];
+const files=['flooring/warehouse-po-handoff-v001.js','flooring/warehouse-work-sync-v090.js','flooring/supplier-pickup-safe-v017.js'];
 for(const p of files){const s=fs.readFileSync(p,'utf8');new vm.Script(s,{filename:p})}
-const handoff=fs.readFileSync(files[0],'utf8'),sync=fs.readFileSync(files[1],'utf8');
+const handoff=fs.readFileSync(files[0],'utf8'),sync=fs.readFileSync(files[1],'utf8'),pickup=fs.readFileSync(files[2],'utf8');
 const must=(x,m)=>{if(!x)throw new Error(m)};
 must(/CANCELLED ORDER — DO NOT PICK UP \/ RECEIVE/.test(handoff),'cancelled handoff warning missing');
 must(/po\?\.status==='Cancelled'\)return ''/.test(handoff),'cancelled Warehouse URL not blocked');
