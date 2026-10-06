@@ -1,0 +1,1 @@
+.uRelease{display:inline-flex;gap:10px;align-items:center;padding:10px 13px;border-radius:10px}.uRelease.pass{background:#eef7f0}.uRelease.fail{background:#fff2f0}.uReleaseTest{padding:9px 0;border-top:1px solid #e5e5e5}.uReleaseTest:first-child{border-top:0}.uReleaseTest b,.uReleaseTest span{display:block}.uReleaseTest span{font-size:12px;color:#666;margin-top:3px}

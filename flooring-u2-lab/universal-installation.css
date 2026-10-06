@@ -1,0 +1,4 @@
+.uInstall{padding:15px 0;border-top:1px solid #e5e5e5}.uInstall:first-child{border-top:0}.uInstallHead{display:flex;justify-content:space-between;gap:12px}.uInstallHead b,.uInstallHead span{display:block}.uInstallHead span{font-size:12px;color:#666;margin-top:3px}.uInstallGrid{display:grid;grid-template-columns:1fr 1fr 2fr;gap:9px;margin-top:11px}.uInstallActions{display:flex;gap:8px;margin-top:10px}@media(max-width:700px){.uInstallGrid{grid-template-columns:1fr}.uInstallHead{flex-direction:column}}
+
+/* Deerfoot-derived operator surface */
+.uInstall{background:#fff;border:1px solid #d7dfdb;border-radius:10px;padding:13px 12px;margin:8px 0}.uInstall:first-child{border-top:1px solid #d7dfdb}.uInstallHead b{color:#173d30}.uInstallHead span{color:#66736d}.uInstallGrid{padding:10px;background:#edf1ef;border-radius:9px}.uInstallActions button{border-radius:8px}#universalInstallation{max-width:1100px;margin:0 auto 12px}@media(max-width:700px){.uInstall{padding:11px 10px}}

@@ -1,0 +1,13 @@
+.uJob{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-top:1px solid #e5e5e5}.uJob:first-child{border-top:0}.uJob b,.uJob span{display:block}.uJob div span{font-size:12px;color:#666;margin-top:3px}
+.uJobCard{padding:16px 0;border-top:1px solid #e5e5e5}.uJobCard:first-child{border-top:0}.uJobHead,.uQuote{display:flex;justify-content:space-between;gap:12px;align-items:center}.uJobHead b,.uJobHead span{display:block}.uJobHead span{font-size:12px;color:#666;margin-top:3px}.uItems{margin:12px 0;padding:10px;background:#f7f7f5;border-radius:10px}.uItems>div{display:flex;justify-content:space-between;gap:12px;padding:5px 0}.uAddItem{display:grid;grid-template-columns:2fr .7fr 1fr auto;gap:8px}.uQuote{margin-top:12px;font-size:13px}@media(max-width:700px){.uJobHead,.uQuote{align-items:flex-start;flex-direction:column}.uAddItem{grid-template-columns:1fr}}
+
+/* Deerfoot-derived operator surface */
+.uJobCard,.uInbound,.uWHRow,.uNotice{background:#fff;border-color:#d7dfdb}
+.uJobCard{padding:14px 12px;margin:8px 0;border:1px solid #d7dfdb;border-radius:10px}
+.uItems{background:#edf1ef;border:1px solid #dbe3df}
+.uJobHead b,.uInbound b,.uWHRow b,.uNotice b{color:#173d30}
+.uJobHead span,.uInbound span,.uWHRow span,.uNotice span{color:#66736d}
+.uReceiveDetail span,.uReceiveDetail strong,.uWHStats b{background:#e8f3ed;color:#245b42}
+#universalSales,#universalInbound,#universalWarehouse{max-width:1100px;margin:0 auto 12px}
+#universalSales button,#universalInbound button,#universalWarehouse button{border-radius:8px}
+@media(max-width:700px){.uJobCard{padding:12px 10px}.uInbound,.uWHRow,.uNotice{padding:11px 8px}.uItems{margin:9px 0}}

@@ -1,0 +1,118 @@
+/* RUNLU Flooring OS Universal · IndexedDB Durable Mirror
+   Phase 1: synchronous Local Adapter remains operational source; IndexedDB is an asynchronous durable mirror and recovery source. */
+(function(){
+'use strict';
+const DB='runlu-flooring-universal-local',DBV=1,STORE='records',PREFIX='runlu_flooring_universal_',BACKEND='runlu_flooring_universal_data_backend',SNAP='runlu_flooring_universal_u2_recovery_points',GUARD='runlu_flooring_universal_u2_startup_guard',JOURNAL='runlu_flooring_universal_u2_crash_journal';
+let dbPromise=null,lastError=null,lastSyncAt=null,pending=0;
+
+function supported(){return typeof indexedDB!=='undefined'}
+function open(){
+ if(!supported())return Promise.reject(new Error('IndexedDB is not supported by this browser.'));
+ if(dbPromise)return dbPromise;
+ dbPromise=new Promise((resolve,reject)=>{
+  const req=indexedDB.open(DB,DBV);
+  req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains(STORE))db.createObjectStore(STORE,{keyPath:'key'})};
+  req.onsuccess=()=>resolve(req.result);
+  req.onerror=()=>{lastError=req.error?.message||'IndexedDB open failed';reject(req.error||new Error(lastError))};
+ });
+ return dbPromise;
+}
+async function put(key,value){
+ if(!key?.startsWith(PREFIX)||key===BACKEND||key===SNAP||key===GUARD||key===JOURNAL)return;
+ pending++;
+ try{const db=await open();await new Promise((resolve,reject)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put({key,value,updatedAt:new Date().toISOString()});tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)});lastSyncAt=new Date().toISOString();lastError=null}
+ catch(e){lastError=e?.message||String(e)}finally{pending--}
+}
+async function remove(key){
+ if(!key?.startsWith(PREFIX)||key===BACKEND||key===SNAP||key===GUARD||key===JOURNAL)return;
+ pending++;
+ try{const db=await open();await new Promise((resolve,reject)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).delete(key);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)});lastSyncAt=new Date().toISOString();lastError=null}
+ catch(e){lastError=e?.message||String(e)}finally{pending--}
+}
+async function all(){
+ const db=await open();return new Promise((resolve,reject)=>{const tx=db.transaction(STORE,'readonly'),req=tx.objectStore(STORE).getAll();req.onsuccess=()=>resolve(req.result||[]);req.onerror=()=>reject(req.error)});
+}
+async function seed(){
+ if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local'||!supported())return {ok:false,reason:'not-local-or-unsupported'};
+ const adapter=window.RUNLUUniversalData.current(),keys=(adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP&&k!==GUARD&&k!==JOURNAL);
+ for(const key of keys)await put(key,adapter.read(key,null));
+ return {ok:true,records:keys.length};
+}
+function validMirrorRecord(r){
+ if(!r?.key?.startsWith(PREFIX)||r.key===BACKEND||r.key===SNAP||r.key===GUARD||r.key===JOURNAL)return false;
+ try{return JSON.stringify(r.value)!==undefined}catch(_){return false}
+}
+async function recoverMissing(){
+ if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local')throw new Error('IndexedDB recovery is available only in Local Device mode.');
+ await waitForIdle();
+ const records=(await all()).filter(validMirrorRecord),adapter=window.RUNLUUniversalData.current();let restored=0,skipped=0;
+ window.RUNLUUniversalLocalHealth?.capture?.('Before IndexedDB recovery',{records:records.length});
+ for(const r of records){if(adapter.raw(r.key)===null){adapter.write(r.key,r.value);restored++}else skipped++}
+ const comparison=await compareWithAdapter();
+ return {restored,skipped,total:records.length,comparison};
+}
+async function replaceLocalFromMirror(){
+ if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local')throw new Error('IndexedDB recovery is available only in Local Device mode.');
+ await waitForIdle();
+ const records=(await all()).filter(validMirrorRecord);if(!records.length)throw new Error('Durable mirror is empty.');
+ const safety=window.RUNLUUniversalLocalHealth?.capture?.('Before full IndexedDB mirror restore',{records:records.length});
+ const journal=window.RUNLUUniversalCrashJournal,tx=journal?.begin?.('Recovery','mirror-to-local-restore',{records:records.length,safetyPoint:safety?.id||null});
+ const adapter=window.RUNLUUniversalData.current();
+ (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP&&k!==GUARD&&k!==JOURNAL).forEach(k=>adapter.remove(k));
+ records.forEach(r=>adapter.write(r.key,r.value));
+ if(tx)journal.phase(tx.id,'LOCAL_REPLACED');
+ const comparison=await compareWithAdapter();
+ if(!comparison.ok)throw new Error('Local recovery from durable mirror did not reach parity.');
+ if(tx){journal.phase(tx.id,'PARITY_VERIFIED');journal.commit(tx.id,{restored:records.length})}
+ return {restored:records.length,comparison,safety};
+}
+async function compareWithAdapter(){
+ if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local')return {ok:true,comparable:false,reason:'not-local'};
+ const adapter=window.RUNLUUniversalData.current(),records=await all();
+ const localKeys=(adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP&&k!==GUARD&&k!==JOURNAL).sort();
+ const mirror=new Map(records.filter(r=>r.key?.startsWith(PREFIX)&&r.key!==BACKEND&&r.key!==SNAP&&r.key!==GUARD&&r.key!==JOURNAL).map(r=>[r.key,r.value]));
+ const mirrorKeys=[...mirror.keys()].sort(),missingLocal=mirrorKeys.filter(k=>adapter.raw(k)===null),missingMirror=localKeys.filter(k=>!mirror.has(k)),different=[];
+ localKeys.filter(k=>mirror.has(k)).forEach(k=>{const local=adapter.read(k,null),remote=mirror.get(k);if(JSON.stringify(local)!==JSON.stringify(remote))different.push(k)});
+ return {ok:missingLocal.length===0&&missingMirror.length===0&&different.length===0,comparable:true,localRecords:localKeys.length,mirrorRecords:mirrorKeys.length,missingLocal:missingLocal.length,missingMirror:missingMirror.length,different:different.length};
+}
+async function waitForIdle(timeoutMs=5000){
+ const started=Date.now();
+ while(pending>0){
+  if(Date.now()-started>timeoutMs)throw new Error('Timed out waiting for IndexedDB mirror writes to finish.');
+  await new Promise(r=>setTimeout(r,25));
+ }
+ return true;
+}
+async function replaceMirrorFromLocal(){
+ if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local')throw new Error('Mirror reconciliation is available only in Local Device mode.');
+ await waitForIdle();
+ const adapter=window.RUNLUUniversalData.current(),keys=(adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP&&k!==GUARD&&k!==JOURNAL);
+ pending++;
+ try{
+  const db=await open(),now=new Date().toISOString();
+  await new Promise((resolve,reject)=>{
+   const tx=db.transaction(STORE,'readwrite'),store=tx.objectStore(STORE);
+   store.clear();
+   keys.forEach(key=>store.put({key,value:adapter.read(key,null),updatedAt:now}));
+   tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||new Error('IndexedDB mirror reconciliation aborted'));
+  });
+  lastSyncAt=new Date().toISOString();lastError=null;
+ }catch(e){lastError=e?.message||String(e);throw e}finally{pending--}
+ const comparison=await compareWithAdapter();
+ if(!comparison.ok)throw new Error('Durable mirror reconciliation did not reach parity with local data.');
+ return {ok:true,records:keys.length,comparison};
+}
+async function status(){
+ if(!supported())return {supported:false,ready:false,records:0,pending,lastSyncAt,error:'IndexedDB unsupported'};
+ try{const records=await all();return {supported:true,ready:true,records:records.length,pending,lastSyncAt,error:lastError}}catch(e){return {supported:true,ready:false,records:0,pending,lastSyncAt,error:lastError||e.message}}
+}
+function init(){
+ if(!supported())return;
+ window.RUNLUUniversalData?.onMutation?.(e=>{if(e.adapter!=='local'||!e.key?.startsWith(PREFIX)||e.key===BACKEND||e.key===SNAP||e.key===GUARD||e.key===JOURNAL)return;e.type==='remove'?remove(e.key):put(e.key,e.value)});
+ // Startup is intentionally one-way: localStorage remains the operational source.
+ // Never overwrite a newer durable mirror with stale/empty local data before the startup guard compares both sides.
+}
+function seedFromLocal(){return seed()}
+window.RUNLUUniversalDurableLocal=Object.freeze({supported,seed:seedFromLocal,status,compareWithAdapter,recoverMissing,replaceLocalFromMirror,waitForIdle,replaceMirrorFromLocal});
+init();
+})();

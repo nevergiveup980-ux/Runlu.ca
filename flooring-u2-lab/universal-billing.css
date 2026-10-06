@@ -1,0 +1,4 @@
+.uBill{padding:15px 0;border-top:1px solid #e5e5e5}.uBill:first-child{border-top:0}.uBillHead{display:flex;justify-content:space-between;gap:12px}.uBillHead b,.uBillHead span{display:block}.uBillHead span{font-size:12px;color:#666;margin-top:3px}.uBillTotals{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.uBillTotals span{padding:7px 9px;background:#f4f4f2;border-radius:8px}.uBillActions{display:flex;align-items:center;gap:8px;margin-top:10px}@media(max-width:600px){.uBillHead{flex-direction:column}}
+
+/* Deerfoot-derived operator surface */
+.uBill{background:#fff;border:1px solid #d7dfdb;border-radius:10px;padding:13px 12px;margin:8px 0}.uBill:first-child{border-top:1px solid #d7dfdb}.uBillHead b{color:#173d30}.uBillHead span{color:#66736d}.uBillTotals span{background:#e8f3ed;color:#245b42}.uBillActions button{border-radius:8px}#universalCustomerBilling{max-width:1100px;margin:0 auto 12px}@media(max-width:700px){.uBill{padding:11px 10px}}

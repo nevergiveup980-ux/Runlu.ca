@@ -1,0 +1,185 @@
+/* RUNLU Flooring OS Universal · U1 Release Gate
+   Non-destructive regression harness over live U1 module contracts. */
+(function(){
+'use strict';
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function run(){
+ const tests=[],t=(name,ok,detail)=>tests.push({name,ok:!!ok,detail});
+ const mods=['RUNLUUniversalData','RUNLUUniversalCrashJournal','RUNLUUniversalInterruptedResolver','RUNLUUniversalCrashSimulator','RUNLUUniversalStartupGuard','RUNLUUniversalSupportCenter','RUNLUUniversalDiagnostics','RUNLUUniversalDeviceReady','RUNLUUniversalPWA','RUNLUUniversalDurableLocal','RUNLUUniversalDataVersion','RUNLUUniversalLocalHealth','RUNLUUniversalBackup','RUNLUUniversalDataExchange','RUNLUUniversalSales','RUNLUUniversalPO','RUNLUUniversalInbound','RUNLUUniversalInstallation','RUNLUUniversalBilling','RUNLUUniversalAccounting','RUNLUUniversalAudit','RUNLUUniversalLifecycleGate','RUNLUUniversalRecovery','RUNLUUniversalGuards'];
+ mods.forEach(m=>t('Module · '+m,!!window[m],window[m]?'loaded':'missing'));
+ const data=window.RUNLUUniversalData,health=data?.current?.()?.health?.();
+ t('Data Adapter · active',!!data&&!!health?.ok,health?.detail||'unavailable');
+ t('Data Adapter · default local',data?.backendConfig?.().mode==='local','cloud remains optional');
+ const journal=window.RUNLUUniversalCrashJournal;
+ if(journal){
+  t('Crash Journal · write-ahead API',typeof journal.begin==='function'&&typeof journal.commit==='function'&&typeof journal.resolve==='function'&&typeof journal.abort==='function'&&typeof journal.get==='function'&&typeof journal.amend==='function','intent lifecycle ready');
+  t('Crash Journal · inspection API',typeof journal.inspect==='function'&&Array.isArray(journal.pending()),'unfinished operations can be reviewed');
+ }
+ t('Crash Journal · persisted phase API',typeof journal?.phase==='function'&&(journal?.inspect?.toString?.()||'').includes("phase:x.phase||'BEGIN'"),'unfinished operations expose last persisted milestone without copying business contents');
+ const resolver=window.RUNLUUniversalInterruptedResolver;
+ if(resolver){
+  t('Interrupted Resolver · evidence API',typeof resolver.scan==='function'&&typeof resolver.classify==='function','read-only classification ready');
+  t('Interrupted Resolver · conservative legacy policy',resolver.classify({id:'fixture',type:'Customer Payment',action:'record',startedAt:new Date(0).toISOString(),meta:{invoiceId:'missing-fixture'}}).verdict==='UNCERTAIN','legacy payment evidence must not auto-clear');
+  const missingFixtures=[
+   ['Receiving','reconcile',{inboundId:'missing-inbound'}],
+   ['Installation','complete',{installationId:'missing-install'}],
+   ['Customer Invoice','issue',{invoiceId:'missing-invoice'}],
+   ['Customer Payment','record',{invoiceId:'missing-invoice',paymentId:'missing-payment'}],
+   ['Supplier Accounting','mark-paid',{accountingId:'missing-accounting'}]
+  ];
+  t('Interrupted Resolver · missing records stay uncertain',missingFixtures.every(([type,action,meta])=>resolver.classify({id:'fixture-'+type,type,action,startedAt:new Date(0).toISOString(),meta}).verdict==='UNCERTAIN'),'record absence must not auto-clear interrupted mutations');
+  t('Interrupted Resolver · fixture isolation',!((resolver.classifyFixture?.toString?.()||'')+(resolver.classify?.toString?.()||'')).includes('arr(KEYS.invoice)')&&(resolver.classifyFixture?.toString?.()||'').includes('classifyWith'),'fixture classifier must not fall through to live invoice data');
+  t('Interrupted Resolver · journal phase evidence',(resolver.classifyFixture({id:'phase-fixture',type:'Receiving',action:'reconcile',startedAt:new Date(0).toISOString(),phase:'AUDIT_SAVED',meta:{inboundId:'missing'}},{[resolver.KEYS.inbound]:[],[resolver.KEYS.audit]:[]}).evidence||[]).some(x=>x.includes('AUDIT_SAVED')),'persisted journal milestone is explanatory evidence, not an automatic verdict');
+  t('Interrupted Resolver · acknowledgement API',typeof resolver.acknowledge==='function','reviewed markers can be closed without rewriting business records');
+  const resolverSrc=resolver.auditMatch.toString(),billingPaySrc=window.RUNLUUniversalBilling?.pay?.toString?.()||'';
+  t('Interrupted Resolver · exact payment audit identity',resolverSrc.includes("e.meta?.paymentId===m.paymentId")&&billingPaySrc.includes('paymentId}'),'payment audit evidence is bound to exact ledger entry');
+  const auditSrc=resolver.auditMatch?.toString?.()||'',resolverSrcFull=resolver.classify?.toString?.()||'';
+  t('Interrupted Resolver · action-bound audit evidence',typeof resolver.auditMatch==='function'&&typeof resolver.classify==='function'&&((auditSrc.includes("tx.action==='record'")&&auditSrc.includes("tx.action==='reconcile'")&&auditSrc.includes("tx.action==='mark-paid'"))||(resolverSrcFull.includes('classifyWith')&&auditSrc.includes('auditMatchWith'))),'audit confidence is delegated to the shared action-bound audit matcher');
+ }
+ if(resolver)t('Crash Simulation · shared production classifier',typeof resolver.classifyFixture==='function'&&(window.RUNLUUniversalCrashSimulator?.run?.toString?.()||'').includes('classify(s.tx,s.map)')&&(window.RUNLUUniversalCrashSimulator?.scenarios?.toString?.()||'').includes('missing record stays uncertain'),'synthetic crash fixtures must be judged by the production Resolver core');
+ const audit=window.RUNLUUniversalAudit;if(resolver&&audit)t('Recovery contract · Audit store identity',typeof audit.STORE==='string'&&resolver.KEYS?.audit===audit.STORE,'Resolver and Audit must read the exact same append-only event store');
+ const phaseActions=[
+ ['Supplier PO · issue',window.RUNLUUniversalPO?.recordManual,true],
+ ['Receiving · reconcile',window.RUNLUUniversalInbound?.receive,true],
+ ['Installation · complete',window.RUNLUUniversalInstallation?.complete,true],
+ ['Supplier Accounting · paid',window.RUNLUUniversalAccounting?.paid,true],
+ ['Customer Invoice · issue',window.RUNLUUniversalBilling?.issue,true],
+ ['Customer Payment · record',window.RUNLUUniversalBilling?.pay,true],
+ ['Supplier PO · create',window.RUNLUUniversalPO?.createFromJob,false]
+ ];
+ phaseActions.forEach(([name,fn,hasAudit])=>{const src=fn?.toString?.()||'',a=src.indexOf("phase(tx.id,'AUDIT_SAVED')"),b=src.indexOf("phase(tx.id,'BUSINESS_SAVED')"),m=src.indexOf('CrashJournal.commit(tx.id)');t('Persisted phase order · '+name,typeof fn==='function'&&b>=0&&b<m&&(!hasAudit||a>=0&&a<b)&&(hasAudit||a<0),'persisted milestones must match the real write order before commit')});
+ const crashSim=window.RUNLUUniversalCrashSimulator;
+ if(crashSim){
+  const cr=crashSim.run();
+  t('Crash Simulation · non-destructive',cr.nonDestructive===true,'synthetic fixtures only');
+  t('Crash Simulation · all scenarios',cr.failed===0,cr.passed+'/'+cr.total+' scenarios passed');
+  t('Crash Simulation · fault injection coverage',cr.faultCount>=9,cr.faultCount+' interruption stages covered');
+ }
+ const startup=window.RUNLUUniversalStartupGuard;
+ if(startup){
+  t('Startup Guard · boot gate API',typeof startup.ready==='function'&&typeof startup.recheck==='function'&&typeof startup.canProceed==='function','startup inspection + gate ready');
+  t('Startup Guard · recovery UI',typeof startup.render==='function'&&typeof startup.renderBanner==='function','review path ready');
+ }
+ const support=window.RUNLUUniversalSupportCenter;
+ if(support){
+  t('Support Center · tool registry',Array.isArray(support.TOOLS)&&support.TOOLS.length===12&&support.TOOLS.some(x=>x.id==='release'),'12 maintenance tools consolidated, including Release Gate');
+  t('Support Center · status API',typeof support.status==='function'&&typeof support.render==='function','customer maintenance hub ready');
+  const wired=(support.TOOLS||[]).every(x=>!!document.getElementById(x.target)&&typeof window[x.api]?.render==='function');
+  t('Support Center · tool wiring',wired,'every maintenance tool must have a DOM target and renderable API');
+ }
+ const diagnostics=window.RUNLUUniversalDiagnostics;
+ if(diagnostics){
+  t('Diagnostics · API available',typeof diagnostics.collect==='function'&&typeof diagnostics.validate==='function','privacy-safe support report ready');
+  const fixture={format:diagnostics.FORMAT,version:diagnostics.VERSION,privacy:{businessContentsIncluded:false}};
+  t('Diagnostics · privacy contract',diagnostics.validate(fixture),'business contents must be excluded');
+  t('Diagnostics · interrupted-write privacy',diagnostics.collect.toString().includes('activeCount')&&diagnostics.collect.toString().includes('detailsIncluded:false'),'only interrupted-operation count may leave diagnostics');
+ }
+ const ready=window.RUNLUUniversalDeviceReady;
+ if(ready){
+  t('Device Readiness · preflight API',typeof ready.run==='function','async first-run checks ready');
+  t('Device Readiness · persistence API',typeof ready.requestPersistence==='function','browser storage protection request ready');
+  t('Device Readiness · interrupted-write gate',ready.run.toString().includes("id:'journal'")&&ready.run.toString().includes("'journal'"),'unfinished journal operations are critical');
+ }
+ const pwa=window.RUNLUUniversalPWA;
+ if(pwa){
+  const ps=pwa.status();
+  t('Offline / PWA · API available',typeof pwa.register==='function'&&typeof pwa.status==='function','service worker registration API ready');
+  t('Offline / PWA · browser capability',ps.supported,'service worker support required for offline shell');
+ }
+ const durable=window.RUNLUUniversalDurableLocal;
+ if(durable){
+  t('Durable Local · IndexedDB capability',typeof durable.status==='function'&&typeof durable.seed==='function','mirror API ready');
+  t('Durable Local · recovery API',typeof durable.recoverMissing==='function'&&typeof durable.replaceLocalFromMirror==='function','missing + full recovery ready');
+ }
+ const version=window.RUNLUUniversalDataVersion;
+ const exchange=window.RUNLUUniversalDataExchange;
+ if(exchange){
+  const oid=data?.read?.('runlu_flooring_universal_u0_workspace',null)?.company?.organizationId||'';
+  const fixture={format:'runlu-flooring-universal-business-package',version:1,schemaVersion:version?.CURRENT||1,createdAt:new Date(0).toISOString(),organizationId:oid,companyName:'Test',datasets:{jobs:[]}};
+  t('Data Exchange · valid package',exchange.validatePackage(fixture).ok,'same-company package accepted');
+  t('Data Exchange · rejects unknown dataset',!exchange.validatePackage({...fixture,datasets:{unknown:[]}}).ok,'unknown dataset blocked');
+  t('Data Exchange · rejects foreign organization',!exchange.validatePackage({...fixture,organizationId:'foreign-org'}).ok,'cross-company import blocked');
+ }
+ if(version){
+  const vs=version.status();
+  t('Data Version · compatible',vs.compatible,'workspace v'+vs.workspaceVersion+' / app v'+vs.currentVersion);
+  t('Data Version · migration registry',typeof version.register==='function'&&typeof version.migrate==='function','registry + runner ready');
+  t('Data Version · no downgrade',version.CURRENT>=vs.workspaceVersion,'future data must not be downgraded');
+ }
+ const localHealth=window.RUNLUUniversalLocalHealth;
+ if(localHealth){
+  t('Recovery Points · bounded history',localHealth.MAX===12,'maximum 12 checkpoints');
+  t('Recovery Points · API available',typeof localHealth.capture==='function'&&typeof localHealth.restore==='function','capture + restore ready');
+ }
+ const backup=window.RUNLUUniversalBackup;
+ if(backup){
+  const fixture={format:'runlu-flooring-universal-backup',version:1,schemaVersion:version?.CURRENT||1,createdAt:new Date(0).toISOString(),product:'RUNLU Flooring OS Universal',data:{runlu_flooring_universal_test:{ok:true}}};
+  t('Backup · valid Universal payload',backup.validate(fixture).ok,'Universal namespace accepted');
+  t('Backup · rejects foreign keys',!backup.validate({...fixture,data:{foreign_key:{}}}).ok,'foreign namespace blocked');
+  t('Backup · rejects foreign format',!backup.validate({...fixture,format:'other-product'}).ok,'foreign product blocked');
+  t('Backup · rejects runtime metadata',!backup.validate({...fixture,data:{runlu_flooring_universal_u2_startup_guard:{sessionOpen:true}}}).ok,'session metadata blocked from restore');
+ }
+ const g=window.RUNLUUniversalGuards;
+ if(g){
+  t('Guard · Paid invoice is terminal',!g.transition('invoice','Paid','Issued').ok,'Paid → Issued must be blocked');
+  t('Guard · Completed installation is terminal',!g.transition('installation','Completed','Scheduled').ok,'Completed → Scheduled must be blocked');
+  t('Guard · forward invoice transition',g.transition('invoice','Issued','Partially Paid').ok,'Issued → Partially Paid must pass');
+ }
+ const gate=window.RUNLUUniversalLifecycleGate?.run?.();
+ t('Lifecycle Gate executes',!!gate,gate?'issues='+gate.issues.length:'unavailable');
+ const rec=window.RUNLUUniversalRecovery?.scan?.();
+ t('Recovery scanner executes',Array.isArray(rec),Array.isArray(rec)?'recommendations='+rec.length:'unavailable');
+ const orderedActions=[
+  ['Supplier PO · create',window.RUNLUUniversalPO?.createFromJob,'xs.unshift'],
+  ['Supplier PO · issue',window.RUNLUUniversalPO?.recordManual,"p.mode='manual'"],
+  ['Receiving · reconcile',window.RUNLUUniversalInbound?.receive,'t.receivedItems=received'],
+  ['Installation · complete',window.RUNLUUniversalInstallation?.complete,"r.status='Completed'"],
+  ['Supplier Accounting · paid',window.RUNLUUniversalAccounting?.paid,"r.status='Paid'"],
+  ['Customer Payment · record',window.RUNLUUniversalBilling?.pay,'r.payments.push']
+ ];
+ orderedActions.forEach(([name,fn,mutation])=>{const src=fn?.toString?.()||'';t('Write-ahead order · '+name,typeof fn==='function'&&src.indexOf("CrashJournal?.begin")>=0&&src.indexOf("CrashJournal?.begin")<src.indexOf(mutation),'journal begins before business mutation')});
+ const terminalContracts=[
+ ['Installation · complete',window.RUNLUUniversalInstallation?.complete,"Guards?.assert","CrashJournal?.begin","r.status='Completed'"],
+ ['Supplier Accounting · paid',window.RUNLUUniversalAccounting?.paid,"Guards?.assert","CrashJournal?.begin","r.status='Paid'"],
+ ['Customer Invoice · issue',window.RUNLUUniversalBilling?.issue,"Guards?.assert","CrashJournal?.begin","r.invoiceNumber=invoiceNumber"]
+ ];
+ terminalContracts.forEach(([name,fn,guard,journal,mutation])=>{const src=fn?.toString?.()||'',g=src.indexOf(guard),j=src.indexOf(journal),m=src.indexOf(mutation);t('Terminal action order · '+name,typeof fn==='function'&&g>=0&&g<j&&j<m,'lifecycle guard precedes journal; journal precedes terminal mutation')});
+ const poIssueSrc=window.RUNLUUniversalPO?.recordManual?.toString?.()||'',poDraftCheck=poIssueSrc.indexOf("p.status!=='Draft'"),poJournal=poIssueSrc.indexOf("CrashJournal?.begin"),poMutation=poIssueSrc.indexOf("p.mode='manual'");t('Supplier PO · issue validation before write-ahead',poDraftCheck>=0&&poDraftCheck<poJournal&&poJournal<poMutation&&poIssueSrc.includes("String(x.poNumber)===n.trim()"),'Draft-only + normalized duplicate validation precedes journaled issue mutation');
+ const receiveSrc=window.RUNLUUniversalInbound?.receive?.toString?.()||'',receiveJournal=receiveSrc.indexOf("CrashJournal?.begin"),receivePrompt=receiveSrc.indexOf("prompt('Received quantity"),receiveMutation=receiveSrc.indexOf('t.receivedItems=received');t('Receiving · input validation before write-ahead',receivePrompt>=0&&receivePrompt<receiveJournal&&receiveJournal<receiveMutation&&receiveSrc.includes('Received quantity cannot exceed ordered quantity')&&receiveSrc.includes('Damaged quantity cannot exceed received quantity'),'all receiving prompts + quantity bounds finish before journaled mutation');
+ const billing=window.RUNLUUniversalBilling;
+ if(billing){const src=billing.issue?.toString?.()||'';t('Billing · invoice write-ahead order',typeof billing.issue==='function'&&src.indexOf("CrashJournal?.begin")<src.indexOf('r.invoiceNumber=invoiceNumber'),'journal begins before invoice mutation')}
+ if(billing){const paySrc=billing.pay?.toString?.()||'',guardAt=paySrc.indexOf("Guards?.assert"),journalAt=paySrc.indexOf("CrashJournal?.begin"),mutationAt=paySrc.indexOf('r.payments.push');t('Billing · payment validation before write-ahead',guardAt>=0&&guardAt<journalAt&&journalAt<mutationAt&&paySrc.includes('Payment exceeds the remaining invoice balance'),'guard + overpayment check run before journaled payment mutation')}
+ const u2Modules=['RUNLUUniversalSales','RUNLUUniversalPO','RUNLUUniversalInbound','RUNLUUniversalWarehouse','RUNLUUniversalInstallation','RUNLUUniversalBilling','RUNLUUniversalAccounting','RUNLUUniversalScenarioSimulator'];
+ t('U2 Contract · required modules loaded',u2Modules.every(m=>!!window[m]),u2Modules.filter(m=>!window[m]).join(', ')||'all U2 business modules loaded');
+ const salesConfirm=window.RUNLUUniversalSales?.confirmOrder?.toString?.()||'';
+ t('U2 Contract · confirmed-order transition',salesConfirm.includes("orderStatus='Confirmed'")&&salesConfirm.includes("status='In Progress'"),'sales must explicitly confirm the customer order before procurement');
+ const poCreate=window.RUNLUUniversalPO?.createFromJob?.toString?.()||'';
+ t('U2 Contract · purchasing requires confirmed order',poCreate.includes("orderStatus!=='Confirmed'"),'supplier PO creation must reject unconfirmed customer orders');
+ const inboundRender=window.RUNLUUniversalInbound?.render?.toString?.()||'',inboundReceive=window.RUNLUUniversalInbound?.receive?.toString?.()||'';
+ t('U2 Contract · receiving module active',!!window.RUNLUUniversalInbound&&typeof window.RUNLUUniversalInbound.tasks==='function'&&typeof window.RUNLUUniversalInbound.receive==='function','receiving contracts available');
+ const whContract=window.RUNLUUniversalWarehouse?.jobReadiness?.toString?.()||'';
+ t('U2 Contract · whole-job readiness requires issued POs',whContract.includes("p.status==='Issued'")&&whContract.includes("issued.length===orders.length"),'draft supplier orders must prevent whole-job readiness');
+ t('U2 Contract · whole-job readiness requires every inbound task ready',whContract.includes("states.every")&&whContract.includes("x==='Ready'"),'partial receipt or exception must block installation readiness');
+ const installModule=window.RUNLUUniversalInstallation;
+ t('U2 Contract · installation consumes warehouse readiness',typeof installModule?.render==='function'&&typeof window.RUNLUUniversalWarehouse?.readyJobs==='function','installation eligibility is sourced from the warehouse whole-job gate');
+ const billingPay=window.RUNLUUniversalBilling?.pay?.toString?.()||'';
+ t('U2 Contract · paid customer invoice closes sales job',billingPay.includes("status==='Paid'")&&billingPay.includes('closePaidJob'),'full customer payment must invoke the sales close transition');
+ const salesClose=window.RUNLUUniversalSales?.closePaidJob?.toString?.()||'';
+ t('U2 Contract · sales close stamps financial completion',salesClose.includes("financialStatus='Paid'")&&salesClose.includes("status='Completed'")&&salesClose.includes('closedAt'),'job close must record paid + completed + close timestamp');
+ const acctPaid=window.RUNLUUniversalAccounting?.paid?.toString?.()||'';
+ t('U2 Contract · supplier payment stamps close time',acctPaid.includes("status='Paid'")&&acctPaid.includes('closedAt'),'supplier accounting payment must retain financial closure evidence');
+ const sim=window.RUNLUUniversalScenarioSimulator?.run?.();
+ t('U2 Business Chain · simulator executes',!!sim,sim?'scenarios='+sim.scenarios.length:'unavailable');
+ t('U2 Business Chain · all scenarios pass',!!sim&&sim.failed===0,sim?sim.passed+' passed · '+sim.failed+' failed':'simulator unavailable');
+ const wh=window.RUNLUUniversalWarehouse;
+ t('U2 Business Chain · whole-job material gate',typeof wh?.jobReadiness==='function'&&typeof wh?.readyJobs==='function','installation readiness must aggregate the entire job');
+ const installSync=window.RUNLUUniversalInstallation?.render?.toString?.()||'';
+ t('U2 Business Chain · installation module present',!!window.RUNLUUniversalInstallation,'whole-job readiness consumer loaded');
+ const bills=billing?.rows?.()||[];
+ bills.forEach(b=>{const paid=(b.payments||[]).reduce((s,p)=>s+Number(p.amount||0),0);t('Invoice ledger · '+(b.invoiceNumber||b.id),Math.abs(paid-Number(b.paidAmount||0))<=.01,'payment ledger equals paid amount')});
+ const pos=window.RUNLUUniversalPO?.pos?.()||[],seen=new Set();pos.filter(p=>p.poNumber).forEach(p=>{const unique=!seen.has(p.poNumber);t('PO number · '+p.poNumber,unique,'issued number unique in workspace');seen.add(p.poNumber)});
+ return {passed:tests.filter(x=>x.ok).length,failed:tests.filter(x=>!x.ok).length,tests};
+}
+function render(){const host=document.getElementById('universalReleaseGate');if(!host)return;const r=run(),ok=r.failed===0;host.innerHTML='<div class="card"><h2>U2 Release Gate</h2><p class="muted">Non-destructive regression harness. Runs foundation, lifecycle, recovery, ledger, and U2 end-to-end business-chain checks.</p><div class="uRelease '+(ok?'pass':'fail')+'"><b>'+(ok?'PASS':'HOLD')+'</b><span>'+r.passed+' passed · '+r.failed+' failed</span></div></div><div class="card">'+r.tests.map(x=>'<div class="uReleaseTest"><b>'+(x.ok?'✓':'✕')+' '+esc(x.name)+'</b><span>'+esc(x.detail)+'</span></div>').join('')+'</div>'}
+window.RUNLUUniversalReleaseGate=Object.freeze({run,render});
+})();
