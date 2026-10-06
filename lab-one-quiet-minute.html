@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="RUNLU LAB 004 — One Quiet Minute. The internet usually wants one more minute from you. RUNLU gives one back.">
+<meta name="theme-color" content="#f5f2e9"><link rel="canonical" href="https://runlu.ca/lab-one-quiet-minute.html">
+<meta property="og:title" content="RUNLU LAB 004 · One Quiet Minute"><meta property="og:description" content="The internet usually wants one more minute from you. RUNLU gives one back."><meta property="og:type" content="website"><meta property="og:url" content="https://runlu.ca/lab-one-quiet-minute.html"><meta property="og:image" content="https://runlu.ca/runlu-hero.png">
+<title>RUNLU LAB 004 · One Quiet Minute</title>
+<style>
+:root{--bg:#f5f2e9;--ink:#243029;--muted:#7a837d;--line:#d8d9d1;--green:#637d6d}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 42%,#fbfaf5 0,#f5f2e9 58%,#efede5 100%);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.top{height:72px;max-width:920px;margin:auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;transition:opacity 1.2s}.brand{font-weight:700;letter-spacing:.14em;color:inherit;text-decoration:none}.right{display:flex;gap:12px;align-items:center}.back{font-size:12px;color:var(--muted);text-decoration:none}select{border:1px solid var(--line);background:rgba(255,255,255,.4);border-radius:999px;color:var(--ink);padding:7px 27px 7px 10px;font-size:11px}
+main{max-width:760px;margin:auto;padding:4vh 22px 10vh;text-align:center}.eyebrow{font:600 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.17em;color:var(--green)}h1{font-size:clamp(42px,8vw,76px);letter-spacing:-.055em;margin:18px 0 12px}.intro{color:var(--muted);line-height:1.7;max-width:550px;margin:auto}.start{margin-top:30px;border:1px solid #30483a;background:#30483a;color:white;border-radius:999px;padding:13px 22px;font-weight:650;cursor:pointer}
+.quiet{min-height:480px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;margin-top:18px}.orb{width:132px;height:132px;border:1px solid rgba(99,125,109,.45);border-radius:50%;position:relative;transform:scale(.94);transition:transform 60s linear,opacity 1s}.orb:after{content:"";position:absolute;inset:14px;border:1px solid rgba(99,125,109,.15);border-radius:50%}.running .orb{transform:scale(1.22)}.ripple{position:absolute;width:132px;height:132px;border:1px solid rgba(99,125,109,.35);border-radius:50%;animation:ripple 2.5s ease-out forwards;pointer-events:none}@keyframes ripple{to{transform:scale(3.1);opacity:0}}
+.timer{position:absolute;bottom:52px;font:500 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;color:var(--muted);opacity:0;transition:opacity .8s}.running .timer{opacity:.65}.done{max-width:580px;margin:22px auto 0;opacity:0;transform:translateY(8px);transition:opacity 1.5s,transform 1.5s}.done.show{opacity:1;transform:none}.done h2{font-size:clamp(27px,5vw,42px);letter-spacing:-.035em;margin:0 0 15px}.done p{color:var(--muted);line-height:1.75}.again{border:0;background:none;text-decoration:underline;color:var(--muted);font-size:12px;cursor:pointer;padding:10px}.rule{max-width:590px;margin:36px auto 0;padding-top:20px;border-top:1px solid var(--line);font-size:12px;line-height:1.7;color:var(--muted)}
+body.session .top,body.session .before{opacity:0;pointer-events:none}.before{transition:opacity 1s}.session main{padding-top:0}.session .quiet{margin-top:-30px;min-height:calc(100vh - 42px)}
+@media(max-width:600px){.top{height:66px;padding:0 15px}.right{gap:7px}select{max-width:108px}.quiet{min-height:430px}.session .quiet{min-height:calc(100vh - 24px)}}
+@media(prefers-reduced-motion:reduce){.orb,.done,.top,.before{transition:none}.ripple{animation-duration:.01ms}}
+</style>
+</head>
+<body>
+<header class="top"><a class="brand" href="index.html">RUNLU</a><div class="right"><select data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select><a class="back" href="lab.html" data-en="← LAB" data-zh="← 实验室" data-fr="← LAB" data-es="← LAB">← LAB</a></div></header>
+<main>
+<section class="before">
+<div class="eyebrow" data-en="RUNLU LAB · INTERACTIVE EXPERIMENT 004" data-zh="RUNLU LAB · 互动实验 004" data-fr="RUNLU LAB · EXPÉRIENCE INTERACTIVE 004" data-es="RUNLU LAB · EXPERIMENTO INTERACTIVO 004">RUNLU LAB · INTERACTIVE EXPERIMENT 004</div>
+<h1 data-en="One Quiet Minute." data-zh="安静的一分钟。" data-fr="Une minute de calme." data-es="Un minuto de calma.">One Quiet Minute.</h1>
+<p class="intro" data-en="For sixty seconds, nothing here will ask for your attention." data-zh="接下来的六十秒，这里没有任何东西向你索取注意力。" data-fr="Pendant soixante secondes, rien ici ne sollicitera votre attention." data-es="Durante sesenta segundos, nada aquí pedirá tu atención.">For sixty seconds, nothing here will ask for your attention.</p>
+<button class="start" id="start" data-en="Begin" data-zh="开始" data-fr="Commencer" data-es="Comenzar">Begin</button>
+</section>
+<section class="quiet" id="quiet" aria-live="polite">
+<div class="orb" id="orb"></div><div class="timer" id="timer">1:00</div>
+</section>
+<section class="done" id="done">
+<h2 data-en="Nothing asked for your attention." data-zh="刚才，没有任何东西向你索取注意力。" data-fr="Rien n’a demandé votre attention." data-es="Nada pidió tu atención.">Nothing asked for your attention.</h2>
+<p data-en="The internet usually wants one more minute from you. RUNLU gives one back." data-zh="互联网通常总想再拿走你一分钟。RUNLU 还给你一分钟。" data-fr="Internet vous demande généralement une minute de plus. RUNLU vous en rend une." data-es="Internet suele pedirte un minuto más. RUNLU te devuelve uno.">The internet usually wants one more minute from you. RUNLU gives one back.</p>
+<button class="again" id="again" data-en="Take another minute" data-zh="再安静一分钟" data-fr="Prendre une autre minute" data-es="Tomar otro minuto">Take another minute</button>
+</section>
+<p class="rule before"><span data-en="No streak. No score. No notification. Touching the screen only makes a ripple; it does not reset the minute." data-zh="没有连续签到，没有积分，没有通知。触碰屏幕只会泛起一圈涟漪，不会让这一分钟重新开始。" data-fr="Aucune série, aucun score, aucune notification. Toucher l’écran crée seulement une ondulation ; la minute ne recommence pas." data-es="Sin rachas, puntos ni notificaciones. Tocar la pantalla solo crea una onda; el minuto no se reinicia.">No streak. No score. No notification. Touching the screen only makes a ripple; it does not reset the minute.</span></p>
+</main>
+<script>
+(()=>{
+ const DURATION=60000,$=id=>document.getElementById(id),start=$('start'),quiet=$('quiet'),timer=$('timer'),done=$('done'),again=$('again');
+ let active=false,started=0,raf=0;
+ function fmt(ms){const s=Math.max(0,Math.ceil(ms/1000));return '0:'+String(s).padStart(2,'0')}
+ function frame(now){if(!active)return;const left=DURATION-(now-started);timer.textContent=fmt(left);if(left<=0){finish();return}raf=requestAnimationFrame(frame)}
+ function begin(){cancelAnimationFrame(raf);active=true;started=performance.now();done.classList.remove('show');document.body.classList.add('session');quiet.classList.add('running');timer.textContent='1:00';raf=requestAnimationFrame(frame)}
+ function finish(){active=false;cancelAnimationFrame(raf);quiet.classList.remove('running');document.body.classList.remove('session');timer.textContent='0:00';setTimeout(()=>done.classList.add('show'),250)}
+ function ripple(e){if(!active)return;const r=document.createElement('i');r.className='ripple';const rect=quiet.getBoundingClientRect();r.style.left=(e.clientX-rect.left-66)+'px';r.style.top=(e.clientY-rect.top-66)+'px';quiet.appendChild(r);setTimeout(()=>r.remove(),2600)}
+ start.addEventListener('click',begin);again.addEventListener('click',begin);quiet.addEventListener('pointerdown',ripple);
+})();
+</script>
+<script src="runlu-language.js?v=2.2"></script>
+</body></html>
