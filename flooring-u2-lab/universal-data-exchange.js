@@ -27,15 +27,21 @@ function packageData(){
  return {format:FORMAT,version:VERSION,schemaVersion:window.RUNLUUniversalDataVersion?.status?.().workspaceVersion||0,createdAt:new Date().toISOString(),organizationId:w.company.organizationId,companyName:w.company.displayName||w.company.legalName||'',datasets};
 }
 function exportPackage(){const p=packageData();downloadBlob('RUNLU-Flooring-Business-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(p,null,2),'application/json');return p}
-function validatePackage(p){
+function validatePackageForOrganization(p,organizationId){
+ const expected=String(organizationId||'').trim();
+ if(!expected)return {ok:false,error:'A company organization ID is required for validation.'};
+ return validatePackageCore(p,expected);
+}
+function validatePackage(p){const expected=org();if(!expected)return {ok:false,error:'Create a company workspace first.'};return validatePackageCore(p,expected)}
+function validatePackageCore(p,expected){
  if(!p||p.format!==FORMAT)return {ok:false,error:'Not a RUNLU Flooring OS Universal business package.'};
  if(p.version!==VERSION)return {ok:false,error:'Unsupported business package version.'};
  if(Number(p.schemaVersion||0)>(window.RUNLUUniversalDataVersion?.CURRENT||1))return {ok:false,error:'Business package data is newer than this app.'};
- if(!p.organizationId||p.organizationId!==org())return {ok:false,error:'This package belongs to a different company workspace.'};
+ if(!p.organizationId||p.organizationId!==expected)return {ok:false,error:'This package belongs to a different company workspace.'};
  if(!p.datasets||typeof p.datasets!=='object'||Array.isArray(p.datasets))return {ok:false,error:'Business datasets are missing.'};
  const allowed=new Set(DATASETS.map(x=>x[0])),unknown=Object.keys(p.datasets).filter(k=>!allowed.has(k));
  if(unknown.length)return {ok:false,error:'Unknown dataset: '+unknown.join(', ')};
- for(const [id] of DATASETS){if(p.datasets[id]!==undefined&&!Array.isArray(p.datasets[id]))return {ok:false,error:id+' must be a record list.'};for(const r of p.datasets[id]||[]){if(r.organizationId!==org())return {ok:false,error:id+' contains a record from another company.'};if(!r.id)return {ok:false,error:id+' contains a record without an id.'}}}
+ for(const [id] of DATASETS){if(p.datasets[id]!==undefined&&!Array.isArray(p.datasets[id]))return {ok:false,error:id+' must be a record list.'};for(const r of p.datasets[id]||[]){if(r.organizationId!==expected)return {ok:false,error:id+' contains a record from another company.'};if(!r.id)return {ok:false,error:id+' contains a record without an id.'}}}
  return {ok:true};
 }
 async function inspectFile(file){let p;try{p=JSON.parse(await file.text())}catch(_){throw new Error('Import file is not valid JSON.')}const v=validatePackage(p);if(!v.ok)throw new Error(v.error);return p}
@@ -59,5 +65,5 @@ function render(){
  document.getElementById('uImportPackage').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;try{const p=await inspectFile(file),n=Object.values(p.datasets).reduce((s,x)=>s+x.length,0);state('Validated · '+n+' records · '+esc(p.companyName||p.organizationId)+'.',true);if(!confirm('Import new records from this package? Existing IDs will be skipped and never overwritten.'))return;const r=importPackage(p);state('IMPORTED · '+r.added+' added · '+r.skipped+' existing record(s) skipped.',true)}catch(err){state(err.message,false)}};
  function state(msg,ok){const el=document.getElementById('uExchangeState');if(el){el.textContent=msg;el.className='uExchangeState '+(ok?'ok':'bad')}}
 }
-window.RUNLUUniversalDataExchange=Object.freeze({DATASETS,csvFor,packageData,validatePackage,inspectFile,importPackage,render});
+window.RUNLUUniversalDataExchange=Object.freeze({DATASETS,csvFor,packageData,validatePackage,validatePackageForOrganization,inspectFile,importPackage,render});
 })();

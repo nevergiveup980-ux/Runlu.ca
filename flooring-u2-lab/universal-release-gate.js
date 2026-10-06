@@ -94,11 +94,12 @@ function run(){
  const version=window.RUNLUUniversalDataVersion;
  const exchange=window.RUNLUUniversalDataExchange;
  if(exchange){
-  const oid=data?.read?.('runlu_flooring_universal_u0_workspace',null)?.company?.organizationId||'';
+  const liveOid=data?.read?.('runlu_flooring_universal_u0_workspace',null)?.company?.organizationId||'',oid=liveOid||'release-gate-fixture-org';
+  const validate=p=>liveOid?exchange.validatePackage(p):exchange.validatePackageForOrganization(p,oid);
   const fixture={format:'runlu-flooring-universal-business-package',version:1,schemaVersion:version?.CURRENT||1,createdAt:new Date(0).toISOString(),organizationId:oid,companyName:'Test',datasets:Object.fromEntries((exchange.DATASETS||[]).map(([id])=>[id,[]]))};
-  t('Data Exchange · valid package',exchange.validatePackage(fixture).ok,'same-company package accepted');
-  t('Data Exchange · rejects unknown dataset',!exchange.validatePackage({...fixture,datasets:{unknown:[]}}).ok,'unknown dataset blocked');
-  t('Data Exchange · rejects foreign organization',!exchange.validatePackage({...fixture,organizationId:'foreign-org'}).ok,'cross-company import blocked');
+  t('Data Exchange · valid package',validate(fixture).ok,liveOid?'same-company package accepted':'isolated organization fixture accepted');
+  t('Data Exchange · rejects unknown dataset',!validate({...fixture,datasets:{unknown:[]}}).ok,'unknown dataset blocked');
+  t('Data Exchange · rejects foreign organization',!validate({...fixture,organizationId:'foreign-org'}).ok,'cross-company import blocked');
  }
  if(version){
   const vs=version.status();
