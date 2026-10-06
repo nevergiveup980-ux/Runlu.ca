@@ -1,0 +1,22 @@
+name: Flooring Desktop Core V0.4.03r
+on:
+  pull_request:
+    paths:
+      - 'flooring/index-v071-pricing-workspace.html'
+      - 'flooring/index-v0403-release.html'
+      - 'scripts/run-flooring-desktop-core-0403r.mjs'
+      - '.github/workflows/flooring-desktop-core-0403r.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'flooring/index-v071-pricing-workspace.html'
+      - 'flooring/index-v0403-release.html'
+      - 'scripts/run-flooring-desktop-core-0403r.mjs'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: node scripts/run-flooring-desktop-core-0403r.mjs
