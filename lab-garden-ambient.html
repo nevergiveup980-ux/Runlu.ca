@@ -12,39 +12,49 @@
 <p class="note" data-en="No recording is loaded. This experiment synthesizes sound locally in your browser. Nothing is uploaded." data-zh="没有加载录音。这一版声音直接在你的浏览器里本地合成，不上传任何东西。" data-fr="Aucun enregistrement n’est chargé. Le son est synthétisé localement dans votre navigateur." data-es="No se carga ninguna grabación. El sonido se sintetiza localmente en tu navegador.">No recording is loaded. Sound is synthesized locally.</p></main>
 <script>
 (()=>{
- let ctx=null,master=null,on=false,timer=null;
- const $=id=>document.getElementById(id),power=$('power'),scale={wind:.38,leaves:.18,rain:.25},nodes={};
- function makeNoise(type,freq){
-   const len=44100*3,raw=new Float32Array(len);for(let i=0;i<len;i++)raw[i]=Math.random()*2-1;
-   const buf=ctx.createBuffer(1,len,44100);buf.copyToChannel(raw,0);
-   const src=ctx.createBufferSource(),f=ctx.createBiquadFilter(),g=ctx.createGain();
-   src.buffer=buf;src.loop=true;f.type=type;f.frequency.value=freq;g.gain.value=0;
-   src.connect(f).connect(g).connect(master);src.start(0);return g;
- }
+ let ctx=null,master=null,on=false,timer=null,noiseNodes={};
+ const $=id=>document.getElementById(id),power=$('power'),scale={wind:.40,leaves:.20,rain:.28};
  function init(){
    const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw Error('Web Audio unavailable');
-   ctx=new AC({latencyHint:'interactive'});master=ctx.createGain();master.gain.value=.8;master.connect(ctx.destination);
-   nodes.wind=makeNoise('lowpass',760);nodes.leaves=makeNoise('bandpass',2900);nodes.rain=makeNoise('highpass',1300);
+   ctx=new AC();master=ctx.createGain();master.gain.value=.85;master.connect(ctx.destination);
  }
- function apply(id){if(!ctx||!nodes[id])return;nodes[id].gain.setTargetAtTime(on?(+$(id).value/100)*scale[id]:0,ctx.currentTime,.05)}
+ function makeNoise(id,type,freq){
+   const seconds=3,len=Math.floor(ctx.sampleRate*seconds),buf=ctx.createBuffer(1,len,ctx.sampleRate),d=buf.getChannelData(0);
+   for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+   const src=ctx.createBufferSource(),f=ctx.createBiquadFilter(),g=ctx.createGain();
+   src.buffer=buf;src.loop=true;f.type=type;f.frequency.value=freq;g.gain.value=0;
+   src.connect(f);f.connect(g);g.connect(master);src.start();
+   noiseNodes[id]={src,g}; return g;
+ }
+ function ensureNoise(){
+   if(!noiseNodes.wind)makeNoise('wind','lowpass',760);
+   if(!noiseNodes.leaves)makeNoise('leaves','bandpass',2900);
+   if(!noiseNodes.rain)makeNoise('rain','highpass',1300);
+ }
+ function apply(id){if(!ctx||!noiseNodes[id])return;noiseNodes[id].g.gain.setTargetAtTime(on?(+$(id).value/100)*scale[id]:0,ctx.currentTime,.05)}
  function bell(){
    if(!on||!ctx||+$('chime').value<1)return;const t=ctx.currentTime,v=+$('chime').value/100;
-   [440,554.37,659.25].forEach((hz,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.value=hz;o.type='sine';g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.001,v*.28/(i+1)),t+.03);g.gain.exponentialRampToValueAtTime(.0001,t+3.5+i*.4);o.connect(g).connect(master);o.start(t);o.stop(t+5)});
+   [440,554.37,659.25].forEach((hz,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.value=hz;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.001,v*.32/(i+1)),t+.03);g.gain.exponentialRampToValueAtTime(.0001,t+3.8+i*.4);o.connect(g).connect(master);o.start(t);o.stop(t+5)});
  }
- function setLabel(msg){
-   if(msg){power.textContent=msg;return}
+ function label(){
    const zh=(document.documentElement.lang||'').toLowerCase().startsWith('zh');
    power.textContent=on?(zh?'暂停声音花园':'Pause the sound garden'):(zh?'进入声音花园':'Enter the sound garden');
  }
- function activate(){
+ async function activate(){
    try{
      if(!ctx)init();
-     const go=()=>{on=!on;['wind','leaves','rain'].forEach(apply);setLabel();clearInterval(timer);if(on){bell();timer=setInterval(bell,17000)}};
-     if(ctx.state==='running')go();else ctx.resume().then(()=>{if(ctx.state==='running')go();else setLabel('Audio blocked · tap again')}).catch(()=>setLabel('Audio blocked · tap again'));
-   }catch(e){setLabel('Audio unavailable')}
+     await ctx.resume();
+     if(ctx.state!=='running'){power.textContent='Audio blocked · tap again';return}
+     on=!on;
+     if(on){
+       ensureNoise();['wind','leaves','rain'].forEach(apply);bell();clearInterval(timer);timer=setInterval(bell,17000);
+     }else{
+       ['wind','leaves','rain'].forEach(apply);clearInterval(timer);
+     }
+     label();
+   }catch(e){power.textContent='Audio unavailable'}
  }
- power.addEventListener('pointerup',activate);
- power.addEventListener('touchend',e=>{e.preventDefault();activate()},{passive:false});
+ power.addEventListener('click',activate);
  ['wind','leaves','rain','chime'].forEach(id=>$(id).addEventListener('input',()=>{$(id).nextElementSibling.value=$(id).value;apply(id)}));
 })();
 </script><script src="runlu-language.js?v=2.2"></script></body></html>
