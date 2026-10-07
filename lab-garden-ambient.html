@@ -42,6 +42,10 @@
  }
  async function activate(){
    try{
+     /* iOS: request media-style playback so Web Audio can remain audible in silent mode. */
+     if(navigator.audioSession && 'type' in navigator.audioSession){
+       try{navigator.audioSession.type='playback'}catch(_){ }
+     }
      if(!ctx)init();
      await ctx.resume();
      if(ctx.state!=='running'){power.textContent='Audio blocked · tap again';return}
