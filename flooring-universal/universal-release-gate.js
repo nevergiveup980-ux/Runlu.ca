@@ -176,11 +176,18 @@ function run(){
  t('U2 Business Chain · whole-job material gate',typeof wh?.jobReadiness==='function'&&typeof wh?.readyJobs==='function','installation readiness must aggregate the entire job');
  const installSync=window.RUNLUUniversalInstallation?.render?.toString?.()||'';
  t('U2 Business Chain · installation module present',!!window.RUNLUUniversalInstallation,'whole-job readiness consumer loaded');
+ const customers=window.RUNLUUniversalCustomers;
+ t('U3 Contract · customer master loaded',!!customers&&typeof customers.rows==='function'&&typeof customers.resolve==='function'&&typeof customers.jobsFor==='function','customer directory and identity API available');
+ t('U3 Contract · customer exchange registered',(exchange?.DATASETS||[]).some(x=>x[0]==='customers'&&x[2]==='runlu_flooring_universal_u3_customers'),'customer records included in portable package');
+ const custSource=customers?.upsertFromJob?.toString?.()||'',salesSource=window.RUNLUUniversalSales?.render?.toString?.()||'';
+ t('U3 Contract · customer ID first',custSource.includes('job.customerId')&&custSource.includes('x.id===job.customerId'),'existing customer identity takes priority over names');
+ t('U3 Contract · sales persists customer ID',salesSource.includes('j.customerId=master.id')&&salesSource.includes('saveJobs(a)'),'new jobs persist linked master identity');
+ if(exchange){const oid='u3-gate-fixture',fixture={format:'runlu-flooring-universal-business-package',version:1,schemaVersion:version?.CURRENT||1,organizationId:oid,datasets:{customers:[{id:'cust-fixture',organizationId:oid,name:'Fixture'}]}};t('U3 Contract · customer package accepted',exchange.validatePackageForOrganization(fixture,oid).ok,'isolated same-company customer fixture');t('U3 Contract · foreign customer rejected',!exchange.validatePackageForOrganization({...fixture,datasets:{customers:[{id:'foreign',organizationId:'other'}]}},oid).ok,'cross-company customer data rejected')}
  const bills=billing?.rows?.()||[];
  bills.forEach(b=>{const paid=(b.payments||[]).reduce((s,p)=>s+Number(p.amount||0),0);t('Invoice ledger · '+(b.invoiceNumber||b.id),Math.abs(paid-Number(b.paidAmount||0))<=.01,'payment ledger equals paid amount')});
  const pos=window.RUNLUUniversalPO?.pos?.()||[],seen=new Set();pos.filter(p=>p.poNumber).forEach(p=>{const unique=!seen.has(p.poNumber);t('PO number · '+p.poNumber,unique,'issued number unique in workspace');seen.add(p.poNumber)});
  return {passed:tests.filter(x=>x.ok).length,failed:tests.filter(x=>!x.ok).length,tests};
 }
-function render(){const host=document.getElementById('universalReleaseGate');if(!host)return;const r=run(),ok=r.failed===0;host.innerHTML='<div class="card"><h2>U2 Release Gate</h2><p class="muted">Non-destructive regression harness. Runs foundation, lifecycle, recovery, ledger, and U2 end-to-end business-chain checks.</p><div class="uRelease '+(ok?'pass':'fail')+'"><b>'+(ok?'PASS':'HOLD')+'</b><span>'+r.passed+' passed · '+r.failed+' failed</span></div></div><div class="card">'+r.tests.map(x=>'<div class="uReleaseTest"><b>'+(x.ok?'✓':'✕')+' '+esc(x.name)+'</b><span>'+esc(x.detail)+'</span></div>').join('')+'</div>'}
+function render(){const host=document.getElementById('universalReleaseGate');if(!host)return;const r=run(),ok=r.failed===0;host.innerHTML='<div class="card"><h2>U3 Release Gate</h2><p class="muted">Non-destructive regression harness. Runs foundation, lifecycle, recovery, ledger, and U2 end-to-end business-chain checks.</p><div class="uRelease '+(ok?'pass':'fail')+'"><b>'+(ok?'PASS':'HOLD')+'</b><span>'+r.passed+' passed · '+r.failed+' failed</span></div></div><div class="card">'+r.tests.map(x=>'<div class="uReleaseTest"><b>'+(x.ok?'✓':'✕')+' '+esc(x.name)+'</b><span>'+esc(x.detail)+'</span></div>').join('')+'</div>'}
 window.RUNLUUniversalReleaseGate=Object.freeze({run,render});
 })();
