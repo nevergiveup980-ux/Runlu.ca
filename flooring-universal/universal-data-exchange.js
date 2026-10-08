@@ -4,6 +4,7 @@
 'use strict';
 const WS='runlu_flooring_universal_u0_workspace',FORMAT='runlu-flooring-universal-business-package',VERSION=1;
 const DATASETS=[
+ ['customers','Customers','runlu_flooring_universal_u3_customers'],
  ['jobs','Jobs','runlu_flooring_universal_u1_jobs'],
  ['supplierOrders','Supplier POs','runlu_flooring_universal_u1_supplier_orders'],
  ['inbound','Receiving','runlu_flooring_universal_u1_inbound_tasks'],
