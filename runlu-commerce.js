@@ -131,7 +131,7 @@
     items.querySelectorAll("[data-remove]").forEach(b=>b.onclick=()=>remove(b.dataset.remove));
     const checkout=document.getElementById("runluBagCheckout"), subtotal=document.getElementById("runluBagSubtotal");
     subtotal.textContent=products.length===1?products[0].price:(products.length?products.map(p=>p.price).join(" + "):"CAD $0.00");
-    checkout.textContent=t("checkout");
+    checkout.textContent=products.length>1 ? ({en:"Choose one item to checkout",zh:"请保留一款商品再结账",fr:"Gardez un seul article pour payer",es:"Deja un solo producto para pagar"}[lang()]||"Choose one item to checkout") : t("checkout");
     const ready=products.length===1 && products[0].enabled && validCheckout(products[0].checkoutUrl);
     // Subscription variants are mutually exclusive even for bags saved by an older build.
     if(bag.includes("guanshi-plus-monthly")&&bag.includes("guanshi-plus-annual")){
