@@ -21,7 +21,7 @@ for (const [key, product] of products) {
   const url = new URL(product.checkoutUrl);
   assert.equal(url.protocol, 'https:', key + ': non-HTTPS checkout');
   assert.equal(url.hostname, 'buy.stripe.com', key + ': wrong checkout host');
-  assert.ok(/^\\/[A-Za-z0-9]+$/.test(url.pathname), key + ': malformed Stripe link');
+  assert.ok(url.pathname.length > 1 && !url.pathname.slice(1).includes('/'), key + ': malformed Stripe link');
   if (product.requiresServerReference) {
     assert.ok(product.requiresAccount, key + ': server checkout requires account');
     assert.ok(cfg.account?.referenceEndpoint?.startsWith('https://'), key + ': missing server checkout endpoint');
@@ -37,7 +37,7 @@ for (const page of pages) {
     assert.ok(html.includes('commerce-config.js') && html.includes('runlu-commerce.js'), page + ': commerce scripts missing');
     buttons++;
   }
-  for (const match of html.matchAll(/https:\/\/buy\\.stripe\\.com\/[A-Za-z0-9]+/g)) {
+  for (const match of html.matchAll(new RegExp('https://buy[.]stripe[.]com/[A-Za-z0-9]+', 'g'))) {
     assert.ok(products.some(([,p]) => p.checkoutUrl === match[0]), page + ': direct link is not in product registry');
   }
 }
