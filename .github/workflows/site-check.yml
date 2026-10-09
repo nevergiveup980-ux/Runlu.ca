@@ -52,6 +52,8 @@ jobs:
           node --check scripts/check-multilingual.mjs
           node --check scripts/check-guanshi-access.mjs
           node --check scripts/check-account-pilot.mjs
+      - name: Guard commerce buttons and Stripe links
+        run: node scripts/check-commerce.mjs
       - name: Enforce complete four-language pages
         run: node scripts/check-multilingual.mjs
       - name: Check RUNLU Account public contract
