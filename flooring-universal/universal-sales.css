@@ -11,3 +11,16 @@
 #universalSales,#universalInbound,#universalWarehouse{max-width:1100px;margin:0 auto 12px}
 #universalSales button,#universalInbound button,#universalWarehouse button{border-radius:8px}
 @media(max-width:700px){.uJobCard{padding:12px 10px}.uInbound,.uWHRow,.uNotice{padding:11px 8px}.uItems{margin:9px 0}}
+
+/* U3 Customer 360: responsive customer directory */
+#universalCustomers{max-width:1100px;margin:0 auto 12px}
+.uCustomerProfile{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid #d7dfdb}
+.uCustomerProfile>div:first-child{min-width:0;flex:1}
+.uCustomerProfile b,.uCustomerProfile span,.uCustomerProfile small{display:block;overflow-wrap:anywhere}
+.uCustomerProfile span,.uCustomerProfile small{color:#66736d;margin-top:4px}
+.uCustomerActions{display:flex;gap:8px;flex-wrap:wrap}
+.uCustomerActions button{border-radius:8px;min-height:40px}
+.uCustomerJobs{padding:10px 14px;background:#edf1ef;border-radius:10px}
+.uCustomerJobs>div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid #d7dfdb}
+.uCustomerJobs>div:last-child{border-bottom:0}
+@media(max-width:700px){.uCustomerProfile{align-items:stretch;flex-direction:column}.uCustomerActions{display:grid;grid-template-columns:1fr 1fr}.uCustomerActions button{min-height:44px}.uCustomerJobs>div{flex-direction:column;gap:3px}}
