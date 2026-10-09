@@ -61,3 +61,5 @@ window.RUNLUCommerceConfig = Object.freeze({
       requiresAccount: true,
       requiresServerReference: true
     })
+  })
+});
