@@ -28,7 +28,7 @@ for (const [key, product] of products) {
     assert.ok(cfg.account?.referenceEndpoint?.startsWith('https://'), key + ': missing server checkout endpoint');
   }
 }
-const pages = ['digital.html', 'small-business-command-center.html', 'project-assistant.html', 'next-product.html'];
+const pages = ['digital.html', 'small-business-command-center.html', 'project-assistant.html', 'next-product.html', 'guanshi-pricing.html'];
 let buttons = 0;
 for (const page of pages) {
   const html = read(page);
@@ -42,7 +42,11 @@ for (const page of pages) {
     assert.ok(products.some(([,p]) => p.checkoutUrl === match[0]), page + ': direct link is not in product registry');
   }
 }
-assert.ok(buttons >= 2, 'Commerce buttons unexpectedly missing');
+assert.ok(buttons >= 6, 'Commerce buttons unexpectedly missing');
+const pricing = read('guanshi-pricing.html');
+for (const key of ['guanshi-plus-monthly','guanshi-plus-annual','guanshi-deep-reading']) {
+  assert.ok(pricing.includes('data-commerce-buy="' + key + '"'), 'GUANSHI purchase button missing: ' + key);
+}
 const next = read('next-product.html');
 assert.ok(next.includes(cfg.products['next-v1-0'].checkoutUrl), 'NEXT direct purchase link does not match product registry');
 const pa = read('project-assistant.html');
