@@ -14,7 +14,8 @@ const cfg = context.window.RUNLUCommerceConfig;
 assert.equal(cfg?.provider, 'stripe', 'Stripe commerce config is missing');
 assert.ok(cfg?.products, 'Product registry missing');
 const products = Object.entries(cfg.products);
-assert.ok(products.length >= 6, 'Product registry unexpectedly shrank');
+const required = ['sbcc-v1-1','pa-v1-0','next-v1-0','guanshi-plus-monthly','guanshi-plus-annual','guanshi-deep-reading'];
+for (const key of required) assert.ok(cfg.products[key], 'Required product missing: ' + key);
 for (const [key, product] of products) {
   assert.ok(product.name && product.price, key + ': name or price missing');
   assert.equal(product.enabled, true, key + ': unexpectedly disabled');
@@ -42,4 +43,12 @@ for (const page of pages) {
   }
 }
 assert.ok(buttons >= 2, 'Commerce buttons unexpectedly missing');
+const next = read('next-product.html');
+assert.ok(next.includes(cfg.products['next-v1-0'].checkoutUrl), 'NEXT direct purchase link does not match product registry');
+const pa = read('project-assistant.html');
+assert.ok(pa.includes('data-commerce-buy="pa-v1-0"'), 'PA purchase button missing');
+const sbcc = read('small-business-command-center.html');
+assert.ok(sbcc.includes('data-commerce-buy="sbcc-v1-1"'), 'SBCC purchase button missing');
+const bag = read('runlu-commerce.js');
+assert.ok(bag.includes('Choose one item to checkout'), 'Missing multi-item bag explanation');
 console.log('Commerce guard PASS:', products.length, 'products,', buttons, 'buy buttons, script syntax and checkout URLs verified (static checks only).');
