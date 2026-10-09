@@ -46,6 +46,22 @@ async function enrichPlans(){
     const r=await sb.rpc('flooring_create_supplier_task',args);if(r.error)throw r.error;
   }
 }
+async function reconcileCancelledPlans(){
+  if(!session)return false;
+  let changed=false;
+  for(const po of pos().filter(x=>x?.poNumber&&x?.status==='Cancelled')){
+    const t=taskByPO(po.poNumber);
+    if(!t||['Completed','Cancelled'].includes(String(t.status||'')))continue;
+    const r=await sb.rpc('flooring_update_supplier_task',{
+      p_environment:ENV,p_id:t.id,p_status:'Cancelled',p_delay_reason:null,
+      p_warehouse_notes:t.warehouse_notes||'Cancelled from Flooring PO',
+      p_received_items:Array.isArray(t.received_items)?t.received_items:[]
+    });
+    if(r.error)throw r.error;
+    changed=true;
+  }
+  return changed;
+}
 async function refresh(manual){
   if(busy)return;busy=true;paintConnection('SYNCING…');
   try{
@@ -57,7 +73,15 @@ async function refresh(manual){
       sb.from('flooring_warehouse_work_events').select('*').eq('environment',ENV).order('occurred_at',{ascending:false}).limit(100)
     ]);
     if(tr.error)throw tr.error;if(er.error)throw er.error;
-    tasks=tr.data||[];events=er.data||[];lastSync=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    tasks=tr.data||[];events=er.data||[];
+    if(await reconcileCancelledPlans()){
+      const [tr2,er2]=await Promise.all([
+        sb.from('flooring_supplier_tasks').select('*').eq('environment',ENV).order('requested_date',{ascending:true}).order('created_at',{ascending:true}),
+        sb.from('flooring_warehouse_work_events').select('*').eq('environment',ENV).order('occurred_at',{ascending:false}).limit(100)
+      ]);
+      if(tr2.error)throw tr2.error;if(er2.error)throw er2.error;tasks=tr2.data||tasks;events=er2.data||events;
+    }
+    lastSync=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
     localStorage.setItem(CACHE,JSON.stringify({tasks,events,lastSync,syncedAt:new Date().toISOString()}));
     paintAll();
     if(manual)alert('Warehouse work plan refreshed from cloud.');
@@ -81,8 +105,11 @@ function ensurePickupBar(){
 function decoratePickup(){
   ensurePickupBar();
   document.querySelectorAll('#supplierPickupPage .pickupPlanTask').forEach(row=>{
-    const m=(row.textContent||'').match(/PO\s*#\s*(\d+)/i);if(!m)return;const t=taskByPO(m[1]);if(!t)return;
-    const badge=row.querySelector('.pickupSafeStatus');if(badge&&badge.textContent!==uiStatus(t.status)){badge.textContent=uiStatus(t.status);badge.dataset.cloudWork='1'}
+    const m=(row.textContent||'').match(/PO\s*#\s*(\d+)/i);if(!m)return;const localPO=pos().find(p=>String(p.poNumber)===String(m[1]));
+    const badge=row.querySelector('.pickupSafeStatus');
+    if(localPO?.status==='Cancelled'){if(badge){badge.textContent='Cancelled';badge.dataset.cloudWork='1'}return}
+    const t=taskByPO(m[1]);if(!t)return;
+    if(badge&&badge.textContent!==uiStatus(t.status)){badge.textContent=uiStatus(t.status);badge.dataset.cloudWork='1'}
   });
   const waiting=tasks.filter(t=>['Waiting','Scheduled'].includes(t.status)).length;
   const progress=tasks.filter(t=>['In Progress','Partial'].includes(t.status)).length;
@@ -118,6 +145,6 @@ function install(){
   setInterval(()=>{if(document.visibilityState==='visible'&&(pageActive('supplierPickupPage')||pageActive('warehouseActivity')))refresh(false)},20000);
   client().then(()=>refresh(false)).catch(()=>paintConnection('CONNECTOR UNAVAILABLE'));
 }
-window.RUNLUWarehouseWorkSyncV090={refresh,taskByPO,version:'0.9.0'};
+window.RUNLUWarehouseWorkSyncV090={refresh,taskByPO,reconcileCancelledPlans,version:'0.9.0'};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();

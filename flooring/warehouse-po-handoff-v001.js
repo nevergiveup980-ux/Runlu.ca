@@ -43,6 +43,7 @@
   function handoffTextPO(){
     const {po,j,items}=handoffData(),supplier=supplierContext(po);
     if(!po&&!j)return 'No active Job or supplier PO.';
+    if(po?.status==='Cancelled')return 'CANCELLED ORDER — DO NOT PICK UP / RECEIVE\nPO: '+(po.poNumber||'')+'\nSupplier: '+(supplier.supplierName||po.supplier||'')+'\nThis PO is quarantined from Warehouse receiving.';
     return [
       'RUNLU DEERFOOT FLOORING → WAREHOUSE RECEIVING',
       'PO: '+(po?.poNumber||j?.supplierPO||''),
@@ -65,6 +66,7 @@
   }
   function warehouseUrlPO(){
     const {po,j,items}=handoffData();
+    if(po?.status==='Cancelled')return '';
     const supplier=supplierContext(po),itemPayload=compactItems(items,po);
     const p=new URLSearchParams({
       from:'flooring',
@@ -86,9 +88,9 @@
     });
     return 'https://warehouse.runlu.ca/?'+p.toString();
   }
-  function renderWarehousePO(){const el=by('handoff');if(el)el.textContent=handoffTextPO();const f=by('warehouseFrame');if(f)f.src=warehouseUrlPO()}
-  function refreshWarehousePO(){const f=by('warehouseFrame');if(f)f.src=warehouseUrlPO()}
-  function openWarehousePO(){window.open(warehouseUrlPO(),'_blank')}
+  function renderWarehousePO(){const {po}=handoffData(),el=by('handoff');if(el)el.textContent=handoffTextPO();const f=by('warehouseFrame');if(f)f.src=po?.status==='Cancelled'?'about:blank':warehouseUrlPO()}
+  function refreshWarehousePO(){const {po}=handoffData();const f=by('warehouseFrame');if(f)f.src=po?.status==='Cancelled'?'about:blank':warehouseUrlPO()}
+  function openWarehousePO(){const {po}=handoffData();if(po?.status==='Cancelled'){alert('Cancelled PO — Warehouse receiving is blocked.');return false}const url=warehouseUrlPO();if(url)window.open(url,'_blank');return !!url}
   async function copyHandoffPO(){try{await navigator.clipboard.writeText(handoffTextPO());alert('Warehouse receiving handoff copied.')}catch(_){alert('Copy is unavailable in this browser.')}}
 
   function ensureCompletedStat(){
