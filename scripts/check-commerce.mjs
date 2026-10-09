@@ -35,7 +35,9 @@ for (const page of pages) {
   const keys = [...html.matchAll(/data-commerce-buy=["']([^"']+)["']/g)].map(m => m[1]);
   for (const key of keys) {
     assert.ok(cfg.products[key], page + ': unregistered buy button ' + key);
-    assert.ok(html.includes('commerce-config.js') && html.includes('runlu-commerce.js'), page + ': commerce scripts missing');
+    const configIndex = html.indexOf('src="commerce-config.js');
+    const commerceIndex = html.indexOf('src="runlu-commerce.js');
+    assert.ok(configIndex >= 0 && commerceIndex > configIndex, page + ': commerce scripts missing or loaded out of order');
     buttons++;
   }
   for (const match of html.matchAll(new RegExp('https://buy[.]stripe[.]com/[A-Za-z0-9]+', 'g'))) {
