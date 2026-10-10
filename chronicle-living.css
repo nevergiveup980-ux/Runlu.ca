@@ -9,3 +9,11 @@
 .runlu-timepath a:focus-visible,#chronicle-tracks a:focus-visible{outline:3px solid #2f6f45;outline-offset:4px;border-radius:3px}
 @media(max-width:600px){.runlu-timepath{padding-left:1rem}.runlu-timepath li{grid-template-columns:1fr;gap:.25rem;padding-left:1rem}.runlu-timepath li::before{left:-1.36rem}}
 @media(prefers-reduced-motion:reduce){.runlu-timepath *,#chronicle-tracks *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Reading wayfinding: familiar anchors, no JS required. */
+.runlu-chronicle-jump{display:flex;flex-wrap:wrap;gap:.65rem;padding:1rem clamp(1rem,5vw,4rem);background:#f7f4ed;border-block:1px solid rgba(23,25,21,.1)}
+.runlu-chronicle-jump a{display:inline-flex;align-items:center;min-height:44px;padding:.55rem 1rem;border:1px solid rgba(23,25,21,.17);border-radius:999px;background:#fff;font-size:.9rem;text-decoration:none}
+.runlu-chronicle-jump a:hover{border-color:#2f6f45;background:#f1f6f0}
+.runlu-chronicle-jump a:focus-visible{outline:3px solid #2f6f45;outline-offset:3px}
+#chronicle-tracks,#chronicle-timeline,#chronicle-index{scroll-margin-top:110px}
+@media(max-width:600px){.runlu-chronicle-jump{gap:.4rem;padding:.75rem 1rem}.runlu-chronicle-jump a{font-size:.82rem;padding:.55rem .8rem}}
