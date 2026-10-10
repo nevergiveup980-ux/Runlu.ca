@@ -188,6 +188,9 @@ function run(){
  t('U3 Contract · changed customer details invalidate selection',(window.RUNLUUniversalSales?.render?.toString?.()||'').includes('selectedCustomer.name===customer&&selectedCustomer.contact===contact'),'edited details cannot silently retain selected customer ID');
  t('U3 Contract · New Job button is rendered',newJob.includes('data-customer-newjob')&&newJob.includes('New Job'),'Customer 360 action must be visible and clickable');
  t('U3 Contract · selected customer resets after save',(window.RUNLUUniversalSales?.render?.toString?.()||'').includes('selectedCustomer=null;render()'),'selection must not leak into the next job');
+ const legacySource=window.RUNLUUniversalCustomers?.jobsFor?.toString?.()||'';
+ t('U3 Contract · legacy job contact match',legacySource.includes('jContact===contact'),'legacy customer records compare contact');
+ t('U3 Contract · linked job ID priority',legacySource.includes('if(j.customerId)return j.customerId===c.id'),'explicit customer IDs cannot fall back to names');
  const bills=billing?.rows?.()||[];
  bills.forEach(b=>{const paid=(b.payments||[]).reduce((s,p)=>s+Number(p.amount||0),0);t('Invoice ledger · '+(b.invoiceNumber||b.id),Math.abs(paid-Number(b.paidAmount||0))<=.01,'payment ledger equals paid amount')});
  const pos=window.RUNLUUniversalPO?.pos?.()||[],seen=new Set();pos.filter(p=>p.poNumber).forEach(p=>{const unique=!seen.has(p.poNumber);t('PO number · '+p.poNumber,unique,'issued number unique in workspace');seen.add(p.poNumber)});
