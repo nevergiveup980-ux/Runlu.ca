@@ -37,3 +37,9 @@
 /* Quiet editorial note between Chronicle introduction and story cards. */
 .runlu-editorial-note{max-width:72ch;margin:0 0 1.5rem;padding:1rem 1.25rem;border-left:3px solid #2f6f45;background:#f7f4ed;color:#38453c;line-height:1.7;overflow-wrap:anywhere}
 @media(max-width:600px){.runlu-editorial-note{margin-bottom:1rem;padding:.8rem 1rem;font-size:.94rem}}
+
+/* Chronicle article reading comfort: scoped to story pages, not the index. */
+body:has(.runlu-chronicle-jump) .long-copy,body:has(.runlu-chronicle-jump) .field-article-body{min-width:0;overflow-wrap:break-word}
+body:has(.runlu-chronicle-jump) .long-copy p,body:has(.runlu-chronicle-jump) .field-article-body p{line-height:1.8;max-width:72ch}
+body:has(.runlu-chronicle-jump) .field-hero h1,body:has(.runlu-chronicle-jump) .field-article-head h1{overflow-wrap:break-word;hyphens:auto}
+@media(max-width:600px){body:has(.runlu-chronicle-jump) .field-hero h1,body:has(.runlu-chronicle-jump) .field-article-head h1{font-size:clamp(1.75rem,7vw,2.5rem);line-height:1.18}body:has(.runlu-chronicle-jump) .long-copy p,body:has(.runlu-chronicle-jump) .field-article-body p{line-height:1.85}}
