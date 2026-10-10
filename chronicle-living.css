@@ -1,0 +1,35 @@
+/* RUNLU Living Chronicle: quiet, accessible timeline */
+.runlu-timepath{list-style:none;margin:2rem 0 0;padding:0 0 0 1.5rem;border-left:1px solid rgba(47,111,69,.25)}
+.runlu-timepath li{position:relative;display:grid;grid-template-columns:minmax(105px,160px) minmax(0,1fr);gap:clamp(1rem,4vw,3rem);padding:0 0 2.5rem 1.5rem}
+.runlu-timepath li::before{content:"";position:absolute;left:-1.86rem;top:.4rem;width:.65rem;height:.65rem;border-radius:50%;background:#2f6f45;box-shadow:0 0 0 5px #f7f4ed}
+.runlu-timepath time{font-size:.78rem;letter-spacing:.08em;color:#667068;font-variant-numeric:tabular-nums}
+.runlu-timepath-kind{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#2f6f45}
+.runlu-timepath h3{margin:.35rem 0 .6rem;font-size:clamp(1.15rem,2.4vw,1.6rem);line-height:1.35}
+.runlu-timepath a{display:inline-block;text-decoration:underline;text-underline-offset:4px}
+.runlu-timepath a:focus-visible,#chronicle-tracks a:focus-visible{outline:3px solid #2f6f45;outline-offset:4px;border-radius:3px}
+@media(max-width:600px){.runlu-timepath{padding-left:1rem}.runlu-timepath li{grid-template-columns:1fr;gap:.25rem;padding-left:1rem}.runlu-timepath li::before{left:-1.36rem}}
+@media(prefers-reduced-motion:reduce){.runlu-timepath *,#chronicle-tracks *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Reading wayfinding: familiar anchors, no JS required. */
+.runlu-chronicle-jump{display:flex;flex-wrap:wrap;gap:.65rem;padding:1rem clamp(1rem,5vw,4rem);background:#f7f4ed;border-block:1px solid rgba(23,25,21,.1)}
+.runlu-chronicle-jump a{display:inline-flex;align-items:center;min-height:44px;padding:.55rem 1rem;border:1px solid rgba(23,25,21,.17);border-radius:999px;background:#fff;font-size:.9rem;text-decoration:none}
+.runlu-chronicle-jump a:hover{border-color:#2f6f45;background:#f1f6f0}
+.runlu-chronicle-jump a:focus-visible{outline:3px solid #2f6f45;outline-offset:3px}
+#chronicle-tracks,#chronicle-timeline,#chronicle-index{scroll-margin-top:110px}
+@media(max-width:600px){.runlu-chronicle-jump{gap:.4rem;padding:.75rem 1rem}.runlu-chronicle-jump a{font-size:.82rem;padding:.55rem .8rem}}
+
+/* Mobile width safeguards */
+#chronicle-tracks .field-card,#chronicle-index .field-card{min-width:0;overflow-wrap:anywhere}
+.runlu-timepath li>div{min-width:0;overflow-wrap:anywhere}
+.runlu-chronicle-jump a{max-width:100%;box-sizing:border-box;text-align:center;justify-content:center}
+@media(max-width:420px){.runlu-chronicle-jump{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.runlu-chronicle-jump a{width:100%;overflow-wrap:anywhere}.runlu-chronicle-jump a:last-child:nth-child(odd){grid-column:1/-1}}
+
+/* Consistent readable spacing and accessible timeline links */
+.runlu-timepath li:last-child{padding-bottom:.5rem}
+.runlu-timepath a{min-height:44px;display:inline-flex;align-items:center}
+.runlu-timepath a:focus-visible{outline:3px solid #2f6f45;outline-offset:4px;border-radius:3px}
+@media(max-width:600px){.runlu-timepath{margin-top:1.25rem}.runlu-timepath li{padding-bottom:1.75rem}}
+
+/* Keyboard-only skip link, visually revealed on focus. */
+.runlu-skip-link{position:absolute;left:1rem;top:-6rem;z-index:9999;padding:.75rem 1rem;background:#fff;color:#173c26;border:2px solid #2f6f45;border-radius:.35rem}
+.runlu-skip-link:focus{top:1rem;outline:3px solid #2f6f45;outline-offset:3px}
