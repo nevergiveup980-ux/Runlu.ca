@@ -1,0 +1,11 @@
+/* RUNLU Living Chronicle: quiet, accessible timeline */
+.runlu-timepath{list-style:none;margin:2rem 0 0;padding:0 0 0 1.5rem;border-left:1px solid rgba(47,111,69,.25)}
+.runlu-timepath li{position:relative;display:grid;grid-template-columns:minmax(105px,160px) minmax(0,1fr);gap:clamp(1rem,4vw,3rem);padding:0 0 2.5rem 1.5rem}
+.runlu-timepath li::before{content:"";position:absolute;left:-1.86rem;top:.4rem;width:.65rem;height:.65rem;border-radius:50%;background:#2f6f45;box-shadow:0 0 0 5px #f7f4ed}
+.runlu-timepath time{font-size:.78rem;letter-spacing:.08em;color:#667068;font-variant-numeric:tabular-nums}
+.runlu-timepath-kind{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.12em;color:#2f6f45}
+.runlu-timepath h3{margin:.35rem 0 .6rem;font-size:clamp(1.15rem,2.4vw,1.6rem);line-height:1.35}
+.runlu-timepath a{display:inline-block;text-decoration:underline;text-underline-offset:4px}
+.runlu-timepath a:focus-visible,#chronicle-tracks a:focus-visible{outline:3px solid #2f6f45;outline-offset:4px;border-radius:3px}
+@media(max-width:600px){.runlu-timepath{padding-left:1rem}.runlu-timepath li{grid-template-columns:1fr;gap:.25rem;padding-left:1rem}.runlu-timepath li::before{left:-1.36rem}}
+@media(prefers-reduced-motion:reduce){.runlu-timepath *,#chronicle-tracks *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
