@@ -47,3 +47,10 @@ body:has(.runlu-chronicle-jump) .field-hero h1,body:has(.runlu-chronicle-jump) .
 /* Quiet archival annotations; preserve the existing keyboard skip-link styling. */
 body:has(.runlu-chronicle-jump) .runlu-editorial-note{font-size:.91rem;line-height:1.65;border-left-width:2px;background:#f7f4ed}
 @media(max-width:600px){body:has(.runlu-chronicle-jump) .runlu-editorial-note{font-size:.88rem;line-height:1.65}}
+
+/* Chronicle thematic reading paths: touch-friendly links and resilient mobile layout. */
+#chronicle-reading-paths .field-card{min-width:0;overflow-wrap:anywhere}
+#chronicle-reading-paths .field-card p a{display:inline-block;min-height:44px;padding:10px 0;text-underline-offset:4px}
+#chronicle-reading-paths .field-card a:focus-visible,.runlu-chronicle-jump a:focus-visible{outline:3px solid #2f6f45;outline-offset:3px;border-radius:3px}
+#chronicle-reading-paths .field-card p{max-width:64ch}
+@media(max-width:600px){#chronicle-reading-paths .field-grid{grid-template-columns:minmax(0,1fr)}#chronicle-reading-paths .field-card{width:100%;box-sizing:border-box}}
