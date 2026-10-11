@@ -43,3 +43,7 @@ body:has(.runlu-chronicle-jump) .long-copy,body:has(.runlu-chronicle-jump) .fiel
 body:has(.runlu-chronicle-jump) .long-copy p,body:has(.runlu-chronicle-jump) .field-article-body p{line-height:1.8;max-width:72ch}
 body:has(.runlu-chronicle-jump) .field-hero h1,body:has(.runlu-chronicle-jump) .field-article-head h1{overflow-wrap:break-word;hyphens:auto}
 @media(max-width:600px){body:has(.runlu-chronicle-jump) .field-hero h1,body:has(.runlu-chronicle-jump) .field-article-head h1{font-size:clamp(1.75rem,7vw,2.5rem);line-height:1.18}body:has(.runlu-chronicle-jump) .long-copy p,body:has(.runlu-chronicle-jump) .field-article-body p{line-height:1.85}}
+
+/* Quiet archival annotations; preserve the existing keyboard skip-link styling. */
+body:has(.runlu-chronicle-jump) .runlu-editorial-note{font-size:.91rem;line-height:1.65;border-left-width:2px;background:#f7f4ed}
+@media(max-width:600px){body:has(.runlu-chronicle-jump) .runlu-editorial-note{font-size:.88rem;line-height:1.65}}
