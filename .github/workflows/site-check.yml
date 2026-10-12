@@ -109,8 +109,10 @@ jobs:
               raise SystemExit('GUANSHI Local Vault contract missing: ' + ', '.join(missing))
           if 'guanshi-vault.js?v=20260907-1' not in vault:
               raise SystemExit('Local Vault page is not loading its current client')
-          if 'https://runlu.ca/guanshi-vault.html' not in sitemap:
-              raise SystemExit('Local Vault is missing from sitemap')
+          if 'https://runlu.ca/guanshi-vault.html' in sitemap:
+              raise SystemExit('Protected Local Vault must stay out of the public sitemap')
+          if 'noindex,nofollow' not in vault or 'data-runlu-capability="guanshi.local_vault"' not in vault:
+              raise SystemExit('Protected Local Vault indexing/access boundary is missing')
           if 'auth_secret' not in js or 'ciphertext' not in js or 'shareWithAnalysis' in js:
               raise SystemExit('Local Vault encryption/privacy separation contract changed unexpectedly')
           print('GUANSHI V2.2 encrypted cloud vault + cross-device merge contract verified.')
