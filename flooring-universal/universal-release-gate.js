@@ -192,6 +192,7 @@ function run(){
  t('U3 Contract · legacy job contact match',legacySource.includes('jContact===contact'),'legacy customer records compare contact');
  t('U3 Contract · linked job ID priority',legacySource.includes('if(j.customerId)return j.customerId===c.id'),'explicit customer IDs cannot fall back to names');
  t('U3 Contract · exact customer resolver',!(window.RUNLUUniversalCustomers?.resolve?.toString?.()||'').includes('xs.filter(c=>String(c.name'), 'new jobs cannot reuse a customer solely by name');
+ t('U3 Contract · contactless legacy isolation',legacySource.includes('!contact&&sameName.length===1'),'legacy contactless jobs remain unlinked to contact-bearing profiles');
  const bills=billing?.rows?.()||[];
  bills.forEach(b=>{const paid=(b.payments||[]).reduce((s,p)=>s+Number(p.amount||0),0);t('Invoice ledger · '+(b.invoiceNumber||b.id),Math.abs(paid-Number(b.paidAmount||0))<=.01,'payment ledger equals paid amount')});
  const pos=window.RUNLUUniversalPO?.pos?.()||[],seen=new Set();pos.filter(p=>p.poNumber).forEach(p=>{const unique=!seen.has(p.poNumber);t('PO number · '+p.poNumber,unique,'issued number unique in workspace');seen.add(p.poNumber)});
