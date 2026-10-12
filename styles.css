@@ -321,3 +321,7 @@
 .goods-signature-status>div{display:block}
 .goods-signature-status span{display:block;margin-top:5px;text-align:left}
 }
+
+/* Keep the complete mobile navigation reachable on short screens. */
+.mobile-menu{max-height:calc(100vh - 76px);max-height:calc(100dvh - 76px);overflow-y:auto;overscroll-behavior-y:contain;padding-bottom:max(30px,env(safe-area-inset-bottom));box-sizing:border-box}
+.mobile-menu>a{flex-shrink:0}
