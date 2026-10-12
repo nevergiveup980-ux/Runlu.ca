@@ -26,3 +26,11 @@
 ## Sensitive data
 
 Never commit passwords, API keys, access tokens, private keys, recovery codes, or production secrets.
+
+## Weekly public-site review
+
+- Review open pull requests before starting routine maintenance; do not mix infrastructure-sensitive or product-preview work into a maintenance change.
+- Confirm the current main Site integrity result and investigate failures before changing public content.
+- Check sitemap-scoped internal links and local resources, canonical/social metadata, product-status wording, Forum live-activity truthfulness, Privacy/Support consistency, robots.txt, sitemap files, and the 404 page.
+- Standalone products, diagnostics, experiments, and pilots may own their localization. Do not force the shared public-site language runtime onto them solely to satisfy a broad checker; instead keep the checker scope aligned with the page architecture.
+- Keep routine maintenance on a feature/* or release/* branch. Do not merge, deploy, alter domains/security, delete production data, or add paid services without explicit approval.

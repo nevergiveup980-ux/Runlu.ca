@@ -21,7 +21,9 @@ const excluded = new Set([
   'field-calculator-privacy.html',
   'roll-length.html',
   'runlu-ledger-privacy.html',
-  'warehouse-privacy.html'
+  'warehouse-privacy.html',
+  // Standalone interactive Lab tool: owns an intentional four-language runtime.
+  'lab-offline-license.html'
 ]);
 const pages = [];
 const languageScript = fs.readFileSync(path.join(root, 'runlu-language.js'), 'utf8');
