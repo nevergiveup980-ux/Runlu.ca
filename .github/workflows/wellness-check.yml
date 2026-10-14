@@ -1,5 +1,12 @@
 name: Wellness static checks
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'wellness.html'
+      - 'health.html'
+      - 'assets/wellness-*.svg'
+      - '.github/workflows/wellness-check.yml'
   pull_request:
     paths:
       - 'wellness.html'
@@ -26,6 +33,27 @@ jobs:
           for lang in ('en','zh','fr','es'):
               assert page.count('class="lang lang-'+lang+'"')>=3, 'Missing language content: '+lang
           assert 'images.unsplash.com' not in page, 'External Unsplash dependency found'
+          # Verify editorial chrome is localized as well as the article.
+          class EditorialChecker(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.labels=[]
+                  self.back_links=0
+              def handle_starttag(self,tag,attrs):
+                  d=dict(attrs)
+                  if 'data-en' in d:
+                      for lang in ('en','zh','fr','es'):
+                          assert d.get('data-'+lang, '').strip(), 'Missing '+lang+' label: '+d['data-en']
+                      self.labels.append(d['data-en'])
+                  if tag=='a' and d.get('href')=='health.html':
+                      self.back_links+=1
+                      assert all(d.get('data-'+lang) for lang in ('zh','fr','es')), 'Untranslated HEALTH return link'
+          editor=EditorialChecker()
+          editor.feed(page)
+          assert editor.back_links>=2, 'Missing localized HEALTH navigation'
+          for marker in ('INAUGURAL ESSAY','Editorial note:','Growth from Within'):
+              assert any(marker in label for label in editor.labels), 'Untranslated editorial marker: '+marker
+          assert 'runlu-language.js' in page, 'Shared language script missing'
           for path in sorted(set(re.findall(r'assets/wellness-[a-z]+\.svg',page))):
               assert Path(path).is_file(), 'Missing illustration: '+path
               ET.parse(path)
