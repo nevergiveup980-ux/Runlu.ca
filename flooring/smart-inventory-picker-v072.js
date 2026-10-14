@@ -16,6 +16,8 @@
   let inventory = [];
   let activeRow = null;
   let selectedId = "";
+  let autoApplyOnSelect = false;
+  let onApplied = null;
   let offline = false;
   let lastSync = "";
   let observer = null;
@@ -265,6 +267,12 @@
     const item = inventory.find((x) => x.id === id);
     const el = by("sip72detail");
     if (!el || !item) return;
+    // Paper-edit selection is a one-tap commit to the originating draft row.
+    // Native PO selection retains the detail + explicit confirmation workflow.
+    if (autoApplyOnSelect && item.selectable) {
+      useItem(item);
+      return;
+    }
     const holdDetails = item.hold.details.length
       ? `<div class="sip72holds">${item.hold.details
           .map(
@@ -347,6 +355,8 @@
     badge.className = "sip72picked";
     badge.textContent = `Warehouse selected · ${reference} · ${quantityText(item)}`;
     if (!badge.isConnected) activeRow.appendChild(badge);
+    // The paper bridge must commit the fake-row values before hiding the picker.
+    try { onApplied?.(item); } catch (error) { console.error("PO paper inventory return failed", error); }
     closePicker();
     return true;
   }
@@ -380,8 +390,10 @@
     by("sip72q").addEventListener("input", renderResults);
     by("sip72kind").addEventListener("change", renderResults);
   }
-  function openPicker(row, query) {
+  function openPicker(row, query, options = {}) {
     activeRow = row;
+    autoApplyOnSelect = options.autoApplyOnSelect === true;
+    onApplied = typeof options.onApplied === "function" ? options.onApplied : null;
     selectedId = "";
     ensureModal();
     by("sip72").hidden = false;
@@ -406,6 +418,8 @@
   function closePicker() {
     if (by("sip72")) by("sip72").hidden = true;
     selectedId = "";
+    autoApplyOnSelect = false;
+    onApplied = null;
   }
   function decorateRows() {
     document.querySelectorAll("[data-po-native-row]").forEach((row) => {
@@ -611,7 +625,7 @@
     install,
     refresh,
     open: () => openPicker(document.querySelector("[data-po-native-row]"), ""),
-    openForRow: (row,query) => openPicker(row,query||""),
+    openForRow: (row,query,options) => openPicker(row,query||"",options),
     close: closePicker,
     inventory: () => inventory.slice(),
   };

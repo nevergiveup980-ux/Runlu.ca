@@ -1,0 +1,24 @@
+name: Flooring PO Roll Auto Return V0.3.54
+on:
+  pull_request:
+    paths:
+      - 'flooring/smart-inventory-picker-v072.js'
+      - 'flooring/po-paper-inventory-bridge-v052.js'
+      - 'flooring/deerfoot-po-invoice-paper-edit-v044r7.html'
+      - 'scripts/run-flooring-po-roll-autoreturn-v054.mjs'
+      - '.github/workflows/flooring-po-roll-autoreturn-v054.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'flooring/smart-inventory-picker-v072.js'
+      - 'flooring/po-paper-inventory-bridge-v052.js'
+      - 'flooring/deerfoot-po-invoice-paper-edit-v044r7.html'
+      - 'scripts/run-flooring-po-roll-autoreturn-v054.mjs'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: node scripts/run-flooring-po-roll-autoreturn-v054.mjs
