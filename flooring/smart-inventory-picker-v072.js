@@ -307,6 +307,8 @@
       item.selectable ? "" : "disabled"
     }>Use this inventory record</button>`;
     by("sip72use")?.addEventListener("click", () => useItem(item));
+    const confirm=by("sip72confirm");
+    if(confirm){confirm.disabled=!item.selectable;confirm.textContent=item.selectable?"✓ Use selected roll · Return to PO":"Record unavailable";}
   }
   function setField(row, field, value, overwrite) {
     const el = row?.querySelector(`[data-f="${field}"]`);
@@ -316,7 +318,7 @@
     el.dispatchEvent(new Event("change", { bubbles: true }));
   }
   function useItem(item) {
-    if (!activeRow || !activeRow.isConnected || !item.selectable) return;
+    if (!activeRow || !activeRow.isConnected || !item.selectable) return false;
     setField(activeRow, "style", item.name, true);
     setField(activeRow, "colour", item.colour, true);
     setField(activeRow, "sku", item.sku || item.manufacturerRoll, false);
@@ -346,13 +348,19 @@
     badge.textContent = `Warehouse selected · ${reference} · ${quantityText(item)}`;
     if (!badge.isConnected) activeRow.appendChild(badge);
     closePicker();
+    return true;
+  }
+  function useSelected(){
+    const item=inventory.find(x=>x.id===selectedId);
+    if(!item||!item.selectable)return false;
+    return useItem(item);
   }
   function ensureStyle() {
     if (by("sip72style")) return;
     const style = document.createElement("style");
     style.id = "sip72style";
     style.textContent = `
-.sip72field{position:relative}.sip72launch{position:absolute;right:4px;top:22px;border:0;border-radius:5px;background:#e6f1eb;color:#23543f;font-size:9px;font-weight:900;padding:4px 6px;cursor:pointer}.sip72field input{padding-right:64px!important}.sip72picked{grid-column:1/-1;border-left:4px solid #438061;background:#eef6f1;color:#315746;padding:6px 8px;border-radius:5px;font-size:9px;font-weight:700}.sip72backdrop{position:fixed;inset:0;z-index:100000;background:rgba(12,28,21,.62);display:flex;align-items:center;justify-content:center;padding:8px}.sip72backdrop[hidden]{display:none!important}.sip72modal{width:calc(100vw - 16px);height:calc(100vh - 16px);background:#fff;border-radius:14px;box-shadow:0 24px 70px rgba(0,0,0,.3);display:grid;grid-template-rows:auto auto minmax(0,1fr);overflow:hidden}.sip72top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 16px;background:#173d30;color:#fff}.sip72top h2{margin:0;font-size:22px}.sip72top p{margin:4px 0 0;font-size:12px;opacity:.8}.sip72top button{border:1px solid rgba(255,255,255,.45);background:transparent;color:#fff;border-radius:7px;padding:6px 9px;cursor:pointer}.sip72tools{display:grid;grid-template-columns:minmax(220px,1fr) 170px auto auto;gap:8px;padding:11px 14px;border-bottom:1px solid #dce5e0;background:#f6f9f7}.sip72tools input,.sip72tools select{padding:11px;font-size:13px;border:1px solid #cbd8d1;border-radius:7px;background:#fff}.sip72sync{font-size:9px;font-weight:900;border-radius:999px;padding:6px 8px;background:#e8f3ed;color:#245841;align-self:center}.sip72sync.off{background:#fff0d4;color:#745000}.sip72body{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(390px,1fr);min-height:0}.sip72results{overflow:auto;padding:9px;background:#f4f7f5}.sip72row{width:100%;display:grid;grid-template-columns:minmax(180px,1.4fr) minmax(150px,1fr) minmax(180px,1fr);gap:12px;text-align:left;border:1px solid #d9e3de;border-radius:8px;background:#fff;padding:12px;margin-bottom:7px;cursor:pointer}.sip72row:hover,.sip72row.selected{border-color:#3f765d;box-shadow:0 0 0 1px #3f765d}.sip72row.disabled{opacity:.52}.sip72row b{display:block;color:#203d31;font-size:13px}.sip72row small{display:block;color:#718078;font-size:11px;margin-top:3px}.sip72detail{overflow:auto;padding:20px;border-left:1px solid #dce5e0}.sip72detailHead{display:flex;justify-content:space-between;gap:10px}.sip72detailHead span{font-size:9px;font-weight:900;color:#66756e}.sip72detailHead h3{margin:5px 0;font-size:23px;color:#173d30}.sip72detailHead p{margin:0;color:#67766e;font-size:13px}.sip72availability{height:max-content;border-radius:999px;padding:5px 7px;font-size:8px}.sip72availability.ok{background:#e4f3e9;color:#23653d}.sip72availability.no{background:#fde8e5;color:#8a3327}.sip72detail dl{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:15px 0;border:1px solid #dce5e0;border-radius:8px;overflow:hidden}.sip72detail dl div{padding:8px;border-bottom:1px solid #e5ebe8}.sip72detail dt{font-size:10px;text-transform:uppercase;color:#78857f;font-weight:900}.sip72detail dd{margin:4px 0 0;font-size:13px;color:#263d32;font-weight:700}.sip72note,.sip72holds{font-size:11px;color:#5e6d65;background:#f3f7f5;padding:8px;border-radius:7px}.sip72empty{padding:30px;text-align:center;color:#738078}.sip72connect>b{display:block;color:#173d30;font-size:14px}.sip72connect p{line-height:1.45}.sip72connect>div{display:grid;grid-template-columns:1fr 1fr auto;gap:7px;max-width:680px;margin:12px auto}.sip72connect input,.sip72connect button{padding:9px;border:1px solid #cbd8d1;border-radius:7px}.sip72connect button{background:#245b44;color:#fff;font-weight:800;cursor:pointer}.sip72connect small{display:block;line-height:1.4}.sip72intro{color:#6b7972;font-size:11px;line-height:1.5}.sip72count{font-size:9px;color:#697870;align-self:center}@media(max-width:760px){.sip72backdrop{padding:5px}.sip72modal{height:98vh;width:99vw}.sip72tools{grid-template-columns:1fr 110px}.sip72body{grid-template-columns:1fr}.sip72detail{border-left:0;border-top:1px solid #dce5e0;max-height:44vh}.sip72row{grid-template-columns:1fr 1fr}.sip72row span:last-child{grid-column:1/-1}.sip72detail dl{grid-template-columns:1fr 1fr}.sip72connect>div{grid-template-columns:1fr}.sip72connect{padding:18px 10px}}`;
+.sip72field{position:relative}.sip72launch{position:absolute;right:4px;top:22px;border:0;border-radius:5px;background:#e6f1eb;color:#23543f;font-size:9px;font-weight:900;padding:4px 6px;cursor:pointer}.sip72field input{padding-right:64px!important}.sip72picked{grid-column:1/-1;border-left:4px solid #438061;background:#eef6f1;color:#315746;padding:6px 8px;border-radius:5px;font-size:9px;font-weight:700}.sip72footer{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border-top:1px solid #dce5e0;z-index:3}.sip72footer button{min-height:48px;padding:10px 14px;border-radius:9px;font:700 15px Arial,sans-serif;cursor:pointer}.sip72footer .sip72confirm{flex:1;border:0;background:#173d30;color:#fff}.sip72footer .sip72confirm:disabled{opacity:.5;cursor:default}.sip72footer .sip72cancel{border:1px solid #bccdc4;background:#fff;color:#173d30}.sip72backdrop{position:fixed;inset:0;z-index:100000;background:rgba(12,28,21,.62);display:flex;align-items:center;justify-content:center;padding:8px}.sip72backdrop[hidden]{display:none!important}.sip72modal{width:calc(100vw - 16px);height:calc(100vh - 16px);background:#fff;border-radius:14px;box-shadow:0 24px 70px rgba(0,0,0,.3);display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;overflow:hidden}.sip72top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 16px;background:#173d30;color:#fff}.sip72top h2{margin:0;font-size:22px}.sip72top p{margin:4px 0 0;font-size:12px;opacity:.8}.sip72top button{border:1px solid rgba(255,255,255,.45);background:transparent;color:#fff;border-radius:7px;padding:6px 9px;cursor:pointer}.sip72tools{display:grid;grid-template-columns:minmax(220px,1fr) 170px auto auto;gap:8px;padding:11px 14px;border-bottom:1px solid #dce5e0;background:#f6f9f7}.sip72tools input,.sip72tools select{padding:11px;font-size:13px;border:1px solid #cbd8d1;border-radius:7px;background:#fff}.sip72sync{font-size:9px;font-weight:900;border-radius:999px;padding:6px 8px;background:#e8f3ed;color:#245841;align-self:center}.sip72sync.off{background:#fff0d4;color:#745000}.sip72body{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(390px,1fr);min-height:0}.sip72results{overflow:auto;padding:9px;background:#f4f7f5}.sip72row{width:100%;display:grid;grid-template-columns:minmax(180px,1.4fr) minmax(150px,1fr) minmax(180px,1fr);gap:12px;text-align:left;border:1px solid #d9e3de;border-radius:8px;background:#fff;padding:12px;margin-bottom:7px;cursor:pointer}.sip72row:hover,.sip72row.selected{border-color:#3f765d;box-shadow:0 0 0 1px #3f765d}.sip72row.disabled{opacity:.52}.sip72row b{display:block;color:#203d31;font-size:13px}.sip72row small{display:block;color:#718078;font-size:11px;margin-top:3px}.sip72detail{overflow:auto;padding:20px;border-left:1px solid #dce5e0}.sip72detailHead{display:flex;justify-content:space-between;gap:10px}.sip72detailHead span{font-size:9px;font-weight:900;color:#66756e}.sip72detailHead h3{margin:5px 0;font-size:23px;color:#173d30}.sip72detailHead p{margin:0;color:#67766e;font-size:13px}.sip72availability{height:max-content;border-radius:999px;padding:5px 7px;font-size:8px}.sip72availability.ok{background:#e4f3e9;color:#23653d}.sip72availability.no{background:#fde8e5;color:#8a3327}.sip72detail dl{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:15px 0;border:1px solid #dce5e0;border-radius:8px;overflow:hidden}.sip72detail dl div{padding:8px;border-bottom:1px solid #e5ebe8}.sip72detail dt{font-size:10px;text-transform:uppercase;color:#78857f;font-weight:900}.sip72detail dd{margin:4px 0 0;font-size:13px;color:#263d32;font-weight:700}.sip72note,.sip72holds{font-size:11px;color:#5e6d65;background:#f3f7f5;padding:8px;border-radius:7px}.sip72empty{padding:30px;text-align:center;color:#738078}.sip72connect>b{display:block;color:#173d30;font-size:14px}.sip72connect p{line-height:1.45}.sip72connect>div{display:grid;grid-template-columns:1fr 1fr auto;gap:7px;max-width:680px;margin:12px auto}.sip72connect input,.sip72connect button{padding:9px;border:1px solid #cbd8d1;border-radius:7px}.sip72connect button{background:#245b44;color:#fff;font-weight:800;cursor:pointer}.sip72connect small{display:block;line-height:1.4}.sip72intro{color:#6b7972;font-size:11px;line-height:1.5}.sip72count{font-size:9px;color:#697870;align-self:center}@media(max-width:760px){.sip72footer{padding:8px 10px;padding-bottom:max(8px,env(safe-area-inset-bottom))}.sip72top button{min-height:44px;font-size:14px}.sip72backdrop{padding:5px}.sip72modal{height:98vh;width:99vw}.sip72tools{grid-template-columns:1fr 110px}.sip72body{grid-template-columns:1fr}.sip72detail{border-left:0;border-top:1px solid #dce5e0;max-height:44vh}.sip72row{grid-template-columns:1fr 1fr}.sip72row span:last-child{grid-column:1/-1}.sip72detail dl{grid-template-columns:1fr 1fr}.sip72connect>div{grid-template-columns:1fr}.sip72connect{padding:18px 10px}}`;
     document.head.appendChild(style);
   }
   function ensureModal() {
@@ -361,9 +369,11 @@
     wrap.id = "sip72";
     wrap.className = "sip72backdrop";
     wrap.hidden = true;
-    wrap.innerHTML = `<div class="sip72modal" role="dialog" aria-modal="true" aria-labelledby="sip72title"><div class="sip72top"><div><h2 id="sip72title">Smart Inventory Picker</h2><p>Live Warehouse OS inventory · read-only selection</p></div><button type="button" id="sip72close">Close</button></div><div class="sip72tools"><input id="sip72q" autocomplete="off" placeholder="Search product, colour, roll, dye lot, SKU"><select id="sip72kind"><option value="all">All inventory</option><option value="carpet">Carpet rolls</option><option value="stock">Hard surface / stock</option></select><span id="sip72count" class="sip72count"></span><span id="sip72sync" class="sip72sync">CONNECTING</span></div><div class="sip72body"><div id="sip72results" class="sip72results"></div><div id="sip72detail" class="sip72detail"><p class="sip72intro">Select an inventory record to inspect its roll, dye lot, location, physical quantity and any hold data currently recorded by Warehouse OS.</p></div></div></div>`;
+    wrap.innerHTML = `<div class="sip72modal" role="dialog" aria-modal="true" aria-labelledby="sip72title"><div class="sip72top"><div><h2 id="sip72title">Smart Inventory Picker</h2><p>Live Warehouse OS inventory · read-only selection</p></div><button type="button" id="sip72close">Close</button></div><div class="sip72tools"><input id="sip72q" autocomplete="off" placeholder="Search product, colour, roll, dye lot, SKU"><select id="sip72kind"><option value="all">All inventory</option><option value="carpet">Carpet rolls</option><option value="stock">Hard surface / stock</option></select><span id="sip72count" class="sip72count"></span><span id="sip72sync" class="sip72sync">CONNECTING</span></div><div class="sip72body"><div id="sip72results" class="sip72results"></div><div id="sip72detail" class="sip72detail"><p class="sip72intro">Select an inventory record to inspect its roll, dye lot, location, physical quantity and any hold data currently recorded by Warehouse OS.</p></div></div><div class="sip72footer"><button type="button" class="sip72cancel" id="sip72return">← Return to PO</button><button type="button" class="sip72confirm" id="sip72confirm" disabled>Choose a roll above</button></div></div>`;
     document.body.appendChild(wrap);
     by("sip72close").addEventListener("click", closePicker);
+    by("sip72return").addEventListener("click", closePicker);
+    by("sip72confirm").addEventListener("click", useSelected);
     wrap.addEventListener("click", (e) => {
       if (e.target === wrap) closePicker();
     });
@@ -375,11 +385,13 @@
     selectedId = "";
     ensureModal();
     by("sip72").hidden = false;
+    const confirm=by("sip72confirm");
+    if(confirm){confirm.disabled=true;confirm.textContent="Choose a roll above";}
     by("sip72q").value = str(query);
     by("sip72detail").innerHTML =
       '<p class="sip72intro">Select an inventory record to see complete Warehouse OS details. Selecting here does not change inventory or create a Hold.</p>';
     renderResults();
-    setTimeout(() => by("sip72q")?.focus(), 0);
+    if(!/iPhone|iPad|iPod/i.test(navigator.userAgent||""))setTimeout(() => by("sip72q")?.focus(), 0);
     if (!inventory.length) refresh(false);
   }
   function rowQuery(row) {
@@ -599,6 +611,8 @@
     install,
     refresh,
     open: () => openPicker(document.querySelector("[data-po-native-row]"), ""),
+    openForRow: (row,query) => openPicker(row,query||""),
+    close: closePicker,
     inventory: () => inventory.slice(),
   };
   setTimeout(install, 500);

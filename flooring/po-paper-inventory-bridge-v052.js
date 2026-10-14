@@ -143,8 +143,8 @@
       if (node !== button) node.remove();
     });
     if (value) cell.insertBefore(cell.ownerDocument.createTextNode(value), button || null);
-    cell.dispatchEvent(new Event("input", { bubbles: true }));
-    cell.dispatchEvent(new Event("change", { bubbles: true }));
+    cell.dispatchEvent(new cell.ownerDocument.defaultView.Event("input", { bubbles: true }));
+    cell.dispatchEvent(new cell.ownerDocument.defaultView.Event("change", { bubbles: true }));
   }
 
   function openForRow(tr) {
@@ -170,7 +170,7 @@
 
     const row = ensureFakeRow();
     row.setAttribute("data-po-native-row", "1");
-    api.open?.();
+    if (api.openForRow) api.openForRow(row, query); else api.open?.();
     row.removeAttribute("data-po-native-row");
 
     setTimeout(() => {
@@ -178,7 +178,7 @@
       if (!q) return;
       q.value = query;
       q.dispatchEvent(new Event("input", { bubbles: true }));
-      q.focus();
+      if (!/iPhone|iPad|iPod/i.test(navigator.userAgent || "")) q.focus();
     }, 0);
   }
 
