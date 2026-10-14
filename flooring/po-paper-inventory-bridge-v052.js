@@ -170,7 +170,7 @@
 
     const row = ensureFakeRow();
     row.setAttribute("data-po-native-row", "1");
-    api.open?.();
+    if (api.openForRow) api.openForRow(row, query); else api.open?.();
     row.removeAttribute("data-po-native-row");
 
     setTimeout(() => {
@@ -178,7 +178,7 @@
       if (!q) return;
       q.value = query;
       q.dispatchEvent(new Event("input", { bubbles: true }));
-      q.focus();
+      if (!/iPhone|iPad|iPod/i.test(navigator.userAgent || "")) q.focus();
     }, 0);
   }
 
