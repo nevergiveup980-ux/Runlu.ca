@@ -1,0 +1,41 @@
+name: Wellness static checks
+on:
+  pull_request:
+    paths:
+      - 'wellness.html'
+      - 'health.html'
+      - 'assets/wellness-*.svg'
+      - '.github/workflows/wellness-check.yml'
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate wellness page and local illustrations
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import xml.etree.ElementTree as ET
+          from html.parser import HTMLParser
+          page=Path('wellness.html').read_text(encoding='utf-8')
+          health=Path('health.html').read_text(encoding='utf-8')
+          assert 'href="wellness.html"' in health, 'HEALTH navigation is missing Wellness link'
+          assert 'id="language"' in page and 'id="essay"' in page
+          for lang in ('en','zh','fr','es'):
+              assert page.count('class="lang lang-'+lang+'"')>=3, 'Missing language content: '+lang
+          assert 'images.unsplash.com' not in page, 'External Unsplash dependency found'
+          for path in sorted(set(re.findall(r'assets/wellness-[a-z]+\.svg',page))):
+              assert Path(path).is_file(), 'Missing illustration: '+path
+              ET.parse(path)
+              print('Validated',path)
+          class ImageChecker(HTMLParser):
+              def handle_starttag(self,tag,attrs):
+                  if tag=='img':
+                      d=dict(attrs)
+                      assert d.get('alt'), 'Image without descriptive alt text'
+                      assert Path(d['src']).is_file(), 'Image not found: '+d['src']
+          ImageChecker().feed(page)
+          print('Wellness static checks passed')
+          PY
