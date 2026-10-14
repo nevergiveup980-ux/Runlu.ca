@@ -147,6 +147,28 @@
     cell.dispatchEvent(new cell.ownerDocument.defaultView.Event("change", { bubbles: true }));
   }
 
+  function returnToPaperRow() {
+    const tr = activePaperRow;
+    if (!tr || !tr.isConnected) return false;
+    try {
+      // Each nested paper iframe has its own scroll context.
+      tr.scrollIntoView({ block: "center", inline: "nearest", behavior: "instant" });
+      let frame = tr.ownerDocument.defaultView?.frameElement;
+      for (let depth = 0; frame && depth < 8; depth++) {
+        frame.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "instant" });
+        frame = frame.ownerDocument.defaultView?.frameElement;
+      }
+      if (!/iPhone|iPad|iPod/i.test(navigator.userAgent || "")) {
+        const styleCell = tr.children[2];
+        if (styleCell?.isContentEditable) styleCell.focus({ preventScroll: true });
+      }
+      return true;
+    } catch (error) {
+      console.warn("PO paper return focus:", error?.message || error);
+      return false;
+    }
+  }
+
   function openForRow(tr) {
     if (!tr || !tr.isConnected) return;
     const api = window[PICKER];
@@ -170,7 +192,15 @@
 
     const row = ensureFakeRow();
     row.setAttribute("data-po-native-row", "1");
-    if (api.openForRow) api.openForRow(row, query); else api.open?.();
+    if (api.openForRow) api.openForRow(row, query, {
+      autoApplyOnSelect: true,
+      onApplied: () => {
+        clearTimeout(applyTimer);
+        applySelection();
+        returnToPaperRow();
+        return true;
+      },
+    }); else api.open?.();
     row.removeAttribute("data-po-native-row");
 
     setTimeout(() => {
