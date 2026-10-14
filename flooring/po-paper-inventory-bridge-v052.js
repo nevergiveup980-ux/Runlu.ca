@@ -143,8 +143,8 @@
       if (node !== button) node.remove();
     });
     if (value) cell.insertBefore(cell.ownerDocument.createTextNode(value), button || null);
-    cell.dispatchEvent(new Event("input", { bubbles: true }));
-    cell.dispatchEvent(new Event("change", { bubbles: true }));
+    cell.dispatchEvent(new cell.ownerDocument.defaultView.Event("input", { bubbles: true }));
+    cell.dispatchEvent(new cell.ownerDocument.defaultView.Event("change", { bubbles: true }));
   }
 
   function openForRow(tr) {
