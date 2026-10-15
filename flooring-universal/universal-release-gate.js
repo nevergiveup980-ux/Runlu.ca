@@ -188,7 +188,7 @@ function run(){
  t('U3 Contract · changed customer details invalidate selection',(window.RUNLUUniversalSales?.render?.toString?.()||'').includes('selectedCustomer.name===customer&&selectedCustomer.contact===contact'),'edited details cannot silently retain selected customer ID');
  t('U3 Contract · New Job button is rendered',newJob.includes('data-customer-newjob')&&newJob.includes('New Job'),'Customer 360 action must be visible and clickable');
  t('U3 Contract · selected customer resets after save',(window.RUNLUUniversalSales?.render?.toString?.()||'').includes('selectedCustomer=null;render()'),'selection must not leak into the next job');
- const legacySource=window.RUNLUUniversalCustomers?.jobsFor?.toString?.()||'';
+ const legacySource=window.RUNLUUniversalCustomers?.jobsForRecords?.toString?.()||'';
  t('U3 Contract · legacy job contact match',legacySource.includes('jContact===contact'),'legacy customer records compare contact');
  t('U3 Contract · linked job ID priority',legacySource.includes('if(j.customerId)return j.customerId===c.id'),'explicit customer IDs cannot fall back to names');
  t('U3 Contract · exact customer resolver',!(window.RUNLUUniversalCustomers?.resolve?.toString?.()||'').includes('xs.filter(c=>String(c.name'), 'new jobs cannot reuse a customer solely by name');
