@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>U3 Customer Fixture Lab</title>
+<h1>RUNLU U3 · Customer Identity Preview</h1><p>Isolated test preview only. Not connected to production jobs, customers, or inventory.</p><pre id="results">Loading...</pre>
+<script>
+const store={runlu_flooring_universal_u0_workspace:{company:{organizationId:'test-org'}},runlu_flooring_universal_u3_customers:[]};
+window.RUNLUUniversalData={read:(k,d)=>store[k]??d,write:(k,v)=>store[k]=v};
+window.RUNLUUniversalSales={jobs:()=>[]};
+</script>
+<script>
+/* RUNLU Flooring OS Universal · U3 Customer Directory */
+(function(){'use strict';
+const STORE='runlu_flooring_universal_u3_customers',WS='runlu_flooring_universal_u0_workspace';
+const data=()=>window.RUNLUUniversalData,workspace=()=>data().read(WS,null),org=()=>workspace()?.company?.organizationId||'',rows=()=>data().read(STORE,[]).filter(x=>x.organizationId===org());
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])),uid=()=>'cust-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
+function save(xs){const other=data().read(STORE,[]).filter(x=>x.organizationId!==org());data().write(STORE,[...other,...xs])}
+function upsertFromJob(job){if(!job?.customerName||!org())return null;const xs=rows(),contact=String(job.customerContact||'').trim(),name=String(job.customerName).trim(),key=(name+'|'+contact).toLowerCase();let c=(job.customerId&&xs.find(x=>x.id===job.customerId))||xs.find(x=>x.matchKey===key);if(!c){c={id:uid(),organizationId:org(),name,contact,matchKey:key,createdAt:new Date().toISOString(),source:'Sales Job'};xs.push(c)}c.updatedAt=new Date().toISOString();c.lastJobId=job.id;c.lastJobNumber=job.jobNumber||'';save(xs);return c}
+function resolve(name,contact=''){const n=String(name||'').trim().toLowerCase(),ct=String(contact||'').trim().toLowerCase(),xs=rows();return xs.find(c=>c.matchKey===(n+'|'+ct))||null}
+function jobsForRecords(c,all,masters){const name=String(c.name||'').trim().toLowerCase(),contact=String(c.contact||'').trim().toLowerCase(),sameName=masters.filter(x=>String(x.name||'').trim().toLowerCase()===name);return all.filter(j=>{if(j.customerId)return j.customerId===c.id;const jName=String(j.customerName||'').trim().toLowerCase(),jContact=String(j.customerContact||'').trim().toLowerCase();if(jName!==name)return false;if(jContact)return jContact===contact&&sameName.filter(x=>String(x.contact||'').trim().toLowerCase()===jContact).length===1;return !contact&&sameName.length===1})}
+function jobsFor(c){return jobsForRecords(c,window.RUNLUUniversalSales?.jobs?.()||[],rows())}
+function profile(c){const js=jobsFor(c).sort((a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||''))),open=js.filter(j=>!['Completed','Archived'].includes(j.status)).length,paid=js.filter(j=>j.financialStatus==='Paid').length,ids=new Set(js.map(j=>j.id)),ci=(window.RUNLUUniversalBilling?.rows?.()||[]).filter(i=>ids.has(i.jobId)&&i.status!=='Draft'),sales=ci.reduce((n,i)=>n+(Number.isFinite(Number(i.total))?Number(i.total):0),0),balance=ci.reduce((n,i)=>n+(Number.isFinite(Number(i.balance))?Number(i.balance):0),0),latest=js[0]?.createdAt?new Date(js[0].createdAt).toLocaleDateString():'—';return '<div class="uCustomerProfile"><div><b>'+esc(c.name)+'</b><span>'+esc(c.contact||'No contact')+'</span><small>'+js.length+' jobs · '+open+' open · '+paid+' paid/closed · Invoiced '+sales.toFixed(2)+' · Outstanding '+balance.toFixed(2)+' · Latest '+latest+'</small></div><div class="uCustomerActions"><button data-customer-newjob="'+esc(c.id)+'">New Job</button><button data-customer-profile="'+esc(c.id)+'">View Jobs</button></div></div><div id="profile-'+esc(c.id)+'" hidden class="uCustomerJobs">'+(js.length?js.map(j=>'<div><b>#'+esc(j.jobNumber||'—')+'</b><span>'+esc(j.status||'Draft')+' · Quote '+esc(j.quoteStatus||'Working')+' · Order '+esc(j.orderStatus||'Not Confirmed')+'</span></div>').join(''):'<span class="muted">No job history yet.</span>')+'</div>'}
+function render(){const host=document.getElementById('universalCustomers');if(!host)return;if(!workspace()){host.innerHTML='<p>Create a company workspace first.</p>';return}const xs=rows().sort((a,b)=>a.name.localeCompare(b.name));host.innerHTML='<div class="card"><h2>Customers</h2><p class="muted">Company customer directory · alphabetical · shared across sales desks.</p><div class="grid"><label>Customer name<input id="uCustName" placeholder="Customer name"></label><label>Phone / Email<input id="uCustContact" placeholder="Contact"></label></div><p><button class="primary" id="uCustAdd">Add Customer</button></p></div><div class="card"><h3>Directory · '+xs.length+'</h3>'+(xs.length?xs.map(profile).join(''):'<p class="muted">No customers yet.</p>')+'</div>';document.getElementById('uCustAdd')?.addEventListener('click',()=>{const name=document.getElementById('uCustName').value.trim(),contact=document.getElementById('uCustContact').value.trim();if(!name)return alert('Enter a customer name.');const key=(name+'|'+contact).toLowerCase(),a=rows();if(a.some(x=>x.matchKey===key))return alert('This customer already exists.');a.push({id:uid(),organizationId:org(),name,contact,matchKey:key,createdAt:new Date().toISOString(),source:'Customer Directory'});save(a);render()});host.querySelectorAll('[data-customer-newjob]').forEach(b=>b.addEventListener('click',()=>{const c=rows().find(x=>x.id===b.dataset.customerNewjob);if(!c)return;const section=document.getElementById('universalSales');if(section)section.hidden=false;window.RUNLUUniversalSales?.prepareCustomer?.(c);const name=document.getElementById('uSalesCustomer');section?.scrollIntoView({behavior:'smooth',block:'start'});name?.focus()}));host.querySelectorAll('[data-customer-profile]').forEach(b=>b.addEventListener('click',()=>{const d=document.getElementById('profile-'+b.dataset.customerProfile);if(!d)return;d.hidden=!d.hidden;b.textContent=d.hidden?'View Jobs':'Hide Jobs'}))}
+window.RUNLUUniversalCustomers=Object.freeze({rows,resolve,upsertFromJob,jobsFor,jobsForRecords,render});
+})();
+</script>
+<script>
+const api=window.RUNLUUniversalCustomers,checks=[];
+const check=(name,ok)=>checks.push((ok?'PASS':'FAIL')+' '+name);
+try{
+const a={id:'a',organizationId:'test-org',name:'Alex',contact:'111',matchKey:'alex|111'};
+const b={id:'b',organizationId:'test-org',name:'Alex',contact:'222',matchKey:'alex|222'};
+store.runlu_flooring_universal_u3_customers=[a,b,{...a,id:'foreign',organizationId:'other-org'}];
+check('tenant isolation',api.rows().length===2);
+check('exact identity',api.resolve('Alex','111')?.id==='a');
+check('no name-only identity',api.resolve('Alex','')===null);
+const jobs=[{id:'one',customerName:'Alex',customerContact:'111'},{id:'two',customerName:'Alex',customerContact:'222'},{id:'unknown',customerName:'Alex',customerContact:''},{id:'linked',customerId:'b',customerName:'Alex',customerContact:'111'}];
+check('same-name separation',api.jobsForRecords(a,jobs,[a,b]).map(x=>x.id).join(',')==='one');
+check('linked ID wins',api.jobsForRecords(b,jobs,[a,b]).map(x=>x.id).join(',')==='two,linked');
+check('unknown stays unlinked',api.jobsForRecords(a,jobs,[a,b]).every(x=>x.id!=='unknown'));
+const c={id:'c',name:'Legacy',contact:''};
+check('unique contactless legacy',api.jobsForRecords(c,[{customerName:'Legacy',customerContact:''}],[c]).length===1);
+check('ambiguous legacy rejected',api.jobsForRecords(c,[{customerName:'Legacy',customerContact:''}],[c,{...c,id:'d'}]).length===0);
+check('known contact rejects unknown',api.jobsForRecords(a,[{customerName:'Alex',customerContact:''}],[a]).length===0);
+}catch(e){check('no runtime exception: '+e.message,false)}
+const failed=checks.filter(x=>x.startsWith('FAIL')).length;
+document.getElementById('results').textContent=checks.join('\n')+'\n'+checks.length+' checks · '+failed+' failed'+(failed?' · HOLD':' · FIXTURE PASS');
+</script></html>
