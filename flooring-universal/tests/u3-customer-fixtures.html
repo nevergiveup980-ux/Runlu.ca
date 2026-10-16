@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>U3 Customer Fixture Lab</title>
+<h1>RUNLU U3 · Customer Fixture Lab</h1><pre id="results">Loading...</pre>
+<script>
+const store={runlu_flooring_universal_u0_workspace:{company:{organizationId:'test-org'}},runlu_flooring_universal_u3_customers:[]};
+window.RUNLUUniversalData={read:(k,d)=>store[k]??d,write:(k,v)=>store[k]=v};
+window.RUNLUUniversalSales={jobs:()=>[]};
+</script>
+<script src="../universal-customers.js"></script>
+<script>
+const api=window.RUNLUUniversalCustomers,checks=[];
+const check=(name,ok)=>checks.push((ok?'PASS':'FAIL')+' '+name);
+try{
+const a={id:'a',organizationId:'test-org',name:'Alex',contact:'111',matchKey:'alex|111'};
+const b={id:'b',organizationId:'test-org',name:'Alex',contact:'222',matchKey:'alex|222'};
+store.runlu_flooring_universal_u3_customers=[a,b,{...a,id:'foreign',organizationId:'other-org'}];
+check('tenant isolation',api.rows().length===2);
+check('exact identity',api.resolve('Alex','111')?.id==='a');
+check('no name-only identity',api.resolve('Alex','')===null);
+const jobs=[{id:'one',customerName:'Alex',customerContact:'111'},{id:'two',customerName:'Alex',customerContact:'222'},{id:'unknown',customerName:'Alex',customerContact:''},{id:'linked',customerId:'b',customerName:'Alex',customerContact:'111'}];
+check('same-name separation',api.jobsForRecords(a,jobs,[a,b]).map(x=>x.id).join(',')==='one');
+check('linked ID wins',api.jobsForRecords(b,jobs,[a,b]).map(x=>x.id).join(',')==='two,linked');
+check('unknown stays unlinked',api.jobsForRecords(a,jobs,[a,b]).every(x=>x.id!=='unknown'));
+const c={id:'c',name:'Legacy',contact:''};
+check('unique contactless legacy',api.jobsForRecords(c,[{customerName:'Legacy',customerContact:''}],[c]).length===1);
+check('ambiguous legacy rejected',api.jobsForRecords(c,[{customerName:'Legacy',customerContact:''}],[c,{...c,id:'d'}]).length===0);
+check('known contact rejects unknown',api.jobsForRecords(a,[{customerName:'Alex',customerContact:''}],[a]).length===0);
+}catch(e){check('no runtime exception: '+e.message,false)}
+const failed=checks.filter(x=>x.startsWith('FAIL')).length;
+document.getElementById('results').textContent=checks.join('\n')+'\n'+checks.length+' checks · '+failed+' failed'+(failed?' · HOLD':' · FIXTURE PASS');
+</script></html>
