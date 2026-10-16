@@ -26,7 +26,7 @@ export class PgJobOperations {
   return tx(this.pool,async db=>{
    const a=await db.query(`SELECT reserved_cents,status FROM stage_attempts
     WHERE id=$1 AND job_id=$2 FOR UPDATE`,[attemptId,jobId]);
-   if(a.rows.length!==1||a.rows[0].status!=="RESERVED")throw Error("Attempt not settleable");
+   if(a.rows.length!==1||!["RESERVED","SUBMITTED"].includes(a.rows[0].status))throw Error("Attempt not settleable");
    const reserved=Number(a.rows[0].reserved_cents);
    if(!Number.isSafeInteger(reserved)||actualCents>reserved)throw Error("Reconciliation required");
    const j=await db.query(`UPDATE stage_jobs SET reserved_cents=reserved_cents-$2,
