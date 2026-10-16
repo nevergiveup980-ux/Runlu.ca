@@ -36,3 +36,17 @@ test("failed event insert rolls back",async()=>{
  await assert.rejects(new PgJobOperations(p).settle("job","attempt",300));
  assert.ok(p.calls.some(x=>x.sql==="ROLLBACK"));
 });
+
+test("submitted provider attempt may be settled after billing is known",async()=>{
+ const p=pool({attemptRows:[{status:"SUBMITTED",reserved_cents:"500"}]});
+ const result=await new PgJobOperations(p).settle("job","attempt",300);
+ assert.deepEqual(result,{chargedCents:300,releasedCents:200});
+ assert.ok(p.calls.some(x=>x.sql==="COMMIT"));
+});
+test("submitting or reconciliation-required attempts cannot settle blindly",async()=>{
+ for(const status of ["SUBMITTING","RECONCILIATION_REQUIRED","SETTLED"]){
+  const p=pool({attemptRows:[{status,reserved_cents:"500"}]});
+  await assert.rejects(new PgJobOperations(p).settle("job","attempt",300),/not settleable/);
+  assert.ok(p.calls.some(x=>x.sql==="ROLLBACK"));
+ }
+});
