@@ -29,6 +29,11 @@ test('real PostgreSQL: idempotency, claim, budget, settle and recovery', {skip:!
   const first=await submit.submit(input),second=await submit.submit(input);
   assert.equal(first.created,true);assert.deepEqual(second,{id:first.id,created:false});
   await assert.rejects(submit.submit({...input,brief:{...input.brief,durationSeconds:40}}),/different request/);
+  // Concurrent duplicate submissions must return exactly one durable job.
+  const concurrentInput={...input,idempotencyKey:randomUUID()};
+  const simultaneous=await Promise.all(Array.from({length:5},()=>submit.submit(concurrentInput)));
+  assert.equal(simultaneous.filter(x=>x.created).length,1);
+  assert.equal(new Set(simultaneous.map(x=>x.id)).size,1);
   const jobs=new PgJobOperations(pool);
   const [a,b]=await Promise.all([jobs.claim('worker-a'),jobs.claim('worker-b')]);
   assert.equal([a,b].filter(x=>x?.id===first.id).length,1);
