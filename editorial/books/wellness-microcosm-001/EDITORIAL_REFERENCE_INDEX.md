@@ -26,3 +26,8 @@
 - 每项临床疗效主张应明确干预、比较、结局、风险和证据等级。
 - 所有说明性故事须与真实病例或研究结果分开。
 - 对待核验的第9–10项不得标记为“已完成终审”。
+
+## E. 社会联系与身体活动
+11. World Health Organization. WHO guidelines on physical activity and sedentary behaviour. 2020. https://www.who.int/publications-detail-redirect/9789240015128 。对应第九章；国际公共卫生指南，需注意人群差异。
+12. CDC. Health Effects of Social Isolation and Loneliness. 2024. https://www.cdc.gov/social-connectedness/risk-factors/ 。对应第六章；孤独与社会隔离不等同，关联不代表个人因果。
+13. CDC. Promoting Social Connection. 2024. https://www.cdc.gov/social-connectedness/promoting/index.html 。对应第六章；公共空间、交通及社区服务。
