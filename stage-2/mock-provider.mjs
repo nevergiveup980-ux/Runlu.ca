@@ -4,6 +4,6 @@ export class MockVideoProvider {
  async generate(brief,{id,attempt,budgetRemainingCad}) {
   if(this.failFirst && attempt===1) return {ok:false,billedCad:this.billedCad};
   if(this.billedCad>budgetRemainingCad) return {ok:false,billedCad:this.billedCad};
-  return {ok:true,billedCad:this.billedCad,artifact:{kind:"mock-video",verified:true,jobId:id,description:"Simulated output; not a playable MP4",durationSeconds:brief.durationSeconds}};
+  return {ok:true,billedCad:this.billedCad,artifact:{kind:"mock-video",verified:false,simulated:true,jobId:id,description:"Simulated output; not a playable MP4",durationSeconds:brief.durationSeconds}};
  }
 }
