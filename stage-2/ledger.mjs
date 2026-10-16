@@ -11,7 +11,7 @@ export class BudgetLedger {
     if(typeof attemptId !== 'string' || !attemptId || r.reservations.has(attemptId)) throw Error('Duplicate attempt');
     if(!Number.isSafeInteger(cents) || cents <= 0) throw Error('Invalid reservation');
     const outstanding = [...r.reservations.values()].reduce((n, v) => n + v, 0);
-    if(r.spentCents + outstanding + cents > r.budgetCents) throw Error('Budget exceeded');
+    if(cents > r.budgetCents - r.spentCents - outstanding) throw Error('Budget exceeded');
     r.reservations.set(attemptId, cents);
     r.events.push({ type: 'RESERVE', attemptId, cents });
   }
