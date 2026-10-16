@@ -15,6 +15,14 @@ test('real PostgreSQL: idempotency, claim, budget, settle and recovery', {skip:!
  try{
   await pool.query(await readFile(new URL('./persistence-schema.sql',import.meta.url),'utf8'));
   await pool.query(await readFile(new URL('./002_attempts.sql',import.meta.url),'utf8'));
+  // Database must reject budget totals that exceed their cap, including at BIGINT boundaries.
+  const boundaryJob=randomUUID(),boundaryOwner=randomUUID();
+  await pool.query(`INSERT INTO stage_jobs(id,owner_id,idempotency_key,request_json,status,budget_cents,spent_cents,reserved_cents)
+   VALUES($1,$2,$3,'{}'::jsonb,'QUEUED',9223372036854775807,9223372036854775806,1)`,
+   [boundaryJob,boundaryOwner,randomUUID()]);
+  await assert.rejects(pool.query('UPDATE stage_jobs SET reserved_cents=2 WHERE id=$1',[boundaryJob]),/check constraint|violates/i);
+  const boundary=(await pool.query('SELECT reserved_cents FROM stage_jobs WHERE id=$1',[boundaryJob])).rows[0];
+  assert.equal(Number(boundary.reserved_cents),1);
   const ownerId=randomUUID(),key=randomUUID();
   const input={ownerId,idempotencyKey:key,brief:{durationSeconds:30,quality:'standard',format:'cinematic'},budgetCents:1000};
   const submit=new PgJobSubmitter(pool);
