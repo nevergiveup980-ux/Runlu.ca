@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS stage_jobs (
  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
  UNIQUE(owner_id,idempotency_key),
- CHECK(spent_cents + reserved_cents <= budget_cents)
+ CHECK(spent_cents <= budget_cents AND reserved_cents <= budget_cents - spent_cents)
 );
 CREATE INDEX IF NOT EXISTS stage_jobs_queue_idx ON stage_jobs(status,created_at) WHERE status='QUEUED';
 CREATE TABLE IF NOT EXISTS stage_job_events (
