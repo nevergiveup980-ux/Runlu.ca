@@ -38,8 +38,11 @@ test('real PostgreSQL: idempotency, claim, budget, settle and recovery', {skip:!
   assert.equal(new Set(simultaneous.map(x=>x.id)).size,1);
   const jobs=new PgJobOperations(pool);
   const [a,b]=await Promise.all([jobs.claim('worker-a'),jobs.claim('worker-b')]);
-  assert.equal([a,b].filter(x=>x?.id===first.id).length,1);
-  const worker=a?.id===first.id?'worker-a':'worker-b';
+  assert.ok(a?.id && b?.id,'two queued jobs should be claimed');
+  assert.notEqual(a.id,b.id,'concurrent workers must never claim the same job');
+  assert.deepEqual(new Set([a.id,b.id]),new Set([first.id,simultaneous[0].id]));
+  assert.equal(await jobs.claim('worker-c'),null,'no queued jobs remain');
+  const worker=a.id===first.id?'worker-a':'worker-b';
   const attemptId=randomUUID();
   await new PgBudgetRepository(pool).reserve(first.id,worker,attemptId,'mock',600);
   await assert.rejects(new PgBudgetRepository(pool).reserve(first.id,worker,randomUUID(),'mock',500),/Budget or lease/);
