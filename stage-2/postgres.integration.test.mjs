@@ -46,6 +46,10 @@ test('real PostgreSQL: idempotency, claim, budget, settle and recovery', {skip:!
   assert.deepEqual(await jobs.settle(first.id,attemptId,450),{chargedCents:450,releasedCents:150});
   const row=(await pool.query('SELECT spent_cents,reserved_cents FROM stage_jobs WHERE id=$1',[first.id])).rows[0];
   assert.equal(Number(row.spent_cents),450);assert.equal(Number(row.reserved_cents),0);
+  const audit=(await pool.query('SELECT event_type FROM stage_job_events WHERE job_id=$1 ORDER BY id',[first.id])).rows.map(x=>x.event_type);
+  assert.deepEqual(audit,['BUDGET_RESERVED','BUDGET_SETTLED']);
+  const attempts=(await pool.query('SELECT attempt_count FROM stage_jobs WHERE id=$1',[first.id])).rows[0];
+  assert.equal(attempts.attempt_count,1);
   await pool.query("UPDATE stage_jobs SET lease_until=NOW()-INTERVAL '1 minute' WHERE id=$1",[first.id]);
   assert.deepEqual(await new PgRecovery(pool).quarantineExpired(),[first.id]);
   const state=(await pool.query('SELECT status FROM stage_jobs WHERE id=$1',[first.id])).rows[0];
