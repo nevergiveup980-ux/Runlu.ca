@@ -12,13 +12,13 @@
 5. American College of Physicians. *ACP Recommends Cognitive Behavioral Therapy as Initial Treatment for Chronic Insomnia.* 2016-05-03. https://www.acponline.org/acp-newsroom/acp-recommends-cognitive-behavioral-therapy-as-initial-treatment-forchronic-insomnia 。第4项指南的机构说明。
 
 ## C. 环境与公共卫生
-6. Health Canada. *Wildfire smoke with extreme heat.* 2024. https://www.canada.ca/en/health-canada/services/publications/healthy-living/combine-wildfire-smoke-heat.html 。对应第三章：复合烟雾与热风险、室内降温优先级。**证据性质：政府公共卫生指导，地域主要为加拿大。**
+6. Health Canada. *Wildfire smoke with extreme heat.* 2024. https://www.canada.ca/en/health-canada/services/publications/healthy-living/combine-wildfire-smoke-heat.html 。对应第三章：复合烟雾与热风险、室内降温优先级。**2026-10-17 已核对加拿大卫生部原始页面（2024-06）：烟雾与极端高温并发时，应优先避免过热，不能机械地一律关窗；指导地域主要为加拿大。**
 7. Health Canada. *Wildfire smoke, air quality and your health: Health effects of wildfire smoke exposure.* https://www.canada.ca/en/services/health/healthy-living/environment/air-quality/wildfire-smoke/health-effects-exposure.html 。对应第三章：细颗粒物、暴露风险与易感人群。
 8. Health Canada. *It's much too hot! Protect yourself from extreme heat.* 2026. https://www.canada.ca/en/health-canada/services/publications/healthy-living/too-hot-protect-yourself-extreme-heat.html 。对应第三章：热风险及防护。**2026年版本；出版前复查有效性。**
 
 ## D. 传统健康产品与职业风险（待复核链接版本）
 9. NCCIH. *Are You Considering a Complementary Health Approach?* https://www.nccih.nih.gov/health/are-you-considering-a-complementary-health-approach 。对应第七章：天然产品不等于无风险、咨询医护人员的必要性。**2026-10-17 已核对NCCIH官方页面可访问，内容支持安全性、药物相互作用与不可延误正规治疗的论述；网页更新日期及最终书目格式仍待核。**
-10. NIOSH. *Ergonomics and Musculoskeletal Disorders.* https://www.cdc.gov/niosh/ergonomics/ 。对应第六章：人体工学与肌肉骨骼风险。**正式引用前补具体子页与发表日期。**
+10. NIOSH. *Ergonomics and Musculoskeletal Disorders.* https://www.cdc.gov/niosh/ergonomics/ 。对应第六章：人体工学与肌肉骨骼风险。**2026-10-17 已核对NIOSH具体子页（2024-02-21）及工效学干预资料；正式书目宜引用具体子页而非仅栏目首页。**
 
 ## 证据使用规则
 - 古籍用于说明思想史和历史语言，不直接充当临床疗效证明。
@@ -37,3 +37,9 @@
 - WHO出版记录：https://www.who.int/publications/b/55518 （核对2020年出版及人群范围）。
 - NCCIH官方页面：https://www.nccih.nih.gov/health/are-you-considering-a-complementary-health-approach （核对补充疗法安全、相互作用、避免替代或延误医疗）。
 - 尚未核对完整书目、所有来源及2026年后续更新；不能据此宣布文献终审完成。
+
+## 2026-10-17 补充复核：烟雾、热与劳动
+- Health Canada, *Wildfire smoke with extreme heat*，2024年6月：https://www.canada.ca/en/health-canada/services/publications/healthy-living/combine-wildfire-smoke-heat.html 。核对要点：野火烟雾与极端高温同时出现时，**避免过热优先**；无空调且室外温度低于室内时，开窗降温可能必要。不可将“关窗防烟”写成无条件规则。
+- NIOSH, *About Ergonomics and Work-Related Musculoskeletal Disorders*，2024年2月21日：https://www.cdc.gov/niosh/ergonomics/about/ 。核对要点：重复动作、用力搬运、姿势、振动和工作组织等因素影响肌肉骨骼风险；风险控制不等于要求个人自行锻炼。
+- NIOSH, *Elements of Ergonomics Programs*，2024年2月26日：https://www.cdc.gov/niosh/ergonomics/ergo-programs/index.html 。核对要点：工作场所需识别风险、设计干预、评估效果并持续改进。
+- 《素问·上古天真论》版本与校勘仍待落实纸本底本，未在本次核验中宣布完成。
