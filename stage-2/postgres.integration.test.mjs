@@ -23,6 +23,8 @@ test('real PostgreSQL: idempotency, claim, budget, settle and recovery', {skip:!
   await assert.rejects(pool.query('UPDATE stage_jobs SET reserved_cents=2 WHERE id=$1',[boundaryJob]),/check constraint|violates/i);
   const boundary=(await pool.query('SELECT reserved_cents FROM stage_jobs WHERE id=$1',[boundaryJob])).rows[0];
   assert.equal(Number(boundary.reserved_cents),1);
+  // Keep the numeric boundary fixture out of the claimable queue.
+  await pool.query('UPDATE stage_jobs SET status=$2 WHERE id=$1',[boundaryJob,'FAILED']);
   const ownerId=randomUUID(),key=randomUUID();
   const input={ownerId,idempotencyKey:key,brief:{durationSeconds:30,quality:'standard',format:'cinematic'},budgetCents:1000};
   const submit=new PgJobSubmitter(pool);
