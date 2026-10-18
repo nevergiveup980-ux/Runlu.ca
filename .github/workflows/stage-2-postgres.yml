@@ -40,4 +40,14 @@ jobs:
       - name: Install test-only PostgreSQL driver
         run: npm install --no-save --no-package-lock --ignore-scripts pg@8
       - name: Run PostgreSQL integration test
-        run: node --test stage-2/postgres.integration.test.mjs
+        run: |
+          set -o pipefail
+          node --test --test-reporter=tap stage-2/postgres.integration.test.mjs | tee stage-2-postgres-results.tap
+      - name: Upload PostgreSQL test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage-2-postgres-test-results
+          path: stage-2-postgres-results.tap
+          if-no-files-found: warn
+          retention-days: 14
