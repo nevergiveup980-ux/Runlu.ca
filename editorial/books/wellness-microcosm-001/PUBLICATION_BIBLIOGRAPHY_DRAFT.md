@@ -39,10 +39,14 @@
 
 [15] National Center for Complementary and Integrative Health. *“Detoxes” and “Cleanses”: What You Need To Know*. National Institutes of Health; updated March 2025. https://www.nccih.nih.gov/health/detoxes-cleanses 。**对应第十一章。** 官方消费者资料区分商业排毒承诺与确有临床指征的特定中毒处理；提醒灌肠、极端节食及补充产品的风险。不能由此推论所有禁食研究已被证伪，也不能把医学螯合治疗与商业“排毒”混为一谈。
 
+[16] National Center for Complementary and Integrative Health. *Know the Science: How Medications and Supplements Can Interact*. National Institutes of Health. https://www.nccih.nih.gov/health/know-science/how-medications-and-supplements-can-interact/introduction 。**对应第十一章。** 2026-10-18核对官方互动教育模块：补充剂可能增加或降低药物作用；应向医护人员提供完整用药及补充剂清单。该来源为**教育模块**，不是系统综述；未核实统一出版年份，不虚填日期。
+
+[17] National Center for Complementary and Integrative Health. *Probiotics: Usefulness and Safety*. National Institutes of Health. https://www.nccih.nih.gov/health/probiotics-usefulness-and-safety 。**对应第四章。** 2026-10-18核对官方资料：不同菌株与产品不应视为同一种干预；安全性证据有限，重症、免疫功能受损者和早产儿风险更高。此为综述性科普，不应写成证明某一特定产品有效的临床试验。
+
 ## 待统一核验并入正式编号
 
 - Health Canada其他烟雾/高温资料（第三章）；NIOSH其余工效学资料（第六章）。
-- NCCIH益生菌与药物相互作用专题资料（第四、十一章）。
+- NCCIH补充剂与药物相互作用的特定案例及益生菌产品疗效原始研究（第四、十一章），如正文有定量主张再补。
 - Cochrane关于缺失研究结果的其他章节（第八章）；CDC其他专题页按需补充。
 - 《黄帝内经素问》卷一《上古天真论》：需确定正式纸本影印或校勘底本、卷页、版本信息；当前仅完成电子转录对读（第一章）。
 
