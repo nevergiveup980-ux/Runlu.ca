@@ -16,16 +16,16 @@
 7. Health Canada. *Wildfire smoke, air quality and your health: Health effects of wildfire smoke exposure.* https://www.canada.ca/en/services/health/healthy-living/environment/air-quality/wildfire-smoke/health-effects-exposure.html 。对应第三章：细颗粒物、暴露风险与易感人群。
 8. Health Canada. *It's much too hot! Protect yourself from extreme heat.* 2026. https://www.canada.ca/en/health-canada/services/publications/healthy-living/too-hot-protect-yourself-extreme-heat.html 。对应第三章：热风险及防护。**2026年版本；出版前复查有效性。**
 
-## D. 传统健康产品与职业风险（待复核链接版本）
+## D. 传统健康产品与职业风险（已完成初步核对，书目待定稿）
 9. NCCIH. *Are You Considering a Complementary Health Approach?* https://www.nccih.nih.gov/health/are-you-considering-a-complementary-health-approach 。对应第七章：天然产品不等于无风险、咨询医护人员的必要性。**2026-10-17 已核对NCCIH官方页面可访问，内容支持安全性、药物相互作用与不可延误正规治疗的论述；网页更新日期及最终书目格式仍待核。**
-10. NIOSH. *Ergonomics and Musculoskeletal Disorders.* https://www.cdc.gov/niosh/ergonomics/ 。对应第六章：人体工学与肌肉骨骼风险。**2026-10-17 已核对NIOSH具体子页（2024-02-21）及工效学干预资料；正式书目宜引用具体子页而非仅栏目首页。**
+10. National Institute for Occupational Safety and Health (NIOSH). *About Ergonomics and Work-Related Musculoskeletal Disorders.* 2024-02-21. https://www.cdc.gov/niosh/ergonomics/about/ 。对应第六章：人体工学与肌肉骨骼风险。另参 *Elements of Ergonomics Programs* (2024-02-26): https://www.cdc.gov/niosh/ergonomics/ergo-programs/index.html 。**已核对官方页面；正式书目仍须统一访问日期与引文格式。**
 
 ## 证据使用规则
 - 古籍用于说明思想史和历史语言，不直接充当临床疗效证明。
 - 指南必须写明适用人群、年代和地区；科普材料不等于系统综述。
 - 每项临床疗效主张应明确干预、比较、结局、风险和证据等级。
 - 所有说明性故事须与真实病例或研究结果分开。
-- 对待核验的第9–10项不得标记为“已完成终审”。
+- 第9–10项已作官方网页初步核对，但仍须核定网页版本、书目格式与文内引用位置；不得标记为“出版终审完成”。
 
 ## E. 社会联系与身体活动
 11. World Health Organization. WHO guidelines on physical activity and sedentary behaviour. 2020. https://www.who.int/publications-detail-redirect/9789240015128 。对应第九章；2026-10-17 已核对WHO官方出版页确认为2020年指南，覆盖儿童、青少年、成人、老年人等人群；具体活动剂量应按人群和身体条件准确引用。
@@ -43,3 +43,8 @@
 - NIOSH, *About Ergonomics and Work-Related Musculoskeletal Disorders*，2024年2月21日：https://www.cdc.gov/niosh/ergonomics/about/ 。核对要点：重复动作、用力搬运、姿势、振动和工作组织等因素影响肌肉骨骼风险；风险控制不等于要求个人自行锻炼。
 - NIOSH, *Elements of Ergonomics Programs*，2024年2月26日：https://www.cdc.gov/niosh/ergonomics/ergo-programs/index.html 。核对要点：工作场所需识别风险、设计干预、评估效果并持续改进。
 - 《素问·上古天真论》版本与校勘仍待落实纸本底本，未在本次核验中宣布完成。
+
+## 2026-10-18 书目一致性清理
+- 将NIOSH栏目首页替换为已核对的具体文章页，补列工效学项目指南页，避免正式书目仅引用目录入口。
+- 将第9–10项的“待复核”描述与后续已核对记录统一：**来源初步核对**与**书目终审完成**是两个不同状态。
+- 保留《素问》纸本校勘底本、具体页码与版本差异核对为未解决事项；不得将电子转录直接当作纸本校勘成果。
