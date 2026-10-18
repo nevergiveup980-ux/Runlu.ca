@@ -58,3 +58,8 @@
 - NCCIH, *Are You Considering a Complementary Health Approach?* https://www.nccih.nih.gov/health/are-you-considering-a-complementary-health-approach 。核对范围：天然不必然安全；草药和补充剂可能与药物相互作用；不应以未经证实的疗法替代或推迟必要医疗；应向医护人员披露使用情况。对应第七章第六节。
 - NCCIH, *Safe Use of Complementary Health Products and Practices.* https://www.nccih.nih.gov/health/safety 。补充佐证：具体产品需逐项考虑安全性，风险包括相互作用及污染；此为机构健康教育资料，并非对所有产品的临床疗效验证。
 - 以上为网页内容与现有书稿的定向核对。正式出版仍需统一访问日期、文内注释及版本信息。
+
+## 2026-10-18 第25轮补记：职业风险控制层级
+- NIOSH, *Step 4: Implement Your Ergonomic Program*. 2024-03-05. https://www.cdc.gov/niosh/ergonomics/ergo-programs/implement.html 。明确优先消除、替代与工程控制；机械辅助装置属于工程控制，轮岗、增加休息及培训属于管理控制，后者不能替代更高层级的风险控制。对应第六章职业劳动段落。
+- NIOSH, *Step 5: Evaluate Your Ergonomic Program*. 2024-03-06. https://www.cdc.gov/niosh/ergonomics/ergo-programs/evaluate.html 。指出措施实施后须跟踪风险因素是否降低、是否产生新的风险，并依据反馈调整。此项可作为后续文字终校的核验依据，暂不表示书稿已引用。
+- 资料类型：美国职业安全机构的实践指导；不等于对每个工作场所的个体化风险评估。出版前仍须统一引文格式和访问日期。
