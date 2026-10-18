@@ -35,11 +35,15 @@
 
 [13] Centers for Disease Control and Prevention. *Promoting Social Connection*. May 15, 2024. https://www.cdc.gov/social-connectedness/promoting/index.html 。**对应第六章。** 2026-10-18核对官方页面：交通、公共空间、社区组织与制度环境影响社会联系的可达性。与[12]分别承担健康风险和公共环境两种证据角色。
 
+[14] Higgins JPT, Savović J, Page MJ, Elbers RG, Sterne JAC. Chapter 8: Assessing risk of bias in a randomized trial [chapter last updated October 2019]. In: Higgins JPT, Thomas J, Chandler J, Cumpston M, Li T, Page MJ, Welch VA, eds. *Cochrane Handbook for Systematic Reviews of Interventions*. Version 6.5. Cochrane; 2024. https://www.cochrane.org/authors/handbooks-and-manuals/handbook/current/chapter-08 。**对应第八章。** 说明RoB 2五类偏倚风险：随机化、偏离预定干预、结局缺失、结局测量、选择性报告结果；工具评价的是**特定试验结果**而非给整项研究一个笼统评分。章更新年份与手册版本年份分别保留。
+
+[15] National Center for Complementary and Integrative Health. *“Detoxes” and “Cleanses”: What You Need To Know*. National Institutes of Health; updated March 2025. https://www.nccih.nih.gov/health/detoxes-cleanses 。**对应第十一章。** 官方消费者资料区分商业排毒承诺与确有临床指征的特定中毒处理；提醒灌肠、极端节食及补充产品的风险。不能由此推论所有禁食研究已被证伪，也不能把医学螯合治疗与商业“排毒”混为一谈。
+
 ## 待统一核验并入正式编号
 
 - Health Canada其他烟雾/高温资料（第三章）；NIOSH其余工效学资料（第六章）。
-- NCCIH益生菌、排毒和药物相互作用专题资料（第四、十一章）。
-- Cochrane研究偏倚和选择性报告章节（第八章）；CDC其他专题页按需补充。
+- NCCIH益生菌与药物相互作用专题资料（第四、十一章）。
+- Cochrane关于缺失研究结果的其他章节（第八章）；CDC其他专题页按需补充。
 - 《黄帝内经素问》卷一《上古天真论》：需确定正式纸本影印或校勘底本、卷页、版本信息；当前仅完成电子转录对读（第一章）。
 
 ## 发布前阻断项
