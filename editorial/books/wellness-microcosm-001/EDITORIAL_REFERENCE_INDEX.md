@@ -73,3 +73,8 @@
 ## 2026-10-18 第29轮：实验室参考范围与临床解释
 - U.S. National Library of Medicine, MedlinePlus, *How to Understand Your Lab Results*. Last updated 2025-09-04. https://medlineplus.gov/lab-tests/how-to-understand-your-lab-results/ 。对应第四章第七节：实验室之间的方法、单位及参考范围可能不同；超出参考范围不必然意味着疾病，处于范围内也不能保证没有疾病；应结合症状、病史和专业评估。
 - 核验状态：已复核官方页面正文与更新日期。注意此来源支持**实验室检测结果**的解释，不应外推为所有可穿戴设备的性能证据；后者仍须逐项核对具体设备用途和监管状态。
+
+## 2026-10-18 第37轮：补充剂与药物相互作用来源定位
+- NCCIH. *How Medications and Supplements Can Interact — Talk With Your Health Care Providers.* https://www.nccih.nih.gov/health/know-science/how-medications-and-supplements-can-interact/talk-with-your-health-care-providers 。对应第十一章第四节：医护人员需要获知处方药、非处方药、补充剂及其剂量、服用频率，以判断可能的相互作用。
+- NCCIH. *How Medications and Supplements Can Interact — Some Medication-Supplement Interactions Can Be Serious.* https://www.nccih.nih.gov/health/know-science/how-medications-and-supplements-can-interact/some-medication-supplement-interactions-can-be-serious 。补充核验：治疗窗狭窄的药物及围手术期尤须注意；本书不提供具体停药方案。
+- 本轮仅完成来源与章节对应、信息边界核对；正式书目仍待统一出版机构、发布日期、访问日期和全书编号。
