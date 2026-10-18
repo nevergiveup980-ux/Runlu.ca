@@ -62,6 +62,11 @@ test('real PostgreSQL: idempotency, claim, budget, settle and recovery', {skip:!
   assert.deepEqual(await jobs.settle(first.id,attemptId,450),{chargedCents:450,releasedCents:150});
   const row=(await pool.query('SELECT spent_cents,reserved_cents FROM stage_jobs WHERE id=$1',[first.id])).rows[0];
   assert.equal(Number(row.spent_cents),450);assert.equal(Number(row.reserved_cents),0);
+  // A duplicate settlement must fail without charging twice.
+  await assert.rejects(jobs.settle(first.id,attemptId,450),/not settleable/);
+  const afterDuplicate=(await pool.query('SELECT spent_cents,reserved_cents FROM stage_jobs WHERE id=$1',[first.id])).rows[0];
+  assert.equal(Number(afterDuplicate.spent_cents),450);
+  assert.equal(Number(afterDuplicate.reserved_cents),0);
   const audit=(await pool.query('SELECT event_type FROM stage_job_events WHERE job_id=$1 ORDER BY id',[first.id])).rows.map(x=>x.event_type);
   assert.deepEqual(audit,['BUDGET_RESERVED','BUDGET_SETTLED']);
   const attempts=(await pool.query('SELECT attempt_count FROM stage_jobs WHERE id=$1',[first.id])).rows[0];
