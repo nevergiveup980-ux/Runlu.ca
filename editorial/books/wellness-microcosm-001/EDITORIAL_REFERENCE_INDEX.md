@@ -48,3 +48,8 @@
 - 将NIOSH栏目首页替换为已核对的具体文章页，补列工效学项目指南页，避免正式书目仅引用目录入口。
 - 将第9–10项的“待复核”描述与后续已核对记录统一：**来源初步核对**与**书目终审完成**是两个不同状态。
 - 保留《素问》纸本校勘底本、具体页码与版本差异核对为未解决事项；不得将电子转录直接当作纸本校勘成果。
+
+## 2026-10-18 第二十一轮：WHO 与 ACP 原文交叉核对
+- WHO (2020), *WHO guidelines on physical activity and sedentary behaviour*, 成人18–64岁建议：每周150–300分钟中等强度有氧活动，或75–150分钟高强度有氧活动，或等效组合；主要肌群强化每周至少2天。原始指南章节：https://www.ncbi.nlm.nih.gov/books/NBK566046/ ；WHO出版记录：https://www.who.int/publications/b/55518 。第九章母稿已据此明确年龄范围、强度、组合与肌肉强化频次。
+- Qaseem A, Kansagara D, Forciea MA, Cooke M, Denberg TD. *Management of Chronic Insomnia Disorder in Adults: A Clinical Practice Guideline From the American College of Physicians.* Ann Intern Med. 2016;165(2):125–133. doi:10.7326/M15-2175。期刊原文：https://doi.org/10.7326/M15-2175 ；PubMed：https://pubmed.ncbi.nlm.nih.gov/27136449/ 。第五章现有“成人慢性失眠以CBT-I作为初始治疗”的归属及适用范围与原文Recommendation 1相符。
+- 本轮核对的是上述两项**原始来源**及母稿相关句子；不代表2026年所有后续指南均已查新，也不代表其余条目已完成出版校勘。
