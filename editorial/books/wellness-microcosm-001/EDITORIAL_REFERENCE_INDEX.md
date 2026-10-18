@@ -63,3 +63,9 @@
 - NIOSH, *Step 4: Implement Your Ergonomic Program*. 2024-03-05. https://www.cdc.gov/niosh/ergonomics/ergo-programs/implement.html 。明确优先消除、替代与工程控制；机械辅助装置属于工程控制，轮岗、增加休息及培训属于管理控制，后者不能替代更高层级的风险控制。对应第六章职业劳动段落。
 - NIOSH, *Step 5: Evaluate Your Ergonomic Program*. 2024-03-06. https://www.cdc.gov/niosh/ergonomics/ergo-programs/evaluate.html 。指出措施实施后须跟踪风险因素是否降低、是否产生新的风险，并依据反馈调整。此项可作为后续文字终校的核验依据，暂不表示书稿已引用。
 - 资料类型：美国职业安全机构的实践指导；不等于对每个工作场所的个体化风险评估。出版前仍须统一引文格式和访问日期。
+
+## 2026-10-18 第27轮：第四章稳态、反馈与微生物论述
+- Libretti S, Puckett Y. *Physiology, Homeostasis.* StatPearls. Last updated 2023-05-01. https://www.ncbi.nlm.nih.gov/books/NBK559138/ 。对应第四章稳态、反馈与体温调节的概念；资料说明稳态并非所有生理指标完全不变。
+- *Homeostasis: The Underappreciated and Far Too Often Ignored Central Organizing Principle of Physiology.* 2020. https://pmc.ncbi.nlm.nih.gov/articles/PMC7076167/ 。对应第四章负反馈与正反馈的机制差异；不能将反馈的“正”“负”理解为健康价值判断。
+- NCCIH. *Probiotics: Usefulness and Safety.* https://www.nccih.nih.gov/health/probiotics-usefulness-and-safety 。对应第四章肠道微生物段落：菌株、产品、适用人群和临床结局需分别评价；微生物群关联并不自动证明补充特定菌株能够治疗疾病。
+- 以上为本轮新建的来源映射；具体作者、期刊卷期、更新日期与网页访问日期仍须在出版书目中统一核定。
