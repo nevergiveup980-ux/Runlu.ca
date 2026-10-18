@@ -27,11 +27,19 @@
 
 [9] National Center for Complementary and Integrative Health. *Are You Considering a Complementary Health Approach?* National Institutes of Health; last updated September 2016. https://www.nccih.nih.gov/health/are-you-considering-a-complementary-health-approach 。**对应第七章、第十一章。** 官方消费者科普资料；适用于安全、相互作用与就医沟通，不作为特定疗法疗效的直接试验证据。
 
+[10] National Institute of General Medical Sciences. *Circadian Rhythms*. National Institutes of Health. https://www.nigms.nih.gov/education/fact-sheets/Pages/circadian-rhythms 。**对应第二章。** 2026-10-18核对官方页面：SCN协调生物钟、接受眼部光信号并参与褪黑素节律；网页未确认明确更新年月，故不虚填出版年份。科普资料，非临床治疗指南。
+
+[11] National Library of Medicine. *How to Understand Your Lab Results*. MedlinePlus Medical Test. Last updated September 4, 2025. https://medlineplus.gov/lab-tests/how-to-understand-your-lab-results/ 。**对应第四章。** 2026-10-18核对官方页面：参考范围因实验室和检测方法而异；结果在范围外不自动等于疾病，范围内也不保证健康；实验室结果须结合病史和症状。
+
+[12] Centers for Disease Control and Prevention. *Health Effects of Social Isolation and Loneliness*. May 15, 2024. https://www.cdc.gov/social-connectedness/risk-factors/index.html 。**对应第六章。** 2026-10-18核对官方页面：社会隔离（客观联系与支持不足）与孤独（主观感受）不同；所列健康风险主要是群体层面的风险关联，不得写成个体必然结果。
+
+[13] Centers for Disease Control and Prevention. *Promoting Social Connection*. May 15, 2024. https://www.cdc.gov/social-connectedness/promoting/index.html 。**对应第六章。** 2026-10-18核对官方页面：交通、公共空间、社区组织与制度环境影响社会联系的可达性。与[12]分别承担健康风险和公共环境两种证据角色。
+
 ## 待统一核验并入正式编号
 
-- NIGMS昼夜节律科普（第二章）；Health Canada其他烟雾/高温资料（第三章）；NIOSH其余工效学资料（第六章）。
-- NCCIH益生菌、排毒和药物相互作用专题资料（第四、十一章）；MedlinePlus化验结果解释（第四章）。
-- WHO、CDC社会联系与孤独资料（第六章）；Cochrane研究偏倚和选择性报告章节（第八章）。
+- Health Canada其他烟雾/高温资料（第三章）；NIOSH其余工效学资料（第六章）。
+- NCCIH益生菌、排毒和药物相互作用专题资料（第四、十一章）。
+- Cochrane研究偏倚和选择性报告章节（第八章）；CDC其他专题页按需补充。
 - 《黄帝内经素问》卷一《上古天真论》：需确定正式纸本影印或校勘底本、卷页、版本信息；当前仅完成电子转录对读（第一章）。
 
 ## 发布前阻断项
