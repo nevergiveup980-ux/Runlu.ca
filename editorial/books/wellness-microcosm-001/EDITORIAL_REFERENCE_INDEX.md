@@ -53,3 +53,8 @@
 - WHO (2020), *WHO guidelines on physical activity and sedentary behaviour*, 成人18–64岁建议：每周150–300分钟中等强度有氧活动，或75–150分钟高强度有氧活动，或等效组合；主要肌群强化每周至少2天。原始指南章节：https://www.ncbi.nlm.nih.gov/books/NBK566046/ ；WHO出版记录：https://www.who.int/publications/b/55518 。第九章母稿已据此明确年龄范围、强度、组合与肌肉强化频次。
 - Qaseem A, Kansagara D, Forciea MA, Cooke M, Denberg TD. *Management of Chronic Insomnia Disorder in Adults: A Clinical Practice Guideline From the American College of Physicians.* Ann Intern Med. 2016;165(2):125–133. doi:10.7326/M15-2175。期刊原文：https://doi.org/10.7326/M15-2175 ；PubMed：https://pubmed.ncbi.nlm.nih.gov/27136449/ 。第五章现有“成人慢性失眠以CBT-I作为初始治疗”的归属及适用范围与原文Recommendation 1相符。
 - 本轮核对的是上述两项**原始来源**及母稿相关句子；不代表2026年所有后续指南均已查新，也不代表其余条目已完成出版校勘。
+
+## 2026-10-18 第22轮补录：补充疗法安全资料
+- NCCIH, *Are You Considering a Complementary Health Approach?* https://www.nccih.nih.gov/health/are-you-considering-a-complementary-health-approach 。核对范围：天然不必然安全；草药和补充剂可能与药物相互作用；不应以未经证实的疗法替代或推迟必要医疗；应向医护人员披露使用情况。对应第七章第六节。
+- NCCIH, *Safe Use of Complementary Health Products and Practices.* https://www.nccih.nih.gov/health/safety 。补充佐证：具体产品需逐项考虑安全性，风险包括相互作用及污染；此为机构健康教育资料，并非对所有产品的临床疗效验证。
+- 以上为网页内容与现有书稿的定向核对。正式出版仍需统一访问日期、文内注释及版本信息。
