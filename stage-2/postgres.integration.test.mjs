@@ -82,6 +82,10 @@ test('real PostgreSQL: idempotency, claim, budget, settle and recovery', {skip:!
   assert.equal(Number(secondFinal.reserved_cents),0);
   const settledCount=(await pool.query("SELECT COUNT(*)::integer AS n FROM stage_job_events WHERE job_id=$1 AND event_type='BUDGET_SETTLED'",[secondJob])).rows[0];
   assert.equal(settledCount.n,1);
+  // An attempt belonging to another job cannot be settled under this job.
+  await assert.rejects(jobs.settle(first.id,winningAttempt,400),/Attempt not settleable/);
+  const isolated=(await pool.query('SELECT spent_cents FROM stage_jobs WHERE id=$1',[first.id])).rows[0];
+  assert.equal(Number(isolated.spent_cents),450);
   // A duplicate settlement must fail without charging twice.
   await assert.rejects(jobs.settle(first.id,attemptId,450),/not settleable/);
   const afterDuplicate=(await pool.query('SELECT spent_cents,reserved_cents FROM stage_jobs WHERE id=$1',[first.id])).rows[0];
