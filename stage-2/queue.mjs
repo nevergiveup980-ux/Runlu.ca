@@ -38,8 +38,8 @@ export class JobQueue {
    if(!Number.isFinite(billed)||billed<0){this.#emit(job,"FAILED","Invalid provider billing");return this.snapshot(id);}
    job.spentCad=Number((job.spentCad+billed).toFixed(2));
    if(job.spentCad>this.maxSpendCad){this.#emit(job,"BUDGET_EXCEEDED");return this.snapshot(id);}
-   if(response?.ok && response?.artifact?.kind==="mock-video" && response.artifact.verified===true){
-    job.result=response.artifact; this.#emit(job,"COMPLETED");return this.snapshot(id);
+   if(response?.ok && response?.artifact?.kind==="mock-video" && response.artifact.simulated===true && response.artifact.verified===false){
+    job.result=response.artifact; this.#emit(job,"SIMULATED_COMPLETE");return this.snapshot(id);
    }
    this.#emit(job,"RETRYABLE_ERROR","Provider did not return a verified artifact");
   }
