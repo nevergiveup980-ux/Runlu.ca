@@ -69,3 +69,7 @@
 - *Homeostasis: The Underappreciated and Far Too Often Ignored Central Organizing Principle of Physiology.* 2020. https://pmc.ncbi.nlm.nih.gov/articles/PMC7076167/ 。对应第四章负反馈与正反馈的机制差异；不能将反馈的“正”“负”理解为健康价值判断。
 - NCCIH. *Probiotics: Usefulness and Safety.* https://www.nccih.nih.gov/health/probiotics-usefulness-and-safety 。对应第四章肠道微生物段落：菌株、产品、适用人群和临床结局需分别评价；微生物群关联并不自动证明补充特定菌株能够治疗疾病。
 - 以上为本轮新建的来源映射；具体作者、期刊卷期、更新日期与网页访问日期仍须在出版书目中统一核定。
+
+## 2026-10-18 第29轮：实验室参考范围与临床解释
+- U.S. National Library of Medicine, MedlinePlus, *How to Understand Your Lab Results*. Last updated 2025-09-04. https://medlineplus.gov/lab-tests/how-to-understand-your-lab-results/ 。对应第四章第七节：实验室之间的方法、单位及参考范围可能不同；超出参考范围不必然意味着疾病，处于范围内也不能保证没有疾病；应结合症状、病史和专业评估。
+- 核验状态：已复核官方页面正文与更新日期。注意此来源支持**实验室检测结果**的解释，不应外推为所有可穿戴设备的性能证据；后者仍须逐项核对具体设备用途和监管状态。
