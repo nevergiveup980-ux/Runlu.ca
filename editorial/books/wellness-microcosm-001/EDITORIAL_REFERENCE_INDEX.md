@@ -78,3 +78,9 @@
 - NCCIH. *How Medications and Supplements Can Interact — Talk With Your Health Care Providers.* https://www.nccih.nih.gov/health/know-science/how-medications-and-supplements-can-interact/talk-with-your-health-care-providers 。对应第十一章第四节：医护人员需要获知处方药、非处方药、补充剂及其剂量、服用频率，以判断可能的相互作用。
 - NCCIH. *How Medications and Supplements Can Interact — Some Medication-Supplement Interactions Can Be Serious.* https://www.nccih.nih.gov/health/know-science/how-medications-and-supplements-can-interact/some-medication-supplement-interactions-can-be-serious 。补充核验：治疗窗狭窄的药物及围手术期尤须注意；本书不提供具体停药方案。
 - 本轮仅完成来源与章节对应、信息边界核对；正式书目仍待统一出版机构、发布日期、访问日期和全书编号。
+
+## 2026-10-18 第38轮：古籍引文版本对照与出版校勘边界
+- 核对《黄帝内经素问》卷一《上古天真论》电子转录（《四库全书》本）：https://zh.wikisource.org/wiki/黃帝內經素問_(四庫全書本)/卷01 。其正文连写「法于阴阳和于术数食饮有节起居有常不妄作劳」，无现代标点；本书采用简体字和现代标点的读者版引文，须明确其编辑性处理。
+- 交叉核对中国哲学书电子化计划《黄帝内经·素问·上古天真论》：https://ctext.org/huangdi-neijing/shang-gu-tian-zhen-lun/zhs 。其现代断句写作「法于阴阳，和于术数，食饮有节，起居有常，不妄作劳」，与母稿引用的词序一致。
+- 版本差异：王冰次注、林亿等校正的《四库全书》本正文可见「和于术数」；不能将不同电子转录视为同一纸本版本的独立校勘证据。纸本影印底本、卷页定位、异文与标点说明仍须核定。
+- 编辑处理：保持第一章现有引文和面向读者的出处说明，不把古代关于寿命的叙述写成现代临床证明。
