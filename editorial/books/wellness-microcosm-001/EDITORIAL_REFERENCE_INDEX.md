@@ -101,3 +101,9 @@
 - 2016 ACP 成人慢性失眠指南保留为历史证据背景，不再作为唯一依据。AASM 2021 年成人慢性失眠行为与心理治疗指南亦对多组分 CBT-I 给出强推荐：https://pmc.ncbi.nlm.nih.gov/articles/PMC7853203/ 。
 - 适用性：VA/DoD指南面向其医疗体系，书稿采用一般性、非个体化表述；不能将其等同于加拿大本地最新临床标准。出版前应再查新加拿大或其他适用地区指南。
 - 正文已更新，提交 `6947e87`。
+
+## 2026-10-18 第42轮：加拿大成人慢性失眠证据补充
+- Ontario Health. *Insomnia Disorder: Care for Adults* [Quality Standard]. January 2025. https://ontariohealth.ca/clinical/quality-standards/qs-details?cf=insomnia-disorder 。质量陈述4明确将CBT-I作为成人失眠障碍的一线治疗，并提出及时、按个人需要提供服务；注意该标准面向安大略省，不可直接称为全国性临床指南。
+- Morin CM, et al. *Delphi consensus recommendations for the management of chronic insomnia in Canada.* Sleep Med. 2024;124:598–605. doi:10.1016/j.sleep.2024.09.038. PubMed PMID:39481275. https://pubmed.ncbi.nlm.nih.gov/39481275/ 。加拿大16位跨专业专家形成德尔菲共识，支持CBT-I一线治疗，强调仅提供睡眠卫生教育不等于CBT-I；该文是**专家共识声明**，不是由全国主管部门发布的正式国家指南。
+- Choosing Wisely Canada. *Avoiding Unnecessary Sedative Use*. March 21, 2021. https://choosingwiselycanada.org/bmj-avoiding-unnecessary-sedative-use/ 。临床实践提醒：慢性失眠优先考虑CBT-I等非药物干预，避免不必要的镇静催眠药；药物决定仍需个体评估。
+- 对应第五章“睡眠与担忧之间的回路”。正文已补充加拿大来源（提交 `231e525`）。正式出版前仍需统一书目格式及查新日期，不可将安省质量标准与全国专家共识混作同一文件类型。
