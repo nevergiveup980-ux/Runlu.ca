@@ -21,4 +21,14 @@ jobs:
         with:
           node-version: '22'
       - name: Run offline STAGE tests
-        run: node --test stage-2/*.test.mjs
+        run: |
+          set -o pipefail
+          node --test --test-reporter=tap stage-2/*.test.mjs | tee stage-2-offline-results.tap
+      - name: Upload offline test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage-2-offline-test-results
+          path: stage-2-offline-results.tap
+          if-no-files-found: warn
+          retention-days: 14
