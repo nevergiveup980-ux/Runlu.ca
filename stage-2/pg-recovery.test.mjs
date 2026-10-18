@@ -35,3 +35,9 @@ test("unresolved attempts can be queried for reconciliation",async()=>{
  const a=await new PgRecovery(p).listUnresolvedAttempts("j1");
  assert.equal(a[0].id,"a1");
 });
+
+test("second recovery pass returns no additional jobs",async()=>{
+ const p=pool({expired:[]});
+ assert.deepEqual(await new PgRecovery(p).quarantineExpired(),[]);
+ assert.equal(p.calls.filter(x=>x.sql.includes("INSERT INTO stage_job_events")).length,0);
+});
