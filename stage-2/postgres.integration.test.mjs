@@ -59,6 +59,13 @@ test('real PostgreSQL: idempotency, claim, budget, settle and recovery', {skip:!
   const attemptId=randomUUID();
   await new PgBudgetRepository(pool).reserve(first.id,worker,attemptId,'mock',600);
   await assert.rejects(new PgBudgetRepository(pool).reserve(first.id,worker,randomUUID(),'mock',500),/Budget or lease/);
+  // An over-reservation settlement must roll back atomically.
+  await assert.rejects(jobs.settle(first.id,attemptId,601),/Reconciliation required/);
+  const afterRejected=(await pool.query('SELECT reserved_cents,spent_cents FROM stage_jobs WHERE id=$1',[first.id])).rows[0];
+  assert.equal(Number(afterRejected.reserved_cents),600);
+  assert.equal(Number(afterRejected.spent_cents),0);
+  const unsettled=(await pool.query('SELECT status FROM stage_attempts WHERE id=$1',[attemptId])).rows[0];
+  assert.equal(unsettled.status,'RESERVED');
   assert.deepEqual(await jobs.settle(first.id,attemptId,450),{chargedCents:450,releasedCents:150});
   const row=(await pool.query('SELECT spent_cents,reserved_cents FROM stage_jobs WHERE id=$1',[first.id])).rows[0];
   assert.equal(Number(row.spent_cents),450);assert.equal(Number(row.reserved_cents),0);
