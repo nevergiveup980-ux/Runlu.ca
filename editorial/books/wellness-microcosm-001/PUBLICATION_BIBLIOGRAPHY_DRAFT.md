@@ -15,10 +15,12 @@
 
 [3] Qaseem A, Kansagara D, Forciea MA, Cooke M, Denberg TD; Clinical Guidelines Committee of the American College of Physicians. Management of chronic insomnia disorder in adults: a clinical practice guideline from the American College of Physicians. *Ann Intern Med*. 2016;165(2):125–133. doi:10.7326/M15-2175. https://pubmed.ncbi.nlm.nih.gov/27136449/ 。**对应第五章；历史指南，须与后续指南并列。**
 
+[4] Department of Veterans Affairs; Department of Defense. *VA/DoD Clinical Practice Guideline for the Management of Chronic Insomnia Disorder and Obstructive Sleep Apnea*. Washington, DC: VA/DoD; 2025. https://www.healthquality.va.gov/HEALTHQUALITY/guidelines/CD/insomnia/index.asp 。**对应第五章。** 官方指南页明确2025版、完整指南与患者/临床人员摘要；PDF封面与页脚标注 January 2025，文件名末尾的20250915不可直接当作出版月份。具体PDF版本与发布日期须在上架前再核定。
+
+[5] Morin CM, Khullar A, Robillard R, et al. Delphi consensus recommendations for the management of chronic insomnia in Canada. *Sleep Med*. 2024;124:598–605. doi:10.1016/j.sleep.2024.09.038. PMID:39481275. https://pubmed.ncbi.nlm.nih.gov/39481275/ 。**对应第五章。** 专家共识，不等同于加拿大国家级临床实践指南。
+
 ## 待统一核验并入正式编号
 
-- VA/DoD 2025年慢性失眠与睡眠呼吸暂停临床指南：核对完整发布机构、最终PDF版号与URL（第五章）。
-- 加拿大2024年德尔菲专家共识：核对完整作者列表、期刊卷期页码和DOI（第五章）。
 - NIGMS昼夜节律科普（第二章）；Health Canada烟雾/高温资料（第三章）；NIOSH工效学系列（第六章）。
 - NCCIH补充疗法、益生菌、排毒和药物相互作用资料（第四、七、十一章）；MedlinePlus化验结果解释（第四章）。
 - WHO、CDC社会联系与孤独资料（第六章）；Cochrane研究偏倚和选择性报告章节（第八章）。
