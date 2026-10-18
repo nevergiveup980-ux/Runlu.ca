@@ -59,6 +59,7 @@ async function replaceLocalFromMirror(){
  await waitForIdle();
  const records=(await all()).filter(validMirrorRecord);if(!records.length)throw new Error('Durable mirror is empty.');
  const safety=window.RUNLUUniversalLocalHealth?.capture?.('Before full IndexedDB mirror restore',{records:records.length});
+ if(!safety?.id)throw new Error('Verified safety checkpoint required before full mirror restore.');
  const journal=window.RUNLUUniversalCrashJournal,tx=journal?.begin?.('Recovery','mirror-to-local-restore',{records:records.length,safetyPoint:safety?.id||null});
  const adapter=window.RUNLUUniversalData.current();
  (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP&&k!==GUARD&&k!==JOURNAL).forEach(k=>adapter.remove(k));
