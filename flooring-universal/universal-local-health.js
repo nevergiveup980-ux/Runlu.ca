@@ -10,7 +10,10 @@ function capture(reason,meta){
  const adapter=data().current(),payload={};
  (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==SNAP&&k!==GUARD&&k!==JOURNAL&&k!=='runlu_flooring_universal_data_backend').forEach(k=>payload[k]=adapter.read(k,null));
  const p={id:'rp-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,5),createdAt:new Date().toISOString(),reason:reason||'Checkpoint',meta:meta||{},organizationId:data().read(WS,null)?.company?.organizationId||'',payload};
- data().write(SNAP,[p,...points()].slice(0,MAX));return p;
+ data().write(SNAP,[p,...points()].slice(0,MAX));
+ const saved=points().find(x=>x.id===p.id);
+ if(!saved||JSON.stringify(saved.payload)!==JSON.stringify(payload))throw new Error('Recovery checkpoint verification failed; existing business data was not changed.');
+ return p;
 }
 async function restore(id){
  if(data().backendConfig().mode!=='local')throw new Error('Recovery Point restore is available only in Local Device mode.');
