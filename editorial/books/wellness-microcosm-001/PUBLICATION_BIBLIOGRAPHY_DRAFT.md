@@ -43,6 +43,8 @@
 
 [17] National Center for Complementary and Integrative Health. *Probiotics: Usefulness and Safety*. National Institutes of Health. https://www.nccih.nih.gov/health/probiotics-usefulness-and-safety 。**对应第四章。** 2026-10-18核对官方资料：不同菌株与产品不应视为同一种干预；安全性证据有限，重症、免疫功能受损者和早产儿风险更高。此为综述性科普，不应写成证明某一特定产品有效的临床试验。
 
+[18] National Institute for Occupational Safety and Health. *Hierarchy of Controls*. Centers for Disease Control and Prevention; April 10, 2024. https://www.cdc.gov/niosh/hierarchy-of-controls/about/ 。**对应第六章。** 由优先到次要为消除、替代、工程控制、管理控制和个人防护装备；具体工效学实施例参[8]。2026-10-18核对官方网页。
+
 ## 待统一核验并入正式编号
 
 - Health Canada其他烟雾/高温资料（第三章）；NIOSH其余工效学资料（第六章）。
