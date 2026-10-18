@@ -69,6 +69,19 @@ test('real PostgreSQL: idempotency, claim, budget, settle and recovery', {skip:!
   assert.deepEqual(await jobs.settle(first.id,attemptId,450),{chargedCents:450,releasedCents:150});
   const row=(await pool.query('SELECT spent_cents,reserved_cents FROM stage_jobs WHERE id=$1',[first.id])).rows[0];
   assert.equal(Number(row.spent_cents),450);assert.equal(Number(row.reserved_cents),0);
+  // A second job tests simultaneous duplicate settlement on one attempt.
+  const winningAttempt=competing.find(x=>x.status==='fulfilled').value.attemptId;
+  const concurrentSettlement=await Promise.allSettled([
+    jobs.settle(secondJob,winningAttempt,400),
+    jobs.settle(secondJob,winningAttempt,400)
+  ]);
+  assert.equal(concurrentSettlement.filter(x=>x.status==='fulfilled').length,1);
+  assert.equal(concurrentSettlement.filter(x=>x.status==='rejected').length,1);
+  const secondFinal=(await pool.query('SELECT spent_cents,reserved_cents FROM stage_jobs WHERE id=$1',[secondJob])).rows[0];
+  assert.equal(Number(secondFinal.spent_cents),400);
+  assert.equal(Number(secondFinal.reserved_cents),0);
+  const settledCount=(await pool.query("SELECT COUNT(*)::integer AS n FROM stage_job_events WHERE job_id=$1 AND event_type='BUDGET_SETTLED'",[secondJob])).rows[0];
+  assert.equal(settledCount.n,1);
   // A duplicate settlement must fail without charging twice.
   await assert.rejects(jobs.settle(first.id,attemptId,450),/not settleable/);
   const afterDuplicate=(await pool.query('SELECT spent_cents,reserved_cents FROM stage_jobs WHERE id=$1',[first.id])).rows[0];
