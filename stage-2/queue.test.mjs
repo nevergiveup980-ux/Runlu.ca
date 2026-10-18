@@ -6,13 +6,13 @@ const brief={durationSeconds:60,quality:"standard",format:"cinematic"};
 test("mock provider completes without paid API",async()=>{
  const q=new JobQueue({provider:new MockVideoProvider()});
  const j=q.submit(brief,5); const done=await q.run(j.id);
- assert.equal(done.status,"COMPLETED"); assert.equal(done.spentCad,0);
- assert.equal(done.result.kind,"mock-video");
+ assert.equal(done.status,"SIMULATED_COMPLETE"); assert.equal(done.spentCad,0);
+ assert.equal(done.result.kind,"mock-video");assert.equal(done.result.verified,false);assert.equal(done.result.simulated,true);
 });
 test("retries are logged",async()=>{
  const q=new JobQueue({provider:new MockVideoProvider({failFirst:true,billedCad:1}),maxAttempts:2});
  const j=q.submit(brief,3); const done=await q.run(j.id);
- assert.equal(done.status,"COMPLETED"); assert.equal(done.attempts,2);assert.equal(done.spentCad,2);
+ assert.equal(done.status,"SIMULATED_COMPLETE"); assert.equal(done.attempts,2);assert.equal(done.spentCad,2);
 });
 test("budget overrun blocks completion",async()=>{
  const q=new JobQueue({provider:new MockVideoProvider({billedCad:8}),maxSpendCad:6});
