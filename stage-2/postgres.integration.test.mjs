@@ -43,6 +43,19 @@ test('real PostgreSQL: idempotency, claim, budget, settle and recovery', {skip:!
   assert.deepEqual(new Set([a.id,b.id]),new Set([first.id,simultaneous[0].id]));
   assert.equal(await jobs.claim('worker-c'),null,'no queued jobs remain');
   const worker=a.id===first.id?'worker-a':'worker-b';
+  // Concurrent reservations against one remaining budget: exactly one can win.
+  const secondJob=simultaneous[0].id;
+  const secondWorker=a.id===secondJob?'worker-a':'worker-b';
+  const budgetRepo=new PgBudgetRepository(pool);
+  const competing=await Promise.allSettled([
+    budgetRepo.reserve(secondJob,secondWorker,randomUUID(),'mock',600),
+    budgetRepo.reserve(secondJob,secondWorker,randomUUID(),'mock',600)
+  ]);
+  assert.equal(competing.filter(x=>x.status==='fulfilled').length,1);
+  assert.equal(competing.filter(x=>x.status==='rejected').length,1);
+  const secondTotals=(await pool.query('SELECT reserved_cents,attempt_count FROM stage_jobs WHERE id=$1',[secondJob])).rows[0];
+  assert.equal(Number(secondTotals.reserved_cents),600);
+  assert.equal(secondTotals.attempt_count,1);
   const attemptId=randomUUID();
   await new PgBudgetRepository(pool).reserve(first.id,worker,attemptId,'mock',600);
   await assert.rejects(new PgBudgetRepository(pool).reserve(first.id,worker,randomUUID(),'mock',500),/Budget or lease/);
