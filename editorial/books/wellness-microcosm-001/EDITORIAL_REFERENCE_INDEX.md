@@ -89,3 +89,9 @@
 - 正式书目建议：World Health Organization. *WHO Guidelines on Physical Activity and Sedentary Behaviour*. Geneva: World Health Organization; 2020. ISBN 978-92-4-001512-8 (print); 978-92-4-001513-5 (electronic). PMID: 33369898. https://www.ncbi.nlm.nih.gov/books/NBK566045/ （核验日期：2026-10-18）。
 - 章节定位：第九章“活动建议需要一把可以调整的尺”；18–64岁成人每周150–300分钟中等强度或75–150分钟高强度有氧活动（或等效组合），每周至少两天主要肌群力量活动。具体建议另有老年人、慢病患者、孕产妇及残障人群分组，不可将成人数字无条件套用所有人。
 - 出版信息与官方推荐引用格式经 NCBI Bookshelf 书目页及 NLM Catalog 双重核对。原索引第11条保留，正式排版时应整合本条，避免出现重复书目编号。
+
+## 2026-10-18 第40轮：ACP 与 NIOSH 出版信息核验
+- Qaseem A, Kansagara D, Forciea MA, Cooke M, Denberg TD; Clinical Guidelines Committee of the American College of Physicians. Management of chronic insomnia disorder in adults: a clinical practice guideline from the American College of Physicians. *Ann Intern Med.* 2016;165(2):125–133. doi:10.7326/M15-2175. PMID:27136449. 在线发表：2016-05-03；纸刊：2016-07-19。对应第五章成人慢性失眠初始CBT-I治疗建议。原始记录：https://pubmed.ncbi.nlm.nih.gov/27136449/ 。注意：此为**2016年历史指南**，出版社页面说明ACP指南在发布5年后或更新后会自动失效；出版前必须重新核查当前指南，不得将其标为2026年仍有效的最新临床建议。
+- National Institute for Occupational Safety and Health (NIOSH). *About Ergonomics and Work-Related Musculoskeletal Disorders.* CDC; reviewed February 21, 2024. https://www.cdc.gov/niosh/topics/ergonomics/default.html 。对应第六章劳动与肌肉骨骼风险。该官方页面现可访问，旧路径 https://www.cdc.gov/niosh/ergonomics/about/ 可作为历史引用但不应作为唯一可用链接。
+- NIOSH. *Elements of Ergonomics Programs.* CDC; reviewed February 26, 2024. https://www.cdc.gov/niosh/ergonomics/ergo-programs/index.html 。对应第六章工效学风险识别、实施和效果评估。网站标注的页面发表日期、更新日期与专家审阅日期并不总一致，正式书目应选择明确的审阅日期并注明页面性质。
+- 以上已核对刊物/机构原始页面，统一了作者、年份、页码、DOI与机构链接；第5章临床指南时效性仍为开放问题。
