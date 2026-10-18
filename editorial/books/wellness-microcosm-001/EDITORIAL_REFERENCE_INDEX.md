@@ -113,3 +113,9 @@
 - 正式PDF：https://ontariohealth.ca/content/dam/ontariohealth/documents/filter-list/qs/qs-insomnia-disorder-en.pdf 。该标准面向18岁及以上成人，要求症状持续至少三个月且伴痛苦或日间功能损害；并排除由其他睡眠障碍更好解释的睡眠困难。不能直接用于偶发失眠的诊断。
 - 依据此标准修订第五章：强调全面评估、合并健康问题与共同决策，而非只强调CBT-I；正文提交 `9a0b561`。
 - 书目编辑提醒：官方索引页列示2025年1月，PDF封面页为2025年2月；正式书目需以所引用版本的封面出版日期为准，说明网站索引元数据差异。2024年公开征求意见的草案标明不可引用，不能混入正式书目。
+
+## 2026-10-18 第44轮：安大略省失眠质量标准的版本定位
+- Ontario Health, *Insomnia Disorder: Care for Adults*. **正式引用版本：February 2025**, PDF第4页页眉印有“ONTARIO HEALTH, FEBRUARY 2025”。PDF：https://ontariohealth.ca/content/dam/ontariohealth/documents/filter-list/qs/qs-insomnia-disorder-en.pdf 。
+- 官方目录页面列示 Publication Date: **2025-January-01**，与PDF印刷月份不同；目录日期属于网页元数据，正式引用PDF时采用其内部标示月份，不合并成不存在的“2025年1—2月版”。https://ontariohealth.ca/clinical/quality-standards/qs-details?cf=insomnia-disorder 。
+- PDF第14页“Quality Statement 4”明确CBT-I为一线治疗，且需要符合个人需要和偏好；质量标准适用18岁以上且符合慢性失眠障碍定义的人群。对应第五章，现有文字不需重复扩写。
+- 本轮完成**出版日期冲突消歧**，但整部书稿仍需一次性生成无重复的正式参考文献列表，并核查所有URL。
