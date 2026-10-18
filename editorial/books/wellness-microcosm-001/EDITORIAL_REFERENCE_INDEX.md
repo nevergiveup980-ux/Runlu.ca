@@ -95,3 +95,9 @@
 - National Institute for Occupational Safety and Health (NIOSH). *About Ergonomics and Work-Related Musculoskeletal Disorders.* CDC; reviewed February 21, 2024. https://www.cdc.gov/niosh/topics/ergonomics/default.html 。对应第六章劳动与肌肉骨骼风险。该官方页面现可访问，旧路径 https://www.cdc.gov/niosh/ergonomics/about/ 可作为历史引用但不应作为唯一可用链接。
 - NIOSH. *Elements of Ergonomics Programs.* CDC; reviewed February 26, 2024. https://www.cdc.gov/niosh/ergonomics/ergo-programs/index.html 。对应第六章工效学风险识别、实施和效果评估。网站标注的页面发表日期、更新日期与专家审阅日期并不总一致，正式书目应选择明确的审阅日期并注明页面性质。
 - 以上已核对刊物/机构原始页面，统一了作者、年份、页码、DOI与机构链接；第5章临床指南时效性仍为开放问题。
+
+## 2026-10-18 第41轮：成人慢性失眠指南查新
+- Department of Veterans Affairs; Department of Defense. *VA/DoD Clinical Practice Guideline for the Management of Chronic Insomnia Disorder and Obstructive Sleep Apnea.* 2025. https://www.healthquality.va.gov/guidelines/CD/insomnia/I-OSA-CPG_2025-Guideline_final_20250915.pdf 。官方指南入口：https://healthquality.va.gov/HEALTHQUALITY/guidelines/CD/insomnia/index.asp 。对应第五章“睡眠与担忧之间的回路”。推荐以 CBT-I 治疗慢性失眠（强推荐），并建议优先于药物治疗作为一线治疗（弱推荐）；两者推荐强度不可混淆。
+- 2016 ACP 成人慢性失眠指南保留为历史证据背景，不再作为唯一依据。AASM 2021 年成人慢性失眠行为与心理治疗指南亦对多组分 CBT-I 给出强推荐：https://pmc.ncbi.nlm.nih.gov/articles/PMC7853203/ 。
+- 适用性：VA/DoD指南面向其医疗体系，书稿采用一般性、非个体化表述；不能将其等同于加拿大本地最新临床标准。出版前应再查新加拿大或其他适用地区指南。
+- 正文已更新，提交 `6947e87`。
