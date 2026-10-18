@@ -107,3 +107,9 @@
 - Morin CM, et al. *Delphi consensus recommendations for the management of chronic insomnia in Canada.* Sleep Med. 2024;124:598–605. doi:10.1016/j.sleep.2024.09.038. PubMed PMID:39481275. https://pubmed.ncbi.nlm.nih.gov/39481275/ 。加拿大16位跨专业专家形成德尔菲共识，支持CBT-I一线治疗，强调仅提供睡眠卫生教育不等于CBT-I；该文是**专家共识声明**，不是由全国主管部门发布的正式国家指南。
 - Choosing Wisely Canada. *Avoiding Unnecessary Sedative Use*. March 21, 2021. https://choosingwiselycanada.org/bmj-avoiding-unnecessary-sedative-use/ 。临床实践提醒：慢性失眠优先考虑CBT-I等非药物干预，避免不必要的镇静催眠药；药物决定仍需个体评估。
 - 对应第五章“睡眠与担忧之间的回路”。正文已补充加拿大来源（提交 `231e525`）。正式出版前仍需统一书目格式及查新日期，不可将安省质量标准与全国专家共识混作同一文件类型。
+
+## 2026-10-18 第43轮：安大略省失眠质量标准的完整适用范围
+- Ontario Health. *Insomnia Disorder: Care for Adults*. Quality Standard. 2025. https://ontariohealth.ca/clinical/quality-standards/qs-details?cf=insomnia-disorder 。质量陈述1—5分别为：全面评估；个体化、以患者为中心的综合照护计划；合并疾病的同步管理；CBT-I一线治疗；药物治疗的剂量、疗程及收益风险沟通。
+- 正式PDF：https://ontariohealth.ca/content/dam/ontariohealth/documents/filter-list/qs/qs-insomnia-disorder-en.pdf 。该标准面向18岁及以上成人，要求症状持续至少三个月且伴痛苦或日间功能损害；并排除由其他睡眠障碍更好解释的睡眠困难。不能直接用于偶发失眠的诊断。
+- 依据此标准修订第五章：强调全面评估、合并健康问题与共同决策，而非只强调CBT-I；正文提交 `9a0b561`。
+- 书目编辑提醒：官方索引页列示2025年1月，PDF封面页为2025年2月；正式书目需以所引用版本的封面出版日期为准，说明网站索引元数据差异。2024年公开征求意见的草案标明不可引用，不能混入正式书目。
