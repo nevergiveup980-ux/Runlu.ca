@@ -21,13 +21,13 @@ async function put(key,value){
  if(!key?.startsWith(PREFIX)||key===BACKEND||key===SNAP||key===GUARD||key===JOURNAL)return;
  pending++;
  try{const db=await open();await new Promise((resolve,reject)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put({key,value,updatedAt:new Date().toISOString()});tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)});lastSyncAt=new Date().toISOString();lastError=null}
- catch(e){lastError=e?.message||String(e)}finally{pending--}
+ catch(e){lastError=e?.message||String(e);throw e}finally{pending--}
 }
 async function remove(key){
  if(!key?.startsWith(PREFIX)||key===BACKEND||key===SNAP||key===GUARD||key===JOURNAL)return;
  pending++;
  try{const db=await open();await new Promise((resolve,reject)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).delete(key);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)});lastSyncAt=new Date().toISOString();lastError=null}
- catch(e){lastError=e?.message||String(e)}finally{pending--}
+ catch(e){lastError=e?.message||String(e);throw e}finally{pending--}
 }
 async function all(){
  const db=await open();return new Promise((resolve,reject)=>{const tx=db.transaction(STORE,'readonly'),req=tx.objectStore(STORE).getAll();req.onsuccess=()=>resolve(req.result||[]);req.onerror=()=>reject(req.error)});
@@ -36,7 +36,10 @@ async function seed(){
  if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local'||!supported())return {ok:false,reason:'not-local-or-unsupported'};
  const adapter=window.RUNLUUniversalData.current(),keys=(adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP&&k!==GUARD&&k!==JOURNAL);
  for(const key of keys)await put(key,adapter.read(key,null));
- return {ok:true,records:keys.length};
+ await waitForIdle();
+ const comparison=await compareWithAdapter();
+ if(!comparison.ok)throw new Error('IndexedDB sync completed without local/mirror parity.');
+ return {ok:true,records:keys.length,comparison};
 }
 function validMirrorRecord(r){
  if(!r?.key?.startsWith(PREFIX)||r.key===BACKEND||r.key===SNAP||r.key===GUARD||r.key===JOURNAL)return false;
