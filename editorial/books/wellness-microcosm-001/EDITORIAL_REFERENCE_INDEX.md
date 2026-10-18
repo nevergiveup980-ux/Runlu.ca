@@ -86,7 +86,7 @@
 - 编辑处理：保持第一章现有引文和面向读者的出处说明，不把古代关于寿命的叙述写成现代临床证明。
 
 ## 2026-10-18 第39轮：WHO 2020指南出版书目标准化
-- 正式书目建议：World Health Organization. *WHO Guidelines on Physical Activity and Sedentary Behaviour*. Geneva: World Health Organization; 2020. ISBN 978-92-4-001512-8 (print); 978-92-4-001513-5 (electronic). PMID: 33369898. https://www.ncbi.nlm.nih.gov/books/NBK566045/ （核验日期：2026-10-18）。
+- 正式书目建议：World Health Organization. *WHO Guidelines on Physical Activity and Sedentary Behaviour*. Geneva: World Health Organization; 2020. ISBN 978-92-4-001512-8 (electronic); 978-92-4-001513-5 (print). PMID: 33369898. https://www.ncbi.nlm.nih.gov/books/NBK566045/ （核验日期：2026-10-18）。
 - 章节定位：第九章“活动建议需要一把可以调整的尺”；18–64岁成人每周150–300分钟中等强度或75–150分钟高强度有氧活动（或等效组合），每周至少两天主要肌群力量活动。具体建议另有老年人、慢病患者、孕产妇及残障人群分组，不可将成人数字无条件套用所有人。
 - 出版信息与官方推荐引用格式经 NCBI Bookshelf 书目页及 NLM Catalog 双重核对。原索引第11条保留，正式排版时应整合本条，避免出现重复书目编号。
 
@@ -119,3 +119,8 @@
 - 官方目录页面列示 Publication Date: **2025-January-01**，与PDF印刷月份不同；目录日期属于网页元数据，正式引用PDF时采用其内部标示月份，不合并成不存在的“2025年1—2月版”。https://ontariohealth.ca/clinical/quality-standards/qs-details?cf=insomnia-disorder 。
 - PDF第14页“Quality Statement 4”明确CBT-I为一线治疗，且需要符合个人需要和偏好；质量标准适用18岁以上且符合慢性失眠障碍定义的人群。对应第五章，现有文字不需重复扩写。
 - 本轮完成**出版日期冲突消歧**，但整部书稿仍需一次性生成无重复的正式参考文献列表，并核查所有URL。
+
+## 2026-10-18 第45轮：出版书目独立整合与纠错
+- 新建 `PUBLICATION_BIBLIOGRAPHY_DRAFT.md`，将已核对的核心书目与待核验资料分开；正式编号目前仅覆盖三条已核验来源，未把全部工作索引误标为可出版。
+- 纠正第39轮记录中 WHO 2020 指南 ISBN 载体颠倒：978-92-4-001512-8 为**电子版**，978-92-4-001513-5 为**印刷版**。依据出版物版权页：https://www.ncbi.nlm.nih.gov/sites/books/NBK566045/pdf/Bookshelf_NBK566045.pdf 。
+- 安大略省失眠标准按正式PDF的2025年2月标注，保留目录页2025年1月元数据差异。
