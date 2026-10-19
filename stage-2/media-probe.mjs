@@ -10,7 +10,7 @@ export function inspectMp4Probe(probe,{bytes,sha256,maxSeconds=3600}={}){
  if(stream.codec_name!=="h264")throw Error("H264 video required");
  const width=Number(stream.width),height=Number(stream.height);
  const durationSeconds=Number(format.duration);
- if(!Number.isFinite(durationSeconds)||durationSeconds<=0)throw Error("Invalid probed duration");
+ if(!Number.isFinite(durationSeconds)||durationSeconds<=0||durationSeconds>maxSeconds)throw Error("Invalid probed duration");
  const meta={bytes,durationSeconds,width,height,mime:"video/mp4",codec:"h264",sha256};
- return verifyDeliveryMp4(meta,{maxSeconds});
+ return verifyDeliveryMp4(meta);
 }
