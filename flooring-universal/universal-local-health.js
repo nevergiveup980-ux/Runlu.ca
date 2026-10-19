@@ -22,8 +22,20 @@ async function restore(id){
  if(!safety?.id)throw new Error('Verified safety checkpoint required before Recovery Point restore.');
  const journal=window.RUNLUUniversalCrashJournal,tx=journal?.begin?.('Recovery','recovery-point-restore',{restorePoint:id,safetyPoint:safety?.id||null});
  // Controlled local replacement first; then explicitly reconcile the durable mirror before reload.
- (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==SNAP&&k!==GUARD&&k!==JOURNAL&&k!=='runlu_flooring_universal_data_backend').forEach(k=>adapter.remove(k));
- Object.entries(p.payload||{}).forEach(([k,v])=>{if(k.startsWith(PREFIX)&&k!==SNAP&&k!==GUARD&&k!==JOURNAL&&k!=='runlu_flooring_universal_data_backend')adapter.write(k,v)});
+ const businessKeys=()=> (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==SNAP&&k!==GUARD&&k!==JOURNAL&&k!=='runlu_flooring_universal_data_backend');
+ const original=new Map(businessKeys().map(k=>[k,adapter.raw(k)]));
+ try{
+  businessKeys().forEach(k=>adapter.remove(k));
+  Object.entries(p.payload||{}).forEach(([k,v])=>{if(k.startsWith(PREFIX)&&k!==SNAP&&k!==GUARD&&k!==JOURNAL&&k!=='runlu_flooring_universal_data_backend')adapter.write(k,v)});
+ }catch(error){
+  try{
+   businessKeys().forEach(k=>adapter.remove(k));
+   original.forEach((raw,key)=>localStorage.setItem(key,raw));
+   if(businessKeys().length!==original.size||![...original].every(([key,raw])=>adapter.raw(key)===raw))throw new Error('Rollback verification failed');
+   if(tx)journal.phase(tx.id,'LOCAL_ROLLED_BACK');
+  }catch(rollbackError){throw new Error('Recovery Point restore failed; rollback could not be verified: '+rollbackError.message,{cause:error})}
+  throw new Error('Recovery Point restore failed; previous local data restored: '+error.message,{cause:error});
+ }
  if(tx)journal.phase(tx.id,'LOCAL_REPLACED');
  const mirror=await window.RUNLUUniversalDurableLocal?.replaceMirrorFromLocal?.();
  if(tx){journal.phase(tx.id,'MIRROR_RECONCILED');journal.commit(tx.id,{restoredPoint:id})}
