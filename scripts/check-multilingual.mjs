@@ -51,13 +51,15 @@ const failures = [];
 // Editorial articles published as four separate files are not shared-runtime
 // pages. Verify that their language links really resolve before exempting them.
 function checkLinkedEditions(rel, html) {
-  if (!/class=["'][^"']*\\bedition-switch\\b/i.test(html)) return false;
-  const tags = [...html.matchAll(/<link\\b[^>]*>/gi)].map(m => m[0]);
-  const attr = (tag, key) => tag.match(new RegExp('\\\\b' + key + '=["\\x27]([^"\\x27]+)["\\x27]', 'i'))?.[1] || '';
+  if (!/class=["'][^"']*\bedition-switch\b/i.test(html)) return false;
+  const tags = [...html.matchAll(/<link\b[^>]*>/gi)].map(m => m[0]);
+  const attr = (tag, key) =>
+    tag.match(new RegExp(key + '="([^"]+)"', 'i'))?.[1] ||
+    tag.match(new RegExp(key + "='([^']+)'", 'i'))?.[1] || '';
   for (const language of ['zh-Hans', 'en', 'fr', 'es']) {
     const tag = tags.find(t => attr(t, 'rel').toLowerCase() === 'alternate' && attr(t, 'hreflang') === language);
     const href = tag && attr(tag, 'href');
-    if (!href || !/^https:\\/\\/runlu\\.ca\\/[^?#]+\\.html$/.test(href)) {
+    if (!href || !/^https:\/\/runlu\.ca\/[^?#]+\.html$/.test(href)) {
       failures.push(`${rel}: edition missing valid ${language} hreflang target`);
       continue;
     }
@@ -76,11 +78,11 @@ function checkLinkedEditions(rel, html) {
 // Some four-language Chronicle essays use a page-local navigation router.
 // Require an actual selector, change handler, and four existing local targets.
 function hasVerifiedScopedRouter(rel, html) {
-  const match = html.match(/const paths=\\{zh:'([^']+)',en:'([^']+)',fr:'([^']+)',es:'([^']+)'\\}/);
+  const match = html.match(/const paths=\{zh:'([^']+)',en:'([^']+)',fr:'([^']+)',es:'([^']+)'\}/);
   if (!match || !html.includes("addEventListener('change'") ||
       !html.includes('location.href=paths[s.value]')) return false;
   return match.slice(1).every(target =>
-    /^[a-zA-Z0-9._-]+\\.html$/.test(target) &&
+    /^[a-zA-Z0-9._-]+\.html$/.test(target) &&
     !target.includes('..') &&
     fs.existsSync(path.join(root, path.dirname(rel), target)));
 }
