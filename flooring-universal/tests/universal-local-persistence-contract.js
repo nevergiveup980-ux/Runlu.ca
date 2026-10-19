@@ -13,7 +13,11 @@ ok('Durable mirror can wait for pending writes before reconciliation',mirror.inc
 ok('Durable mirror can atomically replace its record store from local data',mirror.includes('async function replaceMirrorFromLocal')&&mirror.includes('store.clear()'));
 ok('Reverse recovery waits for pending mirror writes',/async function recoverMissing\(\)[\s\S]*?await waitForIdle\(\)/.test(mirror)&&/async function replaceLocalFromMirror\(\)[\s\S]*?await waitForIdle\(\)/.test(mirror));
 ok('Reverse recovery rejects unusable mirror records',mirror.includes('function validMirrorRecord')&&mirror.includes('JSON.stringify(r.value)!==undefined'));
-ok('Full mirror-to-local restore verifies parity',mirror.includes("throw new Error('Local recovery from durable mirror did not reach parity.')"));
+ok('Full mirror-to-local restore verifies parity',mirror.includes('Local recovery from durable mirror did not reach parity; leave recovery journal open for review.'));
+ok('Mirror sync rejects missing parity after seed',mirror.includes("if(!comparison.ok)throw new Error('IndexedDB sync completed without local/mirror parity.')"));
+ok('Async mirror mutation listener handles write failures',mirror.includes("RUNLUUniversalData?.onMutation?.")&&mirror.includes(".catch(error=>{lastError="));
+ok('Device Ready requires healthy mirror parity',read('universal-device-ready.js').includes('mirrorParity?.ok===true'));
+ok('Sync Now requires confirmed mirror parity',mirrorUi.includes("!result?.ok||!result.comparison?.ok"));
 ok('Missing-only recovery reports remaining parity state',mirror.includes('return {restored,skipped,total:records.length,comparison}'));
 ok('Durable Local UI catches recovery failures',mirrorUi.includes("try{const r=await d.replaceLocalFromMirror()")&&mirrorUi.includes("Startup Guard will keep reviewing this state."));
 ok('Recovery Point restore reconciles mirror before reload',health.includes('await window.RUNLUUniversalDurableLocal?.replaceMirrorFromLocal?.()')&&health.includes('await restore(b.dataset.restorePoint)'));
