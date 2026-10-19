@@ -26,3 +26,11 @@ export function customerAssetView(record){
  if(record?.state!=="VERIFIED"||typeof record?.assetId!=="string"||!/^asset_[a-zA-Z0-9_-]{4,80}$/.test(record.assetId))throw Error("Asset not ready");
  return {assetId:record.assetId,status:"READY"};
 }
+
+export function verifyDeliveryMp4(meta){
+ const m=validateIngestMetadata(meta);
+ if(m.mime!=="video/mp4"||m.codec!=="h264")throw Error("Delivery requires H.264 MP4");
+ if(m.width%2!==0||m.height%2!==0)throw Error("Delivery dimensions must be even");
+ if(m.width/m.height<0.5||m.width/m.height>2.5)throw Error("Unsupported delivery aspect ratio");
+ return { ...m, deliveryFormat:"mp4-h264", verifiedMetadata:true };
+}
