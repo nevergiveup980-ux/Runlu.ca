@@ -35,6 +35,7 @@ async function restore(payload){
  const check=validate(payload);if(!check.ok)throw new Error(check.error);
  if(window.RUNLUUniversalData?.backendConfig?.().mode!=='local')throw new Error('Restore is allowed only in Local Device mode.');
  const adapter=window.RUNLUUniversalData.current(),backup=collect(),incoming=payload.data,safety=window.RUNLUUniversalLocalHealth?.capture('Before full Backup restore',{backupCreatedAt:payload.createdAt||null});
+ if(!safety?.id)throw new Error('Verified safety checkpoint required before backup restore.');
  const journal=window.RUNLUUniversalCrashJournal,tx=journal?.begin?.('Recovery','backup-restore',{backupCreatedAt:payload.createdAt||null,safetyPoint:safety?.id||null});
  // Replace Universal business/workspace keys as one controlled operation; backend selection remains local.
  (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!=='runlu_flooring_universal_data_backend'&&k!==SNAP&&k!==GUARD&&k!==JOURNAL).forEach(k=>adapter.remove(k));
