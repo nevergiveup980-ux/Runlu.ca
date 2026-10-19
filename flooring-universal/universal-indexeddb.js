@@ -62,9 +62,24 @@ async function replaceLocalFromMirror(){
  if(!safety?.id)throw new Error('Verified safety checkpoint required before full mirror restore.');
  const journal=window.RUNLUUniversalCrashJournal,tx=journal?.begin?.('Recovery','mirror-to-local-restore',{records:records.length,safetyPoint:safety?.id||null});
  const adapter=window.RUNLUUniversalData.current();
- (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP&&k!==GUARD&&k!==JOURNAL).forEach(k=>adapter.remove(k));
- records.forEach(r=>adapter.write(r.key,r.value));
- if(tx)journal.phase(tx.id,'LOCAL_REPLACED');
+ const keys=()=> (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP&&k!==GUARD&&k!==JOURNAL);
+ const before=new Map(keys().map(k=>[k,adapter.raw(k)]));
+ try{
+  keys().forEach(k=>adapter.remove(k));
+  records.forEach(r=>adapter.write(r.key,r.value));
+  if(tx)journal.phase(tx.id,'LOCAL_REPLACED');
+ }catch(error){
+  try{
+   keys().forEach(k=>adapter.remove(k));
+   before.forEach((raw,key)=>localStorage.setItem(key,raw));
+   const restored=keys().length===before.size&&[...before].every(([key,raw])=>adapter.raw(key)===raw);
+   if(!restored)throw new Error('Rollback verification failed');
+   if(tx)journal.phase(tx.id,'LOCAL_ROLLED_BACK');
+  }catch(rollbackError){
+   throw new Error('Mirror restore failed and rollback could not be verified; keep workspace paused: '+rollbackError.message,{cause:error});
+  }
+  throw new Error('Mirror restore failed; previous local records restored: '+error.message,{cause:error});
+ }
  const comparison=await compareWithAdapter();
  if(!comparison.ok)throw new Error('Local recovery from durable mirror did not reach parity.');
  if(tx){journal.phase(tx.id,'PARITY_VERIFIED');journal.commit(tx.id,{restored:records.length})}
