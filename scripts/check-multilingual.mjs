@@ -51,21 +51,27 @@ const failures = [];
 // Editorial articles published as four separate files are not shared-runtime
 // pages. Verify that their language links really resolve before exempting them.
 function checkLinkedEditions(rel, html) {
-  if (!/class=["'][^"']*\bedition-switch\b/i.test(html)) return false;
+  // Both editorial layouts are supported: an edition-switch or a compact langs bar.
+  if (!/class=["'][^"']*\b(?:edition-switch|langs)\b/i.test(html)) return false;
   const tags = [...html.matchAll(/<link\b[^>]*>/gi)].map(m => m[0]);
+  const anchors = [...html.matchAll(/<a\b[^>]*>/gi)].map(m => m[0]);
   const attr = (tag, key) =>
     tag.match(new RegExp(key + '="([^"]+)"', 'i'))?.[1] ||
     tag.match(new RegExp(key + "='([^']+)'", 'i'))?.[1] || '';
   for (const language of ['zh-Hans', 'en', 'fr', 'es']) {
     const tag = tags.find(t => attr(t, 'rel').toLowerCase() === 'alternate' && attr(t, 'hreflang') === language);
-    const href = tag && attr(tag, 'href');
-    if (!href || !/^https:\/\/runlu\.ca\/[^?#]+\.html$/.test(href)) {
-      failures.push(`${rel}: edition missing valid ${language} hreflang target`);
-      continue;
+    const hreflangAnchor = anchors.find(t => attr(t, 'hreflang') === language);
+    const absolute = tag && attr(tag, 'href');
+    const relativeHref = hreflangAnchor && attr(hreflangAnchor, 'href');
+    let target = '';
+    if (absolute && /^https:\/\/runlu\.ca\/[^?#]+\.html$/.test(absolute)) {
+      target = absolute.slice('https://runlu.ca/'.length);
+    } else if (!absolute && relativeHref && /^[a-zA-Z0-9._-]+\.html$/.test(relativeHref)) {
+      target = path.posix.normalize(path.posix.join(path.posix.dirname(rel), relativeHref));
     }
-    const target = href.slice('https://runlu.ca/'.length);
-    if (!fs.existsSync(path.join(root, target))) {
-      failures.push(`${rel}: ${language} edition target missing: ${target}`);
+    if (!target || target.startsWith('../') || !fs.existsSync(path.join(root, target))) {
+      failures.push(`${rel}: ${language} edition target missing or invalid`);
+      continue;
     }
     const relative = path.posix.relative(path.posix.dirname(rel), target);
     if (!html.includes('href="' + relative + '"') && !html.includes("href='" + relative + "'")) {
