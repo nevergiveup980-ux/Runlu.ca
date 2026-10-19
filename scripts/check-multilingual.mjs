@@ -6,7 +6,8 @@ const root = process.cwd();
 // legal/privacy policies are applications/support pages rather than editorial
 // site pages. They own their localization and must not be made to load the
 // public website's language switcher.
-const excludedPrefixes = ['flooring/','flooring-u2-lab/'];
+// Isolated application/fixture routes use product-specific navigation and localization.
+const excludedPrefixes = ['flooring/','flooring-u2-lab/','flooring-u3-preview/','invest/'];
 const excluded = new Set([
   'health-view-006-humid-heat.html',
   'health-view-007-staree-statins.html',
@@ -21,7 +22,9 @@ const excluded = new Set([
   'field-calculator-privacy.html',
   'roll-length.html',
   'runlu-ledger-privacy.html',
-  'warehouse-privacy.html'
+  'warehouse-privacy.html',
+  // RUNLU INVEST is a standalone product page with its own language runtime.
+  'runlu-invest.html'
 ]);
 const pages = [];
 const languageScript = fs.readFileSync(path.join(root, 'runlu-language.js'), 'utf8');
@@ -44,6 +47,46 @@ function walk(dir) {
 
 walk(root);
 const failures = [];
+
+// Editorial articles published as four separate files are not shared-runtime
+// pages. Verify that their language links really resolve before exempting them.
+function checkLinkedEditions(rel, html) {
+  if (!/class=["'][^"']*\\bedition-switch\\b/i.test(html)) return false;
+  const tags = [...html.matchAll(/<link\\b[^>]*>/gi)].map(m => m[0]);
+  const attr = (tag, key) => tag.match(new RegExp('\\\\b' + key + '=["\\x27]([^"\\x27]+)["\\x27]', 'i'))?.[1] || '';
+  for (const language of ['zh-Hans', 'en', 'fr', 'es']) {
+    const tag = tags.find(t => attr(t, 'rel').toLowerCase() === 'alternate' && attr(t, 'hreflang') === language);
+    const href = tag && attr(tag, 'href');
+    if (!href || !/^https:\\/\\/runlu\\.ca\\/[^?#]+\\.html$/.test(href)) {
+      failures.push(`${rel}: edition missing valid ${language} hreflang target`);
+      continue;
+    }
+    const target = href.slice('https://runlu.ca/'.length);
+    if (!fs.existsSync(path.join(root, target))) {
+      failures.push(`${rel}: ${language} edition target missing: ${target}`);
+    }
+    const relative = path.posix.relative(path.posix.dirname(rel), target);
+    if (!html.includes('href="' + relative + '"') && !html.includes("href='" + relative + "'")) {
+      failures.push(`${rel}: edition switch missing ${language} link: ${relative}`);
+    }
+  }
+  return true;
+}
+
+// Some four-language Chronicle essays use a page-local navigation router.
+// Require an actual selector, change handler, and four existing local targets.
+function hasVerifiedScopedRouter(rel, html) {
+  const match = html.match(/const paths=\\{zh:'([^']+)',en:'([^']+)',fr:'([^']+)',es:'([^']+)'\\}/);
+  if (!match || !html.includes("addEventListener('change'") ||
+      !html.includes('location.href=paths[s.value]')) return false;
+  return match.slice(1).every(target =>
+    /^[a-zA-Z0-9._-]+\\.html$/.test(target) &&
+    !target.includes('..') &&
+    fs.existsSync(path.join(root, path.dirname(rel), target)));
+}
+
+let sharedPages = 0;
+let linkedEditionPages = 0;
 for (const file of pages) {
   const rel = path.relative(root, file);
   if (excluded.has(rel) || excludedPrefixes.some(prefix => rel.startsWith(prefix))) continue;
@@ -53,6 +96,8 @@ for (const file of pages) {
     const duplicate=names.find((name,index)=>names.indexOf(name)!==index);
     if(duplicate) failures.push(`${rel}: duplicate ${duplicate} attribute`);
   }
+  if (checkLinkedEditions(rel, html)) { linkedEditionPages++; continue; }
+  sharedPages++;
   const selectors = [...html.matchAll(/<select\b[^>]*data-runlu-language-select[^>]*>([\s\S]*?)<\/select>/gi)];
   if (!selectors.length) failures.push(`${rel}: missing standard language selector`);
   for (const [, options] of selectors) {
@@ -75,7 +120,9 @@ for (const file of pages) {
   if (Math.max(...Object.values(counts)) > 0 && new Set(Object.values(counts)).size !== 1) {
     failures.push(`${rel}: long-form block counts differ ${JSON.stringify(counts)}`);
   }
-  if (!html.includes('runlu-language.js')) failures.push(`${rel}: shared language script is not loaded`);
+  if (!html.includes('runlu-language.js') && !hasVerifiedScopedRouter(rel, html)) {
+    failures.push(`${rel}: shared language script or verified page-local router is not loaded`);
+  }
 }
 
 if (failures.length) {
@@ -83,4 +130,4 @@ if (failures.length) {
   console.error(failures.join('\n'));
   process.exit(1);
 }
-console.log(`Four-language check passed for ${pages.length} HTML pages.`);
+console.log(`Four-language check passed: ${sharedPages} shared/runtime pages and ${linkedEditionPages} linked-edition pages (${pages.length} HTML files discovered).`);
