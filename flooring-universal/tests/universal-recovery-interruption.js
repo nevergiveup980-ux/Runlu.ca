@@ -16,6 +16,17 @@ ok('Backup restore journals before destructive local replacement',
 ok('Mirror-to-local restore journals before destructive local replacement',
  ordered(mirror,["capture?.('Before full IndexedDB mirror restore'","journal?.begin?.('Recovery','mirror-to-local-restore'","adapter.remove(k)","journal.phase(tx.id,'LOCAL_REPLACED')","compareWithAdapter","journal.phase(tx.id,'PARITY_VERIFIED')","journal.commit(tx.id"]));
 
+ok('Mirror restore requires verified safety point before destructive writes',
+ ordered(mirror,["const safety=window.RUNLUUniversalLocalHealth?.capture?.","if(!safety?.id)throw","adapter.remove(k)"]));
+ok('Mirror restore snapshots raw local records before destructive writes',
+ ordered(mirror,["const before=new Map(keys().map(k=>[k,adapter.raw(k)]))","adapter.remove(k)"]));
+ok('Mirror restore has rollback and raw-value verification on write failure',
+ mirror.includes("catch(error){")&&mirror.includes("before.forEach((raw,key)=>localStorage.setItem(key,raw))")&&mirror.includes("adapter.raw(key)===raw")&&mirror.includes("Rollback verification failed"));
+ok('Mirror restore leaves journal open on parity failure',
+ mirror.includes("leave recovery journal open for review."));
+ok('Recovery checkpoint is verified by reread before returning',
+ ordered(health,["data().write(SNAP,","const saved=points().find(x=>x.id===p.id)","Recovery checkpoint verification failed","return p;"]));
+
 const stages=[
  {name:'after intent',phase:'BEGIN'},
  {name:'after local replacement',phase:'LOCAL_REPLACED'},
