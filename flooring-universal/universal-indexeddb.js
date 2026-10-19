@@ -81,7 +81,7 @@ async function replaceLocalFromMirror(){
   throw new Error('Mirror restore failed; previous local records restored: '+error.message,{cause:error});
  }
  const comparison=await compareWithAdapter();
- if(!comparison.ok)throw new Error('Local recovery from durable mirror did not reach parity.');
+ if(!comparison.ok)throw new Error('Local recovery from durable mirror did not reach parity; leave recovery journal open for review.');
  if(tx){journal.phase(tx.id,'PARITY_VERIFIED');journal.commit(tx.id,{restored:records.length})}
  return {restored:records.length,comparison,safety};
 }
