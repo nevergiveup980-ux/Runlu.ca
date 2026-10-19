@@ -19,6 +19,7 @@ async function restore(id){
  if(data().backendConfig().mode!=='local')throw new Error('Recovery Point restore is available only in Local Device mode.');
  const p=points().find(x=>x.id===id);if(!p)throw new Error('Recovery Point not found.');
  const adapter=data().current(),safety=capture('Safety checkpoint before Recovery Point restore',{restorePoint:id});
+ if(!safety?.id)throw new Error('Verified safety checkpoint required before Recovery Point restore.');
  const journal=window.RUNLUUniversalCrashJournal,tx=journal?.begin?.('Recovery','recovery-point-restore',{restorePoint:id,safetyPoint:safety?.id||null});
  // Controlled local replacement first; then explicitly reconcile the durable mirror before reload.
  (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==SNAP&&k!==GUARD&&k!==JOURNAL&&k!=='runlu_flooring_universal_data_backend').forEach(k=>adapter.remove(k));
