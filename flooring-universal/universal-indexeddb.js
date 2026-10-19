@@ -112,7 +112,7 @@ async function status(){
 }
 function init(){
  if(!supported())return;
- window.RUNLUUniversalData?.onMutation?.(e=>{if(e.adapter!=='local'||!e.key?.startsWith(PREFIX)||e.key===BACKEND||e.key===SNAP||e.key===GUARD||e.key===JOURNAL)return;e.type==='remove'?remove(e.key):put(e.key,e.value)});
+ window.RUNLUUniversalData?.onMutation?.(e=>{if(e.adapter!=='local'||!e.key?.startsWith(PREFIX)||e.key===BACKEND||e.key===SNAP||e.key===GUARD||e.key===JOURNAL)return;(e.type==='remove'?remove(e.key):put(e.key,e.value)).catch(error=>{lastError=String(error?.message||error)})});
  // Startup is intentionally one-way: localStorage remains the operational source.
  // Never overwrite a newer durable mirror with stale/empty local data before the startup guard compares both sides.
 }
