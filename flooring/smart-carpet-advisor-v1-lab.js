@@ -22,6 +22,18 @@
     if(["syd","sy","sq yd","sqyd","square yards","square yard"].includes(u))return q*9;
     return 0;
   }
+  // No advice until the complete sales line has been committed by leaving a field.
+  // The UI must call this after blur/change, never on each keystroke.
+  function completionGate({style,colour,quantity,unit}={},eventType="blur"){
+    const name=norm(style),color=norm(colour),area=areaSF(quantity,unit);
+    if(!name||!color||!area)return {ready:false,reason:"INCOMPLETE_LINE",requestKey:""};
+    if(eventType!=="blur"&&eventType!=="change")return {ready:false,reason:"AWAIT_FIELD_COMMIT",requestKey:""};
+    return {ready:true,reason:"READY",requestKey:JSON.stringify([name,color,area])};
+  }
+  function sameRequest(request,expectedKey){
+    const gate=completionGate(request,"change");
+    return gate.ready&&gate.requestKey===expectedKey;
+  }
   function advise({style,colour,quantity,unit,items=[],maxResults=6}={}){
     const area=areaSF(quantity,unit),name=norm(style),color=norm(colour);
     if(!name||!color||!area)return {ok:false,code:"COMPLETE_STYLE_COLOUR_AND_AREA",results:[]};
@@ -38,7 +50,7 @@
     results.sort((a,b)=>Number(b.areaCandidate)-Number(a.areaCandidate)||Number(b.holdKnown)-Number(a.holdKnown)||a.estimatedRemainingSF-b.estimatedRemainingSF||a.roll.localeCompare(b.roll));
     return {ok:true,requestedSF:area,cutVerified:false,warning:"Area-only estimate. Verify roll width, cut dimensions, orientation, seams, holds and actual stock before confirmation.",results:results.slice(0,Math.max(1,Math.min(20,Number(maxResults)||6)))};
   }
-  const api=Object.freeze({version:"1.0.0-lab",readOnly:true,areaSF,widthFeet,advise});
+  const api=Object.freeze({version:"1.1.0-lab",readOnly:true,areaSF,widthFeet,completionGate,sameRequest,advise});
   if(typeof module!=="undefined"&&module.exports)module.exports=api;
   if(root)root.RUNLUSmartCarpetAdvisorV1=api;
 })(typeof window!=="undefined"?window:null);

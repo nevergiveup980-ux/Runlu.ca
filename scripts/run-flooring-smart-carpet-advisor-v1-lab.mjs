@@ -23,4 +23,19 @@ ok(r.results.some(x=>x.roll==='C'&&x.reason==='HOLD_STATUS_UNVERIFIED'),'unknown
 ok(r.results.some(x=>x.roll==='D'&&x.reason==='WIDTH_UNKNOWN'),'unknown width flagged');
 ok(r.results.some(x=>x.roll==='F'&&x.reason==='UNAVAILABLE'),'inactive roll rejected');
 ok(!/localStorage|\.insert\(|\.update\(|\.delete\(|fetch\(|\.rpc\(/.test(source),'no storage or network mutations');
+const fields={style:'Dawn',colour:'Blue',quantity:20,unit:'syd'};
+for(const missing of ['style','colour','quantity','unit']){
+  const partial={...fields,[missing]:''};
+  ok(!a.completionGate(partial,'blur').ready,'must not advise with missing '+missing);
+}
+ok(!a.completionGate(fields,'input').ready,'typing must not trigger popup');
+ok(!a.completionGate(fields,'focus').ready,'focus must not trigger popup');
+const complete=a.completionGate(fields,'blur');
+ok(complete.ready&&complete.reason==='READY','complete committed line triggers advisor');
+ok(a.sameRequest(fields,complete.requestKey),'unchanged request stays valid');
+ok(a.sameRequest({...fields,quantity:180,unit:'sf'},complete.requestKey),'equivalent SF/SYD same request');
+ok(!a.sameRequest({...fields,quantity:21},complete.requestKey),'quantity edit invalidates advice');
+ok(!a.sameRequest({...fields,colour:'Red'},complete.requestKey),'colour edit invalidates advice');
+ok(!a.sameRequest({...fields,style:'Other'},complete.requestKey),'style edit invalidates advice');
+ok(!a.sameRequest({...fields,quantity:''},complete.requestKey),'cleared field invalidates advice');
 console.log('Smart Carpet Advisor V1 LAB: PASS');
