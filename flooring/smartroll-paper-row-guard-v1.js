@@ -1,5 +1,5 @@
 /* SmartRoll paper PO row confirmation guard V1 — pure, read-only.
- * No DOM edits, no localStorage, no inventory or PO writes.
+ * Pure comparison only; no DOM, inventory or PO modifications.
  * Confirms a recommendation only for the same live paper row and same fields.
  */
 (function(root){
