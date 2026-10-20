@@ -5,6 +5,6 @@ ok(h.includes('smart-carpet-cut-planner-v1-lab.js'),'use existing planner');
 ok(s.includes('window.RUNLUSmartCarpetCutPlannerV1.plan(request())'),'actual plan invoked');
 ok(s.includes("input',reset"),'invalidation');
 ok(s.includes('signature()!==requestSignature'),'stale confirmation blocked');
-ok(s.includes('review').toString!==undefined,'dialog lifecycle');
+ok(s.includes("by('review').showModal()")&&s.includes("by('review').close()"),'dialog lifecycle');
 ok(!/localStorage|sessionStorage|\.rpc\(|\.update\(|fetch\(/.test(s),'no backend or storage writes');
 console.log('Smart Carpet Cut Preview V1: PASS');
