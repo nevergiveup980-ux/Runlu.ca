@@ -36,3 +36,15 @@ test("private-root symlink escape is rejected before media probing",async()=>{
   await assert.rejects(probeLocalMp4({filePath:join(link,"sample.mp4"),privateRoot:root,sha256:"0".repeat(64)}),/Media outside private root/);
  }finally{await rm(root,{recursive:true,force:true});await rm(outside,{recursive:true,force:true});}
 });
+
+test("a non-video file with a correct SHA256 cannot pass media verification",async()=>{
+ assert.equal(mediaToolsAvailable,true,"FFmpeg and ffprobe required");
+ const root=await mkdtemp(join(tmpdir(),"stage-corrupt-mp4-"));
+ try{
+  const filePath=join(root,"fake.mp4");
+  const bytes=Buffer.from("This file is not a playable MP4.");
+  await writeFile(filePath,bytes);
+  const sha256=createHash("sha256").update(bytes).digest("hex");
+  await assert.rejects(probeLocalMp4({filePath,privateRoot:root,sha256}),/ffprobe failed|Invalid ffprobe|MP4 container required|Exactly one video stream required/);
+ }finally{await rm(root,{recursive:true,force:true});}
+});
