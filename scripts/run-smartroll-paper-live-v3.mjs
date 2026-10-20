@@ -1,0 +1,18 @@
+import fs from 'node:fs';import vm from 'node:vm';
+const html=fs.readFileSync('flooring/index-smartroll-paper-multirow-preview-v2.html','utf8');
+const ui=fs.readFileSync('flooring/smartroll-paper-multirow-preview-v2.js','utf8');
+const adapter=fs.readFileSync('flooring/smart-cut-preview-live-inventory-v2.js','utf8');
+const ok=(v,m)=>{if(!v)throw Error(m)};
+new vm.Script(ui);new vm.Script(adapter);
+ok(html.includes('id="loadLive"')&&html.includes('id="useDemo"'),'explicit live/demo controls');
+ok(html.includes('smart-cut-preview-live-inventory-v2.js'),'live adapter loaded');
+ok(ui.includes('RUNLUCutPreviewLiveInventoryV2.loadLive()'),'authenticated live read-only source');
+ok(ui.includes('adapter.rank(input,stock,advisor)'),'recommendations use selected source');
+ok(ui.includes('stockVersion!==token.stockVersion'),'reject stale stock after refresh');
+ok(ui.includes('stockVersion!==token?.stockVersion'),'reject stale stock at confirmation');
+ok(ui.includes('guard.check(token,adapter)'),'existing row safety guard retained');
+ok(ui.includes('No cached or demo fallback'),'offline must fail closed');
+ok(ui.includes('Deerfoot Roll '),'roll identification shown');
+ok(adapter.includes('manufacturerRoll:String(p.manufacturerRoll||"")'),'manufacturer roll available');
+ok(!/localStorage|sessionStorage|fetch\(|\.rpc\(|\.insert\(|\.update\(/.test(ui),'no preview persistent writes');
+console.log('SmartRoll paper live read-only V3 PASS');

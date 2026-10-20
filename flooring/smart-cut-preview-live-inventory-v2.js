@@ -23,7 +23,7 @@ function adapt(rows){
   const status=String(p.status||"");
   return {id:String(r.record_id||p.roll||p.id||""),roll:String(p.roll||""),name:String(p.collection||p.product||""),
    colour:String(p.colour||p.color||""),kind:"Carpet Roll",lot:String(p.lot||""),widthFt:widthFt(p.width),
-   available,selectable:length>0&&!p.transferredOut&&String(p.warehouseScope||"").toLowerCase()!=="external"&&!/used up|transferred|at store/i.test(status),
+   available,manufacturerRoll:String(p.manufacturerRoll||""),location:String(p.location||""),selectable:length>0&&!p.transferredOut&&String(p.warehouseScope||"").toLowerCase()!=="external"&&!/used up|transferred|at store/i.test(status),
    hold:{known:holdKnown},sourceUpdatedAt:String(r.updated_at||p.updatedAt||"")};
  });
 }
