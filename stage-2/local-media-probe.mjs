@@ -1,6 +1,8 @@
 // Local-only ffprobe execution boundary. Never pass user input to a shell.
 import {spawn} from "node:child_process";
 import {realpath,stat} from "node:fs/promises";
+import {createReadStream} from "node:fs";
+import {createHash} from "node:crypto";
 import {resolve,relative,isAbsolute} from "node:path";
 import {inspectMp4Probe} from "./media-probe.mjs";
 export async function probeLocalMp4({filePath,privateRoot,sha256,timeoutMs=15000,maxBytes=500_000_000}){
@@ -12,6 +14,10 @@ export async function probeLocalMp4({filePath,privateRoot,sha256,timeoutMs=15000
  if(!rel||rel===".."||rel.startsWith("../")||rel.startsWith("..\\")||isAbsolute(rel))throw Error("Media outside private root");
  const info=await stat(file);
  if(!info.isFile()||info.size<=0||info.size>maxBytes)throw Error("Invalid media size");
+ if(typeof sha256!=="string"||!/^[a-f0-9]{64}$/.test(sha256))throw Error("Invalid expected SHA256");
+ const hash=createHash("sha256");
+ for await(const chunk of createReadStream(file)){hash.update(chunk);}
+ if(hash.digest("hex")!==sha256)throw Error("Media SHA256 mismatch");
  const raw=await new Promise((accept,reject)=>{
   const child=spawn("ffprobe",["-v","error","-show_entries","format=format_name,duration:stream=codec_type,codec_name,width,height","-of","json","--",file],{shell:false,stdio:["ignore","pipe","pipe"]});
   let stdout="",stderr="",settled=false;
