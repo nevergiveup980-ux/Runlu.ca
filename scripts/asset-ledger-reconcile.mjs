@@ -10,7 +10,7 @@ export function reconcileAssets(existing, discovered) {
   for (const item of discovered) {
     const key = normalize(item.asset_key);
     const url = normalize(item.url).replace(/\/$/, '');
-    if (!key || !item.name || !url || !url.startsWith('https://runlu.ca/')) {
+    if (!key || !item.name || !url || !(url === 'https://runlu.ca' || url.startsWith('https://runlu.ca/'))) {
       conflicts.push({ item, reason: 'missing key/name or untrusted public URL' });
       continue;
     }
