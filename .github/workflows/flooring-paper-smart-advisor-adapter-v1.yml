@@ -1,0 +1,21 @@
+name: Flooring Paper Smart Advisor Adapter V1
+on:
+  pull_request:
+    paths:
+      - 'flooring/paper-smart-advisor-adapter-v1.js'
+      - 'scripts/run-flooring-paper-smart-advisor-adapter-v1.mjs'
+      - '.github/workflows/flooring-paper-smart-advisor-adapter-v1.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'flooring/paper-smart-advisor-adapter-v1.js'
+      - 'scripts/run-flooring-paper-smart-advisor-adapter-v1.mjs'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/run-flooring-paper-smart-advisor-adapter-v1.mjs
