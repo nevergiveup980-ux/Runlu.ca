@@ -55,6 +55,7 @@ async function restore(payload){
  if(tx)journal.phase(tx.id,'LOCAL_REPLACED');
  const migration=window.RUNLUUniversalDataVersion?.migrate?.();
  const mirror=await window.RUNLUUniversalDurableLocal?.replaceMirrorFromLocal?.();
+ if(!mirror?.ok||!mirror.comparison?.ok)throw new Error('Restore cannot complete without verified durable mirror reconciliation; recovery journal remains open.');
  if(tx){journal.phase(tx.id,'MIRROR_RECONCILED');journal.commit(tx.id,{restoredKeys:Object.keys(incoming).length})}
  return {restoredKeys:Object.keys(incoming).length,safetyBackup:backup,safety,migration,mirror};
 }
