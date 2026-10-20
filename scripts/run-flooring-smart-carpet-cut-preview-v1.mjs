@@ -1,0 +1,10 @@
+import fs from 'node:fs';import vm from 'node:vm';const h=fs.readFileSync('flooring/index-smart-carpet-cut-preview-v1.html','utf8'),s=fs.readFileSync('flooring/smart-carpet-cut-preview-v1.js','utf8');new vm.Script(s);const ok=(x,m)=>{if(!x)throw Error(m)};
+ok(h.includes('DEMO INVENTORY ONLY'),'lab warning required');
+ok(h.includes('id="review"')&&h.includes('id="confirm"')&&h.includes('id="cancel"'),'confirm/cancel dialog');
+ok(h.includes('smart-carpet-cut-planner-v1-lab.js'),'use existing planner');
+ok(s.includes('window.RUNLUSmartCarpetCutPlannerV1.plan(request())'),'actual plan invoked');
+ok(s.includes("input',reset"),'invalidation');
+ok(s.includes('signature()!==requestSignature'),'stale confirmation blocked');
+ok(s.includes("by('review').showModal()")&&s.includes("by('review').close()"),'dialog lifecycle');
+ok(!/localStorage|sessionStorage|\.rpc\(|\.update\(|fetch\(/.test(s),'no backend or storage writes');
+console.log('Smart Carpet Cut Preview V1: PASS');
