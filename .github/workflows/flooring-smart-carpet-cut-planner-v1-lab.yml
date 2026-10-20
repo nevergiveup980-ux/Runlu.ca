@@ -1,0 +1,21 @@
+name: Flooring Smart Carpet Cut Planner V1 Lab
+on:
+  pull_request:
+    paths:
+      - 'flooring/smart-carpet-cut-planner-v1-lab.js'
+      - 'scripts/run-flooring-smart-carpet-cut-planner-v1-lab.mjs'
+      - '.github/workflows/flooring-smart-carpet-cut-planner-v1-lab.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'flooring/smart-carpet-cut-planner-v1-lab.js'
+      - 'scripts/run-flooring-smart-carpet-cut-planner-v1-lab.mjs'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/run-flooring-smart-carpet-cut-planner-v1-lab.mjs
