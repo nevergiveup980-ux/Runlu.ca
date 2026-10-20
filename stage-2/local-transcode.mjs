@@ -20,7 +20,7 @@ export async function transcodeToH264Mp4({sourcePath,privateRoot,outputName="del
  const existing=await stat(output).catch(e=>{if(e.code==="ENOENT")return null;throw e;});
  if(existing)throw Error("Output already exists");
  await new Promise((resolveDone,reject)=>{
-  const args=["-hide_banner","-loglevel","error","-nostdin","-i",source,"-map","0:v:0","-map","0:a:0?","-c:v","libx264","-pix_fmt","yuv420p","-movflags","+faststart","-c:a","aac","-y",output];
+  const args=["-hide_banner","-loglevel","error","-nostdin","-i",source,"-map","0:v:0","-map","0:a:0?","-c:v","libx264","-pix_fmt","yuv420p","-movflags","+faststart","-c:a","aac","-n",output];
   const child=spawn("ffmpeg",args,{shell:false,stdio:["ignore","ignore","pipe"]});
   let settled=false,stderr="";
   const fail=e=>{if(!settled){settled=true;reject(e);}};
