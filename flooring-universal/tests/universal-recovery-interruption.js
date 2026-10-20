@@ -27,6 +27,15 @@ ok('Mirror restore leaves journal open on parity failure',
 ok('Recovery checkpoint is verified by reread before returning',
  ordered(health,["data().write(SNAP,","const saved=points().find(x=>x.id===p.id)","Recovery checkpoint verification failed","return p;"]));
 
+ok('Backup restore refuses missing or failed durable mirror reconciliation',
+ backup.includes("if(!mirror?.ok||!mirror.comparison?.ok)throw new Error(")&&ordered(backup,["const mirror=await","if(!mirror?.ok||!mirror.comparison?.ok)","journal.commit(tx.id"]));
+ok('Recovery Point restore refuses missing or failed durable mirror reconciliation',
+ health.includes("if(!mirror?.ok||!mirror.comparison?.ok)throw new Error(")&&ordered(health,["const mirror=await","if(!mirror?.ok||!mirror.comparison?.ok)","journal.commit(tx.id"]));
+ok('Backup restore has verified local rollback on synchronous write errors',
+ backup.includes("original.forEach((raw,key)=>localStorage.setItem(key,raw))")&&backup.includes("Rollback verification failed"));
+ok('Recovery Point restore has verified local rollback on synchronous write errors',
+ health.includes("original.forEach((raw,key)=>localStorage.setItem(key,raw))")&&health.includes("Rollback verification failed"));
+
 const stages=[
  {name:'after intent',phase:'BEGIN'},
  {name:'after local replacement',phase:'LOCAL_REPLACED'},
