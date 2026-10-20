@@ -35,6 +35,13 @@ function render(){
  }
 }
 $("recommend").addEventListener("click",render);
+// Recommend only after a fully populated row is committed by leaving a field.
+for(const id of ["qty","style","colour"]){
+ $(id).addEventListener("blur",()=>{
+   const r=current();
+   if(r.ready&&r.requestKey!==token)render();
+ });
+}
 $("cancel").addEventListener("click",()=>{selection=null;$("dialog").close();});
 $("confirm").addEventListener("click",()=>{
  if(!selection||!current().ready||current().requestKey!==token){selection=null;$("dialog").close();stale();return;}
