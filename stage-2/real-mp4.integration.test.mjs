@@ -3,7 +3,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {spawnSync} from "node:child_process";
 import {createHash} from "node:crypto";
-import {mkdtemp,readFile,rm,symlink} from "node:fs/promises";
+import {mkdtemp,readFile,writeFile,rm,symlink} from "node:fs/promises";
 import {tmpdir} from "node:os";
 import {join} from "node:path";
 import {probeLocalMp4} from "./local-media-probe.mjs";
@@ -29,8 +29,9 @@ test("private-root symlink escape is rejected before media probing",async()=>{
  const root=await mkdtemp(join(tmpdir(),"stage-private-"));
  const outside=await mkdtemp(join(tmpdir(),"stage-outside-"));
  try{
+  await writeFile(join(outside,"sample.mp4"),"outside private storage");
   const link=join(root,"escape");
   await symlink(outside,link,"dir");
-  await assert.rejects(probeLocalMp4({filePath:join(link,"missing.mp4"),privateRoot:root,sha256:"0".repeat(64)}));
+  await assert.rejects(probeLocalMp4({filePath:join(link,"sample.mp4"),privateRoot:root,sha256:"0".repeat(64)}),/Media outside private root/);
  }finally{await rm(root,{recursive:true,force:true});await rm(outside,{recursive:true,force:true});}
 });
