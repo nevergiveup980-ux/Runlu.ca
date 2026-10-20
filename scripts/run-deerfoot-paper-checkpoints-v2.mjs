@@ -1,0 +1,14 @@
+import fs from 'node:fs';import vm from 'node:vm';
+const html=fs.readFileSync('flooring/deerfoot-paper-reference-calibration-v1.html','utf8');
+const css=fs.readFileSync('flooring/deerfoot-paper-checkpoints-v2.css','utf8');
+const js=fs.readFileSync('flooring/deerfoot-paper-checkpoints-v2.js','utf8');
+const prod=fs.readFileSync('flooring/deerfoot-po-invoice-v040.html','utf8');
+const ok=(x,m)=>{if(!x)throw Error(m)};
+new vm.Script(js);
+ok(html.includes('deerfoot-paper-checkpoints-v2.css')&&html.includes('deerfoot-paper-checkpoints-v2.js'),'calibration files loaded');
+ok(html.includes('id="calibrationGrid"')&&html.includes('id="calibrationPoints"'),'controls visible');
+ok(js.includes('"Line items","items"')&&js.includes('"Signature","authLine"')&&js.includes('"Payment","paymentBox"'),'major mid/bottom checkpoints');
+ok(css.includes('@media print{.calibrationPanel,#calibrationOverlay{display:none!important}}'),'guides never contaminate output');
+ok(!prod.includes('deerfoot-paper-checkpoints-v2'),'live invoice unchanged');
+ok(!/localStorage|fetch\(|\.rpc\(|\.update\(|\.insert\(/.test(js),'no persistence');
+console.log('Deerfoot paper checkpoints V2 PASS');
