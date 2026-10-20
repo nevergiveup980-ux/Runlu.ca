@@ -21,3 +21,18 @@ test("reject empty file before invoking ffprobe",async()=>{
  }finally{await rm(root,{recursive:true,force:true});}
 });
 test("reject unsafe timeout",async()=>assert.rejects(probeLocalMp4({filePath:"x",privateRoot:"y",sha256,timeoutMs:0}),/Invalid probe timeout/));
+
+test("reject mismatched file digest before ffprobe",async()=>{
+ const root=await mkdtemp(join(tmpdir(),"stage-probe-"));
+ try{
+  const path=join(root,"wrong.mp4");await writeFile(path,"not a video");
+  await assert.rejects(probeLocalMp4({filePath:path,privateRoot:root,sha256}),/Media SHA256 mismatch/);
+ }finally{await rm(root,{recursive:true,force:true});}
+});
+test("reject malformed expected digest before ffprobe",async()=>{
+ const root=await mkdtemp(join(tmpdir(),"stage-probe-"));
+ try{
+  const path=join(root,"wrong.mp4");await writeFile(path,"not a video");
+  await assert.rejects(probeLocalMp4({filePath:path,privateRoot:root,sha256:"abc"}),/Invalid expected SHA256/);
+ }finally{await rm(root,{recursive:true,force:true});}
+});
