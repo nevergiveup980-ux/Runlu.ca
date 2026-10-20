@@ -6,6 +6,7 @@
 <title>Deerfoot Paper Reference · Calibration LAB</title>
 <link rel="stylesheet" href="deerfoot-base.css">
 <link rel="stylesheet" href="deerfoot-final.css?v=091"><link rel="stylesheet" href="deerfoot-paper-reference-calibration-v1.css">
+<link rel="stylesheet" href="deerfoot-paper-checkpoints-v2.css">
 <style>
 .notesBox{border-top:0!important}
 .poPurpose{font-weight:800;color:#173d30}.controls .control.costControl{min-width:180px}
@@ -13,6 +14,13 @@
 </head>
 <body class="poInvoicePage referenceCalibration">
 <div class="appbar"><div class="inner"><div class="brand">PO → Deerfoot Invoice<small>REFERENCE CALIBRATION LAB · not a production invoice</small></div><button class="primary" onclick="window.print()">Print / Save PDF</button></div></div>
+<section class="calibrationPanel" aria-label="Physical Deerfoot form calibration">
+<strong>Original form alignment check · V2</strong>
+<p>Compare with a blank paper original at 100% actual size, Letter paper, zero printer margins. Do not use customer orders for calibration.</p>
+<label><input type="checkbox" id="calibrationGrid"> Show 10 mm measurement grid (screen only)</label>
+<label><input type="checkbox" id="calibrationPoints"> Show form alignment checkpoints (screen only)</label>
+<p id="calibrationNote">Reference geometry is provisional; print with no scaling to verify with an original blank form.</p>
+</section>
 <div class="controls">
   <div class="control"><label>Copy</label><select id="copy"><option value="customer">White</option><option value="warehouse">Yellow</option><option value="accounting">Pink</option></select></div>
   <div class="control"><label>Output</label><select id="mode"><option value="full">Full Form</option><option value="overlay">3-Part Overlay · Data Only</option></select></div>
@@ -71,4 +79,5 @@
   </div>
 </div></div></div>
 <script src="deerfoot-po-invoice-v040.js?v=042"></script>
+<script src="deerfoot-paper-checkpoints-v2.js"></script>
 </body></html>
