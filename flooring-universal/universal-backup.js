@@ -38,8 +38,20 @@ async function restore(payload){
  if(!safety?.id)throw new Error('Verified safety checkpoint required before backup restore.');
  const journal=window.RUNLUUniversalCrashJournal,tx=journal?.begin?.('Recovery','backup-restore',{backupCreatedAt:payload.createdAt||null,safetyPoint:safety?.id||null});
  // Replace Universal business/workspace keys as one controlled operation; backend selection remains local.
- (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!=='runlu_flooring_universal_data_backend'&&k!==SNAP&&k!==GUARD&&k!==JOURNAL).forEach(k=>adapter.remove(k));
- Object.entries(incoming).forEach(([k,v])=>{if(!RESERVED.has(k))adapter.write(k,v)});
+ const businessKeys=()=> (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&!RESERVED.has(k));
+ const original=new Map(businessKeys().map(k=>[k,adapter.raw(k)]));
+ try{
+  businessKeys().forEach(k=>adapter.remove(k));
+  Object.entries(incoming).forEach(([k,v])=>{if(!RESERVED.has(k))adapter.write(k,v)});
+ }catch(error){
+  try{
+   businessKeys().forEach(k=>adapter.remove(k));
+   original.forEach((raw,key)=>localStorage.setItem(key,raw));
+   if(businessKeys().length!==original.size||![...original].every(([key,raw])=>adapter.raw(key)===raw))throw new Error('Rollback verification failed');
+   if(tx)journal.phase(tx.id,'LOCAL_ROLLED_BACK');
+  }catch(rollbackError){throw new Error('Backup restore failed; rollback could not be verified: '+rollbackError.message,{cause:error})}
+  throw new Error('Backup restore failed; previous local data restored: '+error.message,{cause:error});
+ }
  if(tx)journal.phase(tx.id,'LOCAL_REPLACED');
  const migration=window.RUNLUUniversalDataVersion?.migrate?.();
  const mirror=await window.RUNLUUniversalDurableLocal?.replaceMirrorFromLocal?.();
