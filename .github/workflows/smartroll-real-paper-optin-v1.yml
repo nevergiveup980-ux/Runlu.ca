@@ -1,0 +1,16 @@
+name: SmartRoll Real Paper Opt-in V1
+on:
+  pull_request:
+    paths:
+      - 'flooring/deerfoot-po-smartroll-optin-v1.html'
+      - 'flooring/smartroll-real-paper-optin-v1.js'
+      - 'scripts/run-smartroll-real-paper-optin-v1.mjs'
+      - '.github/workflows/smartroll-real-paper-optin-v1.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: node scripts/run-smartroll-real-paper-optin-v1.mjs
