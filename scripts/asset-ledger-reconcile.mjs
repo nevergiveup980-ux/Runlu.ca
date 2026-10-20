@@ -14,6 +14,7 @@ export function reconcileAssets(existing, discovered) {
       conflicts.push({ item, reason: 'missing key/name or untrusted public URL' });
       continue;
     }
+    if (keys.has(key) && urls.has(url)) continue;
     if (seen.has(key)) {
       conflicts.push({ item, reason: 'duplicate discovery key' });
       continue;
