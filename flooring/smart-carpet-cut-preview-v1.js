@@ -4,18 +4,40 @@
 const by=x=>document.getElementById(x);
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const n=x=>Number(by(x).value);
-const rolls=[
+const demoRolls=[
 {id:'preview-small',roll:'DEMO-101',name:'Dawn',colour:'Blue',kind:'Carpet Roll',lot:'LOT-A',widthFt:12,available:26,selectable:true,hold:{known:true}},
 {id:'preview-mid',roll:'DEMO-102',name:'Dawn',colour:'Blue',kind:'Carpet Roll',lot:'LOT-A',widthFt:12,available:35,selectable:true,hold:{known:true}},
 {id:'preview-other',roll:'DEMO-203',name:'Dawn',colour:'Blue',kind:'Carpet Roll',lot:'LOT-B',widthFt:12,available:38,selectable:true,hold:{known:true}}
 ];
-let current=[],chosen=null;
+let rolls=demoRolls,source="DEMO",fetchedAt="",current=[],chosen=null;
+async function loadLive(){
+  reset();
+  by("source").textContent="Loading authenticated live Warehouse records…";
+  by("loadLive").disabled=true;
+  try{
+    const data=await window.RUNLUCutPreviewLiveInventoryV2.loadLive();
+    rolls=data.rolls;
+    source=data.source;
+    fetchedAt=data.fetchedAt;
+    by("source").textContent="LIVE read-only · "+rolls.length+" carpet records · "+new Date(fetchedAt).toLocaleString()+" · unverified holds are excluded";
+    by("info").textContent="Real roll records loaded. Enter requirements and calculate. No stock or PO writes.";
+  }catch(e){
+    rolls=[];
+    source="UNAVAILABLE";
+    fetchedAt="";
+    by("source").textContent="LIVE unavailable: "+(e?.message||e)+". No stale cache or demo inventory substituted.";
+  }finally{by("loadLive").disabled=false}
+}
+by("loadLive").addEventListener("click",loadLive);
+by("useDemo").addEventListener("click",()=>{rolls=demoRolls;source="DEMO";fetchedAt="";reset();by("source").textContent="DEMO inventory · invented rolls only"});
+
 const request=()=>({style:by('style').value,colour:by('colour').value,dyelot:by('lot').value,cutAllowanceFt:n('allowance'),cuts:[{id:'Living',widthFt:n('w1'),lengthFt:n('l1')},{id:'Bedroom',widthFt:n('w2'),lengthFt:n('l2')}],rolls});
-const signature=()=>JSON.stringify(request());
+const signature=()=>JSON.stringify({request:request(),source,fetchedAt});
 let requestSignature='';
 function reset(){current=[];chosen=null;requestSignature='';by('results').replaceChildren();by('info').textContent='Input changed. Recalculate to see current recommendations.'}
 document.querySelectorAll('input').forEach(el=>el.addEventListener('input',reset));
 by('calculate').addEventListener('click',()=>{
+ if(source==="UNAVAILABLE"){by("info").textContent="Live inventory unavailable; no recommendation permitted.";return}
  const r=window.RUNLUSmartCarpetCutPlannerV1.plan(request());
  current=r.plans||[];chosen=null;requestSignature=signature();
  const holder=by('results');holder.replaceChildren();
