@@ -11,7 +11,7 @@ ok(a.widthFeet("12'")===12,'12 foot width');
 ok(Math.abs(a.widthFeet("13' 2\"")-13.166666666666666)<.0001,'feet inches width');
 ok(a.widthFeet("unknown")===0,'unknown width fail closed');
 const row=(id,width,available,hold=true,other={})=>({id,kind:'Carpet Roll',name:'Dawn',colour:'Blue',width,quantity:available,available,selectable:true,hold:{known:hold},roll:id,...other});
-const items=[row('A',"12'",20),row('B',"12'",12),row('C',"15'",10,false),row('D',"",100),row('E',"12'",30,true,{colour:'Red'}),row('F',"12'",30,true,{selectable:false})];
+const items=[row('A',"12'",20),row('B',"12'",12),row('C',"15'",15,false),row('D',"",100),row('E',"12'",30,true,{colour:'Red'}),row('F',"12'",30,true,{selectable:false})];
 const r=a.advise({style:'dawn',colour:'BLUE',quantity:20,unit:'syd',items});
 ok(r.ok&&r.requestedSF===180,'request conversion');
 ok(r.results.length===5,'exact product and colour');
