@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flooring Smart Cut Planner · Isolated Preview</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f1f5f2;color:#183f31;font:15px system-ui,sans-serif}
+main{max-width:900px;margin:auto;padding:22px}.card{background:white;border:1px solid #d4e2d8;border-radius:13px;padding:18px;margin:14px 0}
+h1{font-size:25px}h2{font-size:19px}label{display:block;font-weight:650;margin-top:10px}input{width:100%;padding:10px;border:1px solid #bacbc1;border-radius:7px;font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}button{border:0;border-radius:9px;padding:12px 17px;background:#205943;color:white;font-weight:700;cursor:pointer;min-height:44px}button:disabled{opacity:.45}
+.secondary{color:#205943;background:white;border:1px solid #a8c1b3}.muted{color:#596e63}.warning{color:#8b5200;background:#fff6df;padding:12px;border-radius:8px}
+.result{border:1px solid #c6d9ce;border-radius:10px;padding:12px;margin:9px 0}
+dialog{border:0;border-radius:14px;max-width:650px;width:calc(100% - 24px);box-shadow:0 12px 60px #0004}dialog::backdrop{background:#10251bb5}
+.actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:12px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}main{padding:12px}}
+</style></head><body><main>
+<h1>Smart Carpet Cut Planner · Preview</h1>
+<p class="warning"><strong>ISOLATED LAB — DEMO INVENTORY ONLY.</strong> No real Warehouse records, PO saving, Hold, cutting authorization or stock deduction.</p>
+<section class="card"><h2>Sales request</h2><div class="grid">
+<div><label for="style">Carpet style</label><input id="style" value="Dawn"></div>
+<div><label for="colour">Colour</label><input id="colour" value="Blue"></div>
+<div><label for="lot">Required Dyelot (optional)</label><input id="lot" placeholder="Same lot required across rolls"></div>
+<div><label for="allowance">Allowance per piece (LF)</label><input id="allowance" type="number" value="0" min="0" step=".1"></div>
+</div><h2>Required cuts · feet</h2><div class="grid">
+<div><label for="w1">Living room width</label><input id="w1" type="number" min=".1" step=".1" value="10"></div>
+<div><label for="l1">Living room length</label><input id="l1" type="number" min=".1" step=".1" value="17"></div>
+<div><label for="w2">Bedroom width</label><input id="w2" type="number" min=".1" step=".1" value="11"></div>
+<div><label for="l2">Bedroom length</label><input id="l2" type="number" min=".1" step=".1" value="8"></div>
+</div><div class="actions"><button id="calculate">Get cut suggestions</button></div></section>
+<section class="card" aria-live="polite"><h2>Suggested plans</h2><p id="info" class="muted">Complete the fields and calculate.</p><div id="results"></div></section>
+</main>
+<dialog id="review"><h2>Confirm proposal?</h2><div id="summary"></div><p class="warning">Confirm only selects a preview proposal. Warehouse must verify all physical cut details. Nothing is saved to a real PO.</p><div class="actions"><button id="cancel" class="secondary">Cancel</button><button id="confirm">Confirm preview</button></div></dialog>
+<script src="smart-carpet-cut-planner-v1-lab.js?v=preview1"></script>
+<script src="smart-carpet-cut-preview-v1.js?v=preview1"></script>
+</body></html>
