@@ -9,7 +9,8 @@ import {join} from "node:path";
 import {probeLocalMp4} from "./local-media-probe.mjs";
 const available=name=>spawnSync(name,["-version"],{timeout:3000,stdio:"ignore"}).status===0;
 const mediaToolsAvailable=available("ffmpeg")&&available("ffprobe");
-test("real H264 MP4 passes private-file SHA256 and ffprobe delivery gates",{skip:!mediaToolsAvailable},async()=>{
+test("real H264 MP4 passes private-file SHA256 and ffprobe delivery gates",async()=>{
+ assert.equal(mediaToolsAvailable,true,"FFmpeg and ffprobe must be installed for real media integration");
  const root=await mkdtemp(join(tmpdir(),"stage-real-mp4-"));
  try{
   const filePath=join(root,"sample.mp4");
