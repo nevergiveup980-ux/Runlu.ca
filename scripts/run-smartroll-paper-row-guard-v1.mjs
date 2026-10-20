@@ -1,0 +1,22 @@
+import fs from 'node:fs';import vm from 'node:vm';
+const source=fs.readFileSync('flooring/smartroll-paper-row-guard-v1.js','utf8'),adapterSource=fs.readFileSync('flooring/paper-smart-advisor-adapter-v1.js','utf8');new vm.Script(source);new vm.Script(adapterSource);
+const ctx={module:{exports:{}}};vm.createContext(ctx);vm.runInContext(adapterSource,ctx);const adapter=ctx.module.exports;ctx.module={exports:{}};vm.runInContext(source,ctx);const guard=ctx.module.exports;
+const ok=(v,m)=>{if(!v)throw Error(m)};
+function row(arr){return {isConnected:true,ownerDocument:{},children:arr.map(value=>({childNodes:[{textContent:value}]}))}}
+const rowA=row(['100 SF','10 x 10','Dawn','Blue','']),rowB=row(['100 SF','10 x 10','Dawn','Blue','']);
+const a=guard.begin(rowA,adapter),b=guard.begin(rowB,adapter);
+ok(a.ok&&b.ok,'independent row tokens');
+ok(guard.check(a.token,adapter).ok,'original row still safe');
+rowB.children[3].childNodes[0].textContent='Red';
+ok(guard.check(a.token,adapter).ok,'second row edits cannot affect first');
+ok(guard.check(b.token,adapter).reason==='REQUEST_CHANGED','second row changed must fail');
+rowA.children[4].childNodes[0].textContent='Other roll';
+ok(guard.check(a.token,adapter).reason==='REFERENCE_CHANGED','conflicting sourceRef must fail');
+rowA.children[4].childNodes[0].textContent='';
+rowA.children[0].childNodes[0].textContent='10 SYD';
+ok(guard.check(a.token,adapter).reason==='REQUEST_CHANGED','area edit invalidates recommendation');
+rowA.children[0].childNodes[0].textContent='100 SF';
+rowA.isConnected=false;
+ok(guard.check(a.token,adapter).reason==='ROW_DETACHED','removed row rejected');
+ok(!/localStorage|sessionStorage|fetch\(|\.rpc\(|\.insert\(|\.update\(/.test(source),'no mutations');
+console.log('SmartRoll Paper Row Confirm Guard V1 PASS');
