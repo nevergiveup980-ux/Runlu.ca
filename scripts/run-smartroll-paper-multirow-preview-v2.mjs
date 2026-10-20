@@ -1,0 +1,13 @@
+import fs from 'node:fs';import vm from 'node:vm';
+const h=fs.readFileSync('flooring/index-smartroll-paper-multirow-preview-v2.html','utf8'),s=fs.readFileSync('flooring/smartroll-paper-multirow-preview-v2.js','utf8');
+new vm.Script(s);const check=(v,m)=>{if(!v)throw Error(m)};
+check((h.match(/class="suggest"/g)||[]).length===2,'two demo rows');
+check(h.includes('smartroll-paper-row-guard-v1.js'),'guard loaded');
+check(s.includes('guard.begin(tr,adapter)'),'row token required');
+check((s.match(/guard.check\(token,adapter\)/g)||[]).length>=2,'check at selection and commit');
+check(s.includes('const tr=token.row'),'write to token original row only');
+check(s.includes("tr.children[4]"),'only source-ref cell');
+check(s.includes("btn.disabled=!rec.areaCandidate||!rec.holdKnown"),'unsafe candidate disabled');
+check(s.includes("reset('Cancelled: paper rows remain unchanged.")&&s.includes('dialog.addEventListener(\'cancel\''),'cancel no write');
+check(!/localStorage|sessionStorage|fetch\(|\.rpc\(|\.update\(|\.insert\(/.test(s),'no persistent writes');
+console.log('SmartRoll paper multirow guarded LAB V2 PASS');
