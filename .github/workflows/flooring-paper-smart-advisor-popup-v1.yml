@@ -1,0 +1,16 @@
+name: Flooring Paper Advisor Popup Preview V1
+on:
+  pull_request:
+    paths:
+      - 'flooring/paper-smart-advisor-popup-preview-v1.js'
+      - 'flooring/index-paper-smart-advisor-preview-v1.html'
+      - 'scripts/run-flooring-paper-smart-advisor-popup-v1.mjs'
+      - '.github/workflows/flooring-paper-smart-advisor-popup-v1.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: node scripts/run-flooring-paper-smart-advisor-popup-v1.mjs
