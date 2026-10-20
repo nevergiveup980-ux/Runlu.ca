@@ -13,7 +13,8 @@ dialog{border:0;border-radius:14px;max-width:650px;width:calc(100% - 24px);box-s
 @media(max-width:600px){.grid{grid-template-columns:1fr}main{padding:12px}}
 </style></head><body><main>
 <h1>Smart Carpet Cut Planner · Preview</h1>
-<p class="warning"><strong>ISOLATED LAB — DEMO INVENTORY ONLY.</strong> No real Warehouse records, PO saving, Hold, cutting authorization or stock deduction.</p>
+<p class="warning"><strong>ISOLATED PREVIEW — DEMO by default; authenticated LIVE read-only is optional.</strong> No real Warehouse records, PO saving, Hold, cutting authorization or stock deduction.</p>
+<section class="card"><h2>Inventory source</h2><p id="source" aria-live="polite">DEMO inventory · invented rolls only</p><div class="actions"><button class="secondary" id="useDemo">Use demo</button><button id="loadLive">Load live Warehouse (read-only)</button></div><p class="muted">Live access requires an existing authorized RUNLU central-services session. Unknown holds, missing widths or lots are excluded. No offline fallback.</p></section>
 <section class="card"><h2>Sales request</h2><div class="grid">
 <div><label for="style">Carpet style</label><input id="style" value="Dawn"></div>
 <div><label for="colour">Colour</label><input id="colour" value="Blue"></div>
@@ -28,6 +29,8 @@ dialog{border:0;border-radius:14px;max-width:650px;width:calc(100% - 24px);box-s
 <section class="card" aria-live="polite"><h2>Suggested plans</h2><p id="info" class="muted">Complete the fields and calculate.</p><div id="results"></div></section>
 </main>
 <dialog id="review"><h2>Confirm proposal?</h2><div id="summary"></div><p class="warning">Confirm only selects a preview proposal. Warehouse must verify all physical cut details. Nothing is saved to a real PO.</p><div class="actions"><button id="cancel" class="secondary">Cancel</button><button id="confirm">Confirm preview</button></div></dialog>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="smart-cut-preview-live-inventory-v2.js?v=preview2"></script>
 <script src="smart-carpet-cut-planner-v1-lab.js?v=preview1"></script>
-<script src="smart-carpet-cut-preview-v1.js?v=preview1"></script>
+<script src="smart-carpet-cut-preview-v1.js?v=preview2"></script>
 </body></html>
