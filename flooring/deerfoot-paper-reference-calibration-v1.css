@@ -1,0 +1,20 @@
+/* Reference-only adjustments guided by provided original paper photograph.
+ * Never loaded by production invoice/PO URLs.
+ * Numeric alignment is provisional pending 100%-size print overlay check. */
+.referenceCalibration .tractorStrip{display:none!important}
+.referenceCalibration .printerMark{display:none!important}
+.referenceCalibration .formCode{display:none!important}
+.referenceCalibration .copyTag{display:none!important}
+.referenceCalibration .invoice::before{display:none!important}
+.referenceCalibration .invoice{background:#fff!important}
+.referenceCalibration .invoice .items th{background:#fff!important}
+.referenceCalibration .invoice .companyInfo{top:5.2mm!important}
+.referenceCalibration .invoice .dcMark{top:2.2mm!important}
+.referenceCalibration .invoice .companyName{top:15.1mm!important}
+.referenceCalibration .invoice .dateLabel{top:2.1mm!important}
+.referenceCalibration .invoice .dateBox{top:6mm!important}
+.referenceCalibration .invoice .invoiceNoTop{top:18.6mm!important}
+@media print{
+  .referenceCalibration .hint{display:none!important}
+  .referenceCalibration .invoice{transform:none!important}
+}

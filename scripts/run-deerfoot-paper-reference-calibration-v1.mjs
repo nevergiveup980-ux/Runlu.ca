@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+const html=fs.readFileSync('flooring/deerfoot-paper-reference-calibration-v1.html','utf8');
+const css=fs.readFileSync('flooring/deerfoot-paper-reference-calibration-v1.css','utf8');
+const prod=fs.readFileSync('flooring/deerfoot-po-invoice-v040.html','utf8');
+const ok=(v,m)=>{if(!v)throw Error(m)};
+ok(html.includes('REFERENCE CALIBRATION LAB'),'isolated lab labeling');
+ok(html.includes('deerfoot-paper-reference-calibration-v1.css'),'styles only in lab');
+ok(!prod.includes('deerfoot-paper-reference-calibration-v1.css'),'production remains untouched');
+ok(css.includes('.tractorStrip{display:none'),'remove decorative tractor holes');
+ok(css.includes('.copyTag{display:none'),'remove digital PO label');
+ok(css.includes('.invoiceNoTop{top:18.6mm'),'reference top invoice number repositioned');
+ok(html.includes('id="rows"'),'native paper column layout preserved');
+ok(css.includes('@media print'),'print-specific handling');
+console.log('Deerfoot paper reference calibration V1: PASS');
