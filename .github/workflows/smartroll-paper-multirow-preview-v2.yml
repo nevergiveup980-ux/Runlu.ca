@@ -1,0 +1,16 @@
+name: SmartRoll Paper Multirow Preview V2
+on:
+  pull_request:
+    paths:
+      - 'flooring/index-smartroll-paper-multirow-preview-v2.html'
+      - 'flooring/smartroll-paper-multirow-preview-v2.js'
+      - 'scripts/run-smartroll-paper-multirow-preview-v2.mjs'
+      - '.github/workflows/smartroll-paper-multirow-preview-v2.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: node scripts/run-smartroll-paper-multirow-preview-v2.mjs
