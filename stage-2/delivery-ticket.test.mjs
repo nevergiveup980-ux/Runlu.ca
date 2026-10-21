@@ -13,7 +13,7 @@ test("ticket cannot be used by another owner",()=>assert.throws(()=>verifyDelive
 test("expired ticket rejected",()=>assert.throws(()=>verifyDeliveryTicket({ticket:issue(),secret,requesterId:"owner-1",now:220000}),/expired/));
 test("tampered ticket rejected",()=>{
  const ticket=issue(),[body,sig]=ticket.split(".");
- assert.throws(()=>verifyDeliveryTicket({ticket:body+"."+sig.slice(0,-1)+"A",secret,requesterId:"owner-1",now:110000}),/signature|Invalid ticket/);
+ assert.throws(()=>verifyDeliveryTicket({ticket:body+"."+(sig[0]==="A"?"B":"A")+sig.slice(1),secret,requesterId:"owner-1",now:110000}),/signature|Invalid ticket/);
 });
 test("wrong signing secret rejected",()=>assert.throws(()=>verifyDeliveryTicket({ticket:issue(),secret:"another-strong-secret-that-is-long-enough",requesterId:"owner-1",now:110000}),/signature/));
 test("unverified asset cannot issue ticket",()=>assert.throws(()=>issue({asset:{...asset,state:"INGESTING"}}),/not ready/));
