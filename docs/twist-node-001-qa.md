@@ -10,6 +10,8 @@ Status: development only. This checklist does not claim browser testing has pass
 - [ ] Reveal answer for puzzle 1; confirm answer and Why the Twist explanation display.
 - [ ] After reveal, select I got it or Not yet; confirm exactly one self-assessment is saved and the total updates.
 - [ ] Reload and switch language; confirm self-assessment persists without affecting exploration points.
+- [ ] Change self-assessment from I got it to Not yet and back; confirm totals update without duplicate entries.
+- [ ] Load saved data with invalid assessment keys or an assessment for an unrevealed puzzle; confirm they are ignored.
 - [ ] Complete all 20, use Review from start, and verify Previous/Next navigation preserves results.
 - [ ] Confirm 5 exploration points if hint was used, or 10 if not.
 - [ ] Tap Next, then Previous; verify answer state remains consistent.
