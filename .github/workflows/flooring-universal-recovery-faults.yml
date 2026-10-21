@@ -1,0 +1,25 @@
+name: Flooring Universal Recovery Fault Injection
+on:
+  push:
+    branches:
+      - fix/flooring-universal-mirror-safety-20261018
+    paths:
+      - 'flooring-universal/**'
+      - '.github/workflows/flooring-universal-recovery-faults.yml'
+  workflow_dispatch:
+jobs:
+  recovery-fault-injection:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Backup restore fault injection
+        run: node flooring-universal/tests/universal-backup-fault-injection.js
+      - name: Recovery interruption contract
+        run: node flooring-universal/tests/universal-recovery-interruption.js
+      - name: Local persistence contract
+        run: node flooring-universal/tests/universal-local-persistence-contract.js
