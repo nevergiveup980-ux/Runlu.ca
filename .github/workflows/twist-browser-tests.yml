@@ -1,0 +1,32 @@
+name: TWIST browser tests
+on:
+  pull_request:
+    paths:
+      - 'twist.html'
+      - 'tests/twist.spec.mjs'
+      - '.github/workflows/twist-browser-tests.yml'
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright test runner
+        run: npm install --no-save --no-package-lock @playwright/test
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Start static preview server
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/twist-server.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8765/twist.html >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/twist-server.log
+          exit 1
+      - name: Run browser regression tests
+        run: npx playwright test tests/twist.spec.mjs --browser chromium --workers 1 --reporter line
