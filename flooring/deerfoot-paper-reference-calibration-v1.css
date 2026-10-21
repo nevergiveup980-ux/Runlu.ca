@@ -18,3 +18,18 @@
   .referenceCalibration .hint{display:none!important}
   .referenceCalibration .invoice{transform:none!important}
 }
+
+/* V3 calibration: date stays inside DATE box, clear of printed invoice number. */
+.referenceCalibration .invoice .dateData{
+  top:8.5mm!important;
+  line-height:4mm!important;
+}
+.referenceCalibration .invoice .invoiceNoTop{top:20.8mm!important}
+/* V3: align right-hand price band rows to the same fixed baseline as left item cells.
+   Both sections share the 101mm table top and 6.5mm header. */
+.referenceCalibration .invoice .priceBand{top:101mm!important}
+.referenceCalibration .invoice .priceBand .priceHead{height:6.5mm!important;min-height:6.5mm!important}
+.referenceCalibration .invoice .priceBand .priceRow{height:4.48mm!important;min-height:4.48mm!important;box-sizing:border-box!important}
+.referenceCalibration .invoice .items{border-collapse:collapse!important;table-layout:fixed!important}
+.referenceCalibration .invoice .items th{height:6.5mm!important;box-sizing:border-box!important}
+.referenceCalibration .invoice .items td{height:4.48mm!important;box-sizing:border-box!important}
