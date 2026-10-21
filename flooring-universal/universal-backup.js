@@ -39,6 +39,7 @@ async function restore(payload){
  if(typeof window.RUNLUUniversalDurableLocal?.replaceMirrorFromLocal!=='function')throw new Error('Durable mirror unavailable; backup restore refused before local data replacement.');
  if(typeof window.RUNLUUniversalCrashJournal?.begin!=='function'||typeof window.RUNLUUniversalCrashJournal?.commit!=='function'||typeof window.RUNLUUniversalCrashJournal?.phase!=='function')throw new Error('Recovery journal unavailable; backup restore refused before local data replacement.');
  const journal=window.RUNLUUniversalCrashJournal,tx=journal?.begin?.('Recovery','backup-restore',{backupCreatedAt:payload.createdAt||null,safetyPoint:safety?.id||null});
+ if(!tx?.id)throw new Error('Recovery journal did not create a valid transaction; restore refused before local data replacement.');
  // Replace Universal business/workspace keys as one controlled operation; backend selection remains local.
  const businessKeys=()=> (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&!RESERVED.has(k));
  const original=new Map(businessKeys().map(k=>[k,adapter.raw(k)]));
