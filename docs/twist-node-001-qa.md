@@ -8,6 +8,9 @@ Status: development only. This checklist does not claim browser testing has pass
 - [ ] Select 简体中文; reload; confirm the selected language persists.
 - [ ] Reveal hint for puzzle 1; reload; confirm hint stays visible.
 - [ ] Reveal answer for puzzle 1; confirm answer and Why the Twist explanation display.
+- [ ] After reveal, select I got it or Not yet; confirm exactly one self-assessment is saved and the total updates.
+- [ ] Reload and switch language; confirm self-assessment persists without affecting exploration points.
+- [ ] Complete all 20, use Review from start, and verify Previous/Next navigation preserves results.
 - [ ] Confirm 5 exploration points if hint was used, or 10 if not.
 - [ ] Tap Next, then Previous; verify answer state remains consistent.
 - [ ] Complete all 20 puzzles; confirm progress 20/20 and final button disabled.
