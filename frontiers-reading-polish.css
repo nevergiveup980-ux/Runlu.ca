@@ -1,0 +1,24 @@
+/* RUNLU Frontiers · shared reading refinements · 2026-10 */
+:root{color-scheme:light}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{min-width:0}
+header{flex-wrap:wrap}
+header,main,footer{box-sizing:border-box;width:100%}
+main article{min-width:0}
+main article section{margin-block:0}
+main article section+section{margin-top:36px}
+main article section h2{margin-top:0;margin-bottom:15px;text-wrap:pretty}
+main article h1{letter-spacing:-.018em;text-wrap:balance;overflow-wrap:break-word}
+main article p{max-width:74ch;overflow-wrap:break-word;hyphens:auto}
+main article[lang="zh"] p{hyphens:none;line-break:strict}
+main article[lang="zh"] h1,main article[lang="zh"] h2{letter-spacing:0}
+main article .meta{line-height:1.6}
+select{min-height:44px;max-width:100%;font:inherit}
+.chapter-nav{clear:both}
+.chapter-nav a{min-height:48px;box-sizing:border-box;overflow-wrap:break-word;transition:background-color .15s,border-color .15s}
+.chapter-nav a:hover{background:#edf4eb;border-color:#63856d}
+.chapter-nav a:focus-visible,select:focus-visible{outline:3px solid #ab8140;outline-offset:3px}
+.season-bridge a{min-height:44px;box-sizing:border-box;display:inline-flex!important;align-items:center;text-underline-offset:4px}
+.season-bridge a:focus-visible{outline:3px solid #ab8140;outline-offset:3px}
+@media(max-width:600px){header,main,footer{padding-inline:18px}main article section+section{margin-top:30px}main article section h2{line-height:1.48}.chapter-nav-pager,.chapter-nav-secondary{gap:10px}.chapter-nav a{padding:12px 14px}.chapter-nav-secondary a{flex:1 1 135px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.chapter-nav a{transition:none}}
