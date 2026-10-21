@@ -36,6 +36,12 @@ ok('Backup restore has verified local rollback on synchronous write errors',
 ok('Recovery Point restore has verified local rollback on synchronous write errors',
  health.includes("original.forEach((raw,key)=>localStorage.setItem(key,raw))")&&health.includes("Rollback verification failed"));
 
+
+ok('Recovery Point preflight requires mirror before destructive write',ordered(health,["if(typeof window.RUNLUUniversalDurableLocal?.replaceMirrorFromLocal!=='function')throw",'adapter.remove(k)']));
+ok('Recovery Point preflight requires journal before destructive write',ordered(health,["if(typeof window.RUNLUUniversalCrashJournal?.begin!=='function",'adapter.remove(k)']));
+ok('Backup preflight requires mirror before destructive write',ordered(backup,["if(typeof window.RUNLUUniversalDurableLocal?.replaceMirrorFromLocal!=='function')throw",'adapter.remove(k)']));
+ok('Backup preflight requires journal before destructive write',ordered(backup,["if(typeof window.RUNLUUniversalCrashJournal?.begin!=='function",'adapter.remove(k)']));
+
 const stages=[
  {name:'after intent',phase:'BEGIN'},
  {name:'after local replacement',phase:'LOCAL_REPLACED'},
