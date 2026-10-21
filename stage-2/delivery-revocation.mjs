@@ -23,6 +23,17 @@ export class InMemoryDeliveryRevocations{
 export function verifyRevocableDeliveryTicket({ticket,secret,requesterId,now=Date.now(),revocations}){
  if(!revocations||typeof revocations.isRevoked!=="function")throw Error("Revocation store required");
  const result=verifyDeliveryTicket({ticket,secret,requesterId,now});
- if(revocations.isRevoked(ticket,{now}))throw Error("Delivery ticket revoked");
+ const revoked=revocations.isRevoked(ticket,{now});
+ if(revoked&&typeof revoked.then==="function")throw Error("Async revocation store requires async verifier");
+ if(revoked!==false)throw Error("Delivery ticket revoked or status unknown");
+ return result;
+}
+
+// Use this verifier with PostgreSQL/Redis adapters; database errors fail closed.
+export async function verifyRevocableDeliveryTicketAsync({ticket,secret,requesterId,now=Date.now(),revocations}){
+ if(!revocations||typeof revocations.isRevoked!=="function")throw Error("Revocation store required");
+ const result=verifyDeliveryTicket({ticket,secret,requesterId,now});
+ const revoked=await revocations.isRevoked(ticket,{now});
+ if(revoked!==false)throw Error("Delivery ticket revoked or status unknown");
  return result;
 }
