@@ -19,6 +19,7 @@ export function verifyDeliveryTicket({ticket,secret,requesterId,now=Date.now()})
  if(typeof requesterId!=="string"||!requesterId.trim()||!Number.isSafeInteger(now))throw Error("Invalid request identity");
  const [body,sig]=ticket.split(".");
  const expected=mac(body,secret),actual=Buffer.from(sig,"base64url");
+ if(actual.toString("base64url")!==sig)throw Error("Noncanonical ticket signature");
  if(actual.length!==expected.length||!timingSafeEqual(actual,expected))throw Error("Invalid ticket signature");
  let payload;try{payload=JSON.parse(Buffer.from(body,"base64url").toString("utf8"));}catch{throw Error("Invalid ticket payload");}
  if(payload.v!==1||payload.ownerId!==requesterId||typeof payload.exp!=="number"||now>=payload.exp||payload.exp-now>300000)throw Error("Ticket expired or not authorized");
