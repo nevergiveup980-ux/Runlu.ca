@@ -25,11 +25,27 @@
   line-height:4mm!important;
 }
 .referenceCalibration .invoice .invoiceNoTop{top:20.8mm!important}
-/* V3: align right-hand price band rows to the same fixed baseline as left item cells.
-   Both sections share the 101mm table top and 6.5mm header. */
-.referenceCalibration .invoice .priceBand{top:101mm!important}
-.referenceCalibration .invoice .priceBand .priceHead{height:6.5mm!important;min-height:6.5mm!important}
-.referenceCalibration .invoice .priceBand .priceRow{height:4.48mm!important;min-height:4.48mm!important;box-sizing:border-box!important}
-.referenceCalibration .invoice .items{border-collapse:collapse!important;table-layout:fixed!important}
+/* V3: real price-band markup is .head / .grid / .h, not .priceHead/.priceRow.
+   15 paper rows at 4.48mm; 6.5mm header; both grids share top 101mm. */
+.referenceCalibration .invoice .items{top:101mm!important;border-collapse:collapse!important;table-layout:fixed!important}
 .referenceCalibration .invoice .items th{height:6.5mm!important;box-sizing:border-box!important}
 .referenceCalibration .invoice .items td{height:4.48mm!important;box-sizing:border-box!important}
+.referenceCalibration .invoice .priceBand{top:101mm!important}
+.referenceCalibration .invoice .priceBand .head{height:6.5mm!important;box-sizing:border-box!important}
+.referenceCalibration .invoice .priceBand .grid{height:67.2mm!important;box-sizing:border-box!important}
+.referenceCalibration .invoice .priceBand .grid .h{top:calc(var(--row) * 4.48mm)!important}
+.referenceCalibration .invoice .priceBand .grid .h:nth-child(1){--row:1}
+.referenceCalibration .invoice .priceBand .grid .h:nth-child(2){--row:2}
+.referenceCalibration .invoice .priceBand .grid .h:nth-child(3){--row:3}
+.referenceCalibration .invoice .priceBand .grid .h:nth-child(4){--row:4}
+.referenceCalibration .invoice .priceBand .grid .h:nth-child(5){--row:5}
+.referenceCalibration .invoice .priceBand .grid .h:nth-child(6){--row:6}
+.referenceCalibration .invoice .priceBand .grid .h:nth-child(7){--row:7}
+.referenceCalibration .invoice .priceBand .grid .h:nth-child(8){--row:8}
+.referenceCalibration .invoice .priceBand .grid .h:nth-child(9){--row:9}
+.referenceCalibration .invoice .priceBand .grid .h:nth-child(10){--row:10}
+.referenceCalibration .invoice .priceBand .grid .h:nth-child(11){--row:11}
+.referenceCalibration .invoice .priceBand .grid .h:nth-child(12){--row:12}
+.referenceCalibration .invoice .priceBand .grid .h:nth-child(13){--row:13}
+.referenceCalibration .invoice .priceBand .grid .h:nth-child(14){--row:14}
+.referenceCalibration .invoice .priceBand .totals{top:73.7mm!important}
