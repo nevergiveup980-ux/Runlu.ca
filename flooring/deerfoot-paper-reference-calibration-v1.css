@@ -49,3 +49,14 @@
 .referenceCalibration .invoice .priceBand .grid .h:nth-child(13){--row:13}
 .referenceCalibration .invoice .priceBand .grid .h:nth-child(14){--row:14}
 .referenceCalibration .invoice .priceBand .totals{top:73.7mm!important}
+
+/* V4: explicit geometry, avoid collision and ensure table row alignment.
+   Reference-only: physical print comparison still required. */
+.referenceCalibration .invoice .dateData{top:10mm!important;left:162mm!important;width:37mm!important;white-space:nowrap!important;font-size:7pt!important}
+.referenceCalibration .invoice .invoiceNoTop{top:26.5mm!important}
+.referenceCalibration .invoice .items{top:101mm!important}
+.referenceCalibration .invoice .priceBand{top:101mm!important}
+.referenceCalibration .invoice .items th{height:6.5mm!important;padding:0!important}
+.referenceCalibration .invoice .items td{height:4.48mm!important;padding:0 .6mm!important}
+.referenceCalibration .invoice .priceBand .head{height:6.5mm!important}
+.referenceCalibration .invoice .priceBand .grid{height:67.2mm!important}
