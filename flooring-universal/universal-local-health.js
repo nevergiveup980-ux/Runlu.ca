@@ -23,6 +23,7 @@ async function restore(id){
  if(typeof window.RUNLUUniversalDurableLocal?.replaceMirrorFromLocal!=='function')throw new Error('Durable mirror unavailable; Recovery Point restore refused before local data replacement.');
  if(typeof window.RUNLUUniversalCrashJournal?.begin!=='function'||typeof window.RUNLUUniversalCrashJournal?.commit!=='function'||typeof window.RUNLUUniversalCrashJournal?.phase!=='function')throw new Error('Recovery journal unavailable; Recovery Point restore refused before local data replacement.');
  const journal=window.RUNLUUniversalCrashJournal,tx=journal?.begin?.('Recovery','recovery-point-restore',{restorePoint:id,safetyPoint:safety?.id||null});
+ if(!tx?.id)throw new Error('Recovery journal did not create a valid transaction; restore refused before local data replacement.');
  // Controlled local replacement first; then explicitly reconcile the durable mirror before reload.
  const businessKeys=()=> (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==SNAP&&k!==GUARD&&k!==JOURNAL&&k!=='runlu_flooring_universal_data_backend');
  const original=new Map(businessKeys().map(k=>[k,adapter.raw(k)]));
