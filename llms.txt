@@ -41,6 +41,8 @@
 - [The Lost Meridian](https://runlu.ca/book/lost-meridian/): Official RUNLU title/project page.
 
 ## Research, editorial, and public writing
+- [When Ordinary People Meet AI · Season One](https://runlu.ca/ordinary-people-meet-ai.html): Original ten-essay RUNLU Frontiers series by JOHN ZHANG on AI, human judgment, work, creativity, and agency; each essay has Chinese, English, French, and Spanish editions.
+- [When Ordinary People Meet Superintelligence · Season Two](https://runlu.ca/ordinary-people-meet-superintelligence.html): Original ten-essay continuation examining possible superintelligence, governance, social change, and human meaning; distinguishes current evidence from speculation, with four-language editions.
 - [RUNLU VIEW](https://runlu.ca/frontiers.html): Editorial and research stream on technology, AI, science, automation, society, and related human questions.
 - [RUNLU Health](https://runlu.ca/health.html): Public health-oriented reading and research section.
 - [RUNLU Stories](https://runlu.ca/notes.html): Public writing about life, work, creation, and time.
@@ -64,4 +66,4 @@
 - Website: https://runlu.ca/
 - Email: hello@runlu.ca
 
-Last reviewed: 2026-10-03
+Last reviewed: 2026-10-21
