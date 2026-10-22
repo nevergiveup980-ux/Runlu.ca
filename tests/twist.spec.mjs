@@ -3,6 +3,8 @@ import { test, expect } from '@playwright/test';
 const url = 'http://127.0.0.1:8765/twist.html';
 
 test('twenty puzzles, score, review and reset', async ({ page }) => {
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
   await page.goto(url);
   await expect(page.locator('#counter')).toContainText('01 / 20');
   await expect(page.locator('#nextBtn')).toBeDisabled();
@@ -27,6 +29,7 @@ test('twenty puzzles, score, review and reset', async ({ page }) => {
   await page.locator('#resetBtn').click();
   await expect(page.locator('#solved')).toContainText('0 / 20');
   await expect(page.locator('#points')).toContainText('0');
+  expect(errors).toEqual([]);
 });
 
 test('language, self-report correction and reload', async ({ page }) => {
@@ -49,4 +52,14 @@ test('narrow screen has no horizontal overflow', async ({ page }) => {
   await page.goto(url);
   const overflowing = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
   expect(overflowing).toBe(false);
+});
+
+test('cancel reset preserves progress and assessment', async ({ page }) => {
+  await page.goto(url);
+  await page.locator('#answerBtn').click();
+  await page.locator('#gotBtn').click();
+  page.once('dialog', dialog => dialog.dismiss());
+  await page.locator('#resetBtn').click();
+  await expect(page.locator('#solved')).toContainText('1 / 20');
+  await expect(page.locator('#correct')).toContainText('1 / 1');
 });
