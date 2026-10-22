@@ -40,8 +40,21 @@ async function restore(id){
   throw new Error('Recovery Point restore failed; previous local data restored: '+error.message,{cause:error});
  }
  if(tx)journal.phase(tx.id,'LOCAL_REPLACED');
- const mirror=await window.RUNLUUniversalDurableLocal?.replaceMirrorFromLocal?.();
- if(!mirror?.ok||!mirror.comparison?.ok)throw new Error('Restore cannot complete without verified durable mirror reconciliation; recovery journal remains open.');
+ let mirror;
+ try{
+  mirror=await window.RUNLUUniversalDurableLocal.replaceMirrorFromLocal();
+  if(!mirror?.ok||!mirror.comparison?.ok)throw new Error('Durable mirror reconciliation failed');
+ }catch(error){
+  // Preserve the open crash journal: an IndexedDB transaction may have committed despite an error.
+  try{
+   businessKeys().forEach(k=>adapter.remove(k));
+   original.forEach((raw,key)=>localStorage.setItem(key,raw));
+   if(businessKeys().length!==original.size||![...original].every(([key,raw])=>adapter.raw(key)===raw))throw new Error('Rollback verification failed');
+   journal.phase(tx.id,'LOCAL_ROLLED_BACK');
+  }catch(rollbackError){throw new Error('Restore mirror failed; local rollback could not be verified; recovery journal remains open: '+rollbackError.message,{cause:error})}
+  throw new Error('Restore mirror failed; previous local data restored, durable mirror status unverified; recovery journal remains open: '+error.message,{cause:error});
+ }
+
  if(tx){journal.phase(tx.id,'MIRROR_RECONCILED');journal.commit(tx.id,{restoredPoint:id})}
  return {point:p,safety,mirror};
 }
