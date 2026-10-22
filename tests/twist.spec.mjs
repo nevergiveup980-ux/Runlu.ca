@@ -63,3 +63,21 @@ test('cancel reset preserves progress and assessment', async ({ page }) => {
   await expect(page.locator('#solved')).toContainText('1 / 20');
   await expect(page.locator('#correct')).toContainText('1 / 1');
 });
+
+test('keyboard focus and localized accessibility labels', async ({ page }) => {
+  await page.goto(url);
+  await page.locator('#answerBtn').click();
+  await page.locator('#nextBtn').click();
+  await expect(page.locator('#question')).toBeFocused();
+  await page.locator('#language').selectOption('zh');
+  await expect(page.locator('#eyebrow')).toHaveText('跳出惯性思维');
+  await expect(page.locator('#progress')).toHaveAttribute('aria-label', '答题进度');
+  await expect(page.locator('#puzzleCard')).toHaveAttribute('aria-label', '脑洞题');
+});
+
+test('small phone header stays within viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 640 });
+  await page.goto(url);
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+  expect(overflow).toBe(false);
+});
