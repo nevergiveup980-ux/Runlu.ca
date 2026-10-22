@@ -81,3 +81,28 @@ test('small phone header stays within viewport', async ({ page }) => {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
   expect(overflow).toBe(false);
 });
+
+test('invalid saved assessments are ignored without losing valid progress', async ({ page }) => {
+  await page.goto(url);
+  await page.evaluate(() => {
+    localStorage.setItem('runlu-twist-node001-v1', JSON.stringify({
+      index: 0, completed: [0], hints: [],
+      assessments: { '0': 'yes', '1': 'yes', '999': 'yes', '2': 'maybe' }
+    }));
+  });
+  await page.reload();
+  await expect(page.locator('#solved')).toContainText('1 / 20');
+  await expect(page.locator('#correct')).toContainText('1 / 1');
+  await expect(page.locator('#answer')).toBeVisible();
+});
+
+test('progress remains intact when moving backward and changing language', async ({ page }) => {
+  await page.goto(url);
+  await page.locator('#answerBtn').click();
+  await page.locator('#nextBtn').click();
+  await page.locator('#prevBtn').click();
+  await expect(page.locator('#answer')).toBeVisible();
+  await page.locator('#language').selectOption('zh');
+  await expect(page.locator('#solved')).toContainText('1 / 20');
+  await expect(page.locator('#points')).toContainText('10');
+});
