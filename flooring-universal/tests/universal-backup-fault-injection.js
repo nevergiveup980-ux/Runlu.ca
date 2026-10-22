@@ -23,18 +23,19 @@ async function scenario(label,failAt,expectRollback,options={}){
  const data={current:()=>adapter,backendConfig:()=>({mode:'local'})};
  const window={RUNLUUniversalData:data,RUNLUUniversalLocalHealth:{capture:()=>({id:'verified'})},RUNLUUniversalCrashJournal:journal,
   RUNLUUniversalDurableLocal:{replaceMirrorFromLocal:async()=>{if(options.mirrorThrows)throw new Error('Injected IndexedDB transaction failure');return options.mirrorFailure?{ok:false,comparison:{ok:false}}:{ok:true,comparison:{ok:true}}}}};
+ if(options.migrationThrows)window.RUNLUUniversalDataVersion={migrate:()=>{throw new Error('Injected migration failure')}};
  const ctx={window,localStorage:storage,Blob,URL,document:{},setTimeout};
  vm.runInNewContext(fs.readFileSync(path.join(__dirname,'..','universal-backup.js'),'utf8'),ctx,{filename:'universal-backup.js'});
  const incoming={format:'runlu-flooring-universal-backup',version:1,schemaVersion:0,data:{[a]:{company:{organizationId:'org-new'}},[c]:[{id:'new'}]}};
  if(options.mirrorMissing)delete window.RUNLUUniversalDurableLocal;
- if(failAt===null&&!options.mirrorFailure&&!options.mirrorMissing&&!options.mirrorThrows&&!options.journalBeginFails){
+ if(failAt===null&&!options.mirrorFailure&&!options.mirrorMissing&&!options.mirrorThrows&&!options.journalBeginFails&&!options.migrationThrows){
   const result=await window.RUNLUUniversalBackup.restore(incoming);
   assert.equal(result.restoredKeys,2);assert.equal(adapter.read(c,[])[0].id,'new');
   assert(journal.phases.includes('COMMITTED'));
  }else{
-  await assert.rejects(()=>window.RUNLUUniversalBackup.restore(incoming),options.journalBeginFails?/valid transaction/:options.mirrorMissing?/Durable mirror unavailable/:options.mirrorFailure?/previous local data restored, durable mirror status unverified/:options.mirrorThrows?/previous local data restored, durable mirror status unverified/:/Backup restore failed/);
-  if(options.mirrorMissing||options.journalBeginFails||options.mirrorFailure||options.mirrorThrows)assert.deepEqual([...store].sort(),[...original].sort(),'missing mirror must leave original records unchanged');
-  if(options.mirrorFailure||options.mirrorThrows)assert(journal.phases.includes('LOCAL_ROLLED_BACK'),'mirror failure must rollback local records');
+  await assert.rejects(()=>window.RUNLUUniversalBackup.restore(incoming),options.journalBeginFails?/valid transaction/:options.mirrorMissing?/Durable mirror unavailable/:options.migrationThrows?/previous local data restored, durable mirror status unverified/:options.mirrorFailure?/previous local data restored, durable mirror status unverified/:options.mirrorThrows?/previous local data restored, durable mirror status unverified/:/Backup restore failed/);
+  if(options.mirrorMissing||options.journalBeginFails||options.mirrorFailure||options.mirrorThrows||options.migrationThrows)assert.deepEqual([...store].sort(),[...original].sort(),'missing mirror must leave original records unchanged');
+  if(options.mirrorFailure||options.mirrorThrows||options.migrationThrows)assert(journal.phases.includes('LOCAL_ROLLED_BACK'),'mirror failure must rollback local records');
   if(expectRollback){
    assert.deepEqual([...store].sort(),[...original].sort(),label+' must preserve byte-for-byte original records');
    assert(journal.phases.includes('LOCAL_ROLLED_BACK'));
@@ -52,5 +53,6 @@ async function scenario(label,failAt,expectRollback,options={}){
  await scenario('mirror module missing, must not commit',null,false,{mirrorMissing:true});
  await scenario('mirror transaction rejects, must not commit',null,false,{mirrorThrows:true});
  await scenario('journal cannot begin, preserve original records',null,false,{journalBeginFails:true});
+ await scenario('migration throws, rollback original records',null,false,{migrationThrows:true});
  console.log('Backup fault injection: PASS');
 })().catch(e=>{console.error(e);process.exitCode=1});
