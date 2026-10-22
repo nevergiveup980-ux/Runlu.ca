@@ -56,9 +56,9 @@ async function restore(payload){
   throw new Error('Backup restore failed; previous local data restored: '+error.message,{cause:error});
  }
  if(tx)journal.phase(tx.id,'LOCAL_REPLACED');
- const migration=window.RUNLUUniversalDataVersion?.migrate?.();
- let mirror;
+ let migration,mirror;
  try{
+  migration=await window.RUNLUUniversalDataVersion?.migrate?.();
   mirror=await window.RUNLUUniversalDurableLocal.replaceMirrorFromLocal();
   if(!mirror?.ok||!mirror.comparison?.ok)throw new Error('Durable mirror reconciliation failed');
  }catch(error){
