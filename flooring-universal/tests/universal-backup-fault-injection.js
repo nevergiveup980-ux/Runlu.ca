@@ -32,8 +32,9 @@ async function scenario(label,failAt,expectRollback,options={}){
   assert.equal(result.restoredKeys,2);assert.equal(adapter.read(c,[])[0].id,'new');
   assert(journal.phases.includes('COMMITTED'));
  }else{
-  await assert.rejects(()=>window.RUNLUUniversalBackup.restore(incoming),options.journalBeginFails?/valid transaction/:options.mirrorMissing?/Durable mirror unavailable/:options.mirrorFailure?/verified durable mirror reconciliation/:options.mirrorThrows?/Injected IndexedDB transaction failure/:/Backup restore failed/);
-  if(options.mirrorMissing||options.journalBeginFails)assert.deepEqual([...store].sort(),[...original].sort(),'missing mirror must leave original records unchanged');
+  await assert.rejects(()=>window.RUNLUUniversalBackup.restore(incoming),options.journalBeginFails?/valid transaction/:options.mirrorMissing?/Durable mirror unavailable/:options.mirrorFailure?/previous local data restored, durable mirror status unverified/:options.mirrorThrows?/previous local data restored, durable mirror status unverified/:/Backup restore failed/);
+  if(options.mirrorMissing||options.journalBeginFails||options.mirrorFailure||options.mirrorThrows)assert.deepEqual([...store].sort(),[...original].sort(),'missing mirror must leave original records unchanged');
+  if(options.mirrorFailure||options.mirrorThrows)assert(journal.phases.includes('LOCAL_ROLLED_BACK'),'mirror failure must rollback local records');
   if(expectRollback){
    assert.deepEqual([...store].sort(),[...original].sort(),label+' must preserve byte-for-byte original records');
    assert(journal.phases.includes('LOCAL_ROLLED_BACK'));
