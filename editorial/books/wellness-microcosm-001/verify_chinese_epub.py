@@ -42,8 +42,24 @@ with ZipFile(epub) as z:
             from posixpath import dirname, normpath, join
             navpath = normpath(join(dirname(opfpath), nav[0].attrib["href"]))
             navroot = ET.fromstring(z.read(navpath))
-            if not navroot.findall(".//{http://www.w3.org/1999/xhtml}nav"):
+            navs = navroot.findall(".//{http://www.w3.org/1999/xhtml}nav")
+            if not navs:
                 errors.append("Navigation XHTML has no nav element")
+            else:
+                navtext = "".join(navs[0].itertext())
+                for chapter in ("序章", "第一章", "第十一章", "终章", "参考文献"):
+                    if chapter not in navtext:
+                        errors.append(f"Navigation missing section: {chapter}")
+        xhtml_items = [i for i in items if i.attrib.get("media-type") == "application/xhtml+xml"]
+        xhtml_text = "\\n".join(
+            z.read(__import__("posixpath").normpath(__import__("posixpath").join(__import__("posixpath").dirname(opfpath), i.attrib["href"]))).decode("utf-8")
+            for i in xhtml_items
+        )
+        for number in range(1, 19):
+            if f'id="ref-{number}"' not in xhtml_text:
+                errors.append(f"Missing bibliography anchor ref-{number}")
+            if f'#ref-{number}' not in xhtml_text:
+                errors.append(f"Missing reference hyperlink ref-{number}")
     except Exception as exc:
         errors.append(f"EPUB metadata/navigation parse failed: {exc}")
 if errors:
