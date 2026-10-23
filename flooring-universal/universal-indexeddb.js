@@ -12,9 +12,11 @@ function open(){
  dbPromise=new Promise((resolve,reject)=>{
   const req=indexedDB.open(DB,DBV);
   req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains(STORE))db.createObjectStore(STORE,{keyPath:'key'})};
-  req.onsuccess=()=>resolve(req.result);
+  req.onsuccess=()=>{const db=req.result;db.onversionchange=()=>{db.close();dbPromise=null};resolve(db)};
   req.onerror=()=>{lastError=req.error?.message||'IndexedDB open failed';reject(req.error||new Error(lastError))};
  });
+ // An intermittent open failure must not poison all subsequent recovery attempts.
+ dbPromise=dbPromise.catch(error=>{dbPromise=null;throw error});
  return dbPromise;
 }
 async function put(key,value){
