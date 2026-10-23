@@ -35,12 +35,14 @@
     if(!selects.length)return true;
     return selects.some(select=>[...select.options].some(option=>option.value===language&&!option.disabled))
   }
+  function readStored(key){try{return localStorage.getItem(key)}catch(error){return null}}
+  function writeStored(key,value){try{localStorage.setItem(key,value)}catch(error){/* Storage may be unavailable in private browsing. */}}
   function savedLanguage(){
-    const current=localStorage.getItem(KEY);
+    const current=readStored(KEY);
     if(current)return normalise(current);
     for(const key of LEGACY_KEYS){
-      const legacy=localStorage.getItem(key);
-      if(legacy){const migrated=normalise(legacy);localStorage.setItem(KEY,migrated);return migrated}
+      const legacy=readStored(key);
+      if(legacy){const migrated=normalise(legacy);writeStored(KEY,migrated);return migrated}
     }
     return FALLBACK
   }
@@ -74,7 +76,7 @@
       const requested=language;language=FALLBACK;
       window.dispatchEvent(new CustomEvent('runlu:translationmissing',{detail:{requested,fallback:FALLBACK}}))
     }
-    current=language;localStorage.setItem(KEY,current);apply(current,{announce:true})
+    current=language;writeStored(KEY,current);apply(current,{announce:true})
   }
   function toggle(){set(current==='en'?'zh':'en')}
   function ensureHealthViewLinks(){
