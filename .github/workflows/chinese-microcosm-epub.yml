@@ -1,0 +1,29 @@
+name: Chinese Microcosm EPUB Proof
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - book/wellness-microcosm-001
+    paths:
+      - 'editorial/books/wellness-microcosm-001/**'
+      - '.github/workflows/chinese-microcosm-epub.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Pandoc and EPUBCheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc epubcheck
+      - name: Build Chinese EPUB proof
+        working-directory: editorial/books/wellness-microcosm-001
+        run: bash build_chinese_epub.sh
+      - name: Upload EPUB proof
+        uses: actions/upload-artifact@v4
+        with:
+          name: chinese-microcosm-epub-proof
+          path: editorial/books/wellness-microcosm-001/RUNLU_HUMAN_MICROCOSM_ZH_PROOF.epub
+          if-no-files-found: error
