@@ -62,7 +62,10 @@ async function replaceLocalFromMirror(){
  const records=(await all()).filter(validMirrorRecord);if(!records.length)throw new Error('Durable mirror is empty.');
  const safety=window.RUNLUUniversalLocalHealth?.capture?.('Before full IndexedDB mirror restore',{records:records.length});
  if(!safety?.id)throw new Error('Verified safety checkpoint required before full mirror restore.');
- const journal=window.RUNLUUniversalCrashJournal,tx=journal?.begin?.('Recovery','mirror-to-local-restore',{records:records.length,safetyPoint:safety?.id||null});
+ const journal=window.RUNLUUniversalCrashJournal;
+ if(typeof journal?.begin!=='function'||typeof journal?.phase!=='function'||typeof journal?.commit!=='function')throw new Error('Recovery journal unavailable; mirror restore refused before local replacement.');
+ const tx=journal.begin('Recovery','mirror-to-local-restore',{records:records.length,safetyPoint:safety.id});
+ if(!tx?.id)throw new Error('Recovery journal did not create a valid transaction; mirror restore refused before local replacement.');
  const adapter=window.RUNLUUniversalData.current();
  const keys=()=> (adapter.rawKeys?.()||[]).filter(k=>k.startsWith(PREFIX)&&k!==BACKEND&&k!==SNAP&&k!==GUARD&&k!==JOURNAL);
  const before=new Map(keys().map(k=>[k,adapter.raw(k)]));
