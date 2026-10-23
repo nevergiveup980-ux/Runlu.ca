@@ -106,3 +106,28 @@ test('progress remains intact when moving backward and changing language', async
   await expect(page.locator('#solved')).toContainText('1 / 20');
   await expect(page.locator('#points')).toContainText('10');
 });
+
+test('hint and answer remain consistent after reload', async ({ page }) => {
+  await page.goto(url);
+  await page.locator('#hintBtn').click();
+  await expect(page.locator('#hint')).toBeVisible();
+  await page.reload();
+  await expect(page.locator('#hint')).toBeVisible();
+  await expect(page.locator('#hintBtn')).toBeDisabled();
+  await page.locator('#answerBtn').click();
+  await expect(page.locator('#points')).toContainText('5');
+  await page.reload();
+  await expect(page.locator('#answer')).toBeVisible();
+  await expect(page.locator('#points')).toContainText('5');
+});
+
+test('self-report can be corrected after reloading', async ({ page }) => {
+  await page.goto(url);
+  await page.locator('#answerBtn').click();
+  await page.locator('#gotBtn').click();
+  await page.reload();
+  await page.locator('#missBtn').click();
+  await expect(page.locator('#correct')).toContainText('0 / 1');
+  await page.reload();
+  await expect(page.locator('#correct')).toContainText('0 / 1');
+});
