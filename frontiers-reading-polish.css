@@ -9,7 +9,7 @@ main article section{margin-block:0}
 main article section+section{margin-top:36px}
 main article section h2{margin-top:0;margin-bottom:15px;text-wrap:pretty}
 main article h1{letter-spacing:-.018em;text-wrap:balance;overflow-wrap:break-word}
-main article p{max-width:74ch;overflow-wrap:break-word;hyphens:auto}
+main article p{max-width:74ch;overflow-wrap:break-word;hyphens:none;word-break:normal}
 main article[lang="zh"] p{hyphens:none;line-break:strict}
 main article[lang="zh"] h1,main article[lang="zh"] h2{letter-spacing:0}
 main article .meta{line-height:1.6}
