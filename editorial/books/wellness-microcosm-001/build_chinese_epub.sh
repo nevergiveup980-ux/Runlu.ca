@@ -5,8 +5,9 @@ SOURCE="CHINESE_BOOK_ASSEMBLED_PROOF_2026-10-22.md"
 OUTPUT="RUNLU_HUMAN_MICROCOSM_ZH_PROOF.epub"
 command -v pandoc >/dev/null || { echo "Requires pandoc" >&2; exit 1; }
 python3 check_chinese_epub_source.py
+python3 prepare_chinese_epub.py
 test -s "$SOURCE" || { echo "Missing manuscript" >&2; exit 1; }
-pandoc "$SOURCE" \
+pandoc "CHINESE_EPUB_READER_PROOF.generated.md" \
   --from=gfm \
   --to=epub3 \
   --output="$OUTPUT" \
