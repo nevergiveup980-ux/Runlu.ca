@@ -56,9 +56,10 @@ async function restore(payload){
   throw new Error('Backup restore failed; previous local data restored: '+error.message,{cause:error});
  }
  if(tx)journal.phase(tx.id,'LOCAL_REPLACED');
- let migration,mirror;
+ let migration,mirror,stage='migration';
  try{
   migration=await window.RUNLUUniversalDataVersion?.migrate?.();
+  stage='mirror';
   mirror=await window.RUNLUUniversalDurableLocal.replaceMirrorFromLocal();
   if(!mirror?.ok||!mirror.comparison?.ok)throw new Error('Durable mirror reconciliation failed');
  }catch(error){
@@ -68,8 +69,8 @@ async function restore(payload){
    original.forEach((raw,key)=>localStorage.setItem(key,raw));
    if(businessKeys().length!==original.size||![...original].every(([key,raw])=>adapter.raw(key)===raw))throw new Error('Rollback verification failed');
    journal.phase(tx.id,'LOCAL_ROLLED_BACK');
-  }catch(rollbackError){throw new Error('Restore mirror failed; local rollback could not be verified; recovery journal remains open: '+rollbackError.message,{cause:error})}
-  throw new Error('Restore mirror failed; previous local data restored, durable mirror status unverified; recovery journal remains open: '+error.message,{cause:error});
+  }catch(rollbackError){throw new Error('Restore '+stage+' failed; local rollback could not be verified; recovery journal remains open: '+rollbackError.message,{cause:error})}
+  throw new Error('Restore '+stage+' failed; previous local data restored, durable mirror status unverified; recovery journal remains open: '+error.message,{cause:error});
  }
 
  if(tx){journal.phase(tx.id,'MIRROR_RECONCILED');journal.commit(tx.id,{restoredKeys:Object.keys(incoming).length})}
