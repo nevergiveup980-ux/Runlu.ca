@@ -9,7 +9,7 @@ const asset={id:"asset_12345",jobId:job.id,ownerId:job.ownerId,state:"VERIFIED",
 const ticket=issueDeliveryTicket({asset,job,requesterId:"owner-1",secret,now});
 function setup({audit,openPrivateObject,loadAssetAndJob}={}){
  const events=[],opens=[],revocations=new InMemoryDeliveryRevocations();
- const service=createPrivateDeliveryService({secret,revocations,audit??{record:async e=>{events.push(e);return true;}},loadAssetAndJob:loadAssetAndJob??(async()=>({asset,job})),openPrivateObject:openPrivateObject??(async scope=>{opens.push(scope);return {kind:"private-stream-handle"};})});
+ const service=createPrivateDeliveryService({secret,revocations,audit:audit??{record:async e=>{events.push(e);return true;}},loadAssetAndJob:loadAssetAndJob??(async()=>({asset,job})),openPrivateObject:openPrivateObject??(async scope=>{opens.push(scope);return {kind:"private-stream-handle"};})});
  return {service,events,opens,revocations};
 }
 test("authenticated download is audited before private storage opens",async()=>{
