@@ -23,3 +23,5 @@ jobs:
         run: node flooring-universal/tests/universal-recovery-interruption.js
       - name: Local persistence contract
         run: node flooring-universal/tests/universal-local-persistence-contract.js
+      - name: IndexedDB open retry and versionchange
+        run: node flooring-universal/tests/universal-indexeddb-open-retry.js
