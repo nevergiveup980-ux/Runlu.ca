@@ -3,7 +3,8 @@ set -euo pipefail
 cd "$(dirname "$0")"
 SOURCE="CHINESE_BOOK_ASSEMBLED_PROOF_2026-10-22.md"
 OUTPUT="RUNLU_HUMAN_MICROCOSM_ZH_PROOF.epub"
-command -v pandoc >/dev/null || { echo "Requires pandoc 3.x" >&2; exit 1; }
+command -v pandoc >/dev/null || { echo "Requires pandoc" >&2; exit 1; }
+python3 check_chinese_epub_source.py
 test -s "$SOURCE" || { echo "Missing manuscript" >&2; exit 1; }
 pandoc "$SOURCE" \
   --from=gfm \
