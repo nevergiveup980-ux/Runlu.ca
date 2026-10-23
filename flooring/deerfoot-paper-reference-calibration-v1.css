@@ -60,3 +60,18 @@
 .referenceCalibration .invoice .items td{height:4.48mm!important;padding:0 .6mm!important}
 .referenceCalibration .invoice .priceBand .head{height:6.5mm!important}
 .referenceCalibration .invoice .priceBand .grid{height:67.2mm!important}
+
+/* V5 physical-paper comparison: adjust ONLY the three yellow-marked header zones.
+   Positions are provisional until the next 100%-scale paper check. */
+.referenceCalibration .invoice .companyInfo{
+ top:7.6mm!important;font-size:8.15pt!important;line-height:1.09!important;
+}
+.referenceCalibration .invoice .dcMark{
+ top:4.3mm!important;font-size:35pt!important;
+}
+.referenceCalibration .invoice .companyName{
+ top:18mm!important;font-size:13.6pt!important;
+}
+.referenceCalibration .invoice .invoiceNoTop{
+ top:28mm!important;font-size:17.5pt!important;
+}
