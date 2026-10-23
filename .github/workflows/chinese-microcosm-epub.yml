@@ -21,9 +21,28 @@ jobs:
       - name: Build Chinese EPUB proof
         working-directory: editorial/books/wellness-microcosm-001
         run: bash build_chinese_epub.sh
+      - name: Record verified EPUB checksum
+        working-directory: editorial/books/wellness-microcosm-001
+        run: |
+          sha256sum RUNLU_HUMAN_MICROCOSM_ZH_PROOF.epub | tee EPUB_PROOF_SHA256.txt
+          {
+            echo "## Chinese EPUB proof"
+            echo "Source branch: \`$GITHUB_REF_NAME\`"
+            echo "Commit: \`$GITHUB_SHA\`"
+            echo "Status: EPUB structural checks and EPUBCheck passed."
+            echo "Download the artifact below; this is not a publication approval."
+            cat EPUB_PROOF_SHA256.txt
+          } >> "$GITHUB_STEP_SUMMARY"
       - name: Upload EPUB proof
         uses: actions/upload-artifact@v4
         with:
           name: chinese-microcosm-epub-proof
           path: editorial/books/wellness-microcosm-001/RUNLU_HUMAN_MICROCOSM_ZH_PROOF.epub
+          if-no-files-found: error
+          retention-days: 30
+      - name: Upload EPUB checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: chinese-microcosm-epub-sha256
+          path: editorial/books/wellness-microcosm-001/EPUB_PROOF_SHA256.txt
           if-no-files-found: error
