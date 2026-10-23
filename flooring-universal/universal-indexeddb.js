@@ -85,9 +85,21 @@ async function replaceLocalFromMirror(){
   }
   throw new Error('Mirror restore failed; previous local records restored: '+error.message,{cause:error});
  }
- const comparison=await compareWithAdapter();
- if(!comparison.ok)throw new Error('Local recovery from durable mirror did not reach parity; leave recovery journal open for review.');
- if(tx){journal.phase(tx.id,'PARITY_VERIFIED');journal.commit(tx.id,{restored:records.length})}
+ let comparison;
+ try{
+  comparison=await compareWithAdapter();
+  if(!comparison.ok)throw new Error('Local recovery from durable mirror did not reach parity');
+ }catch(error){
+  // The mirror is read-only in this operation; restore the exact original local bytes.
+  try{
+   keys().forEach(k=>adapter.remove(k));
+   before.forEach((raw,key)=>localStorage.setItem(key,raw));
+   if(keys().length!==before.size||![...before].every(([key,raw])=>adapter.raw(key)===raw))throw new Error('Rollback verification failed');
+   journal.phase(tx.id,'LOCAL_ROLLED_BACK');
+  }catch(rollbackError){throw new Error('Mirror parity failed; local rollback unverified; recovery journal remains open: '+rollbackError.message,{cause:error})}
+  throw new Error('Mirror parity failed; previous local records restored; recovery journal remains open: '+error.message,{cause:error});
+ }
+ journal.phase(tx.id,'PARITY_VERIFIED');journal.commit(tx.id,{restored:records.length});
  return {restored:records.length,comparison,safety};
 }
 async function compareWithAdapter(){
