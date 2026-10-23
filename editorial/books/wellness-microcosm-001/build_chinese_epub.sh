@@ -19,9 +19,11 @@ pandoc "CHINESE_EPUB_READER_PROOF.generated.md" \
   --metadata=date:"2026" \
   --toc --toc-depth=1 \
   --split-level=1
+python3 verify_chinese_epub.py
 echo "Created $OUTPUT (proof only; not approved for publication)"
 if command -v epubcheck >/dev/null; then
   epubcheck "$OUTPUT"
 else
-  echo "EPUBCheck not installed; EPUB validation still required" >&2
+  echo "EPUBCheck not installed; refusing to mark proof as validated" >&2
+  exit 1
 fi
