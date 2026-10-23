@@ -648,7 +648,7 @@
 
 有人喜欢一个人读书、散步、整理思绪。独处可以是一种主动选择，并不必然意味着孤独。另一些人身处人群，却始终觉得没有可以求助或分享心事的人。
 
-孤独是复杂的主观体验，社会隔离则涉及实际联系的数量与质量。两者可能重叠，却不是同一个概念。研究这些因素与健康之间的关系时，也需要谨慎区分相关性、机制和因果结论。
+孤独是复杂的主观体验，社会隔离则涉及实际联系的数量与质量[12]。两者可能重叠，却不是同一个概念。研究这些因素与健康之间的关系时，也需要谨慎区分相关性、机制和因果结论。
 
 建立联系并不总是“主动一点”那么简单。行动能力、语言、交通、经济条件、照护责任和社区资源，都可能影响一个人能否参与社会生活。
 
@@ -1018,7 +1018,7 @@
 
 为了更严格地检验效果，研究者可以在合乎伦理且可行的情况下开展随机对照试验。假设招募符合预设条件的成年人，将他们随机分配到饮品组和适当的比较组，并尽量让参与者与评估者不知道分组。
 
-随机化的目的，是降低组间系统性差异；盲法有助于减少期待对报告和评价的影响。研究还需要明确剂量、持续时间、主要结局、缺失数据处理和不良事件记录方式。尤其要留意两种不同情况：有人虽然没有按原计划完成干预，但仍留下了结局数据；也有人因为退出随访而没有留下相应测量。前一种情况涉及怎样分析偏离预定干预的人，后一种则涉及结局数据缺失可能带来的偏倚。不能只因为研究声称采用了“意向性治疗分析”，就假定这些问题已经解决；退出原因是否与疗效或不良反应有关，仍需具体检查。
+随机化的目的，是降低组间系统性差异[14]；盲法有助于减少期待对报告和评价的影响。研究还需要明确剂量、持续时间、主要结局、缺失数据处理和不良事件记录方式。尤其要留意两种不同情况：有人虽然没有按原计划完成干预，但仍留下了结局数据；也有人因为退出随访而没有留下相应测量。前一种情况涉及怎样分析偏离预定干预的人，后一种则涉及结局数据缺失可能带来的偏倚。不能只因为研究声称采用了“意向性治疗分析”，就假定这些问题已经解决；退出原因是否与疗效或不良反应有关，仍需具体检查。
 
 但随机试验不是魔法。如果样本太小、随访太短、参与者与真实使用人群差异过大，或者研究者在看到结果后临时更换主要指标，结论仍可能不可靠。还应对照研究注册记录或事先确定的分析计划：是否测量了多个结局，却只展示最有利的一项？是否在多个测量时间点或分析方法中，只报告看起来最漂亮的结果？还要区分两种不同的报告问题：一是从已经算出的多个数值结果中挑选最有利的一项；二是某个预定结局的结果根本没有公开。前者可以在单项试验结果层面评估，后者往往需要结合研究注册、其他报告及证据综合来检查。两者都可能让公开呈现的效果偏离研究实际发现。
 
@@ -1529,42 +1529,41 @@
 
 # 参考文献
 
-[1] World Health Organization. *WHO Guidelines on Physical Activity and Sedentary Behaviour*. Geneva: World Health Organization; 2020. ISBN 978-92-4-001512-8（电子版）；978-92-4-001513-5（印刷版）. https://www.ncbi.nlm.nih.gov/books/NBK566045/ 。**对应第九章。** 本条以出版物版权页核对ISBN载体，避免此前索引将电子版与印刷版颠倒。
+[1] World Health Organization. *WHO Guidelines on Physical Activity and Sedentary Behaviour*. Geneva: World Health Organization; 2020. ISBN 978-92-4-001512-8（电子版）；978-92-4-001513-5（印刷版）. https://www.ncbi.nlm.nih.gov/books/NBK566045/ 。
 
-[2] Ontario Health. *Insomnia Disorder: Care for Adults*. Quality Standard. Toronto: Ontario Health; February 2025. https://www.hqontario.ca/portals/0/documents/evidence/quality-standards/qs-insomnia-disorder-en.pdf 。**对应第五章。** PDF正文印有“ONTARIO HEALTH, FEBRUARY 2025”；官方目录显示2025年1月，为不同元数据，不据此改写所引PDF版本日期。
+[2] Ontario Health. *Insomnia Disorder: Care for Adults*. Quality Standard. Toronto: Ontario Health; February 2025. https://www.hqontario.ca/portals/0/documents/evidence/quality-standards/qs-insomnia-disorder-en.pdf 。
 
-[3] Qaseem A, Kansagara D, Forciea MA, Cooke M, Denberg TD; Clinical Guidelines Committee of the American College of Physicians. Management of chronic insomnia disorder in adults: a clinical practice guideline from the American College of Physicians. *Ann Intern Med*. 2016;165(2):125–133. doi:10.7326/M15-2175. https://pubmed.ncbi.nlm.nih.gov/27136449/ 。**对应第五章；历史指南，须与后续指南并列。**
+[3] Qaseem A, Kansagara D, Forciea MA, Cooke M, Denberg TD; Clinical Guidelines Committee of the American College of Physicians. Management of chronic insomnia disorder in adults: a clinical practice guideline from the American College of Physicians. *Ann Intern Med*. 2016;165(2):125–133. doi:10.7326/M15-2175. https://pubmed.ncbi.nlm.nih.gov/27136449/ 。
 
-[4] Department of Veterans Affairs; Department of Defense. *VA/DoD Clinical Practice Guideline for the Management of Chronic Insomnia Disorder and Obstructive Sleep Apnea*. Washington, DC: VA/DoD; 2025. https://www.healthquality.va.gov/HEALTHQUALITY/guidelines/CD/insomnia/index.asp 。**对应第五章。** 官方指南页明确2025版、完整指南与患者/临床人员摘要；PDF封面与页脚标注 January 2025，文件名末尾的20250915不可直接当作出版月份。具体PDF版本与发布日期须在上架前再核定。
+[4] Department of Veterans Affairs; Department of Defense. *VA/DoD Clinical Practice Guideline for the Management of Chronic Insomnia Disorder and Obstructive Sleep Apnea*. Washington, DC: VA/DoD; 2025. https://www.healthquality.va.gov/HEALTHQUALITY/guidelines/CD/insomnia/index.asp 。
 
-[5] Morin CM, Khullar A, Robillard R, et al. Delphi consensus recommendations for the management of chronic insomnia in Canada. *Sleep Med*. 2024;124:598–605. doi:10.1016/j.sleep.2024.09.038. PMID:39481275. https://pubmed.ncbi.nlm.nih.gov/39481275/ 。**对应第五章。** 专家共识，不等同于加拿大国家级临床实践指南。
+[5] Morin CM, Khullar A, Robillard R, et al. Delphi consensus recommendations for the management of chronic insomnia in Canada. *Sleep Med*. 2024;124:598–605. doi:10.1016/j.sleep.2024.09.038. PMID:39481275. https://pubmed.ncbi.nlm.nih.gov/39481275/ 。
 
-[6] Health Canada. *Wildfire Smoke with Extreme Heat*. Ottawa: Government of Canada; June 2024. https://www.canada.ca/en/health-canada/services/publications/healthy-living/combine-wildfire-smoke-heat.html 。**对应第三章。** 2026-10-18核对机构、发布日期和官方正文；涉及烟雾与高温同时发生时的风险排序。
+[6] Health Canada. *Wildfire Smoke with Extreme Heat*. Ottawa: Government of Canada; June 2024. https://www.canada.ca/en/health-canada/services/publications/healthy-living/combine-wildfire-smoke-heat.html 。
 
-[7] National Institute for Occupational Safety and Health. *About Ergonomics and Work-Related Musculoskeletal Disorders*. Centers for Disease Control and Prevention; February 21, 2024. https://www.cdc.gov/niosh/topics/ergonomics/default.html 。**对应第六章。** 本次核对官方页面及标题日期；网页存在旧版与新导航路径，正式排版时保留可用的官方页面地址。
+[7] National Institute for Occupational Safety and Health. *About Ergonomics and Work-Related Musculoskeletal Disorders*. Centers for Disease Control and Prevention; February 21, 2024. https://www.cdc.gov/niosh/topics/ergonomics/default.html 。
 
-[8] National Institute for Occupational Safety and Health. *Elements of Ergonomics Programs*. Centers for Disease Control and Prevention; February 26, 2024. https://www.cdc.gov/niosh/ergonomics/ergo-programs/index.html 。**对应第六章。** 2024年网页基于1997年原始项目资料，不可把1997年原书误写为2024年新发布的研究。
+[8] National Institute for Occupational Safety and Health. *Elements of Ergonomics Programs*. Centers for Disease Control and Prevention; February 26, 2024. https://www.cdc.gov/niosh/ergonomics/ergo-programs/index.html 。
 
-[9] National Center for Complementary and Integrative Health. *Are You Considering a Complementary Health Approach?* National Institutes of Health; last updated September 2016. https://www.nccih.nih.gov/health/are-you-considering-a-complementary-health-approach 。**对应第七章、第十一章。** 官方消费者科普资料；适用于安全、相互作用与就医沟通，不作为特定疗法疗效的直接试验证据。
+[9] National Center for Complementary and Integrative Health. *Are You Considering a Complementary Health Approach?* National Institutes of Health; last updated September 2016. https://www.nccih.nih.gov/health/are-you-considering-a-complementary-health-approach 。
 
-[10] National Institute of General Medical Sciences. *Circadian Rhythms*. National Institutes of Health. https://www.nigms.nih.gov/education/fact-sheets/Pages/circadian-rhythms 。**对应第二章。** 2026-10-18核对官方页面：SCN协调生物钟、接受眼部光信号并参与褪黑素节律；网页未确认明确更新年月，故不虚填出版年份。科普资料，非临床治疗指南。
+[10] National Institute of General Medical Sciences. *Circadian Rhythms*. National Institutes of Health. https://www.nigms.nih.gov/education/fact-sheets/Pages/circadian-rhythms 。
 
-[11] National Library of Medicine. *How to Understand Your Lab Results*. MedlinePlus Medical Test. Last updated September 4, 2025. https://medlineplus.gov/lab-tests/how-to-understand-your-lab-results/ 。**对应第四章。** 2026-10-18核对官方页面：参考范围因实验室和检测方法而异；结果在范围外不自动等于疾病，范围内也不保证健康；实验室结果须结合病史和症状。
+[11] National Library of Medicine. *How to Understand Your Lab Results*. MedlinePlus Medical Test. Last updated September 4, 2025. https://medlineplus.gov/lab-tests/how-to-understand-your-lab-results/ 。
 
-[12] Centers for Disease Control and Prevention. *Health Effects of Social Isolation and Loneliness*. May 15, 2024. https://www.cdc.gov/social-connectedness/risk-factors/index.html 。**对应第六章。** 2026-10-18核对官方页面：社会隔离（客观联系与支持不足）与孤独（主观感受）不同；所列健康风险主要是群体层面的风险关联，不得写成个体必然结果。
+[12] Centers for Disease Control and Prevention. *Health Effects of Social Isolation and Loneliness*. May 15, 2024. https://www.cdc.gov/social-connectedness/risk-factors/index.html 。
 
-[13] Centers for Disease Control and Prevention. *Promoting Social Connection*. May 15, 2024. https://www.cdc.gov/social-connectedness/promoting/index.html 。**对应第六章。** 2026-10-18核对官方页面：交通、公共空间、社区组织与制度环境影响社会联系的可达性。与[12]分别承担健康风险和公共环境两种证据角色。
+[13] Centers for Disease Control and Prevention. *Promoting Social Connection*. May 15, 2024. https://www.cdc.gov/social-connectedness/promoting/index.html 。
 
-[14] Higgins JPT, Savović J, Page MJ, Elbers RG, Sterne JAC. Chapter 8: Assessing risk of bias in a randomized trial [chapter last updated October 2019]. In: Higgins JPT, Thomas J, Chandler J, Cumpston M, Li T, Page MJ, Welch VA, eds. *Cochrane Handbook for Systematic Reviews of Interventions*. Version 6.5. Cochrane; 2024. https://www.cochrane.org/authors/handbooks-and-manuals/handbook/current/chapter-08 。**对应第八章。** 说明RoB 2五类偏倚风险：随机化、偏离预定干预、结局缺失、结局测量、选择性报告结果；工具评价的是**特定试验结果**而非给整项研究一个笼统评分。章更新年份与手册版本年份分别保留。
+[14] Higgins JPT, Savović J, Page MJ, Elbers RG, Sterne JAC. Chapter 8: Assessing risk of bias in a randomized trial [chapter last updated October 2019]. In: Higgins JPT, Thomas J, Chandler J, Cumpston M, Li T, Page MJ, Welch VA, eds. *Cochrane Handbook for Systematic Reviews of Interventions*. Version 6.5. Cochrane; 2024. https://www.cochrane.org/authors/handbooks-and-manuals/handbook/current/chapter-08 。
 
-[15] National Center for Complementary and Integrative Health. *“Detoxes” and “Cleanses”: What You Need To Know*. National Institutes of Health; updated March 2025. https://www.nccih.nih.gov/health/detoxes-cleanses 。**对应第十一章。** 官方消费者资料区分商业排毒承诺与确有临床指征的特定中毒处理；提醒灌肠、极端节食及补充产品的风险。不能由此推论所有禁食研究已被证伪，也不能把医学螯合治疗与商业“排毒”混为一谈。
+[15] National Center for Complementary and Integrative Health. *“Detoxes” and “Cleanses”: What You Need To Know*. National Institutes of Health; updated March 2025. https://www.nccih.nih.gov/health/detoxes-cleanses 。
 
-[16] National Center for Complementary and Integrative Health. *Know the Science: How Medications and Supplements Can Interact*. National Institutes of Health. https://www.nccih.nih.gov/health/know-science/how-medications-and-supplements-can-interact/introduction 。**对应第十一章。** 2026-10-18核对官方互动教育模块：补充剂可能增加或降低药物作用；应向医护人员提供完整用药及补充剂清单。该来源为**教育模块**，不是系统综述；未核实统一出版年份，不虚填日期。
+[16] National Center for Complementary and Integrative Health. *Know the Science: How Medications and Supplements Can Interact*. National Institutes of Health. https://www.nccih.nih.gov/health/know-science/how-medications-and-supplements-can-interact/introduction 。
 
-[17] National Center for Complementary and Integrative Health. *Probiotics: Usefulness and Safety*. National Institutes of Health. https://www.nccih.nih.gov/health/probiotics-usefulness-and-safety 。**对应第四章。** 2026-10-18核对官方资料：不同菌株与产品不应视为同一种干预；安全性证据有限，重症、免疫功能受损者和早产儿风险更高。此为综述性科普，不应写成证明某一特定产品有效的临床试验。
+[17] National Center for Complementary and Integrative Health. *Probiotics: Usefulness and Safety*. National Institutes of Health. https://www.nccih.nih.gov/health/probiotics-usefulness-and-safety 。
 
-[18] National Institute for Occupational Safety and Health. *Hierarchy of Controls*. Centers for Disease Control and Prevention; April 10, 2024. https://www.cdc.gov/niosh/hierarchy-of-controls/about/ 。**对应第六章。** 由优先到次要为消除、替代、工程控制、管理控制和个人防护装备；具体工效学实施例参[8]。2026-10-18核对官方网页。
-
+[18] National Institute for Occupational Safety and Health. *Hierarchy of Controls*. Centers for Disease Control and Prevention; April 10, 2024. https://www.cdc.gov/niosh/hierarchy-of-controls/about/ 。
 ---
 
 # 阅读与健康信息说明
