@@ -1,6 +1,6 @@
 # Chapter Two — The Body in Time: Sleep, Seasons, and Circadian Rhythms
 
-*The Universe Within Us — English adaptation, draft 1*
+*The Universe Within Us — English adaptation, revised working draft*
 
 ## Two Kinds of Time
 
@@ -35,6 +35,14 @@ Our traveler has reached a destination, but internal timing takes longer to adju
 Adjustment differs with the number and direction of time zones crossed, recent sleep, light exposure, and individual circumstances. There is no single rule that guarantees immediate adaptation. Persistent or severe symptoms deserve attention rather than automatic dismissal as ordinary jet lag.
 
 This experience makes something usually invisible easier to see: geography can change abruptly, while physiology adjusts through a process.
+
+## The Weekend Clock
+
+A student rises early for weekday classes, then sleeps much later on weekends. On Sunday evening, sleep seems reluctant to arrive; Monday morning feels like crossing a time zone without leaving town.
+
+Researchers sometimes use the term *social jet lag* for a mismatch between social schedules and biological timing. The phrase describes a pattern rather than diagnosing everyone who sleeps late. Sleep duration, individual differences, work demands, and health circumstances all complicate the picture.
+
+It is tempting to prescribe exactly the same hours every day. Yet students, caregivers, and workers cannot always control their schedules. Understanding biological rhythms should illuminate those constraints rather than turn them into moral shortcomings.
 
 ## The People Who Work While Others Sleep
 
