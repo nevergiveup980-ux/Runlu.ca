@@ -131,3 +131,30 @@ test('self-report can be corrected after reloading', async ({ page }) => {
   await page.reload();
   await expect(page.locator('#correct')).toContainText('0 / 1');
 });
+
+test('editorial integrity: twenty distinct complete bilingual puzzles', async ({ page }) => {
+  await page.goto(url);
+  const content = await page.evaluate(() => ({
+    en: puzzles,
+    zh,
+    explanations
+  }));
+  for (const locale of ['en', 'zh']) {
+    const entries = content[locale];
+    expect(entries).toHaveLength(20);
+    expect(content.explanations[locale]).toHaveLength(20);
+    const questions = new Set();
+    for (let i = 0; i < 20; i++) {
+      const entry = entries[i];
+      expect(entry).toHaveLength(3);
+      for (const field of entry) {
+        expect(typeof field).toBe('string');
+        expect(field.trim().length).toBeGreaterThan(2);
+      }
+      expect(content.explanations[locale][i].trim().length).toBeGreaterThan(12);
+      expect(entry[1].trim().toLowerCase()).not.toBe(entry[2].trim().toLowerCase());
+      questions.add(entry[0].trim());
+    }
+    expect(questions.size).toBe(20);
+  }
+});
