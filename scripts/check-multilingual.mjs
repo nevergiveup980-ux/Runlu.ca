@@ -51,6 +51,16 @@ const failures = [];
 for (const file of pages) {
   const rel = path.relative(root, file);
   if (excluded.has(rel) || excludedPrefixes.some(prefix => rel.startsWith(prefix))) continue;
+  // Wellness Season 2 currently publishes a Chinese master before translated editions.
+  // Never imply unpublished translations exist; verify the declared language and
+  // visible translation-pending notice until the four editions are actually released.
+  if (/^wellness-season-02-\d{2}\.html$/.test(rel)) {
+    const edition = fs.readFileSync(file, 'utf8');
+    if (!/<html lang="zh(?:-Hans|-CN)?"/.test(edition)) failures.push(`${rel}: expected Chinese master language`);
+    if (!edition.includes('aria-label="语言版本 / Language editions"')) failures.push(`${rel}: missing edition navigation`);
+    if (!edition.includes('coming later')) failures.push(`${rel}: missing translation-pending notice`);
+    continue;
+  }
   // The Wellness Twelve articles are four separate, canonical language editions.
   // They do not use in-page translation; validate their linked counterparts instead
   // of incorrectly requiring the shared in-page language selector/script.
