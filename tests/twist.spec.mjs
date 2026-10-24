@@ -201,3 +201,28 @@ test('previous and review navigation focus the current puzzle', async ({ page })
   await expect(page.locator('#question')).toBeFocused();
   await expect(page.locator('#counter')).toContainText('01 / 20');
 });
+
+test('malformed saved JSON falls back to a clean playable game', async ({ page }) => {
+  await page.goto(url);
+  await page.evaluate(() => localStorage.setItem('runlu-twist-node001-v1', '{broken-json'));
+  await page.reload();
+  await expect(page.locator('#counter')).toContainText('01 / 20');
+  await expect(page.locator('#solved')).toContainText('0 / 20');
+  await page.locator('#answerBtn').click();
+  await expect(page.locator('#solved')).toContainText('1 / 20');
+});
+
+test('out-of-range saved progress and duplicates are sanitized', async ({ page }) => {
+  await page.goto(url);
+  await page.evaluate(() => localStorage.setItem('runlu-twist-node001-v1', JSON.stringify({
+    index: 900, completed: [0, 0, 19, -1, 20, '3'], hints: [0, 0, 20],
+    assessments: { '0': 'yes', '19': 'no', '3': 'yes' }
+  })));
+  await page.reload();
+  await expect(page.locator('#counter')).toContainText('20 / 20');
+  await expect(page.locator('#solved')).toContainText('2 / 20');
+  await expect(page.locator('#points')).toContainText('15');
+  await expect(page.locator('#correct')).toContainText('1 / 2');
+  await page.locator('#prevBtn').click();
+  await expect(page.locator('#counter')).toContainText('19 / 20');
+});
