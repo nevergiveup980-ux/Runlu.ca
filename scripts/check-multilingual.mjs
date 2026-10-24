@@ -6,7 +6,7 @@ const root = process.cwd();
 // legal/privacy policies are applications/support pages rather than editorial
 // site pages. They own their localization and must not be made to load the
 // public website's language switcher.
-const excludedPrefixes = ['flooring/','flooring-u2-lab/'];
+const excludedPrefixes = ['flooring/','flooring-u2-lab/','flooring-u3-preview/'];
 const excluded = new Set([
   'health-view-006-humid-heat.html',
   'health-view-007-staree-statins.html',
@@ -21,7 +21,11 @@ const excluded = new Set([
   'field-calculator-privacy.html',
   'roll-length.html',
   'runlu-ledger-privacy.html',
-  'warehouse-privacy.html'
+  'warehouse-privacy.html',
+  // Standalone app policy/support pages and a separate book microsite own their locale UI.
+  'invest/privacy.html',
+  'invest/support.html',
+  'truth-and-lies.html'
 ]);
 const pages = [];
 const languageScript = fs.readFileSync(path.join(root, 'runlu-language.js'), 'utf8');
@@ -61,6 +65,18 @@ for (const file of pages) {
     }
     const canonical = `href="https://runlu.ca/${rel}"`;
     if (!edition.includes(`rel="canonical" ${canonical}`)) failures.push(`${rel}: missing self canonical`);
+    continue;
+  }
+  // Chronicle Twilight uses separate language editions with a route-switching selector.
+  // Preserve the edition-specific navigation; verify all four targets instead.
+  if (/^chronicle\/twilight-crescent-moon-2026(?:-(?:en|fr|es))?\.html$/.test(rel)) {
+    const edition = fs.readFileSync(file, 'utf8');
+    for (const suffix of ['', '-en', '-fr', '-es']) {
+      const target = 'chronicle/twilight-crescent-moon-2026' + suffix + '.html';
+      if (!fs.existsSync(path.join(root, target))) failures.push(`${rel}: missing edition ${target}`);
+      if (!edition.includes('twilight-crescent-moon-2026' + suffix + '.html')) failures.push(`${rel}: missing language navigation ${target}`);
+    }
+    if (!edition.includes(`rel="canonical" href="https://runlu.ca/${rel}"`)) failures.push(`${rel}: missing self canonical`);
     continue;
   }
   const html = fs.readFileSync(file, 'utf8');
