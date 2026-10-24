@@ -28,6 +28,13 @@ Status: development only. Chromium Playwright regression suite passed on commit 
 - [ ] Repeat the above using an iPhone home-screen shortcut; Safari and standalone storage may differ.
 - [ ] Check keyboard focus and VoiceOver reading order.
 
+## Editorial review notes (2026-10-24)
+
+- Revised Chinese wording for puzzles 1, 4, 6, 11, 12, 16, 17 and 18 to avoid awkward literal translations and overly revealing hints.
+- Curated-classics disclosure is present in the visible score explanation; no originality claim is made.
+- Browser regression suite passed after the previous content change (commit ff6bfec, run 40088688945); current copy-edit commit still requires a new run.
+- Human bilingual editorial acceptance remains open; this note is not a completed sign-off.
+
 ## Editorial acceptance
 
 - [ ] Confirm 20 English and 20 Chinese prompts, hints, answers and explanations align.
