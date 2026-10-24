@@ -26,9 +26,12 @@ async function inspect(prior){
  const schema=window.RUNLUUniversalDataVersion?.status?.()||null;
  let durable=null,comparison=null;
  try{durable=await window.RUNLUUniversalDurableLocal?.status?.();if(durable?.ready){await new Promise(r=>setTimeout(r,120));comparison=await window.RUNLUUniversalDurableLocal?.compareWithAdapter?.()}}catch(_){}
- const journal=window.RUNLUUniversalCrashJournal?.inspect?.()||{active:0,pending:[]}; const interrupted=window.RUNLUUniversalInterruptedResolver?.scan?.()||[];
+ let journal=null;
+ try{journal=window.RUNLUUniversalCrashJournal?.inspect?.()||null}catch(_){}
+ const interrupted=window.RUNLUUniversalInterruptedResolver?.scan?.()||[];
  const issues=[];
- if(journal.active>0)issues.push({code:'INCOMPLETE_BUSINESS_OPERATION',severity:'critical',detail:journal.active+' write-ahead operation(s) were not committed'});
+ if(hasWorkspace&&(!journal||!Number.isInteger(journal.active)||journal.active<0))issues.push({code:'RECOVERY_JOURNAL_UNAVAILABLE',severity:'critical',detail:'Recovery journal cannot be verified; startup remains paused'});
+ if(journal?.active>0)issues.push({code:'INCOMPLETE_BUSINESS_OPERATION',severity:'critical',detail:journal.active+' write-ahead operation(s) were not committed'});
  if(health?.corruptKeys?.length)issues.push({code:'CORRUPT_LOCAL_JSON',severity:'critical',detail:health.corruptKeys.length+' unreadable local data group(s)'});
  if(schema&&schema.workspaceVersion>schema.currentVersion)issues.push({code:'FUTURE_SCHEMA',severity:'critical',detail:'Workspace schema v'+schema.workspaceVersion+' is newer than app v'+schema.currentVersion});
  if(hasWorkspace&&!durable?.ready)issues.push({code:'DURABLE_UNAVAILABLE',severity:'review',detail:'IndexedDB durable mirror is unavailable'});
