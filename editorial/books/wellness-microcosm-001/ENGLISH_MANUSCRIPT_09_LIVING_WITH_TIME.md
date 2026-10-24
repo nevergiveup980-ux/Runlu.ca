@@ -80,9 +80,7 @@ A practical plan can be modest: protect reasonable rest opportunities, find suit
 
 Its most important feature may be the instructions for what to do when circumstances change.
 
-Living with time means refusing to turn the clock into a tyrant. It also means recognizing that people with identical schedules may have very different bodies, resources, and risks. That is where our next chapter begins.
-
----
+The principle becomes clearer when we consider a household whose week cannot be reduced to one ideal timetable.
 
 ## A Week That Refuses to Be Identical
 
