@@ -9,7 +9,7 @@ import {createPrivateDeliveryService} from "./private-delivery-service.mjs";
 import {createDeliveryHttpHandler} from "./delivery-http.mjs";
 import {writeDeliveryHttpResponse} from "./delivery-node-http.mjs";
 const secret="stage-real-http-e2e-test-secret-123456";
-const now=100000,hash="a".repeat(64);
+const now=Date.now(),hash="a".repeat(64);
 const job={id:"STAGE-100",ownerId:"owner-1",status:"COMPLETED"};
 const asset={id:"asset_12345",jobId:job.id,ownerId:job.ownerId,state:"VERIFIED",sha256:hash,storageKey:"stage/private/STAGE-100/"+hash+".mp4"};
 const ticket=issueDeliveryTicket({asset,job,requesterId:"owner-1",secret,now,ttlSeconds:120});
