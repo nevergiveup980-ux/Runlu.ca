@@ -65,3 +65,37 @@ Traditional thought can offer a wide view of our place in nature. Modern science
 Observe the patterns of the world. Attend to the changes of living things. Learn the workings of the human body. Seek a life guided by understanding and care.
 
 May we keep our curiosity without surrendering judgment, care for our own bodies without forgetting others, and find within this vast world a more measured way to live.
+
+---
+
+## The Ordinary Work of Balance
+
+Balance is sometimes pictured as a perfect stillness, a point at which every demand has been satisfied and nothing unexpected can happen. Human life offers few such moments.
+
+A balanced day may involve a difficult conversation, an interrupted plan, or a decision to rest instead of pushing harder. A balanced year may include illness, recovery, changes in employment, or new responsibilities for another person.
+
+To live with measure is not to escape these changes. It is to respond to them without surrendering the capacity to judge.
+
+That response may be private and quiet: preparing a meal, taking prescribed treatment as directed, calling someone who needs company, or deciding that a frightening advertisement can wait. It may also be collective: asking for safer working conditions, improving access to a public space, or sharing caregiving work more fairly.
+
+The scale of the action matters less than the care with which it is chosen.
+
+## What We Owe to Evidence and to One Another
+
+Evidence helps us avoid mistaking a comforting story for a demonstrated effect. It can protect us from unnecessary expense and dangerous delay. But evidence does not decide every question of meaning.
+
+Science can investigate whether an intervention improves an outcome. It cannot, by itself, tell a family how to express gratitude, or a community what kind of neighbor it hopes to be. Those questions involve values, relationships, and judgment.
+
+Likewise, a meaningful cultural tradition cannot settle a clinical question merely by being meaningful. Keeping these forms of understanding distinct allows them to contribute without pretending to be identical.
+
+There is humility in both directions: acknowledging what a study cannot tell us and acknowledging what a cherished story cannot prove.
+
+## The Window Is Still Open
+
+At the end of the day, the same window may frame a different light. The streets are quieter. Someone has returned from work; another person is beginning a night shift. Somewhere, a family is negotiating tomorrow's responsibilities.
+
+Nothing in this book promises that life can be made free of risk, fatigue, or uncertainty. Its quieter hope is that a person can become more attentive to the conditions of living—and more capable of asking for what is needed.
+
+A body belongs to a person. A person belongs to relationships and environments. Those relationships do not dissolve individual responsibility, but they keep us from confusing responsibility with isolation.
+
+The universe within us is not a hidden diagram waiting to be decoded. It is an invitation to look carefully at the life already unfolding, with curiosity strong enough to ask questions and compassion strong enough to accept imperfect answers.
