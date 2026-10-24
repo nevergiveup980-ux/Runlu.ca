@@ -10,7 +10,7 @@ export async function readDeliveryJsonBody(req,{maxBytes=4096}={}){
  if(req.headers?.["content-length"]!==undefined&&(!Number.isSafeInteger(declared)||declared<0||declared>maxBytes))throw Error("Request body too large");
  const chunks=[];let size=0;
  const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(Error("Request body timeout")),timeoutMs);
+ const timeout=setTimeout(()=>{controller.abort(Error("Request body timeout"));req.destroy(Error("Request body timeout"));},timeoutMs);
  try{
  for await(const chunk of req.iterator({signal:controller.signal})){
   if(controller.signal.aborted)throw Error("Request body timeout");
