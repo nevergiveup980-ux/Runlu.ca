@@ -1,11 +1,24 @@
 # RUNLU TWIST — Node 001 QA checklist
 
-Status: development only. Chromium Playwright 11-test regression suite passed on commit de24fb8 (GitHub Actions run 40120416635). iPhone Safari manual acceptance remains pending. Site integrity is a separate failing check; do not equate it with TWIST browser tests.
+Status: development only. Chromium Playwright 15-test regression suite passed on commit d97e788 (GitHub Actions run 40130142523). iPhone Safari manual acceptance remains pending. Site integrity is a separate failing check; do not equate it with TWIST browser tests.
 
 ## Automated browser acceptance (Chromium)
 
-- [x] 11 Playwright tests passed in GitHub Actions run 40120416635, including 20-puzzle completion, score, review, reset, language persistence, self-report correction, saved-data filtering, keyboard focus, 320px/375px viewport checks, and hint persistence.
-- [ ] Recheck the suite after any subsequent code changes.\n- [ ] Confirm new touch-enabled mobile regression test passes (commit 5b3f116); this is emulation, not real iPhone Safari.
+- [x] 15 Playwright tests passed in GitHub Actions run 40130142523, including 20-puzzle completion, score, review, reset, language persistence, self-report correction, saved-data filtering, keyboard focus, 320px/375px viewport checks, and hint persistence.
+- [ ] Recheck the suite after any subsequent code changes.\n- [x] Touch-enabled Chromium mobile emulation passed in the 15-test suite; this is not real iPhone Safari.\n- [x] Malformed JSON and out-of-range saved data recovery passed in the 15-test suite.
+
+## Quick real-device acceptance sequence (iPhone Safari)
+
+1. Open the actual TWIST preview URL in Safari, not a screenshot or GitHub source-code view.
+2. Check narrow-screen layout in portrait; switch to 简体中文 and refresh.
+3. On puzzle 1, tap hint, refresh, reveal answer, and confirm 5 exploration points.
+4. Tap “我想对了”, refresh, change to “还没想对”, and confirm self-report counts change without changing points.
+5. Tap Next, then Previous, and verify puzzle 1 answer is still revealed.
+6. Test share sheet; cancel Reset once and accept Reset once.
+7. Close and reopen Safari; check whether progress persists. Repeat via home-screen shortcut separately if installed.
+8. Record device model, iOS version, Safari/standalone mode, preview URL, and any failure screenshots.
+
+Passing Chromium emulation does not check WebKit, iOS safe areas, VoiceOver, or native share behavior. Do not mark any manual checkbox without actual device evidence.
 
 ## Manual acceptance on iPhone Safari
 
