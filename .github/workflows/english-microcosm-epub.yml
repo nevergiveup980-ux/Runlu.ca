@@ -1,0 +1,48 @@
+name: English Microcosm EPUB Proof
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - book/wellness-microcosm-001
+    paths:
+      - 'editorial/books/wellness-microcosm-001/ENGLISH_MANUSCRIPT_*.md'
+      - 'editorial/books/wellness-microcosm-001/ENGLISH_BACK_MATTER_REFERENCES_AND_NOTICES.md'
+      - 'editorial/books/wellness-microcosm-001/build_english_epub.sh'
+      - '.github/workflows/english-microcosm-epub.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Pandoc and EPUBCheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc epubcheck
+      - name: Build and validate English EPUB proof
+        working-directory: editorial/books/wellness-microcosm-001
+        run: bash build_english_epub.sh
+      - name: Record checksum
+        working-directory: editorial/books/wellness-microcosm-001
+        run: |
+          sha256sum RUNLU_THE_UNIVERSE_WITHIN_US_EN_PROOF.epub | tee ENGLISH_EPUB_PROOF_SHA256.txt
+          {
+            echo "## English EPUB proof"
+            echo "Commit: `$GITHUB_SHA`"
+            echo "Status: EPUBCheck passed; editorial and Apple Books approval pending."
+            cat ENGLISH_EPUB_PROOF_SHA256.txt
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload English EPUB proof
+        uses: actions/upload-artifact@v4
+        with:
+          name: english-microcosm-epub-proof
+          path: editorial/books/wellness-microcosm-001/RUNLU_THE_UNIVERSE_WITHIN_US_EN_PROOF.epub
+          if-no-files-found: error
+          retention-days: 30
+      - name: Upload checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: english-microcosm-epub-sha256
+          path: editorial/books/wellness-microcosm-001/ENGLISH_EPUB_PROOF_SHA256.txt
+          if-no-files-found: error
