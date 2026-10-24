@@ -72,6 +72,12 @@ Physiological responses depend on many factors, including prior health, inherite
 
 The body's ability to adapt should never become an argument that people ought to endure unlimited demands.
 
+### The Social Cost of Adaptation
+
+The language of adaptation can conceal a social question: who is expected to keep adapting, and at whose expense? A workplace may praise resilience while giving employees little control over schedules or recovery. A family may celebrate one caregiver's endurance while overlooking the support that person needs.
+
+The body's capacity to respond to demands is remarkable. It does not establish that those demands are fair or sustainable. Physiological explanation and social responsibility belong in the same conversation, without being mistaken for the same kind of evidence.
+
 ## The Other Lives Within Us
 
 The human body is not a sealed container occupied by human cells alone. Complex microbial communities inhabit the gut, mouth, skin, and other sites. Researchers investigate relationships between these communities and digestion, immunity, and additional physiological processes.
