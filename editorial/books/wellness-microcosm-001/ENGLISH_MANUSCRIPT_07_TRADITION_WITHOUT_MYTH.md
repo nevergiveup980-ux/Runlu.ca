@@ -97,3 +97,45 @@ Respect for tradition and commitment to evidence can coexist. Some specific prac
 Listening to experience is valuable. Testing causal claims is equally valuable. Keeping cultural significance, clinical effectiveness, and safety distinct makes the discussion more honest.
 
 The next chapter takes up the practical challenge: how do we test a wellness claim, understand a dramatic statistic, and decide whether the evidence justifies the promise?
+
+---
+
+## What Counts as a Fair Comparison?
+
+Imagine that a clinic offers a traditional treatment to people with recurring discomfort. Most visitors have already tried other approaches, and many arrive during an especially difficult period. A month later, some report improvement.
+
+This is worth noticing, but it is not yet a fair estimate of the treatment's effect. People who seek the clinic may differ from those who do not. Symptoms may fluctuate. Other treatments, expectations, and the attention received during visits may all influence outcomes.
+
+A credible comparison should ask what would have happened to similar people without the particular intervention, or with another appropriate intervention. The comparison must be ethical and relevant. For some conditions, usual care may be an important part of both groups; for others, a different comparator is appropriate.
+
+No single research design resolves every question. A randomized trial can help with efficacy under specified conditions, while observational evidence may help investigate uncommon harms or patterns of real-world use. Each type of evidence must be interpreted according to what it can reasonably establish.
+
+## A Remedy Is More Than Its Name
+
+Consider two products bearing the same traditional label. One is a whole-herb preparation; the other is a concentrated extract. Their doses, composition, manufacturing processes, and potential interactions may differ substantially.
+
+Even where historical sources describe a similarly named remedy, it would be careless to assume equivalence without examining the details. Plant identity, sourcing, contamination controls, preparation methods, and ingredient concentrations all matter.
+
+This is not an argument against studying traditional formulations. It is an argument for studying the formulation that people will actually use.
+
+The same precision applies to procedures. A broad category such as acupuncture or manual therapy may include different techniques, treatment schedules, and practitioner training. Evidence should follow the actual intervention rather than the prestige of a category name.
+
+## The Conversation in the Examination Room
+
+A patient has been using a traditional preparation but hesitates to tell their clinician. They worry that the practice will be dismissed as superstition. The clinician, unaware of the product, considers prescribing a new medication.
+
+Silence is not a good outcome for either person. The patient's beliefs and experience deserve a respectful hearing, and the clinician needs an accurate account of substances and treatments that could affect safety.
+
+A better conversation separates cultural meaning from medical claims. What does the patient value about the practice? What benefit have they noticed? What ingredients are involved? Are there known interactions, adverse effects, or reasons to avoid it? Does the patient have symptoms requiring assessment?
+
+Respectful communication does not require clinicians to endorse unsupported claims. It requires them to listen carefully and explain their reasoning without contempt.
+
+## An Honest Answer Can Be Incomplete
+
+People often want a simple verdict: Does traditional medicine work, yes or no? But that question combines too many different interventions, conditions, outcomes, and risks to produce a meaningful single answer.
+
+The more responsible answer may be that evidence supports a narrowly defined use, that another claim lacks convincing evidence, and that a third question remains uncertain.
+
+That unevenness is not inconsistency. It is what happens when conclusions follow evidence instead of loyalty to a label.
+
+Tradition can remain culturally alive while its clinical claims are examined one by one. Indeed, refusing exaggerated promises may be one of the best ways to preserve room for serious research and genuine understanding.
