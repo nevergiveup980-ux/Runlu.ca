@@ -1,6 +1,6 @@
 // Bounded JSON request-body reader for Node.js HTTP hosts.
 // Use before the delivery handler; never buffer unbounded user input.
-export async function readDeliveryJsonBody(req,{maxBytes=4096}={}){
+export async function readDeliveryJsonBody(req,{maxBytes=4096,timeoutMs=5000}={}){
  if(!req||typeof req[Symbol.asyncIterator]!=="function")throw Error("Readable HTTP request required");
  if(!Number.isSafeInteger(maxBytes)||maxBytes<1||maxBytes>65536)throw Error("Invalid body limit");
  if(!Number.isSafeInteger(timeoutMs)||timeoutMs<1||timeoutMs>30000)throw Error("Invalid body timeout");
