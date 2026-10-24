@@ -3,9 +3,10 @@ import {enforceDeliveryOrigin} from "./delivery-origin.mjs";
 // The host MUST add CSRF, rate limiting, TLS and a trusted authentication adapter.
 import {readDeliveryJsonBody} from "./delivery-request-body.mjs";
 import {writeDeliveryHttpResponse} from "./delivery-node-http.mjs";
-export function createDeliveryNodeHandler({handleDelivery,maxBodyBytes=4096,allowedOrigin}){
+export function createDeliveryNodeHandler({handleDelivery,maxBodyBytes=4096,bodyTimeoutMs=5000,allowedOrigin}){
  if(typeof handleDelivery!=="function")throw Error("Trusted delivery handler required");
  if(!Number.isSafeInteger(maxBodyBytes)||maxBodyBytes<1||maxBodyBytes>65536)throw Error("Invalid body limit");
+ if(!Number.isSafeInteger(bodyTimeoutMs)||bodyTimeoutMs<1||bodyTimeoutMs>30000)throw Error("Invalid body timeout");
  return async function nodeHandler(req,res){
   const base={"cache-control":"no-store","x-content-type-options":"nosniff"};
   const json=(status,error)=>({status,headers:{...base,"content-type":"application/json; charset=utf-8"},body:{error}});
@@ -16,7 +17,7 @@ export function createDeliveryNodeHandler({handleDelivery,maxBodyBytes=4096,allo
    else if(path!=="/stage/private/download"&&path!=="/stage/private/revoke")descriptor=json(404,"not_found");
    else if(allowedOrigin!==undefined&&!enforceDeliveryOrigin(req,{allowedOrigin}))descriptor=json(403,"forbidden_origin");
    else{
-    const body=await readDeliveryJsonBody(req,{maxBytes:maxBodyBytes});
+    const body=await readDeliveryJsonBody(req,{maxBytes:maxBodyBytes,timeoutMs:bodyTimeoutMs});
     descriptor=await handleDelivery({method:req.method,path,body,headers:req.headers});
    }
   }catch{
