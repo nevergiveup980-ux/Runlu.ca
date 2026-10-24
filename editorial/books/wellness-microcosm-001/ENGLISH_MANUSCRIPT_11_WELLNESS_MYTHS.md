@@ -86,9 +86,7 @@ When evidence is strong, we can speak clearly. When research is incomplete, we c
 
 Across this book, we have learned not to confuse metaphor with mechanism, tradition with clinical proof, testimony with causation, or scientific authority with infallibility.
 
-Wellness does not require perfect certainty. It requires better questions, proportionate confidence, and the willingness to choose carefully when knowledge has limits.
-
----
+One especially tempting way to escape uncertainty is to claim that a single hidden cause explains almost every difficulty.
 
 ## The Problem with “One Cause Explains Everything”
 
