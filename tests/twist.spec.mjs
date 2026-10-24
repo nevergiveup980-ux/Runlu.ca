@@ -159,3 +159,30 @@ test('editorial integrity: twenty distinct complete bilingual puzzles', async ({
     expect(questions.size).toBe(20);
   }
 });
+
+test('mobile touch flow: hint, answer, next and reload', async ({ browser }) => {
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    isMobile: true,
+    hasTouch: true,
+    deviceScaleFactor: 3
+  });
+  try {
+    const page = await context.newPage();
+    await page.goto(url);
+    await page.locator('#hintBtn').tap();
+    await expect(page.locator('#hint')).toBeVisible();
+    await page.locator('#answerBtn').tap();
+    await expect(page.locator('#answer')).toBeVisible();
+    await expect(page.locator('#points')).toContainText('5');
+    await page.locator('#nextBtn').tap();
+    await expect(page.locator('#counter')).toContainText('02 / 20');
+    await page.reload();
+    await expect(page.locator('#counter')).toContainText('02 / 20');
+    await page.locator('#prevBtn').tap();
+    await expect(page.locator('#answer')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)).toBe(false);
+  } finally {
+    await context.close();
+  }
+});
