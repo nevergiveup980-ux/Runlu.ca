@@ -1,0 +1,29 @@
+name: RUNLU Discovery smoke test
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'runlu-discovery.js'
+      - 'runlu-discovery.css'
+      - 'tests/discovery-smoke.test.cjs'
+      - '.github/workflows/runlu-discovery.yml'
+  push:
+    branches: ['feature/**', main]
+    paths:
+      - 'index.html'
+      - 'runlu-discovery.js'
+      - 'runlu-discovery.css'
+      - 'tests/discovery-smoke.test.cjs'
+      - '.github/workflows/runlu-discovery.yml'
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check runlu-discovery.js
+      - run: node --test tests/discovery-smoke.test.cjs
