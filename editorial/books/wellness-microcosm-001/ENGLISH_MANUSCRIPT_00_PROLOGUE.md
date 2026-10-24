@@ -65,7 +65,7 @@ We will use an old image to raise questions, then turn to history, physiology, p
 
 We can now measure more aspects of daily life than most previous generations could have imagined. A watch tracks heart rate. A phone counts steps. An app charts sleep. A medical report displays rows of numbers. These tools can be valuable. They can also make a life feel like a scorecard that must be improved every morning.
 
-If you walked ten thousand steps yesterday and only two thousand today, have you failed? If you slept badly last night, has every previous effort been erased? Once we begin to think this way, a useful instrument quietly becomes a judge.
+If you walked a long distance yesterday and very little today, have you failed? If you slept badly last night, has every previous effort been erased? Once we begin to think this way, a useful instrument quietly becomes a judge.
 
 Numbers matter, but they cannot tell the whole story. They do not explain why someone works nights, why a parent must stay awake with a child, or how grief, unemployment, or migration can reshape a person's days.
 
@@ -75,7 +75,7 @@ The goal is not to abandon measurement. It is to understand what measurement can
 
 ## The Journey Ahead
 
-We begin with an ancient Chinese way of thinking about human life, then move into the science of circadian rhythms, climate and place, the body's internal regulation, stress and sleep, and the influence of family, work, and society. We will consider how to approach traditional medicine without romanticizing it, how science evaluates wellness claims, and how health advice can be adapted to different lives.
+We begin with a historical Chinese image of human life, then turn to circadian rhythms, climate and place, the body's internal regulation, stress and sleep, and the influence of family, work, and society. We will consider how to approach traditional medicine without romanticizing it, how science evaluates wellness claims, and how health advice can be adapted to different lives.
 
 This journey offers no secret to living forever. Indeed, any promise that one universal routine can prevent illness and aging in everyone deserves skepticism.
 
