@@ -1,0 +1,15 @@
+import fs from "node:fs";import vm from "node:vm";
+const html=fs.readFileSync("flooring/deerfoot-po-smartroll-v8-layout-pilot.html","utf8");
+const bridge=fs.readFileSync("flooring/smartroll-paper-v8-layout-bridge-v1.js","utf8");
+const css=fs.readFileSync("flooring/deerfoot-paper-reference-calibration-v1.css","utf8");
+const original=fs.readFileSync("flooring/deerfoot-po-smartroll-optin-v1.html","utf8");
+const assert=(b,m)=>{if(!b)throw Error(m)};
+new vm.Script(bridge);
+assert(html.includes("smartroll-real-paper-optin-v1.js")&&html.includes("smartroll-paper-v8-layout-bridge-v1.js"),"SmartRoll pilot and V8 bridge both loaded");
+assert(bridge.includes('d.body.classList.add("referenceCalibration")'),"V8 scope added only in nested iframe");
+assert(bridge.includes("deerfoot-paper-reference-calibration-v1.css?v=8-smartroll-20261024"),"V8 CSS cache busted");
+assert(bridge.includes('d.getElementById(marker)'),"style idempotent");
+assert(css.includes(".referenceCalibration .invoice .companyInfo{top:19.2mm!important}")&&css.includes(".referenceCalibration .invoice .invoiceNoTop{top:27mm!important}"),"V8 reference layout present");
+assert(!original.includes("smartroll-paper-v8-layout-bridge-v1.js"),"prior pilot unchanged");
+assert(!/fetch\(|\.insert\(|\.update\(|\.delete\(|localStorage|supabase/.test(bridge),"bridge has no data persistence or inventory writes");
+console.log("SmartRoll V8 isolated layout pilot PASS");
