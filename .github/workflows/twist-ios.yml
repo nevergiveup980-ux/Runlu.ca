@@ -1,0 +1,31 @@
+name: TWIST iOS package
+on:
+  pull_request:
+    paths: ['ios/RUNLUTwist/**', '.github/workflows/twist-ios.yml']
+  workflow_dispatch:
+jobs:
+  offline-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python3 ios/RUNLUTwist/Scripts/verify-package.py
+      - run: node ios/RUNLUTwist/Scripts/test-game-logic.cjs
+      - run: npm install --no-save --no-package-lock @playwright/test
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Serve bundled iOS game
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory ios/RUNLUTwist/RUNLUTwist/Web > /tmp/twist-ios.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8765/twist.html >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+      - run: for browser in chromium webkit; do npx playwright test tests/twist.spec.mjs --browser "$browser" --workers 1 --reporter line || exit 1; done
+  ios-build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - run: xcodebuild -project ios/RUNLUTwist/RUNLUTwist.xcodeproj -scheme RUNLUTwist -sdk iphoneos -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build

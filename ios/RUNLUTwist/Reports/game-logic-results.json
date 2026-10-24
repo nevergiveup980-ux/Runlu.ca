@@ -1,0 +1,33 @@
+{
+  "kind": "Node VM with DOM stub; NOT browser layout or iPhone UI tests",
+  "tests": [
+    {
+      "name": "20 complete bilingual puzzles",
+      "status": "passed"
+    },
+    {
+      "name": "20 puzzles, hint score 195, review, reset",
+      "status": "passed"
+    },
+    {
+      "name": "Native backup and text-only share",
+      "status": "passed"
+    },
+    {
+      "name": "Language persists and native backup updates",
+      "status": "passed"
+    },
+    {
+      "name": "Relaunch restores progress and assessment",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed and out-of-range storage sanitized",
+      "status": "passed"
+    },
+    {
+      "name": "Cancel reset preserves state",
+      "status": "passed"
+    }
+  ]
+}
