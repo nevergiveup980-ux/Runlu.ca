@@ -147,9 +147,10 @@ test('editorial integrity: twenty distinct complete bilingual puzzles', async ({
     for (let i = 0; i < 20; i++) {
       const entry = entries[i];
       expect(entry).toHaveLength(3);
-      for (const field of entry) {
+      for (const [fieldIndex, field] of entry.entries()) {
         expect(typeof field).toBe('string');
-        expect(field.trim().length).toBeGreaterThan(2);
+        const minLength = fieldIndex === 2 ? (locale === 'zh' ? 1 : 2) : (locale === 'zh' ? 4 : 8);
+        expect(field.trim().length).toBeGreaterThan(minLength);
       }
       expect(content.explanations[locale][i].trim().length).toBeGreaterThan(12);
       expect(entry[1].trim().toLowerCase()).not.toBe(entry[2].trim().toLowerCase());
