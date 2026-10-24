@@ -6,7 +6,7 @@ const root = process.cwd();
 // legal/privacy policies are applications/support pages rather than editorial
 // site pages. They own their localization and must not be made to load the
 // public website's language switcher.
-const excludedPrefixes = ['flooring/','flooring-u2-lab/'];
+const excludedPrefixes = ['flooring/','flooring-u2-lab/','flooring-u3-preview/'];
 const excluded = new Set([
   'health-view-006-humid-heat.html',
   'health-view-007-staree-statins.html',
@@ -21,7 +21,11 @@ const excluded = new Set([
   'field-calculator-privacy.html',
   'roll-length.html',
   'runlu-ledger-privacy.html',
-  'warehouse-privacy.html'
+  'warehouse-privacy.html',
+  // Standalone app policy/support pages and a separate book microsite own their locale UI.
+  'invest/privacy.html',
+  'invest/support.html',
+  'truth-and-lies.html'
 ]);
 const pages = [];
 const languageScript = fs.readFileSync(path.join(root, 'runlu-language.js'), 'utf8');
@@ -47,6 +51,34 @@ const failures = [];
 for (const file of pages) {
   const rel = path.relative(root, file);
   if (excluded.has(rel) || excludedPrefixes.some(prefix => rel.startsWith(prefix))) continue;
+  // The Wellness Twelve articles are four separate, canonical language editions.
+  // They do not use in-page translation; validate their linked counterparts instead
+  // of incorrectly requiring the shared in-page language selector/script.
+  if (/^wellness-twelve-\d{2}(?:-[a-z-]+)?(?:-(?:en|fr|es))?\.html$/.test(rel)) {
+    const edition = fs.readFileSync(file, 'utf8');
+    const base = rel.replace(/-(?:en|fr|es)\.html$/, '.html').replace(/\.html$/, '');
+    for (const [lang, suffix] of [['zh-Hans',''],['en','-en'],['fr','-fr'],['es','-es']]) {
+      const target = base + suffix + '.html';
+      if (!fs.existsSync(path.join(root, target))) failures.push(`${rel}: missing edition ${target}`);
+      const expected = `hreflang="${lang}" href="https://runlu.ca/${target}"`;
+      if (!edition.includes(expected)) failures.push(`${rel}: missing alternate ${expected}`);
+    }
+    const canonical = `href="https://runlu.ca/${rel}"`;
+    if (!edition.includes(`rel="canonical" ${canonical}`)) failures.push(`${rel}: missing self canonical`);
+    continue;
+  }
+  // Chronicle Twilight uses separate language editions with a route-switching selector.
+  // Preserve the edition-specific navigation; verify all four targets instead.
+  if (/^chronicle\/twilight-crescent-moon-2026(?:-(?:en|fr|es))?\.html$/.test(rel)) {
+    const edition = fs.readFileSync(file, 'utf8');
+    for (const suffix of ['', '-en', '-fr', '-es']) {
+      const target = 'chronicle/twilight-crescent-moon-2026' + suffix + '.html';
+      if (!fs.existsSync(path.join(root, target))) failures.push(`${rel}: missing edition ${target}`);
+      if (!edition.includes('twilight-crescent-moon-2026' + suffix + '.html')) failures.push(`${rel}: missing language navigation ${target}`);
+    }
+    if (!edition.includes(`rel="canonical" href="https://runlu.ca/${rel}"`)) failures.push(`${rel}: missing self canonical`);
+    continue;
+  }
   const html = fs.readFileSync(file, 'utf8');
   for (const match of html.matchAll(/<[^!][^>]*>/g)) {
     const names=[...match[0].matchAll(/\s(data-(?:en|zh|fr|es))=/gi)].map(item=>item[1].toLowerCase());
