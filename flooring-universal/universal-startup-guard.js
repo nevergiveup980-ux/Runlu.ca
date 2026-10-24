@@ -8,12 +8,20 @@ let startup=null,readyPromise=null;
 
 function previous(){return data().read(STORE,null)}
 function write(v){data().write(STORE,v);return v}
+function journalRawValid(){
+ try{
+  const raw=data().current()?.raw?.('runlu_flooring_universal_u2_crash_journal');
+  if(typeof raw!=='string')return false;
+  const value=JSON.parse(raw);
+  return !!value&&Array.isArray(value.active)&&Array.isArray(value.history);
+ }catch(_){return false}
+}
 function markClean(reason){
  const s=previous()||{};if(!s.sessionOpen)return s;
  // A pagehide is not a clean exit while a recovery transaction remains unresolved.
  let active;
  try{active=window.RUNLUUniversalCrashJournal?.inspect?.()?.active}catch(_){active=null}
- if(active===undefined||active===null||active>0)return s;
+ if(!journalRawValid()||active===undefined||active===null||active>0)return s;
  return write({...s,sessionOpen:false,cleanExitAt:new Date().toISOString(),cleanExitReason:reason||'pagehide'});
 }
 function markOpen(prior){
@@ -30,7 +38,7 @@ async function inspect(prior){
  try{journal=window.RUNLUUniversalCrashJournal?.inspect?.()||null}catch(_){}
  const interrupted=window.RUNLUUniversalInterruptedResolver?.scan?.()||[];
  const issues=[];
- if(hasWorkspace&&(!journal||!Number.isInteger(journal.active)||journal.active<0))issues.push({code:'RECOVERY_JOURNAL_UNAVAILABLE',severity:'critical',detail:'Recovery journal cannot be verified; startup remains paused'});
+ if(hasWorkspace&&(!journalRawValid()||!journal||!Number.isInteger(journal.active)||journal.active<0))issues.push({code:'RECOVERY_JOURNAL_UNAVAILABLE',severity:'critical',detail:'Recovery journal cannot be verified; startup remains paused'});
  if(journal?.active>0)issues.push({code:'INCOMPLETE_BUSINESS_OPERATION',severity:'critical',detail:journal.active+' write-ahead operation(s) were not committed'});
  if(health?.corruptKeys?.length)issues.push({code:'CORRUPT_LOCAL_JSON',severity:'critical',detail:health.corruptKeys.length+' unreadable local data group(s)'});
  if(schema&&schema.workspaceVersion>schema.currentVersion)issues.push({code:'FUTURE_SCHEMA',severity:'critical',detail:'Workspace schema v'+schema.workspaceVersion+' is newer than app v'+schema.currentVersion});
