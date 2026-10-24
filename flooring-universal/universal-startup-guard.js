@@ -10,6 +10,10 @@ function previous(){return data().read(STORE,null)}
 function write(v){data().write(STORE,v);return v}
 function markClean(reason){
  const s=previous()||{};if(!s.sessionOpen)return s;
+ // A pagehide is not a clean exit while a recovery transaction remains unresolved.
+ let active;
+ try{active=window.RUNLUUniversalCrashJournal?.inspect?.()?.active}catch(_){active=null}
+ if(active===undefined||active===null||active>0)return s;
  return write({...s,sessionOpen:false,cleanExitAt:new Date().toISOString(),cleanExitReason:reason||'pagehide'});
 }
 function markOpen(prior){
