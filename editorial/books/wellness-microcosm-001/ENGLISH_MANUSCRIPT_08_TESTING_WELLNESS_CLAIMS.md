@@ -81,3 +81,45 @@ Before accepting a wellness claim, ask what outcome is promised; who was studied
 Science changes its conclusions when better evidence arrives. That is a strength, not an excuse to treat every claim as equally credible.
 
 The goal is not to memorize a permanent list of approved products. It is to learn how to ask questions that remain useful when the next persuasive advertisement appears.
+
+---
+
+## A Study That Disappeared from the Headline
+
+Consider an invented research project with three planned outcomes: fatigue, sleep quality, and work performance. At the end, the results are mixed. Fatigue shows little difference between groups, sleep results are uncertain, and one work-performance measure appears favorable.
+
+A press release highlights only the favorable measure and announces that the intervention “improves daily vitality.” A reader may never learn that the other outcomes were examined.
+
+This illustrates selective reporting. A trial can be randomized and still communicate a distorted story if outcomes are chosen for publicity after results are known. Looking at a preregistered protocol, a published statistical plan, and the complete results helps distinguish the original question from a later marketing narrative.
+
+There is a further difference between choosing the most flattering number from several analyses and failing to publish an entire planned outcome. Both deserve scrutiny, but they may require different sources to investigate. A journal abstract alone is not always the whole record.
+
+## When Two Good-Looking Studies Disagree
+
+One trial reports improvement. Another reports little difference. This does not automatically mean that science is unreliable or that someone has concealed the truth.
+
+Perhaps the studies enrolled different populations, used different doses, followed participants for different lengths of time, or defined improvement differently. Random variation and methodological weaknesses can also matter.
+
+The first task is to check whether the studies actually asked the same question. The next is to consider their risk of bias and the precision of their estimates. A synthesis of evidence can be informative, but combining unlike studies without care may obscure rather than clarify the answer.
+
+An honest conclusion may be that the benefit is plausible but uncertain, or that the evidence is too inconsistent for a confident recommendation. Uncertainty is an outcome of careful analysis, not necessarily a failure to analyze.
+
+## The Difference Between a Marker and a Life
+
+Imagine a product that changes a laboratory marker after eight weeks. The result may be interesting. But people generally care about whether they can function better, experience fewer symptoms, avoid serious illness, or live longer and healthier lives.
+
+A marker can sometimes serve as a useful surrogate for a clinical outcome, but that relationship must be validated in the relevant context. A number moving in a desirable direction does not automatically show that a person is healthier.
+
+This is especially important in discussions of immunity and aging, where many biological measures are scientifically intriguing but do not by themselves justify broad consumer promises.
+
+Good evidence connects what researchers can measure with what matters to patients—and acknowledges when that connection has not yet been established.
+
+## Who Can Use the Result?
+
+Suppose a trial enrolls healthy adults in their twenties and thirties. Even if the results are convincing for that group, they may not apply directly to older adults with several chronic conditions, pregnant people, or children.
+
+External validity asks whether a finding travels beyond the study setting. Dose, access, adherence, coexisting treatment, and real-world cost may alter what happens outside a controlled experiment.
+
+A responsible recommendation states not just whether something worked in a study, but for whom it was studied and which important questions remain unanswered.
+
+The scientific habit is not to demand perfection before acting. It is to match the strength of a claim to the strength and relevance of its supporting evidence.
