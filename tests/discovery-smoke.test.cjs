@@ -8,8 +8,8 @@ const html = read('index.html');
 const js = read('runlu-discovery.js');
 const css = read('runlu-discovery.css');
 assert.match(html, /id="runluDiscoveryGrid"/);
-assert.match(html, /runlu-discovery\.css\?v=20261023/);
-assert.match(html, /runlu-discovery\.js\?v=20261023/);
+assert.match(html, /runlu-discovery\.css\?v=20261024/);
+assert.match(html, /runlu-discovery\.js\?v=20261024/);
 for (const language of ['en', 'zh', 'fr', 'es']) {
   assert.match(html, new RegExp('data-' + language + '='));
   assert.match(js, new RegExp('\\b' + language + ':'));
