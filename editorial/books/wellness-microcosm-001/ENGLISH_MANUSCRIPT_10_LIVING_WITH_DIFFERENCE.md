@@ -88,9 +88,7 @@ Needs change with age, work, family responsibilities, and health. A plan that fi
 
 This does not make every choice equally sound. Evidence, safety, and feasibility remain essential. Individualization means bringing those principles into contact with a real person's circumstances.
 
-With that perspective, we are ready to examine the wellness marketplace's most seductive promises—and the risks that attractive stories can conceal.
-
----
+The practical importance of individual differences is easy to see even between people who appear to belong to the same group.
 
 ## Two People, the Same Birthday
 
