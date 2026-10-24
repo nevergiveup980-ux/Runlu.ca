@@ -37,8 +37,20 @@ extension TwistUITests {
         let app = XCUIApplication()
         app.launch()
         XCTAssertTrue(app.buttons["Puzzle language"].waitForExistence(timeout: 20) || app.buttons["题目语言"].waitForExistence(timeout: 5))
-        let language = app.buttons["Puzzle language"].exists ? app.buttons["Puzzle language"] : app.buttons["题目语言"]
+        var language = app.buttons["Puzzle language"].exists ? app.buttons["Puzzle language"] : app.buttons["题目语言"]
         XCTAssertTrue(language.waitForExistence(timeout: 20))
+        if app.buttons["题目语言"].exists {
+            language.tap()
+            if app.pickerWheels.firstMatch.waitForExistence(timeout: 2) {
+                app.pickerWheels.firstMatch.adjust(toPickerWheelValue: "English")
+                if app.buttons["Done"].exists { app.buttons["Done"].tap() }
+                else if app.buttons["完成"].exists { app.buttons["完成"].tap() }
+            } else {
+                app.buttons["English"].tap()
+            }
+            XCTAssertTrue(app.buttons["Puzzle language"].waitForExistence(timeout: 10))
+            language = app.buttons["Puzzle language"]
+        }
         app.swipeDown()
         capture(app, "01-actual-game-English")
         language.tap()
