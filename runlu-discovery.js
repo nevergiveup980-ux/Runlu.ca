@@ -9,4 +9,6 @@ const locales={en:0,zh:1,fr:2,es:3};
 function render(){const grid=document.getElementById('runluDiscoveryGrid');if(!grid)return;const lang=window.RUNLULanguage?.get?.()||document.documentElement.lang?.slice(0,2)||'en';const i=locales[lang]??0;grid.replaceChildren(...cards.map(card=>{const a=document.createElement('a');a.className='runlu-discovery-card';a.href=card.href;const h=document.createElement('strong');h.textContent=card.title[i];const p=document.createElement('span');p.textContent=card.description[i];const arrow=document.createElement('em');arrow.textContent='↗';arrow.setAttribute('aria-hidden','true');a.append(h,p,arrow);return a;}));}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render,{once:true});else render();
 document.addEventListener('change',e=>{if(e.target?.matches?.('[data-runlu-language-select]'))queueMicrotask(render);});
+// Programmatic language changes may not fire a select change event.
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:['data-runlu-language','lang']});
 })();
