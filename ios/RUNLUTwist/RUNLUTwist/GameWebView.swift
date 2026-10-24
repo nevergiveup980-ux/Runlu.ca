@@ -33,6 +33,7 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
         webView.isOpaque = false
         webView.backgroundColor = .systemBackground
         webView.scrollView.backgroundColor = .systemBackground
+        webView.overrideUserInterfaceStyle = overrideUserInterfaceStyle
         webView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(webView)
         NSLayoutConstraint.activate([
@@ -94,6 +95,25 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
         alert.addAction(UIAlertAction(title: chinese ? "取消" : "Cancel", style: .cancel) { _ in completionHandler(false) })
         alert.addAction(UIAlertAction(title: chinese ? "重置" : "Reset", style: .destructive) { _ in completionHandler(true) })
         present(alert, animated: true)
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        syncAppearance()
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        syncAppearance()
+    }
+
+    private func syncAppearance() {
+        guard webView != nil else { return }
+        var dark = traitCollection.userInterfaceStyle == .dark
+        #if DEBUG
+        dark = dark || ProcessInfo.processInfo.arguments.contains("-twist-dark")
+        #endif
+        let appearance = dark ? "dark" : "light"
+        webView.evaluateJavaScript("document.documentElement.dataset.nativeAppearance = '\(appearance)'")
     }
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {

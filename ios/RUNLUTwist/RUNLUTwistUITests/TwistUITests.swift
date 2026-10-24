@@ -1,4 +1,5 @@
 import XCTest
+import UIKit
 
 final class TwistUITests: XCTestCase {
     func testOfflineGameplayPersistenceAndShare() throws {
@@ -104,6 +105,18 @@ extension TwistUITests {
         app.launchArguments = ["-twist-dark"]
         app.launch()
         XCTAssertTrue(app.buttons["Puzzle language"].waitForExistence(timeout: 20) || app.buttons["题目语言"].waitForExistence(timeout: 5))
+        let darkReady = NSPredicate { _, _ in
+            guard let image = app.screenshot().image.cgImage,
+                  let pixel = image.cropping(to: CGRect(x: 10, y: image.height / 3, width: 1, height: 1)) else { return false }
+            var rgba = [UInt8](repeating: 0, count: 4)
+            let colorSpace = CGColorSpaceCreateDeviceRGB()
+            guard let context = CGContext(data: &rgba, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4,
+                                          space: colorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return false }
+            context.draw(pixel, in: CGRect(x: 0, y: 0, width: 1, height: 1))
+            return Int(rgba[0]) + Int(rgba[1]) + Int(rgba[2]) < 240
+        }
+        expectation(for: darkReady, evaluatedWith: nil)
+        waitForExpectations(timeout: 10)
         let item = XCTAttachment(screenshot: app.screenshot())
         item.name = "05-actual-dark-appearance"
         item.lifetime = .keepAlways
