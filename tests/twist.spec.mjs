@@ -186,3 +186,18 @@ test('mobile touch flow: hint, answer, next and reload', async ({ browser }) => 
     await context.close();
   }
 });
+
+test('previous and review navigation focus the current puzzle', async ({ page }) => {
+  await page.goto(url);
+  await page.locator('#answerBtn').click();
+  await page.locator('#nextBtn').click();
+  await page.locator('#prevBtn').click();
+  await expect(page.locator('#question')).toBeFocused();
+  for (let i = 0; i < 20; i++) {
+    if (i > 0) await page.locator('#answerBtn').click();
+    if (i < 19) await page.locator('#nextBtn').click();
+  }
+  await page.locator('#reviewBtn').click();
+  await expect(page.locator('#question')).toBeFocused();
+  await expect(page.locator('#counter')).toContainText('01 / 20');
+});
