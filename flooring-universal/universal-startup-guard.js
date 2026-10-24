@@ -11,6 +11,8 @@ function write(v){data().write(STORE,v);return v}
 function journalRawValid(){
  try{
   const raw=data().current()?.raw?.('runlu_flooring_universal_u2_crash_journal');
+  // An untouched journal has no stored key yet; inspect() must still be available.
+  if(raw===null||raw===undefined)return true;
   if(typeof raw!=='string')return false;
   const value=JSON.parse(raw);
   return !!value&&Array.isArray(value.active)&&Array.isArray(value.history);
