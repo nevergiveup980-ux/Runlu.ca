@@ -17,5 +17,5 @@ test("production accepts valid HTTPS origin with trusted handler",()=>{
  assert.equal(typeof createProductionDeliveryNodeHandler({handleDelivery,allowedOrigin:"https://runlu.ca",rateLimiter,getTrustedRateKey}),"function");
 });
 test("production rejects missing handler before server starts",()=>{
- assert.throws(()=>createProductionDeliveryNodeHandler({allowedOrigin:"https://runlu.ca"}),/Trusted delivery handler/);
+ assert.throws(()=>createProductionDeliveryNodeHandler({allowedOrigin:"https://runlu.ca",rateLimiter,getTrustedRateKey}),/Trusted delivery handler/);
 });
