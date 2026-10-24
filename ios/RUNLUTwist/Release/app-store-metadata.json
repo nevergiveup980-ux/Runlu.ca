@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0", "build": "1", "bundleId": "ca.runlu.twist", "sku": "RUNLU-TWIST-IOS-001",
+  "primaryCategory": "GAMES", "secondaryCategory": "ENTERTAINMENT", "gameSubcategoryProposal": ["PUZZLE", "TRIVIA"],
+  "copyright": "2026 RUNLU", "supportURL": "https://runlu.ca/support.html",
+  "privacyURLProposedNotPublished": "https://runlu.ca/twist-privacy.html",
+  "privacyLabelProposal": "Data Not Collected",
+  "tracking": false, "advertising": false, "loginRequired": false, "inAppPurchases": false,
+  "exportComplianceProposal": "No non-exempt encryption; only Apple system frameworks",
+  "localizations": {
+    "en-US": {
+      "name": "RUNLU TWIST",
+      "subtitle": "20 riddles. Think differently.",
+      "promotionalText": "Think beyond the obvious with 20 classic brain teasers, English and Chinese play, and progress saved on your iPhone.",
+      "description": "A familiar question. An unexpected answer. RUNLU TWIST brings you 20 curated classic brain teasers in English and Simplified Chinese.\n\nTake your time, ask for a hint, then reveal the answer and discover why the question led you astray. Record whether you solved it before the reveal and revisit every puzzle after finishing.\n\n• 20 complete bilingual puzzles, hints, answers and explanations\n• Works offline with all game content included\n• Local progress and language preference on your iPhone\n• Exploration points: 10 without a hint, 5 with a hint\n• Optional self-assessment, separate from exploration points\n• Native result sharing and a fresh-start reset\n• Light and dark appearance\n\nNo account, ads, analytics or in-app purchases. The riddles are curated classics, not claims of original RUNLU inventions. Points reward exploration and do not verify whether a guess was correct.",
+      "keywords": "riddles,brain teaser,puzzle,logic,word game,offline,bilingual,Chinese,thinking,trivia",
+      "whatsNew": "First release: 20 bilingual classic riddles, hints and explanations, local progress, exploration points and result sharing."
+    },
+    "zh-Hans": {
+      "name": "RUNLU TWIST 润庐脑洞",
+      "subtitle": "20道经典脑筋急转弯，中英双语",
+      "promotionalText": "换个角度，答案就在眼前。20道经典脑洞题，中英切换、离线游玩，进度保存在你的iPhone。",
+      "description": "熟悉的问题，意想不到的答案。RUNLU TWIST 精选20道经典脑筋急转弯，支持英文与简体中文。\n\n先自己想一想，需要时查看提示，再揭晓答案和解析。你可以记录自己是否在揭晓前想对，完成后从头回顾。\n\n• 20道完整双语题目、提示、答案与解析\n• 所有游戏内容随应用打包，离线可玩\n• 本机保存进度及语言偏好\n• 无提示揭晓得10分，使用提示后揭晓得5分\n• 自评与探索积分分别记录\n• 原生成绩分享与重置进度\n• 支持深色和浅色外观\n\n无需账户，无广告、分析追踪或内购。题目选编自经典谜题，并非润庐原创。积分代表探索进度，不验证答案是否正确。",
+      "keywords": "脑筋急转弯,谜语,脑洞,益智,逻辑,离线,双语,英文,中文,思维,解谜",
+      "whatsNew": "首次发布：20道中英双语经典脑洞题、提示与解析、本机存档、探索积分及成绩分享。"
+    }
+  },
+  "reviewNotes": "Offline bilingual riddle game, 20 curated classics. No login or IAP. Use Language / 语言 to switch English and Simplified Chinese. Reveal answer awards exploration points, not correctness. Self-assessment is optional. Reset has a native confirmation dialog. Share opens the iOS activity sheet and shares text only. All gameplay is bundled. Support links open separately in Safari.",
+  "requiredOwnerFields": ["Review contact name, phone, email", "Confirmed rights holder and copyright", "Age-rating questionnaire", "Pricing and territories", "Public privacy URL", "App record and Bundle ID registration", "Distribution signing and provisioning"]
+}

@@ -1,0 +1,7 @@
+DerivedData/
+*.xcarchive/
+*.ipa
+xcuserdata/
+Reports/*attachments/
+
+.DS_Store
