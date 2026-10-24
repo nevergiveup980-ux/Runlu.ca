@@ -1,0 +1,16 @@
+name: SmartRoll Paper V8 Layout Pilot
+on:
+  pull_request:
+    paths:
+      - 'flooring/deerfoot-po-smartroll-v8-layout-pilot.html'
+      - 'flooring/smartroll-paper-v8-layout-bridge-v1.js'
+      - 'scripts/run-smartroll-paper-v8-layout-pilot.mjs'
+      - '.github/workflows/smartroll-paper-v8-layout-pilot.yml'
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: node scripts/run-smartroll-paper-v8-layout-pilot.mjs
