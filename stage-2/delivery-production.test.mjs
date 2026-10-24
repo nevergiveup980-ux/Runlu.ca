@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {createProductionDeliveryNodeHandler} from "./delivery-production.mjs";
 const handleDelivery=async()=>({status:200,headers:{},body:{ok:true}});
-const rateLimiter={allow:()=>true};
+const rateLimiter={distributed:true,allow:()=>true};
 const getTrustedRateKey=async()=>"trusted-session";
 test("production requires configured trusted HTTPS origin",()=>{
  assert.throws(()=>createProductionDeliveryNodeHandler({handleDelivery}),/origin required/);
