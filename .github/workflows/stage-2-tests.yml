@@ -1,0 +1,40 @@
+name: RUNLU STAGE 2.0 Tests
+on:
+  push:
+    branches: [stage-2-engine-prototype]
+    paths:
+      - 'stage-2/**'
+      - '.github/workflows/stage-2-tests.yml'
+  pull_request:
+    paths:
+      - 'stage-2/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install FFmpeg for real media verification
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          ffmpeg -version
+          ffprobe -version
+      - name: Run offline STAGE tests
+        run: |
+          set -o pipefail
+          node --test --test-reporter=tap stage-2/*.test.mjs | tee stage-2-offline-results.tap
+      - name: Upload offline test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage-2-offline-test-results
+          path: stage-2-offline-results.tap
+          if-no-files-found: warn
+          retention-days: 14
