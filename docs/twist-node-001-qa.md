@@ -1,6 +1,11 @@
 # RUNLU TWIST — Node 001 QA checklist
 
-Status: development only. This checklist does not claim browser testing has passed.
+Status: development only. Chromium Playwright regression suite passed on commit b03e25e4 (GitHub Actions run 39897576369). iPhone Safari manual acceptance remains pending. Site integrity is a separate failing check; do not equate it with TWIST browser tests.
+
+## Automated browser acceptance (Chromium)
+
+- [x] Playwright suite passed in GitHub Actions run 39897576369, including 20-puzzle completion, score, review, reset, language persistence, self-report correction, saved-data filtering, keyboard focus, 320px/375px viewport checks, and hint persistence.
+- [ ] Recheck the suite after any subsequent code changes.
 
 ## Manual acceptance on iPhone Safari
 
