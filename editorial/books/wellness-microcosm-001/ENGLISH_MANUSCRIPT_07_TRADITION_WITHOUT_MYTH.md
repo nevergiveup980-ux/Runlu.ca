@@ -96,9 +96,7 @@ Respect for tradition and commitment to evidence can coexist. Some specific prac
 
 Listening to experience is valuable. Testing causal claims is equally valuable. Keeping cultural significance, clinical effectiveness, and safety distinct makes the discussion more honest.
 
-The next chapter takes up the practical challenge: how do we test a wellness claim, understand a dramatic statistic, and decide whether the evidence justifies the promise?
-
----
+That distinction matters most when a treatment seems to help. The next question is how to tell whether the treatment itself made the difference.
 
 ## What Counts as a Fair Comparison?
 
