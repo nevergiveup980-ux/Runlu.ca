@@ -1,8 +1,9 @@
+import {enforceDeliveryOrigin} from "./delivery-origin.mjs";
 // Node.js HTTP integration: bounded request -> authenticated service -> stream.
 // The host MUST add CSRF, rate limiting, TLS and a trusted authentication adapter.
 import {readDeliveryJsonBody} from "./delivery-request-body.mjs";
 import {writeDeliveryHttpResponse} from "./delivery-node-http.mjs";
-export function createDeliveryNodeHandler({handleDelivery,maxBodyBytes=4096}){
+export function createDeliveryNodeHandler({handleDelivery,maxBodyBytes=4096,allowedOrigin}){
  if(typeof handleDelivery!=="function")throw Error("Trusted delivery handler required");
  if(!Number.isSafeInteger(maxBodyBytes)||maxBodyBytes<1||maxBodyBytes>65536)throw Error("Invalid body limit");
  return async function nodeHandler(req,res){
@@ -13,6 +14,7 @@ export function createDeliveryNodeHandler({handleDelivery,maxBodyBytes=4096}){
    const path=new URL(req.url??"/","http://localhost").pathname;
    if(req.method!=="POST")descriptor=json(405,"method_not_allowed");
    else if(path!=="/stage/private/download"&&path!=="/stage/private/revoke")descriptor=json(404,"not_found");
+   else if(allowedOrigin!==undefined&&!enforceDeliveryOrigin(req,{allowedOrigin}))descriptor=json(403,"forbidden_origin");
    else{
     const body=await readDeliveryJsonBody(req,{maxBytes:maxBodyBytes});
     descriptor=await handleDelivery({method:req.method,path,body,headers:req.headers});
