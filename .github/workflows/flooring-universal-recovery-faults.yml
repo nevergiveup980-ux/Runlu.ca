@@ -27,3 +27,5 @@ jobs:
         run: node flooring-universal/tests/universal-indexeddb-open-retry.js
       - name: IndexedDB mirror restore fault injection
         run: node flooring-universal/tests/universal-mirror-restore-faults.js
+      - name: Startup clean-exit safety
+        run: node flooring-universal/tests/universal-startup-clean-exit.js
