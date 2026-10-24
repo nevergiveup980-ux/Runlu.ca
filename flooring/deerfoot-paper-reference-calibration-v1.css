@@ -75,3 +75,9 @@
 .referenceCalibration .invoice .invoiceNoTop{
  top:28mm!important;font-size:17.5pt!important;
 }
+
+/* V6 physical-form observation: printed PO number shares the company-name baseline.
+   Header only; item table, totals and footer unchanged. */
+.referenceCalibration .invoice .companyName{top:18mm!important}
+.referenceCalibration .invoice .invoiceNoTop{top:18mm!important;font-size:17.5pt!important;line-height:1!important}
+.referenceCalibration .invoice .companyInfo{top:10.2mm!important}
