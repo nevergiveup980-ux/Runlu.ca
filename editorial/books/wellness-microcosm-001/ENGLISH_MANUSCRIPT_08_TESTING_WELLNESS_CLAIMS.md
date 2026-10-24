@@ -80,9 +80,7 @@ Before accepting a wellness claim, ask what outcome is promised; who was studied
 
 Science changes its conclusions when better evidence arrives. That is a strength, not an excuse to treat every claim as equally credible.
 
-The goal is not to memorize a permanent list of approved products. It is to learn how to ask questions that remain useful when the next persuasive advertisement appears.
-
----
+Those questions become especially important when a study's published headline tells a simpler story than its results.
 
 ## A Study That Disappeared from the Headline
 
