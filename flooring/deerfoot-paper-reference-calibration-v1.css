@@ -92,3 +92,14 @@
 .referenceCalibration .invoice .dateBox{top:10mm!important}
 .referenceCalibration .invoice .dateData{top:14mm!important}
 .referenceCalibration .invoice .invoiceNoTop{top:22mm!important}
+
+/* V8: move the entire V7 header cluster 5mm farther down, beneath the
+   marked top reference line. Keep company name and red PO number aligned.
+   No changes to customer fields or item/settlement grids. */
+.referenceCalibration .invoice .companyInfo{top:19.2mm!important}
+.referenceCalibration .invoice .dcMark{top:13.3mm!important}
+.referenceCalibration .invoice .companyName{top:27mm!important}
+.referenceCalibration .invoice .dateLabel{top:11.1mm!important}
+.referenceCalibration .invoice .dateBox{top:15mm!important}
+.referenceCalibration .invoice .dateData{top:19mm!important}
+.referenceCalibration .invoice .invoiceNoTop{top:27mm!important}
