@@ -81,3 +81,14 @@
 .referenceCalibration .invoice .companyName{top:18mm!important}
 .referenceCalibration .invoice .invoiceNoTop{top:18mm!important;font-size:17.5pt!important;line-height:1!important}
 .referenceCalibration .invoice .companyInfo{top:10.2mm!important}
+
+/* V7: shift only the highlighted header block down by 4mm as one unit.
+   Preserve the V6 alignment of the red number with the company name.
+   Do not move SOLD/SHIP fields, product rows or settlement area. */
+.referenceCalibration .invoice .companyInfo{top:14.2mm!important}
+.referenceCalibration .invoice .dcMark{top:8.3mm!important}
+.referenceCalibration .invoice .companyName{top:22mm!important}
+.referenceCalibration .invoice .dateLabel{top:6.1mm!important}
+.referenceCalibration .invoice .dateBox{top:10mm!important}
+.referenceCalibration .invoice .dateData{top:14mm!important}
+.referenceCalibration .invoice .invoiceNoTop{top:22mm!important}
