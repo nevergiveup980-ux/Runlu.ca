@@ -64,9 +64,7 @@ Traditional thought can offer a wide view of our place in nature. Modern science
 
 Observe the patterns of the world. Attend to the changes of living things. Learn the workings of the human body. Seek a life guided by understanding and care.
 
-May we keep our curiosity without surrendering judgment, care for our own bodies without forgetting others, and find within this vast world a more measured way to live.
-
----
+Such a way of living is less a final achievement than an ordinary practice, renewed whenever circumstances change.
 
 ## The Ordinary Work of Balance
 
