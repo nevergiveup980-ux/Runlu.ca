@@ -1,0 +1,19 @@
+{
+  "sourceCommit": "104710b28c62c3d6bcd74dc3d96c9c35e807e5fb",
+  "iosPackage": {
+    "run": 40136637716,
+    "conclusion": "success"
+  },
+  "originalBrowserTests": {
+    "run": 40136637720,
+    "conclusion": "success"
+  },
+  "siteIntegrity": {
+    "run": 40136637731,
+    "conclusion": "failure"
+  },
+  "packagedBrowserAssertions": {
+    "chromium": 15,
+    "webkit": 15
+  }
+}

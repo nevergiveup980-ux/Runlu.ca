@@ -18,3 +18,7 @@ Open `RUNLUTwist.xcodeproj`, select an iPhone simulator, and Run. No package dep
 See `Reports/TEST-REPORT.md` and `Release/RELEASE-STATUS.md` for actual results and remaining gates. An unsigned archive is a compilation artifact, not a TestFlight-ready distribution. Do not submit for review without the owner's explicit confirmation.
 
 The web source is a packaged adaptation; the root website `twist.html` and all unrelated website files remain unchanged. Native snapshots are independent of the development web prototype's browser storage.
+
+## 交付状态
+
+源码提交104710b；已同步到原开发分支和草稿PR #339。三种iPhone模拟器有实际验证，最终iPhone 17e的4项UI测试通过。TestFlight和审核提交尚未执行，账号条件及人工验收未完成项见发布报告。
