@@ -152,7 +152,7 @@ test('editorial integrity: twenty distinct complete bilingual puzzles', async ({
         const minLength = fieldIndex === 2 ? (locale === 'zh' ? 1 : 2) : (locale === 'zh' ? 4 : 8);
         expect(field.trim().length).toBeGreaterThan(minLength);
       }
-      expect(content.explanations[locale][i].trim().length).toBeGreaterThan(12);
+      expect(content.explanations[locale][i].trim().length).toBeGreaterThan(locale === 'zh' ? 7 : 20);
       expect(entry[1].trim().toLowerCase()).not.toBe(entry[2].trim().toLowerCase());
       questions.add(entry[0].trim());
     }
