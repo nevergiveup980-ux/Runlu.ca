@@ -47,6 +47,22 @@ const failures = [];
 for (const file of pages) {
   const rel = path.relative(root, file);
   if (excluded.has(rel) || excludedPrefixes.some(prefix => rel.startsWith(prefix))) continue;
+  // The Wellness Twelve articles are four separate, canonical language editions.
+  // They do not use in-page translation; validate their linked counterparts instead
+  // of incorrectly requiring the shared in-page language selector/script.
+  if (/^wellness-twelve-\d{2}(?:-[a-z-]+)?(?:-(?:en|fr|es))?\.html$/.test(rel)) {
+    const edition = fs.readFileSync(file, 'utf8');
+    const base = rel.replace(/-(?:en|fr|es)\.html$/, '.html').replace(/\.html$/, '');
+    for (const [lang, suffix] of [['zh-Hans',''],['en','-en'],['fr','-fr'],['es','-es']]) {
+      const target = base + suffix + '.html';
+      if (!fs.existsSync(path.join(root, target))) failures.push(`${rel}: missing edition ${target}`);
+      const expected = `hreflang="${lang}" href="https://runlu.ca/${target}"`;
+      if (!edition.includes(expected)) failures.push(`${rel}: missing alternate ${expected}`);
+    }
+    const canonical = `href="https://runlu.ca/${rel}"`;
+    if (!edition.includes(`rel="canonical" ${canonical}`)) failures.push(`${rel}: missing self canonical`);
+    continue;
+  }
   const html = fs.readFileSync(file, 'utf8');
   for (const match of html.matchAll(/<[^!][^>]*>/g)) {
     const names=[...match[0].matchAll(/\s(data-(?:en|zh|fr|es))=/gi)].map(item=>item[1].toLowerCase());
