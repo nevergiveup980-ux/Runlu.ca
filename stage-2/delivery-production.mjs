@@ -4,6 +4,7 @@ import {createDeliveryNodeHandler} from "./delivery-node-handler.mjs";
 import {enforceDeliveryOrigin} from "./delivery-origin.mjs";
 export function createProductionDeliveryNodeHandler({handleDelivery,allowedOrigin,maxBodyBytes=4096,bodyTimeoutMs=5000,rateLimiter,getTrustedRateKey}){
  if(typeof allowedOrigin!=="string"||!allowedOrigin)throw Error("Production trusted HTTPS origin required");
+ if(!rateLimiter||typeof rateLimiter.allow!=="function"||typeof getTrustedRateKey!=="function")throw Error("Production trusted rate limiter required");
  // Validate the deployment origin at startup, before binding any listener.
  enforceDeliveryOrigin({headers:{origin:allowedOrigin}},{allowedOrigin});
  return createDeliveryNodeHandler({handleDelivery,allowedOrigin,maxBodyBytes,bodyTimeoutMs,rateLimiter,getTrustedRateKey});
