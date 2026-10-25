@@ -37,9 +37,9 @@
   },
   "reviewNotes": "Offline bilingual riddle game, 20 curated classics. No login or IAP. Use Language / 语言 to switch English and Simplified Chinese. Reveal answer awards exploration points, not correctness. Self-assessment is optional. Reset has a native confirmation dialog. Share opens the iOS activity sheet and shares text only. All gameplay is bundled. Support links open separately in Safari.",
   "requiredOwnerFields": [
-    "Account-wide Part XX compliance response",
+    "Account-wide Part XX compliance response, as applicable",
     "Review newly available Paid Apps Agreement as applicable",
-    "Separate authorization for Submit for Review and public release"
+    "Separate authorization for manual public release after approval"
   ],
   "appleID": "6826695667",
   "ageRatingActual": "4+ (with regional exceptions)",
@@ -59,7 +59,10 @@
     "visionProAvailability": false,
     "releaseMode": "Manual",
     "preflightStatus": "Item Ready to Submit: 1.0.0 (3), draft 2026-10-25 11:51 America/Edmonton",
-    "submittedForReview": false,
-    "publiclyReleased": false
+    "submittedForReview": true,
+    "publiclyReleased": false,
+    "reviewStatus": "Waiting for Review",
+    "submissionId": "3007d0aa-0e6c-431d-beb4-054b1bc67999",
+    "submittedAt": "2026-10-25 15:17 America/Edmonton"
   }
 }
