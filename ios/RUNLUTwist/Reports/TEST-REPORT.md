@@ -37,3 +37,12 @@ Apple截图规格与隐私信息依据：
 - [iOS package / browser suites + iOS build](https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/40136637716)：success。
 - [Original TWIST browser suite](https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/40136637720)：success。
 - [Site integrity](https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/40136637731)：failure，原有网站四语言问题，不作为iOS通过结果。
+
+## TestFlight 发布回归（2026-10-24）
+
+- 修正 XcodeGen 目标级设备家族覆盖问题，实际 Archive 和分发 IPA 均 UIDeviceFamily=[1]，Bundle ID/版本/构建与元数据一致；新增可对实际 Archive 检查的验证入口，已通过。
+- 新 Archive 编译成功；Apple 分发处理及上传成功，TestFlight 已 Ready to Test。导出 IPA 采用云管理分发签名，发布环境 get-task-allow=false。
+- 16-30-31 结果包：修正配置后的 iPhone 17e，4项XCTest全部成功。结果包有一条 Debug session ended with code 9: killed 警告，未造成测试失败；不隐瞒该警告。详见 iphone-only-final-ui-summary.json。
+- 包资源检查及7项逻辑检查重新通过。当前沙盒本地 codesign trust 验证返回 CSSMERR_TP_NOT_TRUSTED，不能声称此轮本地信任检查通过；Apple服务器已接受实际分发构建。
+- Shell模拟器连接仍失败；实际UI测试通过Xcode图形界面执行。没有把Shell失败结果计作测试通过。
+- 尚无TestFlight安装会话，真机与人工无障碍验收仍待完成。

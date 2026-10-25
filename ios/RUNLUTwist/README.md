@@ -21,4 +21,4 @@ The web source is a packaged adaptation; the root website `twist.html` and all u
 
 ## 交付状态
 
-源码提交104710b；已同步到原开发分支和草稿PR #339。三种iPhone模拟器有实际验证，最终iPhone 17e的4项UI测试通过。TestFlight和审核提交尚未执行，账号条件及人工验收未完成项见发布报告。
+沿用PR #339。iPhone目标配置已修正，1.0.0（1）已上传TestFlight并显示Ready to Test。内部测试尚待安装验收，未提交审核或公开发布。详见Release/RELEASE-STATUS.md。

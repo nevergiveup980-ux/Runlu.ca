@@ -1,0 +1,74 @@
+[
+  {
+    "file": "05-actual-dark-appearance.png",
+    "device": "iPhone 18 Pro Max",
+    "size": [
+      1320,
+      2868
+    ],
+    "source": "Unmodified XCTest screenshot attachment",
+    "sourceResult": "Test-RUNLUTwist-2026.10.24_15-56-30--0600.xcresult",
+    "test": "TwistUITests/testDarkAppearanceScreenshot()",
+    "timestamp": 1792879039.373
+  },
+  {
+    "file": "04-actual-landscape.png",
+    "device": "iPhone 18 Pro Max",
+    "size": [
+      2868,
+      1320
+    ],
+    "source": "Unmodified XCTest screenshot attachment",
+    "sourceResult": "Test-RUNLUTwist-2026.10.24_15-47-02--0600.xcresult",
+    "test": "TwistUITests/testLanguageResetAndScreenshots()",
+    "timestamp": 1792878518.394
+  },
+  {
+    "file": "03-actual-Chinese-answer-and-assessment.png",
+    "device": "iPhone 18 Pro Max",
+    "size": [
+      1320,
+      2868
+    ],
+    "source": "Unmodified XCTest screenshot attachment",
+    "sourceResult": "Test-RUNLUTwist-2026.10.24_15-47-02--0600.xcresult",
+    "test": "TwistUITests/testLanguageResetAndScreenshots()",
+    "timestamp": 1792878518.2
+  },
+  {
+    "file": "02-actual-game-Chinese.png",
+    "device": "iPhone 18 Pro Max",
+    "size": [
+      1320,
+      2868
+    ],
+    "source": "Unmodified XCTest screenshot attachment",
+    "sourceResult": "Test-RUNLUTwist-2026.10.24_15-47-02--0600.xcresult",
+    "test": "TwistUITests/testLanguageResetAndScreenshots()",
+    "timestamp": 1792878498.449
+  },
+  {
+    "file": "01-actual-game-English.png",
+    "device": "iPhone 18 Pro Max",
+    "size": [
+      1320,
+      2868
+    ],
+    "source": "Unmodified XCTest screenshot attachment",
+    "sourceResult": "Test-RUNLUTwist-2026.10.24_15-44-49--0600.xcresult",
+    "test": "TwistUITests/testLanguageResetAndScreenshots()",
+    "timestamp": 1792878322.531
+  },
+  {
+    "file": "Actual-iPhone-gameplay.png",
+    "device": "iPhone 18 Pro Max",
+    "size": [
+      1320,
+      2868
+    ],
+    "source": "Unmodified XCTest screenshot attachment",
+    "sourceResult": "Test-RUNLUTwist-2026.10.24_15-47-02--0600.xcresult",
+    "test": "TwistUITests/testOfflineGameplayPersistenceAndShare()",
+    "timestamp": 1792878556.2
+  }
+]

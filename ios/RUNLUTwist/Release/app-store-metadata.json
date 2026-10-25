@@ -1,10 +1,22 @@
 {
-  "version": "1.0.0", "build": "1", "bundleId": "ca.runlu.twist", "sku": "RUNLU-TWIST-IOS-001",
-  "primaryCategory": "GAMES", "secondaryCategory": "ENTERTAINMENT", "gameSubcategoryProposal": ["PUZZLE", "TRIVIA"],
-  "copyright": "2026 RUNLU", "supportURL": "https://runlu.ca/support.html",
+  "version": "1.0.0",
+  "build": "1",
+  "bundleId": "ca.runlu.twist",
+  "sku": "RUNLU-TWIST-IOS-001",
+  "primaryCategory": "GAMES",
+  "secondaryCategory": "ENTERTAINMENT",
+  "gameSubcategoryProposal": [
+    "PUZZLE",
+    "TRIVIA"
+  ],
+  "copyright": "2026 RUNLU",
+  "supportURL": "https://runlu.ca/support.html",
   "privacyURLProposedNotPublished": "https://runlu.ca/twist-privacy.html",
   "privacyLabelProposal": "Data Not Collected",
-  "tracking": false, "advertising": false, "loginRequired": false, "inAppPurchases": false,
+  "tracking": false,
+  "advertising": false,
+  "loginRequired": false,
+  "inAppPurchases": false,
   "exportComplianceProposal": "No non-exempt encryption; only Apple system frameworks",
   "localizations": {
     "en-US": {
@@ -25,5 +37,15 @@
     }
   },
   "reviewNotes": "Offline bilingual riddle game, 20 curated classics. No login or IAP. Use Language / 语言 to switch English and Simplified Chinese. Reveal answer awards exploration points, not correctness. Self-assessment is optional. Reset has a native confirmation dialog. Share opens the iOS activity sheet and shares text only. All gameplay is bundled. Support links open separately in Safari.",
-  "requiredOwnerFields": ["Review contact name, phone, email", "Confirmed rights holder and copyright", "Age-rating questionnaire", "Pricing and territories", "Public privacy URL", "App record and Bundle ID registration", "Distribution signing and provisioning"]
+  "requiredOwnerFields": [
+    "Review contact name, phone, email",
+    "Confirmed content rights",
+    "Pricing and territories",
+    "Live privacy policy URL",
+    "Physical device / TestFlight acceptance",
+    "Pending Apple agreements before App Store submission"
+  ],
+  "appleID": "6826695667",
+  "ageRatingActual": "4+ (with regional exceptions)",
+  "privacyLabelStatus": "Data Not Collected saved as unpublished draft"
 }
