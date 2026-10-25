@@ -6,3 +6,7 @@
 .runlu-quick-paths a:focus-visible{outline:3px solid #326b5c;outline-offset:3px}
 @media(max-width:760px){.runlu-quick-paths{justify-content:flex-start;gap:8px;padding:12px 16px}.runlu-quick-label{width:100%}.runlu-quick-paths a{font-size:.88rem}}
 @media(prefers-reduced-motion:reduce){.runlu-quick-paths a{scroll-behavior:auto}}
+
+/* Keep the first editorial section visually connected to the shortcut bar. */
+.runlu-home #thanksgiving-2026{padding-top:40px;padding-bottom:54px}
+@media(max-width:760px){.runlu-home #thanksgiving-2026{padding-top:26px;padding-bottom:44px}}
