@@ -10,4 +10,4 @@ Apple当前规格：https://developer.apple.com/help/app-store-connect/reference
 
 ## 最终必需尺寸补充（2026-10-24）
 
-当前Apple文档要求至少一张 Dynamic Island medium 截图。已补充 iPhone 18 Pro 实际 XCTest 附件，1206×2622，RGB不透明；中英文各自的 Dynamic-Island-medium 目录可用于相应商店设备槽位。此轮最终 iPhone 配置4/4测试通过，源结果包20-46-54；截图未缩放或修改，原始附件和manifest在 iPhone-18-Pro-final。大尺寸1320×2868候选保留用于large槽位，不能把它们单独宣称为当前完整必需集合。截图尚未上传/选择到商店产品页。
+当前Apple文档要求至少一张 Dynamic Island medium 截图。已补充 iPhone 18 Pro 实际 XCTest 附件，1206×2622，RGB不透明；中英文各自的 Dynamic-Island-medium 目录可用于相应商店设备槽位。此轮最终 iPhone 配置4/4测试通过，源结果包20-46-54；截图未缩放或修改，原始附件和manifest在 iPhone-18-Pro-final。大尺寸1320×2868候选保留用于large槽位，不能把它们单独宣称为当前完整必需集合。现已上传/选择到商店产品页草稿：英文1张、中文3张，均为Dynamic Island medium必需槽位；没有提交素材审核或应用审核。

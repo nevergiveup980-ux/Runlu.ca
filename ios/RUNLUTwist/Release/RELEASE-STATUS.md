@@ -12,7 +12,7 @@
 - 已完成年龄问卷：4+，部分地区有例外；非 Made for Kids，无社交、无限网页浏览、广告、赌博或内购。
 - App Privacy 已保存 Data Not Collected 草稿；未点击 Publish。无追踪或数据收集 SDK，UserDefaults required reason CA92.1。
 - 支持 URL https://runlu.ca/support.html。专用隐私政策拟为 https://runlu.ca/twist-privacy.html，源已备好，尚未确认公开部署；商店隐私 URL 保持未填，不把未上线网页当作有效政策。
-- 内部组 RUNLU TWIST Internal QA：最新页面显示 1 Tester / 1 Build，构建 Ready to Test。账号所有者邀请状态 Invited，尚无安装、会话、崩溃或反馈记录。该已存在邀请是在恢复工作后观察到的，未额外邀请其他人。
+- 内部组 RUNLU TWIST Internal QA：最新页面显示 1 Tester / 1 Build，构建 Ready to Test。最新核对已为 Installed，设备 iPhone 16 Pro Max / iOS 27.2，安装构建1.0.0（1）；会话、崩溃和反馈栏仍无记录，不等于真机功能验收通过。该已存在邀请是在恢复工作后观察到的，未额外邀请其他人。
 
 ## 剩余验收与账号事项
 
@@ -21,3 +21,9 @@
 发布前仍需确认并部署隐私政策、核对内容权利、审核联系人、价格/地区及其他商店合规信息。App Store Connect 有更新协议提示；协议由账号持有人自行审阅接受，本次 TestFlight 上传没有被该提示阻断。不得未经用户确认提交 App Store 审核或公开发布。
 
 截图见 Screenshots/README.md，真实测试结果见 Reports/TEST-REPORT.md。所有签名归档和 IPA 留在本地交付包；GitHub 同步源工程、图标、真实截图、元数据及报告，避免提交签名产物和 provisioning profile。
+
+## 商店草稿补齐
+
+真实1206×2622截图已上传到必需Dynamic Island medium槽位：英文1张、简体中文3张（含深色和自评画面）。构建1已关联到1.0.0版本草稿并保存，仍为Prepare for Submission，手动发布，未Add for Review。支持和专用隐私URL的HTTP客户端复核均403，不能把此前支持页200视作当前验证结果；还需确认公开可访问性。
+
+Safari浏览器复核：支持页正常显示（含support@runlu.ca）；专用隐私政策明确显示404。HTTP客户端403不能代表用户浏览器不可访问。隐私网页单独发布授权已询问，未获答复前不部署。

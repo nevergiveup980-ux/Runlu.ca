@@ -1,0 +1,12 @@
+[
+  {
+    "url": "https://runlu.ca/support.html",
+    "error": "HTTP Error 403: Forbidden",
+    "browserResult": "Safari successfully displayed RUNLU Support, including support@runlu.ca"
+  },
+  {
+    "url": "https://runlu.ca/twist-privacy.html",
+    "error": "HTTP Error 403: Forbidden",
+    "browserResult": "Safari displayed RUNLU 404 Page not found"
+  }
+]

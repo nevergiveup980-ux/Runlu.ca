@@ -10,7 +10,7 @@
   "group": "RUNLU TWIST Internal QA",
   "groupBuilds": 1,
   "groupTesters": 1,
-  "testerStatus": "Invited",
+  "testerStatus": "Installed",
   "sessionsObserved": null,
   "appStoreSubmission": false,
   "publicRelease": false,
@@ -21,5 +21,16 @@
   "ipaSHA256": "c1f73ddceb50880e7cdfa425154f978478e1d8be2e0509650e199145852e0ce6",
   "privacyLabel": "Data Not Collected (unpublished draft)",
   "privacyPolicyURLVerifiedLive": false,
-  "ageRating": "4+ with regional exceptions"
+  "ageRating": "4+ with regional exceptions",
+  "installedDevice": "iPhone 16 Pro Max / iOS 27.2",
+  "installedBuild": "1.0.0 (1)",
+  "physicalFunctionalAcceptance": "Not yet verified",
+  "storeVersionBuildSelected": true,
+  "storeScreenshots": {
+    "en-US": 1,
+    "zh-Hans": 3,
+    "size": "1206x2622",
+    "slot": "Dynamic Island medium",
+    "reviewSubmitted": false
+  }
 }
