@@ -58,5 +58,23 @@ pandoc "$tmp/assembled.md" --from=markdown --to=epub3 \
   -o "$output"
 
 test -s "$output"
+python3 - "$output" <<'PY'
+import sys, zipfile
+from xml.etree import ElementTree as ET
+with zipfile.ZipFile(sys.argv[1]) as epub:
+    assert epub.testzip() is None, "Corrupt EPUB archive"
+    names = epub.namelist()
+    assert names[0] == "mimetype", "EPUB mimetype must be first"
+    assert epub.read("mimetype") == b"application/epub+zip"
+    assert "META-INF/container.xml" in names
+    container = ET.fromstring(epub.read("META-INF/container.xml"))
+    rootfile = container.find(".//{*}rootfile")
+    assert rootfile is not None, "Missing OPF rootfile"
+    opf = ET.fromstring(epub.read(rootfile.attrib["full-path"]))
+    spine = opf.find("{*}spine")
+    assert spine is not None and len(spine) >= 14, "Unexpectedly short EPUB spine"
+    assert any(name.endswith(".xhtml") for name in names)
+print("EPUB archive and spine checks passed")
+PY
 epubcheck "$output"
 echo "Validated EPUB proof: $output"
