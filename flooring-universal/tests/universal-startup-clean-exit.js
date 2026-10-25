@@ -13,6 +13,23 @@ async function scenario(label,active,expectedOpen){
  console.log('PASS '+label);
 }
 
+async function checkJournalCountMismatch(){
+ let state={sessionOpen:false};
+ const transactions=[0,1].map(i=>({id:'tx-'+i,type:'Recovery',action:'restore',startedAt:'2026-10-25T00:00:00Z'}));
+ const data={read(key){return key.endsWith('_workspace')?{company:{organizationId:'test'}}:state},
+  write(_key,value){state=value;return value},
+  current(){return {raw(){return JSON.stringify({active:transactions,history:[]})}}}};
+ const window={RUNLUUniversalData:data,addEventListener(){},
+  RUNLUUniversalCrashJournal:{inspect(){return {active:0,pending:[]}}},
+  RUNLUUniversalLocalHealth:{health:async()=>({corruptKeys:[]})},
+  RUNLUUniversalDurableLocal:{status:async()=>({ready:true}),compareWithAdapter:async()=>({ok:true})}};
+ vm.runInNewContext(source,{window,document:{getElementById(){return null}},setTimeout,console});
+ const result=await window.RUNLUUniversalStartupGuard.ready();
+ assert.equal(result.blocked,true);
+ assert(result.issues.some(x=>x.code==='RECOVERY_JOURNAL_MISMATCH'));
+ console.log('PASS stored journal transactions disagree with reported active count');
+}
+
 async function checkStartupJournal(mode){
  let state={sessionOpen:false};
  const workspace={company:{organizationId:'test'}};
@@ -33,5 +50,6 @@ async function checkStartupJournal(mode){
  await scenario('empty journal allows clean exit',0,false);
  await scenario('missing journal keeps session open',null,true);
  for(const mode of ['missing','throws','active','clear','corrupt','invalid','brokenTx'])await checkStartupJournal(mode);
+ await checkJournalCountMismatch();
  console.log('Startup clean exit and journal inspection: PASS');
 })().catch(e=>{console.error(e);process.exitCode=1});
