@@ -2,7 +2,17 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-output="RUNLU_THE_UNIVERSE_WITHIN_US_EN_PROOF.epub"
+# Release builds require a separate editorial gate. Proof builds remain available
+# for review even while final reference and copyright checks are outstanding.
+mode="${RUNLU_BUILD_MODE:-proof}"
+case "$mode" in
+  proof) output="RUNLU_THE_UNIVERSE_WITHIN_US_EN_PROOF.epub" ;;
+  release)
+    python3 check_english_release_readiness.py
+    output="RUNLU_THE_UNIVERSE_WITHIN_US_EN_RELEASE_CANDIDATE.epub"
+    ;;
+  *) echo "Invalid RUNLU_BUILD_MODE: $mode" >&2; exit 1 ;;
+esac
 files=(
   ENGLISH_MANUSCRIPT_00_PROLOGUE.md
   ENGLISH_MANUSCRIPT_01_HEAVEN_EARTH_BODY.md
