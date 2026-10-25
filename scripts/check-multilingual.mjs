@@ -51,14 +51,24 @@ const failures = [];
 for (const file of pages) {
   const rel = path.relative(root, file);
   if (excluded.has(rel) || excludedPrefixes.some(prefix => rel.startsWith(prefix))) continue;
-  // Wellness Season 2 currently publishes a Chinese master before translated editions.
-  // Never imply unpublished translations exist; verify the declared language and
-  // visible translation-pending notice until the four editions are actually released.
+  // Season 2 Chinese masters may initially precede translations. Once all
+  // editions exist, validate the actual route-switching navigation instead.
   if (/^wellness-season-02-\d{2}\.html$/.test(rel)) {
     const edition = fs.readFileSync(file, 'utf8');
     if (!/<html lang="zh(?:-Hans|-CN)?"/.test(edition)) failures.push(`${rel}: expected Chinese master language`);
-    if (!edition.includes('aria-label="语言版本 / Language editions"')) failures.push(`${rel}: missing edition navigation`);
-    if (!edition.includes('coming later')) failures.push(`${rel}: missing translation-pending notice`);
+    const base = rel.replace(/\.html$/, '');
+    const counterparts = ['-en', '-fr', '-es'].map(suffix => base + suffix + '.html');
+    if (counterparts.every(target => fs.existsSync(path.join(root, target)))) {
+      for (const [lang, suffix] of [['zh-Hans',''],['en','-en'],['fr','-fr'],['es','-es']]) {
+        const target = base + suffix + '.html';
+        if (!edition.includes(`hreflang="${lang}" href="https://runlu.ca/${target}"`)) failures.push(`${rel}: missing alternate ${target}`);
+        if (!edition.includes(`href="${target}"`)) failures.push(`${rel}: missing language navigation ${target}`);
+      }
+      if (!edition.includes(`rel="canonical" href="https://runlu.ca/${rel}"`)) failures.push(`${rel}: missing self canonical`);
+    } else {
+      if (!edition.includes('aria-label="语言版本 / Language editions"')) failures.push(`${rel}: missing edition navigation`);
+      if (!edition.includes('coming later')) failures.push(`${rel}: missing translation-pending notice`);
+    }
     continue;
   }
   // Season 2 translated editions use independent language pages, not the
