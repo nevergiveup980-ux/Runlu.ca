@@ -7,6 +7,9 @@
   {
     "url": "https://runlu.ca/twist-privacy.html",
     "error": "HTTP Error 403: Forbidden",
-    "browserResult": "Safari displayed RUNLU 404 Page not found"
+    "browserResult": "After explicit user authorization: live four-language policy, Safari English and Chinese rendering/switching verified",
+    "deploymentRun": 40156754433,
+    "deploymentConclusion": "success",
+    "commit": "6520b224ab675198b16c6a6cb61621614d15788b"
   }
 ]

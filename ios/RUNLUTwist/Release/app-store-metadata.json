@@ -11,7 +11,6 @@
   ],
   "copyright": "2026 RUNLU",
   "supportURL": "https://runlu.ca/support.html",
-  "privacyURLProposedNotPublished": "https://runlu.ca/twist-privacy.html",
   "privacyLabelProposal": "Data Not Collected",
   "tracking": false,
   "advertising": false,
@@ -41,11 +40,12 @@
     "Review contact name, phone, email",
     "Confirmed content rights",
     "Pricing and territories",
-    "Live privacy policy URL",
     "Physical device / TestFlight acceptance",
     "Pending Apple agreements before App Store submission"
   ],
   "appleID": "6826695667",
   "ageRatingActual": "4+ (with regional exceptions)",
-  "privacyLabelStatus": "Data Not Collected saved as unpublished draft"
+  "privacyLabelStatus": "Data Not Collected saved as unpublished draft",
+  "privacyURL": "https://runlu.ca/twist-privacy.html",
+  "privacyURLStatus": "Live; Safari English/Chinese checked; saved in both App Store Connect locales"
 }

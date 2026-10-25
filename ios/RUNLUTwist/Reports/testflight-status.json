@@ -20,7 +20,7 @@
   ],
   "ipaSHA256": "c1f73ddceb50880e7cdfa425154f978478e1d8be2e0509650e199145852e0ce6",
   "privacyLabel": "Data Not Collected (unpublished draft)",
-  "privacyPolicyURLVerifiedLive": false,
+  "privacyPolicyURLVerifiedLive": true,
   "ageRating": "4+ with regional exceptions",
   "installedDevice": "iPhone 16 Pro Max / iOS 27.2",
   "installedBuild": "1.0.0 (1)",
@@ -32,5 +32,11 @@
     "size": "1206x2622",
     "slot": "Dynamic Island medium",
     "reviewSubmitted": false
-  }
+  },
+  "privacyPolicyURL": "https://runlu.ca/twist-privacy.html",
+  "privacyURLSavedLocales": [
+    "en-US",
+    "zh-Hans"
+  ],
+  "policyPublicationCommit": "6520b224ab675198b16c6a6cb61621614d15788b"
 }
