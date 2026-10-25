@@ -37,3 +37,10 @@ Do not present this tracking file as a completed fact check. Do not submit the p
 - **[16] NCCIH medication–supplement interaction module — OFFICIAL SOURCE LOCATED, CLAIM REVIEW PENDING.** NCCIH confirms that supplements can increase, decrease or adversely interact with medicines. Confirm precise claims in chapter before approving citation. https://www.nccih.nih.gov/health/know-science/how-medications-and-supplements-can-interact/introduction
 
 These are source-level checks, not a completed sentence-by-sentence scientific audit. All remaining references remain open.
+
+## Second source verification pass — insomnia guidance (2026-10-25)
+
+- **[2] Ontario Health 2025 quality standard — SOURCE AND CHAPTER CLAIM CHECKED.** Ontario Health identifies CBT-I as first-line treatment for adults with insomnia disorder, recommends comprehensive assessment and individualized planning, and states that sleep hygiene alone is ineffective. The chapter's first-line CBT-I characterization is consistent with the official standard. Official page: https://ontariohealth.ca/clinical/quality-standards/qs-details?cf=insomnia-disorder
+- **[4] VA/DoD 2025 guideline — SOURCE AND CHAPTER CLAIM CHECKED.** Official guideline recommends CBT-I for chronic insomnia, suggests brief behavioral treatment (BBT-I) where appropriate, and suggests against sleep hygiene education as a stand-alone treatment. The chapter's revised characterization is consistent with these recommendations. Official guideline: https://www.healthquality.va.gov/guidelines/CD/insomnia/I-OSA-CPG_2025-Guideline_final_20250915.pdf
+- **Clinical scope:** These are guidelines for chronic insomnia disorder, not every isolated poor night of sleep. Individual assessment, comorbidities, suitability, and patient preferences still matter.
+- **Remaining:** Verify [5] bibliographic details and exact consensus recommendations; inspect Chinese counterpart for consistent interpretation. This review does not approve the whole book or all references.
