@@ -16,7 +16,7 @@ function journalRawValid(){
   if(typeof raw!=='string')return false;
   const value=JSON.parse(raw);
   const validTx=tx=>!!tx&&typeof tx==='object'&&!Array.isArray(tx)&&typeof tx.id==='string'&&tx.id.length>0&&typeof tx.type==='string'&&typeof tx.action==='string'&&typeof tx.startedAt==='string';
-  return !!value&&typeof value==='object'&&!Array.isArray(value)&&Array.isArray(value.active)&&Array.isArray(value.history)&&value.active.every(validTx);
+  return !!value&&typeof value==='object'&&!Array.isArray(value)&&Array.isArray(value.active)&&Array.isArray(value.history)&&value.active.every(validTx)&&new Set(value.active.map(tx=>tx.id)).size===value.active.length;
  }catch(_){return false}
 }
 function markClean(reason){
