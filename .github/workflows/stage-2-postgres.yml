@@ -42,7 +42,7 @@ jobs:
       - name: Run PostgreSQL integration test
         run: |
           set -o pipefail
-          node --test --test-concurrency=1 --test-reporter=tap stage-2/postgres.integration.test.mjs stage-2/postgres-delivery.integration.test.mjs stage-2/postgres-audit.integration.test.mjs stage-2/postgres-delivery-e2e.integration.test.mjs stage-2/postgres-rate-limit.integration.test.mjs stage-2/postgres-rate-limit-cleanup.integration.test.mjs | tee stage-2-postgres-results.tap
+          node --test --test-concurrency=1 --test-reporter=tap stage-2/postgres.integration.test.mjs stage-2/postgres-delivery.integration.test.mjs stage-2/postgres-audit.integration.test.mjs stage-2/postgres-delivery-e2e.integration.test.mjs stage-2/postgres-rate-limit.integration.test.mjs stage-2/postgres-rate-limit-cleanup.integration.test.mjs stage-2/postgres-rate-limit-cleanup-lock.integration.test.mjs | tee stage-2-postgres-results.tap
       - name: Upload PostgreSQL test evidence
         if: always()
         uses: actions/upload-artifact@v4
