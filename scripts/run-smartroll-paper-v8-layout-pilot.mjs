@@ -5,7 +5,7 @@ const css=fs.readFileSync("flooring/deerfoot-paper-reference-calibration-v1.css"
 const original=fs.readFileSync("flooring/deerfoot-po-smartroll-optin-v1.html","utf8");
 const assert=(b,m)=>{if(!b)throw Error(m)};
 new vm.Script(bridge);
-assert(html.includes("smartroll-real-paper-optin-v2.js")&&html.includes("smartroll-paper-v8-layout-bridge-v1.js"),"SmartRoll pilot and V8 bridge both loaded");
+assert(html.includes("smartroll-real-paper-optin-v3.js")&&html.includes("smartroll-paper-v8-layout-bridge-v1.js"),"SmartRoll pilot and V8 bridge both loaded");
 assert(bridge.includes('d.body.classList.add("referenceCalibration")'),"V8 scope added only in nested iframe");
 assert(bridge.includes("deerfoot-paper-reference-calibration-v1.css?v=8-smartroll-20261024"),"V8 CSS cache busted");
 assert(bridge.includes('d.getElementById(marker)'),"style idempotent");
@@ -18,3 +18,13 @@ const v2=fs.readFileSync("flooring/smartroll-real-paper-optin-v2.js","utf8");new
 assert(v2.includes("srOpenLauncher")&&v2.includes("srStatusPanel"),"visible SmartRoll launcher and status panel");
 assert(v2.includes('showPanel("Load LIVE Warehouse first.')&&v2.includes("30 SYD or 270 SF"),"explain prerequisite instead of silent no-op");
 assert(v2.includes("guard.check(token,adapter)")&&v2.includes('cell.dispatchEvent(new win.Event("input"'),"row guard and confirmation preserved");
+
+const v3=fs.readFileSync("flooring/smartroll-real-paper-optin-v3.js","utf8");
+const auth=fs.readFileSync("flooring/smartroll-paper-auth-v1.js","utf8");
+new vm.Script(v3);new vm.Script(auth);
+assert(html.includes("smartroll-paper-auth-v1.js"),"pilot loads in-page auth before SmartRoll");
+assert(v3.includes('form.addEventListener("submit",signInHere)')&&v3.includes('await authApi.signIn(email.value.trim(),password)'),"login form signs in on the same page");
+assert(v3.includes('pass.value=""')&&v3.includes("await loadLive()"),"password field cleared and inventory reloaded after sign in");
+assert(auth.includes('storageKey:AUTH')&&auth.includes('signInWithPassword'),"central session key and Supabase auth");
+assert(!auth.includes("localStorage.setItem")&&!auth.includes("console.log"),"no credential logging or custom persistence");
+assert(v3.includes('guard.check(token,adapter)')&&v3.includes('cell.dispatchEvent(new win.Event("input"'),"guarded row-only draft confirmation retained");
