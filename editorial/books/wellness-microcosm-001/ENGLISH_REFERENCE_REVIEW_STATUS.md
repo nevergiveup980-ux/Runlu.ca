@@ -29,3 +29,11 @@ The English back matter contains numbered references 1 through 18. Presence of a
 5. Record reviewer, date and resolution.
 
 Do not present this tracking file as a completed fact check. Do not submit the proof EPUB for sale while scientific and legal review remains open.
+
+## First source verification pass — 2026-10-25
+
+- **[3] ACP 2016 insomnia guideline — UPDATE REQUIRED.** The ACP's own inactive-guidelines page lists the 2016 chronic-insomnia guideline as inactive. It can be retained as a historical source but must not be represented as currently active clinical guidance. https://www.acponline.org/clinical-information/clinical-guidelines-recommendations/inactive-acp-guidelines
+- **[15] NCCIH detox and cleanse fact sheet — OFFICIAL SOURCE LOCATED, CLAIM REVIEW PENDING.** The NCCIH page reports no compelling evidence for detox diets eliminating toxins or long-term weight management, and documents potential harms. Confirm manuscript's exact claims before approving citation. Current page: https://www.nccih.nih.gov/health/detoxes-and-cleanses-what-you-need-to-know
+- **[16] NCCIH medication–supplement interaction module — OFFICIAL SOURCE LOCATED, CLAIM REVIEW PENDING.** NCCIH confirms that supplements can increase, decrease or adversely interact with medicines. Confirm precise claims in chapter before approving citation. https://www.nccih.nih.gov/health/know-science/how-medications-and-supplements-can-interact/introduction
+
+These are source-level checks, not a completed sentence-by-sentence scientific audit. All remaining references remain open.
