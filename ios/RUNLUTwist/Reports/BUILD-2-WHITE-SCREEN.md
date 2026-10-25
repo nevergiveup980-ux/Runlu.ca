@@ -23,4 +23,6 @@ Canonicalize both file and bundle paths using `resolvingSymlinksInPath().standar
 
 ## Distribution
 
-CLI export could not read the Xcode account credentials. Xcode Organizer completed upload and displayed “RUNLUTwist 1.0.0 (2) uploaded”. Apple processing / Ready to Test status has not yet been confirmed. No App Store review submission was made.
+CLI export could not read the Xcode account credentials. Xcode Organizer completed upload and displayed “RUNLUTwist 1.0.0 (2) uploaded”. Apple TestFlight lists build 2, uploaded Oct 25 at 9:09 AM, with status Ready to Submit. Build processing has completed. Build 2 details confirm Group (1): RUNLU TWIST Internal QA, Internal, 1 tester. Bilingual What to Test instructions were saved. Physical-device installation and gameplay acceptance remain pending.
+
+PR #339 contains fix commit `8c28602206acc0325dc58c871a66c14789971262` and remains a draft. No App Store review submission was made.
