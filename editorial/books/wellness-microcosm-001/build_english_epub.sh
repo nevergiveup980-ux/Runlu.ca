@@ -40,9 +40,10 @@ for index, name in enumerate(sys.argv[2:]):
         if start < 0:
             raise SystemExit("Prologue heading not found")
         source = source[start:]
-    if index > 0:
-        # Back matter may use its own heading structure.
-        pass
+    if index == len(sys.argv[2:]) - 1:
+        source = re.sub(r"(?m)^\\*English-edition editorial back matter[^\\n]*\\*\\s*\\n", "", source)
+    if not re.search(r"(?m)^# ", source):
+        raise SystemExit(f"Missing chapter-level heading: {name}")
     parts.append(source.strip())
 out.write_text("\n\n".join(parts) + "\n", encoding="utf-8")
 PY
