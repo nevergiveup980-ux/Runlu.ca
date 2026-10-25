@@ -37,15 +37,29 @@
   },
   "reviewNotes": "Offline bilingual riddle game, 20 curated classics. No login or IAP. Use Language / 语言 to switch English and Simplified Chinese. Reveal answer awards exploration points, not correctness. Self-assessment is optional. Reset has a native confirmation dialog. Share opens the iOS activity sheet and shares text only. All gameplay is bundled. Support links open separately in Safari.",
   "requiredOwnerFields": [
-    "Review contact name, phone, email",
-    "Confirmed content rights",
-    "Pricing and territories",
-    "Physical device / TestFlight acceptance",
-    "Pending Apple agreements before App Store submission"
+    "Account-wide Part XX compliance response",
+    "Review newly available Paid Apps Agreement as applicable",
+    "Separate authorization for Submit for Review and public release"
   ],
   "appleID": "6826695667",
   "ageRatingActual": "4+ (with regional exceptions)",
-  "privacyLabelStatus": "Data Not Collected saved as unpublished draft",
+  "privacyLabelStatus": "Published: Data Not Collected, 2026-10-25",
   "privacyURL": "https://runlu.ca/twist-privacy.html",
-  "privacyURLStatus": "Live; Safari English/Chinese checked; saved in both App Store Connect locales"
+  "privacyURLStatus": "Live; Safari English/Chinese checked; saved in both App Store Connect locales",
+  "releaseCandidate": {
+    "version": "1.0.0",
+    "build": "3",
+    "locked": true,
+    "physicalDeviceAcceptance": "User confirmed passed on 2026-10-25",
+    "appReviewContact": "Completed in App Store Connect; private values omitted",
+    "contentRights": "Owner confirmed third-party classic content is permitted; saved in App Store Connect",
+    "price": "Free (0.00)",
+    "territories": "174 countries/regions; excludes China mainland",
+    "macAvailability": false,
+    "visionProAvailability": false,
+    "releaseMode": "Manual",
+    "preflightStatus": "Item Ready to Submit: 1.0.0 (3), draft 2026-10-25 11:51 America/Edmonton",
+    "submittedForReview": false,
+    "publiclyReleased": false
+  }
 }
