@@ -61,6 +61,22 @@ for (const file of pages) {
     if (!edition.includes('coming later')) failures.push(`${rel}: missing translation-pending notice`);
     continue;
   }
+  // Season 2 translated editions use independent language pages, not the
+  // shared in-page language switcher. Validate actual edition links instead.
+  if (/^wellness-season-02-\d{2}-(?:en|fr|es)\.html$/.test(rel)) {
+    const edition = fs.readFileSync(file, 'utf8');
+    const base = rel.replace(/-(?:en|fr|es)\.html$/, '');
+    const language = rel.match(/-(en|fr|es)\.html$/)?.[1];
+    if (!edition.includes(`<html lang="${language}"`)) failures.push(`${rel}: incorrect document language`);
+    for (const [lang, suffix] of [['zh-Hans',''],['en','-en'],['fr','-fr'],['es','-es']]) {
+      const target = base + suffix + '.html';
+      if (!fs.existsSync(path.join(root, target))) failures.push(`${rel}: missing edition ${target}`);
+      if (!edition.includes(`hreflang="${lang}" href="https://runlu.ca/${target}"`)) failures.push(`${rel}: missing alternate ${target}`);
+      if (!edition.includes(`href="${target}"`)) failures.push(`${rel}: missing language navigation ${target}`);
+    }
+    if (!edition.includes(`rel="canonical" href="https://runlu.ca/${rel}"`)) failures.push(`${rel}: missing self canonical`);
+    continue;
+  }
   // The Wellness Twelve articles are four separate, canonical language editions.
   // They do not use in-page translation; validate their linked counterparts instead
   // of incorrectly requiring the shared in-page language selector/script.
