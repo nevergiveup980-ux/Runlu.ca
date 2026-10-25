@@ -46,7 +46,12 @@ for index, name in enumerate(sys.argv[2:]):
     if not re.search(r"(?m)^# ", source):
         raise SystemExit(f"Missing chapter-level heading: {name}")
     parts.append(source.strip())
-out.write_text("\n\n".join(parts) + "\n", encoding="utf-8")
+assembled = "\n\n".join(parts) + "\n"
+if re.search(r"(?i)english adaptation[^\n]{0,60}working draft|editorial back matter[^\n]{0,60}working version", assembled):
+    raise SystemExit("Working-draft label leaked into reader-facing EPUB text")
+if sum(1 for line in assembled.splitlines() if line.startswith("# ")) != len(parts):
+    raise SystemExit("Unexpected top-level chapter headings; review EPUB navigation")
+out.write_text(assembled, encoding="utf-8")
 PY
 
 pandoc "$tmp/assembled.md" --from=markdown --to=epub3 \
