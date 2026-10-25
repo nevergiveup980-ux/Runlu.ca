@@ -316,7 +316,7 @@
     }>Use this inventory record</button>`;
     by("sip72use")?.addEventListener("click", () => useItem(item));
     const confirm=by("sip72confirm");
-    if(confirm){confirm.disabled=!item.selectable;confirm.textContent=item.selectable?"✓ Use selected roll · Return to PO":"Record unavailable";}
+    if(confirm){confirm.disabled=offline||!item.selectable;confirm.textContent=offline?"Live connection required":item.selectable?"✓ Use selected roll · Return to PO":"Record unavailable";}
   }
   function setField(row, field, value, overwrite) {
     const el = row?.querySelector(`[data-f="${field}"]`);
@@ -362,7 +362,7 @@
   }
   function useSelected(){
     const item=inventory.find(x=>x.id===selectedId);
-    if(!item||!item.selectable)return false;
+    if(offline||!item||!item.selectable)return false;
     return useItem(item);
   }
   function ensureStyle() {
