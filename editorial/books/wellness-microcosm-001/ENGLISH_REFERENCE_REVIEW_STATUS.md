@@ -44,3 +44,10 @@ These are source-level checks, not a completed sentence-by-sentence scientific a
 - **[4] VA/DoD 2025 guideline — SOURCE AND CHAPTER CLAIM CHECKED.** Official guideline recommends CBT-I for chronic insomnia, suggests brief behavioral treatment (BBT-I) where appropriate, and suggests against sleep hygiene education as a stand-alone treatment. The chapter's revised characterization is consistent with these recommendations. Official guideline: https://www.healthquality.va.gov/guidelines/CD/insomnia/I-OSA-CPG_2025-Guideline_final_20250915.pdf
 - **Clinical scope:** These are guidelines for chronic insomnia disorder, not every isolated poor night of sleep. Individual assessment, comorbidities, suitability, and patient preferences still matter.
 - **Remaining:** Verify [5] bibliographic details and exact consensus recommendations; inspect Chinese counterpart for consistent interpretation. This review does not approve the whole book or all references.
+
+## Third verification pass — reference [5] (2026-10-25)
+
+- **Bibliographic metadata confirmed:** Morin CM, Khullar A, Robillard R, et al. *Delphi consensus recommendations for the management of chronic insomnia in Canada*. *Sleep Medicine*. 2024;124:598–605. DOI 10.1016/j.sleep.2024.09.038; PMID 39481275. Cross-checked with PubMed and publisher record: https://pubmed.ncbi.nlm.nih.gov/39481275/ and https://www.sciencedirect.com/science/article/pii/S1389945724004593
+- **Support for Chapter Five:** The paper reports a 16-expert multidisciplinary Delphi process and 37 consensus recommendations; its abstract and publisher highlights explicitly reinforce CBT-I as first-line care for chronic insomnia. The chapter's statement that the Canadian consensus supports this direction is supported.
+- **Important distinction:** This is an expert consensus statement, not a Canadian government clinical guideline. It also discusses selected medications and evidence limitations. Do not imply it prohibits all medication or applies to every isolated poor night.
+- **Status:** [5] metadata and the specific CBT-I sentence checked; broader manuscript medical review still pending.
