@@ -1,0 +1,36 @@
+{
+  "resultBundle": "Test-RUNLUTwist-2026.10.24_20-46-54--0600.xcresult",
+  "device": "iPhone 18 Pro / iOS 27.0",
+  "files": [
+    {
+      "name": "05-actual-dark-appearance",
+      "file": "05-actual-dark-appearance.png",
+      "timestamp": "2026-10-24T20:47:55.464-0600"
+    },
+    {
+      "name": "01-actual-game-English",
+      "file": "01-actual-game-English.png",
+      "timestamp": "2026-10-24T20:48:32.258-0600"
+    },
+    {
+      "name": "02-actual-game-Chinese",
+      "file": "02-actual-game-Chinese.png",
+      "timestamp": "2026-10-24T20:48:40.312-0600"
+    },
+    {
+      "name": "03-actual-Chinese-answer-and-assessment",
+      "file": "03-actual-Chinese-answer-and-assessment.png",
+      "timestamp": "2026-10-24T20:48:59.215-0600"
+    },
+    {
+      "name": "04-actual-landscape",
+      "file": "04-actual-landscape.png",
+      "timestamp": "2026-10-24T20:48:59.720-0600"
+    },
+    {
+      "name": "Actual-iPhone-gameplay",
+      "file": "Actual-iPhone-gameplay.png",
+      "timestamp": "2026-10-24T20:49:37.892-0600"
+    }
+  ]
+}

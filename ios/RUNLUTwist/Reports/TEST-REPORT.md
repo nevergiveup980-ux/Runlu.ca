@@ -46,3 +46,5 @@ Apple截图规格与隐私信息依据：
 - 包资源检查及7项逻辑检查重新通过。当前沙盒本地 codesign trust 验证返回 CSSMERR_TP_NOT_TRUSTED，不能声称此轮本地信任检查通过；Apple服务器已接受实际分发构建。
 - Shell模拟器连接仍失败；实际UI测试通过Xcode图形界面执行。没有把Shell失败结果计作测试通过。
 - 尚无TestFlight安装会话，真机与人工无障碍验收仍待完成。
+
+- 最终iPhone配置在 iPhone 18 Pro / iOS27.0 完成4/4项UI回归（20-46-54结果包），暗色像素、双语、重置、持久化、分享和隐私页往返均成功。附真实1206×2622截图与来源清单。仍有同样的debug session killed警告，测试0失败；见 iphone-medium-final-ui-summary.json。

@@ -1,0 +1,34 @@
+{
+  "resultBundle": "iphone-medium-final.xcresult",
+  "metrics": {
+    "testsCount": "4",
+    "testsFailedCount": "0",
+    "testsSkippedCount": "0",
+    "warningCount": "1"
+  },
+  "actions": [
+    {
+      "status": "succeeded",
+      "device": "iPhone 18 Pro"
+    }
+  ],
+  "tests": [
+    {
+      "name": "TwistUITests/testDarkAppearanceScreenshot()",
+      "status": "Success"
+    },
+    {
+      "name": "TwistUITests/testLanguageResetAndScreenshots()",
+      "status": "Success"
+    },
+    {
+      "name": "TwistUITests/testOfflineGameplayPersistenceAndShare()",
+      "status": "Success"
+    },
+    {
+      "name": "TwistUITests/testPrivacyRoundTripPreservesProgress()",
+      "status": "Success"
+    }
+  ],
+  "warning": "Debug session ended with code 9: killed"
+}

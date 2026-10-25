@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-24",
+  "appleRequirementsURL": "https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/",
+  "requiredMediumSlot": "Provided actual 1206x2622 screenshots in each locale Dynamic-Island-medium subfolder",
+  "screenshots": [
+    {
+      "path": "Screenshots/AppStore/en-US/01-actual-game-English.png",
+      "width": 1320,
+      "height": 2868,
+      "alpha": false,
+      "sha256": "898d9f7bdc8f33ef5a6f9ecd5fb487d4e36715d9449759efc4abf45e4b9e32c6",
+      "source": "Actual XCTest attachment, unmodified"
+    },
+    {
+      "path": "Screenshots/AppStore/en-US/Dynamic-Island-medium/01-actual-game-English.png",
+      "width": 1206,
+      "height": 2622,
+      "alpha": false,
+      "sha256": "3c6e24a35d9308164d61a03fa112136ce8cadaa58bde80755aea62c37f64c321",
+      "source": "Actual XCTest attachment, unmodified"
+    },
+    {
+      "path": "Screenshots/AppStore/zh-Hans/02-actual-game-Chinese.png",
+      "width": 1320,
+      "height": 2868,
+      "alpha": false,
+      "sha256": "bd8f0c4ee5f1e6f33087d1a1dd79523d4021421defd40d0f62c52c632d31371f",
+      "source": "Actual XCTest attachment, unmodified"
+    },
+    {
+      "path": "Screenshots/AppStore/zh-Hans/03-actual-Chinese-answer-and-assessment.png",
+      "width": 1320,
+      "height": 2868,
+      "alpha": false,
+      "sha256": "789a4e36766a3804d1be17e886cc41f737d9f85ffc16ed677dd683efea04abbb",
+      "source": "Actual XCTest attachment, unmodified"
+    },
+    {
+      "path": "Screenshots/AppStore/zh-Hans/05-actual-dark-appearance.png",
+      "width": 1320,
+      "height": 2868,
+      "alpha": false,
+      "sha256": "8ef6c1ef06d065115bb102e1f6a627f73fffa3458920d52496ff8cf1d51c9d4e",
+      "source": "Actual XCTest attachment, unmodified"
+    },
+    {
+      "path": "Screenshots/AppStore/zh-Hans/Dynamic-Island-medium/02-actual-game-Chinese.png",
+      "width": 1206,
+      "height": 2622,
+      "alpha": false,
+      "sha256": "df128f8b6b50db7243156e96b55f68a0510a8d1a6aaa0b7a929d9ba4d02b605e",
+      "source": "Actual XCTest attachment, unmodified"
+    },
+    {
+      "path": "Screenshots/AppStore/zh-Hans/Dynamic-Island-medium/03-actual-Chinese-answer-and-assessment.png",
+      "width": 1206,
+      "height": 2622,
+      "alpha": false,
+      "sha256": "610ac1dde7ef41731bcba52d057d3f01f05be9fafa8316012e0f686075ff76d7",
+      "source": "Actual XCTest attachment, unmodified"
+    },
+    {
+      "path": "Screenshots/AppStore/zh-Hans/Dynamic-Island-medium/05-actual-dark-appearance.png",
+      "width": 1206,
+      "height": 2622,
+      "alpha": false,
+      "sha256": "fc5bf09dda4e263aeb5f92af9d287566588030fbc754cc40ecae18cd043f185e",
+      "source": "Actual XCTest attachment, unmodified"
+    }
+  ],
+  "storeScreenshotUpload": "Not uploaded or selected in App Store Connect yet"
+}

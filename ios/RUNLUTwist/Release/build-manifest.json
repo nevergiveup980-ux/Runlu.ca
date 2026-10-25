@@ -1,0 +1,32 @@
+{
+  "bundleId": "ca.runlu.twist",
+  "version": "1.0.0",
+  "build": "1",
+  "sdk": "iphoneos27.1",
+  "developmentTeam": "F2J2Z8H2L4",
+  "signature": "Cloud Managed Apple Distribution (actual exported IPA)",
+  "webResourcesMatchSource": true,
+  "resources": [
+    {
+      "file": "Web/twist-support.html",
+      "sha256": "4056cea1ad07dc6b950ea871f1af2aef648e62f198c7c403d15141f0ed52f9c0"
+    },
+    {
+      "file": "Web/twist.html",
+      "sha256": "7187db8ae4a977cd4068fd0532d13b9416a3e8269afdf9d44bb40d75612bece5"
+    },
+    {
+      "file": "Web/twist-privacy.html",
+      "sha256": "415cbbfa5660aa4a46c232d377d7e35e8ddfbf393611592b45e5145c7baa053d"
+    }
+  ],
+  "runtimeSourceCommit": "104710b28c62c3d6bcd74dc3d96c9c35e807e5fb",
+  "configurationCommit": "11fe6fc993dd4254bffede99635e9fe976aefc92",
+  "archive": "Release/RUNLUTwist-iPhone.xcarchive",
+  "ipa": "Release/TestFlight-1.0.0-1/RUNLUTwist.ipa",
+  "ipaSHA256": "c1f73ddceb50880e7cdfa425154f978478e1d8be2e0509650e199145852e0ce6",
+  "UIDeviceFamily": [
+    1
+  ],
+  "testFlightStatus": "Ready to Test"
+}
