@@ -41,6 +41,10 @@ async function inspect(prior){
  try{journal=window.RUNLUUniversalCrashJournal?.inspect?.()||null}catch(_){}
  const interrupted=window.RUNLUUniversalInterruptedResolver?.scan?.()||[];
  const issues=[];
+ // The journal summary must agree with the persisted active transactions.
+ let persistedActive=null;
+ try{const raw=data().current()?.raw?.('runlu_flooring_universal_u2_crash_journal');persistedActive=raw===null||raw===undefined?0:JSON.parse(raw).active.length}catch(_){}
+ if(hasWorkspace&&journal&&persistedActive!==null&&journal.active!==persistedActive)issues.push({code:'RECOVERY_JOURNAL_MISMATCH',severity:'critical',detail:'Recovery journal summary differs from stored active transactions'});
  if(hasWorkspace&&(!journalRawValid()||!journal||!Number.isInteger(journal.active)||journal.active<0))issues.push({code:'RECOVERY_JOURNAL_UNAVAILABLE',severity:'critical',detail:'Recovery journal cannot be verified; startup remains paused'});
  if(journal?.active>0)issues.push({code:'INCOMPLETE_BUSINESS_OPERATION',severity:'critical',detail:journal.active+' write-ahead operation(s) were not committed'});
  if(health?.corruptKeys?.length)issues.push({code:'CORRUPT_LOCAL_JSON',severity:'critical',detail:health.corruptKeys.length+' unreadable local data group(s)'});
