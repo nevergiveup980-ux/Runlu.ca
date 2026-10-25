@@ -63,10 +63,10 @@ for (const file of pages) {
   }
   // Season 2 translated editions use independent language pages, not the
   // shared in-page language switcher. Validate actual edition links instead.
-  if (/^wellness-season-02-\\d{2}-(?:en|fr|es)\\.html$/.test(rel)) {
+  if (/^wellness-season-02-\d{2}-(?:en|fr|es)\.html$/.test(rel)) {
     const edition = fs.readFileSync(file, 'utf8');
-    const base = rel.replace(/-(?:en|fr|es)\\.html$/, '');
-    const language = rel.match(/-(en|fr|es)\\.html$/)?.[1];
+    const base = rel.replace(/-(?:en|fr|es)\.html$/, '');
+    const language = rel.match(/-(en|fr|es)\.html$/)?.[1];
     if (!edition.includes(`<html lang="${language}"`)) failures.push(`${rel}: incorrect document language`);
     for (const [lang, suffix] of [['zh-Hans',''],['en','-en'],['fr','-fr'],['es','-es']]) {
       const target = base + suffix + '.html';
