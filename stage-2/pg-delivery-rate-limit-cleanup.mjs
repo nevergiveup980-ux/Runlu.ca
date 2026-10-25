@@ -12,7 +12,9 @@ export async function prunePgDeliveryRateLimits({pool,windowMs=60000,now=Date.no
   `DELETE FROM stage_delivery_rate_limits WHERE ctid IN (
      SELECT ctid FROM stage_delivery_rate_limits
      WHERE window_start_ms < $1
+     ORDER BY window_start_ms,rate_key
      LIMIT $2
+     FOR UPDATE SKIP LOCKED
    ) RETURNING rate_key`,
   [cutoff,batchSize]
  );
