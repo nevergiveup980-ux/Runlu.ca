@@ -35,14 +35,14 @@ for index, name in enumerate(sys.argv[2:]):
     source = pathlib.Path(name).read_text(encoding="utf-8")
     source = re.sub(r"(?m)^\*The Universe Within Us — English adaptation, working draft\*\s*\n", "", source)
     source = re.sub(r"(?m)^\*English-language adaptation — working manuscript\*\s*\n", "", source)
-    source = re.sub(r"(?m)^\\*The Universe Within Us — English adaptation[^\\n]*\\*\\s*\\n", "", source)
+    source = re.sub(r"(?m)^\*The Universe Within Us — English adaptation[^\n]*\*\s*\n", "", source)
     if index == 0:
         start = source.find("# Prologue —")
         if start < 0:
             raise SystemExit("Prologue heading not found")
         source = source[start:]
     if index == len(sys.argv[2:]) - 1:
-        source = re.sub(r"(?m)^\\*English-edition editorial back matter[^\\n]*\\*\\s*\\n", "", source)
+        source = re.sub(r"(?m)^\*English-edition editorial back matter[^\n]*\*\s*\n", "", source)
     if not re.search(r"(?m)^# ", source):
         raise SystemExit(f"Missing chapter-level heading: {name}")
     parts.append(source.strip())
