@@ -16,14 +16,14 @@ async function scenario(label,active,expectedOpen){
 async function checkStartupJournal(mode){
  let state={sessionOpen:false};
  const workspace={company:{organizationId:'test'}};
- const data={read(key){return key.endsWith('_workspace')?workspace:state},write(_key,value){state=value;return value},current(){return {raw(){return mode==='corrupt'?'not-json':mode==='invalid'?'{}':null}}}};
+ const data={read(key){return key.endsWith('_workspace')?workspace:state},write(_key,value){state=value;return value},current(){return {raw(){return mode==='corrupt'?'not-json':mode==='invalid'?'{}':mode==='brokenTx'?JSON.stringify({active:[{id:'tx1'}],history:[]}):null}}}};
  const window={RUNLUUniversalData:data,addEventListener(){},RUNLUUniversalLocalHealth:{health:async()=>({corruptKeys:[]})},
   RUNLUUniversalDurableLocal:{status:async()=>({ready:true}),compareWithAdapter:async()=>({ok:true})}};
  if(mode!=='missing')window.RUNLUUniversalCrashJournal={inspect(){if(mode==='throws')throw Error('unavailable');return {active:mode==='active'?1:0,pending:[]}}};
  vm.runInNewContext(source,{window,document:{getElementById(){return null}},setTimeout,console});
  const result=await window.RUNLUUniversalStartupGuard.ready();
  assert.equal(result.blocked,mode!=='clear');
- if(['missing','throws','corrupt','invalid'].includes(mode))assert(result.issues.some(x=>x.code==='RECOVERY_JOURNAL_UNAVAILABLE'));
+ if(['missing','throws','corrupt','invalid','brokenTx'].includes(mode))assert(result.issues.some(x=>x.code==='RECOVERY_JOURNAL_UNAVAILABLE'));
  if(mode==='active')assert(result.issues.some(x=>x.code==='INCOMPLETE_BUSINESS_OPERATION'));
  console.log('PASS startup journal '+mode);
 }
@@ -32,6 +32,6 @@ async function checkStartupJournal(mode){
  await scenario('pending journal keeps session open',2,true);
  await scenario('empty journal allows clean exit',0,false);
  await scenario('missing journal keeps session open',null,true);
- for(const mode of ['missing','throws','active','clear','corrupt','invalid'])await checkStartupJournal(mode);
+ for(const mode of ['missing','throws','active','clear','corrupt','invalid','brokenTx'])await checkStartupJournal(mode);
  console.log('Startup clean exit and journal inspection: PASS');
 })().catch(e=>{console.error(e);process.exitCode=1});
