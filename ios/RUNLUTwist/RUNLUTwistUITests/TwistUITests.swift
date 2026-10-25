@@ -51,6 +51,8 @@ extension TwistUITests {
             XCTAssertTrue(app.buttons["Puzzle language"].waitForExistence(timeout: 10))
             language = app.buttons["Puzzle language"]
         }
+        XCTAssertTrue(app.staticTexts["Think first. Reveal the answer. See if you got it right. Twenty puzzles, free to play—no account needed."].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.textFields.count, 0)
         app.swipeDown()
         capture(app, "01-actual-game-English")
         language.tap()
@@ -63,6 +65,8 @@ extension TwistUITests {
             app.buttons["简体中文"].tap()
         }
         XCTAssertTrue(app.buttons["揭晓答案"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["先想一想，再揭晓答案，看看自己是否答对。共20道脑洞题，免费游玩，无需注册。"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.textFields.count, 0)
         capture(app, "02-actual-game-Chinese")
         app.terminate()
         app.launch()

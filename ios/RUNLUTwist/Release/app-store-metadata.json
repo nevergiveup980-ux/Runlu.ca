@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "build": "1",
+  "build": "3",
   "bundleId": "ca.runlu.twist",
   "sku": "RUNLU-TWIST-IOS-001",
   "primaryCategory": "GAMES",

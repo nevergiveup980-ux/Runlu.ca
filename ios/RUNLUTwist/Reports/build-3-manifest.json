@@ -1,0 +1,12 @@
+{
+  "bundleId": "ca.runlu.twist",
+  "version": "1.0.0",
+  "build": "3",
+  "deviceFamily": [
+    1
+  ],
+  "htmlSHA256": "3719ce80d0f07f8389c6091cb66b176e67f3a2b8cf50c09247c90c917af79d7f",
+  "nativeSHA256": "3301d414743940e3f8a4fba0f635a88e7ea0d822b01fdd4beac054dd80400ae0",
+  "copySource": "70087c0d80ab7e366c58c6c8a12724ed01bd4193",
+  "noAnswerInput": true
+}
