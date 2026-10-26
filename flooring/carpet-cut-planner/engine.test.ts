@@ -14,4 +14,8 @@ describe("carpet planner engine",()=>{
   const p=planCuts([{id:"R1",widthIn:120,lengthIn:240,dyeLot:"A"}],[{id:"P1",widthIn:144,lengthIn:100}]);
   expect(p.unplaced).toEqual(["P1"]);
  });
+
+ it("rejects duplicate roll IDs",()=>{expect(()=>planCuts([{id:"R1",widthIn:144,lengthIn:240,dyeLot:"A"},{id:"R1",widthIn:144,lengthIn:240,dyeLot:"A"}],[{id:"P1",widthIn:72,lengthIn:120}])).toThrow()});
+ it("rejects nonfinite dimensions",()=>{expect(()=>planCuts([{id:"R1",widthIn:Infinity,lengthIn:240,dyeLot:"A"}],[{id:"P1",widthIn:72,lengthIn:120}])).toThrow()});
+ it("allows rotation when requested",()=>{const p=planCuts([{id:"R1",widthIn:120,lengthIn:240,dyeLot:"A"}],[{id:"P1",widthIn:144,lengthIn:100,allowRotate:true}]);expect(p.unplaced).toEqual([])});
 });
