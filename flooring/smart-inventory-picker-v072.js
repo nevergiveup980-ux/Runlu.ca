@@ -269,7 +269,7 @@
     if (!el || !item) return;
     // Paper-edit selection is a one-tap commit to the originating draft row.
     // Native PO selection retains the detail + explicit confirmation workflow.
-    if (autoApplyOnSelect && item.selectable) {
+    if (autoApplyOnSelect && !offline && item.selectable) {
       useItem(item);
       return;
     }
@@ -326,7 +326,7 @@
     el.dispatchEvent(new Event("change", { bubbles: true }));
   }
   function useItem(item) {
-    if (!activeRow || !activeRow.isConnected || !item.selectable) return false;
+    if (offline || !activeRow || !activeRow.isConnected || !item.selectable) return false;
     setField(activeRow, "style", item.name, true);
     setField(activeRow, "colour", item.colour, true);
     setField(activeRow, "sku", item.sku || item.manufacturerRoll, false);
