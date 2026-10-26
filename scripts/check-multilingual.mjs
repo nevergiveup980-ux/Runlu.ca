@@ -51,6 +51,17 @@ const failures = [];
 for (const file of pages) {
   const rel = path.relative(root, file);
   if (excluded.has(rel) || excludedPrefixes.some(prefix => rel.startsWith(prefix))) continue;
+  // The authenticated Chinese-only private archive is not a public four-language
+  // editorial page. Verify basic indexing and login wiring, not a shared selector.
+  // noindex is a crawler hint, NOT a privacy or access-control guarantee.
+  if (rel === 'private-chronicle.html') {
+    const archive = fs.readFileSync(file, 'utf8');
+    if (!archive.includes('noindex,nofollow')) failures.push(`${rel}: missing private noindex policy`);
+    if (!archive.includes("db.auth.getUser()") || !archive.includes("runlu_private_chronicle")) {
+      failures.push(`${rel}: missing authenticated archive read contract`);
+    }
+    continue;
+  }
   // Season 2 Chinese masters may initially precede translations. Once all
   // editions exist, validate the actual route-switching navigation instead.
   if (/^wellness-season-02-\d{2}\.html$/.test(rel)) {
