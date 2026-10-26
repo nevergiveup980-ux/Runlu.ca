@@ -286,8 +286,8 @@
     el.innerHTML = `<div class="sip72detailHead"><div><span>${esc(
       item.kind,
     )}</span><h3>${esc(item.name)}</h3><p>${esc(item.colour || "No colour")}</p></div><span class="sip72availability ${
-      item.selectable ? "ok" : "no"
-    }">${item.selectable ? "AVAILABLE" : "NOT AVAILABLE"}</span></div><dl><div><dt>Roll / Stock ID</dt><dd>${esc(
+      !offline && item.selectable ? "ok" : "no"
+    }">${offline ? "CACHED · VERIFY ONLINE" : item.selectable ? "AVAILABLE" : "NOT AVAILABLE"}</span></div><dl><div><dt>Roll / Stock ID</dt><dd>${esc(
       item.roll || item.sku || "—",
     )}</dd></div><div><dt>Manufacturer Roll</dt><dd>${esc(
       item.manufacturerRoll || "—",
@@ -312,8 +312,8 @@
     )}</dd></div></dl>${holdDetails}${
       item.notes ? `<p class="sip72note">${esc(item.notes)}</p>` : ""
     }<button type="button" id="sip72use" class="action primary" ${
-      item.selectable ? "" : "disabled"
-    }>Use this inventory record</button>`;
+      !offline && item.selectable ? "" : "disabled"
+    }>${offline ? "Live connection required" : "Use this inventory record"}</button>`;
     by("sip72use")?.addEventListener("click", () => useItem(item));
     const confirm=by("sip72confirm");
     if(confirm){confirm.disabled=offline||!item.selectable;confirm.textContent=offline?"Live connection required":item.selectable?"✓ Use selected roll · Return to PO":"Record unavailable";}
