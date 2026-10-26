@@ -13,6 +13,20 @@ async function scenario(label,active,expectedOpen){
  console.log('PASS '+label);
 }
 
+async function checkCleanExitMismatch(){
+ let state={sessionId:'test',sessionOpen:true};
+ const active=[{id:'tx1',type:'Recovery',action:'restore',startedAt:'2026-10-25T00:00:00Z'}];
+ const data={read(){return state},write(_key,value){state=value;return value},
+  current(){return {raw(){return JSON.stringify({active,history:[]})}}}};
+ const window={RUNLUUniversalData:data,addEventListener(){},
+  RUNLUUniversalCrashJournal:{inspect(){return {active:0,pending:[]}}},
+  RUNLUUniversalLocalHealth:{health:async()=>({})}};
+ vm.runInNewContext(source,{window,document:{getElementById(){return null}},setTimeout,console});
+ window.RUNLUUniversalStartupGuard.markClean('pagehide');
+ assert.equal(state.sessionOpen,true,'mismatched persisted journal must not mark clean exit');
+ console.log('PASS clean exit blocked by mismatched persisted journal');
+}
+
 async function checkJournalCountMismatch(){
  let state={sessionOpen:false};
  const transactions=[0,1].map(i=>({id:'tx-'+i,type:'Recovery',action:'restore',startedAt:'2026-10-25T00:00:00Z'}));
@@ -51,5 +65,6 @@ async function checkStartupJournal(mode){
  await scenario('missing journal keeps session open',null,true);
  for(const mode of ['missing','throws','active','clear','corrupt','invalid','brokenTx','duplicateTx'])await checkStartupJournal(mode);
  await checkJournalCountMismatch();
+ await checkCleanExitMismatch();
  console.log('Startup clean exit and journal inspection: PASS');
 })().catch(e=>{console.error(e);process.exitCode=1});
