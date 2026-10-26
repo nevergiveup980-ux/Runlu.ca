@@ -11,8 +11,18 @@ export const inchesToFeet=(inch:number)=>inch/12;
 export const areaSF=(wIn:number,lIn:number)=>wIn*lIn/144;
 type Space={rollId:string;x:number;y:number;w:number;h:number;dyeLot:string};
 export function planCuts(rolls:Roll[],pieces:Piece[]):Plan {
-  for(const r of rolls) if(!(r.widthIn>0&&r.lengthIn>0&&r.dyeLot.trim())) throw Error("Invalid roll");
-  for(const p of pieces) if(!(p.widthIn>0&&p.lengthIn>0)) throw Error("Invalid piece");
+  const rollIds=new Set<string>(),pieceIds=new Set<string>();
+  for(const r of rolls){
+    if(!r.id?.trim()||rollIds.has(r.id))throw Error("Duplicate or empty roll ID");
+    rollIds.add(r.id);
+    if(!Number.isFinite(r.widthIn)||!Number.isFinite(r.lengthIn)||r.widthIn<=0||r.lengthIn<=0||!r.dyeLot?.trim())throw Error("Invalid roll");
+  }
+  for(const p of pieces){
+    if(!p.id?.trim()||pieceIds.has(p.id))throw Error("Duplicate or empty piece ID");
+    pieceIds.add(p.id);
+    if(!Number.isFinite(p.widthIn)||!Number.isFinite(p.lengthIn)||p.widthIn<=0||p.lengthIn<=0)throw Error("Invalid piece");
+  }
+  if(!rolls.length||!pieces.length)throw Error("At least one roll and one piece are required");
   const spaces:Space[]=rolls.map(r=>({rollId:r.id,x:0,y:0,w:r.widthIn,h:r.lengthIn,dyeLot:r.dyeLot}));
   const placements:Placement[]=[]; const unplaced:string[]=[];
   const ordered=[...pieces].sort((a,b)=>b.widthIn*b.lengthIn-a.widthIn*a.lengthIn);
