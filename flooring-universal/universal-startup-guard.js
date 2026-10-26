@@ -24,7 +24,9 @@ function markClean(reason){
  // A pagehide is not a clean exit while a recovery transaction remains unresolved.
  let active;
  try{active=window.RUNLUUniversalCrashJournal?.inspect?.()?.active}catch(_){active=null}
- if(!journalRawValid()||active===undefined||active===null||active>0)return s;
+ let storedActive=null;
+ try{const adapter=data().current();if(typeof adapter?.raw==='function'){const raw=adapter.raw('runlu_flooring_universal_u2_crash_journal');storedActive=raw===null||raw===undefined?0:JSON.parse(raw).active.length}}catch(_){}
+ if(!journalRawValid()||!Number.isInteger(active)||active!==0||storedActive!==0)return s;
  return write({...s,sessionOpen:false,cleanExitAt:new Date().toISOString(),cleanExitReason:reason||'pagehide'});
 }
 function markOpen(prior){
