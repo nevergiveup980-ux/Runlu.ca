@@ -1,9 +1,10 @@
 // One scheduled invocation, with a bounded number of retry attempts.
 // Caller owns the external schedule; no timers or background loops here.
 import {runDeliveryRateLimitMaintenance} from "./delivery-rate-limit-maintenance.mjs";
-export async function runDeliveryRateLimitMaintenanceWithRetry({maxAttempts=2,onAttempt,...options}){
+export async function runDeliveryRateLimitMaintenanceWithRetry({maxAttempts=2,onAttempt,shouldRetry=()=>true,...options}){
  if(!Number.isSafeInteger(maxAttempts)||maxAttempts<1||maxAttempts>3)throw Error("Invalid maintenance retry limit");
  if(onAttempt!==undefined&&typeof onAttempt!=="function")throw Error("Invalid maintenance attempt observer");
+ if(typeof shouldRetry!=="function")throw Error("Invalid maintenance retry predicate");
  let lastError;
  for(let attempt=1;attempt<=maxAttempts;attempt++){
   try{
@@ -13,6 +14,7 @@ export async function runDeliveryRateLimitMaintenanceWithRetry({maxAttempts=2,on
   }catch(error){
    lastError=error;
    onAttempt?.({attempt,ok:false});
+   if(!shouldRetry(error))throw error;
   }
  }
  throw lastError;
