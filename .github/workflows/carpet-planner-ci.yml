@@ -1,0 +1,25 @@
+name: Carpet Planner Checks
+on:
+  push:
+    branches: [feature/carpet-cut-planner-mvp]
+    paths:
+      - 'flooring/carpet-cut-planner/**'
+      - '.github/workflows/carpet-planner-ci.yml'
+  pull_request:
+    paths:
+      - 'flooring/carpet-cut-planner/**'
+      - '.github/workflows/carpet-planner-ci.yml'
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: flooring/carpet-cut-planner
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test
