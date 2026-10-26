@@ -22,13 +22,23 @@ zh:{intro:"全球知识，本地适用。",search:"搜索知识条目...",allReg
 fr:{intro:"Savoirs mondiaux, pertinence locale.",search:"Rechercher...",allRegions:"Toutes les régions",allCategories:"Toutes les catégories",count:n=>n+" fiches",source:"Référence",empty:"Aucun résultat.",notice:"Démonstration Phase 0 : résumés originaux et liens de référence, sans jeux de données importés. Vérifier les licences avant toute réutilisation."},
 es:{intro:"Conocimiento global, relevancia local.",search:"Buscar...",allRegions:"Todas las regiones",allCategories:"Todas las categorías",count:n=>n+" fichas",source:"Referencia",empty:"Sin resultados.",notice:"Demostración Phase 0: resúmenes originales y enlaces de referencia, sin importar conjuntos de datos. Verificar las licencias antes de reutilizar."}
 };
-const entries=[
-{id:"RK-0001",category:"construction",region:"global",title:{en:"Engineered wood flooring",zh:"实木复合地板",fr:"Parquet contrecollé",es:"Suelo de madera multicapa"},summary:{en:"A flooring category using a real wood wear layer over a constructed core. Installation and performance requirements depend on the product and local standards.",zh:"由实木面层与结构基材组成的地板类别。安装与性能要求取决于具体产品及当地标准。",fr:"Un revêtement avec couche d'usure en bois véritable sur une âme construite. Les exigences varient selon le produit et les normes locales.",es:"Pavimento con capa de madera real sobre un núcleo estructurado. Los requisitos dependen del producto y las normas locales."},source:"https://www.nwfa.org/"},
-{id:"RK-0002",category:"economy",region:"global",title:{en:"World development indicators",zh:"世界发展指标",fr:"Indicateurs du développement mondial",es:"Indicadores del desarrollo mundial"},summary:{en:"The World Bank publishes indicators for comparing development and economic conditions across economies; check each dataset's metadata and license.",zh:"世界银行发布用于比较不同经济体发展与经济状况的指标；使用前应核对具体数据集的元数据及许可。",fr:"La Banque mondiale publie des indicateurs comparatifs; vérifier les métadonnées et la licence de chaque jeu de données.",es:"El Banco Mundial publica indicadores comparativos; revise los metadatos y la licencia de cada conjunto de datos."},source:"https://data.worldbank.org/"},
-{id:"RK-0003",category:"research",region:"global",title:{en:"Open scholarly metadata",zh:"开放学术元数据",fr:"Métadonnées scientifiques ouvertes",es:"Metadatos académicos abiertos"},summary:{en:"OpenAlex connects scholarly works, authors, institutions and topics. Open metadata does not imply unrestricted access to full-text publications.",zh:"OpenAlex 关联学术成果、作者、机构和主题。开放元数据不代表论文全文可以无限制使用。",fr:"OpenAlex relie travaux, auteurs, institutions et sujets. Les métadonnées ouvertes n'autorisent pas automatiquement la réutilisation des textes intégraux.",es:"OpenAlex conecta obras, autores, instituciones y temas. Los metadatos abiertos no autorizan automáticamente reutilizar textos completos."},source:"https://docs.openalex.org/"},
-{id:"RK-0004",category:"economy",region:"europe",title:{en:"European statistical indicators",zh:"欧洲统计指标",fr:"Indicateurs statistiques européens",es:"Indicadores estadísticos europeos"},summary:{en:"Eurostat provides European statistics across many subjects. Reuse conditions and third-party exceptions should be checked for each dataset.",zh:"Eurostat 提供多个领域的欧洲统计资料。应逐个数据集核查再利用条件及第三方例外。",fr:"Eurostat fournit des statistiques européennes. Vérifier les conditions de réutilisation et les exceptions.",es:"Eurostat ofrece estadísticas europeas. Compruebe las condiciones de reutilización y las excepciones."},source:"https://ec.europa.eu/eurostat/"},
-{id:"RK-0005",category:"careers",region:"north-america",title:{en:"Occupational information (United States)",zh:"美国职业信息",fr:"Information professionnelle (États-Unis)",es:"Información ocupacional (Estados Unidos)"},summary:{en:"O*NET describes occupations and skills for the United States. Its regional applicability should not be assumed for other countries.",zh:"O*NET 提供美国职业与技能信息，不应直接假定适用于其他国家。",fr:"O*NET décrit les métiers et compétences aux États-Unis; ne pas extrapoler automatiquement à d'autres pays.",es:"O*NET describe ocupaciones y habilidades de Estados Unidos; no extrapolar automáticamente a otros países."},source:"https://www.onetcenter.org/"}
-];
+// Public dataset only. Draft and inbox records must never be rendered here.
+let entries=[];
+async function loadPublished(){
+ try{
+  const response=await fetch("./data/published.json",{cache:"no-store"});
+  if(!response.ok)throw new Error("HTTP "+response.status);
+  const dataset=await response.json();
+  if(!dataset||!Array.isArray(dataset.entries))throw new Error("Invalid dataset");
+  entries=dataset.entries.filter(e=>e.status==="published"&&e.review?.facts_verified===true&&e.review?.license_verified===true&&e.review?.translations_verified===true&&Array.isArray(e.sources)&&e.sources.length>0&&e.sources.every(s=>s.license_status==="permitted")&&e.titles?.en&&e.summaries?.en);
+  render();
+ }catch(err){
+  entries=[];
+  $("count").textContent="Unable to load published knowledge records.";
+  $("results").replaceChildren();
+  console.error("RUNLU Knowledge dataset error",err);
+ }
+}
 const regions={global:{en:"Global",zh:"全球",fr:"Monde",es:"Global"},europe:{en:"Europe",zh:"欧洲",fr:"Europe",es:"Europa"},"north-america":{en:"North America",zh:"北美",fr:"Amérique du Nord",es:"Norteamérica"}};
 const categories={construction:{en:"Construction",zh:"建筑与地材",fr:"Construction",es:"Construcción"},economy:{en:"Economy",zh:"经济",fr:"Économie",es:"Economía"},research:{en:"Research",zh:"科研",fr:"Recherche",es:"Investigación"},careers:{en:"Careers",zh:"职业",fr:"Métiers",es:"Profesiones"}};
 const $=id=>document.getElementById(id);const safe=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -36,10 +46,10 @@ function render(){const lang=$("lang").value,t=UI[lang],region=$("region").value
 $("intro").textContent=t.intro;$("search").placeholder=t.search;$("notice").textContent=t.notice;
 const setOptions=(id,all,map,selected)=>{$(id).innerHTML='<option value="">'+safe(all)+'</option>'+Object.keys(map).map(k=>'<option value="'+safe(k)+'">'+safe(map[k][lang])+'</option>').join("");$(id).value=selected};
 setOptions("region",t.allRegions,regions,region);setOptions("category",t.allCategories,categories,category);
-const hits=entries.filter(e=>(!region||e.region===region)&&(!category||e.category===category)&&(!q||Object.values(e.title).concat(Object.values(e.summary),e.id).join(" ").toLocaleLowerCase().includes(q)));
+const hits=entries.filter(e=>(!region||e.scope?.type==="global"&&region==="global"||e.scope?.codes?.includes(region))&&(!category||e.category===category)&&(!q||Object.values(e.titles||{}).concat(Object.values(e.summaries||{}),e.id).join(" ").toLocaleLowerCase().includes(q)));
 $("count").textContent=t.count(hits.length);
-$("results").innerHTML=hits.length?hits.map(e=>'<article><div class="meta">'+safe(e.id)+'</div><h2>'+safe(e.title[lang])+'</h2><div class="meta"><span class="tag">'+safe(categories[e.category][lang])+'</span><span class="tag">'+safe(regions[e.region][lang])+'</span></div><p>'+safe(e.summary[lang])+'</p><a href="'+safe(e.source)+'" target="_blank" rel="noopener noreferrer">'+safe(t.source)+'</a></article>').join(""):'<p>'+safe(t.empty)+'</p>';
+$("results").innerHTML=hits.length?hits.map(e=>'<article><div class="meta">'+safe(e.id)+'</div><h2>'+safe(e.titles[lang]||e.titles.en)+'</h2><div class="meta"><span class="tag">'+safe(categories[e.category]?.[lang]||e.category)+'</span><span class="tag">'+safe(e.scope?.type==="global"?regions.global[lang]:(e.scope?.codes||[]).join(", "))+'</span></div><p>'+safe(e.summaries[lang]||e.summaries.en)+'</p><a href="'+safe(e.sources[0].url)+'" target="_blank" rel="noopener noreferrer">'+safe(t.source)+'</a></article>').join(""):'<p>'+safe(t.empty)+'</p>';
 document.documentElement.lang=lang==="zh"?"zh-Hans":lang;
 }
-["lang","region","category"].forEach(id=>$(id).addEventListener("change",render));$("search").addEventListener("input",render);render();
+["lang","region","category"].forEach(id=>$(id).addEventListener("change",render));$("search").addEventListener("input",render);render();loadPublished();
 </script></body></html>
