@@ -10,7 +10,7 @@ export const sfToSyd=(sf:number)=>sf/9;
 export const inchesToFeet=(inch:number)=>inch/12;
 export const areaSF=(wIn:number,lIn:number)=>wIn*lIn/144;
 type Space={rollId:string;x:number;y:number;w:number;h:number;dyeLot:string};
-export function planCuts(rolls:Roll[],pieces:Piece[]):Plan {
+export function planCuts(rolls:Roll[],pieces:Piece[],order: 'area'|'length'|'width'|'input'='area'):Plan {
   const rollIds=new Set<string>(),pieceIds=new Set<string>();
   for(const r of rolls){
     if(!r.id?.trim()||rollIds.has(r.id))throw Error("Duplicate or empty roll ID");
@@ -25,7 +25,10 @@ export function planCuts(rolls:Roll[],pieces:Piece[]):Plan {
   if(!rolls.length||!pieces.length)throw Error("At least one roll and one piece are required");
   const spaces:Space[]=rolls.map(r=>({rollId:r.id,x:0,y:0,w:r.widthIn,h:r.lengthIn,dyeLot:r.dyeLot}));
   const placements:Placement[]=[]; const unplaced:string[]=[];
-  const ordered=[...pieces].sort((a,b)=>b.widthIn*b.lengthIn-a.widthIn*a.lengthIn);
+  const ordered=[...pieces];
+  if(order==='area')ordered.sort((a,b)=>b.widthIn*b.lengthIn-a.widthIn*a.lengthIn);
+  else if(order==='length')ordered.sort((a,b)=>b.lengthIn-a.lengthIn);
+  else if(order==='width')ordered.sort((a,b)=>b.widthIn-a.widthIn);
   for(const p of ordered){
     let best:{i:number;w:number;h:number;score:number}|undefined;
     for(let i=0;i<spaces.length;i++){
