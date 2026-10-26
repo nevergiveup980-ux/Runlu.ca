@@ -19,7 +19,7 @@ $('addRoll').onclick=()=>{rolls.push({id:'R'+(rolls.length+1),w:12,l:30,lot:'A'}
 $('addPiece').onclick=()=>{pieces.push({id:'Room '+(pieces.length+1),w:10,l:10,lot:'A',rotate:false});render()};
 function calculate(){
 if(!rolls.length||!pieces.length)throw Error('Add at least one roll and one cut piece.');
-for(const [kind,items] of [['Roll',rolls],['Piece',pieces]]){const ids=new Set();for(const o of items){if(!o.id.trim()||ids.has(o.id))throw Error(kind+' IDs must be unique and non-empty.');ids.add(o.id);if(!Number.isFinite(o.w)||!Number.isFinite(o.l)||o.w<=0||o.l<=0)throw Error(kind+' dimensions must be positive numbers.');if(kind==='Roll'&&!o.lot.trim())throw Error('Every roll needs a Dyelot.');}}
+for(const [kind,items] of [['Roll',rolls],['Piece',pieces]]){const ids=new Set();for(const o of items){if(typeof o.id!=='string'||!o.id.trim()||ids.has(o.id))throw Error(kind+' IDs must be unique and non-empty.');ids.add(o.id);if(!Number.isFinite(o.w)||!Number.isFinite(o.l)||o.w<=0||o.l<=0)throw Error(kind+' dimensions must be positive numbers.');if(typeof o.lot!=='string'||(kind==='Roll'&&!o.lot.trim()))throw Error('Every roll needs a Dyelot.');}}
 const spaces=rolls.map(r=>({roll:r.id,lot:r.lot,x:0,y:0,w:r.w,h:r.l}));
 const placed=[],unplaced=[];
 for(const p of [...pieces].sort((a,b)=>b.w*b.l-a.w*a.l)){
@@ -50,6 +50,6 @@ $('results').innerHTML=html;
 $('calculate').onclick=show;
 $('save').onclick=()=>{const blob=new Blob([JSON.stringify({version:1,rolls,pieces},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='runlu-carpet-project.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
 $('loadButton').onclick=()=>$('load').click();
-$('load').onchange=async e=>{try{const o=JSON.parse(await e.target.files[0].text());if(o.version!==1||!Array.isArray(o.rolls)||!Array.isArray(o.pieces))throw Error('Unsupported project file');rolls=o.rolls;pieces=o.pieces;render();show()}catch(err){alert(err.message)}};
+$('load').onchange=async e=>{try{const o=JSON.parse(await e.target.files[0].text());if(o.version!==1||!Array.isArray(o.rolls)||!Array.isArray(o.pieces))throw Error('Unsupported project file');const previousRolls=rolls,previousPieces=pieces;rolls=o.rolls;pieces=o.pieces;try{calculate()}catch(validationError){rolls=previousRolls;pieces=previousPieces;throw validationError}render();show()}catch(err){alert(err.message)}};
 $('print').onclick=()=>{show();window.print()};render();show();
 </script></body></html>
