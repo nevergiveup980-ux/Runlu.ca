@@ -582,6 +582,18 @@
           error?.message || error,
         );
     }
+    // A refresh may replace the inventory or change connectivity.
+    // Never leave a previously selected record or an enabled confirmation stale.
+    selectedId = "";
+    const confirm = by("sip72confirm");
+    if (confirm) {
+      confirm.disabled = true;
+      confirm.textContent = offline ? "Live connection required" : "Choose a roll above";
+    }
+    const detail = by("sip72detail");
+    if (detail) {
+      detail.innerHTML = '<p class="sip72intro">Select an inventory record to inspect current Warehouse OS details.</p>';
+    }
     setSync();
     if (by("sip72") && !by("sip72").hidden) renderResults();
   }
