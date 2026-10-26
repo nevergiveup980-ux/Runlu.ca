@@ -20,6 +20,8 @@ jobs:
           node-version: '20'
       - name: Validate knowledge records
         run: node knowledge/scripts/validate.cjs
+      - name: Check publication safety gate
+        run: node knowledge/scripts/check-publication.cjs
       - name: Test knowledge ID allocation
         run: node knowledge/scripts/test-allocate.cjs
       - name: Test knowledge version archives
