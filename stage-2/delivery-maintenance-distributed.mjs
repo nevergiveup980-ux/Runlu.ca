@@ -24,7 +24,7 @@ export async function runDeliveryMaintenanceDistributed({pool,...options}){
   if(!lock.rows[0].acquired)return Object.freeze({ok:false,skipped:true,reason:"already_running_elsewhere"});
   acquired=true;
   // Maintenance queries use the same checked-out connection as the lock.
-  return await runDeliveryRateLimitMaintenanceWithRetry({...options,pool:guardedClient,maxAttempts:connectionLost?1:options.maxAttempts});
+  return await runDeliveryRateLimitMaintenanceWithRetry({...options,pool:guardedClient,shouldRetry:error=>!connectionLost&&(options.shouldRetry?.(error)??true)});
  }finally{
   try{
    if(acquired&&!connectionLost){
