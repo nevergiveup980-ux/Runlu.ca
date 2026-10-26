@@ -544,21 +544,30 @@
       const c = await client();
       const session = await recoverWarehouseSession(c);
       if (!session) throw new Error("Warehouse OS sign-in was not found");
-      const res = await c
-        .from("warehouse_records")
-        .select("dataset_key,record_id,payload,version,updated_at")
-        .in("dataset_key", DATASETS)
-        .is("deleted_at", null)
-        .limit(1000);
-      if (res.error) throw res.error;
-      buildInventory(Array.isArray(res.data) ? res.data : []);
+      const rows = [];
+      const pageSize = 500;
+      for (let offset = 0; ; offset += pageSize) {
+        const res = await c
+          .from("warehouse_records")
+          .select("dataset_key,record_id,payload,version,updated_at")
+          .in("dataset_key", DATASETS)
+          .is("deleted_at", null)
+          .order("dataset_key", { ascending: true })
+          .order("record_id", { ascending: true })
+          .range(offset, offset + pageSize - 1);
+        if (res.error) throw res.error;
+        const page = Array.isArray(res.data) ? res.data : [];
+        rows.push(...page);
+        if (page.length < pageSize) break;
+      }
+      buildInventory(rows);
       offline = false;
       connectionMessage = "";
       lastSync = new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
       });
-      writeCache({ rows: res.data, lastSync });
+      writeCache({ rows, lastSync });
     } catch (error) {
       const cache = readCache();
       if (cache?.rows) buildInventory(cache.rows);
