@@ -14,7 +14,7 @@ export function comparePlans(rolls:Roll[],pieces:Piece[]):Scenario[]{
   const plan=planCuts(rolls,pieces,c.order),key=signature(plan);
   if(seen.has(key))continue;seen.add(key);
   const feasible=plan.unplaced.length===0;
-  results.push({name:c.name,plan,feasible,score:feasible?plan.allocatedAreaSF:Number.POSITIVE_INFINITY});
+  results.push({name:c.name,plan,feasible,score:plan.allocatedAreaSF});
  }
- return results.sort((a,b)=>Number(b.feasible)-Number(a.feasible)||a.score-b.score);
+ return results.sort((a,b)=>Number(b.feasible)-Number(a.feasible)||a.plan.unplaced.length-b.plan.unplaced.length||a.score-b.score);
 }
