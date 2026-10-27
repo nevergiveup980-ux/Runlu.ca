@@ -11,7 +11,6 @@ if(!r.review?.facts_verified||!r.review?.license_verified||!r.review?.translatio
 const folder=path.join(root,"history",r.id),name="v"+String(r.version).padStart(4,"0")+".json";
 fs.mkdirSync(folder,{recursive:true});
 const file=path.join(folder,name);
-if(fs.existsSync(file))throw Error("Snapshot already exists; refusing overwrite");
 const previous=fs.readdirSync(folder).filter(x=>/^v\d+\.json$/.test(x)).map(x=>Number(x.slice(1,-5)));
 const log=path.join(folder,"manifest.jsonl");
 const snapshots=fs.readdirSync(folder).filter(x=>/^v\d+\.json$/.test(x));
@@ -28,6 +27,7 @@ for(const event of events){
  if(digest!==event.sha256)throw Error("Archive hash mismatch: manual recovery required");
 }
 if(snapshots.some(name=>!listed.has(name)))throw Error("Unlisted archive snapshot: manual recovery required");
+if(fs.existsSync(file))throw Error("Snapshot already exists; refusing overwrite");
 if(previous.length&&r.version!==Math.max(...previous)+1)throw Error("Version must increment by exactly one");
 if(!previous.length&&r.version!==1)throw Error("First archived version must be 1");
 const content=JSON.stringify(r,null,2)+"\n";
