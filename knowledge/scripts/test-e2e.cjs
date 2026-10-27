@@ -15,10 +15,14 @@ try{
  fs.writeFileSync(intake,JSON.stringify(sample));
  assert(run("allocate.cjs",[intake,allocated]).status===0,"Allocation failed");
  const record=JSON.parse(fs.readFileSync(allocated,"utf8"));
- assert(record.id==="RK-0002"&&record.status==="draft","Incorrect allocated record");
+ const occupied=JSON.parse(fs.readFileSync(path.join(tmp,"data","records.json"),"utf8")).map(r=>Number(r.id.slice(3)));
+ const expected="RK-"+String(Math.max(0,...occupied)+1).padStart(4,"0");
+ assert(record.id===expected&&record.status==="draft","Incorrect allocated record");
  record.status="approved";record.review={facts_verified:true,license_verified:true,translations_verified:true,reviewer:"Fixture reviewer",reviewed_at:"2026-10-26"};
  fs.writeFileSync(allocated,JSON.stringify(record));
  assert(run("archive.cjs",[allocated,"Initial fixture","Fixture reviewer"]).status===0,"Archive failed");
+ const history=path.join(tmp,"history",record.id,"v0001.json");
+ assert(fs.existsSync(history),"Archive snapshot missing");
  assert(run("archive.cjs",[allocated,"Duplicate","Fixture reviewer"]).status!==0,"Duplicate archive was accepted");
  const publicData=JSON.parse(fs.readFileSync(path.join(tmp,"data","published.json"),"utf8"));
  record.status="published";record.sources[0].license_status="permitted";
