@@ -4,6 +4,7 @@ import {runDeliveryRateLimitMaintenance} from "./delivery-rate-limit-maintenance
 export async function runDeliveryRateLimitMaintenanceWithRetry({maxAttempts=2,onAttempt,shouldRetry=()=>true,...options}){
  if(!Number.isSafeInteger(maxAttempts)||maxAttempts<1||maxAttempts>3)throw Error("Invalid maintenance retry limit");
  if(onAttempt!==undefined&&typeof onAttempt!=="function")throw Error("Invalid maintenance attempt observer");
+ if(shouldRetry!==undefined&&typeof shouldRetry!=="function")throw Error("Invalid maintenance retry predicate");
  if(typeof shouldRetry!=="function")throw Error("Invalid maintenance retry predicate");
  let lastError;
  for(let attempt=1;attempt<=maxAttempts;attempt++){
@@ -14,6 +15,7 @@ export async function runDeliveryRateLimitMaintenanceWithRetry({maxAttempts=2,on
   }catch(error){
    lastError=error;
    onAttempt?.({attempt,ok:false});
+   if(shouldRetry && !shouldRetry(error,attempt))throw error;
    if(!shouldRetry(error))throw error;
   }
  }
