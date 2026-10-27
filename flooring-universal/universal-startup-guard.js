@@ -60,9 +60,15 @@ async function inspect(prior){
 async function boot(){
  const prior=previous(),hasWorkspace=!!data().read(WS,null)?.company?.organizationId;
  let startupRecoveryPoint=null;
- if(prior?.sessionOpen&&hasWorkspace)startupRecoveryPoint=window.RUNLUUniversalLocalHealth?.capture?.('Startup Guard · prior session ended unexpectedly',{priorSessionId:prior.sessionId||null,priorOpenedAt:prior.openedAt||null})||null;
+ if(prior?.sessionOpen&&hasWorkspace){
+  try{startupRecoveryPoint=await window.RUNLUUniversalLocalHealth?.capture?.('Startup Guard · prior session ended unexpectedly',{priorSessionId:prior.sessionId||null,priorOpenedAt:prior.openedAt||null})||null}catch(_){startupRecoveryPoint=null}
+ }
  markOpen(prior);
  startup={...(await inspect(prior)),recoveryPointCaptured:!!startupRecoveryPoint};
+ if(prior?.sessionOpen&&hasWorkspace&&!startupRecoveryPoint){
+  const issue={code:'STARTUP_RECOVERY_POINT_FAILED',severity:'critical',detail:'Previous session ended unexpectedly and a startup recovery point could not be captured'};
+  startup.issues.push(issue);startup.critical.push(issue);startup.blocked=true;
+ }
  const s=previous()||{};write({...s,lastInspection:{checkedAt:startup.checkedAt,blocked:startup.blocked,priorUnclean:startup.priorUnclean,recoveryPointCaptured:startup.recoveryPointCaptured,issueCodes:startup.issues.map(x=>x.code)}});
  renderBanner();
  return startup;
