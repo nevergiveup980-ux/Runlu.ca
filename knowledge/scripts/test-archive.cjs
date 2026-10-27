@@ -30,5 +30,11 @@ try{
  record.version=3;fs.writeFileSync(input,JSON.stringify(record));
  const tamperedResult=run();
  if(tamperedResult.status===0||!tamperedResult.stderr.includes("Archive hash mismatch"))throw Error("Tampered archive was not specifically detected: "+tamperedResult.stderr);
+ // Duplicate manifest events must be rejected even when counts match.
+ const folder=path.join(temp,"history","RK-9999");
+ const lines=fs.readFileSync(path.join(folder,"manifest.jsonl"),"utf8").trim().split("\n");
+ fs.writeFileSync(path.join(folder,"manifest.jsonl"),lines[0]+"\n"+lines[0]+"\n");
+ const duplicateResult=run();
+ if(duplicateResult.status===0||!duplicateResult.stderr.includes("Duplicate archive manifest entry"))throw Error("Duplicate manifest was not specifically rejected: "+duplicateResult.stderr);
  console.log("Archive smoke tests passed.");
 }finally{fs.rmSync(temp,{recursive:true,force:true})}
