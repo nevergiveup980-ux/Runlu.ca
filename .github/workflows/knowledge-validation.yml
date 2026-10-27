@@ -26,3 +26,5 @@ jobs:
         run: node knowledge/scripts/test-allocate.cjs
       - name: Test knowledge version archives
         run: node knowledge/scripts/test-archive.cjs
+      - name: Test end-to-end editorial lifecycle
+        run: node knowledge/scripts/test-e2e.cjs
