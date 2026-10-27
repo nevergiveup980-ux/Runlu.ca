@@ -17,7 +17,7 @@ export function createDeliveryNodeHandler({handleDelivery,maxBodyBytes=4096,body
    if(req.method!=="POST")descriptor=json(405,"method_not_allowed");
    else if(path!=="/stage/private/download"&&path!=="/stage/private/revoke")descriptor=json(404,"not_found");
    else if(allowedOrigin!==undefined&&!enforceDeliveryOrigin(req,{allowedOrigin}))descriptor=json(403,"forbidden_origin");
-   else if(rateLimiter&&!rateLimiter.allow(await getTrustedRateKey(req)))descriptor=json(429,"rate_limited");
+   else if(rateLimiter&&!(await rateLimiter.allow(await getTrustedRateKey(req))))descriptor=json(429,"rate_limited");
    else{
     const body=await readDeliveryJsonBody(req,{maxBytes:maxBodyBytes,timeoutMs:bodyTimeoutMs});
     descriptor=await handleDelivery({method:req.method,path,body,headers:req.headers});
