@@ -15,10 +15,19 @@ if(fs.existsSync(file))throw Error("Snapshot already exists; refusing overwrite"
 const previous=fs.readdirSync(folder).filter(x=>/^v\d+\.json$/.test(x)).map(x=>Number(x.slice(1,-5)));
 if(previous.length&&r.version!==Math.max(...previous)+1)throw Error("Version must increment by exactly one");
 if(!previous.length&&r.version!==1)throw Error("First archived version must be 1");
+const log=path.join(folder,"manifest.jsonl");
+const snapshots=fs.readdirSync(folder).filter(x=>/^v\d+\.json$/.test(x));
+const events=fs.existsSync(log)?fs.readFileSync(log,"utf8").trim().split("\n").filter(Boolean).map(line=>JSON.parse(line)):[];
+if(snapshots.length!==events.length)throw Error("Archive/manifest mismatch: manual recovery required");
+for(const event of events){
+ const snapshot=path.join(folder,event.filename);
+ if(!/^v\d+\.json$/.test(event.filename||"")||!fs.existsSync(snapshot))throw Error("Manifest snapshot missing");
+ const digest=crypto.createHash("sha256").update(fs.readFileSync(snapshot)).digest("hex");
+ if(digest!==event.sha256)throw Error("Archive hash mismatch: manual recovery required");
+}
 const content=JSON.stringify(r,null,2)+"\n";
 const hash=crypto.createHash("sha256").update(content).digest("hex");
 const event={id:r.id,version:r.version,filename:name,sha256:hash,archived_at:new Date().toISOString(),reason:reason.trim(),reviewer:reviewer.trim()};
-const log=path.join(folder,"manifest.jsonl");
 fs.writeFileSync(file,content,{flag:"wx"});
 fs.appendFileSync(log,JSON.stringify(event)+"\n");
 console.log("Archived "+r.id+" v"+r.version+" sha256="+hash);
