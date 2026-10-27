@@ -16,7 +16,8 @@ test("invalid lock result discards ambiguous connection",async()=>{
  assert.deepEqual(released,[true]);
 });
 test("failed advisory unlock destroys session rather than pooling a held lock",async()=>{
- const {pool,released}=mockPool(async sql=>{
+ const {pool,released}=mockPool(async request=>{
+  const sql=typeof request==="string"?request:request.text;
   if(sql.includes("pg_try_advisory_lock"))return {rows:[{acquired:true}]};
   if(sql.includes("pg_advisory_unlock"))throw Error("connection lost during unlock");
   return {rows:[]};
@@ -25,7 +26,8 @@ test("failed advisory unlock destroys session rather than pooling a held lock",a
  assert.deepEqual(released,[true]);
 });
 test("unexpected unlock result destroys session",async()=>{
- const {pool,released}=mockPool(async sql=>{
+ const {pool,released}=mockPool(async request=>{
+  const sql=typeof request==="string"?request:request.text;
   if(sql.includes("pg_try_advisory_lock"))return {rows:[{acquired:true}]};
   if(sql.includes("pg_advisory_unlock"))return {rows:[{released:false}]};
   return {rows:[]};
@@ -34,7 +36,8 @@ test("unexpected unlock result destroys session",async()=>{
  assert.deepEqual(released,[true]);
 });
 test("successful unlock returns clean session to pool",async()=>{
- const {pool,released}=mockPool(async sql=>{
+ const {pool,released}=mockPool(async request=>{
+  const sql=typeof request==="string"?request:request.text;
   if(sql.includes("pg_try_advisory_lock"))return {rows:[{acquired:true}]};
   if(sql.includes("pg_advisory_unlock"))return {rows:[{released:true}]};
   return {rows:[]};
