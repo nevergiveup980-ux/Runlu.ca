@@ -24,18 +24,20 @@ es:{intro:"Conocimiento global, relevancia local.",search:"Buscar...",allRegions
 };
 // Public dataset only. Draft and inbox records must never be rendered here.
 let entries=[];
+let loadError=false;
 async function loadPublished(){
  try{
   const response=await fetch("./data/published.json",{cache:"no-store"});
   if(!response.ok)throw new Error("HTTP "+response.status);
   const dataset=await response.json();
   if(!dataset||!Array.isArray(dataset.entries))throw new Error("Invalid dataset");
-  entries=dataset.entries.filter(e=>e.status==="published"&&e.review?.facts_verified===true&&e.review?.license_verified===true&&e.review?.translations_verified===true&&Array.isArray(e.sources)&&e.sources.length>0&&e.sources.every(s=>s.license_status==="permitted")&&e.titles?.en&&e.summaries?.en);
+  loadError=false;
+  entries=dataset.entries.filter(e=>e.status==="published"&&e.review?.facts_verified===true&&e.review?.license_verified===true&&e.review?.translations_verified===true&&Boolean(e.review?.reviewer)&&/^\d{4}-\d{2}-\d{2}$/.test(e.review?.reviewed_at||"")&&["en","zh","fr","es"].every(l=>Boolean(e.titles?.[l]&&e.summaries?.[l]))&&Array.isArray(e.sources)&&e.sources.length>0&&e.sources.every(s=>s.license_status==="permitted")&&e.titles?.en&&e.summaries?.en);
   render();
  }catch(err){
   entries=[];
-  $("count").textContent="Unable to load published knowledge records.";
-  $("results").replaceChildren();
+  loadError=true;
+  render();
   console.error("RUNLU Knowledge dataset error",err);
  }
 }
@@ -46,6 +48,7 @@ function render(){const lang=$("lang").value,t=UI[lang],region=$("region").value
 $("intro").textContent=t.intro;$("search").placeholder=t.search;$("notice").textContent=t.notice;
 const setOptions=(id,all,map,selected)=>{$(id).innerHTML='<option value="">'+safe(all)+'</option>'+Object.keys(map).map(k=>'<option value="'+safe(k)+'">'+safe(map[k][lang])+'</option>').join("");$(id).value=selected};
 setOptions("region",t.allRegions,regions,region);setOptions("category",t.allCategories,categories,category);
+if(loadError){$("count").textContent="Unable to load published knowledge records."; $("results").textContent="Knowledge data could not be loaded. Please try again later.";return}
 const hits=entries.filter(e=>(!region||e.scope?.type==="global"&&region==="global"||e.scope?.codes?.includes(region))&&(!category||e.category===category)&&(!q||Object.values(e.titles||{}).concat(Object.values(e.summaries||{}),e.id).join(" ").toLocaleLowerCase().includes(q)));
 $("count").textContent=t.count(hits.length);
 $("results").innerHTML=hits.length?hits.map(e=>'<article><div class="meta">'+safe(e.id)+'</div><h2>'+safe(e.titles[lang]||e.titles.en)+'</h2><div class="meta"><span class="tag">'+safe(categories[e.category]?.[lang]||e.category)+'</span><span class="tag">'+safe(e.scope?.type==="global"?regions.global[lang]:(e.scope?.codes||[]).join(", "))+'</span></div><p>'+safe(e.summaries[lang]||e.summaries.en)+'</p><a href="'+safe(e.sources[0].url)+'" target="_blank" rel="noopener noreferrer">'+safe(t.source)+'</a></article>').join(""):'<p>'+safe(t.empty)+'</p>';
