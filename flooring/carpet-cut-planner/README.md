@@ -58,3 +58,18 @@ RUNLU Field Calculator is an already-published field calculation app with a carp
 6. Provide plan provenance and a cut list with source roll ID, start offset, cut size, direction, and remaining material.
 
 **Release guardrail:** Current prototype is a demo, not a verified installation plan or sellable optimization product.
+
+## Browser preview build
+
+From `flooring/carpet-cut-planner`:
+
+```sh
+npm install
+npm run typecheck
+npm test
+npm run build
+```
+
+Open `index.html` after the build; it loads `dist/browser.js` and uses the **same TypeScript engine** as the tests. The development branch CI is configured to upload `index.html` and `dist/browser.js` as the `carpet-planner-preview` artifact after successful checks.
+
+The UI now shows candidate scenario summaries. The current SVG displays the highest-ranked candidate only. Do not publish the standalone HTML without its generated `dist/browser.js`. Deployment and browser acceptance remain unverified.
