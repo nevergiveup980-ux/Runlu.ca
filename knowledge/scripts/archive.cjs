@@ -17,12 +17,17 @@ const log=path.join(folder,"manifest.jsonl");
 const snapshots=fs.readdirSync(folder).filter(x=>/^v\d+\.json$/.test(x));
 const events=fs.existsSync(log)?fs.readFileSync(log,"utf8").trim().split("\n").filter(Boolean).map(line=>JSON.parse(line)):[];
 if(snapshots.length!==events.length)throw Error("Archive/manifest mismatch: manual recovery required");
+const listed=new Set();
 for(const event of events){
+ if(event.id!==r.id||!Number.isInteger(event.version)||event.version<1||event.filename!=="v"+String(event.version).padStart(4,"0")+".json")throw Error("Invalid archive manifest event");
+ if(listed.has(event.filename))throw Error("Duplicate archive manifest entry");
+ listed.add(event.filename);
  const snapshot=path.join(folder,event.filename);
  if(!/^v\d+\.json$/.test(event.filename||"")||!fs.existsSync(snapshot))throw Error("Manifest snapshot missing");
  const digest=crypto.createHash("sha256").update(fs.readFileSync(snapshot)).digest("hex");
  if(digest!==event.sha256)throw Error("Archive hash mismatch: manual recovery required");
 }
+if(snapshots.some(name=>!listed.has(name)))throw Error("Unlisted archive snapshot: manual recovery required");
 if(previous.length&&r.version!==Math.max(...previous)+1)throw Error("Version must increment by exactly one");
 if(!previous.length&&r.version!==1)throw Error("First archived version must be 1");
 const content=JSON.stringify(r,null,2)+"\n";
