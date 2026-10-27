@@ -32,11 +32,20 @@ async function loadLive(){
  const client=root.supabase.createClient(PROJECT,KEY,{auth:{persistSession:true,storageKey:AUTH,autoRefreshToken:true,detectSessionInUrl:false}});
  const session=(await client.auth.getSession()).data?.session;
  if(!session)throw new Error("Sign in to RUNLU central services in this browser before loading live inventory");
- const data=await client.from("warehouse_records").select("dataset_key,record_id,payload,updated_at").eq("dataset_key","runlu_carpet_inventory_v52").is("deleted_at",null).limit(1000);
- if(data.error)throw data.error;
- if(!Array.isArray(data.data))throw new Error("No verified live response");
- if(data.data.length===1000)throw new Error("Inventory query reached row limit; cannot treat as complete");
- return {rolls:adapt(data.data),source:"LIVE_READ_ONLY",fetchedAt:new Date().toISOString()};
+ const rows=[],pageSize=500;
+ for(let offset=0;;offset+=pageSize){
+  const data=await client.from("warehouse_records")
+   .select("dataset_key,record_id,payload,updated_at")
+   .eq("dataset_key","runlu_carpet_inventory_v52")
+   .is("deleted_at",null)
+   .order("record_id",{ascending:true})
+   .range(offset,offset+pageSize-1);
+  if(data.error)throw data.error;
+  if(!Array.isArray(data.data))throw new Error("No verified live response");
+  rows.push(...data.data);
+  if(data.data.length<pageSize)break;
+ }
+ return {rolls:adapt(rows),source:"LIVE_READ_ONLY",fetchedAt:new Date().toISOString()};
 }
 const api=Object.freeze({version:"2.0-preview",widthFt,adapt,loadLive});
 if(typeof module!=="undefined"&&module.exports)module.exports=api;
