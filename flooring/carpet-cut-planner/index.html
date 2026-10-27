@@ -15,10 +15,10 @@ let selectedScenario=0;
 let rolls=[{id:'R1',w:12,l:30,lot:'A'}],pieces=[{id:'Room 1',w:10,l:12,lot:'A',rotate:false},{id:'Room 2',w:9,l:10,lot:'A',rotate:false}];
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function render(){for(const [kind,items,target] of [['roll',rolls,'rollRows'],['piece',pieces,'pieceRows']]){$(target).innerHTML=items.map((o,i)=>'<tr><td><input aria-label="ID" data-kind="'+kind+'" data-index="'+i+'" data-field="id" value="'+esc(o.id)+'"></td><td><input aria-label="Width feet" type="number" min=".01" step=".01" data-kind="'+kind+'" data-index="'+i+'" data-field="w" value="'+o.w+'"></td><td><input aria-label="Length feet" type="number" min=".01" step=".01" data-kind="'+kind+'" data-index="'+i+'" data-field="l" value="'+o.l+'"></td><td><input aria-label="Dyelot" data-kind="'+kind+'" data-index="'+i+'" data-field="lot" value="'+esc(o.lot)+'"></td>'+(kind==='piece'?'<td><input aria-label="Allow rotation" type="checkbox" data-kind="'+kind+'" data-index="'+i+'" data-field="rotate" '+(o.rotate?'checked':'')+'></td>':'')+'<td><button class="danger" data-remove="'+kind+'" data-index="'+i+'" aria-label="Remove row">×</button></td></tr>').join('');}}
-document.addEventListener('change',e=>{const d=e.target.dataset;if(!d.kind)return;const o=(d.kind==='roll'?rolls:pieces)[+d.index];o[d.field]=d.field==='rotate'?e.target.checked:['w','l'].includes(d.field)?Number(e.target.value):e.target.value;});
-document.addEventListener('click',e=>{const d=e.target.dataset;if(!d.remove)return;(d.remove==='roll'?rolls:pieces).splice(+d.index,1);render();});
-$('addRoll').onclick=()=>{rolls.push({id:'R'+(rolls.length+1),w:12,l:30,lot:'A'});render()};
-$('addPiece').onclick=()=>{pieces.push({id:'Room '+(pieces.length+1),w:10,l:10,lot:'A',rotate:false});render()};
+document.addEventListener('change',e=>{const d=e.target.dataset;if(!d.kind)return;const o=(d.kind==='roll'?rolls:pieces)[+d.index];selectedScenario=0;o[d.field]=d.field==='rotate'?e.target.checked:['w','l'].includes(d.field)?Number(e.target.value):e.target.value;});
+document.addEventListener('click',e=>{const d=e.target.dataset;if(!d.remove)return;(d.remove==='roll'?rolls:pieces).splice(+d.index,1);selectedScenario=0;render();});
+$('addRoll').onclick=()=>{rolls.push({id:'R'+(rolls.length+1),w:12,l:30,lot:'A'});selectedScenario=0;render()};
+$('addPiece').onclick=()=>{pieces.push({id:'Room '+(pieces.length+1),w:10,l:10,lot:'A',rotate:false});selectedScenario=0;render()};
 function calculate(){if(typeof window.runluCalculateShared!=='function')throw Error('Calculation engine not loaded. Run npm run build and serve the generated files.');return window.runluCalculateShared(rolls,pieces,selectedScenario);}
 
 const fmt=n=>Number(n).toFixed(2);
