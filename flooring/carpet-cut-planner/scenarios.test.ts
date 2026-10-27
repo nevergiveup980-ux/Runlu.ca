@@ -18,4 +18,14 @@ describe("candidate scenario comparison",()=>{
   const plans=comparePlans(rolls,[{id:"other",widthIn:72,lengthIn:100,dyeLot:"D2"}]);
   expect(plans[0].plan.unplaced).toEqual(["other"]);
  });
+
+ it("reports missing area for incomplete plans",()=>{
+  const plans=comparePlans(rolls,[{id:"too-wide",widthIn:180,lengthIn:144}]);
+  expect(plans[0].feasible).toBe(false);
+  expect(plans[0].unplacedAreaSF).toBe(180);
+ });
+ it("deduplicates identical candidate layouts",()=>{
+  const plans=comparePlans(rolls,[{id:"one",widthIn:72,lengthIn:120}]);
+  expect(plans).toHaveLength(1);
+ });
 });
