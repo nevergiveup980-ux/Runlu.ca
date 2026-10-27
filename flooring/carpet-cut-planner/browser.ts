@@ -15,4 +15,4 @@ export function calculateShared(rollInputs:InputRoll[],pieceInputs:InputPiece[],
  return {placed,unplaced:best.unplaced,used,net:best.usedAreaSF,allocated:best.allocatedAreaSF,waste:best.wasteAreaSF,remaining,rate:best.wastePercent,scenarios:scenarios.map(s=>({name:s.name,feasible:s.feasible,unplaced:s.plan.unplaced.length,unplacedAreaSF:s.unplacedAreaSF,allocatedSF:s.plan.allocatedAreaSF})),selected};
 }
 declare global {interface Window {runluCalculateShared?:typeof calculateShared}}
-window.runluCalculateShared=calculateShared;
+if(typeof window!=='undefined')window.runluCalculateShared=calculateShared;
