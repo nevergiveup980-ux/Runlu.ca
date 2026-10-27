@@ -16,7 +16,7 @@ export async function runDeliveryMaintenanceDistributed({pool,queryTimeoutMs=500
    if(connectionLost)throw Error("Maintenance database connection lost");
    return result;
   }catch(error){
-   if(error?.code==="57014"||error?.message?.toLowerCase().includes("query read timeout")){broken=true;connectionLost=true;}
+   if(error?.code==="57014"||String(error?.code??"").startsWith("08")||["ECONNRESET","EPIPE","ETIMEDOUT"].includes(error?.code)||error?.message?.toLowerCase().includes("query read timeout")||error?.message?.toLowerCase().includes("connection terminated")){broken=true;connectionLost=true;}
    throw error;
   }
  }};
