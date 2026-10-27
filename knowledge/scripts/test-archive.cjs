@@ -21,12 +21,14 @@ try{
  const orphan=path.join(temp,"history","RK-9999","v0003.json");
  fs.writeFileSync(orphan,JSON.stringify(record));
  record.version=4;fs.writeFileSync(input,JSON.stringify(record));
- if(run().status===0)throw Error("Orphaned snapshot was not detected");
+ const orphanResult=run();
+ if(orphanResult.status===0||!orphanResult.stderr.includes("Archive/manifest mismatch"))throw Error("Orphaned snapshot was not specifically detected: "+orphanResult.stderr);
  fs.unlinkSync(orphan);
  // Simulate corruption of a previously archived snapshot.
  const archived=path.join(temp,"history","RK-9999","v0002.json");
  fs.appendFileSync(archived,"tampered");
  record.version=3;fs.writeFileSync(input,JSON.stringify(record));
- if(run().status===0)throw Error("Tampered archive was not detected");
+ const tamperedResult=run();
+ if(tamperedResult.status===0||!tamperedResult.stderr.includes("Archive hash mismatch"))throw Error("Tampered archive was not specifically detected: "+tamperedResult.stderr);
  console.log("Archive smoke tests passed.");
 }finally{fs.rmSync(temp,{recursive:true,force:true})}
