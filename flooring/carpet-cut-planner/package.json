@@ -5,7 +5,8 @@
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "build": "esbuild browser.ts --bundle --format=iife --target=es2020 --outfile=dist/browser.js"
+    "build": "esbuild browser.ts --bundle --format=iife --target=es2020 --outfile=dist/browser.js",
+    "check:html": "node check-html.mjs"
   },
   "devDependencies": {
     "typescript": "^5.7.3",
