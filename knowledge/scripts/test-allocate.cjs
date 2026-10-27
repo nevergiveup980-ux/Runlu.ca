@@ -15,7 +15,7 @@ try{
  const result=run(output);
  if(result.status!==0)throw Error(result.stderr);
  const assigned=JSON.parse(fs.readFileSync(output,"utf8"));
- const ids=[...records,...published].map(r=>Number(/^RK-(\\d+)$/.exec(r.id)?.[1]||0));
+ const ids=[...records,...published].map(r=>Number(/^RK-(\d+)$/.exec(r.id)?.[1]||0));
  const expected="RK-"+String(Math.max(0,...ids)+1).padStart(4,"0");
  if(assigned.id!==expected||assigned.status!=="draft")throw Error("Unexpected allocated ID/status "+assigned.id);
  if(run(output).status===0)throw Error("Overwrite was not blocked");
