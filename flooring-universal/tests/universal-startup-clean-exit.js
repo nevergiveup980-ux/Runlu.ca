@@ -13,6 +13,25 @@ async function scenario(label,active,expectedOpen){
  console.log('PASS '+label);
 }
 
+async function checkFailedRecoveryPoint(mode){
+ let state={sessionId:'previous-session',sessionOpen:true,openedAt:'2026-10-24T00:00:00Z'};
+ const data={read(key){return key.endsWith('_workspace')?{company:{organizationId:'test'}}:state},
+  write(_key,value){state=value;return value},
+  current(){return {raw(){return JSON.stringify({active:[],history:[]})}}}};
+ const capture=mode==='throws'?()=>{throw Error('storage unavailable')}:()=>null;
+ const window={RUNLUUniversalData:data,addEventListener(){},
+  RUNLUUniversalCrashJournal:{inspect(){return {active:0,pending:[]}}},
+  RUNLUUniversalLocalHealth:{health:async()=>({corruptKeys:[]}),capture},
+  RUNLUUniversalDurableLocal:{status:async()=>({ready:true}),compareWithAdapter:async()=>({ok:true})}};
+ vm.runInNewContext(source,{window,document:{getElementById(){return null}},setTimeout,console});
+ const result=await window.RUNLUUniversalStartupGuard.ready();
+ assert.equal(result.blocked,true);
+ assert.equal(result.recoveryPointCaptured,false);
+ assert(result.issues.some(x=>x.code==='STARTUP_RECOVERY_POINT_FAILED'));
+ assert.equal(state.priorSessionId,'previous-session');
+ console.log('PASS failed recovery point '+mode+' blocks restart');
+}
+
 async function checkRestartPreservesUncleanExit(){
  let state={sessionId:'previous-session',sessionOpen:true,openedAt:'2026-10-24T00:00:00Z'};
  const writes=[];
@@ -88,5 +107,7 @@ async function checkStartupJournal(mode){
  await checkJournalCountMismatch();
  await checkCleanExitMismatch();
  await checkRestartPreservesUncleanExit();
+ await checkFailedRecoveryPoint('null');
+ await checkFailedRecoveryPoint('throws');
  console.log('Startup clean exit and journal inspection: PASS');
 })().catch(e=>{console.error(e);process.exitCode=1});
