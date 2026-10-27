@@ -8,6 +8,7 @@
 <main><div class="grid"><section class="card"><h2>Carpet rolls</h2><p class="small">Dimensions in feet. All rolls require a dye lot.</p><table><thead><tr><th>ID</th><th>Width ft</th><th>Length ft</th><th>Dyelot</th><th></th></tr></thead><tbody id="rollRows"></tbody></table><div class="actions"><button class="secondary" id="addRoll">+ Add roll</button></div></section>
 <section class="card"><h2>Required cut pieces</h2><p class="small">Each piece must fit as one rectangle. Rotation is off by default to protect pile direction.</p><table><thead><tr><th>ID</th><th>Width ft</th><th>Length ft</th><th>Dyelot*</th><th>Rotate</th><th></th></tr></thead><tbody id="pieceRows"></tbody></table><p class="small">* Optional; when specified, only matching rolls may be used.</p><div class="actions"><button class="secondary" id="addPiece">+ Add piece</button></div></section>
 <section class="card full"><h2>Plan & results</h2><div class="actions"><button id="calculate">Calculate plan</button><button class="secondary" id="save">Save project JSON</button><button class="secondary" id="loadButton">Load project JSON</button><input id="load" type="file" accept=".json,application/json" hidden><button class="secondary" id="print">Print / Save PDF</button></div><div id="results" aria-live="polite"></div></section></div></main>
+<script src="./dist/browser.js"></script>
 <script>
 const $=id=>document.getElementById(id);
 let rolls=[{id:'R1',w:12,l:30,lot:'A'}],pieces=[{id:'Room 1',w:10,l:12,lot:'A',rotate:false},{id:'Room 2',w:9,l:10,lot:'A',rotate:false}];
@@ -38,4 +39,4 @@ $('save').onclick=()=>{const blob=new Blob([JSON.stringify({version:1,rolls,piec
 $('loadButton').onclick=()=>$('load').click();
 $('load').onchange=async e=>{try{const o=JSON.parse(await e.target.files[0].text());if(o.version!==1||!Array.isArray(o.rolls)||!Array.isArray(o.pieces))throw Error('Unsupported project file');const previousRolls=rolls,previousPieces=pieces;rolls=o.rolls;pieces=o.pieces;try{calculate()}catch(validationError){rolls=previousRolls;pieces=previousPieces;throw validationError}render();show()}catch(err){alert(err.message)}};
 $('print').onclick=()=>{show();window.print()};render();show();
-</script><script src="./dist/browser.js"></script></body></html>
+</script></body></html>
