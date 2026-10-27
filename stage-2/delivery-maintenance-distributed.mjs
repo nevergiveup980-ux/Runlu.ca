@@ -2,17 +2,23 @@
 // A dedicated checked-out client is essential: advisory locks belong to sessions.
 import {runDeliveryRateLimitMaintenanceWithRetry} from "./delivery-rate-limit-maintenance-retry.mjs";
 const LOCK_A=0x53544732,LOCK_B=0x52415445; // STG2 / RATE
-export async function runDeliveryMaintenanceDistributed({pool,...options}){
+export async function runDeliveryMaintenanceDistributed({pool,queryTimeoutMs=5000,...options}){
+ if(!Number.isSafeInteger(queryTimeoutMs)||queryTimeoutMs<100||queryTimeoutMs>30000)throw Error("Invalid maintenance query timeout");
  if(!pool||typeof pool.connect!=="function")throw Error("PostgreSQL connection pool required");
  const client=await pool.connect();
  let acquired=false,uncertain=false,broken=false,connectionLost=false;
  const onConnectionError=()=>{connectionLost=true;broken=true;};
  client.on?.("error",onConnectionError);
- const guardedClient={query:async(...args)=>{
+ const guardedClient={query:async(text,values)=>{
   if(connectionLost)throw Error("Maintenance database connection lost");
-  const result=await client.query(...args);
-  if(connectionLost)throw Error("Maintenance database connection lost");
-  return result;
+  try{
+   const result=await client.query({text,values,query_timeout:queryTimeoutMs});
+   if(connectionLost)throw Error("Maintenance database connection lost");
+   return result;
+  }catch(error){
+   if(error?.code==="57014"||error?.message?.toLowerCase().includes("query read timeout")){broken=true;connectionLost=true;}
+   throw error;
+  }
  }};
  try{
   // If the acquire query fails after reaching PostgreSQL, the session might
