@@ -13,6 +13,27 @@ async function scenario(label,active,expectedOpen){
  console.log('PASS '+label);
 }
 
+async function checkRestartPreservesUncleanExit(){
+ let state={sessionId:'previous-session',sessionOpen:true,openedAt:'2026-10-24T00:00:00Z'};
+ const writes=[];
+ const data={read(key){return key.endsWith('_workspace')?{company:{organizationId:'test'}}:state},
+  write(_key,value){state=value;writes.push(value);return value},
+  current(){return {raw(){return JSON.stringify({active:[],history:[]})}}}};
+ const window={RUNLUUniversalData:data,addEventListener(){},
+  RUNLUUniversalCrashJournal:{inspect(){return {active:0,pending:[]}}},
+  RUNLUUniversalLocalHealth:{health:async()=>({corruptKeys:[]}),capture(){return {id:'recovery-point'}}},
+  RUNLUUniversalDurableLocal:{status:async()=>({ready:true}),compareWithAdapter:async()=>({ok:true})}};
+ vm.runInNewContext(source,{window,document:{getElementById(){return null}},setTimeout,console});
+ const result=await window.RUNLUUniversalStartupGuard.ready();
+ assert.equal(result.priorUnclean,true,'prior unclean exit must survive boot');
+ assert.equal(result.recoveryPointCaptured,true,'recovery point must be captured before startup');
+ assert.equal(state.priorSessionId,'previous-session','prior session ID must be retained');
+ assert.equal(state.priorUnclean,true,'persisted guard must retain prior unclean state');
+ assert(result.issues.some(x=>x.code==='UNCLEAN_EXIT'));
+ assert.equal(writes[0].priorSessionId,'previous-session','first startup write must preserve prior session');
+ console.log('PASS restart retains prior unclean exit and recovery-point evidence');
+}
+
 async function checkCleanExitMismatch(){
  let state={sessionId:'test',sessionOpen:true};
  const active=[{id:'tx1',type:'Recovery',action:'restore',startedAt:'2026-10-25T00:00:00Z'}];
@@ -66,5 +87,6 @@ async function checkStartupJournal(mode){
  for(const mode of ['missing','throws','active','clear','corrupt','invalid','brokenTx','duplicateTx'])await checkStartupJournal(mode);
  await checkJournalCountMismatch();
  await checkCleanExitMismatch();
+ await checkRestartPreservesUncleanExit();
  console.log('Startup clean exit and journal inspection: PASS');
 })().catch(e=>{console.error(e);process.exitCode=1});
