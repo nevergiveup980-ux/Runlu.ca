@@ -16,5 +16,17 @@ try{
  if(run().status!==0)throw Error("Second version failed");
  const manifest=fs.readFileSync(path.join(temp,"history","RK-9999","manifest.jsonl"),"utf8").trim().split("\n");
  if(manifest.length!==2)throw Error("Incorrect manifest count");
+ // Simulate an interrupted write: snapshot exists without a matching manifest event.
+ record.version=3;fs.writeFileSync(input,JSON.stringify(record));
+ const orphan=path.join(temp,"history","RK-9999","v0003.json");
+ fs.writeFileSync(orphan,JSON.stringify(record));
+ record.version=4;fs.writeFileSync(input,JSON.stringify(record));
+ if(run().status===0)throw Error("Orphaned snapshot was not detected");
+ fs.unlinkSync(orphan);
+ // Simulate corruption of a previously archived snapshot.
+ const archived=path.join(temp,"history","RK-9999","v0002.json");
+ fs.appendFileSync(archived,"tampered");
+ record.version=3;fs.writeFileSync(input,JSON.stringify(record));
+ if(run().status===0)throw Error("Tampered archive was not detected");
  console.log("Archive smoke tests passed.");
 }finally{fs.rmSync(temp,{recursive:true,force:true})}
