@@ -7,7 +7,7 @@
 <header><h1>RUNLU · Carpet Cut & Waste Planner</h1><p>Rectangular roll-cut planning · Prototype MVP · Not a final installation specification</p></header>
 <main><div class="grid"><section class="card"><h2>Carpet rolls</h2><p class="small">Dimensions in feet. All rolls require a dye lot.</p><table><thead><tr><th>ID</th><th>Width ft</th><th>Length ft</th><th>Dyelot</th><th></th></tr></thead><tbody id="rollRows"></tbody></table><div class="actions"><button class="secondary" id="addRoll">+ Add roll</button></div></section>
 <section class="card"><h2>Required cut pieces</h2><p class="small">Each piece must fit as one rectangle. Rotation is off by default to protect pile direction.</p><table><thead><tr><th>ID</th><th>Width ft</th><th>Length ft</th><th>Dyelot*</th><th>Rotate</th><th></th></tr></thead><tbody id="pieceRows"></tbody></table><p class="small">* Optional; when specified, only matching rolls may be used.</p><div class="actions"><button class="secondary" id="addPiece">+ Add piece</button></div></section>
-<section class="card full"><h2>Plan & results</h2><div class="actions"><button id="calculate">Calculate plan</button><button class="secondary" id="save">Save project JSON</button><button class="secondary" id="loadButton">Load project JSON</button><input id="load" type="file" accept=".json,application/json" hidden><button class="secondary" id="print">Print / Save PDF</button></div><div id="results" aria-live="polite"></div></section></div></main>
+<section class="card full"><h2>Plan & results</h2><label><input type="checkbox" id="shortRollFirst" style="width:auto"> Prefer short inventory rolls (heuristic)</label><div class="actions"><button id="calculate">Calculate plan</button><button class="secondary" id="save">Save project JSON</button><button class="secondary" id="loadButton">Load project JSON</button><input id="load" type="file" accept=".json,application/json" hidden><button class="secondary" id="print">Print / Save PDF</button></div><div id="results" aria-live="polite"></div></section></div></main>
 <script src="./dist/browser.js"></script>
 <script>
 const $=id=>document.getElementById(id);
@@ -19,8 +19,9 @@ document.addEventListener('change',e=>{const d=e.target.dataset;if(!d.kind)retur
 document.addEventListener('click',e=>{const d=e.target.dataset;if(!d.remove)return;(d.remove==='roll'?rolls:pieces).splice(+d.index,1);selectedScenario=0;render();});
 $('addRoll').onclick=()=>{rolls.push({id:'R'+(rolls.length+1),w:12,l:30,lot:'A'});selectedScenario=0;render()};
 $('addPiece').onclick=()=>{pieces.push({id:'Room '+(pieces.length+1),w:10,l:10,lot:'A',rotate:false});selectedScenario=0;render()};
-function calculate(){if(typeof window.runluCalculateShared!=='function')throw Error('Calculation engine not loaded. Run npm run build and serve the generated files.');return window.runluCalculateShared(rolls,pieces,selectedScenario);}
+function calculate(){if(typeof window.runluCalculateShared!=='function')throw Error('Calculation engine not loaded. Run npm run build and serve the generated files.');return window.runluCalculateShared(rolls,pieces,selectedScenario,document.getElementById("shortRollFirst").checked);}
 
+$('shortRollFirst').onchange=()=>{selectedScenario=0;show()};
 const fmt=n=>Number(n).toFixed(2);
 function show(){
 try{const p=calculate();let html='<div class="stats"><div class="stat"><span>Cut area · SF</span><strong>'+fmt(p.net)+'</strong></div><div class="stat"><span>Allocated roll area · SF</span><strong>'+fmt(p.allocated)+'</strong></div><div class="stat"><span>Within allocated area · waste</span><strong>'+fmt(p.rate)+'%</strong></div><div class="stat"><span>Unused roll area · SF</span><strong>'+fmt(p.remaining)+'</strong></div></div>';
