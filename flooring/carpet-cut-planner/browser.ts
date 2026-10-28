@@ -2,10 +2,13 @@ import {comparePlans} from "./scenarios";
 import type {Roll,Piece} from "./engine";
 type InputRoll={id:string;w:number;l:number;lot:string};
 type InputPiece={id:string;w:number;l:number;lot:string;rotate:boolean};
-export function calculateShared(rollInputs:InputRoll[],pieceInputs:InputPiece[],selected=0){
+export function calculateShared(rollInputs:InputRoll[],pieceInputs:InputPiece[],selected=0,shortRollFirst=false){
  const rolls:Roll[]=rollInputs.map(r=>({id:r.id,widthIn:r.w*12,lengthIn:r.l*12,dyeLot:r.lot}));
  const pieces:Piece[]=pieceInputs.map(p=>({id:p.id,widthIn:p.w*12,lengthIn:p.l*12,dyeLot:p.lot||undefined,allowRotate:p.rotate}));
- const scenarios=comparePlans(rolls,pieces);
+ // Optional inventory preference: shorter rolls are offered to the greedy engine first.
+ // This is a heuristic, not a guarantee of minimum material consumption.
+ const orderedRolls=shortRollFirst?[...rolls].sort((a,b)=>a.lengthIn-b.lengthIn):rolls;
+ const scenarios=comparePlans(orderedRolls,pieces);
  if(!scenarios.length)throw Error("No candidate plans");
  if(!Number.isInteger(selected)||selected<0||selected>=scenarios.length)throw Error("Invalid scenario selection");
  const best=scenarios[selected].plan;
