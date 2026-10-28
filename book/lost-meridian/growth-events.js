@@ -30,7 +30,7 @@
       emit('book_external_link_click');
     }else if(url.pathname==='/book/lost-meridian/reader.html'){
       const rawChapter=url.searchParams.get('ch')||'';
-      const chapter=/^\\d{1,2}$/.test(rawChapter)?Number(rawChapter):null;
+      const chapter=/^\d{1,2}$/.test(rawChapter)?Number(rawChapter):null;
       emit('book_preview_click',{chapter:chapter!==null&&chapter>=1&&chapter<=10?chapter:null});
     }
   },{passive:true});
