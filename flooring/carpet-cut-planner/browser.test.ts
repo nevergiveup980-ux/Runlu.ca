@@ -26,6 +26,13 @@ describe("browser adapter",()=>{
   expect(result.net).toBe(60);
   expect(result.placed[0].roll).toBe("SHORT");
  });
+ it("reports remaining inventory for each classified roll",()=>{
+  const inventory=[{id:"F",w:12,l:30,lot:"A",stockType:"FULL" as const},{id:"S",w:12,l:10,lot:"A",stockType:"SHORT" as const}];
+  const result=calculateShared(inventory,[{id:"P",w:6,l:10,lot:"A",rotate:false}],0,true);
+  expect(result.rollSummary.find(r=>r.id==="S")?.stockType).toBe("SHORT");
+  expect(result.rollSummary.find(r=>r.id==="S")?.remainingLF).toBe(0);
+  expect(result.rollSummary.find(r=>r.id==="F")?.remainingLF).toBe(30);
+ });
  it("rejects out-of-range scenario index",()=>{
   expect(()=>calculateShared(rolls,pieces,999)).toThrow("Invalid scenario selection");
  });
