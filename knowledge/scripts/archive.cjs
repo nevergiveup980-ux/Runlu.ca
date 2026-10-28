@@ -33,6 +33,17 @@ if(!previous.length&&r.version!==1)throw Error("First archived version must be 1
 const content=JSON.stringify(r,null,2)+"\n";
 const hash=crypto.createHash("sha256").update(content).digest("hex");
 const event={id:r.id,version:r.version,filename:name,sha256:hash,archived_at:new Date().toISOString(),reason:reason.trim(),reviewer:reviewer.trim()};
+const manifestSize=fs.existsSync(log)?fs.statSync(log).size:0;
 fs.writeFileSync(file,content,{flag:"wx"});
-fs.appendFileSync(log,JSON.stringify(event)+"\n");
+try{
+ fs.appendFileSync(log,JSON.stringify(event)+"\n");
+}catch(error){
+ // An append can fail after a partial write. Roll back only when the
+ // manifest still matches the bytes observed before this attempt.
+ try{
+  if(fs.statSync(log).size===manifestSize)fs.unlinkSync(file);
+  else console.error("Archive requires manual recovery: manifest may be partially written");
+ }catch(cleanupError){console.error("Archive rollback failed: "+cleanupError.message)}
+ throw error;
+}
 console.log("Archived "+r.id+" v"+r.version+" sha256="+hash);
