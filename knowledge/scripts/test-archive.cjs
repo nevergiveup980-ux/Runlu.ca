@@ -26,10 +26,12 @@ try{
  fs.unlinkSync(orphan);
  // Simulate corruption of a previously archived snapshot.
  const archived=path.join(temp,"history","RK-9999","v0002.json");
+ const originalV2=fs.readFileSync(archived);
  fs.appendFileSync(archived,"tampered");
  record.version=3;fs.writeFileSync(input,JSON.stringify(record));
  const tamperedResult=run();
  if(tamperedResult.status===0||!tamperedResult.stderr.includes("Archive hash mismatch"))throw Error("Tampered archive was not specifically detected: "+tamperedResult.stderr);
+ fs.writeFileSync(archived,originalV2);
  // Duplicate manifest events must be rejected even when counts match.
  const folder=path.join(temp,"history","RK-9999");
  const lines=fs.readFileSync(path.join(folder,"manifest.jsonl"),"utf8").trim().split("\n");
