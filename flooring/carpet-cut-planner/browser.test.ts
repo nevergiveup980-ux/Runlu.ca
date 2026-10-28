@@ -19,6 +19,13 @@ describe("browser adapter",()=>{
    expect(p.placed).toHaveLength(2);
   }
  });
+ it("supports optional short-roll preference without changing required area",()=>{
+  const inventory=[{id:"LONG",w:12,l:30,lot:"A"},{id:"SHORT",w:12,l:10,lot:"A"}];
+  const result=calculateShared(inventory,[{id:"P1",w:6,l:10,lot:"A",rotate:false}],0,true);
+  expect(result.unplaced).toEqual([]);
+  expect(result.net).toBe(60);
+  expect(result.placed[0].roll).toBe("SHORT");
+ });
  it("rejects out-of-range scenario index",()=>{
   expect(()=>calculateShared(rolls,pieces,999)).toThrow("Invalid scenario selection");
  });
