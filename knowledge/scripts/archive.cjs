@@ -41,7 +41,7 @@ try{
  // An append can fail after a partial write. Roll back only when the
  // manifest still matches the bytes observed before this attempt.
  try{
-  if(fs.statSync(log).size===manifestSize)fs.unlinkSync(file);
+  if((fs.existsSync(log)?fs.statSync(log).size:0)===manifestSize)fs.unlinkSync(file);
   else console.error("Archive requires manual recovery: manifest may be partially written");
  }catch(cleanupError){console.error("Archive rollback failed: "+cleanupError.message)}
  throw error;
