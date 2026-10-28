@@ -40,7 +40,14 @@ function check(record,where,isPublic){
  }
 }
 if(!Array.isArray(draft))fail("records.json","expected array");
-else draft.forEach((r,i)=>check(r,"draft["+i+"]",false));
+else {
+ const draftIds=new Set();
+ draft.forEach((r,i)=>{
+  check(r,"draft["+i+"]",false);
+  if(draftIds.has(r.id))fail("draft["+i+"]","duplicate draft id "+r.id);
+  draftIds.add(r.id);
+ });
+}
 if(!published||!Array.isArray(published.entries))fail("published.json","expected entries array");
 else {
  const ids=new Set();
