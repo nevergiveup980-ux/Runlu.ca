@@ -64,7 +64,7 @@ async function boot(){
   try{
    startupRecoveryPoint=await window.RUNLUUniversalLocalHealth?.capture?.('Startup Guard · prior session ended unexpectedly',{priorSessionId:prior.sessionId||null,priorOpenedAt:prior.openedAt||null})||null;
    const saved=window.RUNLUUniversalLocalHealth?.points?.();
-   if(!startupRecoveryPoint?.id||!Array.isArray(saved)||!saved.some(p=>p?.id===startupRecoveryPoint.id&&p?.organizationId===startupRecoveryPoint.organizationId&&p?.payload&&typeof p.payload==='object'))startupRecoveryPoint=null;
+   if(!startupRecoveryPoint?.id||!Array.isArray(saved)||!saved.some(p=>p?.id===startupRecoveryPoint.id&&p?.organizationId===startupRecoveryPoint.organizationId&&p?.payload&&typeof p.payload==='object'&&!Array.isArray(p.payload)&&JSON.stringify(p.payload)===JSON.stringify(startupRecoveryPoint.payload)))startupRecoveryPoint=null;
   }catch(_){startupRecoveryPoint=null}
  }
  markOpen(prior);
