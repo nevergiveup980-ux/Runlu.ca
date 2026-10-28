@@ -32,6 +32,24 @@ async function checkFailedRecoveryPoint(mode){
  console.log('PASS failed recovery point '+mode+' blocks restart');
 }
 
+async function checkUnretrievableRecoveryPoint(){
+ let state={sessionId:'prior',sessionOpen:true};
+ const data={read(k){return k.endsWith('_workspace')?{company:{organizationId:'test'}}:state},
+  write(_k,v){state=v;return v},current(){return {raw(){return null}}}};
+ const window={RUNLUUniversalData:data,addEventListener(){},
+  RUNLUUniversalCrashJournal:{inspect(){return {active:0,pending:[]}}},
+  RUNLUUniversalLocalHealth:{health:async()=>({corruptKeys:[]}),
+   capture(){return {id:'lost-point',organizationId:'test',payload:{}}},
+   points(){return []}},
+  RUNLUUniversalDurableLocal:{status:async()=>({ready:true}),compareWithAdapter:async()=>({ok:true})}};
+ vm.runInNewContext(source,{window,document:{getElementById(){return null}},setTimeout,console});
+ const result=await window.RUNLUUniversalStartupGuard.ready();
+ assert.equal(result.blocked,true);
+ assert.equal(result.recoveryPointCaptured,false);
+ assert(result.issues.some(x=>x.code==='STARTUP_RECOVERY_POINT_FAILED'));
+ console.log('PASS missing persisted recovery point blocks restart');
+}
+
 async function checkRestartPreservesUncleanExit(){
  let state={sessionId:'previous-session',sessionOpen:true,openedAt:'2026-10-24T00:00:00Z'};
  const writes=[];
@@ -40,7 +58,7 @@ async function checkRestartPreservesUncleanExit(){
   current(){return {raw(){return JSON.stringify({active:[],history:[]})}}}};
  const window={RUNLUUniversalData:data,addEventListener(){},
   RUNLUUniversalCrashJournal:{inspect(){return {active:0,pending:[]}}},
-  RUNLUUniversalLocalHealth:{health:async()=>({corruptKeys:[]}),capture(){return {id:'recovery-point'}}},
+  RUNLUUniversalLocalHealth:{health:async()=>({corruptKeys:[]}),capture(){return {id:'recovery-point',organizationId:'test',payload:{}}},points(){return [{id:'recovery-point',organizationId:'test',payload:{}}]}},
   RUNLUUniversalDurableLocal:{status:async()=>({ready:true}),compareWithAdapter:async()=>({ok:true})}};
  vm.runInNewContext(source,{window,document:{getElementById(){return null}},setTimeout,console});
  const result=await window.RUNLUUniversalStartupGuard.ready();
@@ -107,6 +125,7 @@ async function checkStartupJournal(mode){
  await checkJournalCountMismatch();
  await checkCleanExitMismatch();
  await checkRestartPreservesUncleanExit();
+ await checkUnretrievableRecoveryPoint();
  await checkFailedRecoveryPoint('null');
  await checkFailedRecoveryPoint('throws');
  console.log('Startup clean exit and journal inspection: PASS');
