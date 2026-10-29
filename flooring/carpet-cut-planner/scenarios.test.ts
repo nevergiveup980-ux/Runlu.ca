@@ -24,6 +24,19 @@ describe("candidate scenario comparison",()=>{
   expect(plans[0].feasible).toBe(false);
   expect(plans[0].unplacedAreaSF).toBe(180);
  });
+ it("offers an unrestricted fallback when priority can strand a large piece",()=>{
+  const stock:Roll[]=[
+   {id:"REM",widthIn:72,lengthIn:120,dyeLot:"A",priority:0},
+   {id:"FULL",widthIn:144,lengthIn:120,dyeLot:"A",priority:2}
+  ];
+  const cuts:Piece[]=[
+   {id:"small",widthIn:72,lengthIn:120,dyeLot:"A"},
+   {id:"wide",widthIn:144,lengthIn:120,dyeLot:"A"}
+  ];
+  const plans=comparePlans(stock,cuts);
+  expect(plans[0].feasible).toBe(true);
+  expect(plans[0].plan.unplaced).toEqual([]);
+ });
  it("deduplicates identical candidate layouts",()=>{
   const plans=comparePlans(rolls,[{id:"one",widthIn:72,lengthIn:120}]);
   expect(plans).toHaveLength(1);
