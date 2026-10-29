@@ -33,6 +33,23 @@ describe("browser adapter",()=>{
   expect(result.rollSummary.find(r=>r.id==="S")?.remainingLF).toBe(0);
   expect(result.rollSummary.find(r=>r.id==="F")?.remainingLF).toBe(30);
  });
+ it("prioritizes compatible remnants ahead of full stock",()=>{
+  const inventory=[
+   {id:"FULL",w:12,l:10,lot:"A",stockType:"FULL" as const},
+   {id:"REM",w:12,l:20,lot:"A",stockType:"REMNANT" as const}
+  ];
+  const p=calculateShared(inventory,[{id:"P",w:6,l:10,lot:"A",rotate:false}],0,true);
+  expect(p.unplaced).toEqual([]);
+  expect(p.placed[0].roll).toBe("REM");
+ });
+ it("does not override dye lot matching for remnants",()=>{
+  const inventory=[
+   {id:"REM",w:12,l:20,lot:"B",stockType:"REMNANT" as const},
+   {id:"FULL",w:12,l:20,lot:"A",stockType:"FULL" as const}
+  ];
+  const p=calculateShared(inventory,[{id:"P",w:6,l:10,lot:"A",rotate:false}],0,true);
+  expect(p.placed[0].roll).toBe("FULL");
+ });
  it("rejects out-of-range scenario index",()=>{
   expect(()=>calculateShared(rolls,pieces,999)).toThrow("Invalid scenario selection");
  });
