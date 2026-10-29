@@ -32,6 +32,22 @@ async function checkFailedRecoveryPoint(mode){
  console.log('PASS failed recovery point '+mode+' blocks restart');
 }
 
+async function checkAlteredSnapshot(){
+ let state={sessionId:'prior',sessionOpen:true};
+ const data={read(k){return k.endsWith('_workspace')?{company:{organizationId:'test'}}:state},write(_k,v){state=v;return v},current(){return {raw(){return null}}}};
+ const window={RUNLUUniversalData:data,addEventListener(){},
+  RUNLUUniversalCrashJournal:{inspect(){return {active:0,pending:[]}}},
+  RUNLUUniversalLocalHealth:{health:async()=>({corruptKeys:[]}),
+   capture(){return {id:'point',organizationId:'test',payload:{stock:5}}},
+   points(){return [{id:'point',organizationId:'test',payload:{stock:0}}]}},
+  RUNLUUniversalDurableLocal:{status:async()=>({ready:true}),compareWithAdapter:async()=>({ok:true})}};
+ vm.runInNewContext(source,{window,document:{getElementById(){return null}},setTimeout,console});
+ const result=await window.RUNLUUniversalStartupGuard.ready();
+ assert.equal(result.blocked,true);
+ assert(result.issues.some(x=>x.code==='STARTUP_RECOVERY_POINT_FAILED'));
+ console.log('PASS altered recovery point rejected');
+}
+
 async function checkUnretrievableRecoveryPoint(){
  let state={sessionId:'prior',sessionOpen:true};
  const data={read(k){return k.endsWith('_workspace')?{company:{organizationId:'test'}}:state},
@@ -126,6 +142,7 @@ async function checkStartupJournal(mode){
  await checkCleanExitMismatch();
  await checkRestartPreservesUncleanExit();
  await checkUnretrievableRecoveryPoint();
+ await checkAlteredSnapshot();
  await checkFailedRecoveryPoint('null');
  await checkFailedRecoveryPoint('throws');
  console.log('Startup clean exit and journal inspection: PASS');
