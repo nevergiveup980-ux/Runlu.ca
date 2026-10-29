@@ -33,5 +33,11 @@ try{
  record.review.license_verified=false;
  publicData.entries=[record];fs.writeFileSync(path.join(tmp,"data","published.json"),JSON.stringify(publicData));
  assert(run("check-publication.cjs").status!==0,"Unreviewed fixture passed publication gate");
+ // Reject duplicate draft IDs.
+ const draftPath=path.join(tmp,"data","records.json");
+ const originalDrafts=JSON.parse(fs.readFileSync(draftPath,"utf8"));
+ fs.writeFileSync(draftPath,JSON.stringify([...originalDrafts,{...originalDrafts[0]}]));
+ assert(run("validate.cjs").status!==0,"Duplicate draft IDs passed validation");
+ fs.writeFileSync(draftPath,JSON.stringify(originalDrafts));
  console.log("RUNLU Knowledge E2E smoke test passed (temporary fixture only).");
 }finally{fs.rmSync(tmp,{recursive:true,force:true})}
