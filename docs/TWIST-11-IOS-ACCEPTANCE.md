@@ -1,5 +1,7 @@
 # RUNLU TWIST 1.1 — iOS 整改验收记录
 
+> 后续工程结论与已签名Build4候选：请见 [TWIST-BUILD4-FINAL-ACCEPTANCE.md](TWIST-BUILD4-FINAL-ACCEPTANCE.md)。下文保留首次整改的历史结果。
+
 日期：2026-10-28（America/Edmonton）。范围：代码整合、构建、自动化和模拟器验收；没有上传、提交 App Review 或公开发布。
 
 ## 工程与版本

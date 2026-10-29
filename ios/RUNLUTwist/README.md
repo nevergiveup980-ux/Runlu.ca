@@ -17,3 +17,7 @@ python3 ios/RUNLUTwist/Scripts/verify-package.py
 Run Xcode's Product > Test for actual WKWebView and touch regressions. `-twist-qa-suite` and `-twist-qa-corrupt` are DEBUG-only test launch arguments; they alter simulator test data. The full suite executes real game JavaScript inside WKWebView, then UI tests verify relaunch, navigation and native controls. Node tests use a DOM stub and do not prove browser layout or VoiceOver. `Scripts/test-remediation.cjs` is an optional Playwright browser suite requiring separately installed Playwright and browser runtimes.
 
 See `../../docs/TWIST-11-IOS-ACCEPTANCE.md` for current evidence and unresolved acceptance gates. Existing Build 1–3 files under `Release/` and older `Reports/` are historical; their metadata, screenshots, upload status and iPhone acceptance do not certify version 1.1. Refresh release metadata only in a separately authorized release-preparation step. No upload, App Review submission or public release is authorized in this remediation task.
+
+## Build 4 final engineering acceptance
+
+See `../../docs/TWIST-BUILD4-FINAL-ACCEPTANCE.md`. Code commit `107ec9d` passed the final nine-test iOS 26.5 run, including accessibility and largest Dynamic Type. A locally signed Release archive and development IPA were exported on 2026-10-29; no upload or review submission occurred. Real iPhone installation remains blocked by Developer Mode and full physical-device acceptance is pending.

@@ -1,0 +1,18 @@
+{
+  "result": "PASS",
+  "product": "/Users/zhangjohn/Documents/Codex/2026-10-25/runlu-twist-app-store-xcode-testflight/outputs/Build4Candidate-2026-10-29/RUNLUTwist-1.1-4.xcarchive/Products/Applications/RUNLUTwist.app",
+  "bundleId": "ca.runlu.twist",
+  "version": "1.1",
+  "build": "4",
+  "deviceFamily": [
+    1
+  ],
+  "minimumOS": "17.0",
+  "resourcesSHA256": {
+    "twist.html": "b92e441c13b009f899be271a687f6bc19c277ae73245b806ca4dc489b6315482",
+    "twist-privacy.html": "415cbbfa5660aa4a46c232d377d7e35e8ddfbf393611592b45e5145c7baa053d",
+    "twist-support.html": "4056cea1ad07dc6b950ea871f1af2aef648e62f198c7c403d15141f0ed52f9c0",
+    "qa-suite.js": "520374ada581ed91f729e5cccb77ee847adca912ded124b74f40cd3d1bf823ff"
+  },
+  "releaseDebugHooksAbsent": true
+}
