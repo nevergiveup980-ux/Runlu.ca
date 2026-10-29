@@ -78,7 +78,7 @@ async function boot(){
  return startup;
 }
 function ready(){if(!readyPromise)readyPromise=boot();return readyPromise}
-async function recheck(){startup=await inspect(startup?.priorUnclean?{sessionOpen:true}:null);const s=previous()||{};write({...s,lastInspection:{checkedAt:startup.checkedAt,blocked:startup.blocked,priorUnclean:startup.priorUnclean,issueCodes:startup.issues.map(x=>x.code)}});renderBanner();return startup}
+async function recheck(){const prior=startup;startup=await inspect(prior?.priorUnclean?{sessionOpen:true}:null);if(prior?.priorUnclean&&prior?.hasWorkspace&&!prior?.recoveryPointCaptured){const issue={code:'STARTUP_RECOVERY_POINT_FAILED',severity:'critical',detail:'Previous session ended unexpectedly and a startup recovery point could not be verified'};startup.issues.push(issue);startup.critical.push(issue);startup.blocked=true}startup.recoveryPointCaptured=!!prior?.recoveryPointCaptured;const s=previous()||{};write({...s,lastInspection:{checkedAt:startup.checkedAt,blocked:startup.blocked,priorUnclean:startup.priorUnclean,recoveryPointCaptured:startup.recoveryPointCaptured,issueCodes:startup.issues.map(x=>x.code)}});renderBanner();return startup}
 function canProceed(){return !!startup&&!startup.blocked}
 function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function openSupportCenter(){const s=document.getElementById('universalSupportCenter');if(!s)return;s.hidden=false;Promise.resolve(window.RUNLUUniversalSupportCenter?.render?.()).finally(()=>requestAnimationFrame(()=>s.scrollIntoView({behavior:'smooth',block:'start'})))}
