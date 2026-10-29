@@ -153,6 +153,20 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
                 if let error { self?.showError(error.localizedDescription) }
             }
         }
+        if ProcessInfo.processInfo.arguments.contains("-twist-qa-large-type"), webView.url?.lastPathComponent == "twist.html" {
+            webView.evaluateJavaScript("""
+            (() => {
+                const font = parseFloat(getComputedStyle(document.documentElement).fontSize);
+                const width = document.documentElement.clientWidth;
+                const overflow = document.documentElement.scrollWidth > width + 1;
+                const ok = font >= 40 && !overflow;
+                window.webkit.messageHandlers.twist.postMessage({type:'qa',report:{passed:ok?1:0,failed:ok?0:1,font,width,overflow}});
+                return true;
+            })()
+            """) { [weak self] _, error in
+                if let error { self?.showError(error.localizedDescription) }
+            }
+        }
         #endif
         guard let url = webView.url, url.lastPathComponent == "twist.html" else { return }
         webView.evaluateJavaScript("document.getElementById('question')?.textContent?.trim().length > 0") { [weak self] result, error in

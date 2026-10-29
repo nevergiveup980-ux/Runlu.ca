@@ -9,7 +9,7 @@ source=source.replace('<meta charset="utf-8">', '<meta charset="utf-8"><meta htt
 source=source.replace('width=device-width,initial-scale=1','width=device-width,initial-scale=1,viewport-fit=cover')
 source=re.sub(r'<style>[\s\S]*?</style>',lambda _: '<style>'+style+'</style>',source,count=1)
 source=source.replace('<a href="/">RUNLU · 润庐</a>','<strong>RUNLU · 润庐</strong>')
-source=source.replace(' © RUNLU.</p>', ' © RUNLU. · <a href="twist-privacy.html">Privacy / 隐私</a> · <a href="twist-support.html">Support / 支持</a></p>')
+source=source.replace(' © RUNLU.</p>', ' © RUNLU. <span aria-hidden="true"> · </span><a href="twist-privacy.html">Privacy / 隐私</a><span aria-hidden="true"> · </span><a href="twist-support.html">Support / 支持</a></p>')
 source=source.replace('stays in this browser','stays on this device').replace('仅保存在当前浏览器','仅保存在这台设备上')
 source=source.replace('localStorage.', 'nativeStorage.')
 source=source.replace('"use strict";', '"use strict";\n'+bridge,1)

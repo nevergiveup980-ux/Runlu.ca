@@ -7,3 +7,12 @@
 :root[data-native-appearance="dark"]{background:#101723;color:#ecf0fa}:root[data-native-appearance="dark"] .card{background:#192435;border-color:#34445d;box-shadow:none}:root[data-native-appearance="dark"] .sub,:root[data-native-appearance="dark"] .eyebrow,:root[data-native-appearance="dark"] .top,:root[data-native-appearance="dark"] .stats,:root[data-native-appearance="dark"] .footer{color:#b4c2d8}:root[data-native-appearance="dark"] button,:root[data-native-appearance="dark"] select{background:#223149;color:#f0f4ff;border-color:#758baa}:root[data-native-appearance="dark"] button.primary{background:#245fb8;border-color:#5288da}:root[data-native-appearance="dark"] .reveal{background:#22334e;border-color:#6ea6ff}:root[data-native-appearance="dark"] .progress{background:#35445a}:root[data-native-appearance="dark"] .bar{background:#6ea6ff}:root[data-native-appearance="dark"] #feedback{color:#9fdbb0}
 
 #studioOptions button,#reasoningChoices button,#reflectionChoices button{white-space:normal;max-width:100%} h2{font-size:1.5rem}
+
+/* Keep meaningful status/footer text readable and footer links comfortably touchable. */
+.top,.footer{font-size:1rem}.footer a{display:inline-flex;align-items:center;min-width:44px;min-height:44px}
+/* The accessible progress region is 44pt; the visual track stays 8pt. */
+.progress,:root[data-native-appearance="dark"] .progress{height:44px;display:flex;align-items:center;position:relative;background:transparent}
+.progress::before{content:"";position:absolute;left:0;right:0;top:18px;height:8px;border-radius:9px;background:#e5eaf1}
+.bar{height:8px;position:relative;border-radius:9px}
+@media(prefers-color-scheme:dark){.progress::before{background:#35445a}}
+:root[data-native-appearance="dark"] .progress::before{background:#35445a}

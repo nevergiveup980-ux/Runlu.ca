@@ -2,6 +2,14 @@ import XCTest
 import UIKit
 
 final class TwistUITests: XCTestCase {
+    override func setUpWithError() throws {
+        continueAfterFailure = false
+        XCUIDevice.shared.orientation = .portrait
+    }
+    override func tearDownWithError() throws {
+        XCUIDevice.shared.orientation = .portrait
+    }
+
     func testOfflineGameplayPersistenceAndShare() throws {
         let app = XCUIApplication()
         app.launch()
@@ -142,6 +150,14 @@ extension TwistUITests {
 
 
 final class RemediationUITests: XCTestCase {
+    override func setUpWithError() throws {
+        continueAfterFailure = false
+        XCUIDevice.shared.orientation = .portrait
+    }
+    override func tearDownWithError() throws {
+        XCUIDevice.shared.orientation = .portrait
+    }
+
     func testActualWKFullGameplayAndNativeRecovery() throws {
         let app = XCUIApplication()
         app.launchArguments = ["-twist-qa-suite"]
@@ -230,6 +246,79 @@ extension RemediationUITests {
         let reflection=app.switches["I overlooked another interpretation"]
         for _ in 0..<7 where !reflection.isHittable {app.swipeDown()}
         XCTAssertTrue(reflection.exists);reflection.tap()
+        XCTAssertFalse(app.staticTexts["twist-startup-error"].exists)
+    }
+}
+
+
+final class AccessibilityUITests: XCTestCase {
+    override func setUpWithError() throws {
+        continueAfterFailure = false
+        XCUIDevice.shared.orientation = .portrait
+    }
+    func testEnglishAndChineseAccessibilityAudit() throws {
+        let app = XCUIApplication()
+        app.launchArguments = ["-twist-qa-suite"]
+        app.launch()
+        XCTAssertTrue(app.staticTexts["twist-qa-result"].waitForExistence(timeout: 40))
+        app.terminate(); app.launchArguments = []; app.launch()
+        let language = app.descendants(matching: .any)["Puzzle language"]
+        XCTAssertTrue(language.waitForExistence(timeout: 20))
+        let checks: XCUIAccessibilityAuditType = [.contrast, .hitRegion, .sufficientElementDescription, .dynamicType, .textClipped, .trait]
+        try app.performAccessibilityAudit(for: checks) { issue in
+            let detail = "\(issue.compactDescription): \(issue.detailedDescription)\n\(issue.element?.debugDescription ?? "no element")"
+            print("TWIST_A11Y_ISSUE: " + detail)
+            let attachment = XCTAttachment(string: detail); attachment.name="Build4-accessibility-issue";attachment.lifetime = .keepAlways;self.add(attachment)
+            return false // Record every issue as a failure; no audit finding is suppressed.
+        }
+        let reflection = app.switches["I overlooked another interpretation"]
+        for _ in 0..<7 where !reflection.isHittable { app.swipeUp() }
+        XCTAssertTrue(reflection.exists)
+        try app.performAccessibilityAudit(for: checks) { issue in
+            let detail = "\(issue.compactDescription): \(issue.detailedDescription)\n\(issue.element?.debugDescription ?? "no element")"
+            print("TWIST_A11Y_ISSUE: " + detail)
+            let attachment = XCTAttachment(string: detail); attachment.name="Build4-accessibility-issue";attachment.lifetime = .keepAlways;self.add(attachment)
+            return false // Record every issue as a failure; no audit finding is suppressed.
+        }
+        let studio = app.buttons["Restart studio"]
+        for _ in 0..<9 where !studio.isHittable { app.swipeUp() }
+        XCTAssertTrue(studio.exists)
+        try app.performAccessibilityAudit(for: checks) { issue in
+            let detail = "\(issue.compactDescription): \(issue.detailedDescription)\n\(issue.element?.debugDescription ?? "no element")"
+            print("TWIST_A11Y_ISSUE: " + detail)
+            let attachment = XCTAttachment(string: detail); attachment.name="Build4-accessibility-issue";attachment.lifetime = .keepAlways;self.add(attachment)
+            return false // Record every issue as a failure; no audit finding is suppressed.
+        }
+        for _ in 0..<12 where !language.isHittable { app.swipeDown() }
+        language.tap()
+        if app.pickerWheels.firstMatch.waitForExistence(timeout: 2) {
+            app.pickerWheels.firstMatch.adjust(toPickerWheelValue: "简体中文")
+            if app.buttons["Done"].exists {app.buttons["Done"].tap()}
+            else if app.buttons["完成"].exists {app.buttons["完成"].tap()}
+        } else {app.buttons["简体中文"].tap()}
+        XCTAssertTrue(app.descendants(matching: .any)["题目语言"].waitForExistence(timeout: 10))
+        try app.performAccessibilityAudit(for: checks) { issue in
+            let detail = "\(issue.compactDescription): \(issue.detailedDescription)\n\(issue.element?.debugDescription ?? "no element")"
+            print("TWIST_A11Y_ISSUE: " + detail)
+            let attachment = XCTAttachment(string: detail); attachment.name="Build4-accessibility-issue";attachment.lifetime = .keepAlways;self.add(attachment)
+            return false // Record every issue as a failure; no audit finding is suppressed.
+        }
+        let shot = XCTAttachment(screenshot: app.screenshot());shot.name="Build4-Chinese-accessibility";shot.lifetime = .keepAlways;add(shot)
+    }
+}
+
+
+extension AccessibilityUITests {
+    func testLargestDynamicTypeHasNoHorizontalOverflow() throws {
+        let app = XCUIApplication()
+        app.launchArguments = ["-UIPreferredContentSizeCategoryName", UIContentSizeCategory.accessibilityExtraExtraExtraLarge.rawValue, "-twist-qa-large-type"]
+        app.launch()
+        let layout = app.staticTexts["twist-qa-result"]
+        XCTAssertTrue(layout.waitForExistence(timeout: 30))
+        XCTAssertEqual(layout.label, "WK QA PASS 1/1", "Expected actual web root font >=40pt and no horizontal document overflow")
+        let language = app.descendants(matching: .any)["Puzzle language"].exists ? app.descendants(matching: .any)["Puzzle language"] : app.descendants(matching: .any)["题目语言"]
+        XCTAssertTrue(language.exists)
+        let shot = XCTAttachment(screenshot: app.screenshot());shot.name="Build4-largest-Dynamic-Type";shot.lifetime = .keepAlways;add(shot)
         XCTAssertFalse(app.staticTexts["twist-startup-error"].exists)
     }
 }
