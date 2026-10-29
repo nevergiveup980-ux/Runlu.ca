@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '2.1-local-reasoner-v1';
+  const VERSION = '2.1-local-reasoner-v2';
   const METHOD_NAMES = {
     bazi:{en:'Bazi / Four Pillars',zh:'八字 / 四柱',fr:'Bazi / Quatre Piliers',es:'Bazi / Cuatro Pilares'},
     ganzhi:{en:'Ganzhi / timing',zh:'干支 / 时运',fr:'Ganzhi / temporalité',es:'Ganzhi / temporalidad'},
@@ -41,7 +41,7 @@
     known.push(nonEmpty(fields.question)?bullet(`${t.question}: ${clean(fields.question,500)}`):bullet(`${t.question}: —`));
     if(facts.length){ known.push(...facts.slice(0,4).map(x=>bullet(x)),bullet(t.factsPresent)); } else missing.push(bullet(t.noFacts));
     if(mode==='general'){
-      if(options.length){ known.push(bullet(t.optionsPresent),...options.slice(0,4).map(x=>bullet(x))); } else missing.push(bullet(t.noOptions));
+      if(options.length>=2){ known.push(bullet(t.optionsPresent),...options.slice(0,4).map(x=>bullet(x))); } else missing.push(bullet(t.noOptions));
       if(constraints.length){ known.push(bullet(t.constraintsPresent),...constraints.slice(0,3).map(x=>bullet(x))); } else missing.push(bullet(t.noConstraints));
     }else{
       if(nonEmpty(fields.decision)) known.push(bullet(`${t.posture}: ${clean(fields.decision,500)}`));
@@ -56,7 +56,8 @@
     next.push(bullet(t.nextPilot));
     next.push(bullet(t.nextFreeze));
 
-    const uncertainty=score>=80?t.low:score>=55?t.medium:t.high;
+    // Field presence does not establish truth or predictive certainty.
+    const uncertainty=({en:'Not assessed — supplied information has not been independently verified.',zh:'未评估：所填资料尚未独立核验。',fr:'Non évaluée : les informations fournies ne sont pas vérifiées indépendamment.',es:'No evaluada: la información aportada no se ha verificado de forma independiente.'})[l];
     const k=(Array.isArray(knowledge)?knowledge:[]).slice(0,5);
     const knowledgeLines=k.length?k.map(x=>bullet(`${x.id} · ${t.status}: ${x.status||'—'} · ${t.source}: ${x.source||'—'}\n  ${clean(x.summary,420)}`)):[bullet(t.knowledgeNone)];
     const lines=[
