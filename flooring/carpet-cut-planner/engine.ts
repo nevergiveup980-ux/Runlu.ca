@@ -2,20 +2,20 @@
  * All internal dimensions are inches; all areas are square inches.
  * Rectangular cut pieces only. No seams or pattern matching in this phase.
  */
-export type Roll = { id:string; widthIn:number; lengthIn:number; dyeLot:string };
+export type Roll = { id:string; widthIn:number; lengthIn:number; dyeLot:string; priority?:number };
 export type Piece = { id:string; widthIn:number; lengthIn:number; dyeLot?:string; allowRotate?:boolean };
 export type Placement = { pieceId:string; rollId:string; xIn:number; yIn:number; widthIn:number; lengthIn:number };
 export type Plan = { placements:Placement[]; unplaced:string[]; usedAreaSF:number; allocatedAreaSF:number; wasteAreaSF:number; wastePercent:number; usedLengthByRoll:Record<string,number> };
 export const sfToSyd=(sf:number)=>sf/9;
 export const inchesToFeet=(inch:number)=>inch/12;
 export const areaSF=(wIn:number,lIn:number)=>wIn*lIn/144;
-type Space={rollId:string;x:number;y:number;w:number;h:number;dyeLot:string};
+type Space={rollId:string;x:number;y:number;w:number;h:number;dyeLot:string;priority:number};
 export function planCuts(rolls:Roll[],pieces:Piece[],order: 'area'|'length'|'width'|'input'='area'):Plan {
   const rollIds=new Set<string>(),pieceIds=new Set<string>();
   for(const r of rolls){
     if(!r.id?.trim()||rollIds.has(r.id))throw Error("Duplicate or empty roll ID");
     rollIds.add(r.id);
-    if(!Number.isFinite(r.widthIn)||!Number.isFinite(r.lengthIn)||r.widthIn<=0||r.lengthIn<=0||!r.dyeLot?.trim())throw Error("Invalid roll");
+    if(!Number.isFinite(r.widthIn)||!Number.isFinite(r.lengthIn)||r.widthIn<=0||r.lengthIn<=0||!r.dyeLot?.trim()||(r.priority!==undefined&&(!Number.isInteger(r.priority)||r.priority<0)))throw Error("Invalid roll");
   }
   for(const p of pieces){
     if(!p.id?.trim()||pieceIds.has(p.id))throw Error("Duplicate or empty piece ID");
@@ -23,20 +23,20 @@ export function planCuts(rolls:Roll[],pieces:Piece[],order: 'area'|'length'|'wid
     if(!Number.isFinite(p.widthIn)||!Number.isFinite(p.lengthIn)||p.widthIn<=0||p.lengthIn<=0)throw Error("Invalid piece");
   }
   if(!rolls.length||!pieces.length)throw Error("At least one roll and one piece are required");
-  const spaces:Space[]=rolls.map(r=>({rollId:r.id,x:0,y:0,w:r.widthIn,h:r.lengthIn,dyeLot:r.dyeLot}));
+  const spaces:Space[]=rolls.map(r=>({rollId:r.id,x:0,y:0,w:r.widthIn,h:r.lengthIn,dyeLot:r.dyeLot,priority:r.priority??0}));
   const placements:Placement[]=[]; const unplaced:string[]=[];
   const ordered=[...pieces];
   if(order==='area')ordered.sort((a,b)=>b.widthIn*b.lengthIn-a.widthIn*a.lengthIn);
   else if(order==='length')ordered.sort((a,b)=>b.lengthIn-a.lengthIn);
   else if(order==='width')ordered.sort((a,b)=>b.widthIn-a.widthIn);
   for(const p of ordered){
-    let best:{i:number;w:number;h:number;score:number}|undefined;
+    let best:{i:number;w:number;h:number;score:number;priority:number}|undefined;
     for(let i=0;i<spaces.length;i++){
       const s=spaces[i]; if(p.dyeLot&&p.dyeLot!==s.dyeLot)continue;
       const orientations=[[p.widthIn,p.lengthIn],...(p.allowRotate?[[p.lengthIn,p.widthIn]]:[])];
       for(const [w,h] of orientations) if(w<=s.w&&h<=s.h){
         const score=s.w*s.h-w*h;
-        if(!best||score<best.score)best={i,w,h,score};
+        if(!best||s.priority<best.priority||(s.priority===best.priority&&score<best.score))best={i,w,h,score,priority:s.priority};
       }
     }
     if(!best){unplaced.push(p.id);continue;}
