@@ -3,11 +3,11 @@ import type {Roll,Piece} from "./engine";
 type InputRoll={id:string;w:number;l:number;lot:string;stockType?:'FULL'|'SHORT'|'REMNANT'};
 type InputPiece={id:string;w:number;l:number;lot:string;rotate:boolean};
 export function calculateShared(rollInputs:InputRoll[],pieceInputs:InputPiece[],selected=0,shortRollFirst=false){
- const rolls:Roll[]=rollInputs.map(r=>({id:r.id,widthIn:r.w*12,lengthIn:r.l*12,dyeLot:r.lot}));
+ const rolls:Roll[]=rollInputs.map(r=>({id:r.id,widthIn:r.w*12,lengthIn:r.l*12,dyeLot:r.lot,priority:shortRollFirst?({REMNANT:0,SHORT:1,FULL:2}[r.stockType||'FULL']):0}));
  const pieces:Piece[]=pieceInputs.map(p=>({id:p.id,widthIn:p.w*12,lengthIn:p.l*12,dyeLot:p.lot||undefined,allowRotate:p.rotate}));
  // Optional inventory preference: shorter rolls are offered to the greedy engine first.
  // This is a heuristic, not a guarantee of minimum material consumption.
- const orderedRolls=shortRollFirst?[...rolls].sort((a,b)=>a.lengthIn-b.lengthIn):rolls;
+ const orderedRolls=shortRollFirst?[...rolls].sort((a,b)=>(a.priority??0)-(b.priority??0)||a.lengthIn-b.lengthIn):rolls;
  const scenarios=comparePlans(orderedRolls,pieces);
  if(!scenarios.length)throw Error("No candidate plans");
  if(!Number.isInteger(selected)||selected<0||selected>=scenarios.length)throw Error("Invalid scenario selection");
