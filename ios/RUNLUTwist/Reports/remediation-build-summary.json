@@ -1,0 +1,30 @@
+[
+  {
+    "platform": "Release-iphonesimulator",
+    "result": "PASS",
+    "version": "1.1",
+    "build": "4",
+    "bundleId": "ca.runlu.twist",
+    "deviceFamily": [
+      1
+    ],
+    "minimumOS": "17.0",
+    "signing": "CODE_SIGNING_ALLOWED=NO",
+    "htmlSHA256": "15c3fd3c09d54114f10175943d448fb8a80020f33282fc7d3783446023271541",
+    "log": "/Users/zhangjohn/Documents/Codex/2026-10-25/runlu-twist-app-store-xcode-testflight/work/twist11-build-final.log"
+  },
+  {
+    "platform": "Release-iphoneos",
+    "result": "PASS",
+    "version": "1.1",
+    "build": "4",
+    "bundleId": "ca.runlu.twist",
+    "deviceFamily": [
+      1
+    ],
+    "minimumOS": "17.0",
+    "signing": "CODE_SIGNING_ALLOWED=NO",
+    "htmlSHA256": "15c3fd3c09d54114f10175943d448fb8a80020f33282fc7d3783446023271541",
+    "log": "/Users/zhangjohn/Documents/Codex/2026-10-25/runlu-twist-app-store-xcode-testflight/work/twist11-device-build.log"
+  }
+]

@@ -33,7 +33,17 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
         let content = WKUserContentController()
         content.add(self, name: "twist")
         content.addUserScript(WKUserScript(source: Self.diagnostics, injectionTime: .atDocumentStart, forMainFrameOnly: true))
-        let snapshot = UserDefaults.standard.string(forKey: storageKey) ?? "{}"
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-twist-qa-suite") {
+            UserDefaults.standard.removeObject(forKey: storageKey)
+        }
+        #endif
+        var snapshot = UserDefaults.standard.string(forKey: storageKey) ?? "{}"
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-twist-qa-corrupt") {
+            snapshot = #"{"twist-reasoning-v1":"7","twist-reflections-v1":"[]","twist-studio-v1":"{broken","runlu-twist-node001-v1":"null","twist-lang":"en"}"#
+        }
+        #endif
         let bootstrap = "window.__twistNativeSnapshot = \(snapshot);"
         content.addUserScript(WKUserScript(source: bootstrap, injectionTime: .atDocumentStart, forMainFrameOnly: true))
         let config = WKWebViewConfiguration()
@@ -67,11 +77,26 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
         guard message.frameInfo.isMainFrame,
               let source = message.frameInfo.request.url, isBundledFile(source),
               let body = message.body as? [String: Any], let type = body["type"] as? String else { return }
+        #if DEBUG
+        if type == "qa", let report = body["report"] as? [String: Any] {
+            let failed = report["failed"] as? Int ?? -1
+            let passed = report["passed"] as? Int ?? 0
+            logger.info("WK QA report: \(String(describing: report), privacy: .public)")
+            let label = UILabel()
+            label.accessibilityIdentifier = "twist-qa-result"
+            label.text = "WK QA \(failed == 0 ? "PASS" : "FAIL") \(passed)/\(passed + failed)"
+            label.backgroundColor = .systemBackground
+            label.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(label)
+            NSLayoutConstraint.activate([label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),label.leadingAnchor.constraint(equalTo: view.leadingAnchor),label.trailingAnchor.constraint(equalTo: view.trailingAnchor)])
+            return
+        }
+        #endif
         if type == "error", let detail = body["message"] as? String {
             logger.error("JavaScript startup error: \(detail, privacy: .public)")
             showError("Game startup failed. Please reopen the app. / 游戏启动失败，请重新打开。")
         } else if type == "save", let values = body["values"] as? [String: String],
-           Set(values.keys).isSubset(of: ["runlu-twist-node001-v1", "twist-lang"]),
+           Set(values.keys).isSubset(of: ["runlu-twist-node001-v1", "twist-lang", "twist-reasoning-v1", "twist-reflections-v1", "twist-studio-v1"]),
            JSONSerialization.isValidJSONObject(values),
            let data = try? JSONSerialization.data(withJSONObject: values), data.count < 65536,
            let string = String(data: data, encoding: .utf8) {
@@ -111,7 +136,7 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
     func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String,
                  initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
         guard presentedViewController == nil else { completionHandler(false); return }
-        let chinese = message.contains("确定")
+        let chinese = message.contains("确定") || message.contains("重置")
         let alert = UIAlertController(title: chinese ? "重置进度" : "Reset progress", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: chinese ? "取消" : "Cancel", style: .cancel) { _ in completionHandler(false) })
         alert.addAction(UIAlertAction(title: chinese ? "重置" : "Reset", style: .destructive) { _ in completionHandler(true) })
@@ -120,6 +145,30 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         syncAppearance()
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-twist-qa-suite"), webView.url?.lastPathComponent == "twist.html",
+           let scriptURL = Bundle.main.url(forResource: "qa-suite", withExtension: "js", subdirectory: "Web"),
+           let script = try? String(contentsOf: scriptURL, encoding: .utf8) {
+            webView.evaluateJavaScript(script + "\nwindow.webkit.messageHandlers.twist.postMessage({type:'qa',report:runTwistQA()}); true;") { [weak self] _, error in
+                if let error { self?.showError(error.localizedDescription) }
+            }
+        }
+        if ProcessInfo.processInfo.arguments.contains("-twist-qa-large-type"), webView.url?.lastPathComponent == "twist.html" {
+            webView.evaluateJavaScript("""
+            (() => {
+                const font = parseFloat(getComputedStyle(document.documentElement).fontSize);
+                const controlFont = parseFloat(getComputedStyle(document.getElementById('language')).fontSize);
+                const width = document.documentElement.clientWidth;
+                const overflow = document.documentElement.scrollWidth > width + 1;
+                const ok = font >= 40 && controlFont >= 40 && !overflow;
+                window.webkit.messageHandlers.twist.postMessage({type:'qa',report:{passed:ok?1:0,failed:ok?0:1,font,controlFont,width,overflow}});
+                return true;
+            })()
+            """) { [weak self] _, error in
+                if let error { self?.showError(error.localizedDescription) }
+            }
+        }
+        #endif
         guard let url = webView.url, url.lastPathComponent == "twist.html" else { return }
         webView.evaluateJavaScript("document.getElementById('question')?.textContent?.trim().length > 0") { [weak self] result, error in
             guard let self else { return }
