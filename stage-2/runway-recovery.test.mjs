@@ -23,3 +23,13 @@ test("unsubmitted task can be submitted",()=>{
 test("invalid submission outcome is rejected",()=>{
  assert.throws(()=>decideRunwayRecovery({submissionOutcome:"maybe"}));
 });
+
+test("unknown provider status fails closed",()=>{
+ assert.equal(decideRunwayRecovery({submissionOutcome:"confirmed_submitted",taskId:"task-1",taskStatus:"UNRECOGNIZED"}).action,"HOLD_FOR_RECONCILIATION");
+});
+test("contradictory unsubmitted evidence fails closed",()=>{
+ assert.equal(decideRunwayRecovery({submissionOutcome:"not_submitted",taskId:"task-1"}).action,"HOLD_FOR_RECONCILIATION");
+});
+test("unknown submission outcome ignores task status",()=>{
+ assert.equal(decideRunwayRecovery({submissionOutcome:"unknown",taskId:"task-1",taskStatus:"FAILED"}).action,"HOLD_FOR_RECONCILIATION");
+});
