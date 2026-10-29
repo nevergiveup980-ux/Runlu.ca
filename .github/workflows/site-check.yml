@@ -61,7 +61,9 @@ jobs:
       - name: Check GUANSHI protected-page access
         run: node scripts/check-guanshi-access.mjs
       - name: Test GUANSHI local reasoner
-        run: node scripts/check-guanshi-local-reasoner.mjs
+        run: |
+          node scripts/check-guanshi-local-reasoner.mjs
+          node scripts/check-guanshi-evidence.mjs
       - name: Check GUANSHI local knowledge wiring
         run: |
           python - <<'PY'
@@ -74,7 +76,7 @@ jobs:
               raise SystemExit('GUANSHI local knowledge index is missing its version/export contract')
           if "runlu_guanshi_local_knowledge_v1" not in kb or "shareWithAnalysis" not in kb:
               raise SystemExit('GUANSHI user local-library storage/consent contract is missing')
-          if "2.1-local-reasoner-v1" not in reasoner or "window.GUANSHI_LOCAL_REASONER" not in reasoner:
+          if "2.1-local-reasoner-v2" not in reasoner or "window.GUANSHI_LOCAL_REASONER" not in reasoner:
               raise SystemExit('GUANSHI V2.1 local reasoner export/version contract is missing')
           if "_runlu_local_knowledge_context" not in consult or "GUANSHI_KB?.search" not in consult:
               raise SystemExit('GUANSHI consultation is not using the local knowledge retriever')
@@ -84,7 +86,7 @@ jobs:
               text = Path(page).read_text(encoding='utf-8')
               if 'guanshi-knowledge.js?v=20260907-2' not in text:
                   raise SystemExit(f'{page} is not loading the current local knowledge index')
-              if 'guanshi-local-reasoner.js?v=20260907-1' not in text or 'data-local-only' not in text:
+              if 'guanshi-local-reasoner.js?v=20261029-1' not in text or 'data-local-only' not in text:
                   raise SystemExit(f'{page} is missing the V2.1 local reasoner or local-only control')
               if 'guanshi-library.html' not in text:
                   raise SystemExit(f'{page} is missing the Local Library route')

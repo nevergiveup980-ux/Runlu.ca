@@ -33,7 +33,7 @@
     return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
   }
   function canonicalOriginal(o){
-    return JSON.stringify({id:o.id,created_at:o.created_at,route:o.route,type:o.type,question:o.question,claim:o.claim,predicted_outcome:o.predicted_outcome,confidence:o.confidence,review_date:o.review_date,stakes:o.stakes,recommendation:o.recommendation,reasons:o.reasons,counterargument:o.counterargument,falsifier:o.falsifier,source_consultation:o.source_consultation});
+    return JSON.stringify({id:o.id,created_at:o.created_at,route:o.route,type:o.type,question:o.question,claim:o.claim,predicted_outcome:o.predicted_outcome,confidence:o.confidence,review_date:o.review_date,stakes:o.stakes,recommendation:o.recommendation,reasons:o.reasons,counterargument:o.counterargument,falsifier:o.falsifier,source_consultation:o.source_consultation,...(o.consultation_snapshot?{consultation_snapshot:o.consultation_snapshot}:{})});
   }
   function caseId(){
     const d = new Date(), pad=n=>String(n).padStart(2,'0');
@@ -56,6 +56,22 @@
   function toggleReviewType(){
     const c = load().find(x=>x.id===reviewCase?.value);
     reviewBinary.forEach(el=>el.classList.toggle('hidden',c?.type!=='binary'));
+  }
+
+  function consultationSnapshot(source,question,route){
+    try{
+      const last=JSON.parse(sessionStorage.getItem(LAST_KEY)||'null');
+      // Never attach an unrelated consultation after the user edits/pastes the form.
+      if(!last||!clean(source)||clean(last.full_text)!==clean(source)||clean(last.question)!==clean(question)||last.mode!==route) return null;
+      return {schema_version:1,generated_at:last.generated_at||null,mode:last.mode,
+        language:last.language||null,engine:last.engine||'unknown',
+        engine_version:last.local_baseline?.version||'unknown',
+        knowledge_version:last.knowledge_version||'unknown',
+        fields:last.fields||{},knowledge_used:last.knowledge_used||[],
+        knowledge_shared_cloud:last.knowledge_shared_cloud||[],
+        local_baseline:last.local_baseline||null,
+        traditional_structure:last.traditional_structure||null,chart:last.chart||null};
+    }catch{return null;}
   }
 
   function prefillFromLast(){
@@ -99,8 +115,12 @@
 
   function renderMetrics(cases){
     if(!metricsBox) return;
-    const finals = cases.flatMap(c=>(c.reviews||[]).filter(r=>r.status==='final').map(r=>({c,r})));
-    const binary = finals.filter(({c,r})=>c.type==='binary'&&['yes','no'].includes(r.actual_outcome));
+    // Reviews are append-only. The latest final supersedes earlier finals for scoring.
+    const finals = cases.flatMap(c=>{
+      const r=[...(c.reviews||[])].reverse().find(r=>r.status==='final');
+      return r?[{c,r}]:[];
+    });
+    const binary = finals.filter(({c,r})=>c.type==='binary'&&['yes','no'].includes(r.actual_outcome)&&['yes','no'].includes(c.predicted_outcome)&&Number.isFinite(Number(c.confidence))&&Number(c.confidence)>=50&&Number(c.confidence)<=99);
     const correct = binary.filter(({c,r})=>c.predicted_outcome===r.actual_outcome).length;
     const meanBrier = binary.length ? binary.reduce((a,{c,r})=>a+brierFor(c,r),0)/binary.length : null;
     metricsBox.innerHTML = [
@@ -122,6 +142,8 @@
       recommendation:clean(d.get('recommendation')), reasons:clean(d.get('reasons')), counterargument:clean(d.get('counterargument')), falsifier:clean(d.get('falsifier')), source_consultation:clean(d.get('source_consultation')),
       reviews:[]
     };
+    const snapshot=consultationSnapshot(original.source_consultation,original.question,original.route);
+    if(snapshot) original.consultation_snapshot=snapshot;
     original.fingerprint = await sha256(canonicalOriginal(original));
     const cases=load(); cases.push(original); save(cases); await render();
     alert(t().saved); freezeForm.reset(); toggleType(); prefillFromLast();
