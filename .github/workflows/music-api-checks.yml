@@ -1,0 +1,26 @@
+name: Music Studio API checks
+on:
+  push:
+    branches: [feature/music-studio-mvp]
+    paths:
+      - 'music/api/**'
+      - '.github/workflows/music-api-checks.yml'
+  pull_request:
+    paths:
+      - 'music/api/**'
+      - '.github/workflows/music-api-checks.yml'
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: music/api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run API contract tests
+        run: npm test
