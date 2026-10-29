@@ -16,3 +16,6 @@
 .bar{height:8px;position:relative;border-radius:9px}
 @media(prefers-color-scheme:dark){.progress::before{background:#35445a}}
 :root[data-native-appearance="dark"] .progress::before{background:#35445a}
+
+/* Form controls do not inherit Dynamic Type automatically in WebKit. */
+select{font:inherit;max-width:100%}

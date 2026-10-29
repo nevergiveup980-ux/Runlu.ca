@@ -157,10 +157,11 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
             webView.evaluateJavaScript("""
             (() => {
                 const font = parseFloat(getComputedStyle(document.documentElement).fontSize);
+                const controlFont = parseFloat(getComputedStyle(document.getElementById('language')).fontSize);
                 const width = document.documentElement.clientWidth;
                 const overflow = document.documentElement.scrollWidth > width + 1;
-                const ok = font >= 40 && !overflow;
-                window.webkit.messageHandlers.twist.postMessage({type:'qa',report:{passed:ok?1:0,failed:ok?0:1,font,width,overflow}});
+                const ok = font >= 40 && controlFont >= 40 && !overflow;
+                window.webkit.messageHandlers.twist.postMessage({type:'qa',report:{passed:ok?1:0,failed:ok?0:1,font,controlFont,width,overflow}});
                 return true;
             })()
             """) { [weak self] _, error in

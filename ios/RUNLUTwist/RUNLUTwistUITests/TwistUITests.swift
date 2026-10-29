@@ -315,7 +315,7 @@ extension AccessibilityUITests {
         app.launch()
         let layout = app.staticTexts["twist-qa-result"]
         XCTAssertTrue(layout.waitForExistence(timeout: 30))
-        XCTAssertEqual(layout.label, "WK QA PASS 1/1", "Expected actual web root font >=40pt and no horizontal document overflow")
+        XCTAssertEqual(layout.label, "WK QA PASS 1/1", "Expected root and language-control fonts >=40pt and no horizontal document overflow")
         let language = app.descendants(matching: .any)["Puzzle language"].exists ? app.descendants(matching: .any)["Puzzle language"] : app.descendants(matching: .any)["题目语言"]
         XCTAssertTrue(language.exists)
         let shot = XCTAttachment(screenshot: app.screenshot());shot.name="Build4-largest-Dynamic-Type";shot.lifetime = .keepAlways;add(shot)
