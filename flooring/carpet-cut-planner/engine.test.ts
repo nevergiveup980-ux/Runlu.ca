@@ -17,5 +17,23 @@ describe("carpet planner engine",()=>{
 
  it("rejects duplicate roll IDs",()=>{expect(()=>planCuts([{id:"R1",widthIn:144,lengthIn:240,dyeLot:"A"},{id:"R1",widthIn:144,lengthIn:240,dyeLot:"A"}],[{id:"P1",widthIn:72,lengthIn:120}])).toThrow()});
  it("rejects nonfinite dimensions",()=>{expect(()=>planCuts([{id:"R1",widthIn:Infinity,lengthIn:240,dyeLot:"A"}],[{id:"P1",widthIn:72,lengthIn:120}])).toThrow()});
+ it("keeps mixed widths and dye lots isolated",()=>{
+  const stock=[
+   {id:"A12",widthIn:144,lengthIn:240,dyeLot:"A",priority:2},
+   {id:"B10",widthIn:120,lengthIn:120,dyeLot:"B",priority:0},
+   {id:"A8",widthIn:96,lengthIn:120,dyeLot:"A",priority:0}
+  ];
+  const pieces=[
+   {id:"A-wide",widthIn:130,lengthIn:120,dyeLot:"A"},
+   {id:"B-only",widthIn:100,lengthIn:120,dyeLot:"B"},
+   {id:"A-small",widthIn:90,lengthIn:120,dyeLot:"A"}
+  ];
+  const plan=planCuts(stock,pieces);
+  expect(plan.unplaced).toEqual([]);
+  expect(Object.fromEntries(plan.placements.map(p=>[p.pieceId,p.rollId]))).toEqual({"A-wide":"A12","B-only":"B10","A-small":"A8"});
+  expect(plan.usedLengthByRoll).toEqual({A12:120,B10:120,A8:120});
+  expect(plan.usedAreaSF).toBeCloseTo(320);
+  expect(plan.allocatedAreaSF).toBe(300);
+ });
  it("allows rotation when requested",()=>{const p=planCuts([{id:"R1",widthIn:120,lengthIn:240,dyeLot:"A"}],[{id:"P1",widthIn:144,lengthIn:100,allowRotate:true}]);expect(p.unplaced).toEqual([])});
 });
