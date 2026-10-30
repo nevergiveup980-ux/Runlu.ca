@@ -58,6 +58,24 @@ describe("browser adapter",()=>{
   expect(p.scenarios[0].usedRolls[0]).toMatchObject({id:"REM",usedLF:10,usedSF:120});
   expect(p.scenarios[0].wasteSF).toBe(60);
  });
+ it("reports mixed-width roll usage separately instead of summing LF",()=>{
+  const inventory=[
+   {id:"A12",w:12,l:20,lot:"A",stockType:"FULL" as const},
+   {id:"B10",w:10,l:10,lot:"B",stockType:"SHORT" as const},
+   {id:"A8",w:8,l:10,lot:"A",stockType:"REMNANT" as const}
+  ];
+  const cuts=[
+   {id:"A-wide",w:11,l:10,lot:"A",rotate:false},
+   {id:"B-only",w:9,l:10,lot:"B",rotate:false},
+   {id:"A-small",w:7,l:10,lot:"A",rotate:false}
+  ];
+  const result=calculateShared(inventory,cuts,0,true);
+  expect(result.unplaced).toEqual([]);
+  expect(result.used).toEqual({A12:10,B10:10,A8:10});
+  expect(result.net).toBe(270);
+  expect(result.allocated).toBe(300);
+  expect(result.rollSummary.find(r=>r.id==="A12")?.remainingLF).toBe(10);
+ });
  it("rejects out-of-range scenario index",()=>{
   expect(()=>calculateShared(rolls,pieces,999)).toThrow("Invalid scenario selection");
  });
