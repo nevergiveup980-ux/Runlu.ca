@@ -54,5 +54,5 @@ $("count").textContent=t.count(hits.length);
 $("results").innerHTML=hits.length?hits.map(e=>'<article><div class="meta">'+safe(e.id)+'</div><h2>'+safe(e.titles[lang]||e.titles.en)+'</h2><div class="meta"><span class="tag">'+safe(categories[e.category]?.[lang]||e.category)+'</span><span class="tag">'+safe(e.scope?.type==="global"?regions.global[lang]:(e.scope?.codes||[]).join(", "))+'</span></div><p>'+safe(e.summaries[lang]||e.summaries.en)+'</p><a href="'+safe(e.sources[0].url)+'" target="_blank" rel="noopener noreferrer">'+safe(t.source)+'</a></article>').join(""):'<p>'+safe(t.empty)+'</p>';
 document.documentElement.lang=lang==="zh"?"zh-Hans":lang;
 }
-["languageToggle","region","category"].forEach(id=>$(id).addEventListener("change",render));$("search").addEventListener("input",render);render();loadPublished();
+["languageToggle","region","category"].forEach(id=>$(id).addEventListener("change",render));$("search").addEventListener("input",render);window.addEventListener("runlu:languagechange",render);render();loadPublished();
 </script><script src="../runlu-language.js?v=2.2"></script></body></html>
