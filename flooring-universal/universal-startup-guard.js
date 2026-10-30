@@ -20,7 +20,7 @@ function journalRawValid(){
  }catch(_){return false}
 }
 function markClean(reason){
- const s=previous()||{};if(!s.sessionOpen)return s;
+ const s=previous()||{};if(!s.sessionOpen||startup?.issues?.some(x=>x.code==='STARTUP_RECOVERY_POINT_FAILED'))return s;
  // A pagehide is not a clean exit while a recovery transaction remains unresolved.
  let active;
  try{active=window.RUNLUUniversalCrashJournal?.inspect?.()?.active}catch(_){active=null}
