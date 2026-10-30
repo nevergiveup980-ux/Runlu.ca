@@ -30,6 +30,8 @@ async function checkFailedRecoveryPoint(mode){
  assert(result.issues.some(x=>x.code==='STARTUP_RECOVERY_POINT_FAILED'));
  const again=await window.RUNLUUniversalStartupGuard.recheck();
  assert.equal(again.blocked,true,'recheck must not clear failed recovery point');
+ window.RUNLUUniversalStartupGuard.markClean('pagehide');
+ assert.equal(state.sessionOpen,true,'failed recovery point must survive pagehide as unclean');
  assert(again.issues.some(x=>x.code==='STARTUP_RECOVERY_POINT_FAILED'));
  assert.equal(state.priorSessionId,'previous-session');
  console.log('PASS failed recovery point '+mode+' blocks restart');
