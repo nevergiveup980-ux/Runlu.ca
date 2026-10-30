@@ -50,6 +50,14 @@ describe("browser adapter",()=>{
   const p=calculateShared(inventory,[{id:"P",w:6,l:10,lot:"A",rotate:false}],0,true);
   expect(p.placed[0].roll).toBe("FULL");
  });
+ it("reports used roll counts and length for candidate comparison",()=>{
+  const stock=[{id:"REM",w:12,l:10,lot:"A",stockType:"REMNANT" as const},{id:"FULL",w:12,l:30,lot:"A",stockType:"FULL" as const}];
+  const p=calculateShared(stock,[{id:"P",w:6,l:10,lot:"A",rotate:false}],0,true);
+  expect(p.scenarios[0].rollCount).toBe(1);
+  expect(p.scenarios[0].remnantCount).toBe(1);
+  expect(p.scenarios[0].usedRolls[0]).toMatchObject({id:"REM",usedLF:10,usedSF:120});
+  expect(p.scenarios[0].wasteSF).toBe(60);
+ });
  it("rejects out-of-range scenario index",()=>{
   expect(()=>calculateShared(rolls,pieces,999)).toThrow("Invalid scenario selection");
  });
