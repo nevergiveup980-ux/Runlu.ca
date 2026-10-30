@@ -11,7 +11,7 @@ article{background:#fff;border:1px solid #e0e2db;border-radius:14px;padding:20px
 .meta{font-size:.8rem;color:#53665b}.tag{display:inline-block;padding:4px 8px;border-radius:20px;background:#e9f0e9;margin-right:6px}
 a{color:#236c61;overflow-wrap:anywhere}footer{font-size:.85rem;color:#5a695f}button{cursor:pointer}
 </style></head><body><header><div class="eyebrow">RUNLU · 润庐 / Prototype only</div><h1>RUNLU KNOWLEDGE<span style="font-size:.5em;vertical-align:top">™</span></h1>
-<p id="intro">Global knowledge. Local relevance.</p><label for="lang">Language / 语言</label> <select id="lang" aria-label="Language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select></header>
+<p id="intro">Global knowledge. Local relevance.</p><label for="lang">Language / 语言</label> <select id="languageToggle" class="language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select></header>
 <main><div class="controls"><input id="search" type="search" placeholder="Search knowledge..." aria-label="Search"><select id="region" aria-label="Region"></select><select id="category" aria-label="Category"></select></div>
 <p id="count" role="status"></p><section id="results" class="cards" aria-label="Knowledge entries"></section></main>
 <footer><p id="notice">Phase 0 demonstration: original explanatory summaries and source pointers. No licensed datasets or copyrighted article texts are redistributed. Source links are for verification; permissions must be reviewed per dataset before ingestion.</p></footer>
@@ -44,7 +44,7 @@ async function loadPublished(){
 const regions={global:{en:"Global",zh:"全球",fr:"Monde",es:"Global"},europe:{en:"Europe",zh:"欧洲",fr:"Europe",es:"Europa"},"north-america":{en:"North America",zh:"北美",fr:"Amérique du Nord",es:"Norteamérica"}};
 const categories={construction:{en:"Construction",zh:"建筑与地材",fr:"Construction",es:"Construcción"},economy:{en:"Economy",zh:"经济",fr:"Économie",es:"Economía"},research:{en:"Research",zh:"科研",fr:"Recherche",es:"Investigación"},careers:{en:"Careers",zh:"职业",fr:"Métiers",es:"Profesiones"}};
 const $=id=>document.getElementById(id);const safe=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function render(){const lang=$("lang").value,t=UI[lang],region=$("region").value,category=$("category").value,q=$("search").value.toLocaleLowerCase();
+function render(){const lang=$("languageToggle").value,t=UI[lang],region=$("region").value,category=$("category").value,q=$("search").value.toLocaleLowerCase();
 $("intro").textContent=t.intro;$("search").placeholder=t.search;$("notice").textContent=t.notice;
 const setOptions=(id,all,map,selected)=>{$(id).innerHTML='<option value="">'+safe(all)+'</option>'+Object.keys(map).map(k=>'<option value="'+safe(k)+'">'+safe(map[k][lang])+'</option>').join("");$(id).value=selected};
 setOptions("region",t.allRegions,regions,region);setOptions("category",t.allCategories,categories,category);
@@ -54,5 +54,5 @@ $("count").textContent=t.count(hits.length);
 $("results").innerHTML=hits.length?hits.map(e=>'<article><div class="meta">'+safe(e.id)+'</div><h2>'+safe(e.titles[lang]||e.titles.en)+'</h2><div class="meta"><span class="tag">'+safe(categories[e.category]?.[lang]||e.category)+'</span><span class="tag">'+safe(e.scope?.type==="global"?regions.global[lang]:(e.scope?.codes||[]).join(", "))+'</span></div><p>'+safe(e.summaries[lang]||e.summaries.en)+'</p><a href="'+safe(e.sources[0].url)+'" target="_blank" rel="noopener noreferrer">'+safe(t.source)+'</a></article>').join(""):'<p>'+safe(t.empty)+'</p>';
 document.documentElement.lang=lang==="zh"?"zh-Hans":lang;
 }
-["lang","region","category"].forEach(id=>$(id).addEventListener("change",render));$("search").addEventListener("input",render);render();loadPublished();
-</script></body></html>
+["languageToggle","region","category"].forEach(id=>$(id).addEventListener("change",render));$("search").addEventListener("input",render);render();loadPublished();
+</script><script src="../runlu-language.js?v=2.2"></script></body></html>
