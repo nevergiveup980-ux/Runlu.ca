@@ -32,7 +32,7 @@ describe("carpet planner engine",()=>{
   expect(plan.unplaced).toEqual([]);
   expect(Object.fromEntries(plan.placements.map(p=>[p.pieceId,p.rollId]))).toEqual({"A-wide":"A12","B-only":"B10","A-small":"A8"});
   expect(plan.usedLengthByRoll).toEqual({A12:120,B10:120,A8:120});
-  expect(plan.usedAreaSF).toBeCloseTo(320);
+  expect(plan.usedAreaSF).toBeCloseTo((130+100+90)*120/144);
   expect(plan.allocatedAreaSF).toBe(300);
  });
  it("allows rotation when requested",()=>{const p=planCuts([{id:"R1",widthIn:120,lengthIn:240,dyeLot:"A"}],[{id:"P1",widthIn:144,lengthIn:100,allowRotate:true}]);expect(p.unplaced).toEqual([])});
