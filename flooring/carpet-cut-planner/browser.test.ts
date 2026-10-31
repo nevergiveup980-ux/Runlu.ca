@@ -101,6 +101,16 @@ describe("browser adapter",()=>{
  it("rejects negative pattern repeat",()=>{
   expect(()=>calculateShared(rolls,pieces,0,false,{widthIn:0,lengthIn:0},-2)).toThrow("Pattern repeat");
  });
+ it("requires installer review and flags pattern matching",()=>{
+  const p=calculateShared(rolls,pieces,0,false,{widthIn:0,lengthIn:0},18);
+  expect(p.requiresInstallerReview).toBe(true);
+  expect(p.installationChecks.some(x=>x.includes("pattern phase"))).toBe(true);
+ });
+ it("flags rotation and unspecified dye lots for review",()=>{
+  const p=calculateShared(rolls,[{id:"P",w:6,l:10,lot:"",rotate:true}]);
+  expect(p.installationChecks.some(x=>x.includes("Rotation"))).toBe(true);
+  expect(p.installationChecks.some(x=>x.includes("dye lot"))).toBe(true);
+ });
  it("rejects out-of-range scenario index",()=>{
   expect(()=>calculateShared(rolls,pieces,999)).toThrow("Invalid scenario selection");
  });
