@@ -14,7 +14,13 @@
   const language = () => ({'zh-CN':'zh',fr:'fr',es:'es'}[document.documentElement.lang] || 'en');
   const copy = (en, zh, fr, es) => ({en, zh, fr, es}[language()] || en);
 
+  let statusTranslations = null;
+  const setStatus = (...translations) => {
+    statusTranslations = translations;
+    status.textContent = copy(...translations);
+  };
   const syncLanguage = () => {
+    if (statusTranslations) status.textContent = copy(...statusTranslations);
     const suffix = {en:'En',zh:'Zh',fr:'Fr',es:'Es'}[language()];
     message.placeholder = message.dataset[`placeholder${suffix}`];
     document.querySelectorAll('#noteCategory option[data-en]').forEach(option => {
@@ -25,34 +31,36 @@
   message.addEventListener('input', () => { count.textContent = String(message.value.length); });
   window.addEventListener('runlu:languagechange', syncLanguage);
   document.addEventListener('runlu:languagechange', syncLanguage);
-  setTimeout(syncLanguage, 0);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', syncLanguage, {once: true});
+  else syncLanguage();
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     status.className = 'note-status';
+    statusTranslations = null;
     status.textContent = '';
 
     if (!category.value) {
       status.classList.add('error');
-      status.textContent = copy('Please choose a note type.', '请选择留言类型。', 'Veuillez choisir un type de message.', 'Elija un tipo de mensaje.');
+      setStatus('Please choose a note type.', '请选择留言类型。', 'Veuillez choisir un type de message.', 'Elija un tipo de mensaje.');
       category.focus();
       return;
     }
     if (message.value.trim().length < 10) {
       status.classList.add('error');
-      status.textContent = copy('Please write at least 10 characters.', '请至少写 10 个字。', 'Veuillez écrire au moins 10 caractères.', 'Escriba al menos 10 caracteres.');
+      setStatus('Please write at least 10 characters.', '请至少写 10 个字。', 'Veuillez écrire au moins 10 caractères.', 'Escriba al menos 10 caracteres.');
       message.focus();
       return;
     }
     if (reply.checked && !email.value.trim()) {
       status.classList.add('error');
-      status.textContent = copy('Please add an email if you would like a reply.', '如需回复，请填写邮箱。', 'Veuillez ajouter un courriel si vous souhaitez une réponse.', 'Añada un correo electrónico si desea una respuesta.');
+      setStatus('Please add an email if you would like a reply.', '如需回复，请填写邮箱。', 'Veuillez ajouter un courriel si vous souhaitez une réponse.', 'Añada un correo electrónico si desea una respuesta.');
       email.focus();
       return;
     }
     if (email.value && !email.validity.valid) {
       status.classList.add('error');
-      status.textContent = copy('Please check the email address.', '请检查邮箱格式。', 'Veuillez vérifier l’adresse courriel.', 'Compruebe la dirección de correo electrónico.');
+      setStatus('Please check the email address.', '请检查邮箱格式。', 'Veuillez vérifier l’adresse courriel.', 'Compruebe la dirección de correo electrónico.');
       email.focus();
       return;
     }
@@ -79,10 +87,10 @@
       form.reset();
       count.textContent = '0';
       status.classList.add('success');
-      status.textContent = copy('Thank you. Your note will be read with care.', '谢谢你的留言。我们会认真阅读。', 'Merci. Votre message sera lu avec attention.', 'Gracias. Leeremos su mensaje con atención.');
+      setStatus('Thank you. Your note will be read with care.', '谢谢你的留言。我们会认真阅读。', 'Merci. Votre message sera lu avec attention.', 'Gracias. Leeremos su mensaje con atención.');
     } catch (error) {
       status.classList.add('error');
-      status.textContent = error.message || copy('We could not save your note. Please try again.', '暂时无法提交，请稍后再试。', 'Impossible d’enregistrer votre message. Veuillez réessayer.', 'No pudimos guardar su mensaje. Inténtelo de nuevo.');
+      setStatus('We could not save your note. Please try again.', '暂时无法提交，请稍后再试。', 'Impossible d’enregistrer votre message. Veuillez réessayer.', 'No pudimos guardar su mensaje. Inténtelo de nuevo.');
     } finally {
       submit.disabled = false;
       submit.textContent = copy('Send Note', '发送留言', 'Envoyer le message', 'Enviar mensaje');
