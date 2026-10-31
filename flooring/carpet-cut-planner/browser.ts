@@ -17,7 +17,7 @@ export function calculateShared(rollInputs:InputRoll[],pieceInputs:InputPiece[],
  const used=Object.fromEntries(Object.entries(best.usedLengthByRoll).map(([id,v])=>[id,v/12]));
  const placed=best.placements.map(p=>({id:p.pieceId,roll:p.rollId,x:p.xIn/12,y:p.yIn/12,w:p.widthIn/12,h:p.lengthIn/12}));
  const roomAreaSF=pieceInputs.reduce((sum,p)=>sum+p.w*p.l,0);
- const allowanceAreaSF=best.usedAreaSF-roomAreaSF+best.unplaced.reduce((sum,id)=>{const p=pieceInputs.find(x=>x.id===id);return p?p.w*p.l:0;},0);
+ const allowanceAreaSF=pieceInputs.reduce((sum,p)=>sum+((p.w*12+allowance.widthIn)*(p.l*12+allowance.lengthIn)-p.w*12*p.l*12)/144,0);
  const remaining=rollInputs.reduce((sum,r)=>sum+r.w*(r.l-used[r.id]),0);
  const rollSummary=rollInputs.map(r=>({id:r.id,stockType:r.stockType||'FULL',widthFt:r.w,availableLF:r.l,usedLF:used[r.id]||0,remainingLF:r.l-(used[r.id]||0),remainingSF:r.w*(r.l-(used[r.id]||0))}));
  return {roomAreaSF,allowanceAreaSF,allowance,placed,unplaced:best.unplaced,used,net:best.usedAreaSF,allocated:best.allocatedAreaSF,waste:best.wasteAreaSF,remaining,rollSummary,rate:best.wastePercent,scenarios:summaries.map(s=>({name:s.name,feasible:s.feasible,unplaced:s.plan.unplaced.length,unplacedAreaSF:s.unplacedAreaSF,allocatedSF:s.plan.allocatedAreaSF,wasteSF:s.wasteSF,rollCount:s.rollCount,remnantCount:s.remnantCount,shortCount:s.shortCount,usedRolls:s.usedRolls})),selected};
