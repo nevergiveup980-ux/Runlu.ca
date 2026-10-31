@@ -1,0 +1,30 @@
+name: RUNLU Knowledge validation
+on:
+  pull_request:
+    paths:
+      - 'knowledge/**'
+      - '.github/workflows/knowledge-validation.yml'
+  push:
+    branches:
+      - 'feature/runlu-knowledge-phase0'
+    paths:
+      - 'knowledge/**'
+      - '.github/workflows/knowledge-validation.yml'
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate knowledge records
+        run: node knowledge/scripts/validate.cjs
+      - name: Check publication safety gate
+        run: node knowledge/scripts/check-publication.cjs
+      - name: Test knowledge ID allocation
+        run: node knowledge/scripts/test-allocate.cjs
+      - name: Test knowledge version archives
+        run: node knowledge/scripts/test-archive.cjs
+      - name: Test end-to-end editorial lifecycle
+        run: node knowledge/scripts/test-e2e.cjs

@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU Knowledge Record v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "status",
+    "category",
+    "scope",
+    "titles",
+    "summaries",
+    "sources",
+    "created_at",
+    "updated_at",
+    "review"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^RK-[0-9]{4,}$"
+    },
+    "status": {
+      "enum": [
+        "inbox",
+        "draft",
+        "verification",
+        "approved",
+        "published",
+        "retired"
+      ]
+    },
+    "category": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "object",
+      "required": [
+        "type",
+        "codes"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "global",
+            "regional",
+            "country",
+            "subnational"
+          ]
+        },
+        "codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "titles": {
+      "$ref": "#/$defs/translations"
+    },
+    "summaries": {
+      "$ref": "#/$defs/translations"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "url",
+          "publisher",
+          "license_status",
+          "checked_at"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "publisher": {
+            "type": "string"
+          },
+          "license_status": {
+            "enum": [
+              "unknown",
+              "permitted",
+              "restricted",
+              "prohibited"
+            ]
+          },
+          "license_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "checked_at": {
+            "type": "string",
+            "format": "date"
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "review": {
+      "type": "object",
+      "required": [
+        "facts_verified",
+        "license_verified",
+        "translations_verified"
+      ],
+      "properties": {
+        "facts_verified": {
+          "type": "boolean"
+        },
+        "license_verified": {
+          "type": "boolean"
+        },
+        "translations_verified": {
+          "type": "boolean"
+        },
+        "reviewer": {
+          "type": "string"
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false
+    },
+    "related_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    }
+  },
+  "$defs": {
+    "translations": {
+      "type": "object",
+      "required": [
+        "en"
+      ],
+      "properties": {
+        "en": {
+          "type": "string",
+          "minLength": 1
+        },
+        "zh": {
+          "type": "string"
+        },
+        "fr": {
+          "type": "string"
+        },
+        "es": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

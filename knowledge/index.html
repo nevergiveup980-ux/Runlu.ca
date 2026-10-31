@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>RUNLU KNOWLEDGE — Phase 0 Preview</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#24352f;background:#f7f4ed}*{box-sizing:border-box}
+body{margin:0}header,main,footer{max-width:1050px;margin:auto;padding:24px}header{border-bottom:1px solid #d9d8cf}
+h1{font-size:clamp(2rem,5vw,3.3rem);margin:12px 0}p{line-height:1.65}.eyebrow{letter-spacing:.13em;text-transform:uppercase;font-size:.8rem;color:#60786a}
+.controls{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0}input,select,button{font:inherit;padding:12px;border:1px solid #b8c6bc;border-radius:9px;background:white;color:#24352f}
+input{flex:2;min-width:220px}select{flex:1;min-width:140px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+article{background:#fff;border:1px solid #e0e2db;border-radius:14px;padding:20px}article h2{font-size:1.2rem;margin:6px 0 10px}
+.meta{font-size:.8rem;color:#53665b}.tag{display:inline-block;padding:4px 8px;border-radius:20px;background:#e9f0e9;margin-right:6px}
+a{color:#236c61;overflow-wrap:anywhere}footer{font-size:.85rem;color:#5a695f}button{cursor:pointer}
+</style></head><body><header><div class="eyebrow">RUNLU · 润庐 / Prototype only</div><h1>RUNLU KNOWLEDGE<span style="font-size:.5em;vertical-align:top">™</span></h1>
+<p id="intro">Global knowledge. Local relevance.</p><label for="languageToggle">Language / 语言</label> <select id="languageToggle" class="language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select></header>
+<main><div class="controls"><input id="search" type="search" placeholder="Search knowledge..." aria-label="Search"><select id="region" aria-label="Region"></select><select id="category" aria-label="Category"></select></div>
+<p id="count" role="status"></p><section id="results" class="cards" aria-label="Knowledge entries"></section></main>
+<footer><p id="notice">Phase 0 demonstration: original explanatory summaries and source pointers. No licensed datasets or copyrighted article texts are redistributed. Source links are for verification; permissions must be reviewed per dataset before ingestion.</p></footer>
+<script>
+const UI={
+en:{intro:"Global knowledge. Local relevance.",search:"Search knowledge...",allRegions:"All regions",allCategories:"All categories",count:n=>n+" entries",source:"Reference",empty:"No matching entries.",notice:"Phase 0 demonstration. These are original introductory summaries with source pointers, not imported datasets. Review each dataset's license before reuse."},
+zh:{intro:"全球知识，本地适用。",search:"搜索知识条目...",allRegions:"全部地区",allCategories:"全部分类",count:n=>n+" 条知识记录",source:"参考来源",empty:"没有匹配的条目。",notice:"Phase 0 演示：仅展示原创简介与参考链接，未导入第三方数据集。正式采集前必须逐项核实授权。"},
+fr:{intro:"Savoirs mondiaux, pertinence locale.",search:"Rechercher...",allRegions:"Toutes les régions",allCategories:"Toutes les catégories",count:n=>n+" fiches",source:"Référence",empty:"Aucun résultat.",notice:"Démonstration Phase 0 : résumés originaux et liens de référence, sans jeux de données importés. Vérifier les licences avant toute réutilisation."},
+es:{intro:"Conocimiento global, relevancia local.",search:"Buscar...",allRegions:"Todas las regiones",allCategories:"Todas las categorías",count:n=>n+" fichas",source:"Referencia",empty:"Sin resultados.",notice:"Demostración Phase 0: resúmenes originales y enlaces de referencia, sin importar conjuntos de datos. Verificar las licencias antes de reutilizar."}
+};
+// Public dataset only. Draft and inbox records must never be rendered here.
+let entries=[];
+let loadError=false;
+async function loadPublished(){
+ try{
+  const response=await fetch("./data/published.json",{cache:"no-store"});
+  if(!response.ok)throw new Error("HTTP "+response.status);
+  const dataset=await response.json();
+  if(!dataset||!Array.isArray(dataset.entries))throw new Error("Invalid dataset");
+  loadError=false;
+  entries=dataset.entries.filter(e=>e.status==="published"&&e.review?.facts_verified===true&&e.review?.license_verified===true&&e.review?.translations_verified===true&&Boolean(e.review?.reviewer)&&/^\d{4}-\d{2}-\d{2}$/.test(e.review?.reviewed_at||"")&&["en","zh","fr","es"].every(l=>Boolean(e.titles?.[l]&&e.summaries?.[l]))&&Array.isArray(e.sources)&&e.sources.length>0&&e.sources.every(s=>s.license_status==="permitted")&&e.titles?.en&&e.summaries?.en);
+  render();
+ }catch(err){
+  entries=[];
+  loadError=true;
+  render();
+  console.error("RUNLU Knowledge dataset error",err);
+ }
+}
+const regions={global:{en:"Global",zh:"全球",fr:"Monde",es:"Global"},europe:{en:"Europe",zh:"欧洲",fr:"Europe",es:"Europa"},"north-america":{en:"North America",zh:"北美",fr:"Amérique du Nord",es:"Norteamérica"}};
+const categories={construction:{en:"Construction",zh:"建筑与地材",fr:"Construction",es:"Construcción"},economy:{en:"Economy",zh:"经济",fr:"Économie",es:"Economía"},research:{en:"Research",zh:"科研",fr:"Recherche",es:"Investigación"},careers:{en:"Careers",zh:"职业",fr:"Métiers",es:"Profesiones"}};
+const $=id=>document.getElementById(id);const safe=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function render(){const lang=$("languageToggle").value,t=UI[lang],region=$("region").value,category=$("category").value,q=$("search").value.toLocaleLowerCase();
+$("intro").textContent=t.intro;$("search").placeholder=t.search;$("notice").textContent=t.notice;
+const setOptions=(id,all,map,selected)=>{$(id).innerHTML='<option value="">'+safe(all)+'</option>'+Object.keys(map).map(k=>'<option value="'+safe(k)+'">'+safe(map[k][lang])+'</option>').join("");$(id).value=selected};
+setOptions("region",t.allRegions,regions,region);setOptions("category",t.allCategories,categories,category);
+if(loadError){$("count").textContent="Unable to load published knowledge records."; $("results").textContent="Knowledge data could not be loaded. Please try again later.";return}
+const hits=entries.filter(e=>(!region||e.scope?.type==="global"&&region==="global"||e.scope?.codes?.includes(region))&&(!category||e.category===category)&&(!q||Object.values(e.titles||{}).concat(Object.values(e.summaries||{}),e.id).join(" ").toLocaleLowerCase().includes(q)));
+$("count").textContent=t.count(hits.length);
+$("results").innerHTML=!entries.length?'<p>'+safe(({en:"The knowledge library is being prepared. No reviewed records have been published yet.",zh:"知识库正在建设中，目前尚无完成审核并公开发布的知识条目。",fr:"La bibliothèque est en préparation. Aucune fiche vérifiée n’a encore été publiée.",es:"La biblioteca está en preparación. Aún no se han publicado fichas verificadas."})[lang])+'</p>':hits.length?hits.map(e=>'<article><div class="meta">'+safe(e.id)+'</div><h2>'+safe(e.titles[lang]||e.titles.en)+'</h2><div class="meta"><span class="tag">'+safe(categories[e.category]?.[lang]||e.category)+'</span><span class="tag">'+safe(e.scope?.type==="global"?regions.global[lang]:(e.scope?.codes||[]).join(", "))+'</span></div><p>'+safe(e.summaries[lang]||e.summaries.en)+'</p><a href="'+safe(e.sources[0].url)+'" target="_blank" rel="noopener noreferrer">'+safe(t.source)+'</a></article>').join(""):'<p>'+safe(t.empty)+'</p>';
+document.documentElement.lang=lang==="zh"?"zh-Hans":lang;
+}
+["languageToggle","region","category"].forEach(id=>$(id).addEventListener("change",render));$("search").addEventListener("input",render);window.addEventListener("runlu:languagechange",render);render();loadPublished();
+</script><script src="../runlu-language.js?v=2.2"></script></body></html>

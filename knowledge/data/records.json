@@ -1,0 +1,41 @@
+[
+  {
+    "id": "RK-0001",
+    "status": "draft",
+    "category": "research",
+    "scope": {
+      "type": "global",
+      "codes": []
+    },
+    "titles": {
+      "en": "Open scholarly metadata",
+      "zh": "开放学术元数据",
+      "fr": "Métadonnées scientifiques ouvertes",
+      "es": "Metadatos académicos abiertos"
+    },
+    "summaries": {
+      "en": "OpenAlex indexes scholarly works and relationships. Metadata rights do not automatically cover full-text works.",
+      "zh": "OpenAlex 提供学术成果及关联索引；元数据的许可不自动覆盖论文全文。",
+      "fr": "OpenAlex indexe les travaux scientifiques; les droits sur les métadonnées ne couvrent pas automatiquement les textes intégraux.",
+      "es": "OpenAlex indexa trabajos académicos; los derechos sobre metadatos no cubren automáticamente los textos completos."
+    },
+    "sources": [
+      {
+        "url": "https://docs.openalex.org/",
+        "publisher": "OpenAlex",
+        "license_status": "unknown",
+        "checked_at": "2026-10-25",
+        "notes": "Candidate reference only. License review pending."
+      }
+    ],
+    "created_at": "2026-10-25",
+    "updated_at": "2026-10-25",
+    "review": {
+      "facts_verified": false,
+      "license_verified": false,
+      "translations_verified": false
+    },
+    "related_ids": [],
+    "version": 1
+  }
+]
