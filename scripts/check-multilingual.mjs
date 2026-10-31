@@ -146,6 +146,31 @@ for (const file of pages) {
   if (!html.includes('runlu-language.js')) failures.push(`${rel}: shared language script is not loaded`);
 }
 
+
+// Guard the three SEO-prerendered book pages against future accidental regressions.
+// This is a static contract, not a substitute for browser-based language testing.
+for (const chapter of ['prologue', 'chapter-01', 'chapter-02']) {
+  const rel = `book/${chapter}.html`;
+  const file = path.join(root, rel);
+  if (!fs.existsSync(file)) {
+    failures.push(`${rel}: missing book chapter`);
+    continue;
+  }
+  const html = fs.readFileSync(file, 'utf8');
+  const article = html.match(/<article\\b[^>]*\\bid="book-content"[^>]*>([\\s\\S]*?)<\\/article>/i)?.[1];
+  const template = html.match(/<template\\b[^>]*\\bid="book-content-zh"[^>]*>([\\s\\S]*?)<\\/template>/i)?.[1];
+  const paragraphs = fragment => [...(fragment || '').matchAll(/<p\\b[^>]*>([\\s\\S]*?)<\\/p>/gi)]
+    .map(match => match[1].replace(/<[^>]+>/g, '').trim());
+  const visible = paragraphs(article);
+  const original = paragraphs(template);
+  if (!visible.length || JSON.stringify(visible) !== JSON.stringify(original)) {
+    failures.push(`${rel}: prerendered Chinese paragraphs differ from source template`);
+  }
+  if (!html.includes('data-runlu-language-select')) failures.push(`${rel}: missing language selector`);
+  if (!html.includes('book-reader.js')) failures.push(`${rel}: missing multilingual reader script`);
+  if (!html.includes('rel="canonical"')) failures.push(`${rel}: missing canonical URL`);
+}
+
 if (failures.length) {
   console.error(`Four-language check failed (${failures.length} issues):`);
   console.error(failures.join('\n'));
