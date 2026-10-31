@@ -76,5 +76,46 @@
     },
     "related_ids": [],
     "version": 1
+  },
+  {
+    "id": "RK-0003",
+    "status": "draft",
+    "category": "construction",
+    "scope": {
+      "type": "global",
+      "codes": []
+    },
+    "titles": {
+      "en": "Carpet roll width and cut planning",
+      "zh": "地毯卷宽与裁切规划",
+      "fr": "Largeur des rouleaux de moquette et planification des découpes",
+      "es": "Ancho de los rollos de alfombra y planificación de cortes"
+    },
+    "summaries": {
+      "en": "Cut planning should use the actual usable roll width and measured installation dimensions. Seam placement, pile direction, pattern matching and product instructions may affect the layout. No universal roll width or waste percentage is assumed.",
+      "zh": "裁切规划应依据实际可用卷宽及测量得到的安装尺寸。接缝位置、绒毛方向、花纹对齐及产品安装说明都可能影响布局。不预设统一卷宽或通用损耗百分比。",
+      "fr": "Le plan de coupe doit utiliser la largeur réellement utilisable du rouleau et les dimensions mesurées. Les joints, le sens du velours, les raccords de motifs et les instructions du fabricant peuvent modifier le plan. Aucune largeur ni aucun taux de perte universels ne sont présumés.",
+      "es": "La planificación de cortes debe utilizar el ancho útil real del rollo y las dimensiones medidas. Las uniones, la dirección del pelo, la coincidencia de patrones y las instrucciones del fabricante pueden modificar el diseño. No se presupone un ancho ni un porcentaje de desperdicio universal."
+    },
+    "sources": [
+      {
+        "url": "https://carpet-rug.org/",
+        "publisher": "The Carpet and Rug Institute",
+        "license_status": "unknown",
+        "checked_at": "2026-10-31",
+        "notes": "Research lead only: locate an applicable technical installation standard and exact manufacturer product sheet. This homepage is not sufficient evidence for publication; URL accessibility and reuse rights not independently checked."
+      }
+    ],
+    "created_at": "2026-10-31",
+    "updated_at": "2026-10-31",
+    "review": {
+      "facts_verified": false,
+      "license_verified": false,
+      "translations_verified": false
+    },
+    "related_ids": [
+      "RK-0002"
+    ],
+    "version": 1
   }
 ]
