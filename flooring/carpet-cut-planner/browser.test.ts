@@ -76,6 +76,17 @@ describe("browser adapter",()=>{
   expect(result.allocated).toBe(300);
   expect(result.rollSummary.find(r=>r.id==="A12")?.remainingLF).toBe(10);
  });
+ it("adds per-piece cutting allowances without changing room net area",()=>{
+  const p=calculateShared([{id:"R",w:12,l:20,lot:"A"}],[{id:"Room",w:10,l:10,lot:"A",rotate:false}],0,false,{widthIn:6,lengthIn:12});
+  expect(p.unplaced).toEqual([]);
+  expect(p.roomAreaSF).toBe(100);
+  expect(p.net).toBeCloseTo(10.5*11);
+  expect(p.allowanceAreaSF).toBeCloseTo(15.5);
+  expect(p.placed[0]).toMatchObject({w:10.5,h:11});
+ });
+ it("rejects negative allowances",()=>{
+  expect(()=>calculateShared(rolls,pieces,0,false,{widthIn:-1,lengthIn:0})).toThrow("Cut allowances");
+ });
  it("rejects out-of-range scenario index",()=>{
   expect(()=>calculateShared(rolls,pieces,999)).toThrow("Invalid scenario selection");
  });
