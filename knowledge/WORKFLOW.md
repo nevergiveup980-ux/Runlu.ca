@@ -22,11 +22,13 @@ This is a **RUNLU website section**, not a separate app. Prototype branch only; 
 
 ## Files
 - `data/schema.json`: proposed JSON Schema contract.
-- `data/records.json`: a **draft** example record, not published knowledge.
-- `index.html`: standalone prototype UI with hardcoded illustrative entries, currently independent of records.json.
+- `data/records.json`: nonpublic draft records, not published knowledge.
+- `data/published.json`: reviewed public export; currently empty.
+- `index.html`: prototype UI loading only `data/published.json`, not raw drafts.
+- `intake.html`: local JSON draft generator; does not submit or publish.
 
 ## Next engineering acceptance
-- Validate all records against schema.
-- Connect UI to a reviewed public dataset (not raw draft records).
+- Keep structural checks, publication gates and end-to-end tests green in GitHub Actions.
+- Prepare first real source-backed records as drafts; verify source access, claims, licensing and all four translations before approving.
 - Test search, region filters, four languages and mobile accessibility.
 - Verify rights and factual accuracy before public launch.
