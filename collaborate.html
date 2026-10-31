@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Discuss tools, publishing, content, creative projects, and relevant partnerships with RUNLU." />
+  <meta name="theme-color" content="#f7f4ed" />
+  <link rel="canonical" href="https://runlu.ca/collaborate.html" />
+  <meta property="og:title" content="Collaborate · RUNLU" />
+  <meta property="og:description" content="Have an idea to share with RUNLU? Let’s talk." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://runlu.ca/collaborate.html" />
+  <title>Collaborate · RUNLU</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=20260901-2" />
+<style>.note-intro h1{font-size:clamp(2rem,4vw,3rem);overflow-wrap:anywhere}.note-header-actions{flex-wrap:wrap}</style>
+</head>
+<body class="note-page">
+  <header class="note-header">
+    <a class="brand" href="index.html">RUNLU</a>
+    <div class="note-header-actions">
+      <a class="note-back" href="index.html#contact" data-en="← Back to RUNLU" data-zh="← 返回润庐" data-fr="← Retour à RUNLU" data-es="← Volver a RUNLU">← Back to RUNLU</a>
+      <select class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select>
+    </div>
+  </header>
+
+  <main class="note-main">
+    <section class="note-intro"><div class="section-kicker" data-en="WORK WITH RUNLU" data-zh="与润庐合作" data-fr="AVEC RUNLU" data-es="CON RUNLU">WORK WITH RUNLU</div><h1  data-en="Let’s talk." data-zh="聊聊你的想法。" data-fr="Parlons-en." data-es="Conversemos.">Let’s talk.</h1><p  data-en="Have an idea you would like to explore with RUNLU? We welcome conversations about useful tools, books, content, and creative projects." data-zh="有一个想法，想和润庐聊聊？欢迎围绕实用工具、书籍出版、内容与创作交流合作。" data-fr="Une idée à explorer avec RUNLU ? Échangeons autour des outils pratiques, des livres, des contenus et des projets créatifs." data-es="¿Tiene una idea que le gustaría explorar con RUNLU? Conversemos sobre herramientas útiles, libros, contenidos y proyectos creativos.">Have an idea you would like to explore with RUNLU? We welcome conversations about useful tools, books, content, and creative projects.</p><p  data-en="Product feedback, publishing collaborations, and relevant partnerships or sponsorships are welcome. Tell us what you have in mind and how we can reach you." data-zh="产品反馈、出版合作，以及契合润庐的品牌合作或赞助，都可以从这里开始。简单说说你的想法，并留下联系方式。" data-fr="Vos retours sur les produits, collaborations éditoriales, partenariats ou soutiens en accord avec RUNLU sont les bienvenus. Présentez votre idée et indiquez comment vous joindre." data-es="Sus comentarios sobre productos, propuestas editoriales, colaboraciones o patrocinios afines a RUNLU son bienvenidos. Cuéntenos su idea e indique cómo contactarle.">Product feedback, publishing collaborations, and relevant partnerships or sponsorships are welcome. Tell us what you have in mind and how we can reach you.</p><p class="note-privacy" data-en="Your message is private and will not be published automatically." data-zh="你的留言不会自动公开。" data-fr="Votre message est privé et ne sera pas publié automatiquement." data-es="Su mensaje es privado y no se publicará automáticamente.">Your message is private and will not be published automatically.</p><p  data-en="Prefer email?" data-zh="也可以直接发邮件：" data-fr="Vous préférez le courriel ?" data-es="¿Prefiere escribir por correo?">Prefer email?</p><a class="text-link" href="mailto:hello@runlu.ca">hello@runlu.ca</a></section>
+
+    <form id="noteForm" class="note-form" novalidate>
+      <input id="noteCategory" name="category" type="hidden" value="collaboration">
+
+      <div class="note-row">
+        <div class="note-field">
+          <label for="noteName" data-en="Name or nickname" data-zh="姓名或昵称" data-fr="Nom ou pseudonyme" data-es="Nombre o apodo">Name or nickname</label>
+          <input id="noteName" name="name" type="text" maxlength="80" autocomplete="name" />
+          <p class="note-help" data-en="Optional. Anonymous notes are welcome." data-zh="选填，也欢迎匿名留言。" data-fr="Facultatif. Les messages anonymes sont les bienvenus." data-es="Opcional. Los mensajes anónimos son bienvenidos.">Optional. Anonymous notes are welcome.</p>
+        </div>
+        <div class="note-field">
+          <label for="noteEmail" data-en="Email" data-zh="邮箱" data-fr="Courriel" data-es="Correo electrónico">Email</label>
+          <input id="noteEmail" name="email" type="email" maxlength="254" autocomplete="email" inputmode="email" />
+          <p class="note-help" data-en="Only needed if you would like a reply." data-zh="只有希望收到回复时才需要填写。" data-fr="Requis uniquement si vous souhaitez une réponse." data-es="Solo es necesario si desea una respuesta.">Only needed if you would like a reply.</p>
+        </div>
+      </div>
+
+      <div class="note-field">
+        <label for="noteMessage" data-en="Your idea" data-zh="合作想法" data-fr="Votre idée" data-es="Su idea">Your idea</label>
+        <textarea id="noteMessage" name="message" minlength="10" maxlength="4000" required data-placeholder-en="Write what is on your mind…" data-placeholder-zh="写下你想说的话……" data-placeholder-fr="Écrivez ce que vous avez en tête…" data-placeholder-es="Escriba lo que tiene en mente…" placeholder="Write what is on your mind…"></textarea>
+        <p class="note-help"><span id="noteCount">0</span> / 4000</p>
+      </div>
+
+      <label class="note-check"><input id="noteReply" name="wants_reply" type="checkbox" /><span data-en="I would like a reply." data-zh="我希望收到回复。" data-fr="Je souhaite recevoir une réponse." data-es="Me gustaría recibir una respuesta.">I would like a reply.</span></label>
+      <input id="noteFeature" name="consent_to_feature" type="checkbox" hidden>
+
+      <div class="note-honeypot" aria-hidden="true"><label for="noteWebsite">Website</label><input id="noteWebsite" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
+      <button id="noteSubmit" class="note-submit" type="submit" data-en="Send Note" data-zh="发送留言" data-fr="Envoyer le message" data-es="Enviar mensaje">Send Note</button>
+      <p id="noteStatus" class="note-status" role="status" aria-live="polite"></p>
+    <p class="note-help"><a href="privacy.html" data-en="Privacy" data-zh="隐私说明" data-fr="Confidentialité" data-es="Privacidad">Privacy</a></p></form>
+  </main>
+
+  <footer class="site-footer"><div>RUNLU · 润庐</div><div data-en="Thank you for taking the time." data-zh="谢谢你愿意花时间写下这些。" data-fr="Merci d’avoir pris le temps." data-es="Gracias por dedicar su tiempo.">Thank you for taking the time.</div><div>© 2026 RUNLU</div></footer>
+  <script src="runlu-language.js?v=20261031-collaborate"></script>
+  <script src="leave-a-note.js?v=20261031"></script>
+</body>
+</html>

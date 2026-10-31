@@ -187,6 +187,18 @@
       }
     }
   }
+  function ensureCollaborationLink(){
+    document.querySelectorAll('footer.site-footer').forEach(footer=>{
+      if(footer.querySelector('a[href="/collaborate.html"],a[href="collaborate.html"]'))return;
+      const item=document.createElement('div');
+      const link=document.createElement('a');
+      link.href='/collaborate.html';
+      Object.assign(link.dataset,{en:'Collaborate',zh:'合作联系',fr:'Collaborer',es:'Colaborar'});
+      link.textContent=link.dataset.en;
+      item.appendChild(link);
+      footer.appendChild(item);
+    });
+  }
   function bind(){
     document.querySelectorAll('[data-runlu-language-select]').forEach(select=>{
       if(select.dataset.runluLanguageBound==='true')return;
@@ -199,6 +211,7 @@
       button.dataset.runluLanguageBound='true';
       button.addEventListener('click',toggle)
     });
+    ensureCollaborationLink();
     ensureHealthViewLinks();
     ensureView011Link();
     standardizeFrontierNav();
