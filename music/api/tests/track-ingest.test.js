@@ -4,7 +4,7 @@ import {webcrypto} from "node:crypto";
 import {ingestMp3} from "../track-ingest.js";
 if(!globalThis.crypto)globalThis.crypto=webcrypto;
 const audio=()=>{const b=new Uint8Array(256);b.set([0x49,0x44,0x33,0x04]);return b.buffer;};
-const args={ownerId:"user_1",trackId:"track_1",title:"故乡",now:100};
+const args={ownerId:"user_1",trackId:"track_1",title:"故乡",now:100,durationSeconds:30};
 const fixture=({failDb=false}={})=>{const calls=[];return {calls,bucket:{async put(...a){calls.push(["put",...a]);},async delete(k){calls.push(["delete",k]);}},db:{prepare(sql){calls.push(["sql",sql]);return {bind(...values){calls.push(["bind",...values]);return {async run(){if(failDb)throw Error("db down");return {success:true};}};}}}}};};
 test("stores MP3 in private owner-scoped R2 key and D1 metadata",async()=>{
  const f=fixture();const result=await ingestMp3({...f,...args,audio:audio()});
