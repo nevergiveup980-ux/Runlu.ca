@@ -1,0 +1,11 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { GuardedJobRunner } from "./production-guards.mjs";
+const brief={durationSeconds:30,quality:"standard",format:"cinematic"};
+const success={generate:async()=>({ok:true,billedCad:1,artifact:{kind:"mock-video",verified:true}})};
+test("mock completes and records charge",async()=>{const q=new GuardedJobRunner({provider:success});const j=q.submit(brief);const r=await q.run(j.id);assert.equal(r.state,"SIMULATED_COMPLETE");assert.equal(r.spentCad,1);});
+test("duplicate concurrent run is rejected",async()=>{let release;const provider={generate:()=>new Promise(resolve=>{release=()=>resolve({ok:true,billedCad:1,artifact:{kind:"mock-video",verified:true}})})};const q=new GuardedJobRunner({provider});const id=q.submit(brief).id;const first=q.run(id);await assert.rejects(q.run(id));release();await first;});
+test("budget reserved before call",async()=>{let called=false;const q=new GuardedJobRunner({provider:{generate:async()=>{called=true;return {ok:true,billedCad:1}}},maxBudgetCad:2,attemptReserveCad:5});const r=await q.run(q.submit(brief).id);assert.equal(r.state,"BUDGET_BLOCKED");assert.equal(called,false);});
+test("billing over reserve requires reconciliation",async()=>{const q=new GuardedJobRunner({provider:{generate:async()=>({ok:true,billedCad:8})},attemptReserveCad:5});const r=await q.run(q.submit(brief).id);assert.equal(r.state,"RECONCILIATION_REQUIRED");});
+test("provider exception requires reconciliation rather than blind retry",async()=>{const q=new GuardedJobRunner({provider:{generate:async()=>{throw Error("timeout")}}});const r=await q.run(q.submit(brief).id);assert.equal(r.state,"RECONCILIATION_REQUIRED");assert.equal(r.reservedCad,5);});
+test("failed output stops at attempt limit",async()=>{const q=new GuardedJobRunner({provider:{generate:async()=>({ok:false,billedCad:1})},maxAttempts:2});const r=await q.run(q.submit(brief).id);assert.equal(r.state,"FAILED");assert.equal(r.spentCad,2);});
