@@ -157,9 +157,9 @@ for (const chapter of ['prologue', 'chapter-01', 'chapter-02']) {
     continue;
   }
   const html = fs.readFileSync(file, 'utf8');
-  const article = html.match(/<article\\b[^>]*\\bid="book-content"[^>]*>([\\s\\S]*?)<\\/article>/i)?.[1];
-  const template = html.match(/<template\\b[^>]*\\bid="book-content-zh"[^>]*>([\\s\\S]*?)<\\/template>/i)?.[1];
-  const paragraphs = fragment => [...(fragment || '').matchAll(/<p\\b[^>]*>([\\s\\S]*?)<\\/p>/gi)]
+  const article = html.match(/<article\b[^>]*\bid="book-content"[^>]*>([\s\S]*?)<\/article>/i)?.[1];
+  const template = html.match(/<template\b[^>]*\bid="book-content-zh"[^>]*>([\s\S]*?)<\/template>/i)?.[1];
+  const paragraphs = fragment => [...(fragment || '').matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/gi)]
     .map(match => match[1].replace(/<[^>]+>/g, '').trim());
   const visible = paragraphs(article);
   const original = paragraphs(template);
