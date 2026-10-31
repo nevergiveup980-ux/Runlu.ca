@@ -13,8 +13,8 @@ export async function pollRunwayTask({providerTaskId, provider, repository, inge
   await repository.recordTaskState(providerTaskId, task.state, task.privateOutputUrls);
   if (task.requiresIngest) {
     // Enqueue must durably accept the work or throw. Idempotency key is task ID.
-    // The queue must keep provider URLs private, encrypted/short-lived as appropriate.
-    await ingestQueue.enqueue({idempotencyKey:providerTaskId,providerTaskId,privateOutputUrls:task.privateOutputUrls});
+    // Queue only the task identity. Ingest worker re-fetches fresh URLs.
+    await ingestQueue.enqueue({idempotencyKey:providerTaskId,providerTaskId});
   }
   return {providerTaskId, state:task.state, requiresIngest:task.requiresIngest};
 }
