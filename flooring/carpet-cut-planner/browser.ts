@@ -20,9 +20,11 @@ export function calculateShared(rollInputs:InputRoll[],pieceInputs:InputPiece[],
  const roomAreaSF=pieceInputs.reduce((sum,p)=>sum+p.w*p.l,0);
  const patternAdjustmentSF=pieces.reduce((sum,p,i)=>sum+p.widthIn*(p.lengthIn-(pieceInputs[i].l*12+allowance.lengthIn))/144,0);
  const allowanceAreaSF=pieceInputs.reduce((sum,p)=>sum+((p.w*12+allowance.widthIn)*(p.l*12+allowance.lengthIn)-p.w*12*p.l*12)/144,0);
+ const installationChecks=[...(patternRepeatIn>0?['Pattern repeat rounding is an allowance estimate; verify pattern phase and seam matching on site.']:[]),...(pieceInputs.some(p=>p.rotate)?['Rotation is enabled for at least one piece; confirm pile/nap direction and pattern orientation.']:[]),...(pieceInputs.some(p=>!p.lot?.trim())?['One or more pieces have no specified dye lot; confirm dye-lot consistency before cutting.']:[]),'Confirm seam placement, edge trimming, site obstacles and installer approval before final cutting.'];
+ const requiresInstallerReview=true;
  const remaining=rollInputs.reduce((sum,r)=>sum+r.w*(r.l-used[r.id]),0);
  const rollSummary=rollInputs.map(r=>({id:r.id,stockType:r.stockType||'FULL',widthFt:r.w,availableLF:r.l,usedLF:used[r.id]||0,remainingLF:r.l-(used[r.id]||0),remainingSF:r.w*(r.l-(used[r.id]||0))}));
- return {roomAreaSF,allowanceAreaSF,patternAdjustmentSF,patternRepeatIn,allowance,placed,unplaced:best.unplaced,used,net:best.usedAreaSF,allocated:best.allocatedAreaSF,waste:best.wasteAreaSF,remaining,rollSummary,rate:best.wastePercent,scenarios:summaries.map(s=>({name:s.name,feasible:s.feasible,unplaced:s.plan.unplaced.length,unplacedAreaSF:s.unplacedAreaSF,allocatedSF:s.plan.allocatedAreaSF,wasteSF:s.wasteSF,rollCount:s.rollCount,remnantCount:s.remnantCount,shortCount:s.shortCount,usedRolls:s.usedRolls})),selected};
+ return {roomAreaSF,allowanceAreaSF,patternAdjustmentSF,patternRepeatIn,allowance,installationChecks,requiresInstallerReview,placed,unplaced:best.unplaced,used,net:best.usedAreaSF,allocated:best.allocatedAreaSF,waste:best.wasteAreaSF,remaining,rollSummary,rate:best.wastePercent,scenarios:summaries.map(s=>({name:s.name,feasible:s.feasible,unplaced:s.plan.unplaced.length,unplacedAreaSF:s.unplacedAreaSF,allocatedSF:s.plan.allocatedAreaSF,wasteSF:s.wasteSF,rollCount:s.rollCount,remnantCount:s.remnantCount,shortCount:s.shortCount,usedRolls:s.usedRolls})),selected};
 }
 declare global {interface Window {runluCalculateShared?:typeof calculateShared}}
 if(typeof window!=='undefined')window.runluCalculateShared=calculateShared;
