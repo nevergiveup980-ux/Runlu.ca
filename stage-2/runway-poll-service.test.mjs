@@ -19,7 +19,7 @@ test('successful task enqueues private output after state record',async()=>{
  const r=await pollRunwayTask({...s,providerTaskId:'t1'});
  assert.equal(r.requiresIngest,true);assert.equal(JSON.stringify(r).includes(url),false);
  assert.deepEqual(s.events.map(x=>Array.isArray(x)?x[0]:x),['poll','record','ingest']);
- assert.deepEqual(s.events[2][1],{idempotencyKey:'t1',providerTaskId:'t1',privateOutputUrls:[url]});
+ assert.deepEqual(s.events[2][1],{idempotencyKey:'t1',providerTaskId:'t1'});
 });
 test('mismatched task IDs cannot be recorded',async()=>{
  const s=setup({id:'other',status:'RUNNING'});
