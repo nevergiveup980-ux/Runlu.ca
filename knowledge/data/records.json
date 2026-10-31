@@ -37,5 +37,44 @@
     },
     "related_ids": [],
     "version": 1
+  },
+  {
+    "id": "RK-0002",
+    "status": "draft",
+    "category": "construction",
+    "scope": {
+      "type": "global",
+      "codes": []
+    },
+    "titles": {
+      "en": "Carpet area units: square feet and square yards",
+      "zh": "地毯面积单位：平方英尺与平方码",
+      "fr": "Unités de surface des moquettes : pieds et yards carrés",
+      "es": "Unidades de superficie de alfombras: pies y yardas cuadradas"
+    },
+    "summaries": {
+      "en": "A square yard contains nine square feet by definition. This conversion concerns area only; roll length, usable width, cutting layout and waste require separate calculation.",
+      "zh": "按单位定义，1 平方码等于 9 平方英尺。此换算只涉及面积；卷材长度、有效幅宽、裁切布局和损耗须另行计算。",
+      "fr": "Par définition, un yard carré équivaut à neuf pieds carrés. Cette conversion concerne uniquement la surface ; la longueur du rouleau, la largeur utile, le plan de coupe et les pertes se calculent séparément.",
+      "es": "Por definición, una yarda cuadrada equivale a nueve pies cuadrados. La conversión solo se refiere al área; la longitud del rollo, el ancho útil, el plan de corte y los desperdicios se calculan por separado."
+    },
+    "sources": [
+      {
+        "url": "https://www.nist.gov/pml/owm/metric-si/unit-conversion",
+        "publisher": "NIST Office of Weights and Measures",
+        "license_status": "unknown",
+        "checked_at": "2026-10-31",
+        "notes": "Candidate primary reference; URL reachability, source wording, reuse rights and technical translation not independently checked. Mathematical unit conversion must be verified before approval."
+      }
+    ],
+    "created_at": "2026-10-31",
+    "updated_at": "2026-10-31",
+    "review": {
+      "facts_verified": false,
+      "license_verified": false,
+      "translations_verified": false
+    },
+    "related_ids": [],
+    "version": 1
   }
 ]
