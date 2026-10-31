@@ -31,7 +31,8 @@
   message.addEventListener('input', () => { count.textContent = String(message.value.length); });
   window.addEventListener('runlu:languagechange', syncLanguage);
   document.addEventListener('runlu:languagechange', syncLanguage);
-  setTimeout(syncLanguage, 0);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', syncLanguage, {once: true});
+  else syncLanguage();
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
