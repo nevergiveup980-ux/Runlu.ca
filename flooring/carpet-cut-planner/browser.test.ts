@@ -87,6 +87,20 @@ describe("browser adapter",()=>{
  it("rejects negative allowances",()=>{
   expect(()=>calculateShared(rolls,pieces,0,false,{widthIn:-1,lengthIn:0})).toThrow("Cut allowances");
  });
+ it("rounds longitudinal cuts to the next full pattern repeat",()=>{
+  const result=calculateShared([{id:"R",w:12,l:20,lot:"A"}],[{id:"P",w:10,l:10,lot:"A",rotate:false}],0,false,{widthIn:0,lengthIn:12},18);
+  expect(result.unplaced).toEqual([]);
+  expect(result.placed[0].h).toBe(12);
+  expect(result.patternAdjustmentSF).toBe(10);
+  expect(result.net).toBe(120);
+ });
+ it("does not round when pattern repeat is zero",()=>{
+  const result=calculateShared(rolls,pieces,0,false,{widthIn:0,lengthIn:0},0);
+  expect(result.patternAdjustmentSF).toBe(0);
+ });
+ it("rejects negative pattern repeat",()=>{
+  expect(()=>calculateShared(rolls,pieces,0,false,{widthIn:0,lengthIn:0},-2)).toThrow("Pattern repeat");
+ });
  it("rejects out-of-range scenario index",()=>{
   expect(()=>calculateShared(rolls,pieces,999)).toThrow("Invalid scenario selection");
  });
