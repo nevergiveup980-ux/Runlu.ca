@@ -2,6 +2,8 @@
 
 Status: working evidence register; NOT a claim of Apple compliance or approval.
 
+Update 2026-11-01: see [the completed Q1–Q9 evidence audit](TWIST-APPLE-REVIEW-EVIDENCE-AUDIT.md). Q1/Q2 are now transcribed in TWIST-APPLE-NINE-QUESTIONS.md. The actual physical-smoke report commit is `62f103e` (the screenshot-based `62f1103e` below was a transcription error). Full physical acceptance and ownership/provenance confirmation remain incomplete. The audit also records the live developer-account app inventory, Shift metadata conflict, and updated agreement gate. Historical screenshot observations below remain as originally recorded.
+
 ## Confirmed from developer-provided Codex screenshot (2026-11-01)
 - Codex reports Build 4 installed and opened on iPhone 16 Pro Max (iOS 27.2) without blank screen.
 - Core manual checks reported PASS: EN/ZH switch, Reasoning Lab choice and feedback, Reflection after reveal, classic next puzzle, Logic Studio correct-answer explanation and next step, resume after background.
@@ -10,7 +12,7 @@ Status: working evidence register; NOT a claim of Apple compliance or approval.
 - Build 4 was not uploaded or submitted according to screenshot.
 
 ## Blocking evidence
-- [ ] Obtain full original Apple reviewer questions Q1 and Q2.
+- [x] Obtain full original Apple reviewer questions Q1 and Q2 (screenshot transcription recorded in `cd9380e`; live AX question body remains truncated).
 - [ ] Obtain accurate response to all Q1–Q9, supported by project and developer-account evidence.
 - [ ] Verify iOS binary provenance and app content ownership, including whether any commercial app generator/template was used.
 - [ ] Compare TWIST with other apps under same developer account, especially SHIFT and WORDSHIFT, with actual feature inventories.
