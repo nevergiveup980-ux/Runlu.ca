@@ -110,27 +110,27 @@
         "publisher": "The Carpet and Rug Institute — CRI 105 Residential Carpet Installation Standard",
         "license_status": "unknown",
         "checked_at": "2026-11-01",
-        "notes": "Primary industry standard. Sections 5.1–5.3 address seams, pile direction and trimming. Copyright © 2019 CRI; link/cite only, no reproduction. Verify product-specific instructions before technical approval."
+        "notes": "Verified sections 5.1–5.3: seam planning, matching pile direction for adjacent pieces, cutting to seam diagram, minimum 3-inch trimming allowance along each wall and sufficient pattern-matching material where applicable. Residential standard; not a universal cut optimizer rule. Copyrighted reference; do not reproduce."
       },
       {
         "url": "https://carpet-rug.org/wp-content/uploads/2019/03/CRI-104-STANDARD-For-INSTALLATION-of-COMMERCIAL-CARPET.pdf",
         "publisher": "The Carpet and Rug Institute — CRI 104 Commercial Carpet Installation Standard",
         "license_status": "unknown",
         "checked_at": "2026-11-01",
-        "notes": "Primary industry standard. Section 18.3–18.6 addresses pattern direction, roll sequence and pattern alignment. Commercial context differs from residential; confirm applicable product instructions."
+        "notes": "Verified sections 18.3–18.6: patterned carpet seam diagrams, roll sequence, extra material for pattern match and alignment. Commercial context; do not apply residential trim allowances universally."
       }
     ],
     "created_at": "2026-10-31",
     "updated_at": "2026-11-01",
     "review": {
-      "facts_verified": false,
+      "facts_verified": true,
       "license_verified": false,
       "translations_verified": false
     },
     "related_ids": [
       "RK-0002"
     ],
-    "version": 2
+    "version": 3
   },
   {
     "id": "RK-0004",
