@@ -31,7 +31,7 @@ test("dye-lot mismatch warns about incomplete planning",async({page})=>{
  await page.goto(pageUrl);
  await page.locator("#pieceRows input[data-field='lot']").first().fill("B");
  await page.locator("#calculate").click();
- await expect(page.locator("#results .warning")).toContainText("Unplaced pieces");
+ await expect(page.locator("#results .warning").filter({hasText:"Unplaced pieces"})).toContainText("Unplaced pieces");
 });
 
 test("invalid width shows a validation error",async({page})=>{
