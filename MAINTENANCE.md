@@ -26,3 +26,14 @@
 ## Sensitive data
 
 Never commit passwords, API keys, access tokens, private keys, recovery codes, or production secrets.
+
+## Weekly read-only audit checklist
+
+- Record the exact main SHA and latest Site integrity / Pages Build conclusions; a green CI result does not prove every live interaction or external URL works.
+- Review open PRs for stale branches and overlapping changes; do not close, merge, or rebase without separate approval.
+- Check internal and external links, canonical/description metadata, both sitemaps, robots.txt, and 404 noindex behavior. Note whether checks are static or live.
+- Compare product-status wording with verified release evidence; distinguish development, pilot, submitted for review, and released.
+- Confirm Forum does not imply unverified live members, discussions, or analytics.
+- Compare Privacy and Support pages for contradictions; do not expose private operational content.
+- Keep findings and unresolved items in the maintenance report, and propose only low-risk changes on feature/* or release/*.
+- Never modify deployment, domain, security configuration, private records, or paid-service settings as part of routine maintenance.
