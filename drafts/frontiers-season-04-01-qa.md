@@ -34,3 +34,10 @@ Status: PRE-PUBLICATION / NOT APPROVED FOR PUBLIC RELEASE
 
 ## Decision
 Keep as editorial preview. Do not claim public publication or full QA signoff.
+
+## Source verification update — 2026-11-01
+- Re-fetched current English, Chinese, French and Spanish drafts, both HTML preview files, and shared language script from GitHub.
+- Performed 18 independent source-level assertions in the connected tool environment: **18 passed, 0 failed**.
+- Confirmed four manuscripts each have six headings; four article language containers and four index language containers; 24 article h2 elements; 40 index cards (10 per language); four links from index to essay and four back-links; both preview pages remain noindex/nofollow; shared language script declares all four languages.
+- This does **not** mean the repository Node.js QA script has been executed, nor does it establish mobile/browser interaction, language quality, accessibility or independent factual accuracy.
+- Decision remains: preview only, not public release.
