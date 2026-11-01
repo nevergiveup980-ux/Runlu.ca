@@ -35,15 +35,15 @@ ZH Explanation: C–A只能占第1、2位或第2、3位。若占第1、2位，B�
 Validation: unique permutation.
 
 ## Candidate D — Slot 5: The cut-plan trap
-EN Question: A carpet roll is 4 metres wide. A room is 5 metres long and 3 metres wide. You can cut one rectangular piece and rotate it, but you cannot join pieces. Can this room be covered with a single piece from the roll?
+EN Question: A carpet roll is 4 metres wide and has at least 5 metres of usable length. A room is 5 metres long and 3 metres wide. You can cut one rectangular piece and rotate it, but you cannot join pieces. Can this room be covered with a single piece from the roll?
 EN Hint: The room's 5-metre side can run along the roll's length, not across its width.
 EN Answer: Yes, cut a 5 m × 3 m piece.
 EN Explanation: A roll's width limits one dimension to 4 m; the roll's length can supply the 5 m dimension. A 3 m width fits within the 4 m roll width.
-ZH Question: 一卷地毯宽4米。房间长5米、宽3米。允许裁下一整块长方形地毯并旋转铺设，但不能拼接。能用一整块覆盖房间吗？
+ZH Question: 一卷地毯宽4米，可用卷长至少5米。房间长5米、宽3米。允许裁下一整块长方形地毯并旋转铺设，但不能拼接。能用一整块覆盖房间吗？
 ZH Hint: 房间的5米长边可以顺着地毯卷的长度方向，而不必横跨卷宽。
 ZH Answer: 可以，裁一块5米×3米的地毯。
 ZH Explanation: 卷宽4米限制的是横向尺寸；5米可以沿卷长方向裁取，房间3米的宽度小于卷宽4米。
-Validation: assumes available roll length >= 5 m; explicitly state this in final version to avoid an underspecified answer.
+Validation: usable roll length >= 5 m is now explicit; single-piece fit is feasible, ignoring installation tolerances and pattern direction.
 
 ## Candidate E — Slot 6: The reversed sign
 EN Question: A sign reads, “THE NEXT SENTENCE IS FALSE.” The next sentence reads, “THE PREVIOUS SENTENCE IS TRUE.” Can both statements be assigned a consistent true-or-false value?
@@ -58,7 +58,19 @@ Validation: logical consistency requires checking both assignments. Similarity t
 
 ## Engineering and editorial gates
 1. These are drafts, not content already implemented in twist.html, Build 5, or Apple-reviewed Build 3.
-2. Editorial review must assess fun, novelty, difficulty, translation equivalence, and repetition with the existing Logic Studio. Candidate D requires explicit roll-length availability in final wording. Candidate E uses a known paradox structure; assess whether it is distinct enough from the Logic Studio contradiction case.
+2. Editorial review must assess fun, novelty, difficulty, translation equivalence, and repetition with the existing Logic Studio. Candidate D now specifies available roll length; assess whether technical installation constraints should be excluded more explicitly. Candidate E uses a known paradox structure; assess whether it is distinct enough from the Logic Studio contradiction case.
 3. If approved, update puzzles[], zh[], explanations.en[], explanations.zh[] in lockstep; verify all indices, scoring, saved-progress migration, and language switching.
 4. Add bilingual test assertions for each new item and ensure existing build artifacts are not silently described as updated.
 5. Keep the 19-item UNKNOWN rights register until each specific old item is actually removed or independently cleared.
+
+## Editorial verification — 2026-11-01
+
+| Candidate | Logical correctness | Bilingual equivalence | Challenge quality | Decision |
+|---|---|---|---|---|
+| A: mislabeled envelopes | PASS: one permutation fits all clues | PASS | Medium; resembles a known mislabeling-puzzle family | HOLD for similarity/provenance review |
+| B: countdown | PASS: 12:03 is 2 | PASS | Too easy; mainly arithmetic | REWORK before shipping |
+| C: card order | PASS: B–C–A is the only ordering | PASS | Easy; similar to existing ordering cases | HOLD for gameplay differentiation |
+| D: carpet fit | PASS with explicit roll length and no joining | PASS | Medium; applied spatial reasoning | CANDIDATE, subject to technical/rights review |
+| E: two statements | PASS: neither truth assignment is consistent | PASS | Medium-hard; familiar paradox structure | HOLD for similarity/provenance review |
+
+**Editorial outcome:** Do not bulk-replace slots 2–6 yet. Only D is provisionally suitable for implementation after a final content review. These checks validate internal logic, not copyright clearance, user enjoyment, or App Store distinctiveness. Do not modify the existing 19-item UNKNOWN risk register on the strength of these drafts.
