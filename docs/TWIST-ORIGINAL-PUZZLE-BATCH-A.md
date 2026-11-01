@@ -34,31 +34,31 @@ ZH Answer: B、C、A。
 ZH Explanation: C–A只能占第1、2位或第2、3位。若占第1、2位，B就会在最后，违反条件，因此只能是B–C–A。
 Validation: unique permutation.
 
-## Candidate D — Slot 5: The warehouse scan
-EN Question: A warehouse has four numbered bins. A scanner reports that the missing item is in an even-numbered bin greater than 1 but less than 4. Which bin should be checked?
-EN Hint: List the even numbers strictly between 1 and 4.
-EN Answer: Bin 2.
-EN Explanation: The only even integer strictly between 1 and 4 is 2.
-ZH Question: 仓库有四个编号1至4的货位。扫描器显示，缺失物品在一个大于1、小于4的偶数货位。应该检查几号？
-ZH Hint: 找出严格位于1和4之间的偶数。
-ZH Answer: 2号货位。
-ZH Explanation: 大于1、小于4的偶数整数只有2。
-Validation: unambiguous; may be too simple for later difficulty tiers.
+## Candidate D — Slot 5: The cut-plan trap
+EN Question: A carpet roll is 4 metres wide. A room is 5 metres long and 3 metres wide. You can cut one rectangular piece and rotate it, but you cannot join pieces. Can this room be covered with a single piece from the roll?
+EN Hint: The room's 5-metre side can run along the roll's length, not across its width.
+EN Answer: Yes, cut a 5 m × 3 m piece.
+EN Explanation: A roll's width limits one dimension to 4 m; the roll's length can supply the 5 m dimension. A 3 m width fits within the 4 m roll width.
+ZH Question: 一卷地毯宽4米。房间长5米、宽3米。允许裁下一整块长方形地毯并旋转铺设，但不能拼接。能用一整块覆盖房间吗？
+ZH Hint: 房间的5米长边可以顺着地毯卷的长度方向，而不必横跨卷宽。
+ZH Answer: 可以，裁一块5米×3米的地毯。
+ZH Explanation: 卷宽4米限制的是横向尺寸；5米可以沿卷长方向裁取，房间3米的宽度小于卷宽4米。
+Validation: assumes available roll length >= 5 m; explicitly state this in final version to avoid an underspecified answer.
 
-## Candidate E — Slot 6: The shared clue
-EN Question: A note says, "The correct door is not the left door." There are exactly two doors, left and right, and exactly one is correct. Which door is correct?
-EN Hint: Use only the information provided; no hidden third door.
-EN Answer: The right door.
-EN Explanation: Exactly one of two doors is correct, and the left is excluded.
-ZH Question: 一张纸条写着：“正确的门不是左边那扇。”这里只有左右两扇门，而且恰好一扇正确。正确的是哪扇？
-ZH Hint: 只有两扇门，不存在第三种选择。
-ZH Answer: 右边那扇门。
-ZH Explanation: 两扇门恰好一扇正确，排除左门就只能选右门。
-Validation: unambiguous but trivial; replace if insufficient challenge.
+## Candidate E — Slot 6: The reversed sign
+EN Question: A sign reads, “THE NEXT SENTENCE IS FALSE.” The next sentence reads, “THE PREVIOUS SENTENCE IS TRUE.” Can both statements be assigned a consistent true-or-false value?
+EN Hint: Assume the first statement is true, then assume it is false. Check both.
+EN Answer: No. Neither assignment is consistent.
+EN Explanation: If the first is true, the second is false; but the second then says the first is true, making the second true. If the first is false, the second is true; then the second says the first is true, contradicting the assumption.
+ZH Question: 一张牌子写着：“下一句话是假的。”下一句写着：“上一句话是真的。”能否为这两句话分别判定真或假，并且不产生矛盾？
+ZH Hint: 分别假设第一句话为真、为假，看看会发生什么。
+ZH Answer: 不能。无论如何分配真假，都会矛盾。
+ZH Explanation: 若第一句为真，则第二句为假；但第二句声称第一句为真，又会使第二句为真。若第一句为假，则第二句为真；第二句又要求第一句为真，与假设冲突。
+Validation: logical consistency requires checking both assignments. Similarity to known liar-paradox family; do not market as wholly unprecedented.
 
 ## Engineering and editorial gates
 1. These are drafts, not content already implemented in twist.html, Build 5, or Apple-reviewed Build 3.
-2. Editorial review must assess fun, novelty, difficulty, translation equivalence, and repetition with the existing Logic Studio. Candidates D and E are likely too similar to existing elimination tasks; do not ship without redesign.
+2. Editorial review must assess fun, novelty, difficulty, translation equivalence, and repetition with the existing Logic Studio. Candidate D requires explicit roll-length availability in final wording. Candidate E uses a known paradox structure; assess whether it is distinct enough from the Logic Studio contradiction case.
 3. If approved, update puzzles[], zh[], explanations.en[], explanations.zh[] in lockstep; verify all indices, scoring, saved-progress migration, and language switching.
 4. Add bilingual test assertions for each new item and ensure existing build artifacts are not silently described as updated.
 5. Keep the 19-item UNKNOWN rights register until each specific old item is actually removed or independently cleared.
