@@ -60,22 +60,29 @@
     },
     "sources": [
       {
-        "url": "https://www.nist.gov/pml/owm/metric-si/unit-conversion",
-        "publisher": "NIST Office of Weights and Measures",
+        "url": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=958917",
+        "publisher": "NIST Handbook 44 (2025), Appendix C — Units of Area",
         "license_status": "unknown",
-        "checked_at": "2026-10-31",
-        "notes": "Candidate primary reference; URL reachability, source wording, reuse rights and technical translation not independently checked. Mathematical unit conversion must be verified before approval."
+        "checked_at": "2026-11-01",
+        "notes": "Primary source independently located: 1 square yard = 9 square feet. Reference for independently authored facts only; publication reuse rights not approved."
+      },
+      {
+        "url": "https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b9",
+        "publisher": "NIST Guide to the SI",
+        "license_status": "unknown",
+        "checked_at": "2026-11-01",
+        "notes": "Corroborates 1 ft² = 0.09290304 m² and 1 yd² = 0.8361274 m²; do not reproduce source tables."
       }
     ],
     "created_at": "2026-10-31",
-    "updated_at": "2026-10-31",
+    "updated_at": "2026-11-01",
     "review": {
-      "facts_verified": false,
+      "facts_verified": true,
       "license_verified": false,
       "translations_verified": false
     },
     "related_ids": [],
-    "version": 1
+    "version": 2
   },
   {
     "id": "RK-0003",
