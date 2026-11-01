@@ -14,6 +14,18 @@ function runTwistQA(){
  ['OLP','LOP','POL','OPL'].findIndex(x=>x.indexOf('O')<x.indexOf('L')&&x.indexOf('L')<x.indexOf('P')),0,
  [36,63,54,72].findIndex(x=>Math.floor(x/10)+x%10===9&&Math.floor(x/10)-x%10===3)];
  check('20 complete bilingual classics',()=>{assert(puzzles.length===20&&zh.length===20);assert([puzzles,zh].every(list=>list.every(p=>p.length===3&&p.every(v=>typeof v==='string'&&v.length>0))));});
+ check('replacement first puzzle renders matching bilingual hint, answer and explanation',()=>{
+  for(const language of ['en','zh']){
+   lang=language;state={index:0,completed:[],hints:[],assessments:{}};render();
+   const first=(language==='en'?puzzles:zh)[0];
+   assert(first[0].includes(language==='en'?'opened without a key':'不用钥匙'));
+   assert(first[2].startsWith(language==='en'?'A conversation.':'一段对话。'));
+   click('hintBtn');assert(el('hint').textContent.includes(first[1]));
+   click('answerBtn');assert(el('answer').textContent.includes(first[2]));
+   assert(el('explanation').textContent.includes(language==='en'?'conversation':'对话'));
+   assert(!/19[7]5|房间号/.test(el('explanation').textContent));
+  }
+ });
  check('10 case answer keys match independently solved constraints',()=>{assert(studioCases.length===10);assert(studioCases.every((v,i)=>v.answer===expected[i]));});
  for(const language of ['en','zh']){
  check(language+' classic reasoning/reflection choices, scoring and review',()=>{

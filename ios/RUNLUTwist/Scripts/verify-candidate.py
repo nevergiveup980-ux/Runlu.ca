@@ -10,7 +10,7 @@ if product.suffix == '.xcarchive':
 info = plistlib.loads((product / 'Info.plist').read_bytes())
 assert info['CFBundleIdentifier'] == 'ca.runlu.twist'
 assert info['CFBundleShortVersionString'] == '1.1'
-assert info['CFBundleVersion'] == '4'
+assert info['CFBundleVersion'] == (sys.argv[2] if len(sys.argv) > 2 else '4')
 assert info['UIDeviceFamily'] == [1]
 assert info['MinimumOSVersion'] == '17.0'
 resources = {}

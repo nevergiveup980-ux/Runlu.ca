@@ -164,7 +164,7 @@ final class RemediationUITests: XCTestCase {
         app.launch()
         let result = app.staticTexts["twist-qa-result"]
         XCTAssertTrue(result.waitForExistence(timeout: 40))
-        XCTAssertEqual(result.label, "WK QA PASS 8/8")
+        XCTAssertEqual(result.label, "WK QA PASS 9/9")
         XCTAssertFalse(app.staticTexts["twist-startup-error"].exists)
         let shot = XCTAttachment(screenshot: app.screenshot()); shot.name = "TWIST-11-actual-WK-suite"; shot.lifetime = .keepAlways; add(shot)
         app.terminate()
