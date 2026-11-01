@@ -106,15 +106,22 @@
     },
     "sources": [
       {
-        "url": "https://carpet-rug.org/",
-        "publisher": "The Carpet and Rug Institute",
+        "url": "https://carpet-rug.org/wp-content/uploads/2019/03/CRI-105-STANDARD-For-INSTALLATION-of-RESIDENTIAL-CARPET.pdf",
+        "publisher": "The Carpet and Rug Institute — CRI 105 Residential Carpet Installation Standard",
         "license_status": "unknown",
-        "checked_at": "2026-10-31",
-        "notes": "Research lead only: locate an applicable technical installation standard and exact manufacturer product sheet. This homepage is not sufficient evidence for publication; URL accessibility and reuse rights not independently checked."
+        "checked_at": "2026-11-01",
+        "notes": "Primary industry standard. Sections 5.1–5.3 address seams, pile direction and trimming. Copyright © 2019 CRI; link/cite only, no reproduction. Verify product-specific instructions before technical approval."
+      },
+      {
+        "url": "https://carpet-rug.org/wp-content/uploads/2019/03/CRI-104-STANDARD-For-INSTALLATION-of-COMMERCIAL-CARPET.pdf",
+        "publisher": "The Carpet and Rug Institute — CRI 104 Commercial Carpet Installation Standard",
+        "license_status": "unknown",
+        "checked_at": "2026-11-01",
+        "notes": "Primary industry standard. Section 18.3–18.6 addresses pattern direction, roll sequence and pattern alignment. Commercial context differs from residential; confirm applicable product instructions."
       }
     ],
     "created_at": "2026-10-31",
-    "updated_at": "2026-10-31",
+    "updated_at": "2026-11-01",
     "review": {
       "facts_verified": false,
       "license_verified": false,
@@ -123,7 +130,7 @@
     "related_ids": [
       "RK-0002"
     ],
-    "version": 1
+    "version": 2
   },
   {
     "id": "RK-0004",
@@ -147,15 +154,22 @@
     },
     "sources": [
       {
-        "url": "https://carpet-rug.org/",
-        "publisher": "The Carpet and Rug Institute",
+        "url": "https://carpet-rug.org/wp-content/uploads/2019/03/CRI-105-STANDARD-For-INSTALLATION-of-RESIDENTIAL-CARPET.pdf",
+        "publisher": "The Carpet and Rug Institute — CRI 105 Residential Carpet Installation Standard",
         "license_status": "unknown",
-        "checked_at": "2026-10-31",
-        "notes": "Candidate organization only. Identify exact applicable installation publication, edition and manufacturer-specific requirements before verification. Website and reuse rights not independently checked."
+        "checked_at": "2026-11-01",
+        "notes": "Primary industry standard. Sections 5.1–5.3 address seams, pile direction and trimming. Copyright © 2019 CRI; link/cite only, no reproduction. Verify product-specific instructions before technical approval."
+      },
+      {
+        "url": "https://carpet-rug.org/wp-content/uploads/2019/03/CRI-104-STANDARD-For-INSTALLATION-of-COMMERCIAL-CARPET.pdf",
+        "publisher": "The Carpet and Rug Institute — CRI 104 Commercial Carpet Installation Standard",
+        "license_status": "unknown",
+        "checked_at": "2026-11-01",
+        "notes": "Primary industry standard. Section 18.3–18.6 addresses pattern direction, roll sequence and pattern alignment. Commercial context differs from residential; confirm applicable product instructions."
       }
     ],
     "created_at": "2026-10-31",
-    "updated_at": "2026-10-31",
+    "updated_at": "2026-11-01",
     "review": {
       "facts_verified": false,
       "license_verified": false,
@@ -164,6 +178,6 @@
     "related_ids": [
       "RK-0003"
     ],
-    "version": 1
+    "version": 2
   }
 ]
