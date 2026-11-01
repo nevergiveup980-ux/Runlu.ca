@@ -118,6 +118,13 @@
         "license_status": "unknown",
         "checked_at": "2026-11-01",
         "notes": "Verified sections 18.3–18.6: patterned carpet seam diagrams, roll sequence, extra material for pattern match and alignment. Commercial context; do not apply residential trim allowances universally."
+      },
+      {
+        "url": "https://carpet-rug.org/resources/installation-standards/",
+        "publisher": "The Carpet and Rug Institute",
+        "license_status": "unknown",
+        "checked_at": "2026-11-01",
+        "notes": "Official index identifies CRI 104 (commercial) and CRI 105 (residential), and links English and Spanish versions. Linking is not permission to reproduce standards."
       }
     ],
     "created_at": "2026-10-31",
@@ -130,7 +137,7 @@
     "related_ids": [
       "RK-0002"
     ],
-    "version": 3
+    "version": 4
   },
   {
     "id": "RK-0004",
