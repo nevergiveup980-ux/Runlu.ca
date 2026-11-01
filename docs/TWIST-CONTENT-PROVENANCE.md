@@ -1,5 +1,7 @@
 # RUNLU TWIST — Content provenance disclosure (2026-11-01)
 
+Update: the first puzzle and its previously stale standalone explanations are now synchronized into local **1.1 (5)** in `cacfb81`. See [Build5 acceptance](TWIST-BUILD5-CONTENT-ACCEPTANCE.md) and [the remaining nineteen-item risk register](TWIST-CLASSIC-CONTENT-RISK-REGISTER.md). Build4 remains a historical candidate with the old first puzzle; no new upload occurred. The historical inspiration disclosure below remains unchanged.
+
 ## User-provided origin evidence
 The product owner supplied a screenshot of a Facebook post by “Relatable Funny Memes” / Timilehin Oladejo showing a handwritten English riddle: a woman born in 1975 and died in 1975 at age 22, asking how this is possible. The owner explained that this Facebook image was the initial inspiration for asking ChatGPT to develop RUNLU TWIST. The first classic puzzle in the game's source uses this premise and a room-number solution.
 
