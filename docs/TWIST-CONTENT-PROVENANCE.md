@@ -16,3 +16,11 @@ This evidence shows the immediate inspiration and similarity, **not** that the F
 
 ## Release gate
 Do not claim copyright clearance, exclusive originality or a complete provenance audit until evidence is documented.
+
+## 2026-11-01 — First puzzle replacement
+- Commit `536199c3cc9c53d86477eca4502f11e90ec50322` replaced the Facebook-inspired first puzzle in both English and Simplified Chinese in `twist.html`.
+- New question: “What can be opened without a key, closed without a lock, and shared without being split in two?” Answer: a conversation. Chinese wording and hints/explanations updated together.
+- This was newly authored for this revision, but generic metaphorical riddle conventions are not exclusive; do not claim a legal originality determination or absence of similar riddles elsewhere.
+- This is a source-branch change, NOT evidence that the installed iPhone Build 4 or the App Store-reviewed Build 3 contains the new puzzle.
+- Before a new iOS build: sync the exact revised `twist.html` into the WKWebView bundle, assert that puzzle 1 matches in EN and ZH, run all ten Logic Studio cases, confirm old first question is absent from shipped assets, and record binary/build identifiers.
+- For Apple Q1–Q9, keep historical inspiration separate from current shipped content and do not claim Build 4 was reviewed or uploaded.
