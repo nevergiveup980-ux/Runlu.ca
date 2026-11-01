@@ -42,7 +42,7 @@ test("invalid width shows a validation error",async({page})=>{
 });
 
 test("pre-cut checklist shows progress but does not imply approval",async({page})=>{
- await page.goto("/");
+ await page.goto(pageUrl);
  await expect(page.locator("#reviewStatus")).toContainText("0 / 5");
  await page.locator("#reviewChecklist input").first().check();
  await expect(page.locator("#reviewStatus")).toContainText("1 / 5");
