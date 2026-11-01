@@ -4,7 +4,7 @@ const labels={"title": ["Private message inbox", "私密留言收件箱", "Messa
 const $=id=>document.getElementById(id),cloud=window.RUNLU.cloud,db=cloud.getClient();
 let offset=0,epoch=0,rows=[],hasNext=false,noticeKey='',busy=false;
 const size=20,columns='id,category,name,email,message,wants_reply,language,status,created_at';
-function t(key){const i=['en','zh','fr','es'].indexOf(document.documentElement.lang);return labels[key]?.[i<0?0:i]||key}
+function t(key){const i=['en','zh','fr','es'].indexOf(document.documentElement.dataset.runluLanguage||document.documentElement.lang);return labels[key]?.[i<0?0:i]||key}
 function notice(key){noticeKey=key;$('notice').textContent=key?t(key):''}
 function clear(){rows=[];$('messages').replaceChildren();$('inbox').hidden=true}
 function controls(){for(const id of ['refresh','filter'])$(id).disabled=busy;$('previous').disabled=busy||offset===0;$('next').disabled=busy||!hasNext;$('page').textContent=String(offset/size+1)}
@@ -48,6 +48,7 @@ async function load(){
 $('filter').addEventListener('change',()=>{offset=0;load()});$('refresh').addEventListener('click',load);
 $('next').addEventListener('click',()=>{offset+=size;load()});$('previous').addEventListener('click',()=>{offset=Math.max(0,offset-size);load()});
 $('signout').addEventListener('click',async()=>{++epoch;clear();notice('login');const {error}=await db.auth.signOut();if(error)notice('error')});
+document.addEventListener('DOMContentLoaded',()=>{notice(noticeKey);render()});
 window.addEventListener('runlu:languagechange',()=>{notice(noticeKey);render()});
 db.auth.onAuthStateChange((event)=>{if(event==='SIGNED_OUT'){++epoch;clear();notice('login')}else if(event==='SIGNED_IN'||event==='TOKEN_REFRESHED')setTimeout(load,0)});
 load();
