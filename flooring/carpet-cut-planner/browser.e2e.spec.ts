@@ -52,3 +52,12 @@ test("pre-cut checklist shows progress but does not imply approval",async({page}
  await page.locator("#reviewChecklist input").nth(4).check();
  await expect(page.locator("#reviewStatus")).toContainText("installer approval remains a separate decision");
 });
+
+test("changing a roll invalidates previously checked review items",async({page})=>{
+ await page.goto(pageUrl);
+ await page.locator("#reviewChecklist input").first().check();
+ await expect(page.locator("#reviewStatus")).toContainText("1 / 5");
+ await page.locator("#rollRows input[data-field='l']").first().fill("31");
+ await expect(page.locator("#reviewStatus")).toContainText("0 / 5");
+ await expect(page.locator("#reviewChecklist input").first()).not.toBeChecked();
+});
