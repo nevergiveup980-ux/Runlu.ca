@@ -40,3 +40,15 @@ test("invalid width shows a validation error",async({page})=>{
  await page.locator("#calculate").click();
  await expect(page.locator("#results .warning")).toContainText("Invalid roll");
 });
+
+test("pre-cut checklist shows progress but does not imply approval",async({page})=>{
+ await page.goto("/");
+ await expect(page.locator("#reviewStatus")).toContainText("0 / 5");
+ await page.locator("#reviewChecklist input").first().check();
+ await expect(page.locator("#reviewStatus")).toContainText("1 / 5");
+ await page.locator("#reviewChecklist input").nth(1).check();
+ await page.locator("#reviewChecklist input").nth(2).check();
+ await page.locator("#reviewChecklist input").nth(3).check();
+ await page.locator("#reviewChecklist input").nth(4).check();
+ await expect(page.locator("#reviewStatus")).toContainText("installer approval remains a separate decision");
+});
