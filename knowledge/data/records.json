@@ -117,5 +117,46 @@
       "RK-0002"
     ],
     "version": 1
+  },
+  {
+    "id": "RK-0004",
+    "status": "draft",
+    "category": "construction",
+    "scope": {
+      "type": "global",
+      "codes": []
+    },
+    "titles": {
+      "en": "Carpet seams, pile direction and pattern alignment",
+      "zh": "地毯接缝、绒毛方向与花纹对齐",
+      "fr": "Joints de moquette, sens du velours et raccords de motifs",
+      "es": "Uniones de alfombras, dirección del pelo y alineación de patrones"
+    },
+    "summaries": {
+      "en": "Seam layout, pile direction and pattern alignment can affect a carpet installation plan. Appropriate requirements depend on the specific product, installation method and applicable manufacturer instructions. This draft does not prescribe a universal seam location or installation technique.",
+      "zh": "接缝布局、绒毛方向和花纹对齐可能影响地毯安装规划。具体要求取决于产品、安装方法和适用的厂家说明。本草稿不规定通用接缝位置或施工方法。",
+      "fr": "L'emplacement des joints, le sens du velours et les raccords de motifs peuvent influencer le plan de pose d'une moquette. Les exigences dépendent du produit, de la méthode de pose et des instructions applicables du fabricant. Ce brouillon ne prescrit aucune position de joint ni technique universelle.",
+      "es": "La disposición de las uniones, la dirección del pelo y la alineación de patrones pueden influir en la instalación de una alfombra. Los requisitos dependen del producto, del método de instalación y de las instrucciones aplicables del fabricante. Este borrador no prescribe ubicaciones de unión ni técnicas universales."
+    },
+    "sources": [
+      {
+        "url": "https://carpet-rug.org/",
+        "publisher": "The Carpet and Rug Institute",
+        "license_status": "unknown",
+        "checked_at": "2026-10-31",
+        "notes": "Candidate organization only. Identify exact applicable installation publication, edition and manufacturer-specific requirements before verification. Website and reuse rights not independently checked."
+      }
+    ],
+    "created_at": "2026-10-31",
+    "updated_at": "2026-10-31",
+    "review": {
+      "facts_verified": false,
+      "license_verified": false,
+      "translations_verified": false
+    },
+    "related_ids": [
+      "RK-0003"
+    ],
+    "version": 1
   }
 ]
