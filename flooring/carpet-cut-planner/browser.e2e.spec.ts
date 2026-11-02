@@ -61,3 +61,15 @@ test("changing a roll invalidates previously checked review items",async({page})
  await expect(page.locator("#reviewStatus")).toContainText("0 / 5");
  await expect(page.locator("#reviewChecklist input").first()).not.toBeChecked();
 });
+
+test("job reference is shown and changing it clears review confirmations",async({page})=>{
+ await page.goto(pageUrl);
+ await page.locator("#jobId").fill("JOB-1042");
+ await page.locator("#calculate").click();
+ await expect(page.locator("#results")).toContainText("JOB-1042");
+ await page.locator("#reviewChecklist input").first().check();
+ await page.locator("#jobId").fill("JOB-1043");
+ await expect(page.locator("#reviewStatus")).toContainText("0 / 5");
+ await page.locator("#calculate").click();
+ await expect(page.locator("#results")).toContainText("JOB-1043");
+});
