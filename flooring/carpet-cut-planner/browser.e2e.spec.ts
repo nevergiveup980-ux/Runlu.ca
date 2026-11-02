@@ -83,3 +83,16 @@ test("review timestamps are bound to revision and cleared when order changes",as
  await expect(page.locator("#reviewEvidence")).toContainText("No review confirmations recorded.");
  await expect(page.locator("#reviewChecklist input").first()).not.toBeChecked();
 });
+
+test("loading a saved job does not restore previous review evidence",async({page})=>{
+ await page.goto(pageUrl);
+ await page.locator("#jobId").fill("JOB-777");
+ await page.locator("#reviewChecklist input").first().check();
+ await expect(page.locator("#reviewEvidence")).toContainText("measurements:");
+ const project={version:1,jobId:"JOB-888",reviewer:"Test reviewer",planRevision:4,rolls:[{id:"R1",w:12,l:30,lot:"A",stockType:"FULL"}],pieces:[{id:"Room 1",w:10,l:12,lot:"A",rotate:false}],settings:{shortRollFirst:false,widthAllowance:0,lengthAllowance:0,patternRepeat:0}};
+ await page.locator("#load").setInputFiles({name:"job.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(project))});
+ await expect(page.locator("#jobId")).toHaveValue("JOB-888");
+ await expect(page.locator("#reviewStatus")).toContainText("0 / 5");
+ await expect(page.locator("#reviewEvidence")).toContainText("No review confirmations recorded.");
+ await expect(page.locator("#results")).toContainText("revision: 5");
+});
