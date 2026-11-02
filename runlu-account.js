@@ -108,6 +108,27 @@
     el.libraryList.replaceChildren(fragment);
   }
 
+  async function beginPaidCheckout(planKey,button){
+    const original=button.textContent;
+    button.disabled=true;
+    button.textContent='…';
+    try{
+      const {data:{session}}=await client.auth.getSession();
+      if(!session?.access_token)throw new Error('authentication_required');
+      const response=await fetch('https://ekrnknlawekeoszzkamd.supabase.co/functions/v1/runlu-stripe-checkout',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':'sb_publishable_Jr12gnQ7UrU6Wv9xz4L1aA_bcTZiGqn'},
+        body:JSON.stringify({action:'create_checkout',plan_key:planKey})
+      });
+      const result=await response.json();
+      if(!response.ok||!result.ok||!/^https:\/\/checkout\.stripe\.com\//.test(result.checkout_url||''))throw new Error(result.error||'checkout_unavailable');
+      window.location.assign(result.checkout_url);
+    }catch(error){
+      showStatus(error?.message||t('generic_error'),true);
+      button.disabled=false;button.textContent=original;
+    }
+  }
+
   async function loadStore(generation){
     if(!el.storeList)return;
     const [offersResult,ownedResult]=await Promise.all([
@@ -152,10 +173,14 @@
           });
           item.append(button);
         }
+      }else if(row.action_state==='ready_for_checkout'){
+        const button=document.createElement('button');button.type='button';button.className='store-action available';
+        button.textContent=({zh:'前往安全结账',en:'Secure checkout',fr:'Paiement sécurisé',es:'Pago seguro'})[el.languageSelect?.value]||'Secure checkout';
+        button.addEventListener('click',()=>beginPaidCheckout(row.plan_key,button));
+        item.append(button);
       }else{
         const badge=document.createElement('span');badge.className='store-action planned';
-        const key=row.action_state==='ready_for_checkout'?'checkout_not_enabled':'planned';
-        badge.dataset.i18n=key;badge.textContent=t(key);item.append(badge);
+        badge.dataset.i18n='planned';badge.textContent=t('planned');item.append(badge);
       }
       fragment.append(item);
     }
