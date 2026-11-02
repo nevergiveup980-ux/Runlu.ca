@@ -6,7 +6,8 @@ test("connection loss during cleanup stops database operations and discards sess
  const client=new EventEmitter();
  let calls=0,discarded;
  client.release=destroy=>{discarded=destroy;};
- client.query=async sql=>{
+ client.query=async request=>{
+  const sql=typeof request==="string"?request:request?.text;
   if(sql.includes("pg_try_advisory_lock"))return {rows:[{acquired:true}]};
   if(sql.includes("pg_advisory_unlock"))throw Error("must not unlock dead session");
   calls++;
