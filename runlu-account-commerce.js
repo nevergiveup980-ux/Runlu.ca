@@ -138,7 +138,7 @@
       const period=row.current_period_start||row.current_period_end ? `${t('renewal')}: ${date(row.current_period_start)} – ${date(row.current_period_end)}` : '';
       const meta=[row.product_name,period,row.cancel_at_period_end?t('cancel_end'):''].filter(Boolean).join(' · ');
       const card=rowCard(row.plan_name||row.product_name||'RUNLU subscription',meta,row.status);
-      if(!['canceled','expired'].includes(String(row.status||'').toLowerCase())){
+      if(['active','trialing','past_due','unpaid'].includes(String(row.status||'').toLowerCase())){
         const button=document.createElement('button');
         button.type='button';button.className='store-action available';
         button.textContent=(portalLabels[language()]||portalLabels.en)[0];
