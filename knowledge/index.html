@@ -32,7 +32,7 @@ async function loadPublished(){
   const dataset=await response.json();
   if(!dataset||!Array.isArray(dataset.entries))throw new Error("Invalid dataset");
   loadError=false;
-  entries=dataset.entries.filter(e=>e.status==="published"&&e.review?.facts_verified===true&&e.review?.license_verified===true&&e.review?.translations_verified===true&&Boolean(e.review?.reviewer)&&/^\d{4}-\d{2}-\d{2}$/.test(e.review?.reviewed_at||"")&&["en","zh","fr","es"].every(l=>Boolean(e.titles?.[l]&&e.summaries?.[l]))&&Array.isArray(e.sources)&&e.sources.length>0&&e.sources.every(s=>s.license_status==="permitted")&&e.titles?.en&&e.summaries?.en);
+  entries=dataset.entries.filter(e=>e.status==="published"&&e.review?.facts_verified===true&&e.review?.license_verified===true&&e.review?.translations_verified===true&&Boolean(e.review?.reviewer)&&/^\d{4}-\d{2}-\d{2}$/.test(e.review?.reviewed_at||"")&&["en","zh","fr","es"].every(l=>Boolean(e.titles?.[l]&&e.summaries?.[l]))&&Array.isArray(e.sources)&&e.sources.length>0&&e.sources.every(s=>(s.use_type==="factual_reference"&&Boolean(s.rights_basis)&&Boolean(s.rights_evidence)&&s.license_status!=="prohibited")||s.license_status==="permitted")&&e.titles?.en&&e.summaries?.en);
   render();
  }catch(err){
   entries=[];
