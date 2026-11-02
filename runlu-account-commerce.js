@@ -24,6 +24,7 @@
   const linkStatus=document.getElementById('purchaseLinkStatus');
   const linkButton=document.getElementById('purchaseLinkButton');
   let generation = 0;
+  const portalLabels={en:['Manage subscription','Opening billing portal…','Unable to open subscription management. Please try again.'],zh:['管理订阅','正在打开订阅管理…','暂时无法打开订阅管理，请稍后重试。'],fr:['Gérer l’abonnement','Ouverture du portail…','Impossible d’ouvrir la gestion de l’abonnement.'],es:['Gestionar suscripción','Abriendo el portal…','No se pudo abrir la gestión de suscripciones.']};
 
   function language(){
     const value=(localStorage.getItem('runlu-account-language')||document.documentElement.lang||navigator.language||'en').toLowerCase();
@@ -107,6 +108,25 @@
     ordersList.replaceChildren(fragment);
   }
 
+  async function openBillingPortal(button){
+    button.disabled=true;
+    const labels=portalLabels[language()]||portalLabels.en;
+    const original=button.textContent;
+    button.textContent=labels[1];
+    try {
+      const {data:{session}}=await client.auth.getSession();
+      if(!session?.access_token)throw Error('authentication_required');
+      const res=await fetch(SUPABASE_URL+'/functions/v1/runlu-stripe-portal',{
+        method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':SUPABASE_PUBLISHABLE_KEY},
+        body:'{}'
+      });
+      const payload=await res.json();
+      if(!res.ok||!payload.ok||!String(payload.url||'').startsWith('https://billing.stripe.com/'))throw Error(payload.error||'portal_unavailable');
+      window.location.assign(payload.url);
+    }catch(err){window.alert(labels[2]);}
+    finally{button.disabled=false;button.textContent=original;}
+  }
+
   async function loadSubscriptions(token){
     if(!subscriptionsList)return;
     const {data,error}=await client.from('runlu_account_subscriptions_v1')
@@ -117,7 +137,15 @@
     for(const row of data||[]){
       const period=row.current_period_start||row.current_period_end ? `${t('renewal')}: ${date(row.current_period_start)} – ${date(row.current_period_end)}` : '';
       const meta=[row.product_name,period,row.cancel_at_period_end?t('cancel_end'):''].filter(Boolean).join(' · ');
-      fragment.append(rowCard(row.plan_name||row.product_name||'RUNLU subscription',meta,row.status));
+      const card=rowCard(row.plan_name||row.product_name||'RUNLU subscription',meta,row.status);
+      if(['active','trialing','past_due','unpaid'].includes(String(row.status||'').toLowerCase())){
+        const button=document.createElement('button');
+        button.type='button';button.className='store-action available';
+        button.textContent=(portalLabels[language()]||portalLabels.en)[0];
+        button.addEventListener('click',()=>openBillingPortal(button));
+        card.append(button);
+      }
+      fragment.append(card);
     }
     if(!fragment.childNodes.length){const p=document.createElement('p');p.className='library-empty';p.textContent=t('subscriptions_empty');fragment.append(p)}
     subscriptionsList.replaceChildren(fragment);
