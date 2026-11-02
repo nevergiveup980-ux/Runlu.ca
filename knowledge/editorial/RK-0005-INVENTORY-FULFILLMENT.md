@@ -164,3 +164,33 @@ This is a **warehouse triage aid**, not an installation standard. All cases assu
 - The example does not account for cutting tolerances, trimming, pattern repeat allowances or waste; actual jobs require those inputs.
 - Dye-lot differences are a flag for review, not proof that material is unusable.
 - A warehouse employee must not override customer approvals, reservations or installation specifications merely because the material appears physically sufficient.
+
+## Source verification dossier — 2026-11-02
+
+**Source A — CRI installation standards, official index**
+https://carpet-rug.org/resources/installation-standards/
+
+**Source B — CRI 104 commercial carpet installation standard (2019 PDF)**
+https://carpet-rug.org/wp-content/uploads/2019/03/CRI-104-STANDARD-For-INSTALLATION-of-COMMERCIAL-CARPET.pdf
+
+**Source C — Shaw commercial broadloom installation guidance**
+https://pdmsview.shawinc.com/Shaw-Contract-Group-PDMS/EMEA-International-Documents/EMEA/Installation/Carpet/Broadloom/EMEA-Commercial-Broadloom-Carpet-Installation
+
+### Evidence-to-claim map
+
+| Article statement | Evidence / reasoning | Status |
+| --- | --- | --- |
+| Aggregated area may fail a continuous cut | Hypothetical 12 × 12.5 ft remnants versus 12 × 20 ft single-piece requirement; arithmetic and geometry | Verified mathematically |
+| Seam layout and pile/pattern direction affect installation planning | CRI 104, patterned carpet and planning sections; Shaw broadloom guidance | Supported as relevant considerations, subject to product/project scope |
+| Pattern matching may require extra material | CRI 104 patterned carpet section | Supported; no universal allowance percentage inferred |
+| Dye-lot and roll sequencing may affect cut planning | CRI 104 patterned carpet section; Shaw roll sequencing guidance | Supported as considerations, not universal incompatibility |
+| Reservations, holds, warehouse locations and stock synchronization affect fulfillment | Original operational reasoning, not covered by the cited installation standards | Requires separate process validation; do not attribute to CRI or Shaw |
+| A specific customer order is fulfillable | Depends on actual roll data, project specifications and approvals | Not verified; no customer-specific claim made |
+
+### Rights handling
+
+All references above are used for **factual corroboration only**. No protected passages, tables, drawings or photographs are reproduced. A citation is not a blanket permission to copy the original documents. Record the sources as factual references in any later structured publication record; review actual intended use.
+
+### Editorial disposition
+
+Source research materially strengthens the installation-related claims. It does **not** replace named technical reviewer sign-off, translation review, or warehouse-process verification. Keep publication on HOLD until those remaining checks are completed.
