@@ -111,3 +111,56 @@ This supplement is a general operational framework, not an assertion that a part
 4. **Publication workflow:** Create a reviewed structured record with its evidence reference only after the above checks. Keep `knowledge/data/published.json` unchanged until approved.
 
 **Decision:** HOLD — valuable editorial draft, but not independently verified or approved for public release.
+
+## Practical decision matrix — editorial enhancement (2026-11-02)
+
+This is a **warehouse triage aid**, not an installation standard. All cases assume the order specifications have been confirmed.
+
+| Observed condition | What it means | Next action | Suggested disposition |
+| --- | --- | --- | --- |
+| Total area sufficient; no piece meets continuous cut dimensions | Geometry mismatch | Check approved seam plan or source another continuous piece | Review needed |
+| Required roll dimensions available, but stock reserved | Allocation conflict | Check reservation ownership and authorization before reallocating | Review needed |
+| Roll listed in system but cannot be located | Inventory integrity issue | Physically locate and reconcile the roll before confirmation | Hold |
+| Roll located but damaged or short of usable length | Usable-stock shortfall | Measure unaffected section and reassess cut plan | Review needed |
+| Two rolls match SKU but have different dye lots | Potential appearance/compatibility constraint | Verify project/manufacturer requirements and approvals | Review needed |
+| Specific pieces verified, compatible, unreserved and meet approved layout | Constraints appear satisfied | Record roll IDs, measurements and release approval | Ready for release |
+
+### 中文：现场判定速查
+
+| 发现的问题 | 判断 | 下一步 |
+| --- | --- | --- |
+| 总面积够，但没有足够长的整块材料 | 尺寸组合不满足订单 | 核对已批准的接缝方案，或另找整卷 |
+| 尺寸够，但材料已被预留 | 可分配库存不足 | 核实预留归属，不擅自挪用 |
+| 系统有货，现场找不到 | 账实不符 | 先定位实物并更正记录 |
+| 找到卷材，但损坏或有效长度不足 | 可用库存不足 | 重新实测，评估其他卷材 |
+| 型号相同，染色批次不同 | 可能存在色差或兼容性限制 | 按项目及厂家要求核实 |
+| 卷号、尺寸、状态及方案全部核实 | 具备出库条件 | 记录依据后确认 |
+
+### Français : décisions de triage
+
+| Constat | Décision recommandée |
+| --- | --- |
+| Surface suffisante, longueur continue insuffisante | Vérifier le plan de joints approuvé ou chercher une autre pièce |
+| Dimensions suffisantes, rouleau réservé | Vérifier les droits de réaffectation avant toute promesse |
+| Stock informatique introuvable physiquement | Suspendre la confirmation et rapprocher l'inventaire |
+| Rouleau endommagé ou longueur utile insuffisante | Mesurer la partie utilisable et réévaluer |
+| Même référence, lots de teinture différents | Vérifier les contraintes du projet et du fabricant |
+| Toutes les pièces et contraintes vérifiées | Consigner les références et autoriser la préparation |
+
+### Español: decisiones operativas
+
+| Hallazgo | Acción recomendada |
+| --- | --- |
+| Área suficiente, longitud continua insuficiente | Revisar el plan aprobado de juntas o buscar otra pieza |
+| Dimensiones suficientes, material reservado | Verificar autorización antes de reasignar |
+| Existencias en el sistema, pero no localizadas | Detener la confirmación y conciliar inventario |
+| Rollo dañado o longitud útil insuficiente | Medir la sección aprovechable y reevaluar |
+| Misma referencia, distintos lotes de teñido | Verificar requisitos del proyecto y del fabricante |
+| Todas las piezas y condiciones verificadas | Registrar identificadores y aprobar preparación |
+
+### Explicit non-claims
+
+- These are **suggested operational dispositions**, not a guarantee of contract fulfillment.
+- The example does not account for cutting tolerances, trimming, pattern repeat allowances or waste; actual jobs require those inputs.
+- Dye-lot differences are a flag for review, not proof that material is unusable.
+- A warehouse employee must not override customer approvals, reservations or installation specifications merely because the material appears physically sufficient.
