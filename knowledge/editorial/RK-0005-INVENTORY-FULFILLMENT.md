@@ -91,3 +91,23 @@ Las reservas, los daños, los errores de ubicación, el ancho útil, el lote de 
 ### Verification boundary
 
 This supplement is a general operational framework, not an assertion that a particular customer contract, manufacturer or installation standard mandates these six steps. Confirm terminology and project-specific constraints before publication. No claim of field observation or independent reviewer sign-off is made.
+
+## Pre-publication technical review — 2026-11-02
+
+**Review scope:** Internal editorial consistency and arithmetic only. This is **not** an independent trade expert sign-off or external source verification.
+
+### Checks completed
+
+- Example arithmetic independently recalculated: each 12 ft × 12.5 ft remnant = 150 ft²; two remnants = 300 ft²; required single piece 12 ft × 20 ft = 240 ft². Neither 12.5-ft remnant can yield a 20-ft continuous length without joining pieces.
+- Confirmed the article explicitly conditions any joining, substitution, rotation or seam layout on the approved project plan and applicable manufacturer/customer requirements; it does not claim all seams are forbidden.
+- Confirmed English, Chinese, French and Spanish sections all distinguish aggregated stock area from a single continuous piece, and all six-point frameworks cover dimensions, actual stock, allocation, compatibility, assignment and decision.
+- Copyright handling: the present article contains original explanatory wording and a hypothetical arithmetic example. No third-party text, image, table or diagram is included. This observation is not a license determination for materials added later.
+
+### Remaining publication blockers
+
+1. **Professional technical review:** An identified flooring operations reviewer must validate terminology, exceptions and real-world applicability; record name, date and findings.
+2. **Language review:** An identified reviewer must confirm all four translations, especially the distinction between a seam and a roll remnant, and locale-appropriate terminology.
+3. **Source evidence:** If published as a technical reference, add verifiable primary manufacturer or relevant industry sources for any specific technical claims. The current article should not imply universal installation standards.
+4. **Publication workflow:** Create a reviewed structured record with its evidence reference only after the above checks. Keep `knowledge/data/published.json` unchanged until approved.
+
+**Decision:** HOLD — valuable editorial draft, but not independently verified or approved for public release.
