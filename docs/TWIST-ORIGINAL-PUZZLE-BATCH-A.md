@@ -12,27 +12,27 @@ ZH Answer: 发票在贴着“照片”标签的信封里。
 ZH Explanation: “空白”信封装着照片；“发票”信封不可能装发票，只能是空白；因此“照片”信封装着发票。
 Validation: unique assignment under all-wrong-label condition.
 
-## Candidate B — Slot 3: The missing minute
-EN Question: A display counts down in whole minutes from 5 to 0, showing each number once. It begins at 12:00 and changes exactly every minute. What does it show at 12:03?
-EN Hint: Count the changes, not the number of displays.
-EN Answer: 2.
-EN Explanation: It shows 5 at 12:00, 4 at 12:01, 3 at 12:02 and 2 at 12:03.
-ZH Question: 一个屏幕从5开始，每隔整整一分钟递减1，依次显示到0，每个数字只显示一次。12:00开始显示5，那么12:03显示什么？
-ZH Hint: 数一数屏幕已经变化了几次。
-ZH Answer: 2。
-ZH Explanation: 12:00显示5，12:01显示4，12:02显示3，12:03显示2。
-Validation: deterministic arithmetic, but relatively easy.
+## Candidate B — Slot 3: The delayed clock
+EN Question: A workshop clock loses exactly 2 minutes for every real hour. It is set correctly at noon and never adjusted. When the real time is 3:00 p.m., what time does it show?
+EN Hint: Three real hours have passed; add up the clock's lost minutes.
+EN Answer: 2:54 p.m.
+EN Explanation: The clock loses 2 minutes per hour, so after three hours it is 6 minutes slow. At real 3:00 p.m. it reads 2:54 p.m.
+ZH Question: 车间里有一只钟，每经过真实的一小时，就恰好慢2分钟。中午12点校准后再也没有调整。真实时间到了下午3点，这只钟显示几点？
+ZH Hint: 已经过了三个真实小时，算算一共慢了多少分钟。
+ZH Answer: 下午2:54。
+ZH Explanation: 每小时慢2分钟，三个小时共慢6分钟，所以真实时间下午3点时，钟显示下午2:54。
+Validation: explicitly defines drift per real hour; deterministic, medium-easy arithmetic. Avoid implying this is an unprecedented puzzle form.
 
-## Candidate C — Slot 4: The only possible order
-EN Question: Three cards marked A, B and C are placed in a row. A is not first. C is immediately before A. B is not last. What is the order?
-EN Hint: Treat C and A as a two-card block.
-EN Answer: B, C, A.
-EN Explanation: The adjacent block C–A can occupy positions 1–2 or 2–3. If it occupies 1–2, B is last, which is forbidden. So B–C–A is the only order.
-ZH Question: 三张卡片A、B、C排成一列。A不在第一位；C紧挨在A前面；B不在最后一位。顺序是什么？
-ZH Hint: 先把C和A看成一个相邻的整体。
-ZH Answer: B、C、A。
-ZH Explanation: C–A只能占第1、2位或第2、3位。若占第1、2位，B就会在最后，违反条件，因此只能是B–C–A。
-Validation: unique permutation.
+## Candidate C — Slot 4: The exhibition labels
+EN Question: Four artworks—A, B, C and D—hang in a row. B is immediately to the right of D. A is somewhere to the left of D. C is not at either end. Which artwork is at the far right?
+EN Hint: Treat D–B as a block. Then test where C can fit.
+EN Answer: B.
+EN Explanation: The only arrangement satisfying all clues is A–C–D–B: D–B must be adjacent; A must precede D; C must occupy an interior position. Thus B is far right.
+ZH Question: 展厅里有四幅作品A、B、C、D排成一行。B紧挨在D右边；A在D左边（不要求相邻）；C不在两端。最右边是哪幅？
+ZH Hint: 先把D–B当成相邻的整体，再考虑C的位置。
+ZH Answer: B。
+ZH Explanation: 满足所有条件的排列只有A–C–D–B：D与B相邻，A在D左边，C处于中间位置，因此最右边是B。
+Validation: needs exhaustive permutation check before acceptance; this wording is a proposed revision, not a verified unique solution.
 
 ## Candidate D — Slot 5: The cut-plan trap
 EN Question: A carpet roll is 4 metres wide and has at least 5 metres of usable length. A room is 5 metres long and 3 metres wide. You can cut one rectangular piece and rotate it, but you cannot join pieces. Can this room be covered with a single piece from the roll?
@@ -68,9 +68,9 @@ Validation: logical consistency requires checking both assignments. Similarity t
 | Candidate | Logical correctness | Bilingual equivalence | Challenge quality | Decision |
 |---|---|---|---|---|
 | A: mislabeled envelopes | PASS: one permutation fits all clues | PASS | Medium; resembles a known mislabeling-puzzle family | HOLD for similarity/provenance review |
-| B: countdown | PASS: 12:03 is 2 | PASS | Too easy; mainly arithmetic | REWORK before shipping |
-| C: card order | PASS: B–C–A is the only ordering | PASS | Easy; similar to existing ordering cases | HOLD for gameplay differentiation |
+| B: delayed clock | PASS: 3 hours × 2 minutes = 6 minutes slow | PASS | Medium-easy applied arithmetic | CANDIDATE; review similarity |
+| C: exhibition labels | PENDING exhaustive permutation verification | PASS | Medium, spatial sequencing | HOLD until verified |
 | D: carpet fit | PASS with explicit roll length and no joining | PASS | Medium; applied spatial reasoning | CANDIDATE, subject to technical/rights review |
 | E: two statements | PASS: neither truth assignment is consistent | PASS | Medium-hard; familiar paradox structure | HOLD for similarity/provenance review |
 
-**Editorial outcome:** Do not bulk-replace slots 2–6 yet. Only D is provisionally suitable for implementation after a final content review. These checks validate internal logic, not copyright clearance, user enjoyment, or App Store distinctiveness. Do not modify the existing 19-item UNKNOWN risk register on the strength of these drafts.
+**Editorial outcome:** Do not bulk-replace slots 2–6 yet. B and D are provisionally suitable after final editorial review; C requires exhaustive uniqueness verification. A and E require similarity/provenance review. These checks validate internal logic, not copyright clearance, user enjoyment, or App Store distinctiveness. Do not modify the existing 19-item UNKNOWN risk register on the strength of these drafts.
