@@ -66,8 +66,8 @@ for (const file of pages) {
         const navStart = edition.indexOf('<nav class="languages"');
         const navEnd = navStart < 0 ? -1 : edition.indexOf('</nav>', navStart);
         const nav = navEnd < 0 ? '' : edition.slice(navStart, navEnd + 6);
-        const hasLink = nav.includes(`href="${target}"`);
-        const hasCurrent = nav.includes('aria-current="page"');
+        const hasLink = edition.includes(`href="${target}"`);
+        const hasCurrent = edition.includes('aria-current="page"');
         if (selfEdition ? !(hasLink || hasCurrent) : !hasLink) failures.push(`${rel}: missing language navigation ${target}`);
       }
       if (!edition.includes(`rel="canonical" href="https://runlu.ca/${rel}"`)) failures.push(`${rel}: missing self canonical`);
@@ -92,8 +92,8 @@ for (const file of pages) {
         const navStart = edition.indexOf('<nav class="languages"');
         const navEnd = navStart < 0 ? -1 : edition.indexOf('</nav>', navStart);
         const nav = navEnd < 0 ? '' : edition.slice(navStart, navEnd + 6);
-        const hasLink = nav.includes(`href="${target}"`);
-        const hasCurrent = nav.includes('aria-current="page"');
+        const hasLink = edition.includes(`href="${target}"`);
+        const hasCurrent = edition.includes('aria-current="page"');
         if (selfEdition ? !(hasLink || hasCurrent) : !hasLink) failures.push(`${rel}: missing language navigation ${target}`);
     }
     if (!edition.includes(`rel="canonical" href="https://runlu.ca/${rel}"`)) failures.push(`${rel}: missing self canonical`);
