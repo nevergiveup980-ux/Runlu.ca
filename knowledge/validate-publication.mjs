@@ -50,7 +50,7 @@ export function auditKnowledge(drafts, published) {
   if (!Array.isArray(drafts) || !published || !Array.isArray(published.entries)) {
     throw new TypeError("expected draft array and published dataset with entries");
   }
-  const seen = new Set(), findings = [];
+  const seen = new Set(), findings = [], draftReadiness = [];
   for (const [source, entries] of [["draft", drafts], ["published", published.entries]]) {
     for (const record of entries) {
       const id = record?.id ?? "(missing)";
@@ -58,6 +58,12 @@ export function auditKnowledge(drafts, published) {
       if (seen.has(key)) findings.push({id,source,problems:["duplicate-id"]});
       seen.add(key);
       const problems = inspectRecord(record,{forPublication:source==="published"});
+      if (source === "draft") {
+        // Preview publication blockers without modifying the draft or declaring it published.
+        const candidate = {...record, status:"published"};
+        const blockers = inspectRecord(candidate,{forPublication:true});
+        draftReadiness.push({id,readyForEditorialDecision:blockers.length===0,blockers});
+      }
       if (problems.length) findings.push({id,source,problems});
     }
   }
@@ -65,6 +71,7 @@ export function auditKnowledge(drafts, published) {
     drafts: drafts.length,
     published: published.entries.length,
     findings,
+    draftReadiness,
     publicationSafe: findings.every(f => f.source !== "published"),
     draftIssues: findings.filter(f=>f.source==="draft").length
   };
