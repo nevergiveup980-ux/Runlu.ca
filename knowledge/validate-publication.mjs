@@ -30,6 +30,8 @@ export function inspectRecord(r, { forPublication = false } = {}) {
     if (!["unknown", "permitted", "restricted", "prohibited"].includes(s?.license_status)) problems.push("invalid-source-rights-" + i);
     if (!validDate(s?.checked_at)) problems.push("invalid-source-date-" + i);
     if (forPublication && s?.license_status !== "permitted") problems.push("source-rights-not-permitted-" + i);
+    if (forPublication && !nonblank(s?.rights_basis)) problems.push("missing-source-rights-basis-" + i);
+    if (forPublication && !nonblank(s?.rights_evidence)) problems.push("missing-source-rights-evidence-" + i);
   });
   if (forPublication) {
     if (r.status !== "published") problems.push("not-published");
@@ -38,6 +40,8 @@ export function inspectRecord(r, { forPublication = false } = {}) {
     }
     if (!nonblank(r.review?.reviewer)) problems.push("missing-reviewer");
     if (!validDate(r.review?.reviewed_at)) problems.push("invalid-reviewed-at");
+    if (!nonblank(r.review?.evidence_ref)) problems.push("missing-review-evidence");
+    if (!nonblank(r.review?.translation_reviewer)) problems.push("missing-translation-reviewer");
   }
   return problems;
 }
