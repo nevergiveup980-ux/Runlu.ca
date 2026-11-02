@@ -73,3 +73,13 @@ test("job reference is shown and changing it clears review confirmations",async(
  await page.locator("#calculate").click();
  await expect(page.locator("#results")).toContainText("JOB-1043");
 });
+
+test("review timestamps are bound to revision and cleared when order changes",async({page})=>{
+ await page.goto(pageUrl);
+ await page.locator("#reviewChecklist input").first().check();
+ await expect(page.locator("#reviewEvidence")).toContainText("measurements:");
+ await expect(page.locator("#reviewEvidence")).toContainText("revision 0");
+ await page.locator("#jobId").fill("JOB-200");
+ await expect(page.locator("#reviewEvidence")).toContainText("No review confirmations recorded.");
+ await expect(page.locator("#reviewChecklist input").first()).not.toBeChecked();
+});
