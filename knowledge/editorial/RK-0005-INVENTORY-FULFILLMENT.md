@@ -217,3 +217,22 @@ Source research materially strengthens the installation-related claims. It does 
 | Final publication record and rights evidence | Approved review metadata and source-use basis | Pending |
 
 **Release decision remains HOLD.** No claim of independent sign-off or successful CI test execution is made.
+
+## Final editorial tightening — 2026-11-02
+
+### Distinguish three evidence levels
+
+1. **Mathematically demonstrated:** A sum of areas does not guarantee a continuous piece of required dimensions. This is established by the hypothetical numerical example, without needing an external citation.
+2. **Externally supported installation considerations:** The official CRI 104 commercial installation standard discusses seam diagrams, pattern/roll sequence and extra material for pattern matching (see https://carpet-rug.org/wp-content/uploads/2019/03/CRI-104-STANDARD-For-INSTALLATION-of-COMMERCIAL-CARPET.pdf , section 18.3–18.6). CRI's installation overview also emphasizes accurate measurements and seam placement (https://carpet-rug.org/carpet-for-business/carpet-installation-information/).
+3. **RUNLU operational synthesis:** Reservations, inventory reconciliation, roll-level allocation and release statuses are recommended warehouse controls. They are **not** attributed to CRI or presented as mandatory industry standards.
+
+### Reader-facing caution — EN / 中文 / FR / ES
+
+- **EN:** This article offers an inventory-screening framework, not a cutting authorization. Verify actual material, approved layouts and manufacturer instructions before release.
+- **中文：** 本文提供的是库存判断方法，不是裁切许可。出库前须核对实物、已批准的铺装方案及厂家要求。
+- **FR:** Cet article propose une méthode de vérification du stock, et non une autorisation de coupe. Contrôlez le matériel, le plan approuvé et les instructions du fabricant.
+- **ES:** Este artículo propone una guía para evaluar existencias, no una autorización de corte. Compruebe el material, el diseño aprobado y las instrucciones del fabricante.
+
+### Publication-readiness decision
+
+**Editorial and source-scoping pass; formal release remains HOLD.** No named independent flooring reviewer or four-language proofreader has signed off. Do not represent these checks as completed and do not add the article to the reviewed publication dataset.
