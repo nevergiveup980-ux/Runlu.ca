@@ -63,9 +63,9 @@ for (const file of pages) {
         const target = base + suffix + '.html';
         if (!edition.includes(`hreflang="${lang}" href="https://runlu.ca/${target}"`)) failures.push(`${rel}: missing alternate ${target}`);
         const selfEdition = target === rel;
-        const nav = edition.match(/<nav\\b[^>]*class=["'][^"']*\\blanguages\\b[^"']*["'][^>]*>[\\s\\S]*?<\\/nav>/i)?.[0] || '';
+        const nav = edition.match(/<nav\b[^>]*class=["'][^"']*\blanguages\b[^"']*["'][^>]*>[\s\S]*?<\/nav>/i)?.[0] || '';
         const hasLink = nav.includes(`href="${target}"`);
-        const hasCurrent = /<span\\b[^>]*aria-current=["']page["'][^>]*>/.test(nav);
+        const hasCurrent = /<span\b[^>]*aria-current=["']page["'][^>]*>/.test(nav);
         if (selfEdition ? !(hasLink || hasCurrent) : !hasLink) failures.push(`${rel}: missing language navigation ${target}`);
       }
       if (!edition.includes(`rel="canonical" href="https://runlu.ca/${rel}"`)) failures.push(`${rel}: missing self canonical`);
@@ -87,9 +87,9 @@ for (const file of pages) {
       if (!fs.existsSync(path.join(root, target))) failures.push(`${rel}: missing edition ${target}`);
       if (!edition.includes(`hreflang="${lang}" href="https://runlu.ca/${target}"`)) failures.push(`${rel}: missing alternate ${target}`);
       const selfEdition = target === rel;
-        const nav = edition.match(/<nav\\b[^>]*class=["'][^"']*\\blanguages\\b[^"']*["'][^>]*>[\\s\\S]*?<\\/nav>/i)?.[0] || '';
+        const nav = edition.match(/<nav\b[^>]*class=["'][^"']*\blanguages\b[^"']*["'][^>]*>[\s\S]*?<\/nav>/i)?.[0] || '';
         const hasLink = nav.includes(`href="${target}"`);
-        const hasCurrent = /<span\\b[^>]*aria-current=["']page["'][^>]*>/.test(nav);
+        const hasCurrent = /<span\b[^>]*aria-current=["']page["'][^>]*>/.test(nav);
         if (selfEdition ? !(hasLink || hasCurrent) : !hasLink) failures.push(`${rel}: missing language navigation ${target}`);
     }
     if (!edition.includes(`rel="canonical" href="https://runlu.ca/${rel}"`)) failures.push(`${rel}: missing self canonical`);
