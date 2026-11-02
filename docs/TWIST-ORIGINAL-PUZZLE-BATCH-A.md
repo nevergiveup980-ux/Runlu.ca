@@ -32,7 +32,7 @@ ZH Question: 展厅里有四幅作品A、B、C、D排成一行。B紧挨在D右�
 ZH Hint: 先把D–B当成相邻的整体，再考虑C的位置。
 ZH Answer: B。
 ZH Explanation: 满足所有条件的排列只有A–C–D–B：D与B相邻，A在D左边，C处于中间位置，因此最右边是B。
-Validation: needs exhaustive permutation check before acceptance; this wording is a proposed revision, not a verified unique solution.
+Validation: exhaustive enumeration of all 24 permutations confirms exactly one valid order: A–C–D–B.
 
 ## Candidate D — Slot 5: The cut-plan trap
 EN Question: A carpet roll is 4 metres wide and has at least 5 metres of usable length. A room is 5 metres long and 3 metres wide. You can cut one rectangular piece and rotate it, but you cannot join pieces. Can this room be covered with a single piece from the roll?
@@ -69,8 +69,8 @@ Validation: logical consistency requires checking both assignments. Similarity t
 |---|---|---|---|---|
 | A: mislabeled envelopes | PASS: one permutation fits all clues | PASS | Medium; resembles a known mislabeling-puzzle family | HOLD for similarity/provenance review |
 | B: delayed clock | PASS: 3 hours × 2 minutes = 6 minutes slow | PASS | Medium-easy applied arithmetic | CANDIDATE; review similarity |
-| C: exhibition labels | PENDING exhaustive permutation verification | PASS | Medium, spatial sequencing | HOLD until verified |
+| C: exhibition labels | PASS: 1 of 24 permutations satisfies all clues | PASS | Medium, spatial sequencing | CANDIDATE; review similarity |
 | D: carpet fit | PASS with explicit roll length and no joining | PASS | Medium; applied spatial reasoning | CANDIDATE, subject to technical/rights review |
 | E: two statements | PASS: neither truth assignment is consistent | PASS | Medium-hard; familiar paradox structure | HOLD for similarity/provenance review |
 
-**Editorial outcome:** Do not bulk-replace slots 2–6 yet. B and D are provisionally suitable after final editorial review; C requires exhaustive uniqueness verification. A and E require similarity/provenance review. These checks validate internal logic, not copyright clearance, user enjoyment, or App Store distinctiveness. Do not modify the existing 19-item UNKNOWN risk register on the strength of these drafts.
+**Editorial outcome:** Do not bulk-replace slots 2–6 yet. B and D are provisionally suitable after final editorial review; C passed exhaustive uniqueness verification. A and E require similarity/provenance review. These checks validate internal logic, not copyright clearance, user enjoyment, or App Store distinctiveness. Do not modify the existing 19-item UNKNOWN risk register on the strength of these drafts.
