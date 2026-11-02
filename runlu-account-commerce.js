@@ -121,7 +121,7 @@
         body:'{}'
       });
       const payload=await res.json();
-      if(!res.ok||!payload.ok||!/^https:\\/\\/billing\\.stripe\\.com\\//.test(payload.url||''))throw Error(payload.error||'portal_unavailable');
+      if(!res.ok||!payload.ok||!String(payload.url||'').startsWith('https://billing.stripe.com/'))throw Error(payload.error||'portal_unavailable');
       window.location.assign(payload.url);
     }catch(err){window.alert(labels[2]);}
     finally{button.disabled=false;button.textContent=original;}
