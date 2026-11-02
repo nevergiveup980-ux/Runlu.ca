@@ -96,3 +96,15 @@ test("loading a saved job does not restore previous review evidence",async({page
  await expect(page.locator("#reviewEvidence")).toContainText("No review confirmations recorded.");
  await expect(page.locator("#results")).toContainText("revision: 5");
 });
+
+test("printed report lists confirmed and missing reviews without claiming approval",async({page})=>{
+ await page.goto(pageUrl);
+ await page.locator("#jobId").fill("JOB-PRINT");
+ await page.locator("#reviewer").fill("Alex");
+ await page.locator("#reviewChecklist input").first().check();
+ await page.locator("#print").click();
+ await expect(page.locator("#printAudit")).toContainText("JOB-PRINT");
+ await expect(page.locator("#printAudit")).toContainText("1 / 5 confirmed");
+ await expect(page.locator("#printAudit")).toContainText("NOT CONFIRMED");
+ await expect(page.locator("#printAudit")).toContainText("not authenticated signatures");
+});
