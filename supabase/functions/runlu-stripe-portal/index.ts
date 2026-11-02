@@ -19,13 +19,14 @@ Deno.serve(async(req:Request)=>{
   if(error||!user)return reply(req,{ok:false,error:"authentication_required"},401);
   const admin=createClient(supabaseUrl,service,{auth:{persistSession:false,autoRefreshToken:false}});
   // The customer ID must be derived exclusively from the authenticated user's stored subscriptions.
-  const {data:subs,error:dbError}=await admin.from("runlu_subscriptions").select("provider_customer_reference,provider_subscription_reference,status").eq("user_id",user.id).eq("payment_provider","stripe").not("provider_customer_reference","is",null).order("created_at",{ascending:false}).limit(50);
+  const {data:subs,error:dbError}=await admin.from("runlu_subscriptions").select("provider_customer_reference,provider_subscription_reference,status").eq("user_id",user.id).eq("payment_provider","stripe").in("status",["active","trialing","past_due","unpaid"]).not("provider_customer_reference","is",null).order("created_at",{ascending:false}).limit(50);
   if(dbError)return reply(req,{ok:false,error:"subscription_lookup_failed"},503);
   const customers=[...new Set((subs||[]).map(s=>String(s.provider_customer_reference||"")).filter(x=>/^cus_[A-Za-z0-9]+$/.test(x)))];
   if(!customers.length)return reply(req,{ok:false,error:"no_stripe_subscription"},404);
   // Multiple Stripe customers cannot safely be chosen by a client-provided ID.
   if(customers.length>1)return reply(req,{ok:false,error:"multiple_billing_profiles_contact_support"},409);
   const customer=customers[0];
+  // Never attempt a portal session using a test-mode customer against a live-mode key or vice versa.
   const check=await fetch("https://api.stripe.com/v1/customers/"+encodeURIComponent(customer),{headers:{Authorization:"Bearer "+secret}});
   const checked=await check.json().catch(()=>({}));
   if(!check.ok||checked.deleted)return reply(req,{ok:false,error:"stripe_customer_unavailable"},502);
