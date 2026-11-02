@@ -36,3 +36,16 @@ test("eligible draft preview does not mutate source record",()=>{
  assert.equal(report.draftReadiness[0].readyForEditorialDecision,true);
  assert.equal(r.status,"draft");
 });
+
+test("factual reference needs no reproduction license when assessment documented",()=>{
+ const r=good();r.sources[0].use_type="factual_reference";r.sources[0].license_status="unknown";
+ assert.deepEqual(inspectRecord(r,{forPublication:true}),[]);
+});
+test("factual reference missing assessment is blocked",()=>{
+ const r=good();r.sources[0].use_type="factual_reference";r.sources[0].license_status="unknown";delete r.sources[0].rights_evidence;
+ assert.ok(inspectRecord(r,{forPublication:true}).includes("factual-reference-assessment-missing-0"));
+});
+test("prohibited source is not bypassed by factual-reference classification",()=>{
+ const r=good();r.sources[0].use_type="factual_reference";r.sources[0].license_status="prohibited";
+ assert.ok(inspectRecord(r,{forPublication:true}).includes("source-use-prohibited-0"));
+});
