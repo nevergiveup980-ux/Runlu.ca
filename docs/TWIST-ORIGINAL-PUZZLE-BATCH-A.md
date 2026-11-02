@@ -1,16 +1,16 @@
 # RUNLU TWIST — Original Puzzle Replacement Batch A (draft for editorial review)
 Date: 2026-11-01. Status: PROPOSED, NOT IN SHIPPED BUILD. Do not claim legal clearance or exclusive originality. These prompts were newly composed for this batch; check for similarities and editorial quality before implementation.
 
-## Candidate A — Slot 2: The label test
-EN Question: Three identical envelopes sit on a desk. One says "Invoice", one says "Photo", and one says "Blank". You are told every label is wrong. You may open only the envelope labeled "Blank", and it contains a photo. Which envelope contains the invoice?
-EN Hint: The envelope labeled "Blank" actually holds the photo. Neither remaining envelope can hold its own label.
-EN Answer: The envelope labeled "Photo" contains the invoice.
-EN Explanation: "Blank" contains the photo. The "Invoice" envelope cannot contain the invoice and must therefore be blank. The "Photo" envelope must contain the invoice.
-ZH Question: 桌上有三个相同的信封，分别贴着“发票”“照片”“空白”标签。已知三个标签全贴错了。你只能打开标着“空白”的信封，发现里面是一张照片。发票在哪个信封里？
-ZH Hint: “空白”信封装着照片，剩下两个信封的标签也都不正确。
-ZH Answer: 发票在贴着“照片”标签的信封里。
-ZH Explanation: “空白”信封装着照片；“发票”信封不可能装发票，只能是空白；因此“照片”信封装着发票。
-Validation: unique assignment under all-wrong-label condition.
+## Candidate A — Slot 2: The packing receipt
+EN Question: A shipping receipt lists exactly three boxes with a total weight of 18 kg. Box B weighs twice as much as box A. Box C weighs 3 kg more than box A. How much does box C weigh?
+EN Hint: Express all three weights using box A.
+EN Answer: 6 kg.
+EN Explanation: Let A weigh x kg. Then B = 2x and C = x + 3. So x + 2x + (x + 3) = 18; x = 3, hence C = 6 kg.
+ZH Question: 一张发货单上恰好有三个箱子，总重量18千克。B箱是A箱重量的两倍，C箱比A箱重3千克。C箱有多重？
+ZH Hint: 先用A箱的重量表示另外两个箱子。
+ZH Answer: 6千克。
+ZH Explanation: 设A箱重x千克，则B箱重2x，C箱重x+3。由x+2x+(x+3)=18，得x=3，因此C箱重6千克。
+Validation: unique positive solution (A,B,C) = (3,6,6) kg. This is a newly written warehouse-context exercise, not an exclusive claim to elementary algebra.
 
 ## Candidate B — Slot 3: The delayed clock
 EN Question: A workshop clock loses exactly 2 minutes for every real hour. It is set correctly at noon and never adjusted. When the real time is 3:00 p.m., what time does it show?
@@ -45,20 +45,20 @@ ZH Answer: 可以，裁一块5米×3米的地毯。
 ZH Explanation: 卷宽4米限制的是横向尺寸；5米可以沿卷长方向裁取，房间3米的宽度小于卷宽4米。
 Validation: usable roll length >= 5 m is now explicit; single-piece fit is feasible, ignoring installation tolerances and pattern direction.
 
-## Candidate E — Slot 6: The reversed sign
-EN Question: A sign reads, “THE NEXT SENTENCE IS FALSE.” The next sentence reads, “THE PREVIOUS SENTENCE IS TRUE.” Can both statements be assigned a consistent true-or-false value?
-EN Hint: Assume the first statement is true, then assume it is false. Check both.
-EN Answer: No. Neither assignment is consistent.
-EN Explanation: If the first is true, the second is false; but the second then says the first is true, making the second true. If the first is false, the second is true; then the second says the first is true, contradicting the assumption.
-ZH Question: 一张牌子写着：“下一句话是假的。”下一句写着：“上一句话是真的。”能否为这两句话分别判定真或假，并且不产生矛盾？
-ZH Hint: 分别假设第一句话为真、为假，看看会发生什么。
-ZH Answer: 不能。无论如何分配真假，都会矛盾。
-ZH Explanation: 若第一句为真，则第二句为假；但第二句声称第一句为真，又会使第二句为真。若第一句为假，则第二句为真；第二句又要求第一句为真，与假设冲突。
-Validation: logical consistency requires checking both assignments. Similarity to known liar-paradox family; do not market as wholly unprecedented.
+## Candidate E — Slot 6: The double scan
+EN Question: A warehouse scans four parcels in order. The recorded weights are 4, 7, 4 and 9 kg. One parcel was scanned twice, and the real total weight is 20 kg. Which recorded weight was the duplicate scan?
+EN Hint: Compare the recorded total with the real total.
+EN Answer: 4 kg.
+EN Explanation: The four scans total 24 kg, which is 4 kg above the real total. Removing one 4 kg duplicate leaves 20 kg. The data identify the duplicated weight, not which of the two identical 4 kg entries is the extra scan.
+ZH Question: 仓库依次记录四次包裹扫描，重量为4、7、4、9千克。其中有一个包裹被重复扫描了一次，实际总重量是20千克。重复扫描的是多重的包裹？
+ZH Hint: 比较扫描记录的总重量与实际总重量。
+ZH Answer: 4千克。
+ZH Explanation: 四次扫描共24千克，比实际多4千克。去掉一次4千克记录后正好是20千克。数据只能确定重复扫描的重量，无法确定两个4千克记录中哪一条是多余的。
+Validation: arithmetic difference is 4 kg. Question deliberately asks weight, not scan position, which is underdetermined. Assumes recorded weights accurate and exactly one duplicate scan.
 
 ## Engineering and editorial gates
 1. These are drafts, not content already implemented in twist.html, Build 5, or Apple-reviewed Build 3.
-2. Editorial review must assess fun, novelty, difficulty, translation equivalence, and repetition with the existing Logic Studio. Candidate D now specifies available roll length; assess whether technical installation constraints should be excluded more explicitly. Candidate E uses a known paradox structure; assess whether it is distinct enough from the Logic Studio contradiction case.
+2. Editorial review must assess fun, novelty, difficulty, translation equivalence, and repetition with the existing Logic Studio. Candidate D now specifies available roll length; assess whether technical installation constraints should be excluded more explicitly. Candidate E now uses reconciliation of duplicated measurements; ensure the distinction between duplicate weight and duplicate scan position is retained.
 3. If approved, update puzzles[], zh[], explanations.en[], explanations.zh[] in lockstep; verify all indices, scoring, saved-progress migration, and language switching.
 4. Add bilingual test assertions for each new item and ensure existing build artifacts are not silently described as updated.
 5. Keep the 19-item UNKNOWN rights register until each specific old item is actually removed or independently cleared.
@@ -67,10 +67,10 @@ Validation: logical consistency requires checking both assignments. Similarity t
 
 | Candidate | Logical correctness | Bilingual equivalence | Challenge quality | Decision |
 |---|---|---|---|---|
-| A: mislabeled envelopes | PASS: one permutation fits all clues | PASS | Medium; resembles a known mislabeling-puzzle family | HOLD for similarity/provenance review |
+| A: packing receipt | PASS: x+2x+(x+3)=18, x=3 | PASS | Medium-easy algebra | CANDIDATE; editorial/provenance review |
 | B: delayed clock | PASS: 3 hours × 2 minutes = 6 minutes slow | PASS | Medium-easy applied arithmetic | CANDIDATE; review similarity |
 | C: exhibition labels | PASS: 1 of 24 permutations satisfies all clues | PASS | Medium, spatial sequencing | CANDIDATE; review similarity |
 | D: carpet fit | PASS with explicit roll length and no joining | PASS | Medium; applied spatial reasoning | CANDIDATE, subject to technical/rights review |
-| E: two statements | PASS: neither truth assignment is consistent | PASS | Medium-hard; familiar paradox structure | HOLD for similarity/provenance review |
+| E: double scan | PASS: 24−20=4 kg | PASS | Medium, attention to what is identifiable | CANDIDATE; editorial/provenance review |
 
-**Editorial outcome:** Do not bulk-replace slots 2–6 yet. B and D are provisionally suitable after final editorial review; C passed exhaustive uniqueness verification. A and E require similarity/provenance review. These checks validate internal logic, not copyright clearance, user enjoyment, or App Store distinctiveness. Do not modify the existing 19-item UNKNOWN risk register on the strength of these drafts.
+**Editorial outcome:** Do not bulk-replace slots 2–6 yet. B and D are provisionally suitable after final editorial review; C passed exhaustive uniqueness verification. A and E have been rewritten; all five still require final editorial/provenance review. These checks validate internal logic, not copyright clearance, user enjoyment, or App Store distinctiveness. Do not modify the existing 19-item UNKNOWN risk register on the strength of these drafts.
