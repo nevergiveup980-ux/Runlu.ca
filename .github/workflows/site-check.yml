@@ -226,3 +226,5 @@ jobs:
               raise SystemExit('Missing local targets:\n'+'\n'.join(missing))
           print('Site integrity checks passed.')
           PY
+      - name: Check public maintenance contracts
+        run: node scripts/check-public-maintenance.mjs
