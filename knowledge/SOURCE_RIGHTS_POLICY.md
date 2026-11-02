@@ -40,3 +40,9 @@ No published entry until facts, source-rights disposition, all four language che
 ## Maintenance
 
 Reassess source links and licenses when a source changes, the planned use expands (e.g. quoting or illustrations), or a rights complaint arrives. Withdraw or revise public records when necessary.
+
+## v0.2 — Factual references versus reproduction (2026-11-01)
+
+For original knowledge entries citing facts without copying protected expression, record `use_type: factual_reference`, `rights_basis` (why the intended use is independently authored), and `rights_evidence` (the review record). A source's `license_status: unknown` does not by itself block that narrow factual-reference use, because a reproduction license is not the right question. This is **not** a finding that the underlying publication is freely reusable. A source expressly marked `prohibited` still blocks publication pending review.
+
+For reproduced or adapted third-party expression, continue to require `license_status: permitted`, `rights_basis` and `rights_evidence`. Missing documentation remains a blocker. The public page and automated publication validator now implement this distinction. The editorial team must assess actual use; a label alone is not a legal determination.
