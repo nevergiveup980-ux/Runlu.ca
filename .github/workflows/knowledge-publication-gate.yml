@@ -1,0 +1,31 @@
+name: RUNLU Knowledge Publication Gate
+
+on:
+  push:
+    paths:
+      - "knowledge/data/**"
+      - "knowledge/validate-publication*.mjs"
+      - ".github/workflows/knowledge-publication-gate.yml"
+  pull_request:
+    paths:
+      - "knowledge/data/**"
+      - "knowledge/validate-publication*.mjs"
+      - ".github/workflows/knowledge-publication-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Test publication eligibility rules
+        run: node --test knowledge/validate-publication.test.mjs
+      - name: Audit draft and published knowledge records
+        run: node knowledge/validate-publication.mjs
