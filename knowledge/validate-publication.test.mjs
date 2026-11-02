@@ -22,3 +22,17 @@ test("rights approval without recorded basis is blocked",()=>{const r=good();del
 test("rights approval without supporting evidence is blocked",()=>{const r=good();delete r.sources[0].rights_evidence;assert.ok(inspectRecord(r,{forPublication:true}).includes("missing-source-rights-evidence-0"));});
 test("translation signoff must name reviewer",()=>{const r=good();delete r.review.translation_reviewer;assert.ok(inspectRecord(r,{forPublication:true}).includes("missing-translation-reviewer"));});
 test("review requires evidence reference",()=>{const r=good();delete r.review.evidence_ref;assert.ok(inspectRecord(r,{forPublication:true}).includes("missing-review-evidence"));});
+
+test("draft readiness exposes missing approval without failing current publication",()=>{
+ const r=good();r.status="draft";r.review.license_verified=false;
+ const report=auditKnowledge([r],{entries:[]});
+ assert.equal(report.publicationSafe,true);
+ assert.equal(report.draftReadiness[0].readyForEditorialDecision,false);
+ assert.ok(report.draftReadiness[0].blockers.includes("review-incomplete-license_verified"));
+});
+test("eligible draft preview does not mutate source record",()=>{
+ const r=good();r.status="draft";
+ const report=auditKnowledge([r],{entries:[]});
+ assert.equal(report.draftReadiness[0].readyForEditorialDecision,true);
+ assert.equal(r.status,"draft");
+});
