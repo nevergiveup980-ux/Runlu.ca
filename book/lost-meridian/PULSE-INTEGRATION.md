@@ -31,3 +31,22 @@ Extend RUNLU Pulse if its existing data model and security design allow it. Do n
 - Never place API secrets in public browser JavaScript.
 - Do not send events to a guessed endpoint.
 - Do not describe browser-only events as stored analytics.
+
+
+## Investigation update — 2026-11-02
+
+- Public request to `https://pulse.runlu.ca/` redirects to a Cloudflare Access authentication page. Pulse is access-protected; this does not reveal its backend implementation.
+- The RUNLU homepage links to Pulse, but the inspected book page has no explicit analytics collector script.
+- Accessible GitHub repositories did not show a clearly named Pulse repository. This is **not** evidence that Pulse has no repository or that it is nonfunctional.
+- `runlu-command-center` describes an orchestration layer; do not assume it hosts Pulse.
+- **Blocked:** identifying Pulse's source, storage and event ingestion mechanism without authorized access or deployment configuration.
+
+## Next authorized checks
+
+1. Inspect the Cloudflare dashboard for the `pulse.runlu.ca` hostname's Worker/Pages route and service name.
+2. Trace that service to its source repository or deployment artifact.
+3. Read its existing analytics schema and ingestion permissions.
+4. Choose between a compatible first-party event adapter and no custom event collection.
+5. Keep PR in draft until the end-to-end collector is verified.
+
+No Cloudflare settings, credentials, production routes or analytics storage were modified during this investigation.
