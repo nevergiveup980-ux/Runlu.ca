@@ -62,7 +62,13 @@ for (const file of pages) {
       for (const [lang, suffix] of [['zh-Hans',''],['en','-en'],['fr','-fr'],['es','-es']]) {
         const target = base + suffix + '.html';
         if (!edition.includes(`hreflang="${lang}" href="https://runlu.ca/${target}"`)) failures.push(`${rel}: missing alternate ${target}`);
-        if (!edition.includes(`href="${target}"`)) failures.push(`${rel}: missing language navigation ${target}`);
+        const selfEdition = target === rel;
+        const navStart = edition.indexOf('<nav class="languages"');
+        const navEnd = navStart < 0 ? -1 : edition.indexOf('</nav>', navStart);
+        const nav = navEnd < 0 ? '' : edition.slice(navStart, navEnd + 6);
+        const hasLink = edition.includes(`href="${target}"`);
+        const hasCurrent = edition.includes('aria-current="page"');
+        if (selfEdition ? !(hasLink || hasCurrent) : !hasLink) failures.push(`${rel}: missing language navigation ${target}`);
       }
       if (!edition.includes(`rel="canonical" href="https://runlu.ca/${rel}"`)) failures.push(`${rel}: missing self canonical`);
     } else {
@@ -82,7 +88,13 @@ for (const file of pages) {
       const target = base + suffix + '.html';
       if (!fs.existsSync(path.join(root, target))) failures.push(`${rel}: missing edition ${target}`);
       if (!edition.includes(`hreflang="${lang}" href="https://runlu.ca/${target}"`)) failures.push(`${rel}: missing alternate ${target}`);
-      if (!edition.includes(`href="${target}"`)) failures.push(`${rel}: missing language navigation ${target}`);
+      const selfEdition = target === rel;
+        const navStart = edition.indexOf('<nav class="languages"');
+        const navEnd = navStart < 0 ? -1 : edition.indexOf('</nav>', navStart);
+        const nav = navEnd < 0 ? '' : edition.slice(navStart, navEnd + 6);
+        const hasLink = edition.includes(`href="${target}"`);
+        const hasCurrent = edition.includes('aria-current="page"');
+        if (selfEdition ? !(hasLink || hasCurrent) : !hasLink) failures.push(`${rel}: missing language navigation ${target}`);
     }
     if (!edition.includes(`rel="canonical" href="https://runlu.ca/${rel}"`)) failures.push(`${rel}: missing self canonical`);
     continue;
