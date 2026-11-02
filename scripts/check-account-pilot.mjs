@@ -27,7 +27,7 @@ requireToken(html, 'index,follow', 'Public Account page must be indexable after 
 requireToken(html, 'no-cache, no-store, must-revalidate', 'Account pilot cache hardening is missing.');
 requireToken(html, 'runlu-account.css?v=5', 'Account page is not loading the current base CSS build.');
 requireToken(html, 'runlu-account-store.css?v=2', 'Account Store preview CSS is missing.');
-requireToken(html, 'runlu-account.js?v=12', 'Account page is not loading the public-launch core JS build.');
+requireToken(html, 'runlu-account.js?v=13', 'Account page is not loading the public-launch core JS build.');
 requireToken(html, 'runlu-account-commerce.js?v=10', 'Account commerce-history reader is missing.');
 requireToken(html, 'runlu-account-plan.css?v=2', 'Account Plan Center CSS is missing.');
 requireToken(html, 'runlu-account-plan.js?v=2', 'Account Plan Center reader is missing.');
