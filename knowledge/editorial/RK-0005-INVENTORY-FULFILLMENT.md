@@ -194,3 +194,26 @@ All references above are used for **factual corroboration only**. No protected p
 ### Editorial disposition
 
 Source research materially strengthens the installation-related claims. It does **not** replace named technical reviewer sign-off, translation review, or warehouse-process verification. Keep publication on HOLD until those remaining checks are completed.
+
+## Source audit correction and acceptance criteria — 2026-11-02
+
+**Authoritative source verified:** CRI installation standards index: https://carpet-rug.org/resources/installation-standards/ . The CRI 104 commercial installation standard is available from the official publisher at https://carpet-rug.org/wp-content/uploads/2019/03/CRI-104-STANDARD-For-INSTALLATION-of-COMMERCIAL-CARPET.pdf .
+
+**Supported scope:** The standard's commercial broadloom planning and patterned-carpet sections address seam diagrams, pile/pattern direction, roll sequencing and the need for additional material for pattern matching. The source is an installation reference, **not** a warehouse inventory-allocation or reservation policy. Do not imply otherwise.
+
+**Correction to earlier source dossier:** A Shaw installation-guide link was listed as a candidate reference but has not been independently checked for accessible content in this review. Treat that link as *unverified*, not as evidence of any specific claim, until opened and inspected.
+
+### Minimum acceptance tests for this article
+
+| Test | Expected result | Current disposition |
+| --- | --- | --- |
+| Arithmetic: two 12 × 12.5 ft remnants | 300 ft² total | Pass |
+| Continuous-cut test: one 12 × 20 ft piece | Neither remnant qualifies | Pass |
+| Seam feasibility | Depends on approved design and applicable guidance | Pass: appropriately conditional |
+| Pattern and roll sequencing | Source support limited to installation context | Pass: CRI source identified |
+| Reservation and stock accuracy | Original operational recommendation, not CRI mandate | Pass: distinction explicit |
+| Four-language expert proofreading | Named reviewers and documented corrections | Pending |
+| Independent trade review | Named reviewer and recorded approval | Pending |
+| Final publication record and rights evidence | Approved review metadata and source-use basis | Pending |
+
+**Release decision remains HOLD.** No claim of independent sign-off or successful CI test execution is made.
