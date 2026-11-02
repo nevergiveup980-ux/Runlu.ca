@@ -29,7 +29,10 @@ export function inspectRecord(r, { forPublication = false } = {}) {
     if (!nonblank(s?.publisher)) problems.push("missing-source-publisher-" + i);
     if (!["unknown", "permitted", "restricted", "prohibited"].includes(s?.license_status)) problems.push("invalid-source-rights-" + i);
     if (!validDate(s?.checked_at)) problems.push("invalid-source-date-" + i);
-    if (forPublication && s?.license_status !== "permitted") problems.push("source-rights-not-permitted-" + i);
+    if (forPublication && s?.use_type === "factual_reference") {
+      if (!nonblank(s?.rights_basis) || !nonblank(s?.rights_evidence)) problems.push("factual-reference-assessment-missing-" + i);
+      if (s?.license_status === "prohibited") problems.push("source-use-prohibited-" + i);
+    } else if (forPublication && s?.license_status !== "permitted") problems.push("source-rights-not-permitted-" + i);
     if (forPublication && !nonblank(s?.rights_basis)) problems.push("missing-source-rights-basis-" + i);
     if (forPublication && !nonblank(s?.rights_evidence)) problems.push("missing-source-rights-evidence-" + i);
   });
