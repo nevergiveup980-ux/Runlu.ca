@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow"><title>RUNLU KNOWLEDGE — Phase 0 Preview</title>
+<meta name="robots" content="index,follow"><title>RUNLU KNOWLEDGE — Practical Knowledge</title>
 <style>
 :root{font-family:system-ui,-apple-system,sans-serif;color:#24352f;background:#f7f4ed}*{box-sizing:border-box}
 body{margin:0}header,main,footer{max-width:1050px;margin:auto;padding:24px}header{border-bottom:1px solid #d9d8cf}
@@ -10,10 +10,10 @@ input{flex:2;min-width:220px}select{flex:1;min-width:140px}.cards{display:grid;g
 article{background:#fff;border:1px solid #e0e2db;border-radius:14px;padding:20px}article h2{font-size:1.2rem;margin:6px 0 10px}
 .meta{font-size:.8rem;color:#53665b}.tag{display:inline-block;padding:4px 8px;border-radius:20px;background:#e9f0e9;margin-right:6px}
 a{color:#236c61;overflow-wrap:anywhere}footer{font-size:.85rem;color:#5a695f}button{cursor:pointer}
-</style></head><body><header><div class="eyebrow">RUNLU · 润庐 / Prototype only</div><h1>RUNLU KNOWLEDGE<span style="font-size:.5em;vertical-align:top">™</span></h1>
+</style></head><body><header><div class="eyebrow">RUNLU · 润庐 / Knowledge in progress</div><h1>RUNLU KNOWLEDGE<span style="font-size:.5em;vertical-align:top">™</span></h1>
 <p id="intro">Global knowledge. Local relevance.</p><label for="languageToggle">Language / 语言</label> <select id="languageToggle" class="language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select></header>
 <main><div class="controls"><input id="search" type="search" placeholder="Search knowledge..." aria-label="Search"><select id="region" aria-label="Region"></select><select id="category" aria-label="Category"></select></div>
-<p id="count" role="status"></p><section id="results" class="cards" aria-label="Knowledge entries"></section></main>
+<section id="introGuide" aria-label="Area conversion introduction" style="background:#fff;border:1px solid #dce5dc;border-radius:14px;padding:22px;margin-bottom:24px"><div class="eyebrow" id="guideLabel">Practical knowledge · introductory guide</div><h2 id="guideTitle">Square feet and square yards</h2><p id="guideBody">1 square yard = 9 square feet. To convert square feet to square yards, divide by 9. For example, 180 square feet = 20 square yards. This is an area conversion only; it does not determine carpet roll length, cutting layout or installation waste.</p><p id="guideCaution" class="meta">Original educational introduction, not an independently reviewed technical installation standard.</p><a href="https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b9" target="_blank" rel="noopener noreferrer" id="guideSource">Reference: NIST conversion factors</a></section><p id="count" role="status"></p><section id="results" class="cards" aria-label="Knowledge entries"></section></main>
 <footer><p id="notice">Phase 0 demonstration: original explanatory summaries and source pointers. No licensed datasets or copyrighted article texts are redistributed. Source links are for verification; permissions must be reviewed per dataset before ingestion.</p></footer>
 <script>
 const UI={
@@ -44,7 +44,13 @@ async function loadPublished(){
 const regions={global:{en:"Global",zh:"全球",fr:"Monde",es:"Global"},europe:{en:"Europe",zh:"欧洲",fr:"Europe",es:"Europa"},"north-america":{en:"North America",zh:"北美",fr:"Amérique du Nord",es:"Norteamérica"}};
 const categories={construction:{en:"Construction",zh:"建筑与地材",fr:"Construction",es:"Construcción"},economy:{en:"Economy",zh:"经济",fr:"Économie",es:"Economía"},research:{en:"Research",zh:"科研",fr:"Recherche",es:"Investigación"},careers:{en:"Careers",zh:"职业",fr:"Métiers",es:"Profesiones"}};
 const $=id=>document.getElementById(id);const safe=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const GUIDE={
+en:["Practical knowledge · introductory guide","Square feet and square yards","1 square yard = 9 square feet. Divide square feet by 9 to obtain square yards. Example: 180 square feet = 20 square yards. This is an area conversion only; roll length, cutting layout and installation waste need separate assessment.","Original educational introduction; not an independently reviewed installation standard.","Reference: NIST conversion factors"],
+zh:["实用知识 · 入门介绍","平方英尺与平方码","1 平方码 = 9 平方英尺。平方英尺数除以 9，即得平方码数。例如：180 平方英尺 = 20 平方码。此处仅为面积换算，卷材长度、裁切布局和安装损耗需要另行评估。","原创科普介绍，尚非经过独立审核的安装技术标准。","参考资料：NIST 单位换算"],
+fr:["Connaissances pratiques · introduction","Pieds carrés et verges carrées","Une verge carrée équivaut à 9 pieds carrés. Divisez les pieds carrés par 9 pour obtenir les verges carrées. Exemple : 180 pieds carrés = 20 verges carrées. Il s’agit uniquement d’une conversion de surface; la longueur du rouleau, le plan de coupe et les pertes exigent une évaluation distincte.","Introduction pédagogique originale, non assimilable à une norme de pose vérifiée indépendamment.","Référence : conversions du NIST"],
+es:["Conocimientos prácticos · introducción","Pies cuadrados y yardas cuadradas","Una yarda cuadrada equivale a 9 pies cuadrados. Divida los pies cuadrados entre 9 para obtener yardas cuadradas. Ejemplo: 180 pies cuadrados = 20 yardas cuadradas. Es solo una conversión de superficie; la longitud del rollo, el plan de corte y el desperdicio requieren una evaluación aparte.","Introducción educativa original; no constituye una norma de instalación revisada de forma independiente.","Referencia: conversiones del NIST"]};
 function render(){const lang=$("languageToggle").value,t=UI[lang],region=$("region").value,category=$("category").value,q=$("search").value.toLocaleLowerCase();
+const g=GUIDE[lang];["guideLabel","guideTitle","guideBody","guideCaution","guideSource"].forEach((id,i)=>$(id).textContent=g[i]);
 $("intro").textContent=t.intro;$("search").placeholder=t.search;$("notice").textContent=t.notice;
 const setOptions=(id,all,map,selected)=>{$(id).innerHTML='<option value="">'+safe(all)+'</option>'+Object.keys(map).map(k=>'<option value="'+safe(k)+'">'+safe(map[k][lang])+'</option>').join("");$(id).value=selected};
 setOptions("region",t.allRegions,regions,region);setOptions("category",t.allCategories,categories,category);
