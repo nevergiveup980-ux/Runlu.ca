@@ -12,7 +12,7 @@ export function createLyriaAdapter({apiKey,fetchImpl=fetch,model="clip",timeoutM
  const selected=MODELS[model];
  return Object.freeze({
   async generate({prompt,language="en",instrumental=false}){
-   if(typeof prompt!=="string"||!prompt.trim()||prompt.length>1000)throw new MusicProviderError("INVALID_PROMPT","Invalid prompt");
+   if(typeof prompt!=="string"||!prompt.trim()||prompt.length>2000)throw new MusicProviderError("INVALID_PROMPT","Invalid prompt");
    if(!["zh","en","fr","es"].includes(language))throw new MusicProviderError("INVALID_LANGUAGE","Invalid language");
    // The caller supplies the localized, rights-safe instruction via buildLyriaPrompt.
    let response;
