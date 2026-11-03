@@ -31,7 +31,7 @@ export function inspectRecord(r, { forPublication = false } = {}) {
     if (!validDate(s?.checked_at)) problems.push("invalid-source-date-" + i);
     if (forPublication && s?.use_type === "factual_reference") {
       if (!nonblank(s?.rights_basis) || !nonblank(s?.rights_evidence)) problems.push("factual-reference-assessment-missing-" + i);
-      if (s?.license_status === "prohibited") problems.push("source-use-prohibited-" + i);
+      if (s?.license_status === "prohibited" || s?.license_status === "restricted") problems.push("source-use-requires-review-" + i);
     } else if (forPublication && s?.license_status !== "permitted") problems.push("source-rights-not-permitted-" + i);
     if (forPublication && !nonblank(s?.rights_basis)) problems.push("missing-source-rights-basis-" + i);
     if (forPublication && !nonblank(s?.rights_evidence)) problems.push("missing-source-rights-evidence-" + i);
@@ -61,6 +61,7 @@ export function auditKnowledge(drafts, published) {
       if (seen.has(key)) findings.push({id,source,problems:["duplicate-id"]});
       seen.add(key);
       const problems = inspectRecord(record,{forPublication:source==="published"});
+      if (source === "published" && drafts.some(d=>d?.id===id && d?.version===record?.version)) problems.push("published-version-still-in-drafts");
       if (source === "draft") {
         // Preview publication blockers without modifying the draft or declaring it published.
         const candidate = {...record, status:"published"};
