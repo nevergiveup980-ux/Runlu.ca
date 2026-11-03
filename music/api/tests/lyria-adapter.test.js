@@ -31,6 +31,14 @@ test("preserves the complete localized prompt without injecting English instruct
  assert.equal(sent,prompt);
 });
 test("rejects oversized provider audio before decoding",async()=>{
- const adapter=createLyriaAdapter({apiKey:"x",fetchImpl:async()=>({ok:true,json:async()=>({steps:[{type:"model_output",content:[{type:"audio",data:"A".repeat(35*1024*1024)}]}]})})})});
+ const fakeFetch=async()=>({
+  ok:true,
+  json:async()=>({
+   steps:[{type:"model_output",content:[{
+    type:"audio",data:"A".repeat(35*1024*1024)
+   }]}]
+  })
+ });
+ const adapter=createLyriaAdapter({apiKey:"x",fetchImpl:fakeFetch});
  await assert.rejects(()=>adapter.generate({prompt:"test"}),{code:"PROVIDER_AUDIO_TOO_LARGE"});
 });
