@@ -5,6 +5,7 @@ on:
     paths:
       - "knowledge/data/**"
       - "knowledge/validate-publication*.mjs"
+      - "knowledge/report-quality.mjs"
       - ".github/workflows/knowledge-publication-gate.yml"
   pull_request:
     paths:
@@ -29,3 +30,5 @@ jobs:
         run: node --test knowledge/validate-publication.test.mjs
       - name: Audit draft and published knowledge records
         run: node knowledge/validate-publication.mjs
+      - name: Generate editorial readiness report
+        run: node knowledge/report-quality.mjs
