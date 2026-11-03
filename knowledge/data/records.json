@@ -193,5 +193,51 @@
       "RK-0003"
     ],
     "version": 3
+  },
+  {
+    "id": "RK-0005",
+    "status": "draft",
+    "category": "construction",
+    "scope": {
+      "type": "global",
+      "codes": []
+    },
+    "titles": {
+      "en": "Why enough carpet inventory may still fail an order",
+      "zh": "为什么库存数量足够，却仍然无法完成订单？",
+      "fr": "Pourquoi un stock de moquette suffisant peut ne pas couvrir une commande",
+      "es": "Por qué un inventario suficiente de alfombra puede no cubrir un pedido"
+    },
+    "summaries": {
+      "en": "Total stock area does not establish whether a verified continuous roll segment satisfies cut dimensions, reservations, condition and project constraints.",
+      "zh": "库存总面积足够，不代表存在满足连续裁切尺寸、预留状态、材料状况和项目要求的可用卷材。",
+      "fr": "Une surface totale suffisante ne garantit pas une pièce continue utilisable respectant les dimensions, réservations et contraintes du projet.",
+      "es": "Una superficie total suficiente no garantiza una pieza continua utilizable que cumpla dimensiones, reservas y requisitos del proyecto."
+    },
+    "sources": [
+      {
+        "url": "https://carpet-rug.org/resources/installation-standards/",
+        "publisher": "The Carpet and Rug Institute",
+        "license_status": "unknown",
+        "use_type": "factual_reference",
+        "checked_at": "2026-11-02",
+        "rights_basis": "Reference to technical considerations only; no third-party protected expression reproduced.",
+        "rights_evidence": "knowledge/editorial/RK-0005-INVENTORY-FULFILLMENT.md",
+        "notes": "Publisher index cited for installation considerations only. Independent source review and access verification pending."
+      }
+    ],
+    "created_at": "2026-11-02",
+    "updated_at": "2026-11-02",
+    "review": {
+      "facts_verified": false,
+      "license_verified": false,
+      "translations_verified": false,
+      "evidence_ref": "knowledge/editorial/RK-0005-INVENTORY-FULFILLMENT.md"
+    },
+    "related_ids": [
+      "RK-0003",
+      "RK-0004"
+    ],
+    "version": 1
   }
 ]
