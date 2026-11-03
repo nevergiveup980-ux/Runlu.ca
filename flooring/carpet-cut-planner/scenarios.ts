@@ -3,16 +3,17 @@ export type Scenario={name:string;plan:Plan;feasible:boolean;score:number;unplac
 const signature=(p:Plan)=>p.placements.map(x=>[x.pieceId,x.rollId,x.xIn,x.yIn,x.widthIn,x.lengthIn].join(":")).sort().join("|")+";"+p.unplaced.slice().sort().join(",");
 /** Candidate comparison, not proof of global optimality. Never call an infeasible plan optimal. */
 export function comparePlans(rolls:Roll[],pieces:Piece[]):Scenario[]{
- const candidates:{name:string;order:"area"|"length"|"width"|"input";ignorePriority?:boolean}[]=[
+ const candidates:{name:string;order:"area"|"length"|"width"|"input";ignorePriority?:boolean;rollOrder?:"short"|"long"}[]=[
   {name:"Largest area first",order:"area"},
   {name:"Longest first",order:"length"},
   {name:"Widest first",order:"width"},
   {name:"Original order",order:"input"},
+  ...(rolls.length>1?[{name:"Shorter rolls first",order:"area" as const,rollOrder:"short" as const},{name:"Longer rolls first",order:"area" as const,rollOrder:"long" as const}]:[]),
   ...(rolls.some(r=>(r.priority??0)>0)?[{name:"Material-saving fallback",order:"area" as const,ignorePriority:true}]:[])
  ];
  const seen=new Set<string>(),results:Scenario[]=[];
  for(const c of candidates){
-  const candidateRolls=c.ignorePriority?rolls.map(r=>({...r,priority:0})):rolls;
+  const candidateRolls=c.ignorePriority?rolls.map(r=>({...r,priority:0})):c.rollOrder?[...rolls].sort((a,b)=>(a.priority??0)-(b.priority??0)||(c.rollOrder==="short"?a.lengthIn-b.lengthIn:b.lengthIn-a.lengthIn)):rolls;
   const plan=planCuts(candidateRolls,pieces,c.order),key=signature(plan);
   if(seen.has(key))continue;seen.add(key);
   const feasible=plan.unplaced.length===0;
