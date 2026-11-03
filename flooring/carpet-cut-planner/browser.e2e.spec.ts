@@ -108,3 +108,19 @@ test("printed report lists confirmed and missing reviews without claiming approv
  await expect(page.locator("#printAudit")).toContainText("NOT CONFIRMED");
  await expect(page.locator("#printAudit")).toContainText("not authenticated signatures");
 });
+
+test("reprinting replaces the audit and plan changes discard stale audit",async({page})=>{
+ await page.goto(pageUrl);
+ await page.locator("#jobId").fill("JOB-OLD");
+ await page.locator("#print").click();
+ await expect(page.locator("#printAudit")).toHaveCount(1);
+ await expect(page.locator("#printAudit")).toContainText("JOB-OLD");
+ await page.locator("#print").click();
+ await expect(page.locator("#printAudit")).toHaveCount(1);
+ await page.locator("#jobId").fill("JOB-NEW");
+ await expect(page.locator("#printAudit")).toHaveCount(0);
+ await page.locator("#print").click();
+ await expect(page.locator("#printAudit")).toHaveCount(1);
+ await expect(page.locator("#printAudit")).toContainText("JOB-NEW");
+ await expect(page.locator("#printAudit")).not.toContainText("JOB-OLD");
+});
