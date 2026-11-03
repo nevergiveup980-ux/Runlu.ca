@@ -124,3 +124,12 @@ test("reprinting replaces the audit and plan changes discard stale audit",async(
  await expect(page.locator("#printAudit")).toContainText("JOB-NEW");
  await expect(page.locator("#printAudit")).not.toContainText("JOB-OLD");
 });
+
+test("mobile viewport keeps document width contained while showing cutting results",async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.goto(pageUrl);
+ await expect(page.locator("#results .stat")).toHaveCount(4);
+ const widths=await page.evaluate(()=>({document:document.documentElement.scrollWidth,viewport:window.innerWidth}));
+ expect(widths.document).toBeLessThanOrEqual(widths.viewport+2);
+ await expect(page.locator("#results svg").first()).toBeVisible();
+});
