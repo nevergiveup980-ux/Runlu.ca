@@ -1,0 +1,23 @@
+name: Lost Meridian growth event checks
+
+on:
+  pull_request:
+    paths:
+      - 'book/lost-meridian/growth-events.js'
+      - 'book/lost-meridian/growth-events.test.cjs'
+      - '.github/workflows/lost-meridian-growth-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  growth-events:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify event adapter
+        run: node book/lost-meridian/growth-events.test.cjs
