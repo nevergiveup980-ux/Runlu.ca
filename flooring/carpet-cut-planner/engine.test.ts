@@ -36,4 +36,23 @@ describe("carpet planner engine",()=>{
   expect(plan.allocatedAreaSF).toBe(300);
  });
  it("allows rotation when requested",()=>{const p=planCuts([{id:"R1",widthIn:120,lengthIn:240,dyeLot:"A"}],[{id:"P1",widthIn:144,lengthIn:100,allowRotate:true}]);expect(p.unplaced).toEqual([])});
+ it("keeps every placed rectangle inside its roll with no overlaps",()=>{
+  const rolls=[{id:"A",widthIn:144,lengthIn:360,dyeLot:"A"},{id:"B",widthIn:120,lengthIn:240,dyeLot:"B"}];
+  const pieces=[{id:"A1",widthIn:72,lengthIn:120,dyeLot:"A"},{id:"A2",widthIn:72,lengthIn:120,dyeLot:"A"},{id:"A3",widthIn:120,lengthIn:96,dyeLot:"A"},{id:"B1",widthIn:60,lengthIn:120,dyeLot:"B"},{id:"B2",widthIn:60,lengthIn:120,dyeLot:"B"}];
+  const result=planCuts(rolls,pieces);
+  expect(result.unplaced).toEqual([]);
+  for(const placement of result.placements){
+   const roll=rolls.find(r=>r.id===placement.rollId)!;
+   expect(placement.xIn).toBeGreaterThanOrEqual(0);
+   expect(placement.yIn).toBeGreaterThanOrEqual(0);
+   expect(placement.xIn+placement.widthIn).toBeLessThanOrEqual(roll.widthIn);
+   expect(placement.yIn+placement.lengthIn).toBeLessThanOrEqual(roll.lengthIn);
+   expect(pieces.find(p=>p.id===placement.pieceId)?.dyeLot).toBe(roll.dyeLot);
+  }
+  for(let i=0;i<result.placements.length;i++)for(let j=i+1;j<result.placements.length;j++){
+   const a=result.placements[i],b=result.placements[j];if(a.rollId!==b.rollId)continue;
+   expect(a.xIn+a.widthIn<=b.xIn||b.xIn+b.widthIn<=a.xIn||a.yIn+a.lengthIn<=b.yIn||b.yIn+b.lengthIn<=a.yIn).toBe(true);
+  }
+  expect(result.usedAreaSF+result.wasteAreaSF).toBeCloseTo(result.allocatedAreaSF,8);
+ });
 });
