@@ -6,7 +6,7 @@ function fixture(){const calls=[];const storage={upload:async(...args)=>{calls.p
 test('private upload requires expected bucket and immutable key',async()=>{
  const {calls,client}=fixture();const s=createStageSupabaseStorage({client,bucket:'stage-private'});
  await s.putObject({bucket:'stage-private',key,body:Buffer.from('abc'),contentType:'video/mp4',private:true});
- assert.equal(calls[0][2].upsert,false);
+ assert.equal(calls[0][3].upsert,false);
  await assert.rejects(s.putObject({bucket:'public',key,body:Buffer.from('abc'),contentType:'video/mp4',private:true}),/Invalid private/);
  await assert.rejects(s.putObject({bucket:'stage-private',key:'../escape',body:Buffer.from('abc'),contentType:'video/mp4',private:true}),/Invalid private/);
 });
