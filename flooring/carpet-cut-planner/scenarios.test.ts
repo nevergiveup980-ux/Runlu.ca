@@ -41,4 +41,20 @@ describe("candidate scenario comparison",()=>{
   const plans=comparePlans(rolls,[{id:"one",widthIn:72,lengthIn:120}]);
   expect(plans).toHaveLength(1);
  });
+ it("ranks a complete plan ahead of incomplete alternatives",()=>{
+  const stock:Roll[]=[{id:"SHORT",widthIn:72,lengthIn:120,dyeLot:"A",priority:0},{id:"FULL",widthIn:144,lengthIn:120,dyeLot:"A",priority:2}];
+  const cuts:Piece[]=[{id:"small",widthIn:72,lengthIn:120,dyeLot:"A"},{id:"wide",widthIn:144,lengthIn:120,dyeLot:"A"}];
+  const plans=comparePlans(stock,cuts);
+  expect(plans[0].feasible).toBe(true);
+  expect(plans[0].plan.unplaced).toEqual([]);
+  expect(plans[0].plan.usedAreaSF+plans[0].plan.wasteAreaSF).toBeCloseTo(plans[0].plan.allocatedAreaSF);
+ });
+ it("compares roll-length orderings without claiming optimality",()=>{
+  const stock:Roll[]=[{id:"LONG",widthIn:144,lengthIn:360,dyeLot:"A"},{id:"SHORT",widthIn:144,lengthIn:120,dyeLot:"A"}];
+  const cuts:Piece[]=[{id:"one",widthIn:72,lengthIn:120,dyeLot:"A"}];
+  const plans=comparePlans(stock,cuts);
+  expect(plans.some(p=>p.name==="Shorter rolls first")).toBe(true);
+  expect(plans.every(p=>p.feasible)).toBe(true);
+  expect(plans[0].plan.allocatedAreaSF).toBeLessThanOrEqual(Math.max(...plans.map(p=>p.plan.allocatedAreaSF)));
+ });
 });
