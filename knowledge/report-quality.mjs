@@ -18,7 +18,9 @@ const labels={
  "missing-translation-reviewer":"Named language reviewer"
 };
 const explain=code=>{
- if(code.startsWith("source-rights-not-permitted-"))return "Source reuse-rights decision";
+ if(code.startsWith("source-rights-not-permitted-"))return "Source reproduction-rights decision";
+ if(code.startsWith("factual-reference-assessment-missing-"))return "Factual-reference use assessment";
+ if(code.startsWith("source-use-prohibited-"))return "Prohibited source use";
  if(code.startsWith("missing-source-rights-basis-"))return "Documented rights basis";
  if(code.startsWith("missing-source-rights-evidence-"))return "Rights evidence reference";
  return labels[code]??code;
@@ -43,7 +45,7 @@ const out=[
  ...rows.flatMap(r=>[`## ${r.id}`,"",...r.blockers.map(b=>"- "+b),""]),
  "## Next step",
  "",
- "Prioritize RK-0002 source-rights documentation and independent four-language signoff. Do not auto-approve or publish.",
+ "Prioritize substantive RK-0005 independent technical and four-language review; record named approvals before publication. Keep basic conversion RK-0002 as an internal reference. Do not auto-approve or publish.",
  ""
 ].join("\n");
 process.stdout.write(out);
