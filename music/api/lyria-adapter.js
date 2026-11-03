@@ -13,19 +13,22 @@ export function createLyriaAdapter({apiKey,fetchImpl=fetch,model="clip"}={}){
   async generate({prompt,language="en",instrumental=false}){
    if(typeof prompt!=="string"||!prompt.trim()||prompt.length>1000)throw new MusicProviderError("INVALID_PROMPT","Invalid prompt");
    if(!["zh","en","fr","es"].includes(language))throw new MusicProviderError("INVALID_LANGUAGE","Invalid language");
-   const instruction=instrumental?"Instrumental only, no vocals.":"Create an original song with vocals and lyrics.";
+   // The caller supplies the localized, rights-safe instruction via buildLyriaPrompt.
    const response=await fetchImpl("https://generativelanguage.googleapis.com/v1beta/interactions",{
     method:"POST",headers:{"content-type":"application/json","x-goog-api-key":apiKey},
-    body:JSON.stringify({model:selected,input:instruction+" Lyrics language: "+language+". "+prompt.trim()})
+    body:JSON.stringify({model:selected,input:prompt.trim()})
    });
    if(!response.ok){
     const retryable=response.status===429||response.status>=500;
     throw new MusicProviderError("PROVIDER_HTTP_ERROR","Lyria request failed (HTTP "+response.status+")",{retryable});
    }
+   const contentLength=Number(response.headers?.get?.("content-length")||0);
+   if(contentLength>36*1024*1024)throw new MusicProviderError("PROVIDER_RESPONSE_TOO_LARGE","Provider response exceeds size limit");
    const data=await response.json();
    const blocks=(data.steps||[]).filter(s=>s.type==="model_output").flatMap(s=>s.content||[]);
    const audio=blocks.find(b=>b.type==="audio"&&typeof b.data==="string");
    if(!audio)throw new MusicProviderError("NO_AUDIO","Lyria response contained no audio");
+   if(audio.data.length>Math.ceil(25*1024*1024*4/3)+8)throw new MusicProviderError("PROVIDER_AUDIO_TOO_LARGE","Provider audio exceeds 25 MB");
    const lyrics=blocks.filter(b=>b.type==="text"&&typeof b.text==="string").map(b=>b.text).join("\n");
    return Object.freeze({model:selected,audioBase64:audio.data,mimeType:audio.mime_type||"audio/mpeg",lyrics});
   }
