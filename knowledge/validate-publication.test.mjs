@@ -47,5 +47,20 @@ test("factual reference missing assessment is blocked",()=>{
 });
 test("prohibited source is not bypassed by factual-reference classification",()=>{
  const r=good();r.sources[0].use_type="factual_reference";r.sources[0].license_status="prohibited";
- assert.ok(inspectRecord(r,{forPublication:true}).includes("source-use-prohibited-0"));
+ assert.ok(inspectRecord(r,{forPublication:true}).includes("source-use-requires-review-0"));
+});
+
+test("restricted factual source requires explicit review",()=>{
+ const r=good();r.sources[0].use_type="factual_reference";r.sources[0].license_status="restricted";
+ assert.ok(inspectRecord(r,{forPublication:true}).includes("source-use-requires-review-0"));
+});
+test("same record version cannot be both draft and published",()=>{
+ const draft=good();draft.status="draft";
+ const report=auditKnowledge([draft],{entries:[good()]});
+ assert.equal(report.publicationSafe,false);
+ assert.ok(report.findings.some(f=>f.source==="published"&&f.problems.includes("published-version-still-in-drafts")));
+});
+test("different draft version can coexist with published version",()=>{
+ const draft=good();draft.status="draft";draft.version=2;
+ assert.equal(auditKnowledge([draft],{entries:[good()]}).publicationSafe,true);
 });
