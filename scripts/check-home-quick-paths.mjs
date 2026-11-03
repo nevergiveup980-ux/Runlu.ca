@@ -12,7 +12,7 @@ for (const [index, match] of anchors.entries()) {
   if (!attrs.includes(`href="#${target}"`)) throw new Error(`Quick link ${index + 1} must target #${target}`);
   if (!new RegExp(`\bid=["']${target}["']`).test(html)) throw new Error(`Missing homepage section #${target}`);
   for (const lang of ['en', 'zh', 'fr', 'es']) {
-    if (!new RegExp(`\bdata-${lang}="[^"]+"`).test(attrs)) throw new Error(`#${target} missing ${lang} label`);
+    if (!attrs.includes(`data-${lang}="`) || attrs.includes(`data-${lang}=""`)) throw new Error(`#${target} missing ${lang} label`);
   }
 }
 console.log('Homepage quick paths: six destinations and four-language labels verified.');
