@@ -31,4 +31,12 @@ jobs:
       - name: Audit draft and published knowledge records
         run: node knowledge/validate-publication.mjs
       - name: Generate editorial readiness report
-        run: node knowledge/report-quality.mjs
+        run: node knowledge/report-quality.mjs | tee knowledge-quality-report.md
+      - name: Preserve editorial report for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: knowledge-editorial-quality-report
+          path: knowledge-quality-report.md
+          if-no-files-found: warn
+          retention-days: 30
