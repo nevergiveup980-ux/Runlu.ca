@@ -10,7 +10,7 @@ for (const [index, match] of anchors.entries()) {
   const attrs = match[1];
   const target = expected[index];
   if (!attrs.includes(`href="#${target}"`)) throw new Error(`Quick link ${index + 1} must target #${target}`);
-  if (!new RegExp(`\bid=["']${target}["']`).test(html)) throw new Error(`Missing homepage section #${target}`);
+  if (!html.includes(`id="${target}"`) && !html.includes(`id='${target}'`)) throw new Error(`Missing homepage section #${target}`);
   for (const lang of ['en', 'zh', 'fr', 'es']) {
     if (!attrs.includes(`data-${lang}="`) || attrs.includes(`data-${lang}=""`)) throw new Error(`#${target} missing ${lang} label`);
   }
