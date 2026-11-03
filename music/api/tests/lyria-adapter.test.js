@@ -42,3 +42,15 @@ test("rejects oversized provider audio before decoding",async()=>{
  const adapter=createLyriaAdapter({apiKey:"x",fetchImpl:fakeFetch});
  await assert.rejects(()=>adapter.generate({prompt:"test"}),{code:"PROVIDER_AUDIO_TOO_LARGE"});
 });
+
+test("provider requests have a bounded timeout and no implicit retries",async()=>{
+ let calls=0,signal;
+ const adapter=createLyriaAdapter({apiKey:"x",timeoutMs:1000,fetchImpl:async(_url,options)=>{
+  calls++;signal=options.signal;throw new Error("connection interrupted");
+ }});
+ await assert.rejects(()=>adapter.generate({prompt:"original song"}),{code:"PROVIDER_NETWORK_ERROR",retryable:false});
+ assert.equal(calls,1);assert.ok(signal instanceof AbortSignal);
+});
+test("rejects invalid timeout before making any provider call",()=>{
+ assert.throws(()=>createLyriaAdapter({apiKey:"x",timeoutMs:0}),{code:"INVALID_TIMEOUT"});
+});
