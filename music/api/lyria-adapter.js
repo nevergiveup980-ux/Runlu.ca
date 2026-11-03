@@ -5,19 +5,24 @@
  */
 import {MusicProviderError} from "./provider-contract.js";
 const MODELS=Object.freeze({clip:"lyria-3-clip-preview",full:"lyria-3.5"});
-export function createLyriaAdapter({apiKey,fetchImpl=fetch,model="clip"}={}){
+export function createLyriaAdapter({apiKey,fetchImpl=fetch,model="clip",timeoutMs=120000}={}){
  if(!apiKey||typeof apiKey!=="string")throw new MusicProviderError("PROVIDER_NOT_CONFIGURED","Server-side Gemini API key required");
  if(!Object.hasOwn(MODELS,model))throw new MusicProviderError("INVALID_MODEL","Unsupported Lyria model");
+ if(!Number.isSafeInteger(timeoutMs)||timeoutMs<1000||timeoutMs>300000)throw new MusicProviderError("INVALID_TIMEOUT","Timeout must be 1–300 seconds");
  const selected=MODELS[model];
  return Object.freeze({
   async generate({prompt,language="en",instrumental=false}){
    if(typeof prompt!=="string"||!prompt.trim()||prompt.length>1000)throw new MusicProviderError("INVALID_PROMPT","Invalid prompt");
    if(!["zh","en","fr","es"].includes(language))throw new MusicProviderError("INVALID_LANGUAGE","Invalid language");
    // The caller supplies the localized, rights-safe instruction via buildLyriaPrompt.
-   const response=await fetchImpl("https://generativelanguage.googleapis.com/v1beta/interactions",{
-    method:"POST",headers:{"content-type":"application/json","x-goog-api-key":apiKey},
+   let response;
+   try{response=await fetchImpl("https://generativelanguage.googleapis.com/v1beta/interactions",{
+    method:"POST",signal:AbortSignal.timeout(timeoutMs),headers:{"content-type":"application/json","x-goog-api-key":apiKey},
     body:JSON.stringify({model:selected,input:prompt.trim()})
-   });
+   });}catch(error){
+    // A timeout may happen after the provider accepted a billable request: never retry automatically.
+    throw new MusicProviderError("PROVIDER_NETWORK_ERROR","Provider request interrupted; billing status unknown",{retryable:false});
+   }
    if(!response.ok){
     const retryable=response.status===429||response.status>=500;
     throw new MusicProviderError("PROVIDER_HTTP_ERROR","Lyria request failed (HTTP "+response.status+")",{retryable});
