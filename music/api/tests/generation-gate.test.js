@@ -27,3 +27,28 @@ test("full mode selects full model, not preview",async()=>{
   request:{...request,duration_seconds:60},fetchImpl:async(_url,options)=>{payload=JSON.parse(options.body);return {ok:true,json:async()=>({steps:[{type:"model_output",content:[{type:"audio",data:"SUQz"}]}]})};}});
  assert.equal(payload.model,"lyria-3.5");
 });
+
+test("maximum-length valid user prompt survives localized composition",async()=>{
+ let calls=0,payload;
+ const input="故".repeat(1000);
+ await generateWithApproval({
+  env:{MUSIC_GENERATION_ENABLED:"true",MUSIC_TEST_APPROVED:"true",GEMINI_API_KEY:"fake-key"},
+  request:{...request,prompt:input},
+  fetchImpl:async(_url,options)=>{
+   calls++;payload=JSON.parse(options.body);
+   return {ok:true,json:async()=>({steps:[{type:"model_output",content:[{type:"audio",data:"SUQz"}]}]})};
+  }
+ });
+ assert.equal(calls,1);
+ assert.ok(payload.input.length>1000);
+ assert.ok(payload.input.startsWith(input));
+});
+test("oversized raw user prompt is rejected before provider call",async()=>{
+ let calls=0;
+ await assert.rejects(()=>generateWithApproval({
+  env:{MUSIC_GENERATION_ENABLED:"true",MUSIC_TEST_APPROVED:"true",GEMINI_API_KEY:"fake-key"},
+  request:{...request,prompt:"故".repeat(1001)},
+  fetchImpl:async()=>{calls++;}
+ }),TypeError);
+ assert.equal(calls,0);
+});
