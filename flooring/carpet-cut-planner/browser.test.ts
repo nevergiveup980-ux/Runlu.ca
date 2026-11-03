@@ -117,4 +117,20 @@ describe("browser adapter",()=>{
  it("rejects invalid roll measurements",()=>{
   expect(()=>calculateShared([{id:"R1",w:-1,l:30,lot:"A"}],pieces)).toThrow();
  });
+ it("flags an oversized piece as unplaced rather than a complete order",()=>{
+  const result=calculateShared([{id:"R",w:12,l:20,lot:"A"}],[{id:"Oversized",w:13,l:10,lot:"A",rotate:false}]);
+  expect(result.unplaced).toEqual(["Oversized"]);
+  expect(result.placed).toHaveLength(0);
+  expect(result.scenarios.every(s=>!s.feasible)).toBe(true);
+  expect(result.scenarios[0].unplacedAreaSF).toBe(130);
+ });
+ it("conserves area across mixed roll widths and reports unused tail separately",()=>{
+  const result=calculateShared([{id:"A",w:12,l:20,lot:"A"},{id:"B",w:10,l:15,lot:"B"}],[{id:"P1",w:6,l:10,lot:"A",rotate:false},{id:"P2",w:5,l:8,lot:"B",rotate:false}]);
+  expect(result.unplaced).toEqual([]);
+  expect(result.net+result.waste).toBeCloseTo(result.allocated,8);
+  expect(result.allocated+result.remaining).toBeCloseTo(390,8);
+  expect(result.rollSummary.reduce((sum,r)=>sum+r.remainingSF,0)).toBeCloseTo(result.remaining,8);
+  expect(result.used.A).toBe(10);
+  expect(result.used.B).toBe(8);
+ });
 });
