@@ -115,9 +115,9 @@
     try{
       const {data:{session}}=await client.auth.getSession();
       if(!session?.access_token)throw new Error('authentication_required');
-      const response=await fetch('https://ekrnknlawekeoszzkamd.supabase.co/functions/v1/runlu-stripe-checkout',{
+      const response=await fetch(SUPABASE_URL+'/functions/v1/runlu-stripe-checkout',{
         method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':'sb_publishable_Jr12gnQ7UrU6Wv9xz4L1aA_bcTZiGqn'},
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':SUPABASE_PUBLISHABLE_KEY},
         body:JSON.stringify({action:'create_checkout',plan_key:planKey})
       });
       const result=await response.json();
