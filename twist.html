@@ -40,7 +40,7 @@ let reflectionSelections=readSelections("twist-reflections-v1");
 let reasoningSelections=readSelections("twist-reasoning-v1");
 try{
   if(localStorage.getItem("twist-classic-content-v3-migrated")!=="1"){
-    for(const i of CHANGED_CLASSIC_INDICES){delete reflectionSelections[i];delete reasoningSelections[i];}
+    for(const i of [6,7,8]){delete reflectionSelections[i];delete reasoningSelections[i];}
     localStorage.setItem("twist-reflections-v1",JSON.stringify(reflectionSelections));
     localStorage.setItem("twist-reasoning-v1",JSON.stringify(reasoningSelections));
     localStorage.setItem("twist-classic-content-v3-migrated","1");
