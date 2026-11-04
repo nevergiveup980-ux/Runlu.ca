@@ -58,4 +58,22 @@ describe("candidate scenario comparison",()=>{
   expect(plans.every(p=>p.feasible)).toBe(true);
   expect(plans[0].plan.allocatedAreaSF).toBeLessThanOrEqual(Math.max(...plans.map(p=>p.plan.allocatedAreaSF)));
  });
+ it("chooses a shorter roll when it reduces allocated material",()=>{
+  const stock:Roll[]=[{id:"LONG",widthIn:144,lengthIn:360,dyeLot:"A"},{id:"SHORT",widthIn:144,lengthIn:120,dyeLot:"A"}];
+  const cuts:Piece[]=[{id:"P",widthIn:72,lengthIn:120,dyeLot:"A"}];
+  const plans=comparePlans(stock,cuts);
+  expect(plans[0].feasible).toBe(true);
+  expect(plans[0].plan.allocatedAreaSF).toBe(120);
+  expect(plans[0].plan.usedAreaSF).toBe(60);
+  expect(plans[0].plan.wasteAreaSF).toBe(60);
+ });
+ it("does not trade away a required wide cut to use a preferred remnant",()=>{
+  const stock:Roll[]=[{id:"REM",widthIn:72,lengthIn:120,dyeLot:"A",priority:0},{id:"FULL",widthIn:144,lengthIn:120,dyeLot:"A",priority:2}];
+  const cuts:Piece[]=[{id:"small",widthIn:72,lengthIn:120,dyeLot:"A"},{id:"wide",widthIn:144,lengthIn:120,dyeLot:"A"}];
+  const plans=comparePlans(stock,cuts);
+  expect(plans[0].feasible).toBe(true);
+  expect(plans[0].plan.placements).toHaveLength(2);
+  expect(plans[0].plan.allocatedAreaSF).toBe(180);
+  expect(plans[0].plan.wasteAreaSF).toBe(0);
+ });
 });
