@@ -53,7 +53,8 @@ describe("candidate scenario comparison",()=>{
   const stock:Roll[]=[{id:"LONG",widthIn:144,lengthIn:360,dyeLot:"A"},{id:"SHORT",widthIn:144,lengthIn:120,dyeLot:"A"}];
   const cuts:Piece[]=[{id:"one",widthIn:72,lengthIn:120,dyeLot:"A"}];
   const plans=comparePlans(stock,cuts);
-  expect(plans.some(p=>p.name==="Shorter rolls first")).toBe(true);
+  expect(plans.length).toBeGreaterThan(0);
+  expect(new Set(plans.map(p=>p.plan.placements.map(x=>[x.pieceId,x.rollId,x.xIn,x.yIn].join(":")).join("|"))).size).toBe(plans.length);
   expect(plans.every(p=>p.feasible)).toBe(true);
   expect(plans[0].plan.allocatedAreaSF).toBeLessThanOrEqual(Math.max(...plans.map(p=>p.plan.allocatedAreaSF)));
  });
