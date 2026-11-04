@@ -19,6 +19,22 @@
 
 ---
 
+## 下一批原创替换草案：第7–9题（尚未进入游戏，2026-11-04）
+
+以下是待人工编辑审阅的中英文新题草案，**不声称已部署、已验收或完成权利清查**。三题均设计为条件明确、可计算或可枚举的应用推理，而非经典双关谜语。
+
+| 题号 | English question / hint / answer | 中文题干 / 提示 / 答案 | 独立核验 |
+|---|---|---|---|
+| 7 | A warehouse shelf has 24 identical cartons. Six are moved to packing, then half of those remaining are shipped. How many cartons stay on the shelf? / Subtract the first six before halving. / **9 cartons.** | 货架上原有24箱相同货物。先取走6箱送去包装，再把货架上剩余箱数的一半发走。货架最后还剩多少箱？ / 先扣除送去包装的6箱，再计算剩余的一半。 / **9箱。** | 24−6=18；18÷2=9 |
+| 8 | A delivery van must visit A, B and C exactly once. B must be visited after A, and C must be visited before B. Which stop must be last? / Both other stops precede B. / **B.** | 送货车必须恰好访问A、B、C三个站点各一次。B必须在A之后，C也必须在B之前。最后到达哪一站？ / 另外两站都要排在B前面。 / **B站。** | 有效顺序只有A-C-B、C-A-B；末站均为B |
+| 9 | A flooring order needs 27 square metres of material. Each unopened pack covers exactly 4 square metres, and packs cannot be split when purchased. What is the minimum number of packs? / Six packs cover only 24 square metres. / **7 packs.** | 一份地板订单需要覆盖27平方米。每包未开封材料恰好可覆盖4平方米，购买时只能按整包计数。最少买几包？ / 6包只能覆盖24平方米。 / **7包。** | ⌈27÷4⌉=7；不含裁切损耗与安装余量 |
+
+**解释草案（需与题目一起写入两种语言的独立 explanation 数组）：** 7: Work from the remaining shelf stock after each operation / 按顺序计算货架库存；8: The two precedence constraints both point to B as last / 两条先后约束均要求B最后；9: Round up whole packs, not down / 整包采购必须向上取整。
+
+**实施前置条件：** 替换 `twist.html` 的 puzzles、zh、explanations 两种语言对应索引6–8；逐题校对；迁移存档时仅清除被替换题目的完成、提示、自评、推理和复盘记录，保留其余题目及 Logic Studio 数据；执行模拟交互及真机回归。当前存档键为 v2，不能直接扩大旧版迁移索引集合而不处理已有 v2 用户。
+
+---
+
 ## 核查方式与边界
 
 逐题读取根目录 `twist.html` 的英文/中文题干、提示、答案及独立解释，检查Git初始题集与后续编辑记录，搜索公开相同/类似谜题。完整当前内容冻结于 [CSV登记表](../ios/RUNLUTwist/Reports/build5/classic-content-register.csv)，可用 `Scripts/audit-content.py` 重建。Git能证明本项目何时加入和修改文字，不能证明外部最早作者、合法授权或公版。
