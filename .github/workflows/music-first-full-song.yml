@@ -27,7 +27,7 @@ jobs:
       - name: Checkout pinned, reviewed music development commit
         uses: actions/checkout@v4
         with:
-          ref: 77dc4722f7a4cb19f0ab3832aef0b73c7fe0dc17
+          ref: 36b2d89a2cb4e20773dd7adbdf67ba9e10e0a403
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
