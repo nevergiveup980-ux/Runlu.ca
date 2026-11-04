@@ -22,3 +22,16 @@ test('rejects overlapping or out-of-bounds cues',()=>{
 test('does not create subtitles for silent scenes',()=>{
  assert.deepEqual(buildStageSubtitles({scenes:[{startSeconds:0,endSeconds:5,narration:''}]}),[]);
 });
+
+test('SRT export rejects overlapping and overlong cues even if caller bypasses planner',()=>{
+ assert.throws(()=>stageSubtitlesToSrt([
+  {startSeconds:0,endSeconds:5,text:'A'},
+  {startSeconds:4,endSeconds:6,text:'B'}
+ ]),/Invalid subtitle cue/);
+ assert.throws(()=>stageSubtitlesToSrt([{startSeconds:899,endSeconds:901,text:'Too late'}]),/Invalid subtitle cue/);
+});
+test('exports Unicode subtitle text without corruption',()=>{
+ const srt=stageSubtitlesToSrt([{startSeconds:0,endSeconds:1.25,text:'润庐 · RUNLU'}]);
+ assert.match(srt,/00:00:00,000 --> 00:00:01,250/);
+ assert.match(srt,/润庐 · RUNLU/);
+});
