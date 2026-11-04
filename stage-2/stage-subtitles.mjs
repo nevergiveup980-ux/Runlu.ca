@@ -30,12 +30,14 @@ export function buildStageSubtitles({scenes,maxCharsPerCue=80}) {
  return cues;
 }
 export function stageSubtitlesToSrt(cues){
- if(!Array.isArray(cues))throw Error('Subtitle cues required');
+ if(!Array.isArray(cues)||cues.length>2000)throw Error('Subtitle cues required');
+ let previousEnd=0;
  return cues.map((cue,i)=>{
   if(!Number.isFinite(cue?.startSeconds)||!Number.isFinite(cue?.endSeconds)||
-     cue.startSeconds<0||cue.endSeconds<=cue.startSeconds||typeof cue.text!=='string'||
+     cue.startSeconds<previousEnd||cue.endSeconds<=cue.startSeconds||cue.endSeconds>900||typeof cue.text!=='string'||
      !cue.text.trim()||cue.text.includes('\n')||cue.text.includes('\r'))
    throw Error('Invalid subtitle cue');
+  previousEnd=cue.endSeconds;
   return String(i+1)+'\n'+stamp(cue.startSeconds)+' --> '+stamp(cue.endSeconds)+'\n'+cue.text+'\n';
  }).join('\n');
 }
