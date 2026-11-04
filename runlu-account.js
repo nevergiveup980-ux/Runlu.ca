@@ -19,7 +19,7 @@
   const initialRecoveryHint = hashParams.get('type') === 'recovery' || queryParams.get('type') === 'recovery' || queryParams.get('recovery') === '1';
   const checkoutSessionKey = 'runlu-pending-checkout-session';
   const incomingCheckoutSession = String(queryParams.get('session_id') || '').trim();
-  if (queryParams.get('checkout') === 'success' && incomingCheckoutSession) {
+  if (queryParams.get('checkout') === 'success' && incomingCheckoutSession && queryParams.get('source') !== 'guanshi') {
     try { sessionStorage.setItem(checkoutSessionKey, incomingCheckoutSession); } catch (_) {}
   } else {
     try {
