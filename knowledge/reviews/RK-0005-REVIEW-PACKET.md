@@ -19,6 +19,28 @@
 
 **Reviewer must record:** name, role or relevant experience, review date, manuscript version or commit, pass / changes requested, and concrete corrections with section references. No invented names, signoffs, or anonymized approvals.
 
+## Scenario-based warehouse acceptance test (hypothetical; awaiting reviewer)
+
+For each scenario, the reviewer should independently record **roll ID(s), required cut, usable dimensions, reservations, compatibility, proposed allocation, decision and reason**. The expected decisions below are editorial hypotheses, **not verified operational results**.
+
+| Case | Verified stock and order | Expected decision | Reason / condition to verify |
+| --- | --- | --- | --- |
+| A — aggregate-area trap | Order requires one continuous 12 ft × 20 ft piece. Available remnants R1 and R2 are each 12 ft × 12.5 ft, with no approved seam | **Not fulfillable as specified** | 300 ft² total exceeds 240 ft² order, but neither remnant supplies 20 ft continuous length |
+| B — reserved material | Order requires one continuous 12 ft × 18 ft piece. Roll R3 has verified usable dimensions 12 ft × 25 ft but is fully reserved for another confirmed order | **Review needed / not allocatable** | Physical dimensions fit, but the stock is not freely available; do not silently override reservation |
+| C — compatible available roll | Order requires one continuous 12 ft × 18 ft piece. Roll R4 has 12 ft usable width × 25 ft continuous length, correct product and project-required dye lot, no holds or damage, and approved orientation | **Potentially fulfillable, pending cut authorization** | All listed screening conditions pass; final cut release remains subject to normal approvals |
+| D — seam-dependent allocation | Order requires 12 ft × 20 ft coverage. Only R1 and R2 are available, and a seam is proposed but not yet approved | **Review needed** | A technically feasible layout must be checked against project/manufacturer instructions and authorized by the appropriate decision-maker |
+
+**Reviewer exercise:** For each case, write the decision without consulting the expected-decision column; then compare, explain any difference, and identify any missing real-world constraint (e.g. pattern repeat, edge trimming, cutting tolerance, stock measurement reliability). The dimensions are simplified; they do **not** include cutting allowances, pattern matching or installation waste.
+
+| Case | Reviewer decision | Missing constraints / correction | Reviewer initials and date |
+| --- | --- | --- | --- |
+| A | Pending | Pending | — |
+| B | Pending | Pending | — |
+| C | Pending | Pending | — |
+| D | Pending | Pending | — |
+
+**Pass condition:** All four outcomes and caveats are technically defensible for the stated assumptions; any dispute is resolved in the manuscript and four language editions before signoff.
+
 ## Source and rights verification
 
 1. Open the official [CRI installation standards index](https://carpet-rug.org/resources/installation-standards/) and verify the current CRI 104 / 105 scope.
