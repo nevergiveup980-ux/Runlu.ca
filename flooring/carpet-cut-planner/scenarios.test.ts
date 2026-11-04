@@ -58,7 +58,7 @@ describe("candidate scenario comparison",()=>{
   expect(plans.every(p=>p.feasible)).toBe(true);
   expect(plans[0].plan.allocatedAreaSF).toBeLessThanOrEqual(Math.max(...plans.map(p=>p.plan.allocatedAreaSF)));
  });
- it("chooses a shorter roll when it reduces allocated material",()=>{
+ it("calculates equal allocated material for equal-width rolls despite different stock lengths",()=>{
   const stock:Roll[]=[{id:"LONG",widthIn:144,lengthIn:360,dyeLot:"A"},{id:"SHORT",widthIn:144,lengthIn:120,dyeLot:"A"}];
   const cuts:Piece[]=[{id:"P",widthIn:72,lengthIn:120,dyeLot:"A"}];
   const plans=comparePlans(stock,cuts);
