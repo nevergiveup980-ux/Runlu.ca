@@ -60,5 +60,5 @@ if(process.env.MUSIC_GENERATION_ENABLED!=="true"||process.env.MUSIC_TEST_APPROVE
   try{duration=estimateCbrMp3Duration(bytes);}catch{}
   await writeFile(new URL("./runlu-first-full-song.local.mp3",import.meta.url),new Uint8Array(bytes),{flag:"wx",mode:0o600});
   console.log(JSON.stringify({saved:"runlu-first-full-song.local.mp3",model:result.model,bytes:bytes.byteLength,estimatedDurationSeconds:duration}));
- }catch(e){console.error("TEST FAILED:",e.code||e.name||"UNKNOWN");process.exitCode=1;}
+ }catch(e){console.error("TEST FAILED:",e.code||e.name||"UNKNOWN",String(e.message||"").replace(/AIza[0-9A-Za-z_-]+/g,"[REDACTED]"));process.exitCode=1;}
 }
