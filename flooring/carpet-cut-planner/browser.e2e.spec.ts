@@ -143,3 +143,15 @@ test("printed audit explicitly blocks cutting when a piece cannot be placed",asy
  await expect(page.locator("#printAudit")).toContainText("INCOMPLETE");
  await expect(page.locator("#printAudit")).toContainText("DO NOT CUT FROM THIS PLAN");
 });
+
+test("changing a cut after review invalidates confirmation on printed audit",async({page})=>{
+ await page.goto(pageUrl);
+ await page.locator("#reviewChecklist input").first().check();
+ await expect(page.locator("#reviewStatus")).toContainText("1 / 5 confirmed");
+ await page.locator("#pieceRows input[data-field='l']").first().fill("9");
+ await page.locator("#calculate").click();
+ await expect(page.locator("#reviewStatus")).toContainText("0 / 5 confirmed");
+ await page.locator("#print").click();
+ await expect(page.locator("#printAudit")).toContainText("0 / 5 confirmed");
+ await expect(page.locator("#printAudit")).toContainText("NOT CONFIRMED");
+});
