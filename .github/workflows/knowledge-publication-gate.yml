@@ -11,6 +11,7 @@ on:
     paths:
       - "knowledge/data/**"
       - "knowledge/validate-publication*.mjs"
+      - "knowledge/report-quality.mjs"
       - ".github/workflows/knowledge-publication-gate.yml"
   workflow_dispatch:
 
@@ -31,7 +32,11 @@ jobs:
       - name: Audit draft and published knowledge records
         run: node knowledge/validate-publication.mjs
       - name: Generate editorial readiness report
-        run: node knowledge/report-quality.mjs | tee knowledge-quality-report.md
+        if: always()
+        shell: bash
+        run: |
+          set -o pipefail
+          node knowledge/report-quality.mjs | tee knowledge-quality-report.md
       - name: Preserve editorial report for review
         if: always()
         uses: actions/upload-artifact@v4
