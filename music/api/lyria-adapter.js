@@ -17,7 +17,7 @@ export function createLyriaAdapter({apiKey,fetchImpl=fetch,model="clip",timeoutM
    // The caller supplies the localized, rights-safe instruction via buildLyriaPrompt.
    let response;
    try{response=await fetchImpl("https://generativelanguage.googleapis.com/v1beta/interactions",{
-    method:"POST",signal:AbortSignal.timeout(timeoutMs),headers:{"content-type":"application/json","x-goog-api-key":apiKey},
+    method:"POST",signal:AbortSignal.timeout(timeoutMs),headers:{"content-type":"application/json","Api-Revision":"2026-05-20","x-goog-api-key":apiKey},
     body:JSON.stringify({model:selected,input:prompt.trim()})
    });}catch(error){
     // A timeout may happen after the provider accepted a billable request: never retry automatically.
