@@ -59,6 +59,7 @@
   async function autoLinkCheckout(session){
     const params=new URLSearchParams(window.location.search);
     const sessionId=String(params.get('session_id')||'').trim();
+    if(params.get('source')==='guanshi')return false;
     if(params.get('checkout')!=='success'||!sessionId||!session?.access_token)return false;
     const endpoint='https://ekrnknlawekeoszzkamd.supabase.co/functions/v1/runlu-digital-download';
     const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({action:'link_purchase_by_session',session_id:sessionId})});
