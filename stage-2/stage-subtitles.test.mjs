@@ -5,7 +5,7 @@ import {buildStageSubtitles,stageSubtitlesToSrt} from './stage-subtitles.mjs';
 test('generates timed SRT from storyboard narration',()=>{
  const plan=planStageStoryboard({title:'Story',targetMinutes:0.5,scenes:[
   {description:'First',durationSeconds:10,narration:'Welcome to RUNLU'},
-  {description:'Second',durationSeconds:20,narration:'Our next scene\\nThe ending'}
+  {description:'Second',durationSeconds:20,narration:'Our next scene\nThe ending'}
  ]});
  const cues=buildStageSubtitles({scenes:plan.scenes});
  assert.equal(cues.length,3);
