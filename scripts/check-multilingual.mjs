@@ -51,9 +51,18 @@ const failures = [];
 for (const file of pages) {
   const rel = path.relative(root, file);
   if (excluded.has(rel) || excludedPrefixes.some(prefix => rel.startsWith(prefix))) continue;
+  // Editorial previews own a four-language selector and are not public website pages.
+  if (rel === 'knowledge/preview/RK-0005.html') {
+    const preview = fs.readFileSync(file, 'utf8');
+    if (!preview.includes('id="lang"') || !['en','zh','fr','es'].every(lang => preview.includes('value="' + lang + '"'))) {
+      failures.push(rel + ': missing editorial preview four-language selector');
+    }
+    continue;
+  }
+
   // Season 2 Chinese masters may initially precede translations. Once all
   // editions exist, validate the actual route-switching navigation instead.
-  if (/^wellness-season-02-\d{2}\.html$/.test(rel)) {
+  if (/^wellness-season-0[23]-\d{2}\.html$/.test(rel)) {
     const edition = fs.readFileSync(file, 'utf8');
     if (!/<html lang="zh(?:-Hans|-CN)?"/.test(edition)) failures.push(`${rel}: expected Chinese master language`);
     const base = rel.replace(/\.html$/, '');
@@ -79,7 +88,7 @@ for (const file of pages) {
   }
   // Season 2 translated editions use independent language pages, not the
   // shared in-page language switcher. Validate actual edition links instead.
-  if (/^wellness-season-02-\d{2}-(?:en|fr|es)\.html$/.test(rel)) {
+  if (/^wellness-season-0[23]-\d{2}-(?:en|fr|es)\.html$/.test(rel)) {
     const edition = fs.readFileSync(file, 'utf8');
     const base = rel.replace(/-(?:en|fr|es)\.html$/, '');
     const language = rel.match(/-(en|fr|es)\.html$/)?.[1];
