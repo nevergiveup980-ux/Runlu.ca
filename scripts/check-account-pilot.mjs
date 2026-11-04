@@ -101,6 +101,9 @@ requireToken(disclosureJs, "technical=new Set(['planCenter','accessCenter','acce
 requireToken(planJs, "Paid checkout remains disabled", 'Plan Center must preserve the paid-checkout lock copy.');
 if (/\.insert\(|\.update\(|\.delete\(|\.upsert\(/.test(planJs)) { throw new Error('Account Plan Center must remain read-only until checkout is explicitly enabled.'); }
 
+requireToken(commerceJs, "params.get('source')==='guanshi'", 'GUANSHI subscription returns must bypass digital-download linking.');
+requireToken(js, "queryParams.get('source') !== 'guanshi'", 'GUANSHI subscription returns must not persist a digital purchase session.');
+requireToken(js, "create_checkout", 'Account Store must request server-side paid checkout.');
 requireToken(commerceJs, "client.from('runlu_account_orders_v1')", 'Account Orders is not reading its own-account view.');
 requireToken(commerceJs, "client.from('runlu_account_subscriptions_v1')", 'Account Subscriptions is not reading its own-account view.');
 requireToken(commerceJs, 'ordersList.replaceChildren(fragment)', 'Orders history must render atomically.');
