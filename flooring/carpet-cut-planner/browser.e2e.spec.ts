@@ -133,3 +133,13 @@ test("mobile viewport keeps document width contained while showing cutting resul
  expect(widths.document).toBeLessThanOrEqual(widths.viewport+2);
  await expect(page.locator("#results svg").first()).toBeVisible();
 });
+
+test("printed audit explicitly blocks cutting when a piece cannot be placed",async({page})=>{
+ await page.goto(pageUrl);
+ await page.locator("#pieceRows input[data-field='lot']").first().fill("UNMATCHED");
+ await page.locator("#calculate").click();
+ await expect(page.locator("#results")).toContainText("Unplaced pieces");
+ await page.locator("#print").click();
+ await expect(page.locator("#printAudit")).toContainText("INCOMPLETE");
+ await expect(page.locator("#printAudit")).toContainText("DO NOT CUT FROM THIS PLAN");
+});
