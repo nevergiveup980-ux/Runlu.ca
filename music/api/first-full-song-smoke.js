@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 /**
  * RUNLU first full-song experiment. Dry-run by default.
- * Do not execute with --live until the current model ID and REST response schema
- * are verified against official docs and explicit paid-call approval is obtained.
+ * The Lyria 3.5 model ID and REST interactions schema were checked against
+ * https://ai.google.dev/gemini-api/docs/music-generation .
+ * Do not execute with --live without explicit paid-call approval.
  */
 import {writeFile} from "node:fs/promises";
 import {createLyriaAdapter} from "./lyria-adapter.js";
@@ -42,7 +43,7 @@ const lyrics=`[Verse 1]
 千言万语化作这一句
 等到夕阳慢慢落下去
 愿我身边依然有你`;
-const prompt=`创作一首约三分钟的原创中文男声抒情民谣。成熟温暖、自然克制的男声，普通话清晰；旋律优美动人，副歌容易记住。钢琴前奏、指弹木吉他、克制弦乐，最后安静收束。74–82 BPM，4/4。按以下原创歌词依次演唱，尽量不要添加重复或突然截断；不得模仿现有歌曲或歌手。\n${lyrics}`;
+const prompt=`创作一首约三分钟的原创中文男声抒情民谣。成熟温暖、自然克制的男声，普通话清晰；旋律优美动人，副歌容易记住。钢琴前奏、指弹木吉他、克制弦乐，最后安静收束。74–82 BPM，4/4。按以下原创歌词依次演唱，尽量不要添加重复或突然截断；不得模仿现有歌曲或歌手。\n\nLyrics:\n${lyrics}`;
 if(!process.argv.includes("--live")){
  console.log(JSON.stringify({mode:"dry-run",title:"一路走来，所幸有你",targetSeconds:180,promptCharacters:prompt.length,paidCall:false,warning:"Live model ID, lyric adherence and duration remain unverified."}));
  process.exit(0);
