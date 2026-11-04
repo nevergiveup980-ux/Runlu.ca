@@ -155,3 +155,19 @@ test("changing a cut after review invalidates confirmation on printed audit",asy
  await expect(page.locator("#printAudit")).toContainText("0 / 5 confirmed");
  await expect(page.locator("#printAudit")).toContainText("NOT CONFIRMED");
 });
+
+test("loading a saved project resets review evidence and updates the printed job",async({page})=>{
+ await page.goto(pageUrl);
+ await page.locator("#reviewChecklist input").first().check();
+ await expect(page.locator("#reviewStatus")).toContainText("1 / 5 confirmed");
+ const saved={version:1,jobId:"RESTORED-JOB",reviewer:"Previous reviewer",planRevision:12,rolls:[{id:"RESTORED-ROLL",w:12,l:30,lot:"A",stockType:"FULL"}],pieces:[{id:"Restored cut",w:10,l:12,lot:"A",rotate:false}],settings:{shortRollFirst:false,widthAllowance:0,lengthAllowance:0,patternRepeat:0}};
+ await page.locator("#load").setInputFiles({name:"saved-project.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(saved))});
+ await expect(page.locator("#reviewStatus")).toContainText("0 / 5 confirmed");
+ await expect(page.locator("#reviewEvidence")).toContainText("No review confirmations recorded");
+ await expect(page.locator("#rollRows")).toContainText("RESTORED-ROLL");
+ await expect(page.locator("#pieceRows")).toContainText("Restored cut");
+ await page.locator("#print").click();
+ await expect(page.locator("#printAudit")).toContainText("RESTORED-JOB");
+ await expect(page.locator("#printAudit")).toContainText("0 / 5 confirmed");
+ await expect(page.locator("#printAudit")).toContainText("NOT CONFIRMED");
+});
