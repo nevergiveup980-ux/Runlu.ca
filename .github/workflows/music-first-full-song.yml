@@ -1,0 +1,59 @@
+name: RUNLU Music — first full song (manual)
+on:
+  workflow_dispatch:
+    inputs:
+      execute_paid_generation:
+        description: 'Select YES to authorize one potentially billable Lyria 3.5 song'
+        required: true
+        type: choice
+        default: 'NO'
+        options:
+          - 'NO'
+          - 'YES'
+jobs:
+  first-song:
+    if: ${{ inputs.execute_paid_generation == 'YES' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    concurrency:
+      group: runlu-first-full-song
+      cancel-in-progress: false
+    defaults:
+      run:
+        working-directory: music/api
+    steps:
+      - name: Checkout pinned, reviewed music development commit
+        uses: actions/checkout@v4
+        with:
+          ref: e146c07e895cf69df255769219f50fc34e0e52af
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run contract tests before paid request
+        run: npm test
+      - name: Confirm secret exists without printing it
+        env:
+          GEMINI_API_KEY: ${{ secrets.RUNLU_MUSIC_GEMINI_API_KEY }}
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "Missing secret; no request made."
+            exit 2
+          fi
+      - name: Generate one original Mandarin full song
+        env:
+          GEMINI_API_KEY: ${{ secrets.RUNLU_MUSIC_GEMINI_API_KEY }}
+          MUSIC_GENERATION_ENABLED: 'true'
+          MUSIC_TEST_APPROVED: 'true'
+          MUSIC_FULL_SONG_MODEL_VERIFIED: 'true'
+        run: node first-full-song-smoke.js --live
+      - name: Store private, short-lived song file
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runlu-first-full-song-private
+          path: music/api/runlu-first-full-song.local.mp3
+          if-no-files-found: error
+          retention-days: 1
