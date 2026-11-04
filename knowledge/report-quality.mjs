@@ -31,6 +31,8 @@ const rows=audit.draftReadiness.map(r=>({
  blockerCount:r.blockers.length,
  blockers:[...new Set(r.blockers.map(explain))]
 }));
+const priority = rows.find(r=>r.id==="RK-0005" && r.blockerCount>0) ?? rows.find(r=>r.blockerCount>0);
+const nextStep = priority ? `Resolve ${priority.id} blockers (${priority.blockerCount}): ${priority.blockers.slice(0,3).join("; ")}. Do not auto-approve or publish.` : "No draft blockers reported. Confirm independent editorial decision before publication.";
 const out=[
  "# RUNLU KNOWLEDGE — Editorial Quality Report",
  "",
@@ -45,7 +47,7 @@ const out=[
  ...rows.flatMap(r=>[`## ${r.id}`,"",...r.blockers.map(b=>"- "+b),""]),
  "## Next step",
  "",
- "Prioritize substantive RK-0005 independent technical and four-language review; record named approvals before publication. Keep basic conversion RK-0002 as an internal reference. Do not auto-approve or publish.",
+ nextStep,
  ""
 ].join("\n");
 process.stdout.write(out);
