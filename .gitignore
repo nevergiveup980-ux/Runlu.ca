@@ -9,3 +9,9 @@
 # Temporary/local media working folders
 media-local/
 video-export/
+
+# RUNLU MUSIC STUDIO: private local outputs and credentials
+music/api/runlu-first-preview.local.mp3
+music/api/.env
+music/api/.env.*
+music/api/*.local.mp3
