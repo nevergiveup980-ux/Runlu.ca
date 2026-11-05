@@ -34,7 +34,7 @@ test('approved content digest rejects modified dialogue and character appearance
  assert.equal(createApprovedShotJobs({approval,plan:originalPlan,bible:originalBible}).length,1);
  const changedPlan=plan();changedPlan.shots[0].dialogue[0].text='Different dialogue';
  assert.throws(()=>createApprovedShotJobs({approval,plan:changedPlan,bible:originalBible}));
- const changedBible=bible();changedBible.characters[0]={...changedBible.characters[0],visualPrompt:'Changed appearance'};
+ const changedBible={...bible(),characters:[{...bible().characters[0],visualPrompt:'Changed appearance'}]};
  assert.throws(()=>createApprovedShotJobs({approval,plan:originalPlan,bible:changedBible}));
  assert.throws(()=>createApprovedShotJobs({approval}));
 });
