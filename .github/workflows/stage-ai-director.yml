@@ -1,0 +1,20 @@
+name: RUNLU STAGE AI Director Tests
+on:
+  push:
+    branches: [stage-2-engine-prototype]
+    paths:
+      - 'stage-2/ai-director/**'
+      - '.github/workflows/stage-ai-director.yml'
+  pull_request:
+    paths:
+      - 'stage-2/ai-director/**'
+      - '.github/workflows/stage-ai-director.yml'
+  workflow_dispatch:
+jobs:
+  novel-parser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run AI Director parser tests
+        run: node --test stage-2/ai-director/*.test.mjs
