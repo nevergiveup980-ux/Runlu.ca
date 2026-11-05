@@ -2,11 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createDramaEpisodePlan,updateDramaShot} from './episode-plan.mjs';
 const input={title:'Pilot',sourceChapterIds:['chapter_001'],targetSeconds:180,
- shots:[{description:'The door opens',durationSeconds:90,dialogue:[{characterId:'lead',text:'Who is there?'}]},
- {description:'A figure enters',durationSeconds:90,dialogue:[]}]};
+ shots:[{description:'The door opens',durationSeconds:60,dialogue:[{characterId:'lead',text:'Who is there?'}]},
+ {description:'A figure enters',durationSeconds:60,dialogue:[]},
+ {description:'The decision',durationSeconds:60,dialogue:[]}]};
 test('three-minute plan produces timed editable shots without provider calls',()=>{
  const p=createDramaEpisodePlan(input);
- assert.equal(p.totalSeconds,180);assert.equal(p.shots[1].startSeconds,90);
+ assert.equal(p.totalSeconds,180);assert.equal(p.shots[1].startSeconds,60);
  assert.equal(p.reviewStatus,'DRAFT');assert.equal(p.shots[0].status,'DRAFT');
  assert.equal(updateDramaShot(p,{shotId:'shot_001',description:'A locked door opens'}).shots[0].description,'A locked door opens');
 });
