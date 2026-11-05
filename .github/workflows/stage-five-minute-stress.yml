@@ -9,6 +9,7 @@ on:
       - '.github/workflows/stage-five-minute-stress.yml'
       - 'stage-2/stage-montage-stress.test.mjs'
       - 'stage-2/stage-hd-render-smoke.test.mjs'
+      - 'stage-2/stage-hd-five-minute.test.mjs'
       - 'stage-2/stage-montage-render.mjs'
   workflow_dispatch:
 jobs:
@@ -34,3 +35,7 @@ jobs:
         env:
           RUNLU_STAGE_STRESS: '1'
         run: node --test --test-reporter=tap stage-2/stage-hd-render-smoke.test.mjs
+      - name: Render full five-minute 720p moving montage
+        env:
+          RUNLU_STAGE_STRESS: '1'
+        run: node --test --test-reporter=tap stage-2/stage-hd-five-minute.test.mjs
