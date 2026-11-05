@@ -27,7 +27,7 @@ requireToken(html, 'index,follow', 'Public Account page must be indexable after 
 requireToken(html, 'no-cache, no-store, must-revalidate', 'Account pilot cache hardening is missing.');
 requireToken(html, 'runlu-account.css?v=5', 'Account page is not loading the current base CSS build.');
 requireToken(html, 'runlu-account-store.css?v=2', 'Account Store preview CSS is missing.');
-requireToken(html, 'runlu-account.js?v=12', 'Account page is not loading the public-launch core JS build.');
+requireToken(html, 'runlu-account.js?v=13', 'Account page is not loading the public-launch core JS build.');
 requireToken(html, 'runlu-account-commerce.js?v=10', 'Account commerce-history reader is missing.');
 requireToken(html, 'runlu-account-plan.css?v=2', 'Account Plan Center CSS is missing.');
 requireToken(html, 'runlu-account-plan.js?v=2', 'Account Plan Center reader is missing.');
@@ -74,7 +74,10 @@ requireToken(js, 'const seen=new Set()', 'Account product/plan-key deduplication
 requireToken(js, 'document.createDocumentFragment()', 'Account atomic rendering is missing.');
 requireToken(js, 'el.libraryList.replaceChildren(fragment)', 'Account Library must replace rendered contents atomically.');
 requireToken(js, 'el.storeList.replaceChildren(fragment)', 'Account Store must replace rendered contents atomically.');
-requireToken(js, "row.action_state==='ready_for_checkout'?'checkout_not_enabled':'planned'", 'Paid offers must not silently become clickable before checkout is integrated.');
+requireToken(js, "row.action_state==='ready_for_checkout'", 'Paid offers must be gated by the server-side checkout state.');
+requireToken(js, "action:'create_checkout'", 'Paid offers must call the guarded Stripe Checkout endpoint.');
+requireToken(js, "session?.access_token", 'Paid Checkout must require an authenticated account session.');
+requireToken(js, "response.ok||!result.ok", 'Paid Checkout must reject failed server responses.');
 requireToken(js, "client.rpc('runlu_activate_free_plan'", 'Eligible free plans must activate through the narrow authenticated RPC.');
 requireToken(js, "ownedProducts.has(row.product_key)", 'Already-entitled products must not create redundant free activation UI.');
 requireToken(js, "runlu:account-entitlements-changed", 'Plan Center refresh signal after entitlement changes is missing.');
@@ -98,6 +101,9 @@ requireToken(disclosureJs, "technical=new Set(['planCenter','accessCenter','acce
 requireToken(planJs, "Paid checkout remains disabled", 'Plan Center must preserve the paid-checkout lock copy.');
 if (/\.insert\(|\.update\(|\.delete\(|\.upsert\(/.test(planJs)) { throw new Error('Account Plan Center must remain read-only until checkout is explicitly enabled.'); }
 
+requireToken(commerceJs, "params.get('source')==='guanshi'", 'GUANSHI subscription returns must bypass digital-download linking.');
+requireToken(js, "queryParams.get('source') !== 'guanshi'", 'GUANSHI subscription returns must not persist a digital purchase session.');
+requireToken(js, "create_checkout", 'Account Store must request server-side paid checkout.');
 requireToken(commerceJs, "client.from('runlu_account_orders_v1')", 'Account Orders is not reading its own-account view.');
 requireToken(commerceJs, "client.from('runlu_account_subscriptions_v1')", 'Account Subscriptions is not reading its own-account view.');
 requireToken(commerceJs, 'ordersList.replaceChildren(fragment)', 'Orders history must render atomically.');
