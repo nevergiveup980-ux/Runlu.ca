@@ -1,6 +1,17 @@
 // AI Director review gate: pure, auditable approval of a specific plan/bible revision.
 // No provider calls, no implicit budget confirmation.
 import {characterShotReferences} from './character-bible.mjs';
+import {createHash} from 'node:crypto';
+const digest=value=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
+const reviewSnapshot=({plan,bible})=>({
+ title:plan.title,aspectRatio:plan.aspectRatio,targetSeconds:plan.targetSeconds,
+ totalSeconds:plan.totalSeconds,sourceChapterIds:plan.sourceChapterIds,
+ shots:plan.shots.map(s=>({id:s.id,description:s.description,durationSeconds:s.durationSeconds,
+ startSeconds:s.startSeconds,endSeconds:s.endSeconds,characterIds:s.characterIds,dialogue:s.dialogue})),
+ characters:bible.characters.map(c=>({id:c.id,name:c.name,visualPrompt:c.visualPrompt,
+ negativePrompt:c.negativePrompt,costume:c.costume,voiceId:c.voiceId,
+ referenceAssetId:c.referenceAssetId,revision:c.revision}))
+});
 const valid=v=>typeof v==='string'&&v.trim().length>0&&v.length<=120;
 export function prepareEpisodeReview({plan,bible}){
  if(plan?.reviewStatus!=='DRAFT'||!Array.isArray(plan.shots)||!plan.shots.length||
@@ -16,7 +27,8 @@ export function prepareEpisodeReview({plan,bible}){
  });
  return {schemaVersion:1,reviewStatus:'AWAITING_REVIEW',title:plan.title,
   targetSeconds:plan.targetSeconds,totalSeconds:plan.totalSeconds,
-  sourceChapterIds:[...plan.sourceChapterIds],shots};
+  sourceChapterIds:[...plan.sourceChapterIds],shots,
+  contentDigest:digest(reviewSnapshot({plan,bible}))};
 }
 export function approveEpisodeReview({review,reviewerId,approvedShotIds}){
  if(review?.reviewStatus!=='AWAITING_REVIEW'||!valid(reviewerId)||
@@ -26,8 +38,11 @@ export function approveEpisodeReview({review,reviewerId,approvedShotIds}){
     !all.every(id=>approvedShotIds.includes(id)))throw Error('Every shot must be reviewed');
  return {...review,reviewStatus:'APPROVED',reviewerId,approvedShotIds:[...approvedShotIds]};
 }
-export function createApprovedShotJobs({approval}){
- if(approval?.reviewStatus!=='APPROVED'||!Array.isArray(approval.shots))throw Error('Approval required');
+export function createApprovedShotJobs({approval,plan,bible}){
+ if(approval?.reviewStatus!=='APPROVED'||!Array.isArray(approval.shots)||
+    !plan||!bible||!approval.contentDigest||
+    digest(reviewSnapshot({plan,bible}))!==approval.contentDigest)
+    throw Error('Approval required for current content revision');
  return approval.shots.map(s=>({shotId:s.shotId,state:'READY',
   characterRevisionIds:s.characterRevisions.map(c=>c.id+'_v'+c.revision),
   attemptId:null,outputAssetId:null,failureReason:null,
