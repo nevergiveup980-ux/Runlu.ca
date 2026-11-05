@@ -12,7 +12,7 @@ test("editorial preview is explicitly excluded from indexing", () => {
 test("all four language choices and localized content are present", () => {
   for (const lang of ["en", "zh", "fr", "es"]) {
     assert.match(html, new RegExp('<option value="' + lang + '">'));
-    assert.match(html, new RegExp('(?:^|[,\\{])' + lang + ':\\{'));
+    assert.match(html, new RegExp('\\b' + lang + ':\\{'));
   }
 });
 
