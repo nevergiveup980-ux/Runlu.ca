@@ -1,7 +1,7 @@
 // AI Director Character Bible: immutable, provider-neutral visual/voice identity.
 const txt=(v,max)=>typeof v==='string'&&v.trim().length>0&&v.length<=max;
 const ident=v=>typeof v==='string'&&/^[a-zA-Z0-9_-]{1,100}$/.test(v);
-const safeOptional=(v,max)=>v===undefined||v===null||txt(v,max);
+const safeOptional=(v,max)=>v===undefined||v===null||(typeof v==='string'&&v.length<=max);
 export function createCharacterBible({characters}){
  if(!Array.isArray(characters)||!characters.length||characters.length>100)
   throw Error('1-100 characters required');
