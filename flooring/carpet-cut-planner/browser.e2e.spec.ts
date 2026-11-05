@@ -164,8 +164,8 @@ test("loading a saved project resets review evidence and updates the printed job
  await page.locator("#load").setInputFiles({name:"saved-project.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(saved))});
  await expect(page.locator("#reviewStatus")).toContainText("0 / 5 confirmed");
  await expect(page.locator("#reviewEvidence")).toContainText("No review confirmations recorded");
- await expect(page.locator("#rollRows")).toContainText("RESTORED-ROLL");
- await expect(page.locator("#pieceRows")).toContainText("Restored cut");
+ await expect(page.locator("#rollRows input[data-field='id']").first()).toHaveValue("RESTORED-ROLL");
+ await expect(page.locator("#pieceRows input[data-field='id']").first()).toHaveValue("Restored cut");
  await page.locator("#print").click();
  await expect(page.locator("#printAudit")).toContainText("RESTORED-JOB");
  await expect(page.locator("#printAudit")).toContainText("0 / 5 confirmed");
