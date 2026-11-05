@@ -8,6 +8,7 @@ on:
     paths:
       - '.github/workflows/stage-five-minute-stress.yml'
       - 'stage-2/stage-montage-stress.test.mjs'
+      - 'stage-2/stage-hd-render-smoke.test.mjs'
       - 'stage-2/stage-montage-render.mjs'
   workflow_dispatch:
 jobs:
@@ -29,3 +30,7 @@ jobs:
         env:
           RUNLU_STAGE_STRESS: '1'
         run: node --test --test-reporter=tap stage-2/stage-montage-stress.test.mjs
+      - name: Render moving 720p 24fps video with narration and captions
+        env:
+          RUNLU_STAGE_STRESS: '1'
+        run: node --test --test-reporter=tap stage-2/stage-hd-render-smoke.test.mjs
