@@ -16,10 +16,10 @@ Status: **NOT RELEASED**. Development branch only. A passing CI run is necessary
 - Waste estimates are geometric allocations, not a guarantee of realized material savings or optimality.
 
 ## Automated gate (must be green at release SHA)
-- [ ] Unit tests: engine, browser adapter, scenarios.
-- [ ] Browser tests: inputs, warnings, candidate selection, mobile viewport, print review, stale-review invalidation.
-- [ ] Site integrity workflow.
-- [ ] No unplaced pieces are labeled as a completed job; no cross-dye-lot placement or overlaps.
+- [x] Unit tests: engine, browser adapter, scenarios. (GitHub Actions green at bbf3272)
+- [x] Browser tests: inputs, warnings, candidate selection, mobile viewport, print review, stale-review invalidation, JSON reload. (GitHub Actions green at bbf3272)
+- [x] Site integrity workflow. (GitHub Actions green at bbf3272)
+- [x] Automated regression coverage for incomplete plans, dye-lot isolation and non-overlap; independent real-job verification still pending.
 
 ## Manual gate (must be signed off before merge/deploy)
 - [ ] Validate three real jobs against independently measured cut sheets, including a mixed-width / mixed-dye-lot job.
@@ -32,3 +32,9 @@ Status: **NOT RELEASED**. Development branch only. A passing CI run is necessary
 
 ## Release decision
 Do **not** merge into production until all manual gates are documented and blocking defects are resolved. Roll back by reverting the release commit if production behavior diverges from acceptance results.
+
+## Verified automated baseline
+- Commit: `bbf3272d6b0a85ff87946477b483d3fd86803539`.
+- Carpet Planner Checks: https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/41971067807 — success.
+- Site integrity: https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/41971067819 — success.
+- These checks do not satisfy the manual gates above; **release remains blocked**.
