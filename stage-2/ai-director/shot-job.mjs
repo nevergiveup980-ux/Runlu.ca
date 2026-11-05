@@ -21,7 +21,7 @@ export function transitionShotJob(job,{to,attemptId=null,outputAssetId=null,fail
  if(!job||!Array.isArray(job.history)||!transitions[job.state]?.includes(to))
   throw Error('Invalid shot transition');
  if(to==='SUBMITTED'&&(!job.attemptId||!ID.test(job.attemptId)))throw Error('Reserved attempt required');
- if(to==='RESERVED'&&(!attemptId||!ID.test(attemptId)))throw Error('Attempt identity required');
+ if(to==='RESERVED'&&(!attemptId||!ID.test(attemptId)||job.history.some(h=>h.attemptId===attemptId)))throw Error('New attempt identity required');
  if(to==='SUCCEEDED'&&(!outputAssetId||!ID.test(outputAssetId)))throw Error('Verified output identity required');
  if(to==='FAILED'&&(typeof failureReason!=='string'||!failureReason.trim()||failureReason.length>500))
   throw Error('Failure reason required');
