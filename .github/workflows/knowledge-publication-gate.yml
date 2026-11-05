@@ -6,12 +6,14 @@ on:
       - "knowledge/data/**"
       - "knowledge/validate-publication*.mjs"
       - "knowledge/report-quality.mjs"
+      - "knowledge/preview/**"
       - ".github/workflows/knowledge-publication-gate.yml"
   pull_request:
     paths:
       - "knowledge/data/**"
       - "knowledge/validate-publication*.mjs"
       - "knowledge/report-quality.mjs"
+      - "knowledge/preview/**"
       - ".github/workflows/knowledge-publication-gate.yml"
   workflow_dispatch:
 
@@ -29,6 +31,8 @@ jobs:
           node-version: "22"
       - name: Test publication eligibility rules
         run: node --test knowledge/validate-publication.test.mjs
+      - name: Test four-language editorial preview
+        run: node --test knowledge/preview/preview-smoke.test.mjs
       - name: Audit draft and published knowledge records
         run: node knowledge/validate-publication.mjs
       - name: Generate editorial readiness report
