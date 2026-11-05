@@ -51,6 +51,14 @@ const failures = [];
 for (const file of pages) {
   const rel = path.relative(root, file);
   if (excluded.has(rel) || excludedPrefixes.some(prefix => rel.startsWith(prefix))) continue;
+  // Bilingual book landing pages are product microsites, not four-language editorial pages.
+  if (rel === 'book/the-universe-within-us.html') {
+    const bookPage = fs.readFileSync(file, 'utf8');
+    if (!bookPage.includes('rel="canonical"') || !bookPage.includes('CHINESE EDITION') || !bookPage.includes('ENGLISH EDITION')) {
+      failures.push(rel + ': missing bilingual book editions or canonical URL');
+    }
+    continue;
+  }
   // Editorial previews own a four-language selector and are not public website pages.
   if (rel === 'knowledge/preview/RK-0005.html') {
     const preview = fs.readFileSync(file, 'utf8');
