@@ -1,0 +1,63 @@
+name: RUNLU Music — English female demo 02 (manual)
+on:
+  workflow_dispatch:
+    inputs:
+      execute_paid_generation:
+        description: 'NO = dry-run only; YES = authorize ONE potentially billable Lyria 3.5 song'
+        required: true
+        type: choice
+        default: 'NO'
+        options:
+          - 'NO'
+          - 'YES'
+jobs:
+  english-female-demo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    concurrency:
+      group: runlu-music-demo02
+      cancel-in-progress: false
+    defaults:
+      run:
+        working-directory: music/api
+    steps:
+      - name: Checkout pinned music development commit
+        uses: actions/checkout@v4
+        with:
+          ref: 31436c4f9ba723d3184de9989e0e781703db1ed9
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run existing music contract tests
+        run: npm test
+      - name: Validate English female demo without API calls
+        run: node demo02-english-female-smoke.js
+      - name: Confirm secret exists without printing it
+        if: ${{ inputs.execute_paid_generation == 'YES' }}
+        env:
+          GEMINI_API_KEY: ${{ secrets.RUNLU_MUSIC_GEMINI_API_KEY }}
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "Missing private API key. No paid request made."
+            exit 2
+          fi
+      - name: Generate exactly one paid English female demo
+        if: ${{ inputs.execute_paid_generation == 'YES' }}
+        env:
+          GEMINI_API_KEY: ${{ secrets.RUNLU_MUSIC_GEMINI_API_KEY }}
+          MUSIC_GENERATION_ENABLED: 'true'
+          MUSIC_TEST_APPROVED: 'true'
+          MUSIC_FULL_SONG_MODEL_VERIFIED: 'true'
+        run: node demo02-english-female-smoke.js --live
+      - name: Store short-lived private MP3
+        if: ${{ success() && inputs.execute_paid_generation == 'YES' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: runlu-demo02-english-female-private
+          path: music/api/runlu-demo02-english-female.local.mp3
+          if-no-files-found: error
+          retention-days: 1
