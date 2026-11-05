@@ -4,6 +4,11 @@ on:
     branches: [stage-2-engine-prototype]
     paths:
       - '.github/workflows/stage-five-minute-stress.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/stage-five-minute-stress.yml'
+      - 'stage-2/stage-montage-stress.test.mjs'
+      - 'stage-2/stage-montage-render.mjs'
   workflow_dispatch:
 jobs:
   five-minute-render:
