@@ -12,6 +12,7 @@ SQL
 # First connection locks the budget and holds it for two seconds.
 psql -v ON_ERROR_STOP=1 <<'SQL' > /tmp/stage-race-first.log 2>&1 &
 BEGIN;
+SET LOCAL application_name='stage_race_first';
 SELECT limit_cents FROM stage_director_budgets WHERE episode_id='racepilot' FOR UPDATE;
 INSERT INTO stage_director_attempts(attempt_id,episode_id,shot_id,estimated_cents)
  VALUES('race_a1','racepilot','s1',700);
@@ -23,7 +24,7 @@ SQL
 first=$!
 # Ensure the first transaction owns the budget row before starting the second.
 for i in $(seq 1 50); do
-  if psql -Atqc "SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE query LIKE '%pg_sleep(2)%' AND state='active')" | grep -qx t; then break; fi
+  if psql -Atqc "SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE application_name='stage_race_first' AND query LIKE 'SELECT pg_sleep%' AND state='active')" | grep -qx t; then break; fi
   sleep 0.1
 done
 # The second connection must wait on the same budget row, then see 700 committed.
