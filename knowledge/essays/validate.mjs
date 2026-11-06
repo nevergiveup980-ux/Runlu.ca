@@ -24,7 +24,11 @@ for(const lang of LANGS){
   }
   if(article.id!==slug||article.language!==lang)fail(lang+': article identity mismatch');
   if(!['draft','reviewed','published'].includes(article.status))fail(lang+': invalid status');
+  if(manifest.status==='published'&&article.status!=='published')fail(lang+': locale not marked published');
+  if(manifest.status!=='published'&&article.status==='published')fail(lang+': locale published before manifest approval');
   if(!nonempty(article.title)||!nonempty(article.subtitle))fail(lang+': missing title/subtitle');
+  if(article.title!==manifest.titles?.[lang]||article.subtitle!==manifest.subtitles?.[lang])
+    fail(lang+': title/subtitle differs from approved manifest');
   if(!Array.isArray(article.sections)||article.sections.length!==8)fail(lang+': expected exactly 8 sections');
   else article.sections.forEach((section,i)=>{
     if(!nonempty(section.heading))fail(lang+': section '+(i+1)+' missing heading');
