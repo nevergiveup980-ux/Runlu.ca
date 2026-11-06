@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>RUNLU KNOWLEDGE — Editorial Essays</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Noto Sans",sans-serif;color:#24352f;background:#f7f4ed}
+*{box-sizing:border-box}body{margin:0}header,main,footer{max-width:850px;margin:auto;padding:24px}
+header{border-bottom:1px solid #d9d8cf}.brand{font-size:.8rem;letter-spacing:.1em;font-weight:700}
+a{color:#236c61}h1{font-size:clamp(2rem,5vw,3rem);line-height:1.2}
+.subtitle{font-size:1.15rem;color:#53665b}.controls{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+select{padding:10px;border:1px solid #b8c6bc;border-radius:8px;background:white;color:inherit}
+article{background:white;border:1px solid #e0e2db;border-radius:14px;padding:clamp(20px,5vw,52px);margin-top:24px}
+article section{margin-top:2.5rem}article p{font-size:1.06rem;line-height:1.9;margin:1.1em 0}
+article h2{font-size:1.45rem;line-height:1.35}#status{line-height:1.7}footer{color:#53665b;font-size:.85rem}
+</style>
+</head>
+<body>
+<header><div class="controls"><a class="brand" href="./">RUNLU KNOWLEDGE · 润庐</a>
+<label><span id="language-label">Language</span>
+<select id="language" aria-label="Article language">
+<option value="zh">中文</option><option value="en">English</option><option value="fr">Français</option><option value="es">Español</option>
+</select></label></div></header>
+<main><p id="status" role="status" aria-live="polite"></p><article id="article" hidden>
+<p class="brand">RUNLU · ORIGINAL ESSAY</p><h1 id="title"></h1><p class="subtitle" id="subtitle"></p>
+<div id="sections"></div><p id="closing"></p></article></main>
+<footer>© RUNLU · <a href="./">Knowledge</a></footer>
+<script src="../runlu-language.js?v=2.2"></script>
+<script>
+(()=>{'use strict';
+const LANGS=['zh','en','fr','es'];
+const messages={
+zh:{label:'语言',loading:'正在加载文章…',missing:'该语言的完整文章尚未发布。',error:'文章暂时无法加载。',invalid:'文章地址无效。'},
+en:{label:'Language',loading:'Loading article…',missing:'The complete article is not yet available in this language.',error:'Unable to load the article.',invalid:'Invalid article address.'},
+fr:{label:'Langue',loading:'Chargement de l’article…',missing:'L’article complet n’est pas encore disponible dans cette langue.',error:'Impossible de charger l’article.',invalid:'Adresse de l’article invalide.'},
+es:{label:'Idioma',loading:'Cargando el artículo…',missing:'El artículo completo aún no está disponible en este idioma.',error:'No se puede cargar el artículo.',invalid:'Dirección del artículo no válida.'}
+};
+const $=id=>document.getElementById(id);
+const query=new URLSearchParams(location.search);
+const id=query.get('id')||'';
+const validId=/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)&&id.length<=100;
+const selected=query.get('lang');
+const preferred=LANGS.includes(selected)?selected:(window.RUNLULanguage?.get?.()||'en');
+$('language').value=LANGS.includes(preferred)?preferred:'en';
+let request=0;
+function status(text){$('status').textContent=text;$('article').hidden=true}
+function clear(node){while(node.firstChild)node.removeChild(node.firstChild)}
+async function load(){
+const lang=$('language').value,serial=++request,t=messages[lang];
+document.documentElement.lang=lang==='zh'?'zh-Hans':lang;
+$('language-label').textContent=t.label;
+if(!validId){status(t.invalid);return}
+status(t.loading);
+try{
+const response=await fetch('./essays/'+encodeURIComponent(id)+'/'+lang+'.json',{cache:'no-store'});
+if(!response.ok){status(response.status===404?t.missing:t.error);return}
+const doc=await response.json();
+if(serial!==request)return;
+if(doc.status!=='published'||doc.id!==id||doc.language!==lang||
+typeof doc.title!=='string'||!doc.title.trim()||
+typeof doc.subtitle!=='string'||!doc.subtitle.trim()||
+!Array.isArray(doc.sections)||doc.sections.length!==8||
+!doc.sections.every(s=>typeof s.heading==='string'&&s.heading.trim()&&
+Array.isArray(s.paragraphs)&&s.paragraphs.length>0&&
+s.paragraphs.every(p=>typeof p==='string'&&p.trim()))){status(t.missing);return}
+$('title').textContent=doc.title;$('subtitle').textContent=doc.subtitle;
+clear($('sections'));
+doc.sections.forEach(s=>{
+const section=document.createElement('section');
+const heading=document.createElement('h2');heading.textContent=s.heading;section.appendChild(heading);
+s.paragraphs.forEach(p=>{const paragraph=document.createElement('p');paragraph.textContent=p;section.appendChild(paragraph)});
+$('sections').appendChild(section);
+});
+$('closing').textContent=typeof doc.closing==='string'?doc.closing:'';
+document.title=doc.title+' — RUNLU KNOWLEDGE';
+$('status').textContent='';$('article').hidden=false;
+}catch(e){if(serial===request)status(t.error)}
+}
+$('language').addEventListener('change',()=>{
+const lang=$('language').value;
+const url=new URL(location.href);url.searchParams.set('lang',lang);history.replaceState(null,'',url);
+window.RUNLULanguage?.set?.(lang);load();
+});
+window.addEventListener('runlu:languagechange',event=>{
+const lang=event.detail?.language;
+if(LANGS.includes(lang)&&$('language').value!==lang){$('language').value=lang;load()}
+});
+load();
+})();
+</script>
+</body></html>
