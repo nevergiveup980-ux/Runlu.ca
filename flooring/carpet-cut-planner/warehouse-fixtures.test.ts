@@ -37,4 +37,28 @@ describe("synthetic warehouse order acceptance fixtures",()=>{
   expect(plans[0].plan.allocatedAreaSF).toBe(120);
   expect(planCuts(rolls,pieces).unplaced).toHaveLength(1);
  });
+ it("preserves cut safety across piece input permutations",()=>{
+  const rolls:Roll[]=[{id:"A-12",widthIn:144,lengthIn:360,dyeLot:"A"},{id:"B-12",widthIn:144,lengthIn:240,dyeLot:"B"}];
+  const pieces:Piece[]=[{id:"A1",widthIn:72,lengthIn:120,dyeLot:"A"},{id:"A2",widthIn:72,lengthIn:120,dyeLot:"A"},{id:"B1",widthIn:144,lengthIn:120,dyeLot:"B"}];
+  const orders=[pieces,[pieces[2],pieces[0],pieces[1]],[pieces[1],pieces[2],pieces[0]]];
+  for(const order of orders){
+   const result=comparePlans(rolls,order)[0].plan;
+   expect(result.unplaced).toEqual([]);
+   expect(result.placements).toHaveLength(3);
+   for(const p of result.placements){
+    const roll=rolls.find(r=>r.id===p.rollId)!;
+    const piece=pieces.find(x=>x.id===p.pieceId)!;
+    expect(roll.dyeLot).toBe(piece.dyeLot);
+    expect(p.xIn).toBeGreaterThanOrEqual(0);
+    expect(p.yIn).toBeGreaterThanOrEqual(0);
+    expect(p.xIn+p.widthIn).toBeLessThanOrEqual(roll.widthIn);
+    expect(p.yIn+p.lengthIn).toBeLessThanOrEqual(roll.lengthIn);
+   }
+   for(let i=0;i<result.placements.length;i++)for(let j=i+1;j<result.placements.length;j++){
+    const a=result.placements[i],b=result.placements[j];if(a.rollId!==b.rollId)continue;
+    expect(a.xIn+a.widthIn<=b.xIn||b.xIn+b.widthIn<=a.xIn||a.yIn+a.lengthIn<=b.yIn||b.yIn+b.lengthIn<=a.yIn).toBe(true);
+   }
+   expect(result.usedAreaSF+result.wasteAreaSF).toBeCloseTo(result.allocatedAreaSF,8);
+  }
+ });
 });
