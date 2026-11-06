@@ -44,3 +44,5 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f stage-2/ai-director/schema-smoke.sql
       - name: Verify transaction claims and rollback on real PostgreSQL
         run: psql -v ON_ERROR_STOP=1 -f stage-2/ai-director/transaction-smoke.sql
+      - name: Verify two-connection budget locking
+        run: bash stage-2/ai-director/concurrency-smoke.sh
