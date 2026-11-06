@@ -14,15 +14,20 @@ const checks=[
   ['HTML uses textContent for paragraphs',html.includes('paragraph.textContent=p')],
   ['HTML checks manifest approval',html.includes('manifest.publication?.approved!==true')],
   ['HTML checks rights verification',html.includes('manifest.review?.rights_verified!==true')],
+  ['HTML rejects mismatched translated titles',html.includes('doc.title!==manifest.titles?.[lang]')],
+  ['HTML rejects mismatched translated subtitles',html.includes('doc.subtitle!==manifest.subtitles?.[lang]')],
   ['HTML does not allow indexing drafts',html.includes('noindex,nofollow')],
   ['Manifest has a recognized status',['draft','reviewed','published'].includes(manifest.status)],
   ['All four language identifiers present',JSON.stringify(manifest.languages)===JSON.stringify(['zh','en','fr','es'])]
 ];
 for(const [name,ok] of checks)console.log((ok?'PASS ':'FAIL ')+name);
 const readiness=spawnSync(process.execPath,[join(dir,'validate.mjs')],{encoding:'utf8'});
-const hasMissing=readiness.stderr.includes('full manuscript missing or invalid');
+const errors=readiness.stderr.trim().split(/\r?\n/).filter(Boolean);
+const missingOnly=errors.length>0&&errors.every(line=>/^(zh|en|fr|es): full manuscript missing or invalid \(publication readiness incomplete\)$/.test(line));
 const isPublished=manifest.status==='published';
-const expectedOutcome=isPublished?readiness.status===0:(readiness.status===0||hasMissing);
+// An incomplete draft may fail only because original manuscripts are not staged.
+// All other validation failures (including mismatched metadata) must fail CI.
+const expectedOutcome=readiness.status===0||(!isPublished&&readiness.status===1&&missingOnly);
 console.log((expectedOutcome?'PASS ':'FAIL ')+(isPublished?'Published edition passes readiness':'Draft validation behaves as expected'));
 if(readiness.stdout)process.stdout.write(readiness.stdout);
 if(readiness.stderr)process.stdout.write(readiness.stderr);
