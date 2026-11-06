@@ -40,3 +40,15 @@ CREATE TABLE IF NOT EXISTS stage_director_attempts (
 );
 CREATE INDEX IF NOT EXISTS stage_director_attempts_episode_idx
  ON stage_director_attempts(episode_id);
+
+-- Outbox: persisted intent before any external paid API request.
+-- Dispatchers must never blindly replay a possibly submitted request.
+CREATE TABLE IF NOT EXISTS stage_director_submission_outbox (
+  attempt_id text PRIMARY KEY REFERENCES stage_director_attempts(attempt_id),
+  state text NOT NULL DEFAULT 'PENDING'
+    CHECK (state IN ('PENDING','DISPATCHING','SUBMITTED','UNKNOWN','CANCELLED')),
+  provider_task_id text,
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS stage_director_submission_outbox_state_idx
+ ON stage_director_submission_outbox(state,updated_at);
