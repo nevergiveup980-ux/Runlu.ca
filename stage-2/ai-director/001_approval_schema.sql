@@ -58,3 +58,13 @@ CREATE INDEX IF NOT EXISTS stage_director_submission_outbox_state_idx
 CREATE UNIQUE INDEX IF NOT EXISTS stage_director_outbox_provider_task_unique
  ON stage_director_submission_outbox(provider_task_id)
  WHERE provider_task_id IS NOT NULL;
+
+-- Audit the provider's actual charge; zero-cost outcomes are recorded explicitly.
+-- This is an additive schema extension, not automatically deployed.
+CREATE TABLE IF NOT EXISTS stage_director_charge_audit (
+  attempt_id text PRIMARY KEY REFERENCES stage_director_attempts(attempt_id),
+  provider_charge_reference text NOT NULL UNIQUE,
+  charged_cents bigint NOT NULL CHECK (charged_cents >= 0),
+  recorded_by text NOT NULL,
+  recorded_at timestamptz NOT NULL DEFAULT now()
+);
