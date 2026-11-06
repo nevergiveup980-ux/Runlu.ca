@@ -25,10 +25,13 @@ test('unknown submission cannot settle without reconciliation',async()=>{
  await assert.rejects(new PgDirectorChargeSettlement(m.pool).settle(input),/reconcile/);
  assert.ok(m.calls.some(c=>c.sql==='ROLLBACK'));
 });
-test('over-budget actual charge blocks settlement and preserves records',async()=>{
+test('over-budget actual charge is audited and flagged rather than discarded',async()=>{
  const m=mock({used:900,estimate:600,limit:1000});
- await assert.rejects(new PgDirectorChargeSettlement(m.pool).settle({...input,chargedCents:800}),/exceeds approved budget/);
- assert.equal(m.calls.filter(c=>c.sql.startsWith('INSERT')).length,0);
+ const result=await new PgDirectorChargeSettlement(m.pool).settle({...input,chargedCents:800});
+ assert.equal(result.exceedsApprovedBudget,true);
+ assert.equal(result.requiresManualReview,true);
+ assert.equal(m.calls.filter(c=>c.sql.startsWith('INSERT')).length,1);
+ assert.equal(m.calls.filter(c=>c.sql==='COMMIT').length,1);
 });
 test('audit insertion failure rolls back attempt settlement',async()=>{
  const m=mock({failAudit:true});
