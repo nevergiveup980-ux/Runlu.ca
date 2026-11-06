@@ -24,18 +24,20 @@ export class PgDirectorChargeSettlement {
    const limit=Number(budget.rows[0].limit_cents);
    const used=Number(committed.rows[0]?.committed_cents??0);
    const estimate=Number(attempt.rows[0].estimated_cents);
-   if(![limit,used,estimate].every(Number.isSafeInteger)||used-estimate+chargedCents>limit)
-    throw Error('Charge exceeds approved budget; manual reconciliation required');
+   if(![limit,used,estimate].every(Number.isSafeInteger)||limit<=0||used<0||estimate<0)
+    throw Error('Invalid stored budget amounts');
+   const exceedsApprovedBudget=used-estimate+chargedCents>limit;
    await client.query(
-    `INSERT INTO stage_director_charge_audit(attempt_id,provider_charge_reference,charged_cents,recorded_by)
-     VALUES($1,$2,$3,$4)`,[attemptId,providerChargeReference,chargedCents,recordedBy]);
+    `INSERT INTO stage_director_charge_audit(attempt_id,provider_charge_reference,charged_cents,recorded_by,exceeds_approved_budget,reconciliation_note)
+     VALUES($1,$2,$3,$4,$5,$6)`,[attemptId,providerChargeReference,chargedCents,recordedBy,exceedsApprovedBudget,
+     exceedsApprovedBudget?'Actual provider charge exceeded user-approved budget; manual review required':null]);
    const updated=await client.query(
     `UPDATE stage_director_attempts SET state='SETTLED',charged_cents=$3
      WHERE attempt_id=$1 AND episode_id=$2 AND state='SUBMITTED' RETURNING attempt_id`,
     [attemptId,episodeId,chargedCents]);
    if(updated.rows.length!==1)throw Error('Attempt settlement conflict');
    await client.query('COMMIT');
-   return {episodeId,attemptId,chargedCents,state:'SETTLED'};
+   return {episodeId,attemptId,chargedCents,state:'SETTLED',exceedsApprovedBudget,requiresManualReview:exceedsApprovedBudget};
   }catch(e){try{await client.query('ROLLBACK')}catch{}throw e;}
   finally{client.release();}
  }
