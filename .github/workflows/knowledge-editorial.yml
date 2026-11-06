@@ -1,0 +1,26 @@
+name: RUNLU editorial essay safeguards
+on:
+  pull_request:
+    paths:
+      - 'knowledge/essay.html'
+      - 'knowledge/essays/**'
+      - '.github/workflows/knowledge-editorial.yml'
+  push:
+    branches:
+      - 'feature/knowledge-philosophy-four-language'
+    paths:
+      - 'knowledge/essay.html'
+      - 'knowledge/essays/**'
+      - '.github/workflows/knowledge-editorial.yml'
+permissions:
+  contents: read
+jobs:
+  editorial-safety:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check editorial safeguards and expected draft blocking
+        run: node knowledge/essays/smoke-test.mjs
