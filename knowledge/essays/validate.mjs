@@ -19,8 +19,7 @@ for(const lang of LANGS){
   const file=join(base,slug,lang+'.json');
   let article;
   try{article=await readJson(file)}catch(e){
-    if(manifest.status==='published'||manifest.publication?.approved)fail(lang+': missing or invalid published text');
-    else console.log('DRAFT '+lang+': full manuscript not yet staged');
+    fail(lang+': full manuscript missing or invalid (publication readiness incomplete)');
     continue;
   }
   if(article.id!==slug||article.language!==lang)fail(lang+': article identity mismatch');
@@ -41,7 +40,7 @@ for(const name of names.filter(n=>/^[a-z]{2}\.json$/.test(n))){
 }
 if(manifest.status==='published'&&(!manifest.review?.facts_verified||
  !manifest.review?.translations_verified||!manifest.review?.rights_verified||
- !manifest.publication?.approved||!nonempty(manifest.review?.reviewed_at)))
+ !manifest.publication?.approved||!/^\d{4}-\d{2}-\d{2}$/.test(manifest.review?.reviewed_at||'')))
  fail('Published manifest missing review approval');
 if(failures.length){console.error(failures.join('\n'));process.exitCode=1}
-else console.log('PASS: essay manifest and available language files validated; status='+manifest.status);
+else console.log('PASS: all four full-length essay files validated; status='+manifest.status);
