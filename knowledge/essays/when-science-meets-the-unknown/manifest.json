@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "id": "when-science-meets-the-unknown",
+  "type": "original_philosophical_essay",
+  "status": "draft",
+  "languages": [
+    "zh",
+    "en",
+    "fr",
+    "es"
+  ],
+  "titles": {
+    "zh": "当科学走向未知",
+    "en": "When Science Meets the Unknown",
+    "fr": "Quand la science rencontre l'inconnu",
+    "es": "Cuando la ciencia se encuentra con lo desconocido"
+  },
+  "subtitles": {
+    "zh": "人类认知的边界，与永不终结的探索",
+    "en": "The Limits of Human Knowledge and the Endless Search for Understanding",
+    "fr": "Les limites de la connaissance humaine et la quête infinie de compréhension",
+    "es": "Los límites del conocimiento humano y la búsqueda interminable de la comprensión"
+  },
+  "editorial": {
+    "zh": "v1.1",
+    "en": "v1.1",
+    "fr": "v1.0",
+    "es": "v1.0"
+  },
+  "review": {
+    "facts_verified": false,
+    "translations_verified": false,
+    "rights_verified": false,
+    "reviewed_at": null
+  },
+  "publication": {
+    "approved": false,
+    "published_at": null
+  },
+  "note": "Metadata only. Complete eight-section manuscript files are not committed; do not publish or invent text."
+}
