@@ -41,6 +41,18 @@ For each scenario, the reviewer should independently record **roll ID(s), requir
 
 **Pass condition:** All four outcomes and caveats are technically defensible for the stated assumptions; any dispute is resolved in the manuscript and four language editions before signoff.
 
+## Practitioner account — warehouse-to-sales correction (2026-11-06)
+
+**Source:** First-person operational account supplied by a flooring warehouse practitioner in conversation. This is qualitative practitioner input, **not independent verification**, and is not the same as the hypothetical dimensional examples above.
+
+**Confirmed sequence:** The warehouse practitioner found that the originally requested cut dimensions could not be supplied from the available material. The practitioner notified the sales team. Sales then revised the order dimensions to ones that the available stock could accommodate.
+
+**Unknown / do not invent:** Original or revised measurements; roll identifiers; customer identity; whether sales consulted the customer or secured any particular approval; whether cutting, delivery or installation was subsequently completed. Do not assert those details.
+
+**Operational lesson for editorial review:** When the requested cut is infeasible, the warehouse should flag the dimensional mismatch to sales rather than quietly substituting material or changing the order. Sales owns the follow-up and any necessary customer/project authorization; the warehouse must recheck the revised cut against verified usable stock before release. This is RUNLU's proposed workflow framing, not a verified universal industry rule.
+
+**Suggested manuscript treatment:** Present this as an anonymized practitioner-reported example, clearly separate from the hypothetical 12 × 20 ft case, and avoid claiming that the full order was fulfilled or independently audited. The reviewer should confirm the account's wording and any permissions required before public inclusion.
+
 ## Field-review worksheet — to be completed by an actual reviewer
 
 Use this worksheet with **one real, anonymized warehouse order** before signing the technical review. Do not enter customer names, addresses, phone numbers, pricing, or other identifying data. A blank worksheet does not count as evidence.
