@@ -55,7 +55,7 @@ if(!validId){status(t.invalid);return}
 status(t.loading);
 try{
 const response=await fetch('./essays/'+encodeURIComponent(id)+'/'+lang+'.json',{cache:'no-store'});
-if(!response.ok){status(response.status===404?t.missing:t.error);return}
+if(!response.ok){if(serial===request)status(response.status===404?t.missing:t.error);return}
 const doc=await response.json();
 if(serial!==request)return;
 if(doc.status!=='published'||doc.id!==id||doc.language!==lang||
@@ -85,7 +85,7 @@ window.RUNLULanguage?.set?.(lang);load();
 });
 window.addEventListener('runlu:languagechange',event=>{
 const lang=event.detail?.language;
-if(LANGS.includes(lang)&&$('language').value!==lang){$('language').value=lang;load()}
+if(LANGS.includes(lang)&&$('language').value!==lang){$('language').value=lang;const url=new URL(location.href);url.searchParams.set('lang',lang);history.replaceState(null,'',url);load()}
 });
 load();
 })();
