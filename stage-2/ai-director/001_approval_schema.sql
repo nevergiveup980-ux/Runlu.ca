@@ -68,3 +68,10 @@ CREATE TABLE IF NOT EXISTS stage_director_charge_audit (
   recorded_by text NOT NULL,
   recorded_at timestamptz NOT NULL DEFAULT now()
 );
+
+-- Actual provider charges must be recorded even when they exceed approved budget.
+-- A financial exception is an alert, not a reason to erase an external charge.
+ALTER TABLE stage_director_charge_audit
+ ADD COLUMN IF NOT EXISTS exceeds_approved_budget boolean NOT NULL DEFAULT false;
+ALTER TABLE stage_director_charge_audit
+ ADD COLUMN IF NOT EXISTS reconciliation_note text;
