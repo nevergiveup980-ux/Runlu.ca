@@ -12,7 +12,7 @@
 风吹过那些年
 吹散了聚散，吹不散思念
 如果时光还能慢一点
-我想再陪你走过那条街</textarea><label for="voice">演唱人声</label><select id="voice"><option value="female">成熟温暖女声</option><option value="male">成熟沧桑男声</option><option value="instrumental">纯器乐</option></select><label for="style">曲风</label><select id="style"><option value="nostalgic">怀旧电影民谣</option><option value="folk">原声叙事民谣</option><option value="piano">钢琴抒情</option><option value="cinematic">电影感弦乐</option></select><label for="notes">创作补充要求</label><textarea id="notes" style="min-height:100px" placeholder="例如：自然换气、柔和弦乐、不要机械唱腔">自然的中文咬字和换气，克制而有感染力的情绪，原创旋律，避免模仿现有歌曲和歌手。</textarea><div class="actions"><button class="secondary" id="import">导入 JSON 草稿</button><input type="file" id="importfile" accept=".json,application/json" hidden><button id="save">保存本机草稿</button><button class="secondary" id="export">导出制作方案 JSON</button><button class="secondary" id="copy">复制生成提示词</button></div><div id="status" class="status" role="status" aria-live="polite">当前为创作工作台，尚未接入付费音乐生成接口。</div></section>
+我想再陪你走过那条街</textarea><label for="voice">演唱人声</label><select id="voice"><option value="female">成熟温暖女声</option><option value="male">成熟沧桑男声</option><option value="instrumental">纯器乐</option></select><label for="style">曲风</label><select id="style"><option value="nostalgic">怀旧电影民谣</option><option value="folk">原声叙事民谣</option><option value="piano">钢琴抒情</option><option value="cinematic">电影感弦乐</option></select><label for="notes">创作补充要求</label><textarea id="notes" style="min-height:100px" placeholder="例如：自然换气、柔和弦乐、不要机械唱腔">自然的中文咬字和换气，克制而有感染力的情绪，原创旋律，避免模仿现有歌曲和歌手。</textarea><div class="actions"><button class="secondary" id="import">导入 JSON 草稿</button><input type="file" id="importfile" accept=".json,application/json" hidden><button id="save">保存本机草稿</button><button class="secondary" id="export">导出制作方案 JSON</button><button class="secondary" id="copy">复制生成提示词</button><button class="secondary" id="stage">导出 STAGE 分镜</button></div><div id="status" class="status" role="status" aria-live="polite">当前为创作工作台，尚未接入付费音乐生成接口。</div></section>
 <aside class="panel"><h2>音乐制作说明</h2><p>选择不同人声和曲风，右侧将自动整理成可用于后续音乐模型的英文提示词。</p><pre id="prompt"></pre><h3>制作流程</h3><p>① 保存歌词与创作要求<br>② 试听原创音乐生成结果<br>③ 验收旋律与人声<br>④ 交给 RUNLU STAGE 制作动态画面</p><h3>试听已有音频</h3><label for="audiofile">选择本机 MP3 / WAV / M4A</label><input type="file" id="audiofile" accept="audio/*,.mp3,.wav,.m4a"><audio id="audioplayer" controls preload="none" style="width:100%;margin-top:12px"></audio><button class="secondary" id="clearaudio" style="margin-top:8px">清除试听音频</button><p class="muted">试听只在本机进行，不会上传；刷新页面后需重新选择音频。</p><div class="status">尚未接入音乐生成 API；本页不会收费，也不会上传歌词。</div><p class="muted">草稿保存在当前浏览器的 localStorage 中。清除浏览器数据可能丢失，请定期导出 JSON 备份。公共或共享设备不建议保存私人歌词。</p></aside></div></main>
 <script>
 (function(){'use strict';
@@ -31,6 +31,28 @@ document.getElementById('audiofile').addEventListener('change',e=>{const file=e.
 document.getElementById('clearaudio').addEventListener('click',()=>{const player=document.getElementById('audioplayer');player.pause();player.removeAttribute('src');player.load();if(audioURL){URL.revokeObjectURL(audioURL);audioURL=null}document.getElementById('audiofile').value='';status('已清除试听音频。')});
 document.getElementById('save').addEventListener('click',()=>{try{localStorage.setItem('runlu-music-studio-v1',JSON.stringify(data()));status('草稿已保存在此浏览器。')}catch(e){status('无法保存草稿，请使用导出功能。')}});
 document.getElementById('export').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({schema:'runlu-music-studio-v1',...data(),prompt:prompt()},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='runlu-music-project.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status('制作方案已导出。')});
+document.getElementById('stage').addEventListener('click',()=>{
+const d=data();
+const storyboard={
+schema:'runlu-stage-storyboard-v1',
+project:d.title,
+source:'RUNLU MUSIC Studio',
+status:'draft-not-rendered',
+format:{aspect_ratio:'9:16',resolution:'1080x1920',fps:24},
+audio:{status:'awaiting-approved-audio',filename:null,lyrics:d.lyrics},
+character_bible:{subject:'fictional adult woman',wardrobe:'muted vintage coat and knitted hat',prop:'woven basket',continuity:'consistent fictional character, wardrobe, season, and cinematic film palette'},
+shots:[
+{id:'S01',start:0,end:6,visual:'misty rural road, moving leaves',camera:'slow dolly forward'},
+{id:'S02',start:6,end:13,visual:'woman with woven basket glances back',camera:'gentle medium close-up'},
+{id:'S03',start:13,end:20,visual:'old photograph beside a rainy window',camera:'slow pan'},
+{id:'S04',start:20,end:26,visual:'woman walks away on the same road',camera:'wide tracking shot'},
+{id:'S05',start:26,end:30,visual:'empty road under a warm evening sky',camera:'static, slow fade'}
+],
+notes:['Shot times are provisional and must be retimed to the actual song','Do not render or charge automatically','Use original imagery and licensed audio only','No fake lip-sync']
+};
+const blob=new Blob([JSON.stringify(storyboard,null,2)],{type:'application/json'});
+const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='runlu-stage-storyboard.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status('STAGE 分镜草稿已导出。请在拿到真实音频后重新校准镜头时间。');
+});
 document.getElementById('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(prompt());status('生成提示词已复制。')}catch(e){status('复制失败，请手动选择右侧提示词。')}});
 try{const saved=JSON.parse(localStorage.getItem('runlu-music-studio-v1')||'null');if(saved&&typeof saved==='object'){ids.forEach(id=>{if(typeof saved[id]==='string')els[id].value=saved[id]})}}catch(e){status('本机旧草稿无法读取，请重新保存。')}
 refresh();
