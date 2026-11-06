@@ -37,5 +37,38 @@
     "approved": false,
     "published_at": null
   },
-  "note": "Metadata only. Complete eight-section manuscript files are not committed; do not publish or invent text."
+  "note": "Editorial metadata provided by publisher; full eight-section manuscripts are not yet staged. Not published.",
+  "publisher": "RUNLU · 润庐",
+  "category": [
+    "Philosophy",
+    "Science and Society",
+    "Human Understanding"
+  ],
+  "descriptions": {
+    "zh": "当科学不断拓展人类认知的边界，我们是否仍然保有对未知的敬畏？\n\n从古代《周易》的变化思想，到现代科学对生命、意识与宇宙的探索，本文重新思考知识、智慧与先见之明的关系，并追问：为什么科技高度发达的今天，我们依然需要哲学？\n\n这不是一篇试图证明科学与玄学孰高孰低的文章，而是一次关于人类认知局限、古代智慧与永恒好奇心的思想探索。",
+    "en": "As science continues to expand the boundaries of human knowledge, have we lost some of our capacity for wonder?\n\nDrawing on the ancient Chinese Book of Changes, modern scientific discoveries, and enduring philosophical questions, this essay explores the relationship between knowledge, wisdom, and the unknown.\n\nWhy do ancient ideas continue to matter? Does technological progress necessarily make us wiser? And can we respect scientific evidence while remaining humble before questions we have yet to answer?\n\nA reflective exploration of humanity’s endless search for understanding."
+  },
+  "keywords": {
+    "zh": [
+      "科学与哲学",
+      "周易",
+      "古代智慧",
+      "未知世界",
+      "认知边界",
+      "科学精神",
+      "先见之明",
+      "RUNLU"
+    ],
+    "en": [
+      "science and philosophy",
+      "I Ching",
+      "Book of Changes",
+      "ancient wisdom",
+      "limits of knowledge",
+      "scientific inquiry",
+      "human understanding",
+      "philosophy of science",
+      "RUNLU"
+    ]
+  }
 }
