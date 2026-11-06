@@ -52,3 +52,9 @@ CREATE TABLE IF NOT EXISTS stage_director_submission_outbox (
 );
 CREATE INDEX IF NOT EXISTS stage_director_submission_outbox_state_idx
  ON stage_director_submission_outbox(state,updated_at);
+
+-- Provider task identity must be unique when known, preventing one provider job
+-- from being attached to multiple attempts.
+CREATE UNIQUE INDEX IF NOT EXISTS stage_director_outbox_provider_task_unique
+ ON stage_director_submission_outbox(provider_task_id)
+ WHERE provider_task_id IS NOT NULL;
