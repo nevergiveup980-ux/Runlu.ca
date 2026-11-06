@@ -1,0 +1,25 @@
+name: RUNLU Books PR structural QA
+
+on:
+  pull_request:
+    paths:
+      - 'book/**'
+      - '.github/workflows/books-pr-qa.yml'
+      - 'scripts/check_books_pr.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  books-structural-qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check book page links, language dictionaries, and mobile rules
+        run: python scripts/check_books_pr.py
