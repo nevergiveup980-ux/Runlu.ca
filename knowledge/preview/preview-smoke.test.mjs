@@ -27,27 +27,21 @@ test("preview includes the six-point decision framework and four cases", () => {
 
 
 test("each language has six decision checks and four worked scenarios", () => {
-  const script = html.match(/<script>([\\s\\S]*?)<\\/script>/)?.[1];
+  const script = html.split("<script>")[1]?.split("</script>")[0];
   assert.ok(script, "missing preview script");
-  const vm = requirePreviewData(script);
+  const scenarioText = script.split("const scenarios=")[1]?.split(";const checkpoints=")[0];
+  const checkpointText = script.split(";const checkpoints=")[1]?.split(";function render()")[0];
+  assert.ok(scenarioText && checkpointText, "missing localized structured data");
+  const scenarios = JSON.parse(scenarioText);
+  const checkpoints = JSON.parse(checkpointText);
   for (const lang of ["en", "zh", "fr", "es"]) {
-    assert.equal(vm.checkpoints[lang].items.length, 6, "checkpoints: " + lang);
-    assert.equal(vm.scenarios[lang].items.length, 4, "scenarios: " + lang);
-    for (const [heading, detail, decision] of vm.scenarios[lang].items) {
+    assert.equal(checkpoints[lang].items.length, 6, "checkpoints: " + lang);
+    assert.equal(scenarios[lang].items.length, 4, "scenarios: " + lang);
+    for (const [heading, detail, decision] of scenarios[lang].items) {
       assert.ok(heading.trim() && detail.trim() && decision.trim(), "incomplete case: " + lang);
     }
   }
 });
-
-function requirePreviewData(script) {
-  const vm = { checkpoints: {}, scenarios: {} };
-  const scenarios = script.match(/const scenarios=(\\{[\\s\\S]*?\\});const checkpoints=/)?.[1];
-  const checkpoints = script.match(/const checkpoints=(\\{[\\s\\S]*?\\});function render\\(/)?.[1];
-  assert.ok(scenarios && checkpoints, "missing localized structured data");
-  vm.scenarios = JSON.parse(scenarios);
-  vm.checkpoints = JSON.parse(checkpoints);
-  return vm;
-}
 
 test("language switch updates visible content and shareable URL", () => {
   assert.match(html, /languageSelect\.addEventListener\("change"/);
