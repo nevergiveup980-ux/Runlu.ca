@@ -9,8 +9,26 @@ import json
 import os
 from pathlib import Path
 
-ALLOWED = {"lyria-3-clip-preview": 0.04, "lyria-3.5": 0.08}
+ALLOWED = ("lyria-3-clip-preview", "lyria-3.5")
 MAX_PROMPT_CHARS = 12000
+MAX_PROJECT_BYTES = 100_000
+VALID_VOICES = {"female", "male", "instrumental"}
+VALID_STYLES = {"nostalgic", "folk", "piano", "cinematic"}
+
+def validate_project(project):
+    if not isinstance(project, dict):
+        raise ValueError("Project must be a JSON object")
+    if project.get("voice", "female") not in VALID_VOICES:
+        raise ValueError("Invalid voice selection")
+    if project.get("style", "nostalgic") not in VALID_STYLES:
+        raise ValueError("Invalid style selection")
+    for field, limit in (("title", 120), ("lyrics", 10000), ("notes", 2000)):
+        value = project.get(field, "")
+        if not isinstance(value, str) or len(value) > limit:
+            raise ValueError(f"Invalid {field} field")
+    if not project.get("lyrics", "").strip() and project.get("voice", "female") != "instrumental":
+        raise ValueError("Vocal song requires lyrics")
+    return project
 
 def build_prompt(project):
     title = str(project.get("title", "Untitled"))[:120]
@@ -32,17 +50,23 @@ def main():
     p.add_argument("--model", choices=ALLOWED, default="lyria-3-clip-preview")
     p.add_argument("--confirm-paid", action="store_true")
     args = p.parse_args()
-    project = json.loads(args.project.read_text(encoding="utf-8"))
+    if args.project.stat().st_size > MAX_PROJECT_BYTES:
+        raise SystemExit("Project JSON exceeds size limit")
+    try:
+        project = validate_project(json.loads(args.project.read_text(encoding="utf-8")))
+    except (ValueError, UnicodeError) as exc:
+        raise SystemExit(f"Invalid project: {exc}")
     prompt = build_prompt(project)
-    print(f"Model: {args.model}; listed request price: USD {ALLOWED[args.model]:.2f}; actual billing may vary.")
+    print(f"Model: {args.model}; price NOT verified in this script. Check current official billing before authorizing.")
     print(f"Output: {args.output}; prompt characters: {len(prompt)}")
     if not args.confirm_paid:
-        print("DRY RUN: no request sent. Add --confirm-paid to authorize one billable generation.")
+        print("DRY RUN: no request sent. Add --confirm-paid only after verifying API model support, price and permissions.")
         return
     if not os.getenv("GEMINI_API_KEY"):
         raise SystemExit("Missing GEMINI_API_KEY environment variable.")
     if args.output.exists():
         raise SystemExit("Output already exists; choose another --output path.")
+    # Provider response schema and model availability must be validated in a real integration test.
     from google import genai
     client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
     interaction = client.interactions.create(model=args.model, input=prompt)
