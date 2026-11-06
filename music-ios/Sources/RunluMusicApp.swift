@@ -25,15 +25,13 @@ struct MusicLibraryView: View {
         List {
             Section {
                 Button("导入本地歌曲") { showingPicker = true }
-                Text("音频文件仍保存在原位置；只保存文件访问凭证和歌曲名称。")
+                Text("歌曲仍保存在原位置。文件授权失效时，可重新选择歌曲。")
                     .font(.footnote).foregroundStyle(.secondary)
             }
             Section("我的音乐") {
                 ForEach(library.tracks) { track in
                     HStack {
-                        Button {
-                            playback.play(track, from: library)
-                        } label: {
+                        Button { playback.play(track, from: library) } label: {
                             Label(track.title, systemImage: playback.playingID == track.id ? "speaker.wave.2" : "music.note")
                         }
                         Spacer()
@@ -47,12 +45,21 @@ struct MusicLibraryView: View {
             if playback.playingID != nil {
                 Section("播放控制") {
                     HStack {
-                        Button("暂停") { playback.pause() }
+                        Button("上一首") { playback.previous() }
                         Spacer()
-                        Button("继续") { playback.resume() }
+                        Button(playback.isPlaying ? "暂停" : "播放") {
+                            if playback.isPlaying { playback.pause() } else { playback.resume() }
+                        }
                         Spacer()
-                        Button("停止") { playback.stop() }
+                        Button("下一首") { playback.next() }
                     }
+                    Toggle("循环整个列表", isOn: $playback.repeatAll)
+                    Button("停止播放", role: .destructive) { playback.stop() }
+                }
+            }
+            if playback.needsRelink {
+                Section {
+                    Button("重新选择无法访问的歌曲") { showingPicker = true }
                 }
             }
         }
