@@ -41,6 +41,36 @@ For each scenario, the reviewer should independently record **roll ID(s), requir
 
 **Pass condition:** All four outcomes and caveats are technically defensible for the stated assumptions; any dispute is resolved in the manuscript and four language editions before signoff.
 
+## Field-review worksheet — to be completed by an actual reviewer
+
+Use this worksheet with **one real, anonymized warehouse order** before signing the technical review. Do not enter customer names, addresses, phone numbers, pricing, or other identifying data. A blank worksheet does not count as evidence.
+
+| Field | Reviewer entry |
+| --- | --- |
+| Reviewer name and relevant trade role | **Pending** |
+| Review date (YYYY-MM-DD) | **Pending** |
+| Reviewed manuscript commit / version | **Pending** |
+| Anonymous case reference | **Pending** |
+| Requested number of pieces; width × length of each; units | **Pending** |
+| Seam layout and orientation required / approved by whom | **Pending** |
+| Candidate roll/remnant IDs (anonymized) | **Pending** |
+| Measured usable width × continuous length per candidate | **Pending** |
+| Allowance for trim, cutting, pattern repeat and waste | **Pending** |
+| Reservation/hold/damage/physical-location checks | **Pending** |
+| Product, dye lot, shade, pile direction and pattern compatibility | **Pending** |
+| Proposed allocation and who may authorize cutting | **Pending** |
+| Outcome: ready / review needed / not fulfillable | **Pending** |
+| Specific reason and next action | **Pending** |
+| Evidence reference (redacted work record, not customer data) | **Pending** |
+| Required corrections with manuscript section | **Pending** |
+| Reviewer decision: pass / changes requested | **Pending** |
+
+**Reviewer decision rule:** A successful example should demonstrate that the framework identifies a feasible cut *and* the correct authorization boundary. A failed example should identify which constraint blocks fulfillment and what evidence or approval would change the decision. Do not classify a roll as available solely because its total area is large enough.
+
+**Escalation checks:** If dimensions are reported in mixed units, convert before comparing; distinguish nominal roll width from measured usable width; verify whether trimming and pattern matching consume additional length; check whether a seam is explicitly permitted rather than assuming it is. If records and physical measurements disagree, stop the release decision until reconciled.
+
+**Evidence boundary:** A reviewer can assess the RUNLU operational framework without claiming it is a mandatory CRI procedure. A source-rights reviewer and four-language reviewers must still sign their own sections. The author or automated tests cannot substitute for independent signoff.
+
 ## Source and rights verification
 
 1. Open the official [CRI installation standards index](https://carpet-rug.org/resources/installation-standards/) and verify the current CRI 104 / 105 scope.
