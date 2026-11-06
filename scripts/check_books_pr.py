@@ -46,7 +46,7 @@ for name in PAGES:
 guide = (ROOT / "book/where-to-read.html").read_text(encoding="utf-8")
 if "runlu_site_language" not in guide:
     issues.append("Distribution guide does not use shared language key")
-if not all(re.search(r"\\b" + lang + r":\\{", guide) for lang in ("en", "zh", "fr", "es")):
+if not all(re.search(r"\b" + lang + r":\{", guide) for lang in ("en", "zh", "fr", "es")):
     issues.append("Distribution guide missing one or more language dictionaries")
 if "@media(max-width:520px)" not in guide:
     issues.append("Distribution guide missing mobile CSS rule")
