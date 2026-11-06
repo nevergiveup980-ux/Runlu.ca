@@ -73,6 +73,7 @@ if(serial!==request)return;
 if(doc.status!=='published'||doc.id!==id||doc.language!==lang||
 typeof doc.title!=='string'||!doc.title.trim()||
 typeof doc.subtitle!=='string'||!doc.subtitle.trim()||
+doc.title!==manifest.titles?.[lang]||doc.subtitle!==manifest.subtitles?.[lang]||
 !Array.isArray(doc.sections)||doc.sections.length!==8||
 !doc.sections.every(s=>typeof s.heading==='string'&&s.heading.trim()&&
 Array.isArray(s.paragraphs)&&s.paragraphs.length>0&&
