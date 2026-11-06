@@ -82,3 +82,14 @@
 2. 必要时另行授权替换无法澄清的题文，保留新写过程和人工作者审阅记录；本轮没有增加玩法或批量替换19题。
 3. 第一题替换是降低某一已知来源相似度，不是整个题集的版权清权证明。Studio十题及品牌/图标权利仍沿用 [九问审计](TWIST-APPLE-REVIEW-EVIDENCE-AUDIT.md) 的未决事项。
 4. 可以继续整理最终审核材料；**不能标记内容权利已通过，不能据本轮结果直接上传/送审**。独立价值、账号产品关系和完整真机验收门槛也未自动解除。
+
+
+## 2026-11-06 — Current implementation status (supersedes historical counts above)
+
+- `twist.html` on `feature/twist-apple-review-remediation` now contains **20 newly written bilingual puzzle texts**: one conversation-themed wordplay puzzle (slot 1) and 19 applied reasoning exercises (slots 2–20). The earlier classic riddles in slots 2–20 have been replaced; historical source links and UNKNOWN statuses above describe **removed content**, not the current displayed questions.
+- All 20 slots have bilingual questions, hints, answers, explanations and reasoning choices. The 10 Logic Studio cases remain separate and require their own provenance/rights review.
+- Current browser storage key is `runlu-twist-node001-v6`. Migration from v1–v5 was exercised in a mocked DOM/JavaScript environment; changed-slot completion, hints, assessments and reasoning/reflection selections are cleared by revision while unaffected slots are retained. **No iPhone Build 6 or real-device validation is claimed.**
+- Replacement and self-authored wording **do not prove worldwide originality, copyright clearance, or App Store 4.3 compliance**. The questions are largely straightforward arithmetic/operations exercises; gameplay differentiation, independent user value, accessibility, packaging, account ownership and reviewer answers remain open.
+- The previous statements saying classic riddles remain, or that only a small batch was replaced, are retained as historical audit snapshots and are **not current implementation status**. Do not copy them into the final Apple reviewer response.
+
+**Release decision: HOLD** pending independent content review, end-to-end real-device QA, verified App Store packaging and truthful reviewer evidence.
