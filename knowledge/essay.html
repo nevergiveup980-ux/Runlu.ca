@@ -54,6 +54,18 @@ $('language-label').textContent=t.label;
 if(!validId){status(t.invalid);return}
 status(t.loading);
 try{
+const manifestResponse=await fetch('./essays/'+encodeURIComponent(id)+'/manifest.json',{cache:'no-store'});
+if(serial!==request)return;
+if(!manifestResponse.ok){status(t.missing);return}
+const manifest=await manifestResponse.json();
+if(serial!==request)return;
+if(manifest.id!==id||manifest.status!=='published'||manifest.publication?.approved!==true||
+manifest.review?.facts_verified!==true||manifest.review?.translations_verified!==true||
+manifest.review?.rights_verified!==true||typeof manifest.review?.reviewed_at!=='string'||
+!/^\\d{4}-\\d{2}-\\d{2}$/.test(manifest.review.reviewed_at)||
+!Array.isArray(manifest.languages)||!manifest.languages.includes(lang)){
+status(t.missing);return;
+}
 const response=await fetch('./essays/'+encodeURIComponent(id)+'/'+lang+'.json',{cache:'no-store'});
 if(!response.ok){if(serial===request)status(response.status===404?t.missing:t.error);return}
 const doc=await response.json();
