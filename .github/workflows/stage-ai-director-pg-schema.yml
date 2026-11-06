@@ -42,3 +42,5 @@ jobs:
           psql -v ON_ERROR_STOP=1 -f stage-2/ai-director/001_approval_schema.sql
       - name: Verify constraints and relationships
         run: psql -v ON_ERROR_STOP=1 -f stage-2/ai-director/schema-smoke.sql
+      - name: Verify transaction claims and rollback on real PostgreSQL
+        run: psql -v ON_ERROR_STOP=1 -f stage-2/ai-director/transaction-smoke.sql
