@@ -151,7 +151,8 @@ render('normal');
   document.querySelector('.notice[role="status"]').textContent='LIVE READ-ONLY SNAPSHOT · Authorized server response. Paid generation remains disabled.';
   liveStatus.textContent='Live read-only snapshot loaded. No paid operations enabled.';
  }catch(e){
-  liveStatus.textContent=e.message==='access_denied'?'Access denied: sign in or request episode access.':e.message==='network_error'?'Network unavailable. Demo remains available.':'Unable to load live episode ('+e.message+'). Demo remains available.';
+  render('normal');
+  liveStatus.textContent=e.message==='access_denied'?'Access denied: sign in or request episode access.':e.message==='network_error'?'Network unavailable. Demo remains available.':'Unable to load live episode. Demo remains available.';
  }finally{button.disabled=false}
 });
 const sample=[
