@@ -3,6 +3,7 @@ from contextlib import contextmanager
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from tempfile import TemporaryDirectory
 import re
 from threading import Thread
 
@@ -105,10 +106,13 @@ def test_browser():
             expect(page.locator("#audioplayer")).to_have_attribute("src", current_src)
             assert page.evaluate("window.__audioUrls.revoked.length") == revoked_before
             assert "MP3" in page.locator("#status").inner_text()
-            page.locator("#audiofile").set_input_files({
-                "name": "oversized.mp3", "mimeType": "audio/mpeg",
-                "buffer": b"ID3" + bytes(50 * 1024 * 1024)
-            })
+            with TemporaryDirectory() as tmp:
+                oversized = Path(tmp) / "oversized.mp3"
+                with oversized.open("wb") as audio:
+                    audio.write(b"ID3")
+                    audio.seek(50 * 1024 * 1024)
+                    audio.write(b"0")
+                page.locator("#audiofile").set_input_files(str(oversized))
             expect(page.locator("#audioplayer")).to_have_attribute("src", current_src)
             assert page.evaluate("window.__audioUrls.revoked.length") == revoked_before
             assert "50 MB" in page.locator("#status").inner_text()
