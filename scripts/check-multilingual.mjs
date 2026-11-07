@@ -101,10 +101,10 @@ for (const file of pages) {
   }
   // Season 3 also publishes four canonical, independently localized editions.
   // Validate cross-edition links instead of requiring the in-page language widget.
-  if (/^wellness-season-03-\\d{2}(?:-(?:en|fr|es))?\\.html$/.test(rel)) {
+  if (/^wellness-season-03-\d{2}(?:-(?:en|fr|es))?\.html$/.test(rel)) {
     const edition = fs.readFileSync(file, 'utf8');
-    const base = rel.replace(/-(?:en|fr|es)\\.html$/, '.html').replace(/\\.html$/, '');
-    const language = rel.match(/-(en|fr|es)\\.html$/)?.[1] || 'zh-Hans';
+    const base = rel.replace(/-(?:en|fr|es)\.html$/, '.html').replace(/\.html$/, '');
+    const language = rel.match(/-(en|fr|es)\.html$/)?.[1] || 'zh-Hans';
     if (!edition.includes(`<html lang="${language}"`)) failures.push(`${rel}: incorrect document language`);
     for (const [lang, suffix] of [['zh-Hans',''],['en','-en'],['fr','-fr'],['es','-es']]) {
       const target = base + suffix + '.html';
