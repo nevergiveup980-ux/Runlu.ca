@@ -11,8 +11,9 @@ export class PgDirectorBudgetClaim {
    await client.query('BEGIN');
    // Serialize all claims for the episode by locking its approved budget row.
    const budget=await client.query(
-    'SELECT limit_cents FROM stage_director_budgets WHERE episode_id=$1 FOR UPDATE',[episodeId]);
+    'SELECT limit_cents,spending_paused FROM stage_director_budgets WHERE episode_id=$1 FOR UPDATE',[episodeId]);
    if(budget.rows.length!==1)throw Error('User-confirmed budget required');
+   if(budget.rows[0].spending_paused===true)throw Error('Episode spending paused pending manual review');
    const limit=Number(budget.rows[0].limit_cents);
    if(!Number.isSafeInteger(limit)||limit<=0)throw Error('Invalid stored budget');
    const totals=await client.query(
@@ -29,6 +30,10 @@ export class PgDirectorBudgetClaim {
    await client.query(
     `INSERT INTO stage_director_attempts(attempt_id,episode_id,shot_id,estimated_cents,state)
      VALUES($1,$2,$3,$4,'RESERVED')`,[attemptId,episodeId,shotId,estimateCents]);
+   // Outbox intent and reservation must commit together; no orphan paid attempt.
+   await client.query(
+    `INSERT INTO stage_director_submission_outbox(attempt_id,state)
+     VALUES($1,'PENDING')`,[attemptId]);
    await client.query('COMMIT');
    return {episodeId,shotId,attemptId,estimateCents,state:'RESERVED'};
   }catch(e){
