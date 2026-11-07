@@ -36,6 +36,12 @@ export class PgDirectorChargeSettlement {
      WHERE attempt_id=$1 AND episode_id=$2 AND state='SUBMITTED' RETURNING attempt_id`,
     [attemptId,episodeId,chargedCents]);
    if(updated.rows.length!==1)throw Error('Attempt settlement conflict');
+   if(exceedsApprovedBudget){
+    await client.query(
+     `UPDATE stage_director_budgets SET spending_paused=true,
+       pause_reason='Provider actual charge exceeded approved budget',paused_at=now()
+      WHERE episode_id=$1`,[episodeId]);
+   }
    await client.query('COMMIT');
    return {episodeId,attemptId,chargedCents,state:'SETTLED',exceedsApprovedBudget,requiresManualReview:exceedsApprovedBudget};
   }catch(e){try{await client.query('ROLLBACK')}catch{}throw e;}
