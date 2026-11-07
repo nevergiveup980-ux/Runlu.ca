@@ -3,6 +3,7 @@ from contextlib import contextmanager
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+import re
 from threading import Thread
 
 from playwright.sync_api import expect, sync_playwright
@@ -93,10 +94,10 @@ def test_browser():
                 page.locator("#audiofile").set_input_files({
                     "name": name, "mimeType": "audio/mpeg", "buffer": b"ID3" + bytes(64)
                 })
-                expect(page.locator("#audioplayer")).to_have_attribute("src", "blob:.*")
+                expect(page.locator("#audioplayer")).to_have_attribute("src", re.compile(r"^blob:"))
             assert page.evaluate("window.__audioUrls.created[0] === window.__audioUrls.revoked[0]")
             page.locator("#clearaudio").click()
-            expect(page.locator("#audioplayer")).not_to_have_attribute("src", "blob:.*")
+            expect(page.locator("#audioplayer")).not_to_have_attribute("src", re.compile(r"^blob:"))
             assert page.evaluate("window.__audioUrls.created.length === 2 && window.__audioUrls.revoked.length === 2")
             assert page.locator("body").evaluate("(el) => el.scrollWidth <= window.innerWidth + 1"), "Mobile horizontal overflow"
             assert not errors, f"Browser JavaScript errors: {errors}"
