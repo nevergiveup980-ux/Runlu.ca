@@ -5,7 +5,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from threading import Thread
 
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import expect, sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -62,9 +62,9 @@ def test_browser():
                 "mimeType": "application/json",
                 "buffer": json.dumps(project, ensure_ascii=False).encode("utf-8")
             })
-            assert page.locator("#title").input_value() == "导入测试曲"
-            assert page.locator("#lyrics").input_value() == "导入的原创歌词"
-            assert page.locator("#voice").input_value() == "male"
+            expect(page.locator("#title")).to_have_value("导入测试曲")
+            expect(page.locator("#lyrics")).to_have_value("导入的原创歌词")
+            expect(page.locator("#voice")).to_have_value("male")
             page.locator("#save").click()
             page.reload()
             assert page.locator("#lyrics").input_value() == "导入的原创歌词"
