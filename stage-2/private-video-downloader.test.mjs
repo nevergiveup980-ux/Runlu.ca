@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createPrivateVideoDownloader} from './private-video-downloader.mjs';
+const body=Buffer.alloc(32);body.write('ftyp',4);
+const ok=async()=>new Response(body,{status:200,headers:{'content-length':'32'}});
+const create=(fetchImpl=ok,maxBytes=100)=>createPrivateVideoDownloader({fetchImpl,allowedHosts:['cdn.example.org'],maxBytes});
+test('downloads from exact allowlisted HTTPS host',async()=>assert.deepEqual(await create().download('https://cdn.example.org/a.mp4'),body));
+test('blocks unrelated hosts',async()=>assert.rejects(create().download('https://evil.example.org/a'),/not allowed/));
+test('blocks HTTP',async()=>assert.rejects(create().download('http://cdn.example.org/a'),/not allowed/));
+test('blocks embedded credentials',async()=>assert.rejects(create().download('https://u:p@cdn.example.org/a'),/not allowed/));
+test('rejects declared oversize',async()=>assert.rejects(create(async()=>new Response(body,{headers:{'content-length':'999'}})).download('https://cdn.example.org/a'),/size limit/));
+test('rejects streaming oversize',async()=>assert.rejects(create(async()=>new Response(body),20).download('https://cdn.example.org/a'),/size limit/));
+test('sets redirect error policy',async()=>{let opts;await create(async(_url,o)=>{opts=o;return ok();}).download('https://cdn.example.org/a');assert.equal(opts.redirect,'error');});
