@@ -76,4 +76,13 @@ describe("candidate scenario comparison",()=>{
   expect(plans[0].plan.allocatedAreaSF).toBe(180);
   expect(plans[0].plan.wasteAreaSF).toBe(0);
  });
+ it("includes small-area-first candidate when it produces a distinct layout",()=>{
+  const stock:Roll[]=[{id:"R",widthIn:144,lengthIn:360,dyeLot:"A"}];
+  const cuts:Piece[]=[{id:"SMALL",widthIn:36,lengthIn:60},{id:"LARGE",widthIn:120,lengthIn:120}];
+  const plans=comparePlans(stock,cuts);
+  expect(plans.some(p=>p.name==="Smallest area first")).toBe(true);
+  expect(plans[0].feasible).toBe(true);
+  expect(plans[0].plan.unplaced).toEqual([]);
+  expect(plans[0].score).toBe(Math.min(...plans.filter(p=>p.feasible).map(p=>p.score)));
+ });
 });
