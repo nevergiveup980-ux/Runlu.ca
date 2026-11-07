@@ -1,5 +1,6 @@
 import {describe,it,expect} from "vitest";
 import {comparePlans} from "./scenarios";
+import {planCuts} from "./engine";
 import type {Roll,Piece} from "./engine";
 describe("candidate scenario comparison",()=>{
  const rolls:Roll[]=[{id:"A",widthIn:144,lengthIn:360,dyeLot:"D1"}];
@@ -84,5 +85,21 @@ describe("candidate scenario comparison",()=>{
   expect(plans[0].feasible).toBe(true);
   expect(plans[0].plan.unplaced).toEqual([]);
   expect(plans[0].score).toBe(Math.min(...plans.filter(p=>p.feasible).map(p=>p.score)));
+ });
+ it("never selects more allocated material than the best feasible legacy ordering",()=>{
+  const cases:{rolls:Roll[];pieces:Piece[]}[]=[
+   {rolls:[{id:"R1",widthIn:144,lengthIn:360,dyeLot:"A"}],pieces:[{id:"A",widthIn:120,lengthIn:120},{id:"B",widthIn:36,lengthIn:60}]},
+   {rolls:[{id:"R1",widthIn:144,lengthIn:360,dyeLot:"A"}],pieces:[{id:"A",widthIn:72,lengthIn:120},{id:"B",widthIn:72,lengthIn:120},{id:"C",widthIn:48,lengthIn:72}]},
+   {rolls:[{id:"SHORT",widthIn:72,lengthIn:120,dyeLot:"A",priority:0},{id:"FULL",widthIn:144,lengthIn:240,dyeLot:"A",priority:2}],pieces:[{id:"small",widthIn:72,lengthIn:120,dyeLot:"A"},{id:"wide",widthIn:144,lengthIn:120,dyeLot:"A"}]}
+  ];
+  for(const {rolls,pieces} of cases){
+   const legacy=(["area","length","width","input"] as const).map(order=>planCuts(rolls,pieces,order)).filter(plan=>plan.unplaced.length===0);
+   if(!legacy.length)continue;
+   const bestLegacy=Math.min(...legacy.map(plan=>plan.allocatedAreaSF));
+   const selected=comparePlans(rolls,pieces)[0];
+   expect(selected.feasible).toBe(true);
+   expect(selected.plan.allocatedAreaSF).toBeLessThanOrEqual(bestLegacy+1e-8);
+   expect(selected.plan.usedAreaSF+selected.plan.wasteAreaSF).toBeCloseTo(selected.plan.allocatedAreaSF,8);
+  }
  });
 });
