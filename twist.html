@@ -65,6 +65,7 @@ function renderReflection(){const i=state.index;const done=state.completed.inclu
 // Interactive ordering prototype for puzzle 4 (index 3). Buttons support touch, keyboard and screen readers.
 const ORDER_KEY="twist-ordering-v1";
 let ordering={sequence:["A","B","C","D"],submitted:false};
+let orderingUndo=null;
 try{const v=JSON.parse(localStorage.getItem(ORDER_KEY)||"null");if(v&&Array.isArray(v.sequence)&&v.sequence.length===4&&["A","B","C","D"].every(x=>v.sequence.includes(x))&&typeof v.submitted==="boolean")ordering=v;}catch(e){}
 function saveOrdering(){try{localStorage.setItem(ORDER_KEY,JSON.stringify(ordering))}catch(e){}}
 function renderOrdering(){
@@ -76,11 +77,12 @@ function renderOrdering(){
  ordering.sequence.forEach((piece,i)=>{
   const cell=document.createElement("div");cell.className="buttons";cell.style.alignItems="center";
   const label=document.createElement("strong");label.textContent=(i+1)+". "+piece;label.setAttribute("aria-label",(lang==="zh"?"第"+(i+1)+"位，作品":"Position "+(i+1)+", artwork ")+piece);cell.appendChild(label);
-  [-1,1].forEach(dir=>{const b=document.createElement("button");b.type="button";b.textContent=dir<0?"←":"→";b.setAttribute("aria-label",(lang==="zh"?"将作品":"Move artwork ")+piece+(dir<0?(lang==="zh"?"向左移动":" left"):(lang==="zh"?"向右移动":" right")));b.disabled=ordering.submitted||i+dir<0||i+dir>=4;b.addEventListener("click",()=>{if(ordering.submitted)return;const j=i+dir;if(j<0||j>=4)return;[ordering.sequence[i],ordering.sequence[j]]=[ordering.sequence[j],ordering.sequence[i]];saveOrdering();renderOrdering()});cell.appendChild(b)});
+  [-1,1].forEach(dir=>{const b=document.createElement("button");b.type="button";b.textContent=dir<0?"←":"→";b.setAttribute("aria-label",(lang==="zh"?"将作品":"Move artwork ")+piece+(dir<0?(lang==="zh"?"向左移动":" left"):(lang==="zh"?"向右移动":" right")));b.disabled=ordering.submitted||i+dir<0||i+dir>=4;b.addEventListener("click",()=>{if(ordering.submitted)return;const j=i+dir;if(j<0||j>=4)return;orderingUndo=[...ordering.sequence];[ordering.sequence[i],ordering.sequence[j]]=[ordering.sequence[j],ordering.sequence[i]];saveOrdering();renderOrdering()});cell.appendChild(b)});
   pieces.appendChild(cell)
  });
  const actions=el("orderingActions");actions.replaceChildren();
  const submit=document.createElement("button");submit.type="button";submit.className="primary";submit.textContent=lang==="zh"?"提交排列":"Submit order";submit.disabled=ordering.submitted||verifiedAnswers[3]===undefined;submit.addEventListener("click",()=>{if(ordering.submitted||verifiedAnswers[3]===undefined)return;ordering.submitted=true;saveOrdering();renderOrdering()});actions.appendChild(submit);
+ const undo=document.createElement("button");undo.type="button";undo.textContent=lang==="zh"?"撤销上一步":"Undo last move";undo.disabled=ordering.submitted||orderingUndo===null;undo.addEventListener("click",()=>{if(ordering.submitted||orderingUndo===null)return;ordering.sequence=orderingUndo;orderingUndo=null;saveOrdering();renderOrdering()});actions.appendChild(undo);
  el("orderingFeedback").textContent=!ordering.submitted?((lang==="zh"?"当前顺序：":"Current order: ")+ordering.sequence.join(" – ")+(verifiedAnswers[3]===undefined?(lang==="zh"?" · 请先提交上方自动判分答案，再核对排列。":" · Submit the verified answer above before checking the order."):"")):(correct?(lang==="zh"?"排列正确！A–C–D–B 满足全部条件。":"Correct! A–C–D–B satisfies every clue."):(lang==="zh"?"排列尚未满足全部条件。你的顺序："+ordering.sequence.join("–")+"；参考答案：A–C–D–B。":"Not all clues are satisfied. Your order: "+ordering.sequence.join("–")+"; solution: A–C–D–B."));
 }
 // Eight objectively graded choices across arithmetic, time, and constraint reasoning; separate from exploration points.
@@ -139,7 +141,7 @@ el("nextBtn").addEventListener("click",()=>{if((state.completed.includes(state.i
 el("reviewBtn").addEventListener("click",()=>{state.index=0;save();render();el("question").scrollIntoView({behavior:"auto",block:"center"});el("question").focus({preventScroll:true});});
 el("gotBtn").addEventListener("click",()=>{if(state.completed.includes(state.index)&&state.assessments[state.index]!=="yes"){state.assessments[state.index]="yes";save();render();}});
 el("missBtn").addEventListener("click",()=>{if(state.completed.includes(state.index)&&state.assessments[state.index]!=="no"){state.assessments[state.index]="no";save();render();}});
-el("resetBtn").addEventListener("click",()=>{if(confirm(lang==="zh"?"确定清除主关卡、推理、复盘和自动判分记录？逻辑工坊进度将保留。":"Clear main puzzles, reasoning, reflections and verified answers? Logic Studio progress will remain.")){state={index:0,completed:[],hints:[],assessments:{}};reasoningSelections={};reflectionSelections={};verifiedAnswers={};ordering={sequence:["A","B","C","D"],submitted:false};try{localStorage.removeItem(ORDER_KEY);localStorage.removeItem("twist-verified-pilot-v1");localStorage.removeItem("twist-reasoning-v1");localStorage.removeItem("twist-reflections-v1")}catch(e){}save();render();}});
+el("resetBtn").addEventListener("click",()=>{if(confirm(lang==="zh"?"确定清除主关卡、推理、复盘和自动判分记录？逻辑工坊进度将保留。":"Clear main puzzles, reasoning, reflections and verified answers? Logic Studio progress will remain.")){state={index:0,completed:[],hints:[],assessments:{}};reasoningSelections={};reflectionSelections={};verifiedAnswers={};ordering={sequence:["A","B","C","D"],submitted:false};orderingUndo=null;try{localStorage.removeItem(ORDER_KEY);localStorage.removeItem("twist-verified-pilot-v1");localStorage.removeItem("twist-reasoning-v1");localStorage.removeItem("twist-reflections-v1")}catch(e){}save();render();}});
 
 // RUNLU ORIGINAL LOGIC STUDIO: authored deductive challenges with verifiable choices.
 // Separate from curated classic riddles; all answer checking is deterministic and local.
