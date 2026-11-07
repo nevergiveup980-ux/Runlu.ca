@@ -75,7 +75,7 @@ const blob=new Blob([JSON.stringify(storyboard,null,2)],{type:'application/json'
 const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='runlu-stage-storyboard.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status('STAGE 分镜草稿已导出。请在拿到真实音频后重新校准镜头时间。');
 });
 document.getElementById('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(prompt());status('生成提示词已复制。')}catch(e){status('复制失败，请手动选择右侧提示词。')}});
-try{const saved=JSON.parse(localStorage.getItem('runlu-music-studio-v1')||'null');if(saved&&typeof saved==='object'){ids.forEach(id=>{if(typeof saved[id]==='string')els[id].value=saved[id]})}}catch(e){status('本机旧草稿无法读取，请重新保存。')}
+try{const saved=JSON.parse(localStorage.getItem('runlu-music-studio-v1')||'null');if(saved&&typeof saved==='object'&&!Array.isArray(saved)){ids.forEach(id=>{if(typeof saved[id]!=='string')return;const field=els[id];if(field.tagName==='SELECT'){if([...field.options].some(option=>option.value===saved[id]))field.value=saved[id]}else{const limit=id==='lyrics'?30000:(id==='title'?120:5000);field.value=saved[id].slice(0,limit)}})}}catch(e){status('本机旧草稿无法读取，请重新保存。')}
 refresh();updatePlaceholders();
 })();
 </script><script src="runlu-language.js"></script></body></html>
