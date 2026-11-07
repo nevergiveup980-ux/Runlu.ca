@@ -6,7 +6,7 @@ const root = process.cwd();
 // legal/privacy policies are applications/support pages rather than editorial
 // site pages. They own their localization and must not be made to load the
 // public website's language switcher.
-const excludedPrefixes = ['flooring/','flooring-u2-lab/','flooring-u3-preview/'];
+const excludedPrefixes = ['flooring/','flooring-u2-lab/','flooring-u3-preview/','knowledge/preview/'];
 const excluded = new Set([
   'health-view-006-humid-heat.html',
   'health-view-007-staree-statins.html',
@@ -25,7 +25,9 @@ const excluded = new Set([
   // Standalone app policy/support pages and a separate book microsite own their locale UI.
   'invest/privacy.html',
   'invest/support.html',
-  'truth-and-lies.html'
+  'truth-and-lies.html',
+  // Standalone music prototype does not use the public site's locale selector.
+  'music-living-visuals-test.html'
 ]);
 const pages = [];
 const languageScript = fs.readFileSync(path.join(root, 'runlu-language.js'), 'utf8');
@@ -53,7 +55,7 @@ for (const file of pages) {
   if (excluded.has(rel) || excludedPrefixes.some(prefix => rel.startsWith(prefix))) continue;
   // Season 2 Chinese masters may initially precede translations. Once all
   // editions exist, validate the actual route-switching navigation instead.
-  if (/^wellness-season-02-\d{2}\.html$/.test(rel)) {
+  if (/^wellness-season-(?:02|03)-\d{2}\.html$/.test(rel)) {
     const edition = fs.readFileSync(file, 'utf8');
     if (!/<html lang="zh(?:-Hans|-CN)?"/.test(edition)) failures.push(`${rel}: expected Chinese master language`);
     const base = rel.replace(/\.html$/, '');
@@ -79,7 +81,7 @@ for (const file of pages) {
   }
   // Season 2 translated editions use independent language pages, not the
   // shared in-page language switcher. Validate actual edition links instead.
-  if (/^wellness-season-02-\d{2}-(?:en|fr|es)\.html$/.test(rel)) {
+  if (/^wellness-season-(?:02|03)-\d{2}-(?:en|fr|es)\.html$/.test(rel)) {
     const edition = fs.readFileSync(file, 'utf8');
     const base = rel.replace(/-(?:en|fr|es)\.html$/, '');
     const language = rel.match(/-(en|fr|es)\.html$/)?.[1];
