@@ -23,6 +23,7 @@ small{color:#a7b7ce} .timeline{padding:0;list-style:none}.timeline li{padding:12
 <main class="wrap"><p class="muted">Novel → Screenplay → Character Bible → Shots → Review → Export</p>
 <h1>Episode Control Center</h1><p class="muted">THE GLASS THRONE · Pilot episode · 180 seconds target</p>
 <div class="notice" role="status"><strong>DEMO DATA ONLY.</strong> This page is not connected to your account, database, or paid video providers. All amounts and states below are illustrative.</div>
+<div class="actions"><label for="episode-id">Episode ID</label><input id="episode-id" value="glass-throne-pilot" maxlength="100" style="padding:9px;background:#17243b;color:#fff;border:1px solid #53627a;border-radius:9px"><button id="load-live" type="button">Load authorized episode</button></div><p id="live-status" role="status" aria-live="polite">Demo mode · No live data loaded.</p>
 <div class="metrics" aria-label="Episode overview">
 <div class="metric"><small>Approved budget</small><strong id="budget">$10.00</strong></div>
 <div class="metric"><small>Committed amount</small><strong id="committed">$4.50</strong></div>
@@ -37,7 +38,122 @@ small{color:#a7b7ce} .timeline{padding:0;list-style:none}.timeline li{padding:12
 <h2>Production stages</h2><ol class="timeline"><li>Novel TXT imported <span class="status ok">Demo</span></li><li>Episode & characters planned <span class="status ok">Demo</span></li><li>Shot review & approval <span class="status">Pending</span></li><li>Paid generation <span class="status">Not connected</span></li><li>MP4 export <span class="status">Not connected</span></li></ol>
 <p class="muted">No real approval, resume, generation or export actions are available on this prototype.</p></aside></div>
 </main>
-<script>
+<script type="module">
+import {DirectorDashboardClient} from './director-dashboard-client.mjs';
+const client=new DirectorDashboardClient();
+let live=false;
+const liveStatus=document.getElementById('live-status');
+document.getElementById('load-live').addEventListener('click',async()=>{
+ const button=document.getElementById('load-live');
+ button.disabled=true;liveStatus.textContent='Loading authorized episode…';
+ try{
+  const d=await client.load(document.getElementById('episode-id').value.trim());
+  live=true;
+  document.getElementById('budget').textContent='[
+ {id:'S01',scene:'Opening · The hall',seconds:40,state:'SUCCEEDED'},
+ {id:'S02',scene:'The warning',seconds:45,state:'SUBMITTED'},
+ {id:'S03',scene:'A hidden letter',seconds:45,state:'READY'},
+ {id:'S04',scene:'The choice',seconds:50,state:'READY'}];
+function render(mode){
+ live=false;document.querySelector('.notice[role="status"]').textContent='DEMO DATA ONLY. This page is not connected to your account, database, or paid video providers.';liveStatus.textContent='Demo mode · No live data loaded.';
+ document.getElementById('budget').textContent='$10.00';
+ const shots=sample.map(s=>({...s}));
+ if(mode==='unknown')shots[1].state='UNKNOWN';
+ const paused=mode==='paused',unknown=mode==='unknown';
+ const committed=unknown?600:450;
+ document.getElementById('committed').textContent='$'+(committed/100).toFixed(2);
+ document.getElementById('remaining').textContent='$'+((1000-committed)/100).toFixed(2);
+ document.getElementById('completed').textContent=shots.filter(s=>s.state==='SUCCEEDED').length+' / '+shots.length;
+ document.getElementById('shots').replaceChildren(...shots.map(s=>{
+  const tr=document.createElement('tr');
+  for(const value of [s.id,s.scene,s.seconds+'s',s.state]){
+   const td=document.createElement('td');
+   if(value===s.state){const span=document.createElement('span');span.className='status '+(value==='UNKNOWN'?'warn':value==='SUCCEEDED'?'ok':'');span.textContent=value;td.append(span)}
+   else td.textContent=value;
+   tr.append(td);
+  }return tr;
+ }));
+ const box=document.getElementById('safety');
+ box.textContent=paused?'Spending paused · Manual review required. No new paid requests.':unknown?'Provider outcome unknown · Do not retry until reconciled.':'Budget active · Paid generation still disabled in this preview.';
+ box.style.borderColor=paused||unknown?'#ac874e':'#53627a';
+}
+for(const mode of ['normal','paused','unknown'])document.getElementById(mode).addEventListener('click',()=>render(mode));
+render('normal');
+</script></body></html>
++(d.budget.limitCents/100).toFixed(2);
+  document.getElementById('committed').textContent='[
+ {id:'S01',scene:'Opening · The hall',seconds:40,state:'SUCCEEDED'},
+ {id:'S02',scene:'The warning',seconds:45,state:'SUBMITTED'},
+ {id:'S03',scene:'A hidden letter',seconds:45,state:'READY'},
+ {id:'S04',scene:'The choice',seconds:50,state:'READY'}];
+function render(mode){
+ const shots=sample.map(s=>({...s}));
+ if(mode==='unknown')shots[1].state='UNKNOWN';
+ const paused=mode==='paused',unknown=mode==='unknown';
+ const committed=unknown?600:450;
+ document.getElementById('committed').textContent='$'+(committed/100).toFixed(2);
+ document.getElementById('remaining').textContent='$'+((1000-committed)/100).toFixed(2);
+ document.getElementById('completed').textContent=shots.filter(s=>s.state==='SUCCEEDED').length+' / '+shots.length;
+ document.getElementById('shots').replaceChildren(...shots.map(s=>{
+  const tr=document.createElement('tr');
+  for(const value of [s.id,s.scene,s.seconds+'s',s.state]){
+   const td=document.createElement('td');
+   if(value===s.state){const span=document.createElement('span');span.className='status '+(value==='UNKNOWN'?'warn':value==='SUCCEEDED'?'ok':'');span.textContent=value;td.append(span)}
+   else td.textContent=value;
+   tr.append(td);
+  }return tr;
+ }));
+ const box=document.getElementById('safety');
+ box.textContent=paused?'Spending paused · Manual review required. No new paid requests.':unknown?'Provider outcome unknown · Do not retry until reconciled.':'Budget active · Paid generation still disabled in this preview.';
+ box.style.borderColor=paused||unknown?'#ac874e':'#53627a';
+}
+for(const mode of ['normal','paused','unknown'])document.getElementById(mode).addEventListener('click',()=>render(mode));
+render('normal');
+</script></body></html>
++(d.budget.committedCents/100).toFixed(2);
+  document.getElementById('remaining').textContent='[
+ {id:'S01',scene:'Opening · The hall',seconds:40,state:'SUCCEEDED'},
+ {id:'S02',scene:'The warning',seconds:45,state:'SUBMITTED'},
+ {id:'S03',scene:'A hidden letter',seconds:45,state:'READY'},
+ {id:'S04',scene:'The choice',seconds:50,state:'READY'}];
+function render(mode){
+ const shots=sample.map(s=>({...s}));
+ if(mode==='unknown')shots[1].state='UNKNOWN';
+ const paused=mode==='paused',unknown=mode==='unknown';
+ const committed=unknown?600:450;
+ document.getElementById('committed').textContent='$'+(committed/100).toFixed(2);
+ document.getElementById('remaining').textContent='$'+((1000-committed)/100).toFixed(2);
+ document.getElementById('completed').textContent=shots.filter(s=>s.state==='SUCCEEDED').length+' / '+shots.length;
+ document.getElementById('shots').replaceChildren(...shots.map(s=>{
+  const tr=document.createElement('tr');
+  for(const value of [s.id,s.scene,s.seconds+'s',s.state]){
+   const td=document.createElement('td');
+   if(value===s.state){const span=document.createElement('span');span.className='status '+(value==='UNKNOWN'?'warn':value==='SUCCEEDED'?'ok':'');span.textContent=value;td.append(span)}
+   else td.textContent=value;
+   tr.append(td);
+  }return tr;
+ }));
+ const box=document.getElementById('safety');
+ box.textContent=paused?'Spending paused · Manual review required. No new paid requests.':unknown?'Provider outcome unknown · Do not retry until reconciled.':'Budget active · Paid generation still disabled in this preview.';
+ box.style.borderColor=paused||unknown?'#ac874e':'#53627a';
+}
+for(const mode of ['normal','paused','unknown'])document.getElementById(mode).addEventListener('click',()=>render(mode));
+render('normal');
+</script></body></html>
++(d.budget.remainingCents/100).toFixed(2);
+  document.getElementById('completed').textContent=d.progress.completed+' / '+d.progress.total;
+  const tbody=document.getElementById('shots');tbody.replaceChildren(...d.shots.map(s=>{
+   const tr=document.createElement('tr');
+   for(const value of [s.shotId,'—','—',s.state]){const td=document.createElement('td');td.textContent=value;tr.append(td)}
+   return tr;
+  }));
+  document.getElementById('safety').textContent=d.budget.paused?'Spending paused: '+(d.budget.pauseReason??'Review required'):d.alerts.requiresAttention?'Attention required: review provider or charge alerts.':'No active alerts in this snapshot.';
+  document.querySelector('.notice[role="status"]').textContent='LIVE READ-ONLY SNAPSHOT · Authorized server response. Paid generation remains disabled.';
+  liveStatus.textContent='Live read-only snapshot loaded. No paid operations enabled.';
+ }catch(e){
+  liveStatus.textContent=e.message==='access_denied'?'Access denied: sign in or request episode access.':e.message==='network_error'?'Network unavailable. Demo remains available.':'Unable to load live episode ('+e.message+'). Demo remains available.';
+ }finally{button.disabled=false}
+});
 const sample=[
  {id:'S01',scene:'Opening · The hall',seconds:40,state:'SUCCEEDED'},
  {id:'S02',scene:'The warning',seconds:45,state:'SUBMITTED'},
