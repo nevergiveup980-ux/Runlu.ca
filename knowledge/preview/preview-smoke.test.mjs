@@ -43,6 +43,22 @@ test("each language has six decision checks and four worked scenarios", () => {
   }
 });
 
+test("practitioner account stays distinct and qualified in every language", () => {
+  const script = html.split("<script>")[1]?.split("</script>")[0];
+  const practiceText = script?.split("const practice=")[1]?.split(";function render()")[0];
+  assert.ok(practiceText, "missing practitioner account translations");
+  const practice = JSON.parse(practiceText);
+  for (const lang of ["en", "zh", "fr", "es"]) {
+    assert.ok(practice[lang].heading.trim());
+    assert.ok(practice[lang].story.trim());
+    assert.ok(practice[lang].boundary.trim());
+  }
+  for (const id of ["practiceHeading", "practiceStory", "practiceBoundary"]) {
+    assert.ok(html.includes('id="' + id + '"'), "missing preview element " + id);
+    assert.ok(html.includes('getElementById("' + id + '").textContent=practice[lang].'), "missing render binding " + id);
+  }
+});
+
 test("language switch updates visible content and shareable URL", () => {
   assert.match(html, /languageSelect\.addEventListener\("change"/);
   assert.match(html, /url\.searchParams\.set\("lang",languageSelect\.value\)/);
