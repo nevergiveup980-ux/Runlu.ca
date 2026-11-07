@@ -1,24 +1,23 @@
-# RUNLU TWIST iOS
+# RUNLU TWIST iOS 1.1 candidate
 
-Standalone SwiftUI + WKWebView iPhone application, iOS 17+. Source baseline: Runlu.ca PR #339, commit c83ddabb024f629321df80f43ead17253c48bc2d.
+Existing SwiftUI + local WKWebView iPhone app, iOS 17+. Bundle ID `ca.runlu.twist`, team `F2J2Z8H2L4`, icons and canonical local-file loading retained. Local candidate configuration is **1.1 (4)**; it has not been uploaded or submitted.
 
-Open `RUNLUTwist.xcodeproj`, select an iPhone simulator, and Run. No package dependencies or server required. All 20 bilingual puzzles, styles, support and privacy pages ship in `RUNLUTwist/Web`.
+Open `RUNLUTwist.xcodeproj` and choose an iPhone simulator. No server or package dependencies are required. The bundle includes 20 bilingual classic riddles, Reasoning Lab, Reflection, ten Logic Studio challenges, privacy and support pages.
 
-- Bundle ID: `ca.runlu.twist` (registration/availability must be confirmed in the developer account).
-- Version: 1.0.0 (1).
-- Team: F2J2Z8H2L4, inferred from the available Apple Development certificate; distribution authorization still needs validation.
-- Local WKWebsiteDataStore plus an allowlisted native UserDefaults backup; no sync, analytics, ads, or tracking.
-- UIActivityViewController shares result text only. Reset uses native confirmation.
-- Native safe-area constraints, responsive web layout, reduced motion, contrast and dark appearance.
+The authoritative gameplay source is repository-root `twist.html`. After editing it, run from repository root:
 
-`project.yml` is the XcodeGen source; the generated Xcode project is included, so XcodeGen is not required to open/build it. To regenerate: `xcodegen generate`.
+```sh
+python3 ios/RUNLUTwist/Scripts/sync-game.py
+node ios/RUNLUTwist/Scripts/test-game-logic.cjs
+python3 ios/RUNLUTwist/Scripts/verify-package.py
+```
 
-## Validation and release
+`sync-game.py` applies the native styling, offline policy, local privacy/support links, allowlisted native storage and text-only sharing. Do not hand-edit the bundled gameplay copy. Native backup covers all five gameplay/language keys. Build 2's canonical bundle-path fix remains.
 
-See `Reports/TEST-REPORT.md` and `Release/RELEASE-STATUS.md` for actual results and remaining gates. An unsigned archive is a compilation artifact, not a TestFlight-ready distribution. Do not submit for review without the owner's explicit confirmation.
+Run Xcode's Product > Test for actual WKWebView and touch regressions. `-twist-qa-suite` and `-twist-qa-corrupt` are DEBUG-only test launch arguments; they alter simulator test data. The full suite executes real game JavaScript inside WKWebView, then UI tests verify relaunch, navigation and native controls. Node tests use a DOM stub and do not prove browser layout or VoiceOver. `Scripts/test-remediation.cjs` is an optional Playwright browser suite requiring separately installed Playwright and browser runtimes.
 
-The web source is a packaged adaptation; the root website `twist.html` and all unrelated website files remain unchanged. Native snapshots are independent of the development web prototype's browser storage.
+See `../../docs/TWIST-11-IOS-ACCEPTANCE.md` for current evidence and unresolved acceptance gates. Existing Build 1–3 files under `Release/` and older `Reports/` are historical; their metadata, screenshots, upload status and iPhone acceptance do not certify version 1.1. Refresh release metadata only in a separately authorized release-preparation step. No upload, App Review submission or public release is authorized in this remediation task.
 
-## 交付状态
+## Build 4 final engineering acceptance
 
-沿用PR #339。iPhone目标配置已修正，1.0.0（1）已上传TestFlight并显示Ready to Test。内部测试尚待安装验收，未提交审核或公开发布。详见Release/RELEASE-STATUS.md。
+See `../../docs/TWIST-BUILD4-FINAL-ACCEPTANCE.md`. Code commit `107ec9d` passed the final nine-test iOS 26.5 run, including accessibility and largest Dynamic Type. A locally signed Release archive and development IPA were exported on 2026-10-29; no upload or review submission occurred. Real iPhone installation remains blocked by Developer Mode and full physical-device acceptance is pending.

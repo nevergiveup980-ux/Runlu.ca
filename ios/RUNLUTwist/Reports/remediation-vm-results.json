@@ -1,0 +1,75 @@
+{
+  "kind": "Node VM + DOM stub, not layout/VoiceOver",
+  "passed": 17,
+  "failed": 0,
+  "results": [
+    {
+      "name": "20 complete bilingual classics",
+      "status": "PASS"
+    },
+    {
+      "name": "10 case answer keys match independently solved constraints",
+      "status": "PASS"
+    },
+    {
+      "name": "en classic reasoning/reflection choices, scoring and review",
+      "status": "PASS"
+    },
+    {
+      "name": "en all 10 studio choices, feedback and explanations",
+      "status": "PASS"
+    },
+    {
+      "name": "zh classic reasoning/reflection choices, scoring and review",
+      "status": "PASS"
+    },
+    {
+      "name": "zh all 10 studio choices, feedback and explanations",
+      "status": "PASS"
+    },
+    {
+      "name": "incorrect studio answer remains locked when revisiting",
+      "status": "PASS"
+    },
+    {
+      "name": "language switch keeps all three feature records",
+      "status": "PASS"
+    },
+    {
+      "name": "full gameplay suite",
+      "status": "PASS"
+    },
+    {
+      "name": "damage syntax/type: {broken",
+      "status": "PASS"
+    },
+    {
+      "name": "damage syntax/type: 7",
+      "status": "PASS"
+    },
+    {
+      "name": "damage syntax/type: \"text\"",
+      "status": "PASS"
+    },
+    {
+      "name": "damage syntax/type: []",
+      "status": "PASS"
+    },
+    {
+      "name": "damage syntax/type: null",
+      "status": "PASS"
+    },
+    {
+      "name": "damage syntax/type: {\"0\":99,\"-1\":1,\"20\":1,\"__proto__\":2}",
+      "status": "PASS"
+    },
+    {
+      "name": "reset scopes and cancellation",
+      "status": "PASS"
+    },
+    {
+      "name": "native share contains no local path",
+      "status": "PASS"
+    }
+  ]
+}

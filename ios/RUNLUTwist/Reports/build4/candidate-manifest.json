@@ -1,0 +1,28 @@
+{
+  "candidate": "RUNLU TWIST 1.1 (4)",
+  "sourceCommit": "107ec9dd29b48a261b66e95988d27eedb7182f79",
+  "archive": "RUNLUTwist-1.1-4.xcarchive",
+  "ipa": "DevelopmentExport/RUNLUTwist.ipa",
+  "ipaSHA256": "64a25c5f080d9040bdac317d43c9f2d4593d0e111b5c2eaa22e2f2bc2009b91f",
+  "ipaBytes": 104350,
+  "signatureVerified": true,
+  "teamID": "F2J2Z8H2L4",
+  "signing": "Apple Development",
+  "developmentProfile": true,
+  "profileExpiresUTC": "2027-08-29 18:35:59",
+  "registeredDeviceCount": 1,
+  "bundleResources": {
+    "twist.html": "b92e441c13b009f899be271a687f6bc19c277ae73245b806ca4dc489b6315482",
+    "twist-privacy.html": "415cbbfa5660aa4a46c232d377d7e35e8ddfbf393611592b45e5145c7baa053d",
+    "twist-support.html": "4056cea1ad07dc6b950ea871f1af2aef648e62f198c7c403d15141f0ed52f9c0",
+    "qa-suite.js": "520374ada581ed91f729e5cccb77ee847adca912ded124b74f40cd3d1bf823ff"
+  },
+  "releaseDebugHooksAbsent": true,
+  "finalUITests": {
+    "passed": 9,
+    "failed": 0
+  },
+  "uploaded": false,
+  "submittedForReview": false,
+  "realIPhoneAcceptance": "NOT TESTED"
+}
