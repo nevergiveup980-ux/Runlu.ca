@@ -171,3 +171,19 @@ test("loading a saved project resets review evidence and updates the printed job
  await expect(page.locator("#printAudit")).toContainText("0 / 5 confirmed");
  await expect(page.locator("#printAudit")).toContainText("NOT CONFIRMED");
 });
+
+
+test("printing after editing a cut refreshes the diagram and discards old review",async({page})=>{
+ await page.goto(pageUrl);
+ await page.locator("#reviewChecklist input").first().check();
+ await expect(page.locator("#reviewStatus")).toContainText("1 / 5 confirmed");
+ const oldDiagram=await page.locator("#results svg").first().evaluate(el=>el.outerHTML);
+ await page.locator("#pieceRows input[data-field='l']").first().fill("8");
+ await expect(page.locator("#reviewStatus")).toContainText("0 / 5 confirmed");
+ await page.locator("#print").click();
+ await expect(page.locator("#printAudit")).toContainText("0 / 5 confirmed");
+ await expect(page.locator("#printAudit")).toContainText("NOT CONFIRMED");
+ const newDiagram=await page.locator("#results svg").first().evaluate(el=>el.outerHTML);
+ expect(newDiagram).not.toBe(oldDiagram);
+ await expect(page.locator("#pieceRows input[data-field='l']").first()).toHaveValue("8");
+});
