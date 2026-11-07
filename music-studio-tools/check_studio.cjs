@@ -20,12 +20,12 @@ for (const lang of ['en', 'zh', 'fr', 'es']) {
 }
 // Language switching must translate labels, never overwrite authored song fields.
 for (const id of ['title', 'lyrics', 'notes']) {
-  const match = html.match(new RegExp('<(?:input|textarea)\b[^>]*\bid="' + id + '"[^>]*>', 'i'));
+  const match = html.match(new RegExp(String.raw`<(?:input|textarea)\b[^>]*\bid="${id}"[^>]*>`, 'i'));
   assert.ok(match, 'Missing author-editable field: ' + id);
   assert.doesNotMatch(match[0], /data-(?:en|zh|fr|es)=/, 'Do not translate authored content: ' + id);
 }
 for (const id of ['voice', 'style']) {
-  const section = html.match(new RegExp('<select id="' + id + '">([\s\S]*?)<\/select>'));
+  const section = html.match(new RegExp(String.raw`<select id="${id}">([\s\S]*?)<\/select>`));
   assert.ok(section, 'Missing choice selector: ' + id);
   for (const option of [...section[1].matchAll(/<option\b[^>]*>/g)]) {
     for (const lang of ['en','zh','fr','es']) assert.match(option[0], new RegExp('data-' + lang + '='), id + ' option missing ' + lang);
