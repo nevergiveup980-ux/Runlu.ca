@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - "knowledge/data/**"
+      - "knowledge/editorial/**"
+      - "knowledge/reviews/**"
       - "knowledge/validate-publication*.mjs"
       - "knowledge/report-quality.mjs"
       - "knowledge/preview/**"
@@ -11,6 +13,8 @@ on:
   pull_request:
     paths:
       - "knowledge/data/**"
+      - "knowledge/editorial/**"
+      - "knowledge/reviews/**"
       - "knowledge/validate-publication*.mjs"
       - "knowledge/report-quality.mjs"
       - "knowledge/preview/**"
