@@ -64,7 +64,7 @@ def test_browser():
             prompt_download = prompt_download_info.value
             assert prompt_download.suggested_filename == "runlu-music-generation-prompt.txt"
             prompt_bytes = Path(prompt_download.path()).read_bytes()
-            assert prompt_bytes.startswith(b"\\xef\\xbb\\xbf")
+            assert prompt_bytes.startswith(bytes([0xEF, 0xBB, 0xBF]))
             prompt_text = prompt_bytes.decode("utf-8-sig")
             assert "原创歌曲 · Browser Test" in prompt_text
             assert "第一句原创歌词" in prompt_text
