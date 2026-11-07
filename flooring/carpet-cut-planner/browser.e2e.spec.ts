@@ -187,3 +187,22 @@ test("printing after editing a cut refreshes the diagram and discards old review
  expect(newDiagram).not.toBe(oldDiagram);
  await expect(page.locator("#pieceRows input[data-field='l']").first()).toHaveValue("8");
 });
+
+
+test("switching candidate plans clears confirmations from the previous layout",async({page})=>{
+ await page.goto(pageUrl);
+ await page.locator("#addPiece").click();
+ await page.locator("#pieceRows input[data-field='w']").last().fill("4");
+ await page.locator("#pieceRows input[data-field='l']").last().fill("18");
+ await page.locator("#calculate").click();
+ const options=await page.locator("#scenarioPicker option").count();
+ expect(options).toBeGreaterThan(1);
+ await page.locator("#reviewChecklist input").first().check();
+ await expect(page.locator("#reviewStatus")).toContainText("1 / 5 confirmed");
+ await page.locator("#scenarioPicker").selectOption("1");
+ await expect(page.locator("#reviewStatus")).toContainText("0 / 5 confirmed");
+ await expect(page.locator("#reviewChecklist input").first()).not.toBeChecked();
+ await page.locator("#print").click();
+ await expect(page.locator("#printAudit")).toContainText("0 / 5 confirmed");
+ await expect(page.locator("#printAudit")).toContainText("NOT CONFIRMED");
+});
