@@ -30,7 +30,7 @@ test("each language has six decision checks and four worked scenarios", () => {
   const script = html.split("<script>")[1]?.split("</script>")[0];
   assert.ok(script, "missing preview script");
   const scenarioText = script.split("const scenarios=")[1]?.split(";const checkpoints=")[0];
-  const checkpointText = script.split(";const checkpoints=")[1]?.split(";function render()")[0];
+  const checkpointText = script.split(";const checkpoints=")[1]?.split(";const practice=")[0];
   assert.ok(scenarioText && checkpointText, "missing localized structured data");
   const scenarios = JSON.parse(scenarioText);
   const checkpoints = JSON.parse(checkpointText);
