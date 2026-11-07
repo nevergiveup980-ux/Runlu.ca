@@ -31,7 +31,15 @@ for (const id of ['voice', 'style']) {
     for (const lang of ['en','zh','fr','es']) assert.match(option[0], new RegExp('data-' + lang + '='), id + ' option missing ' + lang);
   }
 }
+// Guard the saved-draft recovery path against regressions.
+assert.match(scripts[0], /localStorage\.getItem\('runlu-music-studio-v1'\)/, 'Saved draft must be restored');
+assert.match(scripts[0], /localStorage\.setItem\('runlu-music-studio-v1'/, 'Save button must persist draft');
+assert.match(scripts[0], /!Array\.isArray\(saved\)/, 'Reject array-shaped draft data');
+assert.match(scripts[0], /field\.tagName==='SELECT'/, 'Validate restored selection fields');
+assert.match(scripts[0], /option\.value===saved\[id\]/, 'Only restore valid option values');
+assert.match(scripts[0], /saved\[id\]\.slice\(0,limit\)/, 'Bound restored text lengths');
+assert.match(scripts[0], /window\.addEventListener\('runlu:languagechange'/, 'Handle language changes');
 assert.match(html, /localStorage/);
 assert.match(html, /URL\.createObjectURL/);
 assert.doesNotMatch(html, /GEMINI_API_KEY|AIza[0-9A-Za-z_-]{20,}/, 'Potential API key exposure');
-console.log('PASS: Studio inline JavaScript parses and expected controls exist; no browser interactions exercised.');
+console.log('PASS: Studio inline JavaScript parses and expected controls exist; static restore safeguards checked; no browser interactions exercised.');
