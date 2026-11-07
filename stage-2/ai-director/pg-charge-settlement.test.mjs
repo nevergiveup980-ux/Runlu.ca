@@ -30,6 +30,7 @@ test('over-budget actual charge is audited and flagged rather than discarded',as
  const result=await new PgDirectorChargeSettlement(m.pool).settle({...input,chargedCents:800});
  assert.equal(result.exceedsApprovedBudget,true);
  assert.equal(result.requiresManualReview,true);
+ assert.ok(m.calls.some(c=>c.sql.includes('spending_paused=true')));
  assert.equal(m.calls.filter(c=>c.sql.startsWith('INSERT')).length,1);
  assert.equal(m.calls.filter(c=>c.sql==='COMMIT').length,1);
 });
