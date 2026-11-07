@@ -84,3 +84,14 @@ ALTER TABLE stage_director_budgets
  ADD COLUMN IF NOT EXISTS pause_reason text;
 ALTER TABLE stage_director_budgets
  ADD COLUMN IF NOT EXISTS paused_at timestamptz;
+
+-- Explicit audit of administrative budget pause/resume decisions.
+-- Resume is only allowed if all reconciled commitments fit the existing limit.
+CREATE TABLE IF NOT EXISTS stage_director_spending_decisions (
+  decision_id text PRIMARY KEY,
+  episode_id text NOT NULL REFERENCES stage_director_budgets(episode_id),
+  action text NOT NULL CHECK (action IN ('RESUME')),
+  reviewer_id text NOT NULL,
+  reason text NOT NULL CHECK (length(trim(reason)) >= 10),
+  recorded_at timestamptz NOT NULL DEFAULT now()
+);
