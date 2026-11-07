@@ -96,12 +96,28 @@ def test_browser():
                 })
                 expect(page.locator("#audioplayer")).to_have_attribute("src", re.compile(r"^blob:"))
             assert page.evaluate("window.__audioUrls.created[0] === window.__audioUrls.revoked[0]")
+            # Rejected files must not replace the existing audio or revoke its URL.
+            current_src = page.locator("#audioplayer").get_attribute("src")
+            revoked_before = page.evaluate("window.__audioUrls.revoked.length")
+            page.locator("#audiofile").set_input_files({
+                "name": "not-a-song.txt", "mimeType": "text/plain", "buffer": b"not audio"
+            })
+            expect(page.locator("#audioplayer")).to_have_attribute("src", current_src)
+            assert page.evaluate("window.__audioUrls.revoked.length") == revoked_before
+            assert "MP3" in page.locator("#status").inner_text()
+            page.locator("#audiofile").set_input_files({
+                "name": "oversized.mp3", "mimeType": "audio/mpeg",
+                "buffer": b"ID3" + bytes(50 * 1024 * 1024)
+            })
+            expect(page.locator("#audioplayer")).to_have_attribute("src", current_src)
+            assert page.evaluate("window.__audioUrls.revoked.length") == revoked_before
+            assert "50 MB" in page.locator("#status").inner_text()
             page.locator("#clearaudio").click()
             expect(page.locator("#audioplayer")).not_to_have_attribute("src", re.compile(r"^blob:"))
             assert page.evaluate("window.__audioUrls.created.length === 2 && window.__audioUrls.revoked.length === 2")
             assert page.locator("body").evaluate("(el) => el.scrollWidth <= window.innerWidth + 1"), "Mobile horizontal overflow"
             assert not errors, f"Browser JavaScript errors: {errors}"
-            print("PASS: Chromium mobile viewport, language switching, save/reload, export/import, invalid JSON, audio cleanup, no JS errors")
+            print("PASS: Chromium mobile viewport, language switching, save/reload, export/import, invalid JSON, audio validation/cleanup, no JS errors")
         finally:
             browser.close()
 
