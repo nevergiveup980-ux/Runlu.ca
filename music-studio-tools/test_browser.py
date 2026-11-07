@@ -4,6 +4,10 @@ from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from tempfile import TemporaryDirectory
+import io
+import math
+import struct
+import wave
 import re
 from threading import Thread
 
@@ -97,6 +101,24 @@ def test_browser():
                 })
                 expect(page.locator("#audioplayer")).to_have_attribute("src", re.compile(r"^blob:"))
             assert page.evaluate("window.__audioUrls.created[0] === window.__audioUrls.revoked[0]")
+            # Load a genuinely decodable, original synthetic WAV tone.
+            wav_bytes = io.BytesIO()
+            with wave.open(wav_bytes, "wb") as wav:
+                wav.setnchannels(1)
+                wav.setsampwidth(2)
+                wav.setframerate(16000)
+                samples = (int(4500 * math.sin(2 * math.pi * 440 * i / 16000)) for i in range(16000))
+                wav.writeframes(b"".join(struct.pack("<h", value) for value in samples))
+            page.locator("#audiofile").set_input_files({
+                "name": "original-test-tone.wav", "mimeType": "audio/wav",
+                "buffer": wav_bytes.getvalue()
+            })
+            page.wait_for_function("document.querySelector('#audioplayer').readyState >= 1")
+            assert 0.9 <= page.locator("#audioplayer").evaluate("(el) => el.duration") <= 1.1
+            page.locator("#audioplayer").evaluate("(el) => el.play()")
+            page.wait_for_function("document.querySelector('#audioplayer').currentTime > 0.05")
+            page.locator("#audioplayer").evaluate("(el) => el.pause()")
+            assert page.locator("#audioplayer").evaluate("(el) => el.paused")
             # Rejected files must not replace the existing audio or revoke its URL.
             current_src = page.locator("#audioplayer").get_attribute("src")
             revoked_before = page.evaluate("window.__audioUrls.revoked.length")
@@ -118,10 +140,10 @@ def test_browser():
             assert "50 MB" in page.locator("#status").inner_text()
             page.locator("#clearaudio").click()
             expect(page.locator("#audioplayer")).not_to_have_attribute("src", re.compile(r"^blob:"))
-            assert page.evaluate("window.__audioUrls.created.length === 2 && window.__audioUrls.revoked.length === 2")
+            assert page.evaluate("window.__audioUrls.created.length === 3 && window.__audioUrls.revoked.length === 3")
             assert page.locator("body").evaluate("(el) => el.scrollWidth <= window.innerWidth + 1"), "Mobile horizontal overflow"
             assert not errors, f"Browser JavaScript errors: {errors}"
-            print("PASS: Chromium mobile viewport, language switching, save/reload, export/import, invalid JSON, audio validation/cleanup, no JS errors")
+            print("PASS: Chromium mobile viewport, language switching, save/reload, export/import, invalid JSON, decodable WAV playback, audio validation/cleanup, no JS errors")
         finally:
             browser.close()
 
