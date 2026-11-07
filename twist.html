@@ -62,8 +62,13 @@ try{
   }
 }catch(e){}
 function renderReflection(){const i=state.index;const done=state.completed.includes(i);el("reflection").hidden=!done;if(!done)return;const chosen=reflectionSelections[i];el("reflectionTitle").textContent=lang==="zh"?"第二步 · 复盘思维转折":"Step 2 · Reflect on the twist";el("reflectionText").textContent=lang==="zh"?"揭晓答案后，回想自己最初的判断：哪一种思维习惯最影响你？":"After seeing the answer, which thinking habit most affected your first guess?";const choices=appliedLenses[i]?(lang==="zh"?["漏看了题目中的一个条件","计算或排列时跳过了核对","过早相信直觉答案"]:["I missed one stated condition","I skipped checking my calculation or arrangement","I trusted my first instinct too quickly"]):(lang==="zh"?["被题目表面词义带偏","忽略了另一种解释","过早锁定第一个答案"]:["I followed the surface meaning","I overlooked another interpretation","I settled on my first guess too quickly"]);const host=el("reflectionChoices");host.replaceChildren();choices.forEach((v,j)=>{const b=document.createElement("button");b.type="button";b.textContent=v;b.className=chosen===j?"primary":"";b.setAttribute("aria-pressed",String(chosen===j));b.onclick=()=>{reflectionSelections[i]=j;try{localStorage.setItem("twist-reflections-v1",JSON.stringify(reflectionSelections))}catch(e){}renderReflection()};host.append(b)});const total=Object.keys(reflectionSelections).filter(k=>Number.isInteger(+k)&&+k>=0&&+k<20).length;el("reflectionFeedback").textContent=(lang==="zh"?"已完成复盘：":"Reflections completed: ")+total+" / 20"+(chosen===undefined?"":lang==="zh"?" · 记录已保存，下次遇到类似谜题可以试试换一种思路。":" · Saved. Try a different lens next time.");}
-// Pilot: three objectively graded answer choices; separate from exploration points.
+// Eight objectively graded choices across arithmetic, time, and constraint reasoning; separate from exploration points.
 const verifiedCases={
+  1:{answer:1,en:["5 kg","6 kg","7 kg"],zh:["5千克","6千克","7千克"]},
+  2:{answer:2,en:["2:56 p.m.","3:06 p.m.","2:54 p.m."],zh:["下午2:56","下午3:06","下午2:54"]},
+  3:{answer:0,en:["Artwork B","Artwork C","Artwork D"],zh:["作品B","作品C","作品D"]},
+  6:{answer:1,en:["12 cartons","9 cartons","18 cartons"],zh:["12箱","9箱","18箱"]},
+  7:{answer:2,en:["Stop A","Stop C","Stop B"],zh:["站点A","站点C","站点B"]},
   9:{answer:2,en:["7 boxes","9 boxes","8 boxes"],zh:["7箱","9箱","8箱"]},
   10:{answer:1,en:["50 minutes","55 minutes","60 minutes"],zh:["50分钟","55分钟","60分钟"]},
   11:{answer:0,en:["25 items","27 items","24 items"],zh:["25件","27件","24件"]}
