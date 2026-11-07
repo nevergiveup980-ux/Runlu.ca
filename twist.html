@@ -75,7 +75,7 @@ function renderOrdering(){
  const pieces=el("orderingPieces");pieces.replaceChildren();
  ordering.sequence.forEach((piece,i)=>{
   const cell=document.createElement("div");cell.className="buttons";cell.style.alignItems="center";
-  const label=document.createElement("strong");label.textContent=piece;cell.appendChild(label);
+  const label=document.createElement("strong");label.textContent=(i+1)+". "+piece;label.setAttribute("aria-label",(lang==="zh"?"第"+(i+1)+"位，作品":"Position "+(i+1)+", artwork ")+piece);cell.appendChild(label);
   [-1,1].forEach(dir=>{const b=document.createElement("button");b.type="button";b.textContent=dir<0?"←":"→";b.setAttribute("aria-label",(lang==="zh"?"将作品":"Move artwork ")+piece+(dir<0?(lang==="zh"?"向左移动":" left"):(lang==="zh"?"向右移动":" right")));b.disabled=ordering.submitted||i+dir<0||i+dir>=4;b.addEventListener("click",()=>{if(ordering.submitted)return;const j=i+dir;if(j<0||j>=4)return;[ordering.sequence[i],ordering.sequence[j]]=[ordering.sequence[j],ordering.sequence[i]];saveOrdering();renderOrdering()});cell.appendChild(b)});
   pieces.appendChild(cell)
  });
