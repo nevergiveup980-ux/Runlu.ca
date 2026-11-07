@@ -56,6 +56,31 @@ if "where-to-read.html" not in (ROOT / "book/index.html").read_text(encoding="ut
     issues.append("Bookshelf missing distribution guide link")
 if "where-to-read.html" not in (ROOT / "book/the-glass-throne.html").read_text(encoding="utf-8"):
     issues.append("Glass Throne page missing return link")
+# Each standalone wellness translation must route to the other three files.
+WELLNESS = {
+    "zh": "wellness-season-03-01.html",
+    "en": "wellness-season-03-01-en.html",
+    "fr": "wellness-season-03-01-fr.html",
+    "es": "wellness-season-03-01-es.html",
+}
+for language, filename in WELLNESS.items():
+    page = ROOT / filename
+    if not page.is_file():
+        issues.append(f"Missing wellness translation: {filename}")
+        continue
+    content = page.read_text(encoding="utf-8")
+    if 'data-runlu-language-select' not in content:
+        issues.append(f"{filename}: missing shared language selector")
+    if 'src="runlu-language.js' not in content:
+        issues.append(f"{filename}: missing shared language script")
+    if 'dataset.runluLanguageBound="true"' not in content:
+        issues.append(f"{filename}: custom selector not protected from double binding")
+    if f'const current="{language}"' not in content:
+        issues.append(f"{filename}: language routing does not match edition")
+    for target in WELLNESS.values():
+        if target not in content:
+            issues.append(f"{filename}: missing translation route {target}")
+
 for issue in issues:
     print("FAIL:", issue)
 print(f"Checked {len(parsed)} HTML pages; {len(issues)} issue(s).")
