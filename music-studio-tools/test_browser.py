@@ -35,6 +35,7 @@ def test_browser():
             page.locator("#notes").fill("自然换气，原创旋律")
             page.locator("#voice").select_option("female")
             page.locator("#style").select_option("nostalgic")
+            page.locator("#languageToggle").select_option("zh")
             page.locator("#save").click()
             assert "草稿已保存在此浏览器" in page.locator("#status").inner_text()
             for lang in ("en", "fr", "es", "zh"):
