@@ -19,7 +19,7 @@ button:focus-visible{outline:3px solid #89b8ff}
 small{color:#a7b7ce} .timeline{padding:0;list-style:none}.timeline li{padding:12px 0;border-bottom:1px solid #293750}
 @media(max-width:760px){.metrics{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}.panel{overflow-x:auto}}
 </style></head><body>
-<header><div class="brand">RUNLU <span class="muted">/ STAGE / AI DIRECTOR</span></div><small>Read-only UI prototype · No paid API calls</small></header>
+<header><div class="brand">RUNLU <span class="muted">/ STAGE / AI DIRECTOR</span></div><div><label for="languageToggle" class="muted">Language </label><select id="languageToggle" class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select><small> · Read-only UI prototype · No paid API calls</small></div></header>
 <main class="wrap"><p class="muted">Novel → Screenplay → Character Bible → Shots → Review → Export</p>
 <h1>Episode Control Center</h1><p class="muted">THE GLASS THRONE · Pilot episode · 180 seconds target</p>
 <div class="notice" role="status"><strong>DEMO DATA ONLY.</strong> This page is not connected to your account, database, or paid video providers. All amounts and states below are illustrative.</div>
@@ -38,6 +38,7 @@ small{color:#a7b7ce} .timeline{padding:0;list-style:none}.timeline li{padding:12
 <h2>Production stages</h2><ol class="timeline"><li>Novel TXT imported <span class="status ok">Demo</span></li><li>Episode & characters planned <span class="status ok">Demo</span></li><li>Shot review & approval <span class="status">Pending</span></li><li>Paid generation <span class="status">Not connected</span></li><li>MP4 export <span class="status">Not connected</span></li></ol>
 <p class="muted">No real approval, resume, generation or export actions are available on this prototype.</p></aside></div>
 </main>
+<script src="../../runlu-language.js?v=2.2"></script>
 <script type="module">
 import {DirectorDashboardClient} from './director-dashboard-client.mjs';
 const client=new DirectorDashboardClient();
