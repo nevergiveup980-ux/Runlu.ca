@@ -23,4 +23,22 @@ python music-studio-tools/generate_preview.py --project runlu-music-project.json
 
 API documentation: https://ai.google.dev/gemini-api/docs/music-generation
 
-The six offline unit tests are defined but no passing GitHub Actions run has been verified. Not yet executed or tested with a live API key. Frontend integration, authenticated server-side generation, rate limits, billing limits and audio storage are future work.
+The offline checks and Chromium interaction tests have passed in GitHub Actions as of commit `e5b6791`. Live generation has not been tested with an API key. Frontend integration, authenticated server-side generation, rate limits, billing limits and audio storage are future work.
+
+## First-song acceptance checklist — 《风吹过的那些年》
+
+Use this checklist **only after a real audio file has been generated**. The current Studio does not generate a song or guarantee a playable MP3.
+
+| Gate | Pass condition | How to verify |
+| --- | --- | --- |
+| Rights | Lyrics and melody are original; no unauthorized artist voice imitation | Review source and provider terms; listen for recognizable borrowing |
+| Language | Mandarin lyrics are intelligible and match the approved words | Listen line by line against exported TXT; mark substitutions |
+| Vocal | Mature warm female vocal, natural breaths, stable pitch and no robotic syllables | Listen on headphones and phone speaker |
+| Musical arc | Clear opening, verse development, emotional peak, satisfying ending | Listen to the entire track without skipping |
+| Audio | File decodes, duration is plausible, no clipping, severe artifacts or abrupt cutoff | Load in Studio and an independent audio player |
+| Delivery | Actual downloadable file, correct format and filename, rights and usage terms recorded | Check file metadata and provider license |
+| Cost | Model, request count and actual charge documented | Check provider billing before any further generation |
+
+**Stop conditions:** do not publish a preview as a finished song; do not assert the lyrics were sung accurately without listening; do not assume a provider returns MP3 just because the output path ends in `.mp3`. Confirm the returned MIME type and actual file format. Do not trigger paid generation from CI.
+
+**Manual acceptance record:** date, project revision, provider/model, terms/license link, actual cost, audio format, duration, checklist results, defects, approval decision. Keep the record alongside the exported project JSON, not in the public website repository if it contains private information.
