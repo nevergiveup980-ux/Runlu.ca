@@ -52,9 +52,31 @@ def test_browser():
                 page.locator("#export").click()
             download = download_info.value
             assert download.suggested_filename == "runlu-music-project.json"
+            # Import a project into the editor, then save and reload it.
+            import json
+            project = {"schema": "runlu-music-studio-v1", "title": "导入测试曲",
+                       "lyrics": "导入的原创歌词", "voice": "male",
+                       "style": "nostalgic", "notes": "导入成功"}
+            page.locator("#importfile").set_input_files({
+                "name": "runlu-music-project.json",
+                "mimeType": "application/json",
+                "buffer": json.dumps(project, ensure_ascii=False).encode("utf-8")
+            })
+            assert page.locator("#title").input_value() == "导入测试曲"
+            assert page.locator("#lyrics").input_value() == "导入的原创歌词"
+            assert page.locator("#voice").input_value() == "male"
+            page.locator("#save").click()
+            page.reload()
+            assert page.locator("#lyrics").input_value() == "导入的原创歌词"
+            # Reject malformed JSON without overwriting existing content.
+            page.locator("#importfile").set_input_files({
+                "name": "invalid.json", "mimeType": "application/json",
+                "buffer": b"{invalid json"
+            })
+            assert page.locator("#lyrics").input_value() == "导入的原创歌词"
             assert page.locator("body").evaluate("(el) => el.scrollWidth <= window.innerWidth + 1"), "Mobile horizontal overflow"
             assert not errors, f"Browser JavaScript errors: {errors}"
-            print("PASS: Chromium mobile viewport, language switching, save/reload, export, no JS errors")
+            print("PASS: Chromium mobile viewport, language switching, save/reload, export/import, invalid JSON, no JS errors")
         finally:
             browser.close()
 
