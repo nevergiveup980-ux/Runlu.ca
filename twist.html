@@ -80,8 +80,8 @@ function renderOrdering(){
   pieces.appendChild(cell)
  });
  const actions=el("orderingActions");actions.replaceChildren();
- const submit=document.createElement("button");submit.type="button";submit.className="primary";submit.textContent=lang==="zh"?"提交排列":"Submit order";submit.disabled=ordering.submitted;submit.addEventListener("click",()=>{if(ordering.submitted)return;ordering.submitted=true;saveOrdering();renderOrdering()});actions.appendChild(submit);
- el("orderingFeedback").textContent=!ordering.submitted?(lang==="zh"?"当前顺序：":"Current order: ")+ordering.sequence.join(" – "):(correct?(lang==="zh"?"排列正确！A–C–D–B 满足全部条件。":"Correct! A–C–D–B satisfies every clue."):(lang==="zh"?"排列尚未满足全部条件。你的顺序："+ordering.sequence.join("–")+"；参考答案：A–C–D–B。":"Not all clues are satisfied. Your order: "+ordering.sequence.join("–")+"; solution: A–C–D–B."));
+ const submit=document.createElement("button");submit.type="button";submit.className="primary";submit.textContent=lang==="zh"?"提交排列":"Submit order";submit.disabled=ordering.submitted||verifiedAnswers[3]===undefined;submit.addEventListener("click",()=>{if(ordering.submitted||verifiedAnswers[3]===undefined)return;ordering.submitted=true;saveOrdering();renderOrdering()});actions.appendChild(submit);
+ el("orderingFeedback").textContent=!ordering.submitted?((lang==="zh"?"当前顺序：":"Current order: ")+ordering.sequence.join(" – ")+(verifiedAnswers[3]===undefined?(lang==="zh"?" · 请先提交上方自动判分答案，再核对排列。":" · Submit the verified answer above before checking the order."):"")):(correct?(lang==="zh"?"排列正确！A–C–D–B 满足全部条件。":"Correct! A–C–D–B satisfies every clue."):(lang==="zh"?"排列尚未满足全部条件。你的顺序："+ordering.sequence.join("–")+"；参考答案：A–C–D–B。":"Not all clues are satisfied. Your order: "+ordering.sequence.join("–")+"; solution: A–C–D–B."));
 }
 // Eight objectively graded choices across arithmetic, time, and constraint reasoning; separate from exploration points.
 const verifiedCases={
