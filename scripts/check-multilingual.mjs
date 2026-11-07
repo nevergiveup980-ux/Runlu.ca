@@ -6,7 +6,9 @@ const root = process.cwd();
 // legal/privacy policies are applications/support pages rather than editorial
 // site pages. They own their localization and must not be made to load the
 // public website's language switcher.
-const excludedPrefixes = ['flooring/','flooring-u2-lab/','flooring-u3-preview/'];
+// Editorial previews and standalone music prototypes own their language UI.
+// Do not impose the public website's in-page selector on these non-editorial routes.
+const excludedPrefixes = ['flooring/','flooring-u2-lab/','flooring-u3-preview/','knowledge/preview/'];
 const excluded = new Set([
   'health-view-006-humid-heat.html',
   'health-view-007-staree-statins.html',
@@ -25,7 +27,8 @@ const excluded = new Set([
   // Standalone app policy/support pages and a separate book microsite own their locale UI.
   'invest/privacy.html',
   'invest/support.html',
-  'truth-and-lies.html'
+  'truth-and-lies.html',
+  'music-living-visuals-test.html'
 ]);
 const pages = [];
 const languageScript = fs.readFileSync(path.join(root, 'runlu-language.js'), 'utf8');
@@ -95,6 +98,26 @@ for (const file of pages) {
         const hasLink = edition.includes(`href="${target}"`);
         const hasCurrent = edition.includes('aria-current="page"');
         if (selfEdition ? !(hasLink || hasCurrent) : !hasLink) failures.push(`${rel}: missing language navigation ${target}`);
+    }
+    if (!edition.includes(`rel="canonical" href="https://runlu.ca/${rel}"`)) failures.push(`${rel}: missing self canonical`);
+    continue;
+  }
+  // Season 3 also publishes four canonical, independently localized editions.
+  // Validate cross-edition links instead of requiring the in-page language widget.
+  if (/^wellness-season-03-\d{2}(?:-(?:en|fr|es))?\.html$/.test(rel)) {
+    const edition = fs.readFileSync(file, 'utf8');
+    const base = rel.replace(/-(?:en|fr|es)\.html$/, '.html').replace(/\.html$/, '');
+    const language = rel.match(/-(en|fr|es)\.html$/)?.[1] || 'zh-Hans';
+    if (!edition.includes(`<html lang="${language}"`)) failures.push(`${rel}: incorrect document language`);
+    for (const [lang, suffix] of [['zh-Hans',''],['en','-en'],['fr','-fr'],['es','-es']]) {
+      const target = base + suffix + '.html';
+      if (!fs.existsSync(path.join(root, target))) failures.push(`${rel}: missing edition ${target}`);
+      if (!edition.includes(`hreflang="${lang}" href="https://runlu.ca/${target}"`)) failures.push(`${rel}: missing alternate ${target}`);
+      if (target === rel) {
+        if (!edition.includes('aria-current="page"')) failures.push(`${rel}: missing current language marker`);
+      } else if (!edition.includes(`href="${target}"`)) {
+        failures.push(`${rel}: missing language navigation ${target}`);
+      }
     }
     if (!edition.includes(`rel="canonical" href="https://runlu.ca/${rel}"`)) failures.push(`${rel}: missing self canonical`);
     continue;
