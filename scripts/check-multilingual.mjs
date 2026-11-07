@@ -6,7 +6,9 @@ const root = process.cwd();
 // legal/privacy policies are applications/support pages rather than editorial
 // site pages. They own their localization and must not be made to load the
 // public website's language switcher.
-const excludedPrefixes = ['flooring/','flooring-u2-lab/','flooring-u3-preview/'];
+// Editorial previews and standalone music prototypes own their language UI.
+// Do not impose the public website's in-page selector on these non-editorial routes.
+const excludedPrefixes = ['flooring/','flooring-u2-lab/','flooring-u3-preview/','knowledge/preview/'];
 const excluded = new Set([
   'health-view-006-humid-heat.html',
   'health-view-007-staree-statins.html',
@@ -25,7 +27,8 @@ const excluded = new Set([
   // Standalone app policy/support pages and a separate book microsite own their locale UI.
   'invest/privacy.html',
   'invest/support.html',
-  'truth-and-lies.html'
+  'truth-and-lies.html',
+  'music-living-visuals-test.html'
 ]);
 const pages = [];
 const languageScript = fs.readFileSync(path.join(root, 'runlu-language.js'), 'utf8');
