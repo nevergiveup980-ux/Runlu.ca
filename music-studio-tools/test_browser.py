@@ -74,9 +74,33 @@ def test_browser():
                 "buffer": b"{invalid json"
             })
             assert page.locator("#lyrics").input_value() == "导入的原创歌词"
+            # Exercise local audio loading, replacement and cleanup without playback or network.
+            page.evaluate("""() => {
+                window.__audioUrls = {created: [], revoked: []};
+                const realCreate = URL.createObjectURL.bind(URL);
+                const realRevoke = URL.revokeObjectURL.bind(URL);
+                URL.createObjectURL = blob => {
+                    const url = realCreate(blob);
+                    window.__audioUrls.created.push(url);
+                    return url;
+                };
+                URL.revokeObjectURL = url => {
+                    window.__audioUrls.revoked.push(url);
+                    return realRevoke(url);
+                };
+            }""")
+            for name in ("first.mp3", "replacement.mp3"):
+                page.locator("#audiofile").set_input_files({
+                    "name": name, "mimeType": "audio/mpeg", "buffer": b"ID3" + bytes(64)
+                })
+                expect(page.locator("#audioplayer")).to_have_attribute("src", "blob:.*")
+            assert page.evaluate("window.__audioUrls.created[0] === window.__audioUrls.revoked[0]")
+            page.locator("#clearaudio").click()
+            expect(page.locator("#audioplayer")).not_to_have_attribute("src", "blob:.*")
+            assert page.evaluate("window.__audioUrls.created.length === 2 && window.__audioUrls.revoked.length === 2")
             assert page.locator("body").evaluate("(el) => el.scrollWidth <= window.innerWidth + 1"), "Mobile horizontal overflow"
             assert not errors, f"Browser JavaScript errors: {errors}"
-            print("PASS: Chromium mobile viewport, language switching, save/reload, export/import, invalid JSON, no JS errors")
+            print("PASS: Chromium mobile viewport, language switching, save/reload, export/import, invalid JSON, audio cleanup, no JS errors")
         finally:
             browser.close()
 
