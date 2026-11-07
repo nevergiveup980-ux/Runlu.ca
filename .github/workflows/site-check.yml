@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [main]
   push:
-    branches: [main, "release/**", "feature/**", "agent/**"]
+    branches: [main, "release/**", "feature/**", "agent/**", "fix-account-store-payment-entry"]
 
 permissions:
   contents: read
