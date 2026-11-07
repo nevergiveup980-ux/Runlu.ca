@@ -122,6 +122,26 @@ This table proposes consistent **working terminology**, not certified translatio
 | Review needed | review needed / hold | 待复核／暂停放行 | vérification requise / mise en attente | requiere revisión / en espera | No promise or release until the blocking question is resolved |
 | Sales order revision | sales revised the order dimensions | 销售修改订单尺寸 | l'équipe commerciale a modifié les dimensions de la commande | ventas modificó las dimensiones del pedido | Warehouse reported infeasibility; sales revised dimensions; customer approval is unknown |
 
+### Proposed primary reader locales — editorial proposal, not approved
+
+| Edition | Proposed primary reader locale | Editorial handling |
+| --- | --- | --- |
+| English | en-CA (Canadian / North American flooring operations) | Keep ft, ft², roll/remnant and warehouse terminology; check Canadian trade usage |
+| Simplified Chinese | zh-Hans (simplified Chinese for general professional readers) | Retain explicit imperial units and explain Dyelot on first use; do not silently convert the example |
+| French | fr-CA (Canadian French, including Quebec readership) | Review *moquette*, *tapis*, *chute*, *joint* and *raccord* for locally appropriate flooring meanings |
+| Spanish | es-419 (general Latin American Spanish) | Review regional alternatives for *alfombra*, *rollo*, *sobrante*, *unión* and *costura*; avoid implying one term is universal |
+
+**Decision required:** The editor must confirm these target locales before final language signoff. This proposal does not change the existing four-language website switcher or authorize new locale-specific publication records.
+
+### Review method for regional terms
+
+1. Give the reviewer the original English technical meaning, the corresponding translated sentence and the intended locale.
+2. Ask whether the term would be understood by a working flooring salesperson, warehouse supervisor and installer in that locale.
+3. Record the preferred replacement, the reason and the exact manuscript section; avoid changing numbers or conditions while polishing prose.
+4. If a term is genuinely regional, prefer a clear descriptive phrase or a first-use explanation over an unexplained localism.
+5. Recheck the practitioner account's role boundaries and the conditional seam/cut language after every revision.
+6. Mark the language **approved** only after a named reviewer signs the reviewed manuscript version; an automated text check cannot substitute.
+
 ### Meaning-preservation acceptance checks
 
 1. In every language, **300 ft² total versus one 12 ft × 20 ft continuous piece** must remain a geometry example, not proof that joining is impossible in all projects.
