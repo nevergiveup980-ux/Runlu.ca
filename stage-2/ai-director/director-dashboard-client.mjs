@@ -1,3 +1,4 @@
+import {projectDirectorDashboard} from './director-dashboard-contract.mjs';
 // Browser-safe read-only dashboard client. No credentials or tokens in URLs.
 export class DirectorDashboardClient {
  constructor({fetchImpl=globalThis.fetch}={}){if(typeof fetchImpl!=='function')throw Error('fetch required');this.fetchImpl=fetchImpl;}
@@ -13,6 +14,6 @@ export class DirectorDashboardClient {
   if(!contentType.includes('application/json'))throw new Error('invalid_response');
   let body;try{body=await response.json()}catch{throw new Error('invalid_response')}
   if(!body?.data||body.data.episodeId!==episodeId)throw new Error('invalid_response');
-  return body.data;
+  try{return projectDirectorDashboard(body.data)}catch{throw new Error('invalid_response')}
  }
 }
