@@ -18,6 +18,19 @@ assert.match(html, /<script src="runlu-language\.js"><\/script>/);
 for (const lang of ['en', 'zh', 'fr', 'es']) {
   assert.match(html, new RegExp('data-' + lang + '='), 'Missing translations for ' + lang);
 }
+// Language switching must translate labels, never overwrite authored song fields.
+for (const id of ['title', 'lyrics', 'notes']) {
+  const match = html.match(new RegExp('<(?:input|textarea)\b[^>]*\bid="' + id + '"[^>]*>', 'i'));
+  assert.ok(match, 'Missing author-editable field: ' + id);
+  assert.doesNotMatch(match[0], /data-(?:en|zh|fr|es)=/, 'Do not translate authored content: ' + id);
+}
+for (const id of ['voice', 'style']) {
+  const section = html.match(new RegExp('<select id="' + id + '">([\s\S]*?)<\/select>'));
+  assert.ok(section, 'Missing choice selector: ' + id);
+  for (const option of [...section[1].matchAll(/<option\b[^>]*>/g)]) {
+    for (const lang of ['en','zh','fr','es']) assert.match(option[0], new RegExp('data-' + lang + '='), id + ' option missing ' + lang);
+  }
+}
 assert.match(html, /localStorage/);
 assert.match(html, /URL\.createObjectURL/);
 assert.doesNotMatch(html, /GEMINI_API_KEY|AIza[0-9A-Za-z_-]{20,}/, 'Potential API key exposure');
