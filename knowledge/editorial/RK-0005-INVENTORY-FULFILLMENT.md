@@ -34,6 +34,18 @@ El inventario puede indicar 300 pies cuadrados de alfombra y aun así no permiti
 
 Las reservas, los daños, los errores de ubicación, el ancho útil, el lote de teñido, la dirección del pelo, la coincidencia de patrones y las instrucciones del fabricante también pueden limitar el uso. Antes de confirmar un pedido, hay que verificar dimensiones, rollos específicos, longitud continua, reservas y características del material. Si hay dudas, se requiere una revisión.
 
+## Practitioner-reported example — warehouse and sales coordination (editorial draft)
+
+**English.** In a reported warehouse situation, the available carpet could not provide the originally requested cut dimensions. The warehouse practitioner identified the mismatch and notified sales. Sales revised the order dimensions to a size compatible with the available material. The original and revised measurements, any customer approval process, and final fulfillment outcome were not supplied. The lesson is to communicate the constraint rather than silently alter the cut: the revised order must be checked again against usable stock and the applicable authorization process. This account is practitioner-reported, not independently verified.
+
+**中文。** 一位地材库房从业人员提供了这样的实际经历：现有地毯无法按原订单要求的尺寸裁切。他发现尺寸不匹配后通知了销售人员，随后销售将订单尺寸改为现有材料能够满足的尺寸。原尺寸、修改后的具体尺寸、客户审批过程及最终交付情况均未提供，不能自行补充。这个案例的启示是：库房发现问题应及时反馈，不能擅自改动裁切要求；订单修改后仍需重新核对可用库存及必要的审批。此经历来自当事人的工作陈述，尚未经过独立核实。
+
+**Français.** Dans un cas rapporté par un professionnel d'entrepôt, le stock de moquette disponible ne permettait pas la découpe aux dimensions initialement demandées. Après avoir constaté l'écart, le professionnel a prévenu l'équipe commerciale. Celle-ci a modifié les dimensions de la commande pour les rendre compatibles avec le matériau disponible. Les mesures précises, la procédure d'approbation du client et l'issue finale de la livraison n'ont pas été communiquées. Il faut signaler l'incompatibilité plutôt que modifier la découpe sans autorisation, puis vérifier de nouveau le stock utile et les approbations nécessaires. Ce témoignage n'a pas fait l'objet d'une vérification indépendante.
+
+**Español.** En un caso relatado por un profesional de almacén, la alfombra disponible no permitía cortar la pieza con las dimensiones solicitadas originalmente. Tras detectar la incompatibilidad, el profesional avisó al equipo de ventas. Ventas modificó las dimensiones del pedido para ajustarlas al material disponible. No se facilitaron las medidas exactas, el proceso de autorización del cliente ni el resultado final de la entrega. La enseñanza es comunicar la limitación, no modificar el corte unilateralmente, y volver a comprobar las existencias utilizables y las autorizaciones necesarias después del cambio. Se trata de un testimonio profesional, todavía sin verificación independiente.
+
+**Editorial boundary:** This real-world account is separate from the hypothetical 12 × 20 ft remnant calculation. The revised dimensions were reported as compatible with stock; no actual cut, customer approval, delivery, or independent signoff is claimed. Keep the publication gate at HOLD until the four language editions and account are reviewed.
+
 ## Editorial gate
 
 - The dimensional example is hypothetical; arithmetic: 2 × 12 × 12.5 = 300; 12 × 20 = 240.
