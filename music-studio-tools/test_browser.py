@@ -58,6 +58,24 @@ def test_browser():
                 page.locator("#export").click()
             download = download_info.value
             assert download.suggested_filename == "runlu-music-project.json"
+            # Download real UTF-8 prompt and verify original Chinese content.
+            with page.expect_download() as prompt_download_info:
+                page.locator("#exportprompt").click()
+            prompt_download = prompt_download_info.value
+            assert prompt_download.suggested_filename == "runlu-music-generation-prompt.txt"
+            prompt_bytes = Path(prompt_download.path()).read_bytes()
+            assert prompt_bytes.startswith(b"\\xef\\xbb\\xbf")
+            prompt_text = prompt_bytes.decode("utf-8-sig")
+            assert "原创歌曲 · Browser Test" in prompt_text
+            assert "第一句原创歌词" in prompt_text
+            assert "第二句仍然保留" in prompt_text
+            assert "mature expressive female voice" in prompt_text
+            assert "natural phrasing" in prompt_text
+            # Instrumental mode must never ask the model to sing the lyrics.
+            page.locator("#voice").select_option("instrumental")
+            assert "No singing" in page.locator("#prompt").inner_text()
+            assert "Instrumental theme inspiration" in page.locator("#prompt").inner_text()
+            page.locator("#voice").select_option("female")
             # Import a project into the editor, then save and reload it.
             import json
             project = {"schema": "runlu-music-studio-v1", "title": "导入测试曲",
