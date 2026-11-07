@@ -75,3 +75,12 @@ ALTER TABLE stage_director_charge_audit
  ADD COLUMN IF NOT EXISTS exceeds_approved_budget boolean NOT NULL DEFAULT false;
 ALTER TABLE stage_director_charge_audit
  ADD COLUMN IF NOT EXISTS reconciliation_note text;
+
+-- A provider overcharge freezes future reservations for this episode.
+-- Explicit administrative review is required to resume; never auto-increase the budget.
+ALTER TABLE stage_director_budgets
+ ADD COLUMN IF NOT EXISTS spending_paused boolean NOT NULL DEFAULT false;
+ALTER TABLE stage_director_budgets
+ ADD COLUMN IF NOT EXISTS pause_reason text;
+ALTER TABLE stage_director_budgets
+ ADD COLUMN IF NOT EXISTS paused_at timestamptz;
