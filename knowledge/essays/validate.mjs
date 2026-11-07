@@ -13,6 +13,17 @@ const nonempty=v=>typeof v==='string'&&v.trim().length>0;
 const fail=message=>failures.push(message);
 const manifest=await readJson(join(base,slug,'manifest.json'));
 if(manifest.id!==slug)fail('Manifest article id mismatch');
+if(!['draft','reviewed','published'].includes(manifest.status))fail('Manifest status invalid');
+const isRealDate=value=>{
+  if(typeof value!=='string'||!/^(\\d{4})-(\\d{2})-(\\d{2})$/.test(value))return false;
+  const [year,month,day]=value.split('-').map(Number);
+  const date=new Date(Date.UTC(year,month-1,day));
+  return date.getUTCFullYear()===year&&date.getUTCMonth()===month-1&&date.getUTCDate()===day;
+};
+if(manifest.status!=='published'&&manifest.publication?.approved===true)
+  fail('Unpublished manifest must not be marked approved');
+if(manifest.status==='published'&&!isRealDate(manifest.publication?.published_at))
+  fail('Published manifest requires a valid publication date');
 if(JSON.stringify(manifest.languages)!==JSON.stringify(LANGS))fail('Manifest language set mismatch');
 for(const lang of LANGS){
   if(!nonempty(manifest.titles?.[lang])||!nonempty(manifest.subtitles?.[lang]))fail(lang+': missing localized metadata');
