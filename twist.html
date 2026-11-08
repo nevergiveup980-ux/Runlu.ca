@@ -83,6 +83,19 @@ let ordering={sequence:["A","B","C","D"],submitted:false};
 let orderingUndo=null;
 try{const v=JSON.parse(localStorage.getItem(ORDER_KEY)||"null");if(v&&Array.isArray(v.sequence)&&v.sequence.length===4&&["A","B","C","D"].every(x=>v.sequence.includes(x))&&typeof v.submitted==="boolean")ordering=v;}catch(e){}
 function saveOrdering(){try{localStorage.setItem(ORDER_KEY,JSON.stringify(ordering))}catch(e){}}
+function orderingClues(){
+ const a=ordering.sequence,at=x=>a.indexOf(x);
+ return [
+  at("B")===at("D")+1,
+  at("A")<at("D"),
+  at("C")!==0&&at("C")!==3
+ ];
+}
+function orderingClueSummary(){
+ if(verifiedAnswers[3]===undefined)return "";
+ const checks=orderingClues(),labels=lang==="zh"?["B紧挨D的右侧","A在D的左侧","C不在两端"]:["B immediately follows D","A is left of D","C is not at either end"];
+ return (lang==="zh"?" · 条件检查：":" · Clue check: ")+checks.map((ok,i)=>(ok?"✓ ":"✗ ")+labels[i]).join("；");
+}
 function renderOrdering(){
  const host=el("orderingChallenge");host.hidden=state.index!==3;if(host.hidden)return;
  const correct=ordering.sequence.join("")==="ACDB";
@@ -92,13 +105,13 @@ function renderOrdering(){
  ordering.sequence.forEach((piece,i)=>{
   const cell=document.createElement("div");cell.className="buttons";cell.style.alignItems="center";
   const position=document.createElement("span");position.className="ordering-position";position.textContent=lang==="zh"?"位置 "+(i+1):"POSITION "+(i+1);cell.appendChild(position);const label=document.createElement("strong");label.className="ordering-tile";label.textContent=piece;label.setAttribute("aria-label",(lang==="zh"?"第"+(i+1)+"位，作品":"Position "+(i+1)+", artwork ")+piece);cell.appendChild(label);
-  [-1,1].forEach(dir=>{const b=document.createElement("button");b.type="button";b.textContent=dir<0?"←":"→";b.setAttribute("aria-label",(lang==="zh"?"将作品":"Move artwork ")+piece+(dir<0?(lang==="zh"?"向左移动":" left"):(lang==="zh"?"向右移动":" right")));b.disabled=ordering.submitted||i+dir<0||i+dir>=4;b.setAttribute("data-artwork",piece);b.setAttribute("data-direction",String(dir));b.addEventListener("click",()=>{if(ordering.submitted)return;const j=i+dir;if(j<0||j>=4)return;orderingUndo=[...ordering.sequence];[ordering.sequence[i],ordering.sequence[j]]=[ordering.sequence[j],ordering.sequence[i]];saveOrdering();renderOrdering();const moved=Array.from(el("orderingPieces").querySelectorAll("button")).find(btn=>btn.getAttribute("data-artwork")===piece&&btn.getAttribute("data-direction")===String(dir)&&!btn.disabled);if(moved)moved.focus();else{const alternative=Array.from(el("orderingPieces").querySelectorAll("button")).find(btn=>btn.getAttribute("data-artwork")===piece&&!btn.disabled);if(alternative)alternative.focus()}el("orderingFeedback").textContent=(lang==="zh"?"已将作品"+piece+"移到第"+(j+1)+"位。当前顺序：":"Moved artwork "+piece+" to position "+(j+1)+". Current order: ")+ordering.sequence.join(" – ") });cell.appendChild(b)});
+  [-1,1].forEach(dir=>{const b=document.createElement("button");b.type="button";b.textContent=dir<0?"←":"→";b.setAttribute("aria-label",(lang==="zh"?"将作品":"Move artwork ")+piece+(dir<0?(lang==="zh"?"向左移动":" left"):(lang==="zh"?"向右移动":" right")));b.disabled=ordering.submitted||i+dir<0||i+dir>=4;b.setAttribute("data-artwork",piece);b.setAttribute("data-direction",String(dir));b.addEventListener("click",()=>{if(ordering.submitted)return;const j=i+dir;if(j<0||j>=4)return;orderingUndo=[...ordering.sequence];[ordering.sequence[i],ordering.sequence[j]]=[ordering.sequence[j],ordering.sequence[i]];saveOrdering();renderOrdering();const moved=Array.from(el("orderingPieces").querySelectorAll("button")).find(btn=>btn.getAttribute("data-artwork")===piece&&btn.getAttribute("data-direction")===String(dir)&&!btn.disabled);if(moved)moved.focus();else{const alternative=Array.from(el("orderingPieces").querySelectorAll("button")).find(btn=>btn.getAttribute("data-artwork")===piece&&!btn.disabled);if(alternative)alternative.focus()}el("orderingFeedback").textContent=(lang==="zh"?"已将作品"+piece+"移到第"+(j+1)+"位。当前顺序：":"Moved artwork "+piece+" to position "+(j+1)+". Current order: ")+ordering.sequence.join(" – ")+orderingClueSummary() });cell.appendChild(b)});
   pieces.appendChild(cell)
  });
  const actions=el("orderingActions");actions.replaceChildren();
  const submit=document.createElement("button");submit.type="button";submit.className="primary";submit.textContent=lang==="zh"?"提交排列":"Submit order";submit.disabled=ordering.submitted||verifiedAnswers[3]===undefined;submit.addEventListener("click",()=>{if(ordering.submitted||verifiedAnswers[3]===undefined)return;ordering.submitted=true;saveOrdering();renderOrdering()});actions.appendChild(submit);
- const undo=document.createElement("button");undo.type="button";undo.textContent=lang==="zh"?"撤销上一步":"Undo last move";undo.disabled=ordering.submitted||orderingUndo===null;undo.addEventListener("click",()=>{if(ordering.submitted||orderingUndo===null)return;ordering.sequence=orderingUndo;orderingUndo=null;saveOrdering();renderOrdering();const next=Array.from(el("orderingPieces").querySelectorAll("button")).find(btn=>!btn.disabled);if(next)next.focus();el("orderingFeedback").textContent=(lang==="zh"?"已撤销上一步。当前顺序：":"Last move undone. Current order: ")+ordering.sequence.join(" – ")});actions.appendChild(undo);
- el("orderingFeedback").textContent=!ordering.submitted?((lang==="zh"?"当前顺序：":"Current order: ")+ordering.sequence.join(" – ")+(verifiedAnswers[3]===undefined?(lang==="zh"?" · 请先提交上方自动判分答案，再核对排列。":" · Submit the verified answer above before checking the order."):"")):(correct?(lang==="zh"?"排列正确！A–C–D–B 满足全部条件。":"Correct! A–C–D–B satisfies every clue."):(lang==="zh"?"排列尚未满足全部条件。你的顺序："+ordering.sequence.join("–")+"；参考答案：A–C–D–B。":"Not all clues are satisfied. Your order: "+ordering.sequence.join("–")+"; solution: A–C–D–B."));
+ const undo=document.createElement("button");undo.type="button";undo.textContent=lang==="zh"?"撤销上一步":"Undo last move";undo.disabled=ordering.submitted||orderingUndo===null;undo.addEventListener("click",()=>{if(ordering.submitted||orderingUndo===null)return;ordering.sequence=orderingUndo;orderingUndo=null;saveOrdering();renderOrdering();const next=Array.from(el("orderingPieces").querySelectorAll("button")).find(btn=>!btn.disabled);if(next)next.focus();el("orderingFeedback").textContent=(lang==="zh"?"已撤销上一步。当前顺序：":"Last move undone. Current order: ")+ordering.sequence.join(" – ")+orderingClueSummary()});actions.appendChild(undo);
+ el("orderingFeedback").textContent=!ordering.submitted?((lang==="zh"?"当前顺序：":"Current order: ")+ordering.sequence.join(" – ")+(verifiedAnswers[3]===undefined?(lang==="zh"?" · 请先提交上方自动判分答案，再核对排列。":" · Submit the verified answer above before checking the order."):orderingClueSummary())):(correct?(lang==="zh"?"排列正确！A–C–D–B 满足全部条件。":"Correct! A–C–D–B satisfies every clue."):(lang==="zh"?"排列尚未满足全部条件。你的顺序："+ordering.sequence.join("–")+"；参考答案：A–C–D–B。":"Not all clues are satisfied. Your order: "+ordering.sequence.join("–")+"; solution: A–C–D–B."));
 }
 // Eight objectively graded choices across arithmetic, time, and constraint reasoning; separate from exploration points.
 const verifiedCases={
