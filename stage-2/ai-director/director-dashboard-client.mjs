@@ -1,7 +1,7 @@
 import {projectDirectorDashboard} from './director-dashboard-contract.mjs';
 // Browser-safe read-only dashboard client. No credentials or tokens in URLs.
 export class DirectorDashboardClient {
- constructor({fetchImpl=globalThis.fetch}={}){if(typeof fetchImpl!=='function')throw Error('fetch required');this.fetchImpl=fetchImpl;}
+ constructor({fetchImpl}={}){const request=fetchImpl??((...args)=>globalThis.fetch(...args));if(typeof request!=='function')throw Error('fetch required');this.fetchImpl=request;}
  async load(episodeId,{signal}={}){
   if(!/^[a-zA-Z0-9_-]{1,100}$/.test(episodeId??''))throw Error('Invalid episode ID');
   const url='/api/stage/director/episode?episodeId='+encodeURIComponent(episodeId);
