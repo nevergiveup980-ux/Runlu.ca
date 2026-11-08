@@ -1,0 +1,22 @@
+name: Flooring Cancelled Order Quarantine V1
+on:
+  pull_request:
+    paths:
+      - 'flooring/warehouse-po-handoff-v001.js'
+      - 'flooring/warehouse-work-sync-v090.js'
+      - 'scripts/run-flooring-cancelled-order-quarantine-v1.mjs'
+      - '.github/workflows/flooring-cancelled-order-quarantine-v1.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'flooring/warehouse-po-handoff-v001.js'
+      - 'flooring/warehouse-work-sync-v090.js'
+      - 'scripts/run-flooring-cancelled-order-quarantine-v1.mjs'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: node scripts/run-flooring-cancelled-order-quarantine-v1.mjs
