@@ -10,6 +10,34 @@ permissions:
   contents: read
 
 jobs:
+  stripe-postgres-lab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17.7
+        env:
+          POSTGRES_USER: runlu_lab_owner
+          POSTGRES_PASSWORD: synthetic_ci_only
+          POSTGRES_DB: runlu_stripe_lab
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U runlu_lab_owner -d runlu_stripe_lab"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install isolated test dependencies
+        run: npm ci --prefix experiments/stripe-ordering --ignore-scripts --no-audit --no-fund
+      - name: Test embedded PostgreSQL and signed webhook
+        run: npm test --prefix experiments/stripe-ordering
+      - name: Test server PostgreSQL locks, rollback and connection death
+        env:
+          RUNLU_STRIPE_LAB_DATABASE_URL: postgresql://runlu_lab_owner:synthetic_ci_only@127.0.0.1:5432/runlu_stripe_lab
+        run: npm test --prefix experiments/stripe-ordering
   check:
     runs-on: ubuntu-latest
     steps:

@@ -25,13 +25,13 @@ export function createProcessor({ store, retrieveSubscription }) {
       throw new Error('invalid_verified_event');
     // Retries are bounded. Exhaustion is a retryable failure, never a 2xx duplicate.
     for (let attempt = 0; attempt < 4; attempt++) {
-      const receipt = store.receipt(event.id);
+      const receipt = await store.receipt(event.id);
       if (receipt) {
         if (receipt.payloadHash !== event.payloadHash || receipt.subscription !== event.subscription)
           throw new Error('event_identity_conflict');
         return 'duplicate';
       }
-      const current = store.read(event.subscription);
+      const current = await store.read(event.subscription);
       const stale = current?.clock && event.created < current.clock.created;
       let next = null;
       if (!stale) {
@@ -42,7 +42,7 @@ export function createProcessor({ store, retrieveSubscription }) {
         if (['canceled', 'incomplete_expired'].includes(current?.status) && next.status !== current.status)
           throw new Error('terminal_subscription_conflict');
       }
-      const outcome = store.commit({ event, expectedRevision: current?.revision ?? 0, next });
+      const outcome = await store.commit({ event, expectedRevision: current?.revision ?? 0, next });
       if (outcome !== 'conflict') return outcome;
     }
     throw new Error('subscription_busy_retry');

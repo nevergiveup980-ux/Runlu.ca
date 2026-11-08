@@ -4,6 +4,53 @@ Not deployed. No production credentials, Stripe requests, Supabase mutations,
 Edge Function deployment, or production migration are included in this experiment.
 Run `node scripts/check-stripe-atomic-replay.mjs` with Node 22.13+ or 24.
 
+## PostgreSQL and signed HTTP lab (2026-11-08)
+
+The next layer is executable PL/pgSQL, not a JavaScript simulation:
+
+```
+cd experiments/stripe-ordering
+npm ci --ignore-scripts
+npm test
+```
+
+Dependencies are pinned with a lockfile. The default backend is an ephemeral,
+embedded PGlite PostgreSQL database; no hosted database is contacted. A dedicated
+Actions job also runs the same SQL and tests against a fresh PostgreSQL 17.7
+service, using independent pooled sessions. The explicit server URL is restricted
+to loopback, database `runlu_stripe_lab`, role `runlu_lab_owner`, and a schema that
+does not yet exist. Never pass a production URL to this harness. A failure leaves
+the disposable CI database for diagnostics; there is no DROP DATABASE command.
+
+`lab-schema.sql` creates ONLY fixture roles and the private `runlu_stripe_lab`
+schema. It is deliberately outside `supabase/migrations`. The invoker RPC revokes
+PUBLIC execution; anonymous/authenticated fixture roles have no access, and all
+four fixture tables enable RLS. The service role has explicit grants and bypasses
+RLS, analogous to a trusted backend. Tests exercise denied access, not just inspect
+the SQL. Advisory transaction locks fence receipt identity and subscription
+creation; revision fencing rejects an authoritative response fetched before a
+competing commit. Stale checks and terminal state checks run in SQL too. External
+retrieval remains outside the transaction, so no Stripe call holds database locks.
+
+`webhook.mjs` verifies HMAC over the raw request and timestamp, rejects live-mode
+payloads, uses a server-owned correlation callback, and acknowledges only committed
+applied/stale/duplicate outcomes. Errors return 503 without raw error details.
+Tests include a real loopback HTTP round trip as well as Fetch API requests, using
+synthetic test-mode JSON and a local signing secret. These are NOT Stripe CLI
+fixtures and do NOT certify Stripe API compatibility or a deployed Deno runtime.
+
+The server-only tests cover simultaneous first creation from separate sessions,
+lock timeout returning 503 rather than false duplicate/200, and terminating a
+connection with uncommitted state followed by a successful retry. All run only
+against the disposable CI database, never the connected Supabase project.
+
+This reduces the remaining gap but still uses fixture tables and fixture access
+policy. It does not yet invoke the real RUNLU receipt, checkout correlation,
+normalization or fulfillment RPCs. Porting those together into the transaction,
+checking account/customer/price identity and verifying Stripe test-mode/Deno
+integration remain release gates below. The production v14 bundle was re-read
+on 2026-11-08 and still matched the version/hash recorded here.
+
 ## Read-only findings (2026-11-07)
 
 Production project `ekrnknlawekeoszzkamd`, `runlu-stripe-webhook`, ACTIVE v14,

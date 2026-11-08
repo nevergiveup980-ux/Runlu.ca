@@ -1,0 +1,10 @@
+{
+  "name": "runlu-stripe-isolated-lab",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node check-postgres-webhook.mjs" },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.15",
+    "pg": "8.23.1"
+  }
+}
