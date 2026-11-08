@@ -31,17 +31,39 @@ def validate_project(project):
     return project
 
 def build_prompt(project):
-    title = str(project.get("title", "Untitled"))[:120]
-    voice = {"female": "mature expressive female voice", "male": "mature warm male baritone",
-             "instrumental": "instrumental, no vocals"}.get(project.get("voice"), "female voice")
-    style = {"nostalgic": "nostalgic cinematic folk ballad", "folk": "acoustic storytelling folk",
-             "piano": "emotional piano ballad", "cinematic": "cinematic strings"}.get(project.get("style"), "nostalgic cinematic folk")
-    lyrics = str(project.get("lyrics", ""))
-    notes = str(project.get("notes", ""))
-    return (f"Create an entirely original Mandarin song titled {title}. "
-            f"Style: {style}. Voice: {voice}. Natural phrasing, clear diction, expressive dynamics. "
-            f"No imitation of existing melodies or identifiable artists. "
-            f"Direction: {notes}\nOriginal lyrics:\n{lyrics}")[:MAX_PROMPT_CHARS]
+    """Match the Studio's song/voice/arrangement guidance in manual dry runs."""
+    title = project.get("title", "Untitled")[:120]
+    voice_key = project.get("voice", "female")
+    instrumental = voice_key == "instrumental"
+    voice = {"female": "mature expressive female voice",
+             "male": "mature warm slightly husky male baritone",
+             "instrumental": "instrumental only, no vocals"}[voice_key]
+    style = {"nostalgic": "nostalgic cinematic folk ballad",
+             "folk": "intimate acoustic storytelling folk",
+             "piano": "emotional piano ballad",
+             "cinematic": "cinematic strings and acoustic guitar"}[project.get("style", "nostalgic")]
+    notes = project.get("notes", "").strip()
+    lines = [
+        "Compose an entirely original instrumental piece." if instrumental else "Create an entirely original Mandarin song.",
+        f"Working title: {title}.",
+        f"Style: {style}.",
+        f"Voice: {voice}.",
+        "Structure: a clear opening, developing verse, memorable emotional peak, and a resolved ending.",
+        "Arrangement: preserve space for the main melody, avoid clutter, build dynamics naturally.",
+        ("No singing, spoken words, vocal samples, or synthetic choir." if instrumental else
+         "Vocal direction: natural phrasing, expressive dynamics, believable breathing, clear Mandarin diction, and restrained vibrato."),
+        "Originality: compose a new melody and arrangement; do not imitate existing recordings, copyrighted melodies, or identifiable artist voices.",
+        "Production: balanced mix, no clipping, no abrupt cutoff, export clean full-length audio when supported.",
+    ]
+    if notes:
+        lines.append(f"Additional direction: {notes}")
+    lines.append(("Instrumental theme inspiration (not to be sung):\\n" if instrumental else
+                  "Original lyrics (sing only the provided words; do not add invented lines):\\n") +
+                 project.get("lyrics", ""))
+    result = "\\n".join(lines)
+    if len(result) > MAX_PROMPT_CHARS:
+        raise ValueError("Generation prompt exceeds size limit; shorten the lyrics or notes")
+    return result
 
 def main():
     p = argparse.ArgumentParser()
