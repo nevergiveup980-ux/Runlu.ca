@@ -2,6 +2,8 @@
 import importlib.util
 import pathlib
 import unittest
+import io
+import wave
 
 MODULE = pathlib.Path(__file__).with_name("generate_preview.py")
 spec = importlib.util.spec_from_file_location("generate_preview", MODULE)
@@ -33,7 +35,15 @@ class ProjectValidationTests(unittest.TestCase):
 
     def test_audio_signature_detection(self):
         self.assertEqual(mod.detect_audio_format(b"ID3" + bytes(16)), ".mp3")
-        self.assertEqual(mod.detect_audio_format(b"RIFF" + bytes(4) + b"WAVE" + bytes(8)), ".wav")
+        buffer = io.BytesIO()
+        with wave.open(buffer, "wb") as wav:
+            wav.setnchannels(1)
+            wav.setsampwidth(2)
+            wav.setframerate(16000)
+            wav.writeframes(bytes(320))
+        self.assertEqual(mod.detect_audio_format(buffer.getvalue()), ".wav")
+        with self.assertRaises(ValueError):
+            mod.detect_audio_format(buffer.getvalue()[:-8])
         self.assertEqual(mod.detect_audio_format(bytes(4) + b"ftypM4A " + bytes(8)), ".m4a")
         with self.assertRaises(ValueError):
             mod.detect_audio_format(b"not an audio file")
