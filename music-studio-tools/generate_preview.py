@@ -61,10 +61,10 @@ def build_prompt(project):
     ]
     if notes:
         lines.append(f"Additional direction: {notes}")
-    lines.append(("Instrumental theme inspiration (not to be sung):\\n" if instrumental else
-                  "Original lyrics (sing only the provided words; do not add invented lines):\\n") +
+    lines.append(("Instrumental theme inspiration (not to be sung):\n" if instrumental else
+                  "Original lyrics (sing only the provided words; do not add invented lines):\n") +
                  project.get("lyrics", ""))
-    result = "\\n".join(lines)
+    result = "\n".join(lines)
     if len(result) > MAX_PROMPT_CHARS:
         raise ValueError("Generation prompt exceeds size limit; shorten the lyrics or notes")
     return result
