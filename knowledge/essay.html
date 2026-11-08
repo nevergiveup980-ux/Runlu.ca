@@ -92,7 +92,7 @@ const heading=document.createElement('h2');heading.textContent=s.heading;section
 s.paragraphs.forEach(p=>{const paragraph=document.createElement('p');
 // Render only simple editorial *italics* and **bold** using safe text nodes.
 // All unmatched markers remain literal text; no HTML is interpreted.
-const tokens=/(\\*\\*[^*\\n]+\\*\\*|\\*[^*\\n]+\\*)/g;
+const tokens=/(\*\*[^*\n]+\*\*|\*[^*\n]+\*)/g;
 let cursor=0;
 for(const match of p.matchAll(tokens)){
   const at=match.index;
