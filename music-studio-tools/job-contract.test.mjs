@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import {validateCreateRequest,validateIdempotencyKey,nextStatus,publicJobView} from "./job-contract.js";
+import {validateCreateRequest,validateIdempotencyKey,nextStatus,publicJobView} from "./job-contract.mjs";
 const good={title:"风吹过的那些年",lyrics:"风吹过那些年",voice:"female",style:"nostalgic",language:"zh"};
 test("validates complete original song request",()=>assert.equal(validateCreateRequest(good).title,good.title));
 test("rejects empty vocal lyrics",()=>assert.throws(()=>validateCreateRequest({...good,lyrics:""}),/LYRICS_REQUIRED/));
