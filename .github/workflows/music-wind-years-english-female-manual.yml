@@ -1,0 +1,70 @@
+name: RUNLU Music - Wind Years English female full song (manual)
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_paid:
+        description: 'YES = authorize exactly one potentially billable Lyria 3.5 request'
+        required: true
+        type: choice
+        default: 'NO'
+        options:
+          - 'NO'
+          - 'YES'
+permissions:
+  contents: read
+concurrency:
+  group: runlu-wind-years-english-one-song
+  cancel-in-progress: false
+jobs:
+  generate:
+    if: ${{ inputs.confirm_paid == 'YES' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout music development branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/runlu-music-studio-mvp
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify English female song project and prompt
+        run: |
+          python - <<'PY'
+          import json, sys
+          sys.path.insert(0, "music-studio-tools")
+          from generate_preview import build_prompt
+          p=json.load(open("music-studio-tools/wind-years-english-project.json", encoding="utf-8"))
+          assert p["title"]=="When the Wind Blows Through the Years"
+          assert p["language"]=="en" and p["voice"]=="female"
+          assert "[Final Chorus]" in p["lyrics"]
+          prompt=build_prompt(p)
+          assert "English-language song" in prompt and "clear English diction" in prompt
+          print("English female song and prompt verified")
+          PY
+      - name: Verify private secret
+        env:
+          RUNLU_MUSIC_GEMINI_API_KEY: ${{ secrets.RUNLU_MUSIC_GEMINI_API_KEY }}
+        run: |
+          if [ -z "$RUNLU_MUSIC_GEMINI_API_KEY" ]; then
+            echo "Missing secret; no provider request made."
+            exit 2
+          fi
+      - name: Generate one English song without retries
+        env:
+          RUNLU_MUSIC_GEMINI_API_KEY: ${{ secrets.RUNLU_MUSIC_GEMINI_API_KEY }}
+        run: |
+          mkdir -p output
+          python music-studio-tools/generate_full_song.py \
+            --project music-studio-tools/wind-years-english-project.json \
+            --output output/runlu-wind-years-english-female.mp3 \
+            --confirm-paid
+      - name: Upload private MP3
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runlu-wind-years-english-female-mp3
+          path: output/runlu-wind-years-english-female.mp3
+          if-no-files-found: error
+          retention-days: 3
