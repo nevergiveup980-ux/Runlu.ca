@@ -4,6 +4,8 @@ on:
     paths:
       - 'music/job-service.mjs'
       - 'music/job-service.test.mjs'
+      - 'music/auth-boundary.mjs'
+      - 'music/auth-boundary.test.mjs'
       - 'music-studio-tools/job-contract.mjs'
       - '.github/workflows/runlu-music-orchestration.yml'
   pull_request:
@@ -23,4 +25,4 @@ jobs:
         with:
           node-version: '22'
       - name: Test isolated music service and job contract
-        run: node --test music/job-service.test.mjs music-studio-tools/job-contract.test.mjs
+        run: node --test music/job-service.test.mjs music/auth-boundary.test.mjs music-studio-tools/job-contract.test.mjs
