@@ -269,7 +269,7 @@
     if (!el || !item) return;
     // Paper-edit selection is a one-tap commit to the originating draft row.
     // Native PO selection retains the detail + explicit confirmation workflow.
-    if (autoApplyOnSelect && item.selectable) {
+    if (autoApplyOnSelect && !offline && item.selectable) {
       useItem(item);
       return;
     }
@@ -286,8 +286,8 @@
     el.innerHTML = `<div class="sip72detailHead"><div><span>${esc(
       item.kind,
     )}</span><h3>${esc(item.name)}</h3><p>${esc(item.colour || "No colour")}</p></div><span class="sip72availability ${
-      item.selectable ? "ok" : "no"
-    }">${item.selectable ? "AVAILABLE" : "NOT AVAILABLE"}</span></div><dl><div><dt>Roll / Stock ID</dt><dd>${esc(
+      !offline && item.selectable ? "ok" : "no"
+    }">${offline ? "CACHED · VERIFY ONLINE" : item.selectable ? "AVAILABLE" : "NOT AVAILABLE"}</span></div><dl><div><dt>Roll / Stock ID</dt><dd>${esc(
       item.roll || item.sku || "—",
     )}</dd></div><div><dt>Manufacturer Roll</dt><dd>${esc(
       item.manufacturerRoll || "—",
@@ -312,11 +312,11 @@
     )}</dd></div></dl>${holdDetails}${
       item.notes ? `<p class="sip72note">${esc(item.notes)}</p>` : ""
     }<button type="button" id="sip72use" class="action primary" ${
-      item.selectable ? "" : "disabled"
-    }>Use this inventory record</button>`;
+      !offline && item.selectable ? "" : "disabled"
+    }>${offline ? "Live connection required" : "Use this inventory record"}</button>`;
     by("sip72use")?.addEventListener("click", () => useItem(item));
     const confirm=by("sip72confirm");
-    if(confirm){confirm.disabled=!item.selectable;confirm.textContent=item.selectable?"✓ Use selected roll · Return to PO":"Record unavailable";}
+    if(confirm){confirm.disabled=offline||!item.selectable;confirm.textContent=offline?"Live connection required":item.selectable?"✓ Use selected roll · Return to PO":"Record unavailable";}
   }
   function setField(row, field, value, overwrite) {
     const el = row?.querySelector(`[data-f="${field}"]`);
@@ -326,7 +326,7 @@
     el.dispatchEvent(new Event("change", { bubbles: true }));
   }
   function useItem(item) {
-    if (!activeRow || !activeRow.isConnected || !item.selectable) return false;
+    if (offline || !activeRow || !activeRow.isConnected || !item.selectable) return false;
     setField(activeRow, "style", item.name, true);
     setField(activeRow, "colour", item.colour, true);
     setField(activeRow, "sku", item.sku || item.manufacturerRoll, false);
@@ -362,7 +362,7 @@
   }
   function useSelected(){
     const item=inventory.find(x=>x.id===selectedId);
-    if(!item||!item.selectable)return false;
+    if(offline||!item||!item.selectable)return false;
     return useItem(item);
   }
   function ensureStyle() {
@@ -544,21 +544,30 @@
       const c = await client();
       const session = await recoverWarehouseSession(c);
       if (!session) throw new Error("Warehouse OS sign-in was not found");
-      const res = await c
-        .from("warehouse_records")
-        .select("dataset_key,record_id,payload,version,updated_at")
-        .in("dataset_key", DATASETS)
-        .is("deleted_at", null)
-        .limit(1000);
-      if (res.error) throw res.error;
-      buildInventory(Array.isArray(res.data) ? res.data : []);
+      const rows = [];
+      const pageSize = 500;
+      for (let offset = 0; ; offset += pageSize) {
+        const res = await c
+          .from("warehouse_records")
+          .select("dataset_key,record_id,payload,version,updated_at")
+          .in("dataset_key", DATASETS)
+          .is("deleted_at", null)
+          .order("dataset_key", { ascending: true })
+          .order("record_id", { ascending: true })
+          .range(offset, offset + pageSize - 1);
+        if (res.error) throw res.error;
+        const page = Array.isArray(res.data) ? res.data : [];
+        rows.push(...page);
+        if (page.length < pageSize) break;
+      }
+      buildInventory(rows);
       offline = false;
       connectionMessage = "";
       lastSync = new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
       });
-      writeCache({ rows: res.data, lastSync });
+      writeCache({ rows, lastSync });
     } catch (error) {
       const cache = readCache();
       if (cache?.rows) buildInventory(cache.rows);
@@ -572,6 +581,18 @@
           "Smart Inventory Picker refresh:",
           error?.message || error,
         );
+    }
+    // A refresh may replace the inventory or change connectivity.
+    // Never leave a previously selected record or an enabled confirmation stale.
+    selectedId = "";
+    const confirm = by("sip72confirm");
+    if (confirm) {
+      confirm.disabled = true;
+      confirm.textContent = offline ? "Live connection required" : "Choose a roll above";
+    }
+    const detail = by("sip72detail");
+    if (detail) {
+      detail.innerHTML = '<p class="sip72intro">Select an inventory record to inspect current Warehouse OS details.</p>';
     }
     setSync();
     if (by("sip72") && !by("sip72").hidden) renderResults();
