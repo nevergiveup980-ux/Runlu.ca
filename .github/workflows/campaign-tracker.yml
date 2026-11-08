@@ -1,0 +1,26 @@
+name: RUNLU Campaign Tracker Checks
+
+on:
+  pull_request:
+    paths:
+      - 'book/campaign-tracker.js'
+      - 'book/campaign-tracker.test.cjs'
+      - '.github/workflows/campaign-tracker.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  campaign-tracker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: node --check book/campaign-tracker.js
+      - name: Run campaign tracker regression checks
+        run: node book/campaign-tracker.test.cjs
