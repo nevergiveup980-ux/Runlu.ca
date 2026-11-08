@@ -213,9 +213,24 @@ test("reproducible material example shows SF, SYD and waste for each candidate",
  const table=page.locator('#results table').first();
  await expect(table).toContainText('Allocated SYD');
  const small=table.locator('tbody tr').filter({hasText:'Smallest area first'});
- await expect(small.locator('td')).toHaveText(['Smallest area first','Complete','0.00','576.00','64.00','134.00','1']);
+ await expect(small.locator('td')).toHaveText(['Smallest area first','Complete','0.00','576.00','64.00','134.00','1','14.89','0.00']);
  const large=table.locator('tbody tr').filter({hasText:'Largest area first'});
- await expect(large.locator('td')).toHaveText(['Largest area first','Complete','0.00','624.00','69.33','182.00','1']);
+ await expect(large.locator('td')).toHaveText(['Largest area first','Complete','0.00','624.00','69.33','182.00','1','20.22','-48.00']);
  await expect(page.locator('#scenarioPicker option:checked')).toContainText('Smallest area first');
  await expect(page.locator('#results .stat').nth(1)).toContainText('576.00');
+});
+
+test('savings comparison excludes incomplete plans and printing follows selected layout',async({page})=>{
+ await page.goto(pageUrl);
+ await page.locator('#load').setInputFiles(resolve('examples/small-first-win.json'));
+ await expect(page.locator('#results')).toContainText('Material Savings Comparison');
+ await page.locator('#reviewChecklist input').first().check();
+ await page.locator('#scenarioPicker').selectOption({label:'Largest area first · Complete'});
+ await expect(page.locator('#reviewChecklist input').first()).not.toBeChecked();
+ await page.locator('#print').click();
+ await expect(page.locator('#results .stat').nth(1)).toContainText('624.00');
+ await expect(page.locator('#results tr[aria-current="true"]')).toContainText('Largest area first');
+ await page.locator('#pieceRows input[data-field="lot"]').first().fill('MISSING');
+ await page.locator('#calculate').click();
+ await expect(page.locator('#results table').first()).toContainText('Not comparable');
 });

@@ -17,10 +17,15 @@ describe('reproducible material comparison',()=>{
    const rolls=Array.from({length:1+random(3)},(_,j)=>({id:`R${j}`,widthIn:12*(8+random(5)),lengthIn:12*(20+random(61)),dyeLot:j===2?'B':'A',priority:random(3)}));
    const pieces=Array.from({length:3+random(6)},(_,j)=>({id:`P${j}`,widthIn:12*(2+random(11)),lengthIn:12*(3+random(14)),dyeLot:random(4)===0?'B':'A',allowRotate:random(4)===0}));
    const result=measureMaterial(rolls,pieces);
+   const previous=comparePlans(rolls,pieces,{includeSpaceSearch:false})[0];
+   const next=comparePlans(rolls,pieces)[0];
+   if(previous.feasible){expect(next.feasible).toBe(true);expect(next.score).toBeLessThanOrEqual(previous.score);}
+   expect(comparePlans(rolls,pieces)).toEqual(comparePlans(rolls,pieces));
    if(result.legacy.complete){expect(result.expanded.complete).toBe(true);expect(result.savingsSF).toBeGreaterThanOrEqual(0);}
    if(!result.legacy.complete&&result.expanded.complete)completionGains++;
    if(result.savingsSF===null)incomplete++;else {totalLegacySF+=result.legacy.allocatedSF;totalExpandedSF+=result.expanded.allocatedSF;if(result.savingsSF>0)wins++;else ties++;}
-   const plan=comparePlans(rolls,pieces)[0].plan;
+   for(const candidate of [...comparePlans(rolls,pieces),...comparePlans(rolls,[...pieces].reverse())]){
+   const plan=candidate.plan;
    expect(new Set([...plan.placements.map(p=>p.pieceId),...plan.unplaced]).size).toBe(pieces.length);
    expect(plan.placements.length+plan.unplaced.length).toBe(pieces.length);
    expect(plan.usedAreaSF+plan.wasteAreaSF).toBeCloseTo(plan.allocatedAreaSF,8);
@@ -30,8 +35,9 @@ describe('reproducible material comparison',()=>{
     expect((p.widthIn===cut.widthIn&&p.lengthIn===cut.lengthIn)||(cut.allowRotate&&p.widthIn===cut.lengthIn&&p.lengthIn===cut.widthIn)).toBe(true);
     for(const q of plan.placements.filter(q=>q!==p&&q.rollId===p.rollId))expect(p.xIn+p.widthIn<=q.xIn||q.xIn+q.widthIn<=p.xIn||p.yIn+p.lengthIn<=q.yIn||q.yIn+q.lengthIn<=p.yIn).toBe(true);
    }
+   }
   }
   console.info(JSON.stringify({seed:980,orders:1000,wins,ties,incomplete,completionGains,totalLegacySF,totalExpandedSF}));
-  expect({wins,ties,incomplete}).toEqual({wins:4,ties:466,incomplete:530});
+  expect({wins,ties,incomplete}).toEqual({wins:196,ties:274,incomplete:530});
  });
 });

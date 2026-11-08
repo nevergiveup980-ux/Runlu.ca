@@ -11,6 +11,7 @@ export function calculateShared(rollInputs:InputRoll[],pieceInputs:InputPiece[],
  // This is a heuristic, not a guarantee of minimum material consumption.
  const orderedRolls=shortRollFirst?[...rolls].sort((a,b)=>(a.priority??0)-(b.priority??0)||a.lengthIn-b.lengthIn):rolls;
  const scenarios=comparePlans(orderedRolls,pieces);
+ const baseline=comparePlans(orderedRolls,pieces,{includeSpaceSearch:false})[0];
  if(!scenarios.length)throw Error("No candidate plans");
  if(!Number.isInteger(selected)||selected<0||selected>=scenarios.length)throw Error("Invalid scenario selection");
  const summaries=scenarios.map(s=>{const usedRolls=rollInputs.map(r=>({id:r.id,stockType:r.stockType||'FULL',usedLF:(s.plan.usedLengthByRoll[r.id]||0)/12,usedSF:r.w*(s.plan.usedLengthByRoll[r.id]||0)/12})).filter(r=>r.usedLF>0);return {...s,usedRolls,rollCount:usedRolls.length,remnantCount:usedRolls.filter(r=>r.stockType==='REMNANT').length,shortCount:usedRolls.filter(r=>r.stockType==='SHORT').length,wasteSF:s.plan.wasteAreaSF};});
@@ -24,7 +25,7 @@ export function calculateShared(rollInputs:InputRoll[],pieceInputs:InputPiece[],
  const requiresInstallerReview=true;
  const remaining=rollInputs.reduce((sum,r)=>sum+r.w*(r.l-used[r.id]),0);
  const rollSummary=rollInputs.map(r=>({id:r.id,stockType:r.stockType||'FULL',widthFt:r.w,availableLF:r.l,usedLF:used[r.id]||0,remainingLF:r.l-(used[r.id]||0),remainingSF:r.w*(r.l-(used[r.id]||0))}));
- return {roomAreaSF,allowanceAreaSF,patternAdjustmentSF,patternRepeatIn,allowance,installationChecks,requiresInstallerReview,placed,unplaced:best.unplaced,used,net:best.usedAreaSF,allocated:best.allocatedAreaSF,waste:best.wasteAreaSF,remaining,rollSummary,rate:best.wastePercent,scenarios:summaries.map(s=>({name:s.name,feasible:s.feasible,unplaced:s.plan.unplaced.length,unplacedAreaSF:s.unplacedAreaSF,allocatedSF:s.plan.allocatedAreaSF,wasteSF:s.wasteSF,rollCount:s.rollCount,remnantCount:s.remnantCount,shortCount:s.shortCount,usedRolls:s.usedRolls})),selected};
+ return {baseline:{name:baseline.name,feasible:baseline.feasible,allocatedSF:baseline.plan.allocatedAreaSF},roomAreaSF,allowanceAreaSF,patternAdjustmentSF,patternRepeatIn,allowance,installationChecks,requiresInstallerReview,placed,unplaced:best.unplaced,used,net:best.usedAreaSF,allocated:best.allocatedAreaSF,waste:best.wasteAreaSF,remaining,rollSummary,rate:best.wastePercent,scenarios:summaries.map(s=>({name:s.name,feasible:s.feasible,unplaced:s.plan.unplaced.length,unplacedAreaSF:s.unplacedAreaSF,allocatedSF:s.plan.allocatedAreaSF,wasteSF:s.wasteSF,savingsSF:baseline.feasible&&s.feasible?baseline.plan.allocatedAreaSF-s.plan.allocatedAreaSF:null,rollCount:s.rollCount,remnantCount:s.remnantCount,shortCount:s.shortCount,usedRolls:s.usedRolls})),selected};
 }
 declare global {interface Window {runluCalculateShared?:typeof calculateShared}}
 if(typeof window!=='undefined')window.runluCalculateShared=calculateShared;

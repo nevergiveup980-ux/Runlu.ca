@@ -9,10 +9,10 @@ export const materialFixtures=[
 ];
 export function measureMaterial(rolls:Roll[],pieces:Piece[]){
  // Full pre-small-first candidate set: includes roll ordering and priority fallback.
- const legacy=comparePlans(rolls,pieces,{includeSmallAreaFirst:false})[0];
+ const legacy=comparePlans(rolls,pieces,{includeSmallAreaFirst:false,includeSpaceSearch:false})[0];
  const expanded=comparePlans(rolls,pieces)[0];
  const small=planCuts(rolls,pieces,'area-asc');
- const metrics=(plan:typeof small)=>({complete:plan.unplaced.length===0,allocatedSF:plan.allocatedAreaSF,allocatedSYD:plan.allocatedAreaSF/9,wasteSF:plan.wasteAreaSF});
+ const metrics=(plan:typeof small)=>({complete:plan.unplaced.length===0,allocatedSF:plan.allocatedAreaSF,allocatedSYD:plan.allocatedAreaSF/9,wasteSF:plan.wasteAreaSF,wastePercent:plan.wastePercent,placed:plan.placements.length});
  return {legacy:metrics(legacy.plan),small:metrics(small),expanded:metrics(expanded.plan),
   // Partial jobs cannot establish material savings for the complete order.
   savingsSF:legacy.feasible&&expanded.feasible?legacy.plan.allocatedAreaSF-expanded.plan.allocatedAreaSF:null};
