@@ -11,8 +11,8 @@ const slug='when-science-meets-the-unknown';
 const html=await readFile(join(dir,'../essay.html'),'utf8');
 const manifest=JSON.parse(await readFile(join(dir,slug,'manifest.json'),'utf8'));
 const checks=[
-  ['HTML uses textContent for paragraphs',html.includes('paragraph.textContent=p')],
-  ['Bold closing lines use safe text-only strong element',html.includes("document.createElement('strong')")&&html.includes('emphasis.textContent=p.slice(2,-2)')],
+  ['HTML inserts paragraph content as text nodes',html.includes('document.createTextNode(p.slice(cursor,at))')],
+  ['Editorial inline emphasis uses safe strong/em textContent',html.includes("document.createElement(bold?'strong':'em')")&&html.includes('emphasis.textContent=match[0].slice(')],
   ['HTML checks manifest approval',html.includes('manifest.publication?.approved!==true')],
   ['HTML checks rights verification',html.includes('manifest.review?.rights_verified!==true')],
   ['HTML rejects mismatched translated titles',html.includes('doc.title!==manifest.titles?.[lang]')],
