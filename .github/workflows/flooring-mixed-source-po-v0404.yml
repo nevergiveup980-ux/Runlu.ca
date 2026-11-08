@@ -1,0 +1,20 @@
+name: Flooring Mixed Source PO V0.4.04
+on:
+  pull_request:
+    paths:
+      - 'flooring/mixed-source-po-v0404.js'
+      - 'flooring/index-v0404-mixed-source-po-preview.html'
+      - 'scripts/run-flooring-mixed-source-po-v0404.mjs'
+      - '.github/workflows/flooring-mixed-source-po-v0404.yml'
+  workflow_dispatch:
+jobs:
+  mixed-source-po:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V0.4.04 mixed-source PO schema, routing and write-scope gates
+        run: node scripts/run-flooring-mixed-source-po-v0404.mjs
