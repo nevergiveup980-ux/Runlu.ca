@@ -9,7 +9,7 @@ function setup(){const calls=[];const supabase={storage:{from(bucket){assert.equ
 test("private audio is stored by owner/job without upsert",async()=>{
  const {calls,service}=setup();
  const path=await service.savePrivate({userId:u,jobId:j,bytes:new Uint8Array([73,68,51,4,5]),contentType:"audio/mpeg"});
- assert.equal(path,u+"/"+j+".mp3");assert.equal(calls[0][2].upsert,false);
+ assert.equal(path,u+"/"+j+".mp3");assert.equal(calls[0][3].upsert,false);
 });
 test("only exact owner/job path gets a short-lived signed link",async()=>{
  const {calls,service}=setup();const path=musicObjectKey(u,j);
