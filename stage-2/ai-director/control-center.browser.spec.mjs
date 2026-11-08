@@ -39,6 +39,9 @@ test('failed authenticated read returns to clearly labeled demo',async({page})=>
  await expect(page.locator('#live-status')).toContainText('Access denied');
  await expect(page.locator('#mode-banner')).toContainText('DEMO MODE');
  await expect(page.locator('#load-live')).toBeEnabled();
+ await page.locator('#load-live').click();
+ await expect(page.locator('#live-status')).toContainText('Access denied');
+ await expect(page.locator('#load-live')).toBeEnabled();
 });
 test('mobile layout and controls remain usable',async({page})=>{
  await page.setViewportSize({width:390,height:844});
