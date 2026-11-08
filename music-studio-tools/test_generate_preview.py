@@ -31,6 +31,15 @@ class ProjectValidationTests(unittest.TestCase):
         self.assertIn("memorable emotional peak", prompt)
         self.assertIn("do not add invented lines", prompt)
 
+    def test_audio_signature_detection(self):
+        self.assertEqual(mod.detect_audio_format(b"ID3" + bytes(16)), ".mp3")
+        self.assertEqual(mod.detect_audio_format(b"RIFF" + bytes(4) + b"WAVE" + bytes(8)), ".wav")
+        self.assertEqual(mod.detect_audio_format(bytes(4) + b"ftypM4A " + bytes(8)), ".m4a")
+        with self.assertRaises(ValueError):
+            mod.detect_audio_format(b"not an audio file")
+        with self.assertRaises(ValueError):
+            mod.detect_audio_format(b"")
+
     def test_reject_empty_vocal_lyrics(self):
         with self.assertRaises(ValueError):
             mod.validate_project({"voice":"female","lyrics":" "})
