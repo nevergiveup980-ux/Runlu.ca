@@ -30,7 +30,7 @@ class ProjectValidationTests(unittest.TestCase):
     def test_vocal_prompt_contains_production_requirements(self):
         project = {"title": "风吹过的那些年", "lyrics": "第一句", "voice": "female", "style": "nostalgic"}
         prompt = mod.build_prompt(mod.validate_project(project))
-        self.assertIn("clear Mandarin diction", prompt)
+        self.assertIn("clear Mandarin Chinese diction", prompt)
         self.assertIn("memorable emotional peak", prompt)
         self.assertIn("do not add invented lines", prompt)
 
