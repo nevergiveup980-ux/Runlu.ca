@@ -27,3 +27,10 @@ test('rejects malformed financial data even on HTTP 200',async()=>{
  const bad=sample();bad.budget.remainingCents=999;
  await assert.rejects(new DirectorDashboardClient({fetchImpl:async()=>json(200,bad)}).load('ep1'),/invalid_response/);
 });
+
+test('default fetch is invoked as a global method, not an unbound native function',async()=>{
+ const original=globalThis.fetch;
+ globalThis.fetch=async function(url){assert.equal(this,globalThis);return json(200,sample())};
+ try{assert.equal((await new DirectorDashboardClient().load('ep1')).episodeId,'ep1')}
+ finally{globalThis.fetch=original}
+});
