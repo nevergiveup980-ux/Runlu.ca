@@ -103,3 +103,19 @@ describe("candidate scenario comparison",()=>{
   }
  });
 });
+
+describe('incremental material and free-space search',()=>{
+ it('reduces consumed full-width area against the current small-first baseline',()=>{
+  const rolls:Roll[]=[{id:'R0',widthIn:144,lengthIn:912,dyeLot:'A',priority:2},{id:'R1',widthIn:96,lengthIn:300,dyeLot:'A',priority:0}];
+  const pieces:Piece[]=[{id:'P0',widthIn:132,lengthIn:60,dyeLot:'A',allowRotate:true},{id:'P1',widthIn:120,lengthIn:132,dyeLot:'A',allowRotate:true},{id:'P2',widthIn:72,lengthIn:36,dyeLot:'A',allowRotate:true}];
+  expect(comparePlans(rolls,pieces,{includeSpaceSearch:false})[0].score).toBe(220);
+  const best=comparePlans(rolls,pieces)[0];
+  expect(best.feasible).toBe(true);expect(best.score).toBe(204);expect(best.plan.wasteAreaSF).toBe(21);
+ });
+ it('vertical split retains a full-height side strip without overlapping the lower strip',()=>{
+  const plan=planCuts([{id:'R',widthIn:120,lengthIn:120,dyeLot:'A'}],[{id:'wide',widthIn:60,lengthIn:60},{id:'tall',widthIn:60,lengthIn:120}],'input',{split:'vertical'});
+  expect(plan.unplaced).toEqual([]);
+  expect(plan.placements.map(p=>[p.xIn,p.yIn,p.widthIn,p.lengthIn])).toEqual([[0,0,60,60],[60,0,60,120]]);
+  expect(plan.allocatedAreaSF).toBe(100);expect(plan.wasteAreaSF).toBe(25);
+ });
+});
