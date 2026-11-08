@@ -20,6 +20,12 @@
 <div id="musicServiceStatus" class="status" role="status" aria-live="polite">生成服务尚未检查；不会自动扣费。</div>
 <audio id="generatedMusicPlayer" controls preload="none" style="display:none;width:100%;margin-top:12px"></audio>
 <a id="generatedMusicDownload" style="display:none" href="#" download data-en="Download completed song" data-zh="下载生成歌曲" data-fr="Télécharger la chanson" data-es="Descargar canción">下载生成歌曲</a>
+</section><section class="panel" aria-labelledby="library-heading" style="margin-top:18px">
+<h2 id="library-heading" data-en="My Music Library" data-zh="我的音乐库" data-fr="Ma bibliothèque musicale" data-es="Mi biblioteca musical">我的音乐库</h2>
+<p data-en="Your private songs will appear here after the secure service is connected." data-zh="安全服务接通后，这里将显示账户下已保存的歌曲。" data-fr="Vos chansons privées apparaîtront ici une fois le service connecté." data-es="Tus canciones privadas aparecerán aquí cuando se conecte el servicio.">安全服务接通后，这里将显示账户下已保存的歌曲。</p>
+<div class="actions"><button type="button" class="secondary" id="refreshMusicLibrary" data-en="Refresh my songs" data-zh="刷新我的歌曲" data-fr="Actualiser mes chansons" data-es="Actualizar mis canciones">刷新我的歌曲</button><button type="button" class="secondary" id="moreMusicLibrary" disabled data-en="Load more" data-zh="加载更多" data-fr="Afficher plus" data-es="Cargar más">加载更多</button></div>
+<div id="musicLibraryStatus" class="status" role="status" aria-live="polite">尚未连接云端作品库。</div>
+<ul id="musicLibraryItems" style="list-style:none;padding:0;display:grid;gap:12px"></ul>
 </section><aside class="panel"><h2 data-en="Music production brief" data-zh="音乐制作说明" data-fr="Guide de production musicale" data-es="Guía de producción musical">音乐制作说明</h2><p data-en="Choose a vocal and style to build an English music-generation prompt." data-zh="选择不同人声和曲风，右侧将自动整理成可用于后续音乐模型的英文提示词。" data-fr="Choisissez une voix et un style pour préparer une consigne en anglais." data-es="Elige voz y estilo para preparar instrucciones en inglés.">选择不同人声和曲风，右侧将自动整理成可用于后续音乐模型的英文提示词。</p><pre id="prompt"></pre><h3 data-en="Production workflow" data-zh="制作流程" data-fr="Étapes de production" data-es="Flujo de producción">制作流程</h3><p><span data-en="① Save lyrics and direction" data-zh="① 保存歌词与创作要求" data-fr="① Enregistrer les paroles et consignes" data-es="① Guardar letra e indicaciones">① 保存歌词与创作要求</span><br><span data-en="② Audition original audio" data-zh="② 试听原创音乐生成结果" data-fr="② Écouter la musique originale" data-es="② Escuchar música original">② 试听原创音乐生成结果</span><br><span data-en="③ Approve melody and vocals" data-zh="③ 验收旋律与人声" data-fr="③ Valider mélodie et voix" data-es="③ Aprobar melodía y voz">③ 验收旋律与人声</span><br><span data-en="④ Create visuals in RUNLU STAGE" data-zh="④ 交给 RUNLU STAGE 制作动态画面" data-fr="④ Créer les visuels dans RUNLU STAGE" data-es="④ Crear imágenes en RUNLU STAGE">④ 交给 RUNLU STAGE 制作动态画面</span></p><h3 data-en="Audition existing audio" data-zh="试听已有音频" data-fr="Écouter un fichier audio" data-es="Escuchar audio existente">试听已有音频</h3><label for="audiofile" data-en="Select local MP3 / WAV / M4A" data-zh="选择本机 MP3 / WAV / M4A" data-fr="Choisir un fichier MP3 / WAV / M4A" data-es="Elegir archivo MP3 / WAV / M4A">选择本机 MP3 / WAV / M4A</label><input type="file" id="audiofile" accept="audio/*,.mp3,.wav,.m4a"><audio id="audioplayer" controls preload="none" style="width:100%;margin-top:12px"></audio><button class="secondary" id="clearaudio" style="margin-top:8px" data-en="Clear audio" data-zh="清除试听音频" data-fr="Effacer l’audio" data-es="Borrar audio">清除试听音频</button><p class="muted" data-en="Audio stays on this device. Select it again after reloading." data-zh="试听只在本机进行，不会上传；刷新页面后需重新选择音频。" data-fr="L’audio reste sur cet appareil. Sélectionnez-le à nouveau après rechargement." data-es="El audio permanece en este dispositivo. Vuelve a seleccionarlo tras recargar.">试听只在本机进行，不会上传；刷新页面后需重新选择音频。</p><div class="status" data-en="Music generation is not connected. This page does not charge or upload lyrics." data-zh="尚未接入音乐生成 API；本页不会收费，也不会上传歌词。" data-fr="La génération musicale n’est pas connectée. Cette page ne facture rien et n’envoie pas les paroles." data-es="La generación musical no está conectada. Esta página no cobra ni sube letras.">尚未接入音乐生成 API；本页不会收费，也不会上传歌词。</div><p class="muted" data-en="Drafts are stored in this browser. Export JSON backups regularly; avoid saving private lyrics on shared devices." data-zh="草稿保存在当前浏览器的 localStorage 中。清除浏览器数据可能丢失，请定期导出 JSON 备份。公共或共享设备不建议保存私人歌词。" data-fr="Les brouillons sont enregistrés dans ce navigateur. Exportez des sauvegardes JSON et évitez les appareils partagés." data-es="Los borradores se guardan en este navegador. Exporta copias JSON y evita dispositivos compartidos.">草稿保存在当前浏览器的 localStorage 中。清除浏览器数据可能丢失，请定期导出 JSON 备份。公共或共享设备不建议保存私人歌词。</p></aside></div></main>
 <script>
 (function(){'use strict';
@@ -89,6 +95,43 @@ document.getElementById('copy').addEventListener('click',async()=>{try{await nav
 try{const saved=JSON.parse(localStorage.getItem('runlu-music-studio-v1')||'null');if(saved&&typeof saved==='object'&&!Array.isArray(saved)){if(!saved.songLanguage&&['zh','en','fr','es'].includes(saved.language))saved.songLanguage=saved.language;ids.forEach(id=>{if(typeof saved[id]!=='string')return;const field=els[id];if(field.tagName==='SELECT'){if([...field.options].some(option=>option.value===saved[id]))field.value=saved[id]}else{const limit=id==='lyrics'?30000:(id==='title'?120:5000);field.value=saved[id].slice(0,limit)}})}}catch(e){status('本机旧草稿无法读取，请重新保存。')}
 refresh();updatePlaceholders();
 })();
+</script><script type="module">
+import {listMySongs,getSongDownload} from "./music/music-api-client.mjs";
+const refresh=document.getElementById("refreshMusicLibrary"),more=document.getElementById("moreMusicLibrary"),status=document.getElementById("musicLibraryStatus"),items=document.getElementById("musicLibraryItems");
+let cursor=null,loading=false;
+function message(t){status.textContent=t}
+async function load(reset){
+ if(loading)return;loading=true;refresh.disabled=true;more.disabled=true;
+ if(reset){cursor=null;items.replaceChildren()}
+ message("正在读取账户作品库…");
+ try{
+  const data=await listMySongs({limit:20,before:cursor});
+  if(!Array.isArray(data.items))throw Error("INVALID_LIBRARY_RESPONSE");
+  for(const song of data.items){
+   const li=document.createElement("li");li.style.cssText="border:1px solid #344158;border-radius:10px;padding:12px";
+   const title=document.createElement("strong");title.textContent=String(song.title||"Untitled");li.append(title);
+   const meta=document.createElement("p");meta.style.margin="6px 0";meta.textContent=[song.language||"",song.voice||"",song.status||""].join(" · ");li.append(meta);
+   if(song.audio_available){
+    const btn=document.createElement("button");btn.type="button";btn.className="secondary";btn.textContent="试听 / 下载";
+    btn.addEventListener("click",async()=>{
+      btn.disabled=true;
+      try{
+        const result=await getSongDownload(song.id);
+        if(typeof result.url!=="string"||!/^https:\/\//.test(result.url))throw Error("INVALID_DOWNLOAD_URL");
+        const a=document.createElement("a");a.href=result.url;a.target="_blank";a.rel="noopener noreferrer";a.textContent="打开私有 MP3（短期有效）";li.append(a);btn.remove();
+      }catch{message("下载链接获取失败，请重新登录后重试。");btn.disabled=false}
+    });li.append(btn);
+   }
+   items.append(li);
+  }
+  cursor=data.has_more?data.next_cursor:null;
+  more.disabled=!cursor;
+  message(items.children.length?"已加载 "+items.children.length+" 首作品。":"暂无云端歌曲，或尚未生成作品。");
+ }catch{message("作品库服务尚未开放，或账户尚未登录。不会产生费用。");more.disabled=true}
+ finally{loading=false;refresh.disabled=false}
+}
+refresh.addEventListener("click",()=>load(true));
+more.addEventListener("click",()=>load(false));
 </script><script type="module">
 import {getCredits,createSongJob,getSongJob,songDownloadUrl} from "./music/music-api-client.mjs";
 const check=document.getElementById("checkMusicService"),generate=document.getElementById("generateSong"),out=document.getElementById("musicServiceStatus"),player=document.getElementById("generatedMusicPlayer"),download=document.getElementById("generatedMusicDownload");
