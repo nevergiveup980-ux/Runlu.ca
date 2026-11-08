@@ -65,6 +65,19 @@ def build_prompt(project):
         raise ValueError("Generation prompt exceeds size limit; shorten the lyrics or notes")
     return result
 
+def detect_audio_format(payload):
+    """Conservative signature check; not a full decoder or security scanner."""
+    if not isinstance(payload, bytes) or len(payload) < 12:
+        raise ValueError("Audio payload is empty or too short")
+    if payload.startswith(b"ID3") or (payload[0] == 0xFF and payload[1] & 0xE0 == 0xE0 and payload[2] & 0xF0 != 0xF0):
+        return ".mp3"
+    if payload.startswith(b"RIFF") and payload[8:12] == b"WAVE":
+        return ".wav"
+    if payload[4:8] == b"ftyp" and payload[8:12] in (b"M4A ", b"isom", b"mp42"):
+        return ".m4a"
+    raise ValueError("Unknown audio format; no file saved")
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--project", required=True, type=Path)
@@ -95,7 +108,14 @@ def main():
     audio = interaction.output_audio
     if audio is None or not audio.data:
         raise SystemExit("No audio returned; inspect API response and billing.")
-    args.output.write_bytes(base64.b64decode(audio.data))
+    try:
+        payload = base64.b64decode(audio.data, validate=True)
+        extension = detect_audio_format(payload)
+    except (ValueError, base64.binascii.Error) as exc:
+        raise SystemExit(f"Invalid provider audio: {exc}")
+    if args.output.suffix.lower() != extension:
+        raise SystemExit(f"Audio is {extension}, not {args.output.suffix or 'an identified format'}; choose an output filename ending in {extension}. No file saved.")
+    args.output.write_bytes(payload)
     print(f"Saved {args.output} ({args.output.stat().st_size} bytes)")
     if interaction.output_text:
         args.output.with_suffix(".lyrics.txt").write_text(interaction.output_text, encoding="utf-8")
