@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+const core=fs.readFileSync('flooring/index-v071-pricing-workspace.html','utf8');
+const release=fs.readFileSync('flooring/index-v0403-release.html','utf8');
+const must=(x,m)=>{if(!x)throw new Error(m)};
+const ready=core.indexOf('r.classList.add("ready");const l=');
+const loop=core.indexOf('for(const[e,r,n,a]of l)');
+must(ready>0&&loop>ready,'Core UI is not released before enhancement loop');
+must(/V0\.4\.03 Core/.test(core),'desktop Core release label missing');
+must(/desktop-safe-0403r/.test(release),'desktop cache token not advanced');
+must(/index-v071-pricing-workspace\.html\?prod=1&release=0403&mobile=safe&desktop=1/.test(release),'desktop direct V071 safe route changed unexpectedly');
+must(!/index-v094-fastboot\.html\?prod=1&release=094&desktop=1/.test(release),'deep V094 desktop wrapper reintroduced');
+console.log('Desktop Core V0.4.03r startup hotfix: PASS');

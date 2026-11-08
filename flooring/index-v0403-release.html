@@ -59,7 +59,7 @@ function openView(v,push){
   }
   paintButtons(v);boot.classList.remove('ready');
   const sep=views[v].includes('?')?'&':'?';
-  const cacheToken=v==='core'?'desktop-safe-0403l':Date.now();
+  const cacheToken=v==='core'?'desktop-safe-0403r':Date.now();
   frame.src=views[v]+sep+'t='+cacheToken;
   if(push&&location.hash!=='#'+v)history.replaceState(null,'','#'+v)
 }
