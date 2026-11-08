@@ -65,6 +65,13 @@ class ProjectValidationTests(unittest.TestCase):
             self.assertEqual(output.read_bytes(), b"ID3" + bytes(16))
             self.assertFalse(list(pathlib.Path(directory).glob(".runlu-audio-*.tmp")))
 
+    def test_prompt_uses_real_line_breaks(self):
+        project = {"title": "风吹过的那些年", "voice": "female",
+                   "style": "nostalgic", "lyrics": "风吹过那些年\n吹过你转身的街"}
+        prompt = mod.build_prompt(project)
+        self.assertIn("Original lyrics (sing only the provided words; do not add invented lines):\n风吹过那些年\n吹过你转身的街", prompt)
+        self.assertNotIn("\\\\n", prompt)
+
     def test_reject_empty_vocal_lyrics(self):
         with self.assertRaises(ValueError):
             mod.validate_project({"voice":"female","lyrics":" "})
