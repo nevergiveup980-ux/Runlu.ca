@@ -1,0 +1,14 @@
+{
+  "name": "runlu-pulse",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Private RUNLU traffic dashboard backed by Cloudflare Web Analytics.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "check": "wrangler deploy --dry-run --outdir .wrangler-dry-run"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
