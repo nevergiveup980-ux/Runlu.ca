@@ -1,0 +1,81 @@
+name: RUNLU NEXT Apple Check
+
+on:
+  push:
+    branches: [runlu-next-apple-v0.1]
+    paths:
+      - 'apple/**'
+      - '.github/workflows/runlu-next-apple-check.yml'
+  pull_request:
+    paths:
+      - 'apple/**'
+      - '.github/workflows/runlu-next-apple-check.yml'
+
+jobs:
+  simulator:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Inspect Xcode project
+        run: xcodebuild -list -project apple/RUNLUNext.xcodeproj
+
+      - name: Build RUNLU NEXT for Simulator
+        run: |
+          xcodebuild \
+            -project apple/RUNLUNext.xcodeproj \
+            -scheme RUNLUNext \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            -derivedDataPath "$RUNNER_TEMP/RUNLUNextDerived" \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Boot iPhone Simulator
+        id: sim
+        run: |
+          UDID="$(xcrun simctl list devices available | sed -nE '/iPhone.*\(Shutdown\)/s/.*\(([0-9A-Fa-f-]{36})\).*/\1/p' | head -1)"
+          if [ -z "$UDID" ]; then
+            echo "No available iPhone Simulator found."
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+          xcrun simctl boot "$UDID" || true
+          open -a Simulator
+          xcrun simctl bootstatus "$UDID" -b
+
+      - name: Install and launch RUNLU NEXT
+        run: |
+          UDID="${{ steps.sim.outputs.udid }}"
+          APP="$RUNNER_TEMP/RUNLUNextDerived/Build/Products/Debug-iphonesimulator/RUNLUNext.app"
+          xcrun simctl install "$UDID" "$APP"
+          xcrun simctl launch "$UDID" ca.runlu.next
+          sleep 12
+
+      - name: Capture RUNLU NEXT screenshots
+        run: |
+          UDID="${{ steps.sim.outputs.udid }}"
+          mkdir -p "$RUNNER_TEMP/runlu-next-screenshots"
+          xcrun simctl io "$UDID" screenshot "$RUNNER_TEMP/runlu-next-screenshots/01-next-home.png"
+
+          for SPEC in "02-next-middle.png:650" "03-next-planning.png:1300"; do
+            FILE="${SPEC%%:*}"
+            Y="${SPEC##*:}"
+            xcrun simctl terminate "$UDID" ca.runlu.next || true
+            SIMCTL_CHILD_RUNLU_SCREENSHOT_Y="$Y" xcrun simctl launch "$UDID" ca.runlu.next
+            sleep 5
+            xcrun simctl io "$UDID" screenshot "$RUNNER_TEMP/runlu-next-screenshots/$FILE"
+          done
+
+          xcrun simctl terminate "$UDID" ca.runlu.next
+          xcrun simctl launch "$UDID" ca.runlu.next
+          sleep 4
+          xcrun simctl io "$UDID" screenshot "$RUNNER_TEMP/runlu-next-screenshots/04-next-relaunch.png"
+
+      - name: Upload simulator screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: runlu-next-simulator-screenshots
+          path: ${{ runner.temp }}/runlu-next-screenshots/*.png
+          if-no-files-found: error
