@@ -6,6 +6,8 @@ Usage: python music-studio-tools/generate_preview.py --project song.json --confi
 import argparse
 import base64
 import json
+import io
+import wave
 import os
 from pathlib import Path
 
@@ -72,6 +74,15 @@ def detect_audio_format(payload):
     if payload.startswith(b"ID3") or (payload[0] == 0xFF and payload[1] & 0xE0 == 0xE0 and payload[2] & 0xF0 != 0xF0):
         return ".mp3"
     if payload.startswith(b"RIFF") and payload[8:12] == b"WAVE":
+        try:
+            with wave.open(io.BytesIO(payload), "rb") as wav:
+                if wav.getnchannels() < 1 or wav.getframerate() < 1 or wav.getnframes() < 1:
+                    raise ValueError("WAV contains no usable audio frames")
+                expected = wav.getnframes() * wav.getnchannels() * wav.getsampwidth()
+                if len(wav.readframes(wav.getnframes())) != expected:
+                    raise ValueError("WAV audio data is truncated")
+        except (wave.Error, EOFError) as exc:
+            raise ValueError(f"Invalid WAV audio: {exc}") from exc
         return ".wav"
     if payload[4:8] == b"ftyp" and payload[8:12] in (b"M4A ", b"isom", b"mp42"):
         return ".m4a"
