@@ -9,6 +9,7 @@ import json
 import io
 import wave
 import os
+import tempfile
 from pathlib import Path
 
 ALLOWED = ("lyria-3-clip-preview", "lyria-3.5")
@@ -92,6 +93,26 @@ def detect_audio_format(payload):
     raise ValueError("Unknown audio format; no file saved")
 
 
+def save_audio_safely(output, payload):
+    """Write beside the destination, then atomically publish without overwriting."""
+    output = Path(output)
+    if output.exists():
+        raise FileExistsError(f"Output already exists: {output}")
+    temp_path = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="wb", prefix=".runlu-audio-", suffix=".tmp",
+                                         dir=output.parent, delete=False) as temp:
+            temp_path = Path(temp.name)
+            temp.write(payload)
+            temp.flush()
+            os.fsync(temp.fileno())
+        # Hard-link creation is atomic and fails if the target already exists.
+        os.link(temp_path, output)
+    finally:
+        if temp_path is not None:
+            temp_path.unlink(missing_ok=True)
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--project", required=True, type=Path)
@@ -131,7 +152,10 @@ def main():
         raise SystemExit(f"Invalid provider audio: {exc}")
     if args.output.suffix.lower() != extension:
         raise SystemExit(f"Audio is {extension}, not {args.output.suffix or 'an identified format'}; choose an output filename ending in {extension}. No file saved.")
-    args.output.write_bytes(payload)
+    try:
+        save_audio_safely(args.output, payload)
+    except (OSError, FileExistsError) as exc:
+        raise SystemExit(f"Could not save audio safely: {exc}")
     print(f"Saved {args.output} ({args.output.stat().st_size} bytes)")
     if interaction.output_text:
         args.output.with_suffix(".lyrics.txt").write_text(interaction.output_text, encoding="utf-8")
