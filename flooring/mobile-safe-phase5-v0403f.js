@@ -79,7 +79,7 @@ function ensureLauncher(){
   if(by(LAUNCHER))return;
   const grid=document.querySelector('#command .grid3');if(!grid)return;
   const b=document.createElement('button');b.id=LAUNCHER;b.type='button';b.className='module';
-  b.innerHTML='<span class="ico">📏</span><strong>Carpet Line RC Check</strong><small>V0.3.93 · choose Finance RC + planned cuts and check live roll sufficiency.</small>';
+  b.innerHTML='<span class="ico">📏</span><strong>Carpet Line RC Check</strong><small>Job-line roll sufficiency check · no inventory movement here.</small>';
   b.addEventListener('click',launch);
   const anchor=by('rc092safeLauncher')||by('rc092module')||by('r091safeLauncher')||by('r091module');
   anchor?anchor.insertAdjacentElement('afterend',b):grid.appendChild(b)

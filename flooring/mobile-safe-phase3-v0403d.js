@@ -60,7 +60,7 @@ function ensureLauncher(){
   if(by(LAUNCHER))return;
   const grid=document.querySelector('#command .grid3');if(!grid)return;
   const b=document.createElement('button');b.id=LAUNCHER;b.type='button';b.className='module';
-  b.innerHTML='<span class="ico">🔀</span><strong>Mixed Order Routing</strong><small>V0.3.91 · route saved Job lines to Warehouse / Installation / Procurement.</small>';
+  b.innerHTML='<span class="ico">🔀</span><strong>Mixed Order Routing</strong><small>Route saved Job lines only · execution stays in Warehouse / Operations / PO.</small>';
   b.addEventListener('click',launch);
   const anchor=by('mw091safeLauncher')||by('mw091module');
   anchor?anchor.insertAdjacentElement('afterend',b):grid.appendChild(b)
