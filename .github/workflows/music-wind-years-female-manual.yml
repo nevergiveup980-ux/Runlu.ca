@@ -1,0 +1,68 @@
+name: RUNLU Music - Wind Years female full song (manual)
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_paid:
+        description: 'YES = authorize exactly one potentially billable Lyria 3.5 request'
+        required: true
+        type: choice
+        default: 'NO'
+        options:
+          - 'NO'
+          - 'YES'
+permissions:
+  contents: read
+concurrency:
+  group: runlu-wind-years-one-song
+  cancel-in-progress: false
+jobs:
+  generate:
+    if: ${{ inputs.confirm_paid == 'YES' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout isolated music development branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/runlu-music-studio-mvp
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check song title, female voice and lyrics before request
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path("music-studio-tools/sample-project.json").read_text(encoding="utf-8"))
+          assert p["title"]=="风吹过的那些年"
+          assert p["voice"]=="female"
+          assert "风吹过那些年" in p["lyrics"]
+          assert "[Final Chorus]" in p["lyrics"]
+          print("Wind Years original female song input verified.")
+          PY
+      - name: Confirm private secret is configured
+        env:
+          RUNLU_MUSIC_GEMINI_API_KEY: ${{ secrets.RUNLU_MUSIC_GEMINI_API_KEY }}
+        run: |
+          if [ -z "$RUNLU_MUSIC_GEMINI_API_KEY" ]; then
+            echo "Secret missing. No provider request made."
+            exit 2
+          fi
+      - name: Make exactly one paid song request (never auto retry)
+        env:
+          RUNLU_MUSIC_GEMINI_API_KEY: ${{ secrets.RUNLU_MUSIC_GEMINI_API_KEY }}
+        run: |
+          mkdir -p output
+          python music-studio-tools/generate_full_song.py \
+            --project music-studio-tools/sample-project.json \
+            --output output/runlu-wind-years-full.mp3 \
+            --confirm-paid
+      - name: Upload private song MP3
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runlu-wind-years-female-mp3
+          path: output/runlu-wind-years-full.mp3
+          if-no-files-found: error
+          retention-days: 3
