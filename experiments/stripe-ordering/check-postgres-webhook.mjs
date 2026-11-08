@@ -234,7 +234,13 @@ try {
       assert.equal((await makeHandler()(request(body()))).status,200);
     });
     await test('SERVER connection death aborts partially processed work; retry completes',async()=>{
-      const client=await pool.connect(); client.on('error',()=>{});
+      // A killed connection must never be released into the shared pool while
+      // its asynchronous FATAL notification is still in flight.
+      const {Client}=await import('pg');
+      const client=new Client({connectionString:connection}); await client.connect();
+      let crashError;
+      const ended=new Promise(resolve=>client.once('end',resolve));
+      client.on('error',error=>{crashError=error;});
       try {
         await client.query('BEGIN');
         await client.query('SET LOCAL ROLE runlu_lab_service');
@@ -242,7 +248,9 @@ try {
           JSON.stringify(event('evt_crash',300)),JSON.stringify({status:'active',periodStart:100,periodEnd:900,cancelAtPeriodEnd:false})]);
         const pid=(await client.query('SELECT pg_backend_pid() AS pid')).rows[0].pid;
         await admin('SELECT pg_terminate_backend($1)',[pid]);
-      } finally { client.release(true); }
+        await ended;
+        assert.equal(crashError?.code,'57P01');
+      } finally { await client.end(); }
       assert.equal(await n('subscriptions'),0); assert.equal(await n('effects'),0); assert.equal(await n('receipts'),0);
       await processor(event('evt_crash',300)); assert.equal(await n('effects'),1);
     });
