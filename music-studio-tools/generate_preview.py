@@ -14,6 +14,7 @@ from pathlib import Path
 ALLOWED = ("lyria-3-clip-preview", "lyria-3.5")
 MAX_PROMPT_CHARS = 12000
 MAX_PROJECT_BYTES = 100_000
+MAX_AUDIO_BYTES = 50 * 1024 * 1024
 VALID_VOICES = {"female", "male", "instrumental"}
 VALID_STYLES = {"nostalgic", "folk", "piano", "cinematic"}
 
@@ -71,6 +72,8 @@ def detect_audio_format(payload):
     """Conservative signature check; not a full decoder or security scanner."""
     if not isinstance(payload, bytes) or len(payload) < 12:
         raise ValueError("Audio payload is empty or too short")
+    if len(payload) > MAX_AUDIO_BYTES:
+        raise ValueError("Audio exceeds 50 MB limit")
     if payload.startswith(b"ID3") or (payload[0] == 0xFF and payload[1] & 0xE0 == 0xE0 and payload[2] & 0xF0 != 0xF0):
         return ".mp3"
     if payload.startswith(b"RIFF") and payload[8:12] == b"WAVE":
@@ -120,6 +123,8 @@ def main():
     if audio is None or not audio.data:
         raise SystemExit("No audio returned; inspect API response and billing.")
     try:
+        if len(audio.data) > ((MAX_AUDIO_BYTES + 2) // 3) * 4 + 16:
+            raise ValueError("Encoded audio exceeds 50 MB limit")
         payload = base64.b64decode(audio.data, validate=True)
         extension = detect_audio_format(payload)
     except (ValueError, base64.binascii.Error) as exc:
