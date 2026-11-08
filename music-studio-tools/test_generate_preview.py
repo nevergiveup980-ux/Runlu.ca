@@ -16,6 +16,21 @@ class ProjectValidationTests(unittest.TestCase):
         self.assertIn("风吹过那些年", prompt)
         self.assertIn("original", prompt.lower())
 
+    def test_instrumental_prompt_never_requests_singing(self):
+        project = {"title": "风吹过的那些年", "lyrics": "仅作为意境", "voice": "instrumental", "style": "piano"}
+        mod.validate_project(project)
+        prompt = mod.build_prompt(project)
+        self.assertIn("No singing", prompt)
+        self.assertIn("Instrumental theme inspiration", prompt)
+        self.assertNotIn("Original lyrics (sing only", prompt)
+
+    def test_vocal_prompt_contains_production_requirements(self):
+        project = {"title": "风吹过的那些年", "lyrics": "第一句", "voice": "female", "style": "nostalgic"}
+        prompt = mod.build_prompt(mod.validate_project(project))
+        self.assertIn("clear Mandarin diction", prompt)
+        self.assertIn("memorable emotional peak", prompt)
+        self.assertIn("do not add invented lines", prompt)
+
     def test_reject_empty_vocal_lyrics(self):
         with self.assertRaises(ValueError):
             mod.validate_project({"voice":"female","lyrics":" "})
