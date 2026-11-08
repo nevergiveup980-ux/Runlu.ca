@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RUNLU STAGE · AI Director Preview</title>
+<title>RUNLU STAGE · AI Director Control Center</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,-apple-system,sans-serif;background:#0b1324;color:#f4f7ff}
-*{box-sizing:border-box}body{margin:0}header{padding:22px max(20px,calc((100vw - 1100px)/2));border-bottom:1px solid #293750;display:flex;justify-content:space-between;align-items:center;gap:16px}
+*{box-sizing:border-box}body{margin:0}header{padding:18px max(20px,calc((100vw - 1100px)/2));border-bottom:1px solid #293750;display:flex;justify-content:space-between;gap:16px;align-items:center}
 .brand{font-weight:800;letter-spacing:.08em}.muted{color:#a7b7ce}.wrap{max-width:1100px;margin:auto;padding:28px 20px 70px}
 h1{font-size:clamp(1.5rem,4vw,2.5rem);margin:0 0 10px}h2{font-size:1.1rem;margin:0 0 18px}
 .notice{padding:12px 16px;border:1px solid #53627a;border-radius:12px;background:#17243b;margin:20px 0}
@@ -11,177 +11,91 @@ h1{font-size:clamp(1.5rem,4vw,2.5rem);margin:0 0 10px}h2{font-size:1.1rem;margin
 .panel,.metric{background:#131f34;border:1px solid #293750;border-radius:16px;padding:20px}
 .metric strong{display:block;font-size:1.7rem;margin-top:9px}.grid{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
 table{width:100%;border-collapse:collapse;text-align:left}th,td{padding:13px 8px;border-bottom:1px solid #293750}th{font-size:.85rem;color:#a7b7ce}
-.status{border-radius:99px;padding:5px 9px;background:#293d55;font-size:.8rem;white-space:nowrap}
-.warn{background:#57432b;color:#ffe4aa}.ok{background:#1c493f;color:#c0f9d9}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
-button{border:1px solid #465975;background:#233452;color:#fff;border-radius:9px;padding:9px 12px;font:inherit;cursor:pointer}
-button:focus-visible{outline:3px solid #89b8ff}
-small{color:#a7b7ce} .timeline{padding:0;list-style:none}.timeline li{padding:12px 0;border-bottom:1px solid #293750}
+.status{border-radius:99px;padding:5px 9px;background:#293d55;font-size:.8rem;white-space:nowrap}.warn{background:#57432b;color:#ffe4aa}.ok{background:#1c493f;color:#c0f9d9}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:18px 0}
+button,input,select{border:1px solid #465975;background:#233452;color:#fff;border-radius:9px;padding:9px 12px;font:inherit}
+button{cursor:pointer}button:disabled{opacity:.5;cursor:wait}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #89b8ff}
+small{color:#a7b7ce}.timeline{padding-left:22px}.timeline li{padding:12px 0;border-bottom:1px solid #293750}
 @media(max-width:760px){.metrics{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}.panel{overflow-x:auto}}
 </style></head><body>
-<header><div class="brand">RUNLU <span class="muted">/ STAGE / AI DIRECTOR</span></div><div><label for="languageToggle" class="muted">Language </label><select id="languageToggle" class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select><small> · Read-only UI prototype · No paid API calls</small></div></header>
+<header><div class="brand">RUNLU <span class="muted">/ STAGE / AI DIRECTOR</span></div><div>
+<label for="languageToggle" class="muted">Language</label>
+<select id="languageToggle" class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select>
+<small>Read-only prototype</small></div></header>
 <main class="wrap"><p class="muted">Novel → Screenplay → Character Bible → Shots → Review → Export</p>
-<h1>Episode Control Center</h1><p class="muted">THE GLASS THRONE · Pilot episode · 180 seconds target</p>
-<div class="notice" role="status"><strong>DEMO DATA ONLY.</strong> This page is not connected to your account, database, or paid video providers. All amounts and states below are illustrative.</div>
-<div class="actions"><label for="episode-id">Episode ID</label><input id="episode-id" value="glass-throne-pilot" maxlength="100" style="padding:9px;background:#17243b;color:#fff;border:1px solid #53627a;border-radius:9px"><button id="load-live" type="button">Load authorized episode</button></div><p id="live-status" role="status" aria-live="polite">Demo mode · No live data loaded.</p>
+<h1>Episode Control Center</h1><p class="muted">THE GLASS THRONE · Pilot · 180-second target</p>
+<div id="mode-banner" class="notice" role="status"><strong>DEMO MODE.</strong> All amounts and shot states are illustrative. No paid requests are enabled.</div>
+<div class="actions"><label for="episode-id">Episode ID</label><input id="episode-id" value="glass-throne-pilot" maxlength="100">
+<button id="load-live" type="button">Load authorized episode</button><button id="demo" type="button">Return to demo</button></div>
+<p id="live-status" role="status" aria-live="polite">Demo data only. Live endpoint is not yet deployed.</p>
 <div class="metrics" aria-label="Episode overview">
-<div class="metric"><small>Approved budget</small><strong id="budget">$10.00</strong></div>
-<div class="metric"><small>Committed amount</small><strong id="committed">$4.50</strong></div>
-<div class="metric"><small>Remaining</small><strong id="remaining">$5.50</strong></div>
-<div class="metric"><small>Shots completed</small><strong id="completed">1 / 4</strong></div>
-</div>
+<div class="metric"><small>Approved budget (CAD)</small><strong id="budget">—</strong></div>
+<div class="metric"><small>Committed (CAD)</small><strong id="committed">—</strong></div>
+<div class="metric"><small>Remaining (CAD)</small><strong id="remaining">—</strong></div>
+<div class="metric"><small>Shots completed</small><strong id="completed">—</strong></div></div>
 <div class="grid"><section class="panel"><h2>Shot production queue</h2>
-<table><thead><tr><th>Shot</th><th>Scene</th><th>Length</th><th>Status</th></tr></thead>
-<tbody id="shots"></tbody></table>
-<div class="actions"><button id="normal" type="button">Normal preview</button><button id="paused" type="button">Preview paused budget</button><button id="unknown" type="button">Preview unknown provider result</button></div>
+<table><thead><tr><th>Shot</th><th>Scene</th><th>Length</th><th>Status</th></tr></thead><tbody id="shots"></tbody></table>
+<div class="actions" id="demo-controls"><button id="normal" type="button">Normal demo</button><button id="paused" type="button">Paused demo</button><button id="unknown" type="button">Unknown result demo</button></div>
 </section><aside class="panel"><h2>Budget & safety</h2><div id="safety" class="notice"></div>
-<h2>Production stages</h2><ol class="timeline"><li>Novel TXT imported <span class="status ok">Demo</span></li><li>Episode & characters planned <span class="status ok">Demo</span></li><li>Shot review & approval <span class="status">Pending</span></li><li>Paid generation <span class="status">Not connected</span></li><li>MP4 export <span class="status">Not connected</span></li></ol>
-<p class="muted">No real approval, resume, generation or export actions are available on this prototype.</p></aside></div>
-</main>
+<h2>Production stages</h2><ol class="timeline"><li>Novel import <span class="status">Prototype</span></li><li>Episode planning <span class="status">Prototype</span></li><li>Review & approval <span class="status">Not connected</span></li><li>Paid generation <span class="status">Disabled</span></li><li>MP4 export <span class="status">Not connected</span></li></ol>
+<p class="muted">This page cannot approve spending, retry generation or export a video.</p></aside></div></main>
 <script src="../../runlu-language.js?v=2.2"></script>
 <script type="module">
 import {DirectorDashboardClient} from './director-dashboard-client.mjs';
+const $=id=>document.getElementById(id);
 const client=new DirectorDashboardClient();
-let live=false;
-const liveStatus=document.getElementById('live-status');
-document.getElementById('load-live').addEventListener('click',async()=>{
- const button=document.getElementById('load-live');
- button.disabled=true;liveStatus.textContent='Loading authorized episode…';
- try{
-  const d=await client.load(document.getElementById('episode-id').value.trim());
-  live=true;
-  document.getElementById('budget').textContent='[
- {id:'S01',scene:'Opening · The hall',seconds:40,state:'SUCCEEDED'},
- {id:'S02',scene:'The warning',seconds:45,state:'SUBMITTED'},
- {id:'S03',scene:'A hidden letter',seconds:45,state:'READY'},
- {id:'S04',scene:'The choice',seconds:50,state:'READY'}];
-function render(mode){
- live=false;document.querySelector('.notice[role="status"]').textContent='DEMO DATA ONLY. This page is not connected to your account, database, or paid video providers.';liveStatus.textContent='Demo mode · No live data loaded.';
- document.getElementById('budget').textContent='$10.00';
- const shots=sample.map(s=>({...s}));
- if(mode==='unknown')shots[1].state='UNKNOWN';
- const paused=mode==='paused',unknown=mode==='unknown';
- const committed=unknown?600:450;
- document.getElementById('committed').textContent='$'+(committed/100).toFixed(2);
- document.getElementById('remaining').textContent='$'+((1000-committed)/100).toFixed(2);
- document.getElementById('completed').textContent=shots.filter(s=>s.state==='SUCCEEDED').length+' / '+shots.length;
- document.getElementById('shots').replaceChildren(...shots.map(s=>{
-  const tr=document.createElement('tr');
-  for(const value of [s.id,s.scene,s.seconds+'s',s.state]){
-   const td=document.createElement('td');
-   if(value===s.state){const span=document.createElement('span');span.className='status '+(value==='UNKNOWN'?'warn':value==='SUCCEEDED'?'ok':'');span.textContent=value;td.append(span)}
-   else td.textContent=value;
-   tr.append(td);
-  }return tr;
- }));
- const box=document.getElementById('safety');
- box.textContent=paused?'Spending paused · Manual review required. No new paid requests.':unknown?'Provider outcome unknown · Do not retry until reconciled.':'Budget active · Paid generation still disabled in this preview.';
- box.style.borderColor=paused||unknown?'#ac874e':'#53627a';
-}
-for(const mode of ['normal','paused','unknown'])document.getElementById(mode).addEventListener('click',()=>render(mode));
-render('normal');
-</script></body></html>
-+(d.budget.limitCents/100).toFixed(2);
-  document.getElementById('committed').textContent='[
- {id:'S01',scene:'Opening · The hall',seconds:40,state:'SUCCEEDED'},
- {id:'S02',scene:'The warning',seconds:45,state:'SUBMITTED'},
- {id:'S03',scene:'A hidden letter',seconds:45,state:'READY'},
- {id:'S04',scene:'The choice',seconds:50,state:'READY'}];
-function render(mode){
- const shots=sample.map(s=>({...s}));
- if(mode==='unknown')shots[1].state='UNKNOWN';
- const paused=mode==='paused',unknown=mode==='unknown';
- const committed=unknown?600:450;
- document.getElementById('committed').textContent='$'+(committed/100).toFixed(2);
- document.getElementById('remaining').textContent='$'+((1000-committed)/100).toFixed(2);
- document.getElementById('completed').textContent=shots.filter(s=>s.state==='SUCCEEDED').length+' / '+shots.length;
- document.getElementById('shots').replaceChildren(...shots.map(s=>{
-  const tr=document.createElement('tr');
-  for(const value of [s.id,s.scene,s.seconds+'s',s.state]){
-   const td=document.createElement('td');
-   if(value===s.state){const span=document.createElement('span');span.className='status '+(value==='UNKNOWN'?'warn':value==='SUCCEEDED'?'ok':'');span.textContent=value;td.append(span)}
-   else td.textContent=value;
-   tr.append(td);
-  }return tr;
- }));
- const box=document.getElementById('safety');
- box.textContent=paused?'Spending paused · Manual review required. No new paid requests.':unknown?'Provider outcome unknown · Do not retry until reconciled.':'Budget active · Paid generation still disabled in this preview.';
- box.style.borderColor=paused||unknown?'#ac874e':'#53627a';
-}
-for(const mode of ['normal','paused','unknown'])document.getElementById(mode).addEventListener('click',()=>render(mode));
-render('normal');
-</script></body></html>
-+(d.budget.committedCents/100).toFixed(2);
-  document.getElementById('remaining').textContent='[
- {id:'S01',scene:'Opening · The hall',seconds:40,state:'SUCCEEDED'},
- {id:'S02',scene:'The warning',seconds:45,state:'SUBMITTED'},
- {id:'S03',scene:'A hidden letter',seconds:45,state:'READY'},
- {id:'S04',scene:'The choice',seconds:50,state:'READY'}];
-function render(mode){
- const shots=sample.map(s=>({...s}));
- if(mode==='unknown')shots[1].state='UNKNOWN';
- const paused=mode==='paused',unknown=mode==='unknown';
- const committed=unknown?600:450;
- document.getElementById('committed').textContent='$'+(committed/100).toFixed(2);
- document.getElementById('remaining').textContent='$'+((1000-committed)/100).toFixed(2);
- document.getElementById('completed').textContent=shots.filter(s=>s.state==='SUCCEEDED').length+' / '+shots.length;
- document.getElementById('shots').replaceChildren(...shots.map(s=>{
-  const tr=document.createElement('tr');
-  for(const value of [s.id,s.scene,s.seconds+'s',s.state]){
-   const td=document.createElement('td');
-   if(value===s.state){const span=document.createElement('span');span.className='status '+(value==='UNKNOWN'?'warn':value==='SUCCEEDED'?'ok':'');span.textContent=value;td.append(span)}
-   else td.textContent=value;
-   tr.append(td);
-  }return tr;
- }));
- const box=document.getElementById('safety');
- box.textContent=paused?'Spending paused · Manual review required. No new paid requests.':unknown?'Provider outcome unknown · Do not retry until reconciled.':'Budget active · Paid generation still disabled in this preview.';
- box.style.borderColor=paused||unknown?'#ac874e':'#53627a';
-}
-for(const mode of ['normal','paused','unknown'])document.getElementById(mode).addEventListener('click',()=>render(mode));
-render('normal');
-</script></body></html>
-+(d.budget.remainingCents/100).toFixed(2);
-  document.getElementById('completed').textContent=d.progress.completed+' / '+d.progress.total;
-  const tbody=document.getElementById('shots');tbody.replaceChildren(...d.shots.map(s=>{
-   const tr=document.createElement('tr');
-   for(const value of [s.shotId,'—','—',s.state]){const td=document.createElement('td');td.textContent=value;tr.append(td)}
-   return tr;
-  }));
-  document.getElementById('safety').textContent=d.budget.paused?'Spending paused: '+(d.budget.pauseReason??'Review required'):d.alerts.requiresAttention?'Attention required: review provider or charge alerts.':'No active alerts in this snapshot.';
-  document.querySelector('.notice[role="status"]').textContent='LIVE READ-ONLY SNAPSHOT · Authorized server response. Paid generation remains disabled.';
-  liveStatus.textContent='Live read-only snapshot loaded. No paid operations enabled.';
- }catch(e){
-  render('normal');
-  liveStatus.textContent=e.message==='access_denied'?'Access denied: sign in or request episode access.':e.message==='network_error'?'Network unavailable. Demo remains available.':'Unable to load live episode. Demo remains available.';
- }finally{button.disabled=false}
-});
 const sample=[
- {id:'S01',scene:'Opening · The hall',seconds:40,state:'SUCCEEDED'},
- {id:'S02',scene:'The warning',seconds:45,state:'SUBMITTED'},
- {id:'S03',scene:'A hidden letter',seconds:45,state:'READY'},
- {id:'S04',scene:'The choice',seconds:50,state:'READY'}];
-function render(mode){
- const shots=sample.map(s=>({...s}));
- if(mode==='unknown')shots[1].state='UNKNOWN';
- const paused=mode==='paused',unknown=mode==='unknown';
- const committed=unknown?600:450;
- document.getElementById('committed').textContent='$'+(committed/100).toFixed(2);
- document.getElementById('remaining').textContent='$'+((1000-committed)/100).toFixed(2);
- document.getElementById('completed').textContent=shots.filter(s=>s.state==='SUCCEEDED').length+' / '+shots.length;
- document.getElementById('shots').replaceChildren(...shots.map(s=>{
+ {shotId:'S01',scene:'Opening · The hall',seconds:40,state:'SUCCEEDED'},
+ {shotId:'S02',scene:'The warning',seconds:45,state:'SUBMITTED'},
+ {shotId:'S03',scene:'A hidden letter',seconds:45,state:'READY'},
+ {shotId:'S04',scene:'The choice',seconds:50,state:'READY'}];
+const money=cents=>(cents/100).toLocaleString('en-CA',{style:'currency',currency:'CAD'});
+let controller=null;
+function rows(shots,demo){
+ $('shots').replaceChildren(...shots.map(s=>{
   const tr=document.createElement('tr');
-  for(const value of [s.id,s.scene,s.seconds+'s',s.state]){
-   const td=document.createElement('td');
-   if(value===s.state){const span=document.createElement('span');span.className='status '+(value==='UNKNOWN'?'warn':value==='SUCCEEDED'?'ok':'');span.textContent=value;td.append(span)}
-   else td.textContent=value;
-   tr.append(td);
+  for(const value of [s.shotId,demo?s.scene:'—',demo?s.seconds+'s':'—',s.state]){
+   const td=document.createElement('td');td.textContent=value;tr.append(td);
   }return tr;
  }));
- const box=document.getElementById('safety');
- box.textContent=paused?'Spending paused · Manual review required. No new paid requests.':unknown?'Provider outcome unknown · Do not retry until reconciled.':'Budget active · Paid generation still disabled in this preview.';
- box.style.borderColor=paused||unknown?'#ac874e':'#53627a';
 }
-for(const mode of ['normal','paused','unknown'])document.getElementById(mode).addEventListener('click',()=>render(mode));
-render('normal');
+function drawDemo(mode='normal'){
+ controller?.abort();controller=null;
+ const shots=sample.map(s=>({...s}));
+ if(mode==='unknown')shots[1].state='UNKNOWN';
+ const committed=mode==='unknown'?600:450;
+ $('budget').textContent=money(1000);$('committed').textContent=money(committed);
+ $('remaining').textContent=money(1000-committed);
+ $('completed').textContent=shots.filter(s=>s.state==='SUCCEEDED').length+' / '+shots.length;
+ rows(shots,true);
+ $('mode-banner').textContent='DEMO MODE · Illustrative data only. No real episode or paid API is connected.';
+ $('safety').textContent=mode==='paused'?'DEMO: spending paused, manual review required.':mode==='unknown'?'DEMO: unknown provider outcome; retry blocked.':'DEMO: no real paid requests enabled.';
+ $('demo-controls').hidden=false;
+ $('live-status').textContent='Demo data only. Live endpoint is not yet deployed.';
+}
+async function loadLive(){
+ controller?.abort();const current=new AbortController();controller=current;
+ $('load-live').disabled=true;$('live-status').textContent='Loading authorized episode…';
+ try{
+  const d=await client.load($('episode-id').value.trim(),{signal:current.signal});
+  if(controller!==current)return;
+  $('budget').textContent=money(d.budget.limitCents);
+  $('committed').textContent=money(d.budget.committedCents);
+  $('remaining').textContent=money(d.budget.remainingCents);
+  $('completed').textContent=d.progress.completed+' / '+d.progress.total;
+  rows(d.shots,false);
+  $('safety').textContent=d.budget.paused?'Spending paused: '+(d.budget.pauseReason??'Manual review required'):d.alerts.requiresAttention?'Attention required: investigate charge or provider outcome.':'No active alerts in this snapshot.';
+  $('mode-banner').textContent='LIVE READ-ONLY SNAPSHOT · Verified server response. Paid generation disabled.';
+  $('demo-controls').hidden=true;
+  $('live-status').textContent='Authorized read-only snapshot loaded.';
+ }catch(e){
+  if(controller!==current)return;
+  drawDemo();
+  $('live-status').textContent=e.message==='access_denied'?'Access denied. Sign in or request episode access.':e.message==='network_error'?'Network unavailable; returned to demo.':'Live data unavailable; returned to demo.';
+ }finally{if(controller===current){controller=null;$('load-live').disabled=false}}
+}
+$('load-live').addEventListener('click',loadLive);
+$('demo').addEventListener('click',()=>{drawDemo();$('load-live').disabled=false});
+for(const mode of ['normal','paused','unknown'])$(mode).addEventListener('click',()=>drawDemo(mode));
+drawDemo();
 </script></body></html>
