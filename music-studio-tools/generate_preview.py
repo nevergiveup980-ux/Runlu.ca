@@ -47,15 +47,19 @@ def build_prompt(project):
              "piano": "emotional piano ballad",
              "cinematic": "cinematic strings and acoustic guitar"}[project.get("style", "nostalgic")]
     notes = project.get("notes", "").strip()
+    language = project.get("language", "zh")
+    if language not in ("zh", "en", "fr", "es"):
+        raise ValueError("Unsupported song language")
+    language_name = {"zh": "Mandarin Chinese", "en": "English", "fr": "French", "es": "Spanish"}[language]
     lines = [
-        "Compose an entirely original instrumental piece." if instrumental else "Create an entirely original Mandarin song.",
+        "Compose an entirely original instrumental piece." if instrumental else f"Create an entirely original {language_name}-language song.",
         f"Working title: {title}.",
         f"Style: {style}.",
         f"Voice: {voice}.",
         "Structure: a clear opening, developing verse, memorable emotional peak, and a resolved ending.",
         "Arrangement: preserve space for the main melody, avoid clutter, build dynamics naturally.",
         ("No singing, spoken words, vocal samples, or synthetic choir." if instrumental else
-         "Vocal direction: natural phrasing, expressive dynamics, believable breathing, clear Mandarin diction, and restrained vibrato."),
+         f"Vocal direction: natural phrasing, expressive dynamics, believable breathing, clear {language_name} diction, and restrained vibrato."),
         "Originality: compose a new melody and arrangement; do not imitate existing recordings, copyrighted melodies, or identifiable artist voices.",
         "Production: balanced mix, no clipping, no abrupt cutoff, export clean full-length audio when supported.",
     ]
