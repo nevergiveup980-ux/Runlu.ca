@@ -40,6 +40,9 @@ begin
     from public.runlu_music_jobs
    where user_id = p_user_id and idempotency_key = p_key;
   if found then
+    if v_existing.project <> p_project then
+      raise exception 'IDEMPOTENCY_KEY_REUSED_WITH_DIFFERENT_PROJECT' using errcode = '22023';
+    end if;
     return query select v_existing.id, v_existing.status, false;
     return;
   end if;
