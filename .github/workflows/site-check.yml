@@ -38,6 +38,12 @@ jobs:
         env:
           RUNLU_STRIPE_LAB_DATABASE_URL: postgresql://runlu_lab_owner:synthetic_ci_only@127.0.0.1:5432/runlu_stripe_lab
         run: npm test --prefix experiments/stripe-ordering
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.9.6
+      - name: Test Deno runtime with embedded PostgreSQL and sourced RUNLU RPCs
+        working-directory: experiments/stripe-ordering
+        run: deno run --no-config --no-lock --node-modules-dir=manual --allow-read=. --allow-net=127.0.0.1 --allow-env=RUNLU_STRIPE_LAB_DATABASE_URL check-postgres-webhook.mjs
   check:
     runs-on: ubuntu-latest
     steps:

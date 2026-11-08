@@ -1,0 +1,81 @@
+{
+  "tables": [
+    {
+      "name": "runlu_subscription_status_history",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notnull": true
+        },
+        {
+          "name": "subscription_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "from_status",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "to_status",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "changed_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        }
+      ],
+      "triggers": null,
+      "constraints": [
+        {
+          "name": "runlu_subscription_status_history_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "runlu_subscription_status_history_subscription_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (subscription_id) REFERENCES runlu_subscriptions(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "runlu_subscription_status_history_user_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+        }
+      ]
+    }
+  ],
+  "indexes": [
+    {
+      "name": "runlu_commerce_events_webhook_receipt_uidx",
+      "definition": "CREATE UNIQUE INDEX runlu_commerce_events_webhook_receipt_uidx ON public.runlu_commerce_events USING btree (webhook_receipt_id) WHERE (webhook_receipt_id IS NOT NULL)"
+    },
+    {
+      "name": "runlu_webhook_receipts_commerce_event_uidx",
+      "definition": "CREATE UNIQUE INDEX runlu_webhook_receipts_commerce_event_uidx ON public.runlu_webhook_receipts USING btree (commerce_event_id) WHERE (commerce_event_id IS NOT NULL)"
+    },
+    {
+      "name": "runlu_orders_checkout_contract_uidx",
+      "definition": "CREATE UNIQUE INDEX runlu_orders_checkout_contract_uidx ON public.runlu_orders USING btree (checkout_contract_id) WHERE (checkout_contract_id IS NOT NULL)"
+    },
+    {
+      "name": "runlu_commerce_events_source_provider_event_uidx",
+      "definition": "CREATE UNIQUE INDEX runlu_commerce_events_source_provider_event_uidx ON public.runlu_commerce_events USING btree (source, provider_event_id) WHERE (provider_event_id IS NOT NULL)"
+    }
+  ]
+}

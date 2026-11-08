@@ -1,0 +1,1920 @@
+{
+  "captured": "2026-11-08",
+  "source": "read-only PostgreSQL catalogs; schema only; no table rows",
+  "tables": [
+    {
+      "name": "runlu_commerce_event_types",
+      "columns": [
+        {
+          "name": "event_type",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "event_family",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "target_scope",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "requires_user",
+          "type": "boolean",
+          "default": "true",
+          "notnull": true
+        },
+        {
+          "name": "requires_product",
+          "type": "boolean",
+          "default": "true",
+          "notnull": true
+        },
+        {
+          "name": "requires_plan",
+          "type": "boolean",
+          "default": "true",
+          "notnull": true
+        },
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": "true",
+          "notnull": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        }
+      ],
+      "triggers": null,
+      "constraints": [
+        {
+          "name": "runlu_commerce_event_types_event_family_check",
+          "type": "c",
+          "definition": "CHECK ((event_family = ANY (ARRAY['payment'::text, 'order'::text, 'subscription'::text])))"
+        },
+        {
+          "name": "runlu_commerce_event_types_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (event_type)"
+        },
+        {
+          "name": "runlu_commerce_event_types_target_scope_check",
+          "type": "c",
+          "definition": "CHECK ((target_scope = ANY (ARRAY['order'::text, 'subscription'::text, 'either'::text])))"
+        }
+      ]
+    },
+    {
+      "name": "runlu_commerce_events",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notnull": true
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "event_type",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "subscription_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "product_key",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "plan_key",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "source",
+          "type": "text",
+          "default": "'system'::text",
+          "notnull": true
+        },
+        {
+          "name": "event_status",
+          "type": "text",
+          "default": "'recorded'::text",
+          "notnull": true
+        },
+        {
+          "name": "provider_event_id",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "metadata",
+          "type": "jsonb",
+          "default": "'{}'::jsonb",
+          "notnull": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "provider_occurred_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "provider_sequence",
+          "type": "bigint",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "ordering_status",
+          "type": "text",
+          "default": "'unassessed'::text",
+          "notnull": true
+        },
+        {
+          "name": "ordering_note",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "webhook_receipt_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "provider_event_type",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "normalization_version",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        }
+      ],
+      "triggers": [
+        "CREATE TRIGGER runlu_commerce_events_validate_plan_product BEFORE INSERT OR UPDATE OF product_key, plan_key ON public.runlu_commerce_events FOR EACH ROW EXECUTE FUNCTION runlu_validate_plan_product_pair()"
+      ],
+      "constraints": [
+        {
+          "name": "runlu_commerce_events_order_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (order_id) REFERENCES runlu_orders(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "runlu_commerce_events_ordering_status_check",
+          "type": "c",
+          "definition": "CHECK ((ordering_status = ANY (ARRAY['unassessed'::text, 'accepted'::text, 'stale'::text, 'unordered'::text, 'missing_clock'::text])))"
+        },
+        {
+          "name": "runlu_commerce_events_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "runlu_commerce_events_plan_key_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (plan_key) REFERENCES runlu_product_plans(plan_key) ON DELETE SET NULL"
+        },
+        {
+          "name": "runlu_commerce_events_product_key_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (product_key) REFERENCES runlu_product_catalog(product_key) ON DELETE SET NULL"
+        },
+        {
+          "name": "runlu_commerce_events_provider_sequence_check",
+          "type": "c",
+          "definition": "CHECK (((provider_sequence IS NULL) OR (provider_sequence >= 0)))"
+        },
+        {
+          "name": "runlu_commerce_events_status_check",
+          "type": "c",
+          "definition": "CHECK ((event_status = ANY (ARRAY['recorded'::text, 'processed'::text, 'ignored'::text, 'failed'::text])))"
+        },
+        {
+          "name": "runlu_commerce_events_subscription_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (subscription_id) REFERENCES runlu_subscriptions(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "runlu_commerce_events_user_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "runlu_commerce_events_webhook_receipt_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (webhook_receipt_id) REFERENCES runlu_webhook_receipts(id) ON DELETE SET NULL"
+        }
+      ]
+    },
+    {
+      "name": "runlu_consumable_credits",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notnull": true
+        },
+        {
+          "name": "commerce_event_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "order_item_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "product_key",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "plan_key",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "units_granted",
+          "type": "integer",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "units_consumed",
+          "type": "integer",
+          "default": "0",
+          "notnull": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "default": "'active'::text",
+          "notnull": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        }
+      ],
+      "triggers": [
+        "CREATE TRIGGER runlu_consumable_credits_validate BEFORE INSERT OR UPDATE ON public.runlu_consumable_credits FOR EACH ROW EXECUTE FUNCTION runlu_validate_consumable_credit()"
+      ],
+      "constraints": [
+        {
+          "name": "runlu_consumable_credits_check",
+          "type": "c",
+          "definition": "CHECK ((units_consumed <= units_granted))"
+        },
+        {
+          "name": "runlu_consumable_credits_commerce_event_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (commerce_event_id) REFERENCES runlu_commerce_events(id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "runlu_consumable_credits_commerce_event_id_order_item_id_key",
+          "type": "u",
+          "definition": "UNIQUE (commerce_event_id, order_item_id)"
+        },
+        {
+          "name": "runlu_consumable_credits_order_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (order_id) REFERENCES runlu_orders(id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "runlu_consumable_credits_order_item_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (order_item_id) REFERENCES runlu_order_items(id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "runlu_consumable_credits_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "runlu_consumable_credits_plan_key_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (plan_key) REFERENCES runlu_product_plans(plan_key) ON DELETE RESTRICT"
+        },
+        {
+          "name": "runlu_consumable_credits_product_key_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (product_key) REFERENCES runlu_product_catalog(product_key) ON DELETE RESTRICT"
+        },
+        {
+          "name": "runlu_consumable_credits_status_check",
+          "type": "c",
+          "definition": "CHECK ((status = ANY (ARRAY['active'::text, 'revoked'::text, 'exhausted'::text])))"
+        },
+        {
+          "name": "runlu_consumable_credits_units_consumed_check",
+          "type": "c",
+          "definition": "CHECK ((units_consumed >= 0))"
+        },
+        {
+          "name": "runlu_consumable_credits_units_granted_check",
+          "type": "c",
+          "definition": "CHECK ((units_granted > 0))"
+        },
+        {
+          "name": "runlu_consumable_credits_user_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "runlu_consumable_revocations",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notnull": true
+        },
+        {
+          "name": "commerce_event_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "product_key",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "plan_key",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "units_revoked",
+          "type": "integer",
+          "default": "0",
+          "notnull": true
+        },
+        {
+          "name": "reason",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        }
+      ],
+      "triggers": null,
+      "constraints": [
+        {
+          "name": "runlu_consumable_revocations_commerce_event_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (commerce_event_id) REFERENCES runlu_commerce_events(id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "runlu_consumable_revocations_commerce_event_id_key",
+          "type": "u",
+          "definition": "UNIQUE (commerce_event_id)"
+        },
+        {
+          "name": "runlu_consumable_revocations_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "runlu_consumable_revocations_plan_key_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (plan_key) REFERENCES runlu_product_plans(plan_key) ON DELETE RESTRICT"
+        },
+        {
+          "name": "runlu_consumable_revocations_product_key_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (product_key) REFERENCES runlu_product_catalog(product_key) ON DELETE RESTRICT"
+        },
+        {
+          "name": "runlu_consumable_revocations_units_revoked_check",
+          "type": "c",
+          "definition": "CHECK ((units_revoked >= 0))"
+        },
+        {
+          "name": "runlu_consumable_revocations_user_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "runlu_entitlement_bases",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notnull": true
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "product_key",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "basis_type",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "basis_key",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "default": "'active'::text",
+          "notnull": true
+        },
+        {
+          "name": "starts_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "ends_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "subscription_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "grant_event_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "revocation_event_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        }
+      ],
+      "triggers": null,
+      "constraints": [
+        {
+          "name": "runlu_entitlement_bases_basis_type_check",
+          "type": "c",
+          "definition": "CHECK ((basis_type = ANY (ARRAY['owner_seed'::text, 'manual'::text, 'free_plan'::text, 'commerce_order'::text, 'subscription'::text, 'legacy_commerce'::text])))"
+        },
+        {
+          "name": "runlu_entitlement_bases_grant_event_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (grant_event_id) REFERENCES runlu_commerce_events(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "runlu_entitlement_bases_order_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (order_id) REFERENCES runlu_orders(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "runlu_entitlement_bases_period_check",
+          "type": "c",
+          "definition": "CHECK (((ends_at IS NULL) OR (ends_at > starts_at)))"
+        },
+        {
+          "name": "runlu_entitlement_bases_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "runlu_entitlement_bases_product_key_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (product_key) REFERENCES runlu_product_catalog(product_key) ON DELETE CASCADE"
+        },
+        {
+          "name": "runlu_entitlement_bases_revocation_event_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (revocation_event_id) REFERENCES runlu_commerce_events(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "runlu_entitlement_bases_status_check",
+          "type": "c",
+          "definition": "CHECK ((status = ANY (ARRAY['active'::text, 'revoked'::text, 'expired'::text])))"
+        },
+        {
+          "name": "runlu_entitlement_bases_subscription_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (subscription_id) REFERENCES runlu_subscriptions(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "runlu_entitlement_bases_user_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "runlu_entitlement_bases_user_product_key_uq",
+          "type": "u",
+          "definition": "UNIQUE (user_id, product_key, basis_key)"
+        }
+      ]
+    },
+    {
+      "name": "runlu_entitlement_grants",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notnull": true
+        },
+        {
+          "name": "commerce_event_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "entitlement_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "product_key",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "grant_type",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "starts_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "ends_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "basis_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": false
+        }
+      ],
+      "triggers": null,
+      "constraints": [
+        {
+          "name": "runlu_entitlement_grants_basis_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (basis_id) REFERENCES runlu_entitlement_bases(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "runlu_entitlement_grants_check",
+          "type": "c",
+          "definition": "CHECK (((ends_at IS NULL) OR (ends_at > starts_at)))"
+        },
+        {
+          "name": "runlu_entitlement_grants_commerce_event_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (commerce_event_id) REFERENCES runlu_commerce_events(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "runlu_entitlement_grants_commerce_event_id_key",
+          "type": "u",
+          "definition": "UNIQUE (commerce_event_id)"
+        },
+        {
+          "name": "runlu_entitlement_grants_entitlement_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (entitlement_id) REFERENCES runlu_entitlements(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "runlu_entitlement_grants_grant_type_check",
+          "type": "c",
+          "definition": "CHECK ((grant_type = ANY (ARRAY['one_time'::text, 'subscription'::text])))"
+        },
+        {
+          "name": "runlu_entitlement_grants_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "runlu_entitlement_grants_product_key_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (product_key) REFERENCES runlu_product_catalog(product_key) ON DELETE RESTRICT"
+        },
+        {
+          "name": "runlu_entitlement_grants_user_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "runlu_entitlement_revocations",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notnull": true
+        },
+        {
+          "name": "commerce_event_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "entitlement_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "product_key",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "reason",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "revoked_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "previous_ends_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "basis_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": false
+        }
+      ],
+      "triggers": null,
+      "constraints": [
+        {
+          "name": "runlu_entitlement_revocations_basis_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (basis_id) REFERENCES runlu_entitlement_bases(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "runlu_entitlement_revocations_commerce_event_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (commerce_event_id) REFERENCES runlu_commerce_events(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "runlu_entitlement_revocations_commerce_event_id_key",
+          "type": "u",
+          "definition": "UNIQUE (commerce_event_id)"
+        },
+        {
+          "name": "runlu_entitlement_revocations_entitlement_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (entitlement_id) REFERENCES runlu_entitlements(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "runlu_entitlement_revocations_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "runlu_entitlement_revocations_product_key_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (product_key) REFERENCES runlu_product_catalog(product_key) ON DELETE RESTRICT"
+        },
+        {
+          "name": "runlu_entitlement_revocations_reason_check",
+          "type": "c",
+          "definition": "CHECK ((reason = ANY (ARRAY['refund'::text, 'order_cancelled'::text, 'subscription_cancelled'::text, 'subscription_expired'::text, 'subscription_past_due'::text, 'manual_review'::text])))"
+        },
+        {
+          "name": "runlu_entitlement_revocations_user_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "runlu_entitlements",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notnull": true
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "product_key",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "source",
+          "type": "text",
+          "default": "'manual'::text",
+          "notnull": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "default": "'active'::text",
+          "notnull": true
+        },
+        {
+          "name": "starts_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "ends_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        }
+      ],
+      "triggers": [
+        "CREATE TRIGGER runlu_entitlements_validate_product BEFORE INSERT OR UPDATE OF product_key, status ON public.runlu_entitlements FOR EACH ROW EXECUTE FUNCTION runlu_validate_entitlement_product()"
+      ],
+      "constraints": [
+        {
+          "name": "runlu_entitlements_period_check",
+          "type": "c",
+          "definition": "CHECK (((ends_at IS NULL) OR (ends_at > starts_at)))"
+        },
+        {
+          "name": "runlu_entitlements_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "runlu_entitlements_product_key_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (product_key) REFERENCES runlu_product_catalog(product_key) ON DELETE CASCADE"
+        },
+        {
+          "name": "runlu_entitlements_status_check",
+          "type": "c",
+          "definition": "CHECK ((status = ANY (ARRAY['active'::text, 'revoked'::text, 'expired'::text])))"
+        },
+        {
+          "name": "runlu_entitlements_user_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "runlu_entitlements_user_id_product_key_key",
+          "type": "u",
+          "definition": "UNIQUE (user_id, product_key)"
+        }
+      ]
+    },
+    {
+      "name": "runlu_fulfillment_runs",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notnull": true
+        },
+        {
+          "name": "commerce_event_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "fulfillment_mode",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "action",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "entitlement_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "units",
+          "type": "integer",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "completed_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        }
+      ],
+      "triggers": null,
+      "constraints": [
+        {
+          "name": "runlu_fulfillment_runs_action_check",
+          "type": "c",
+          "definition": "CHECK ((action = ANY (ARRAY['grant'::text, 'revoke'::text])))"
+        },
+        {
+          "name": "runlu_fulfillment_runs_commerce_event_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (commerce_event_id) REFERENCES runlu_commerce_events(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "runlu_fulfillment_runs_commerce_event_id_key",
+          "type": "u",
+          "definition": "UNIQUE (commerce_event_id)"
+        },
+        {
+          "name": "runlu_fulfillment_runs_entitlement_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (entitlement_id) REFERENCES runlu_entitlements(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "runlu_fulfillment_runs_fulfillment_mode_check",
+          "type": "c",
+          "definition": "CHECK ((fulfillment_mode = ANY (ARRAY['product_access'::text, 'consumable_credit'::text])))"
+        },
+        {
+          "name": "runlu_fulfillment_runs_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "runlu_fulfillment_runs_units_check",
+          "type": "c",
+          "definition": "CHECK (((units IS NULL) OR (units >= 0)))"
+        }
+      ]
+    },
+    {
+      "name": "runlu_order_items",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notnull": true
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "product_key",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "plan_key",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "quantity",
+          "type": "integer",
+          "default": "1",
+          "notnull": true
+        },
+        {
+          "name": "unit_price",
+          "type": "numeric(12,2)",
+          "default": "0",
+          "notnull": true
+        },
+        {
+          "name": "line_total",
+          "type": "numeric(12,2)",
+          "default": "0",
+          "notnull": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        }
+      ],
+      "triggers": [
+        "CREATE TRIGGER runlu_order_items_set_line_total BEFORE INSERT OR UPDATE OF quantity, unit_price ON public.runlu_order_items FOR EACH ROW EXECUTE FUNCTION runlu_set_order_item_line_total()",
+        "CREATE TRIGGER runlu_order_items_sync_subtotal AFTER INSERT OR DELETE OR UPDATE ON public.runlu_order_items FOR EACH ROW EXECUTE FUNCTION runlu_sync_order_subtotal()",
+        "CREATE TRIGGER runlu_order_items_validate_plan_product BEFORE INSERT OR UPDATE OF product_key, plan_key ON public.runlu_order_items FOR EACH ROW EXECUTE FUNCTION runlu_validate_plan_product_pair()"
+      ],
+      "constraints": [
+        {
+          "name": "runlu_order_items_line_total_check",
+          "type": "c",
+          "definition": "CHECK ((line_total >= (0)::numeric))"
+        },
+        {
+          "name": "runlu_order_items_line_total_matches_check",
+          "type": "c",
+          "definition": "CHECK ((line_total = round((unit_price * (quantity)::numeric), 2)))"
+        },
+        {
+          "name": "runlu_order_items_order_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (order_id) REFERENCES runlu_orders(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "runlu_order_items_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "runlu_order_items_plan_key_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (plan_key) REFERENCES runlu_product_plans(plan_key) ON DELETE RESTRICT"
+        },
+        {
+          "name": "runlu_order_items_product_key_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (product_key) REFERENCES runlu_product_catalog(product_key) ON DELETE RESTRICT"
+        },
+        {
+          "name": "runlu_order_items_quantity_check",
+          "type": "c",
+          "definition": "CHECK ((quantity > 0))"
+        },
+        {
+          "name": "runlu_order_items_unit_price_check",
+          "type": "c",
+          "definition": "CHECK ((unit_price >= (0)::numeric))"
+        }
+      ]
+    },
+    {
+      "name": "runlu_orders",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notnull": true
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "order_number",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "currency",
+          "type": "text",
+          "default": "'CAD'::text",
+          "notnull": true
+        },
+        {
+          "name": "subtotal",
+          "type": "numeric(12,2)",
+          "default": "0",
+          "notnull": true
+        },
+        {
+          "name": "total",
+          "type": "numeric(12,2)",
+          "default": "0",
+          "notnull": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "default": "'draft'::text",
+          "notnull": true
+        },
+        {
+          "name": "payment_provider",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "provider_reference",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "checkout_contract_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": false
+        }
+      ],
+      "triggers": [
+        "CREATE TRIGGER runlu_order_checkout_guard BEFORE UPDATE ON public.runlu_orders FOR EACH ROW EXECUTE FUNCTION runlu_order_checkout_guard()",
+        "CREATE TRIGGER runlu_orders_record_status_transition AFTER UPDATE OF status ON public.runlu_orders FOR EACH ROW EXECUTE FUNCTION runlu_record_order_status_transition()",
+        "CREATE TRIGGER runlu_orders_touch_updated_at BEFORE UPDATE ON public.runlu_orders FOR EACH ROW EXECUTE FUNCTION runlu_touch_updated_at()",
+        "CREATE TRIGGER runlu_orders_validate_status_transition BEFORE UPDATE OF status ON public.runlu_orders FOR EACH ROW EXECUTE FUNCTION runlu_validate_order_status_transition()"
+      ],
+      "constraints": [
+        {
+          "name": "runlu_orders_checkout_contract_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (checkout_contract_id) REFERENCES runlu_checkout_contracts(id) ON DELETE RESTRICT"
+        },
+        {
+          "name": "runlu_orders_order_number_key",
+          "type": "u",
+          "definition": "UNIQUE (order_number)"
+        },
+        {
+          "name": "runlu_orders_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "runlu_orders_status_check",
+          "type": "c",
+          "definition": "CHECK ((status = ANY (ARRAY['draft'::text, 'pending'::text, 'paid'::text, 'cancelled'::text, 'refunded'::text, 'failed'::text])))"
+        },
+        {
+          "name": "runlu_orders_subtotal_check",
+          "type": "c",
+          "definition": "CHECK ((subtotal >= (0)::numeric))"
+        },
+        {
+          "name": "runlu_orders_total_check",
+          "type": "c",
+          "definition": "CHECK ((total >= (0)::numeric))"
+        },
+        {
+          "name": "runlu_orders_user_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "runlu_product_catalog",
+      "columns": [
+        {
+          "name": "product_key",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "kind",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "platform",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "access_url",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "default": "'active'::text",
+          "notnull": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "category",
+          "type": "text",
+          "default": "'software'::text",
+          "notnull": true
+        },
+        {
+          "name": "lifecycle_status",
+          "type": "text",
+          "default": "'active'::text",
+          "notnull": true
+        },
+        {
+          "name": "visibility",
+          "type": "text",
+          "default": "'private'::text",
+          "notnull": true
+        },
+        {
+          "name": "commerce_status",
+          "type": "text",
+          "default": "'not_for_sale'::text",
+          "notnull": true
+        },
+        {
+          "name": "library_eligible",
+          "type": "boolean",
+          "default": "false",
+          "notnull": true
+        },
+        {
+          "name": "account_required",
+          "type": "boolean",
+          "default": "false",
+          "notnull": true
+        },
+        {
+          "name": "apple_status",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "release_date",
+          "type": "date",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "parent_key",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "sort_order",
+          "type": "integer",
+          "default": "100",
+          "notnull": true
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        }
+      ],
+      "triggers": [
+        "CREATE TRIGGER runlu_product_catalog_touch_updated_at BEFORE UPDATE ON public.runlu_product_catalog FOR EACH ROW EXECUTE FUNCTION runlu_touch_updated_at()"
+      ],
+      "constraints": [
+        {
+          "name": "runlu_product_catalog_parent_key_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (parent_key) REFERENCES runlu_product_catalog(product_key) ON DELETE SET NULL"
+        },
+        {
+          "name": "runlu_product_catalog_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (product_key)"
+        },
+        {
+          "name": "runlu_product_catalog_status_check",
+          "type": "c",
+          "definition": "CHECK ((status = ANY (ARRAY['active'::text, 'hidden'::text, 'retired'::text])))"
+        }
+      ]
+    },
+    {
+      "name": "runlu_product_plans",
+      "columns": [
+        {
+          "name": "plan_key",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "product_key",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "plan_type",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "billing_period",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "price_cad",
+          "type": "numeric(10,2)",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "availability",
+          "type": "text",
+          "default": "'planned'::text",
+          "notnull": true
+        },
+        {
+          "name": "public_label",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "sort_order",
+          "type": "integer",
+          "default": "0",
+          "notnull": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "fulfillment_mode",
+          "type": "text",
+          "default": "'product_access'::text",
+          "notnull": true
+        }
+      ],
+      "triggers": [
+        "CREATE TRIGGER runlu_product_plans_touch_updated_at BEFORE UPDATE ON public.runlu_product_plans FOR EACH ROW EXECUTE FUNCTION runlu_touch_updated_at()"
+      ],
+      "constraints": [
+        {
+          "name": "runlu_product_plans_availability_check",
+          "type": "c",
+          "definition": "CHECK ((availability = ANY (ARRAY['planned'::text, 'available'::text, 'retired'::text])))"
+        },
+        {
+          "name": "runlu_product_plans_billing_period_check",
+          "type": "c",
+          "definition": "CHECK (((billing_period = ANY (ARRAY['month'::text, 'year'::text, 'one_time'::text])) OR (billing_period IS NULL)))"
+        },
+        {
+          "name": "runlu_product_plans_fulfillment_mode_check",
+          "type": "c",
+          "definition": "CHECK ((fulfillment_mode = ANY (ARRAY['product_access'::text, 'consumable_credit'::text, 'none'::text])))"
+        },
+        {
+          "name": "runlu_product_plans_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (plan_key)"
+        },
+        {
+          "name": "runlu_product_plans_plan_type_check",
+          "type": "c",
+          "definition": "CHECK ((plan_type = ANY (ARRAY['free'::text, 'subscription'::text, 'one_time'::text])))"
+        },
+        {
+          "name": "runlu_product_plans_price_cad_check",
+          "type": "c",
+          "definition": "CHECK ((price_cad >= (0)::numeric))"
+        },
+        {
+          "name": "runlu_product_plans_product_key_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (product_key) REFERENCES runlu_product_catalog(product_key) ON DELETE CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "runlu_provider_adapters",
+      "columns": [
+        {
+          "name": "provider_name",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "implementation_status",
+          "type": "text",
+          "default": "'disabled'::text",
+          "notnull": true
+        },
+        {
+          "name": "adapter_version",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "create_checkout_ready",
+          "type": "boolean",
+          "default": "false",
+          "notnull": true
+        },
+        {
+          "name": "verify_webhook_ready",
+          "type": "boolean",
+          "default": "false",
+          "notnull": true
+        },
+        {
+          "name": "normalize_event_ready",
+          "type": "boolean",
+          "default": "false",
+          "notnull": true
+        },
+        {
+          "name": "refund_ready",
+          "type": "boolean",
+          "default": "false",
+          "notnull": true
+        },
+        {
+          "name": "subscription_sync_ready",
+          "type": "boolean",
+          "default": "false",
+          "notnull": true
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        }
+      ],
+      "triggers": null,
+      "constraints": [
+        {
+          "name": "runlu_provider_adapters_implementation_status_check",
+          "type": "c",
+          "definition": "CHECK ((implementation_status = ANY (ARRAY['disabled'::text, 'testing'::text, 'ready'::text])))"
+        },
+        {
+          "name": "runlu_provider_adapters_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (provider_name)"
+        }
+      ]
+    },
+    {
+      "name": "runlu_subscriptions",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notnull": true
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "product_key",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "plan_key",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "default": "'pending'::text",
+          "notnull": true
+        },
+        {
+          "name": "payment_provider",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "provider_customer_reference",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "provider_subscription_reference",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "current_period_start",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "current_period_end",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "cancel_at_period_end",
+          "type": "boolean",
+          "default": "false",
+          "notnull": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        }
+      ],
+      "triggers": [
+        "CREATE TRIGGER runlu_subscriptions_record_status_transition AFTER UPDATE OF status ON public.runlu_subscriptions FOR EACH ROW EXECUTE FUNCTION runlu_record_subscription_status_transition()",
+        "CREATE TRIGGER runlu_subscriptions_touch_updated_at BEFORE UPDATE ON public.runlu_subscriptions FOR EACH ROW EXECUTE FUNCTION runlu_touch_updated_at()",
+        "CREATE TRIGGER runlu_subscriptions_validate_period_integrity BEFORE INSERT OR UPDATE OF status, current_period_start, current_period_end, cancel_at_period_end ON public.runlu_subscriptions FOR EACH ROW EXECUTE FUNCTION runlu_validate_subscription_period_integrity()",
+        "CREATE TRIGGER runlu_subscriptions_validate_plan_product BEFORE INSERT OR UPDATE OF product_key, plan_key ON public.runlu_subscriptions FOR EACH ROW EXECUTE FUNCTION runlu_validate_plan_product_pair()",
+        "CREATE TRIGGER runlu_subscriptions_validate_status_transition BEFORE UPDATE OF status ON public.runlu_subscriptions FOR EACH ROW EXECUTE FUNCTION runlu_validate_subscription_status_transition()"
+      ],
+      "constraints": [
+        {
+          "name": "runlu_subscriptions_period_pair_check",
+          "type": "c",
+          "definition": "CHECK ((((current_period_start IS NULL) AND (current_period_end IS NULL)) OR ((current_period_start IS NOT NULL) AND (current_period_end IS NOT NULL) AND (current_period_end > current_period_start))))"
+        },
+        {
+          "name": "runlu_subscriptions_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "runlu_subscriptions_plan_key_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (plan_key) REFERENCES runlu_product_plans(plan_key) ON DELETE RESTRICT"
+        },
+        {
+          "name": "runlu_subscriptions_product_key_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (product_key) REFERENCES runlu_product_catalog(product_key) ON DELETE RESTRICT"
+        },
+        {
+          "name": "runlu_subscriptions_status_check",
+          "type": "c",
+          "definition": "CHECK ((status = ANY (ARRAY['pending'::text, 'active'::text, 'paused'::text, 'cancelled'::text, 'expired'::text, 'past_due'::text])))"
+        },
+        {
+          "name": "runlu_subscriptions_user_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "runlu_subscriptions_user_id_plan_key_key",
+          "type": "u",
+          "definition": "UNIQUE (user_id, plan_key)"
+        }
+      ]
+    },
+    {
+      "name": "runlu_webhook_receipts",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "default": "gen_random_uuid()",
+          "notnull": true
+        },
+        {
+          "name": "provider",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "provider_event_id",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "event_type",
+          "type": "text",
+          "default": null,
+          "notnull": true
+        },
+        {
+          "name": "payload_sha256",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "signature_verified",
+          "type": "boolean",
+          "default": "false",
+          "notnull": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "default": "'received'::text",
+          "notnull": true
+        },
+        {
+          "name": "delivery_count",
+          "type": "integer",
+          "default": "1",
+          "notnull": true
+        },
+        {
+          "name": "first_received_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "last_received_at",
+          "type": "timestamp with time zone",
+          "default": "now()",
+          "notnull": true
+        },
+        {
+          "name": "processed_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "failure_code",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "processing_attempt_count",
+          "type": "integer",
+          "default": "0",
+          "notnull": true
+        },
+        {
+          "name": "processing_started_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "duplicate_mismatch_count",
+          "type": "integer",
+          "default": "0",
+          "notnull": true
+        },
+        {
+          "name": "commerce_event_id",
+          "type": "uuid",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "last_failed_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "next_retry_at",
+          "type": "timestamp with time zone",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "manual_review_required",
+          "type": "boolean",
+          "default": "false",
+          "notnull": true
+        },
+        {
+          "name": "processing_disposition",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "disposition_note",
+          "type": "text",
+          "default": null,
+          "notnull": false
+        },
+        {
+          "name": "integration_scope",
+          "type": "text",
+          "default": "'unclassified'::text",
+          "notnull": true
+        }
+      ],
+      "triggers": null,
+      "constraints": [
+        {
+          "name": "runlu_webhook_receipts_commerce_event_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (commerce_event_id) REFERENCES runlu_commerce_events(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "runlu_webhook_receipts_delivery_count_check",
+          "type": "c",
+          "definition": "CHECK ((delivery_count > 0))"
+        },
+        {
+          "name": "runlu_webhook_receipts_duplicate_mismatch_count_check",
+          "type": "c",
+          "definition": "CHECK ((duplicate_mismatch_count >= 0))"
+        },
+        {
+          "name": "runlu_webhook_receipts_hash_check",
+          "type": "c",
+          "definition": "CHECK (((payload_sha256 IS NULL) OR (payload_sha256 ~ '^[0-9a-fA-F]{64}$'::text)))"
+        },
+        {
+          "name": "runlu_webhook_receipts_integration_scope_check",
+          "type": "c",
+          "definition": "CHECK ((integration_scope = ANY (ARRAY['unclassified'::text, 'runlu_correlated'::text, 'foreign_or_uncorrelated'::text])))"
+        },
+        {
+          "name": "runlu_webhook_receipts_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "runlu_webhook_receipts_processing_attempt_count_check",
+          "type": "c",
+          "definition": "CHECK ((processing_attempt_count >= 0))"
+        },
+        {
+          "name": "runlu_webhook_receipts_processing_disposition_check",
+          "type": "c",
+          "definition": "CHECK (((processing_disposition IS NULL) OR (processing_disposition = ANY (ARRAY['fulfilled'::text, 'acknowledged_noop'::text, 'awaiting_correlation'::text, 'unsupported'::text]))))"
+        },
+        {
+          "name": "runlu_webhook_receipts_provider_event_unique",
+          "type": "u",
+          "definition": "UNIQUE (provider, provider_event_id)"
+        },
+        {
+          "name": "runlu_webhook_receipts_status_check",
+          "type": "c",
+          "definition": "CHECK ((status = ANY (ARRAY['received'::text, 'verified'::text, 'rejected'::text, 'processing'::text, 'processed'::text, 'failed'::text])))"
+        }
+      ]
+    }
+  ]
+}

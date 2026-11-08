@@ -6,6 +6,7 @@ import { once } from 'node:events';
 import { createProcessor } from './processor.mjs';
 import { PostgresStore } from './postgres-store.mjs';
 import { createWebhook } from './webhook.mjs';
+import { checkRunluIntegration } from './check-runlu-integration.mjs';
 
 // No Supabase URL, Stripe key, or production environment variable is used.
 // Network mode is restricted to a fresh, explicitly named loopback CI database.
@@ -256,4 +257,5 @@ try {
     });
   }
   console.log(`PASS ${count} ${pool?'server PostgreSQL':'embedded PostgreSQL'} transaction and signed HTTP scenarios`);
+  await checkRunluIntegration({admin,service,pool,exec:sql=>embedded?embedded.exec(sql):admin(sql)});
 } finally { await close(); }

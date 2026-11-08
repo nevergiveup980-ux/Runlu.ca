@@ -44,12 +44,63 @@ lock timeout returning 503 rather than false duplicate/200, and terminating a
 connection with uncommitted state followed by a successful retry. All run only
 against the disposable CI database, never the connected Supabase project.
 
-This reduces the remaining gap but still uses fixture tables and fixture access
-policy. It does not yet invoke the real RUNLU receipt, checkout correlation,
-normalization or fulfillment RPCs. Porting those together into the transaction,
-checking account/customer/price identity and verifying Stripe test-mode/Deno
-integration remain release gates below. The production v14 bundle was re-read
-on 2026-11-08 and still matched the version/hash recorded here.
+This fixture-only layer now runs alongside the sourced RUNLU integration below.
+The production v14 bundle was re-read on 2026-11-08 and still matched the
+version/hash recorded here.
+
+## Sourced RUNLU RPC integration (2026-11-08)
+
+`runlu-rpc-snapshot.sql`, `runlu-trigger-snapshot.sql` and the schema JSON files
+were captured with read-only catalog SELECTs from the specified project. No
+customer rows, provider configuration rows, secrets or auth sessions were copied.
+`snapshot-manifest.json` records their SHA-256 digests; the installer verifies
+them before execution. Source function definitions are preserved verbatim.
+
+`install-runlu-snapshot.mjs` recreates 17 table definitions, check/unique constraints,
+unique indexes and subscription-path triggers in the disposable database. It
+includes relevant internal foreign keys. `auth.users` is a synthetic ID-only stub;
+the orders-to-checkout-contract foreign key is omitted because Checkout creation
+is outside this test. Order/consumable triggers and production RLS policies are
+not loaded. Product, plan, adapter readiness, event types, user and subscription
+bindings are synthetic fixtures. These limits prevent claiming full schema parity.
+
+`runlu-integration.sql` and `runlu-store.mjs` add an isolated candidate transaction
+around sourced receipt record/claim, subscription update, normalization,
+fulfillment and completion. All roll back together. Only a fully processed RUNLU
+receipt can count as duplicate. A server-owned binding targets an existing seeded
+subscription; this is NOT yet production Checkout correlation or first creation.
+The tested clock guard still writes its fixture projections within the same
+transaction; replacing those redundant fixtures with a production clock table
+remains part of migration design.
+
+Two ordering functions get a narrow, isolated reconciliation path. It is accepted
+only when the commerce event matches the verified processing receipt, trusted
+subscription binding, current clock event ID and exact authoritative revision.
+Unmarked events retain the sourced legacy ordering behavior. Tests prove that
+same-second past-due-to-active recovery succeeds through the candidate and remains
+stale through the unmarked legacy path. No provider timestamp is fabricated.
+
+Cancellation maps to RUNLU `expired`, cuts effective access off at the earlier of
+the snapshot period end and now, and retains the raw snapshot in the clock row.
+This honors the real expiration trigger, which prohibits future ends on expired
+subscriptions. Scheduled cancellation on an active subscription retains its paid
+period and creates/updates its actual entitlement basis. Missing revocation basis
+fails closed and remains retryable; it needs controlled reconciliation rather
+than fabricated historical grants. Paused/incomplete snapshots require an explicit
+RUNLU policy and are deliberately rejected by this integration candidate.
+
+The suite verifies real sourced grant/revocation/projection functions and status
+history triggers, same-second recovery, completion/grant failure rollback, busy /
+backoff / manual review 503 responses, expired claim recovery, trusted bindings,
+and denied anonymous/authenticated execution. The server backend also tests two
+concurrent candidate wrappers. All functions loaded into public have PUBLIC
+execution revoked; the candidate wrapper uses invoker security.
+
+Standalone Deno 2.9.6 executes the same embedded PostgreSQL suite, with read access
+restricted to this directory, network restricted to loopback, and only the lab URL
+environment variable readable. A Deno-only test uses `Deno.serve` for a signed
+HTTP round trip through the actual-RPC adapter. This is not the hosted Supabase
+Edge Runtime and does not establish Stripe test-account/API compatibility.
 
 ## Read-only findings (2026-11-07)
 
@@ -126,11 +177,14 @@ this machine has no `python` alias). Upstream baseline `0141213` Site integrity 
 5. Distinguish completed duplicate from busy/backoff/review. Return retryable status
    for transient busy/backoff, or persist work in a separately verified durable queue;
    do not swallow work with a false duplicate acknowledgement.
-6. Port this suite to an isolated Supabase/Postgres database and the candidate HTTP
-   Edge Function, exercising actual receipt and entitlement RPCs, permissions,
-   initial-create races, multi-worker contention, process crashes and expired claims.
-   Run Stripe test-mode signed fixtures (including API failure/recovery and missing
-   period fields); no live charge or live event replay is authorized here.
+6. Re-run against an isolated hosted Supabase database and Edge Runtime through
+   PostgREST, including production RLS/auth and Checkout correlation. The local
+   sourced-RPC and server lock suites now exercise receipt/entitlement RPCs,
+   rollback, contention, process crashes and expired claims, but use synthetic
+   configuration and a seeded subscription. Verify first creation and complete
+   Checkout/provider identity before adapting v14. Run Stripe test-mode signed
+   fixtures (including API failure/recovery and missing period fields); no live
+   charge or live event replay is authorized here.
 
 This experiment is a tested reference implementation of the safety boundary, not
 a production-ready v15 patch. No production migration or deployment is performed.

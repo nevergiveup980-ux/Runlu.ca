@@ -1,0 +1,11 @@
+{
+  "captured": "2026-11-08",
+  "project": "ekrnknlawekeoszzkamd",
+  "method": "Read-only PostgreSQL catalog queries; no customer rows",
+  "sha256": {
+    "runlu-rpc-snapshot.sql": "4dec7967978f296a3b4f6bd3ecd9321aac130e5e112c2a4ce4a969cfb52a9d46",
+    "runlu-trigger-snapshot.sql": "77b0a3b41dd3095d4f3671a8940d0c35fdcf8d7cf2da16970b150428677096e1",
+    "runlu-schema-snapshot.json": "4613bbfced4ea0c1e82efd449160f4640ecc728bcac5c20ebdfaea3340f7aef4",
+    "runlu-schema-extra.json": "108a9919da65227a064925ab1359be686f954c8388cea78b23e5eabf1375a28d"
+  }
+}
