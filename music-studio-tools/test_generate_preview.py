@@ -50,6 +50,10 @@ class ProjectValidationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             mod.detect_audio_format(b"")
 
+    def test_reject_oversized_audio_payload(self):
+        with self.assertRaisesRegex(ValueError, "50 MB"):
+            mod.detect_audio_format(b"ID3" + bytes(mod.MAX_AUDIO_BYTES))
+
     def test_reject_empty_vocal_lyrics(self):
         with self.assertRaises(ValueError):
             mod.validate_project({"voice":"female","lyrics":" "})
