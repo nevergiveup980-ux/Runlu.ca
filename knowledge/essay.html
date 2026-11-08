@@ -90,12 +90,20 @@ doc.sections.forEach(s=>{
 const section=document.createElement('section');
 const heading=document.createElement('h2');heading.textContent=s.heading;section.appendChild(heading);
 s.paragraphs.forEach(p=>{const paragraph=document.createElement('p');
-// Preserve the editorial **bold** closing line without injecting HTML.
-if(/^\*\*[^*]+\*\*$/.test(p)){
-  const emphasis=document.createElement('strong');
-  emphasis.textContent=p.slice(2,-2);
+// Render only simple editorial *italics* and **bold** using safe text nodes.
+// All unmatched markers remain literal text; no HTML is interpreted.
+const tokens=/(\\*\\*[^*\\n]+\\*\\*|\\*[^*\\n]+\\*)/g;
+let cursor=0;
+for(const match of p.matchAll(tokens)){
+  const at=match.index;
+  if(at>cursor)paragraph.appendChild(document.createTextNode(p.slice(cursor,at)));
+  const bold=match[0].startsWith('**');
+  const emphasis=document.createElement(bold?'strong':'em');
+  emphasis.textContent=match[0].slice(bold?2:1,bold?-2:-1);
   paragraph.appendChild(emphasis);
-}else paragraph.textContent=p;
+  cursor=at+match[0].length;
+}
+if(cursor<p.length||p.length===0)paragraph.appendChild(document.createTextNode(p.slice(cursor)));
 section.appendChild(paragraph)});
 $('sections').appendChild(section);
 });
