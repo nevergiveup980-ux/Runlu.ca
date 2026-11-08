@@ -4,6 +4,7 @@ import pathlib
 import unittest
 import io
 import wave
+from tempfile import TemporaryDirectory
 
 MODULE = pathlib.Path(__file__).with_name("generate_preview.py")
 spec = importlib.util.spec_from_file_location("generate_preview", MODULE)
@@ -53,6 +54,16 @@ class ProjectValidationTests(unittest.TestCase):
     def test_reject_oversized_audio_payload(self):
         with self.assertRaisesRegex(ValueError, "50 MB"):
             mod.detect_audio_format(b"ID3" + bytes(mod.MAX_AUDIO_BYTES))
+
+    def test_safe_audio_save_and_no_overwrite(self):
+        with TemporaryDirectory() as directory:
+            output = pathlib.Path(directory) / "original.mp3"
+            mod.save_audio_safely(output, b"ID3" + bytes(16))
+            self.assertEqual(output.read_bytes(), b"ID3" + bytes(16))
+            with self.assertRaises(FileExistsError):
+                mod.save_audio_safely(output, b"replacement")
+            self.assertEqual(output.read_bytes(), b"ID3" + bytes(16))
+            self.assertFalse(list(pathlib.Path(directory).glob(".runlu-audio-*.tmp")))
 
     def test_reject_empty_vocal_lyrics(self):
         with self.assertRaises(ValueError):
