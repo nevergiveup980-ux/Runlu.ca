@@ -238,9 +238,9 @@ try {
       // its asynchronous FATAL notification is still in flight.
       const {Client}=await import('pg');
       const client=new Client({connectionString:connection}); await client.connect();
-      let crashError;
+      const crashErrors=[];
       const ended=new Promise(resolve=>client.once('end',resolve));
-      client.on('error',error=>{crashError=error;});
+      client.on('error',error=>{crashErrors.push(error);});
       try {
         await client.query('BEGIN');
         await client.query('SET LOCAL ROLE runlu_lab_service');
@@ -249,7 +249,7 @@ try {
         const pid=(await client.query('SELECT pg_backend_pid() AS pid')).rows[0].pid;
         await admin('SELECT pg_terminate_backend($1)',[pid]);
         await ended;
-        assert.equal(crashError?.code,'57P01');
+        assert.ok(crashErrors.some(error=>error.code==='57P01'),'must observe the deliberate backend termination');
       } finally { await client.end(); }
       assert.equal(await n('subscriptions'),0); assert.equal(await n('effects'),0); assert.equal(await n('receipts'),0);
       await processor(event('evt_crash',300)); assert.equal(await n('effects'),1);
