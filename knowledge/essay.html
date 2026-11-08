@@ -89,7 +89,14 @@ clear($('sections'));
 doc.sections.forEach(s=>{
 const section=document.createElement('section');
 const heading=document.createElement('h2');heading.textContent=s.heading;section.appendChild(heading);
-s.paragraphs.forEach(p=>{const paragraph=document.createElement('p');paragraph.textContent=p;section.appendChild(paragraph)});
+s.paragraphs.forEach(p=>{const paragraph=document.createElement('p');
+// Preserve the editorial **bold** closing line without injecting HTML.
+if(/^\*\*[^*]+\*\*$/.test(p)){
+  const emphasis=document.createElement('strong');
+  emphasis.textContent=p.slice(2,-2);
+  paragraph.appendChild(emphasis);
+}else paragraph.textContent=p;
+section.appendChild(paragraph)});
 $('sections').appendChild(section);
 });
 $('closing').textContent=typeof doc.closing==='string'?doc.closing:'';
