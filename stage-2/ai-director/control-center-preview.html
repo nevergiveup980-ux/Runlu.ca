@@ -91,6 +91,7 @@ async function loadLive(){
  }catch(e){
   if(controller!==current)return;
   drawDemo();
+  $('load-live').disabled=false;
   $('live-status').textContent=e.message==='access_denied'?'Access denied. Sign in or request episode access.':e.message==='network_error'?'Network unavailable; returned to demo.':'Live data unavailable; returned to demo.';
  }finally{if(controller===current){controller=null;$('load-live').disabled=false}}
 }
