@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>RUNLU Life Ledger · Refinement Prototype</title>
+<meta name="theme-color" content="#071a18">
+<style>
+:root{--ink:#0d1c2c;--muted:#718096;--line:#dbe4ec;--paper:#f5f8fb;--card:#fff;--navy:#07131f;--green:#00be87;--green2:#e8fbf5;--warn:#fff8e6;--shadow:0 16px 40px rgba(18,42,66,.08);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink)}button,input,select{font:inherit}.shell{max-width:1180px;margin:auto;min-height:100vh;background:var(--paper)}
+.topbar{position:sticky;top:0;z-index:20;background:linear-gradient(120deg,#06342f,#07131f 72%);color:white;display:flex;align-items:center;gap:14px;padding:16px 22px;box-shadow:0 4px 22px rgba(0,0,0,.12)}.mark{width:46px;height:46px;border-radius:14px;background:#00d59b;display:grid;place-items:center;color:#05251f;font-weight:900}.brand small{display:block;letter-spacing:.26em;color:#65e9c2;font-weight:800}.brand b{font-size:20px}.prototype{margin-left:auto;font-size:12px;padding:8px 11px;border:1px solid rgba(255,255,255,.25);border-radius:999px;color:#d5fff2}
+main{padding:22px 22px 105px}.page{display:none}.page.active{display:block}.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:22px}.eyebrow{font-size:12px;font-weight:900;letter-spacing:.14em;color:#49806f;text-transform:uppercase}.balance{background:linear-gradient(145deg,#112838,#07131f);color:#fff}.balance h1{font-size:44px;margin:10px 0 4px}.muted{color:var(--muted)}.balance .muted{color:#a8bdca}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}.stat{padding:15px;border-radius:18px;background:rgba(255,255,255,.07)}.stat small{display:block;color:#b8c8d1;margin-bottom:6px}.stat b{font-size:19px}.quick{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:14px;padding:12px 15px;font-weight:800;background:#edf2f7;color:#223043;cursor:pointer}.btn.primary{background:var(--green);color:#05271f}.btn.dark{background:#152538;color:white}.btn.ghost{background:white;border:1px solid var(--line)}
+.bar-card h2,.section-head h2{margin:4px 0 0}.bar-chart{display:flex;align-items:end;gap:9px;height:210px;margin-top:20px;padding-top:14px;border-bottom:1px solid var(--line)}.bar-col{flex:1;min-width:0;text-align:center}.bars{height:160px;display:flex;gap:4px;justify-content:center;align-items:end}.bar{width:38%;min-width:8px;border-radius:8px 8px 2px 2px;background:#9bb0c3}.bar.income{background:var(--green)}.bar-col small{display:block;font-size:10px;color:var(--muted);margin-top:7px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:16px}.seg{display:inline-flex;background:#e9eef4;padding:4px;border-radius:13px}.seg button{border:0;background:transparent;border-radius:10px;padding:9px 14px;font-weight:800;color:#718096}.seg button.active{background:white;color:#162638;box-shadow:0 3px 10px rgba(30,50,70,.08)}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:20px;background:#fff}.ledger-table{width:100%;border-collapse:collapse;min-width:760px}.ledger-table th,.ledger-table td{padding:12px 14px;border-bottom:1px solid #e8edf2;text-align:left;white-space:nowrap}.ledger-table th{position:sticky;top:0;background:#f7f9fb;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#708095}.money{font-variant-numeric:tabular-nums;font-weight:800}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#eef4f7;font-size:12px;font-weight:800}.entry-row{cursor:pointer}.entry-row:hover{background:#f8fbfd}
+.sheet{border-collapse:separate;border-spacing:0;min-width:1220px;width:100%}.sheet th,.sheet td{border-right:1px solid #e7edf2;border-bottom:1px solid #e7edf2;padding:0}.sheet th{background:#f7f9fb;padding:11px 9px;font-size:12px;position:sticky;top:0;z-index:3}.sheet .label{position:sticky;left:0;z-index:4;background:#fff;min-width:190px;padding:10px 12px;font-weight:800}.sheet th.label{background:#f7f9fb;z-index:5}.sheet input{border:0;background:transparent;width:86px;padding:10px 7px;text-align:right;font-variant-numeric:tabular-nums}.sheet input:focus{outline:2px solid rgba(0,190,135,.35);outline-offset:-2px;background:#effcf8}.group-row td{background:#f0f7f5;color:#3b6e5e;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px}.sync-note{margin:0 0 14px;padding:12px 14px;border-radius:14px;background:var(--green2);color:#276854;font-weight:700}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:13px;font-weight:900;color:#42536a}.field input,.field select{border:1px solid var(--line);background:#fff;border-radius:15px;padding:14px 14px;color:#142337}.amount-input{font-size:30px;font-weight:900}.suggestions{display:flex;gap:8px;flex-wrap:wrap}.suggestions button{border:1px solid #cfe1da;background:#f4fffb;color:#2a6553;border-radius:999px;padding:8px 11px;font-weight:800}.savebar{margin-top:18px;display:flex;justify-content:flex-end;gap:10px}.privacy{margin-top:16px;padding:14px;border-radius:16px;background:#effcf7;border:1px solid #c7f1e1}.privacy b{display:block;margin-bottom:4px}
+.setting-list{display:grid;gap:12px}.setting{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--line);border-radius:16px;background:#fff}.setting span{margin-left:auto;color:#5d7186}.note{padding:14px;border-radius:16px;background:var(--warn);border:1px solid #f1dfad;margin-top:16px}
+.bottomnav{position:fixed;bottom:0;left:0;right:0;z-index:30;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;justify-content:center}.bottomnav .inner{width:min(100%,800px);display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:9px 10px calc(9px + env(safe-area-inset-bottom))}.navbtn{border:0;background:transparent;color:#8a9aae;border-radius:14px;padding:9px 4px 8px;font-size:12px;font-weight:900}.navbtn i{display:block;font-style:normal;font-size:20px;margin-bottom:3px}.navbtn.active{background:#eafbf5;color:#079b70}
+.modal{position:fixed;inset:0;background:rgba(2,11,18,.52);display:none;align-items:end;justify-content:center;z-index:50}.modal.show{display:flex}.sheet-modal{background:#fff;width:min(100%,620px);border-radius:26px 26px 0 0;padding:20px 20px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -20px 60px rgba(0,0,0,.18)}.sheet-modal h3{margin:0 0 14px}.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.modal-grid input,.modal-grid select{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px}.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
+@media(max-width:760px){main{padding:15px 14px 102px}.topbar{padding:14px}.hero{grid-template-columns:1fr}.card{border-radius:20px;padding:17px}.stats{grid-template-columns:1fr 1fr 1fr}.balance h1{font-size:38px}.section-head{align-items:flex-start;flex-direction:column}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.bar-card{display:none}.prototype{font-size:10px}.modal-grid{grid-template-columns:1fr}.sheet-modal{max-height:88vh;overflow:auto}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="topbar"><div class="mark">RL</div><div class="brand"><small>RUNLU</small><b>Life Ledger</b></div><div class="prototype">REFINEMENT PROTOTYPE · SAMPLE DATA</div></header>
+<main>
+<section id="home" class="page active">
+  <div class="hero">
+    <div class="card balance"><div class="eyebrow" style="color:#78e7c6">September 2026</div><h1 id="homeBalance">$1,235.00</h1><div class="muted">Monthly balance · sample figures</div><div class="stats"><div class="stat"><small>Income</small><b id="homeIncome">$4,500</b></div><div class="stat"><small>Expenses</small><b id="homeExpense">$3,265</b></div><div class="stat"><small>Entries</small><b id="homeEntries">9</b></div></div><div class="quick"><button class="btn primary" onclick="go('add')">＋ Quick Add</button><button class="btn dark" onclick="go('ledger');setLedgerView('sheet')">Open Sheet View</button></div></div>
+    <div class="card bar-card"><div class="eyebrow">At a glance</div><h2>Year rhythm</h2><div class="muted">Income and expenses month by month.</div><div id="homeChart" class="bar-chart"></div></div>
+  </div>
+  <div class="card" style="margin-top:18px"><div class="section-head"><div><div class="eyebrow">Recent activity</div><h2>What changed lately</h2></div><button class="btn ghost" onclick="go('ledger')">View all</button></div><div id="recentList"></div></div>
+</section>
+
+<section id="add" class="page">
+ <div class="section-head"><div><div class="eyebrow">Fast entry</div><h2>Add a record</h2><div class="muted">Amount first. The rest should take only a few taps.</div></div></div>
+ <div class="card"><div class="form-grid">
+  <div class="field full"><label>Amount</label><input id="addAmount" class="amount-input" inputmode="decimal" placeholder="$0.00"></div>
+  <div class="field full"><label>Item</label><input id="addItem" placeholder="Type or choose a familiar item"><div class="suggestions"><button onclick="suggest('Groceries','Food')">Groceries</button><button onclick="suggest('Fuel','Transport')">Fuel</button><button onclick="suggest('Phone','Utilities')">Phone</button><button onclick="suggest('Salary','Income')">Salary</button></div></div>
+  <div class="field"><label>Type</label><select id="addType"><option>Expense</option><option>Income</option><option>Transfer</option></select></div>
+  <div class="field"><label>Category</label><select id="addCategory"><option>Food</option><option>Transport</option><option>Housing</option><option>Utilities</option><option>Personal</option><option>Income</option></select></div>
+  <div class="field"><label>Account</label><select id="addAccount"><option>Checking</option><option>Credit Card</option><option>Cash</option><option>Savings</option></select></div>
+  <div class="field"><label>Date</label><input id="addDate" type="date" value="2026-09-06"></div>
+  <div class="field full"><label>Note <span class="muted">optional</span></label><input id="addNote" placeholder="What was this for?"></div>
+ </div><div class="savebar"><button class="btn" onclick="clearAdd()">Clear</button><button class="btn primary" onclick="saveAdd()">✓ Save entry</button></div></div>
+ <div class="privacy"><b>🔒 Private by design</b><span class="muted">No bank connection. This prototype uses fictional sample data only.</span></div>
+</section>
+
+<section id="ledger" class="page">
+ <div class="section-head"><div><div class="eyebrow">One dataset · two working views</div><h2>Ledger</h2><div class="muted">Edit the list or edit the sheet. Both write to the same records.</div></div><div class="seg"><button id="listSeg" class="active" onclick="setLedgerView('list')">Entries</button><button id="sheetSeg" onclick="setLedgerView('sheet')">Sheet View</button></div></div>
+ <p class="sync-note">↔ Edit either view and the other updates immediately. No duplicate bookkeeping.</p>
+ <div id="ledgerList" class="table-wrap"></div><div id="ledgerSheet" class="table-wrap" style="display:none"></div>
+</section>
+
+<section id="trends" class="page">
+ <div class="section-head"><div><div class="eyebrow">Simple visual answer</div><h2>Trends</h2><div class="muted">Charts should answer “where did the money move?” at a glance.</div></div></div>
+ <div class="card"><div class="section-head"><div><h2>2026 monthly flow</h2><div class="muted">Green = income · gray = expenses</div></div></div><div id="trendChart" class="bar-chart" style="height:300px"></div></div>
+ <div class="card" style="margin-top:16px"><div class="eyebrow">Design rule</div><h2>Prefer bars before dashboards.</h2><p class="muted">No dense analytics wall. Start with a clean monthly bar chart, then allow category and annual drill-down only when needed.</p></div>
+</section>
+
+<section id="settings" class="page">
+ <div class="section-head"><div><div class="eyebrow">Control without clutter</div><h2>Settings</h2></div></div>
+ <div class="setting-list"><div class="setting"><b>Item library</b><span>Add · rename · archive</span></div><div class="setting"><b>CSV export</b><span>Your data stays portable</span></div><div class="setting"><b>Privacy</b><span>No bank API</span></div><div class="setting"><b>Backup</b><span>User-controlled</span></div></div>
+ <div class="note"><b>Product boundary</b><br>Do not turn Life Ledger into accounting software. Keep Home, Add, Ledger, Trends, and Settings familiar; make the dual editable ledger and Sheet View the differentiator.</div>
+</section>
+</main>
+</div>
+
+<nav class="bottomnav"><div class="inner"><button class="navbtn active" data-page="home" onclick="go('home')"><i>⌂</i>Home</button><button class="navbtn" data-page="add" onclick="go('add')"><i>＋</i>Add</button><button class="navbtn" data-page="ledger" onclick="go('ledger')"><i>▤</i>Ledger</button><button class="navbtn" data-page="trends" onclick="go('trends')"><i>▥</i>Trends</button><button class="navbtn" data-page="settings" onclick="go('settings')"><i>⚙</i>Settings</button></div></nav>
+
+<div id="editModal" class="modal" onclick="if(event.target===this)closeEdit()"><div class="sheet-modal"><h3>Edit entry</h3><input id="editId" type="hidden"><div class="modal-grid"><input id="editItem" placeholder="Item"><input id="editAmount" inputmode="decimal" placeholder="Amount"><select id="editType"><option>Expense</option><option>Income</option><option>Transfer</option></select><input id="editCategory" placeholder="Category"><input id="editAccount" placeholder="Account"><input id="editDate" type="date"></div><div class="modal-actions"><button class="btn" onclick="closeEdit()">Cancel</button><button class="btn primary" onclick="saveEdit()">Save changes</button></div></div></div>
+
+<script>
+const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+let entries=[
+{id:1,date:'2026-09-01',type:'Income',item:'Salary',category:'Income',account:'Checking',amount:4500},
+{id:2,date:'2026-09-02',type:'Expense',item:'Groceries · W1',category:'Food',account:'Credit Card',amount:162.4},
+{id:3,date:'2026-09-03',type:'Expense',item:'Fuel · W1',category:'Transport',account:'Credit Card',amount:71.8},
+{id:4,date:'2026-09-04',type:'Expense',item:'Phone',category:'Utilities',account:'Checking',amount:86},
+{id:5,date:'2026-09-05',type:'Expense',item:'Groceries · W2',category:'Food',account:'Credit Card',amount:148.7},
+{id:6,date:'2026-09-05',type:'Expense',item:'Mortgage',category:'Housing',account:'Checking',amount:1850},
+{id:7,date:'2026-09-06',type:'Expense',item:'Fuel · W2',category:'Transport',account:'Credit Card',amount:76.1},
+{id:8,date:'2026-09-06',type:'Expense',item:'Internet',category:'Utilities',account:'Checking',amount:95},
+{id:9,date:'2026-09-06',type:'Expense',item:'Household',category:'Personal',account:'Credit Card',amount:775}
+];
+const monthlyIncome=[4300,4300,4400,4400,4400,4450,4450,4450,4500,0,0,0],monthlyExpense=[3120,2980,3340,3050,3190,3010,3275,3140,3265,0,0,0];
+function money(n){return new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD',minimumFractionDigits:2}).format(Number(n)||0)}
+function go(id){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('.navbtn').forEach(x=>x.classList.toggle('active',x.dataset.page===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='ledger')renderLedger();if(id==='trends')renderCharts()}
+function currentMonthRows(){return entries.filter(e=>e.date.startsWith('2026-09'))}
+function totals(){let income=0,expense=0;currentMonthRows().forEach(e=>{if(e.type==='Income')income+=+e.amount;if(e.type==='Expense')expense+=+e.amount});return{income,expense,balance:income-expense}}
+function renderHome(){const t=totals();homeBalance.textContent=money(t.balance);homeIncome.textContent=money(t.income);homeExpense.textContent=money(t.expense);homeEntries.textContent=currentMonthRows().length;recentList.innerHTML=[...entries].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,5).map(e=>`<div class="setting" onclick="openEdit(${e.id})" style="cursor:pointer"><div><b>${e.item}</b><div class="muted" style="font-size:12px">${e.date} · ${e.account}</div></div><span class="money">${e.type==='Income'?'+':'−'}${money(e.amount)}</span></div>`).join('');renderCharts()}
+function chart(el){el.innerHTML=months.map((m,i)=>{const mx=Math.max(...monthlyIncome,...monthlyExpense,1);return `<div class="bar-col"><div class="bars"><div class="bar income" style="height:${monthlyIncome[i]/mx*100}%" title="Income ${money(monthlyIncome[i])}"></div><div class="bar" style="height:${monthlyExpense[i]/mx*100}%" title="Expense ${money(monthlyExpense[i])}"></div></div><small>${m}</small></div>`}).join('')}
+function renderCharts(){chart(homeChart);chart(trendChart)}
+function renderLedger(){renderList();renderSheet()}
+function renderList(){ledgerList.innerHTML=`<table class="ledger-table"><thead><tr><th>Date</th><th>Item</th><th>Category</th><th>Account</th><th>Type</th><th>Amount</th></tr></thead><tbody>${[...entries].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).map(e=>`<tr class="entry-row" onclick="openEdit(${e.id})"><td>${e.date}</td><td><b>${e.item}</b></td><td><span class="pill">${e.category}</span></td><td>${e.account}</td><td>${e.type}</td><td class="money">${e.type==='Income'?'+':'−'}${money(e.amount)}</td></tr>`).join('')}</tbody></table>`}
+function sheetRows(){const labels=['Salary','Mortgage','Phone','Internet','Household','Groceries · W1','Groceries · W2','Groceries · W3','Groceries · W4','Groceries · W5','Fuel · W1','Fuel · W2','Fuel · W3','Fuel · W4','Fuel · W5'];return labels}
+function renderSheet(){const rows=sheetRows();ledgerSheet.innerHTML=`<table class="sheet"><thead><tr><th class="label">Item</th>${months.map(m=>`<th>${m}</th>`).join('')}</tr></thead><tbody>${rows.map((label,idx)=>`${idx===5?'<tr class="group-row"><td colspan="13">Weekly shopping</td></tr>':''}${idx===10?'<tr class="group-row"><td colspan="13">Weekly fuel</td></tr>':''}<tr><td class="label">${label}</td>${months.map((m,mi)=>{const e=entries.find(x=>x.item===label&&Number(x.date.slice(5,7))===mi+1);return `<td><input inputmode="decimal" data-item="${label}" data-month="${mi+1}" value="${e?e.amount:''}" placeholder="—" onchange="sheetEdit(this)"></td>`}).join('')}</tr>`).join('')}</tbody></table>`}
+function defaultMeta(label){if(label==='Salary')return{type:'Income',category:'Income',account:'Checking'};if(label.startsWith('Fuel'))return{type:'Expense',category:'Transport',account:'Credit Card'};if(label.startsWith('Groceries'))return{type:'Expense',category:'Food',account:'Credit Card'};if(label==='Mortgage')return{type:'Expense',category:'Housing',account:'Checking'};if(['Phone','Internet'].includes(label))return{type:'Expense',category:'Utilities',account:'Checking'};return{type:'Expense',category:'Personal',account:'Credit Card'}}
+function sheetEdit(inp){const label=inp.dataset.item,month=Number(inp.dataset.month),amount=Number(String(inp.value).replace(/[^0-9.-]/g,''));let e=entries.find(x=>x.item===label&&Number(x.date.slice(5,7))===month);if(!amount){if(e)entries=entries.filter(x=>x.id!==e.id)}else if(e){e.amount=amount}else{const meta=defaultMeta(label);entries.push({id:Date.now(),date:`2026-${String(month).padStart(2,'0')}-01`,item:label,amount,...meta})}syncAll()}
+function setLedgerView(v){listSeg.classList.toggle('active',v==='list');sheetSeg.classList.toggle('active',v==='sheet');ledgerList.style.display=v==='list'?'block':'none';ledgerSheet.style.display=v==='sheet'?'block':'none';renderLedger()}
+function suggest(item,cat){addItem.value=item;addCategory.value=cat;addType.value=item==='Salary'?'Income':'Expense'}
+function clearAdd(){['addAmount','addItem','addNote'].forEach(id=>document.getElementById(id).value='')}
+function saveAdd(){const amount=Number(String(addAmount.value).replace(/[^0-9.-]/g,''));if(!amount||!addItem.value.trim()){alert('Enter an amount and item.');return}entries.push({id:Date.now(),date:addDate.value||'2026-09-06',type:addType.value,item:addItem.value.trim(),category:addCategory.value,account:addAccount.value,amount});clearAdd();syncAll();go('home')}
+function openEdit(id){const e=entries.find(x=>x.id===id);if(!e)return;editId.value=e.id;editItem.value=e.item;editAmount.value=e.amount;editType.value=e.type;editCategory.value=e.category;editAccount.value=e.account;editDate.value=e.date;editModal.classList.add('show')}
+function closeEdit(){editModal.classList.remove('show')}
+function saveEdit(){const e=entries.find(x=>String(x.id)===editId.value);if(!e)return;e.item=editItem.value.trim()||e.item;e.amount=Number(editAmount.value)||e.amount;e.type=editType.value;e.category=editCategory.value.trim()||e.category;e.account=editAccount.value.trim()||e.account;e.date=editDate.value||e.date;closeEdit();syncAll()}
+function syncAll(){renderHome();renderLedger()}
+renderHome();renderLedger();
+</script>
+</body></html>
