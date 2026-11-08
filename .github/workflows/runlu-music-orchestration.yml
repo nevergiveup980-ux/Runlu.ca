@@ -1,0 +1,26 @@
+name: RUNLU MUSIC orchestration tests
+on:
+  push:
+    paths:
+      - 'music/job-service.mjs'
+      - 'music/job-service.test.mjs'
+      - 'music-studio-tools/job-contract.mjs'
+      - '.github/workflows/runlu-music-orchestration.yml'
+  pull_request:
+    paths:
+      - 'music/job-service.mjs'
+      - 'music/job-service.test.mjs'
+      - 'music-studio-tools/job-contract.mjs'
+      - '.github/workflows/runlu-music-orchestration.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test isolated music service and job contract
+        run: node --test music/job-service.test.mjs music-studio-tools/job-contract.test.mjs
