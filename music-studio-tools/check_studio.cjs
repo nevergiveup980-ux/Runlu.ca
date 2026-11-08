@@ -7,7 +7,7 @@ const path = require('node:path');
 const html = fs.readFileSync(path.resolve(__dirname, '..', 'music-studio.html'), 'utf8');
 const scripts = [...html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/gi)]
   .filter(m => !/\bsrc\s*=/.test(m[1]))
-  .map(m => ({source:m[2],isModule:/\\btype\\s*=\\s*["']module["']/i.test(m[1])}));
+  .map(m => ({source:m[2],isModule:/\btype\s*=\s*["']module["']/i.test(m[1])}));
 assert.ok(scripts.length >= 1, 'Expected at least one inline script');
 const classicScripts=scripts.filter(s=>!s.isModule);
 assert.equal(classicScripts.length, 1, 'Expected exactly one classic Studio script');
@@ -15,7 +15,7 @@ for (const [index, script] of scripts.entries()) {
   if(script.isModule){
     // Node's vm.Script does not parse import declarations. Validate module
     // JavaScript with the runtime parser using an in-memory data URL.
-    const stripped=script.source.replace(/^\\s*import\\s+[^;]+;\\s*/gm, '');
+    const stripped=script.source.replace(/^\s*import\s+[^;]+;\s*/gm, '');
     new vm.Script(stripped, {filename:'music-studio.module-'+index+'.js'});
   }else new vm.Script(script.source, {filename:'music-studio.inline-'+index+'.js'});
 }
