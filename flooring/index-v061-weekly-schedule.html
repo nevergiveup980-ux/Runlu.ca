@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173d30">
+<meta name="robots" content="noindex,nofollow">
+<title>RUNLU Flooring OS · V0.6.1 Weekly Scheduling Board</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#eef2f0;color:#20352b;font-family:Arial,Helvetica,sans-serif}button,input{font:inherit}.r61page{max-width:1500px;margin:0 auto;padding:20px}.r61back{display:inline-flex;align-items:center;gap:6px;margin:0 0 12px;color:#315d49;text-decoration:none;font-size:12px;font-weight:800}.r61shell{background:#fff;border:1px solid #dce5e0;border-radius:16px;box-shadow:0 8px 30px rgba(26,57,44,.07);overflow:hidden}.r61top{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;padding:18px 20px 14px;background:#173d30;color:#fff}.r61top h1{margin:3px 0 3px;font-size:23px;line-height:1.15}.r61eyebrow{font-size:10px;font-weight:900;letter-spacing:.08em;opacity:.78}.r61sub{font-size:11px;opacity:.8}.r61nav{display:flex;gap:7px;flex-wrap:wrap}.r61nav button{border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;border-radius:8px;padding:8px 10px;font-size:11px;font-weight:800;cursor:pointer}.r61status{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid #e4ebe7;background:#f8faf9}.r61status #r61range{font-size:13px;font-weight:900;color:#173d30}.r61status #r61mode{padding:5px 8px;border-radius:999px;font-size:9px;font-weight:900}.r61status #r61mode.live{background:#e3f0e8;color:#275f40}.r61status #r61mode.demo{background:#fff0d8;color:#7a5612}.r61filters{display:flex;gap:7px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid #e4ebe7}.r61filters label{display:flex;align-items:center;gap:5px;border:1px solid #dbe4df;border-radius:999px;padding:6px 8px;background:#fff;font-size:10px;font-weight:800;cursor:pointer}.r61filters input{margin:0;width:14px;height:14px}.dot{width:8px;height:8px;border-radius:50%;display:inline-block}.dot.installation{background:#315d49}.dot.measure{background:#3d6fb6}.dot.pickup{background:#2b7c70}.dot.delivery{background:#8a5f9d}.dot.service{background:#a06f24}.r61scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.r61board{min-width:980px}.r61days{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid #dce5e0;background:#f6f8f7}.r61days>div{padding:9px 10px;border-right:1px solid #e1e7e4;min-height:48px}.r61days>div:last-child{border-right:0}.r61days span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:#6d7b74;font-weight:900}.r61days b{display:block;margin-top:2px;font-size:12px;color:#274238}.r61days .today{background:#e9f2ed}.r61body{position:relative;min-height:170px;transition:height .12s ease;background:#fff}.r61gridlines{position:absolute;inset:0;display:grid;grid-template-columns:repeat(7,1fr);pointer-events:none}.r61gridlines i{border-right:1px solid #e8ecea}.r61gridlines i:last-child{border-right:0}.r61task{position:absolute;height:38px;border:0;border-left:5px solid rgba(0,0,0,.13);border-radius:7px;padding:5px 7px;color:#fff;text-align:left;overflow:hidden;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.08);z-index:2}.r61task span,.r61task small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.r61task span{font-size:10px;font-weight:900}.r61task small{margin-top:2px;font-size:8px;opacity:.88}.r61task.installation{background:#315d49}.r61task.measure{background:#3d6fb6}.r61task.pickup{background:#2b7c70}.r61task.delivery{background:#8a5f9d}.r61task.service{background:#a06f24}.r61task.demo{outline:1px dashed rgba(255,255,255,.8);outline-offset:-3px}.r61task:focus-visible{outline:3px solid #111;outline-offset:2px}.r61empty{position:absolute;inset:0;display:grid;place-items:center;color:#75827c;font-size:12px}.r61foot{padding:10px 14px;border-top:1px solid #e4ebe7;background:#fafbfa;color:#68766f;font-size:10px}.r61modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(19,34,27,.48)}.r61modal.open{display:flex}.r61dialog{width:min(560px,96vw);max-height:88vh;overflow:auto;background:#fff;border-radius:14px;box-shadow:0 20px 70px rgba(0,0,0,.28)}.r61dialogTop{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#173d30;color:#fff}.r61dialogTop button{border:0;background:transparent;color:#fff;font-size:22px;line-height:1;cursor:pointer}.r61detail{padding:14px}.r61detail h2{margin:0 0 10px;font-size:18px;color:#173d30}.r61demowarn{display:inline-block;margin-bottom:9px;padding:4px 7px;border-radius:999px;background:#fff0d8;color:#7a5612;font-size:9px;font-weight:900}.r61detail dl{margin:0}.r61detail dl>div{display:grid;grid-template-columns:95px 1fr;gap:10px;padding:7px 0;border-bottom:1px solid #edf0ee}.r61detail dt{font-size:10px;font-weight:900;color:#66746d}.r61detail dd{margin:0;font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere}.r61detail p{margin:12px 0 0;padding:9px 10px;border-radius:8px;background:#f1f5f3;color:#5d6b64;font-size:10px;line-height:1.4}@media(max-width:700px){.r61page{padding:10px}.r61top{align-items:flex-start;flex-direction:column}.r61top h1{font-size:20px}.r61nav{width:100%}.r61nav button{flex:1}.r61filters{gap:5px}.r61filters label{padding:5px 7px}.r61detail dl>div{grid-template-columns:78px 1fr}}
+</style>
+</head>
+<body>
+<main class="r61page">
+<a class="r61back" href="./">← Flooring OS</a>
+<div id="runluWeeklyScheduleV061"></div>
+</main>
+<script src="weekly-schedule-v061.js?v=061"></script>
+<script>
+(function(){
+  'use strict';
+  function start(){
+    if(!window.RUNLUWeeklyScheduleV061)return;
+    window.RUNLUWeeklyScheduleV061.boot({hostId:'runluWeeklyScheduleV061'});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
+</script>
+</body>
+</html>
