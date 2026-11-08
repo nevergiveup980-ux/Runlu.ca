@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "jobId": "SYNTHETIC-small-first-win",
+  "rolls": [
+    {
+      "id": "R",
+      "w": 12,
+      "l": 100,
+      "lot": "A",
+      "stockType": "FULL"
+    }
+  ],
+  "pieces": [
+    {
+      "id": "P1",
+      "w": 11,
+      "l": 10,
+      "lot": "A",
+      "rotate": false
+    },
+    {
+      "id": "P2",
+      "w": 2,
+      "l": 6,
+      "lot": "A",
+      "rotate": false
+    },
+    {
+      "id": "P3",
+      "w": 8,
+      "l": 10,
+      "lot": "A",
+      "rotate": false
+    },
+    {
+      "id": "P4",
+      "w": 4,
+      "l": 16,
+      "lot": "A",
+      "rotate": false
+    },
+    {
+      "id": "P5",
+      "w": 6,
+      "l": 16,
+      "lot": "A",
+      "rotate": false
+    },
+    {
+      "id": "P6",
+      "w": 5,
+      "l": 16,
+      "lot": "A",
+      "rotate": false
+    }
+  ],
+  "settings": {
+    "shortRollFirst": false,
+    "widthAllowance": 0,
+    "lengthAllowance": 0,
+    "patternRepeat": 0
+  }
+}

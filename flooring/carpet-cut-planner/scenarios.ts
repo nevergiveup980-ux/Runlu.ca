@@ -2,10 +2,10 @@ import {planCuts,type Roll,type Piece,type Plan} from "./engine";
 export type Scenario={name:string;plan:Plan;feasible:boolean;score:number;unplacedAreaSF:number};
 const signature=(p:Plan)=>p.placements.map(x=>[x.pieceId,x.rollId,x.xIn,x.yIn,x.widthIn,x.lengthIn].join(":")).sort().join("|")+";"+p.unplaced.slice().sort().join(",");
 /** Candidate comparison, not proof of global optimality. Never call an infeasible plan optimal. */
-export function comparePlans(rolls:Roll[],pieces:Piece[]):Scenario[]{
+export function comparePlans(rolls:Roll[],pieces:Piece[],options:{includeSmallAreaFirst?:boolean}={}):Scenario[]{
  const candidates:{name:string;order:"area"|"area-asc"|"length"|"width"|"input";ignorePriority?:boolean;rollOrder?:"short"|"long"}[]=[
   {name:"Largest area first",order:"area"},
-  {name:"Smallest area first",order:"area-asc"},
+  ...(options.includeSmallAreaFirst===false?[]:[{name:"Smallest area first",order:"area-asc" as const}]),
   {name:"Longest first",order:"length"},
   {name:"Widest first",order:"width"},
   {name:"Original order",order:"input"},

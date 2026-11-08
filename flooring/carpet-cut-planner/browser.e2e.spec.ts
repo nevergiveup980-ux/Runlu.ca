@@ -206,3 +206,16 @@ test("switching candidate plans clears confirmations from the previous layout",a
  await expect(page.locator("#printAudit")).toContainText("0 / 5 confirmed");
  await expect(page.locator("#printAudit")).toContainText("NOT CONFIRMED");
 });
+
+test("reproducible material example shows SF, SYD and waste for each candidate",async({page})=>{
+ await page.goto(pageUrl);
+ await page.locator('#load').setInputFiles(resolve('examples/small-first-win.json'));
+ const table=page.locator('#results table').first();
+ await expect(table).toContainText('Allocated SYD');
+ const small=table.locator('tbody tr').filter({hasText:'Smallest area first'});
+ await expect(small.locator('td')).toHaveText(['Smallest area first','Complete','0.00','576.00','64.00','134.00','1']);
+ const large=table.locator('tbody tr').filter({hasText:'Largest area first'});
+ await expect(large.locator('td')).toHaveText(['Largest area first','Complete','0.00','624.00','69.33','182.00','1']);
+ await expect(page.locator('#scenarioPicker option:checked')).toContainText('Smallest area first');
+ await expect(page.locator('#results .stat').nth(1)).toContainText('576.00');
+});

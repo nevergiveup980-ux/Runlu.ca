@@ -73,3 +73,11 @@ npm run build
 Open `index.html` after the build; it loads `dist/browser.js` and uses the **same TypeScript engine** as the tests. The development branch CI is configured to upload `index.html` and `dist/browser.js` as the `carpet-planner-preview` artifact after successful checks.
 
 The UI now shows candidate scenario summaries. The current SVG displays the highest-ranked candidate only. Do not publish the standalone HTML without its generated `dist/browser.js`. Deployment and browser acceptance remain unverified.
+
+### Material comparison evidence
+
+See [MATERIAL_COMPARISON.md](MATERIAL_COMPARISON.md) for full pre-small-first
+baseline comparisons, fixed-seed corpus results and reproduction instructions.
+Load `examples/small-first-win.json` to inspect the synthetic improvement case;
+candidate rows now report allocated SF and SYD alongside waste SF. Results are
+finite heuristic comparisons, not verified real-job savings or global optima.
