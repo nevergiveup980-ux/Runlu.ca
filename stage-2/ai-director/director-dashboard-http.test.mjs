@@ -33,3 +33,20 @@ test('requires server-side principal verification and hides resolver failures',a
  const r=await h(request);assert.equal(r.status,500);
  assert.ok(!r.body.includes('token-secret'));
 });
+
+test('spoofed request identity cannot override server verified principal',async()=>{
+ let checked;const h=createDirectorDashboardHandler({pool:pool(),
+  resolvePrincipal:async()=>({verifiedByServer:true,subject:'actual-user'}),
+  authorizeEpisode:async args=>(checked=args,false)});
+ const r=await h({...request,headers:{'x-user-id':'owner','x-user-role':'admin'},principal:{verifiedByServer:true,subject:'owner'}});
+ assert.equal(r.status,403);
+ assert.equal(checked.subject,'actual-user');
+});
+test('authorization lookup errors fail without leaking membership details',async()=>{
+ const h=createDirectorDashboardHandler({pool:pool(),
+  resolvePrincipal:async()=>({verifiedByServer:true,subject:'actual-user'}),
+  authorizeEpisode:async()=>{throw Error('private-membership-table-failure')}});
+ const r=await h(request);assert.equal(r.status,500);
+ assert.deepEqual(JSON.parse(r.body),{error:'internal_error'});
+ assert.equal(r.body.includes('private-membership-table-failure'),false);
+});
