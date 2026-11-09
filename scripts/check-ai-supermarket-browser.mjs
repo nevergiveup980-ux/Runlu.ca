@@ -26,7 +26,22 @@ try {
       assert.equal(await page.locator('h1').innerText(),heading,'reload '+lang);
       const afterReload=await page.locator('[data-en]').evaluateAll((nodes,language)=>nodes.map(node=>({actual:node.textContent,expected:node.getAttribute('data-'+language)})).filter(x=>x.actual!==x.expected),lang);
       assert.deepEqual(afterReload,[],'all translated nodes after reload '+lang);
-      if (lang==='en'||lang==='zh') await page.screenshot({path:`ai-supermarket-browser-evidence/viewport-${width}-${lang}.png`,fullPage:true});
+      await page.screenshot({path:`ai-supermarket-browser-evidence/viewport-${width}-${lang}.png`,fullPage:true});
+      const geometry=await page.evaluate(()=>{
+        const selectors=['.brand','.top nav','.language','.hero h1','.status','.grid','.trust'];
+        const rects=Object.fromEntries(selectors.map(selector=>{const r=document.querySelector(selector).getBoundingClientRect();return [selector,{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}]}));
+        const cards=[...document.querySelectorAll('.grid article')].map(el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}});
+        return {rects,cards,viewport:innerWidth};
+      });
+      for(const [name,r] of Object.entries(geometry.rects)){
+        assert.ok(r.width>0&&r.height>0,'empty element '+name+' at '+width+' '+lang);
+        assert.ok(r.left>=-1&&r.right<=width+1,'off-screen element '+name+' at '+width+' '+lang);
+      }
+      assert.equal(geometry.cards.length,6);
+      for(const [i,r] of geometry.cards.entries()){
+        assert.ok(r.width>0&&r.height>0&&r.left>=-1&&r.right<=width+1,'off-screen card '+i+' at '+width+' '+lang);
+      }
+      assert.ok(geometry.rects['.top nav'].bottom<=geometry.rects['.hero h1'].top,'header overlaps hero at '+width+' '+lang);
       const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);
       assert.equal(overflow,false,'horizontal overflow at '+width+'px '+lang);
     }
@@ -38,7 +53,7 @@ try {
     assert.equal(await page.locator('.grid article').count(),6,'six category cards');
     assert.equal(errors.length,0,'page errors: '+errors.join('; '));
     assert.ok(requests.every(url=>url.startsWith('file:')),'Unexpected external request: '+requests.join(', '));
-    console.log('PASS browser viewport',width,'all translations, persistence, keyboard skip link, no overflow, no errors/external requests');
+    console.log('PASS browser viewport',width,'all translations, geometry, 4-language screenshots, persistence, keyboard skip link, no overflow, no errors/external requests');
     await page.close();
   }
 } finally {await browser.close();}
