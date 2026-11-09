@@ -96,7 +96,7 @@ try{const saved=JSON.parse(localStorage.getItem('runlu-music-studio-v1')||'null'
 refresh();updatePlaceholders();
 })();
 </script><script type="module">
-import {listMySongs,getSongDownload} from "./music/music-api-client.mjs";
+import {listMySongs} from "./music/music-api-client.mjs";
 const refresh=document.getElementById("refreshMusicLibrary"),more=document.getElementById("moreMusicLibrary"),status=document.getElementById("musicLibraryStatus"),items=document.getElementById("musicLibraryItems");
 let cursor=null,loading=false;
 function message(t){status.textContent=t}
@@ -113,14 +113,11 @@ async function load(reset){
    const meta=document.createElement("p");meta.style.margin="6px 0";meta.textContent=[song.language||"",song.voice||"",song.status||""].join(" · ");li.append(meta);
    if(song.audio_available){
     const btn=document.createElement("button");btn.type="button";btn.className="secondary";btn.textContent="试听 / 下载";
-    btn.addEventListener("click",async()=>{
-      btn.disabled=true;
-      try{
-        const result=await getSongDownload(song.id);
-        if(typeof result.url!=="string"||!/^https:\/\//.test(result.url))throw Error("INVALID_DOWNLOAD_URL");
-        const a=document.createElement("a");a.href=result.url;a.target="_blank";a.rel="noopener noreferrer";a.textContent="打开私有 MP3（短期有效）";li.append(a);btn.remove();
-      }catch{message("下载链接获取失败，请重新登录后重试。");btn.disabled=false}
-    });li.append(btn);
+    btn.addEventListener("click",()=>{
+      window.dispatchEvent(new CustomEvent("runlu-music-select-song",{detail:{jobId:String(song.id)}}));
+      message("正在主播放器中打开所选歌曲…");
+    });
+    li.append(btn);
    }
    items.append(li);
   }
@@ -143,6 +140,19 @@ const clearPlayback=()=>{playback.clear();activeJobId=null;player.pause();player
 player.addEventListener("error",()=>{if(activeJobId)say("试听链接可能已过期。请点击“重新获取试听链接”，无需再次生成或扣费。")});
 const renew=document.createElement("button");renew.type="button";renew.className="secondary";renew.textContent="重新获取试听链接";renew.style.display="none";player.insertAdjacentElement("afterend",renew);
 renew.addEventListener("click",async()=>{if(!activeJobId)return;renew.disabled=true;try{const url=await playback.getLink(activeJobId,{force:true});player.src=url;download.href=url;player.style.display="block";download.style.display="inline-block";say("试听链接已更新。无需再次生成歌曲。")}catch{say("试听链接获取失败，请确认登录状态后重试，不要重复付费生成。")}finally{renew.disabled=false}});
+window.addEventListener("runlu-music-select-song",async event=>{
+ const jobId=event.detail?.jobId;
+ if(typeof jobId!=="string"||!/^[0-9a-f-]{36}$/i.test(jobId))return;
+ clearPlayback();activeJobId=jobId;renew.style.display="inline-block";
+ try{
+  const url=await playback.getLink(jobId);
+  if(activeJobId!==jobId)return;
+  player.src=url;player.style.display="block";download.href=url;download.style.display="inline-block";
+  say("已加载音乐库歌曲。点击播放即可试听，链接过期可重新获取。");
+ }catch{
+  if(activeJobId===jobId)say("无法打开所选歌曲。请确认登录状态或重新获取试听链接。");
+ }
+});
 const say=message=>{out.textContent=message};
 const disable=()=>{available=false;generate.disabled=true;generate.textContent="生成歌曲（尚未连接）"};
 const project=()=>({title:document.getElementById("title").value.trim(),lyrics:document.getElementById("lyrics").value,language:document.getElementById("songLanguage").value,voice:document.getElementById("voice").value,style:document.getElementById("style").value,notes:document.getElementById("notes").value});
