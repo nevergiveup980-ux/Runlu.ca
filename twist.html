@@ -16,6 +16,7 @@
 #orderingActions{margin-top:12px}
 #orderingActions button{min-height:44px;touch-action:manipulation}
 #orderingFeedback{overflow-wrap:anywhere}
+#orderingFeedback:focus,#routeFeedback:focus{outline:3px solid #f1a51d;outline-offset:3px;border-radius:4px}
 #routePieces{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}
 #routePieces>.buttons{min-width:0;display:flex;flex-direction:column;align-items:stretch;gap:6px;padding:8px 5px;border:1px solid #ccd8e8;border-radius:12px;background:linear-gradient(160deg,#fff,#f0f5fd)}
 #routePieces .ordering-position{text-align:center;font-size:.7rem;font-weight:750;color:#52647d}
@@ -139,7 +140,7 @@ function renderOrdering(){
   pieces.appendChild(cell)
  });
  const actions=el("orderingActions");actions.replaceChildren();
- const submit=document.createElement("button");submit.type="button";submit.className="primary";submit.textContent=lang==="zh"?"提交排列":"Submit order";submit.disabled=ordering.submitted||verifiedAnswers[3]===undefined;submit.addEventListener("click",()=>{if(ordering.submitted||verifiedAnswers[3]===undefined)return;ordering.submitted=true;saveOrdering();renderOrdering()});actions.appendChild(submit);
+ const submit=document.createElement("button");submit.type="button";submit.className="primary";submit.textContent=lang==="zh"?"提交排列":"Submit order";submit.disabled=ordering.submitted||verifiedAnswers[3]===undefined;submit.addEventListener("click",()=>{if(ordering.submitted||verifiedAnswers[3]===undefined)return;ordering.submitted=true;saveOrdering();renderOrdering();el("orderingFeedback").setAttribute("tabindex","-1");el("orderingFeedback").focus()});actions.appendChild(submit);
  const undo=document.createElement("button");undo.type="button";undo.textContent=lang==="zh"?"撤销上一步":"Undo last move";undo.disabled=ordering.submitted||orderingUndo===null;undo.addEventListener("click",()=>{if(ordering.submitted||orderingUndo===null)return;ordering.sequence=orderingUndo;orderingUndo=null;saveOrdering();renderOrdering();const next=Array.from(el("orderingPieces").querySelectorAll("button")).find(btn=>!btn.disabled);if(next)next.focus();el("orderingFeedback").textContent=(lang==="zh"?"已撤销上一步。当前顺序：":"Last move undone. Current order: ")+ordering.sequence.join(" – ")+orderingClueSummary()});actions.appendChild(undo);
  el("orderingFeedback").textContent=!ordering.submitted?((lang==="zh"?"当前顺序：":"Current order: ")+ordering.sequence.join(" – ")+(verifiedAnswers[3]===undefined?(lang==="zh"?" · 请先提交上方自动判分答案，再核对排列。":" · Submit the verified answer above before checking the order."):orderingClueSummary())):(correct?(lang==="zh"?"排列正确！A–C–D–B 满足全部条件。":"Correct! A–C–D–B satisfies every clue."):(lang==="zh"?"排列尚未满足全部条件。你的顺序："+ordering.sequence.join("–")+"；参考答案：A–C–D–B。":"Not all clues are satisfied. Your order: "+ordering.sequence.join("–")+"; solution: A–C–D–B."));
 }
