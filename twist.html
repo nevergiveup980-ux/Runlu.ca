@@ -103,6 +103,19 @@ function orderingClueSummary(){
  const checks=orderingClues(),labels=lang==="zh"?["B紧挨D的右侧","A在D的左侧","C不在两端"]:["B immediately follows D","A is left of D","C is not at either end"];
  return (lang==="zh"?" · 条件检查：":" · Clue check: ")+checks.map((ok,i)=>(ok?"✓ ":"✗ ")+labels[i]).join("；");
 }
+// Shared accessible tile and focus utilities for interactive sequencing puzzles.
+function sequenceTile(piece,index,positionText,accessibleName){
+ const cell=document.createElement("div");cell.className="buttons";
+ const position=document.createElement("span");position.className="ordering-position";position.textContent=positionText;cell.appendChild(position);
+ const label=document.createElement("strong");label.className="ordering-tile";label.textContent=piece;label.setAttribute("aria-label",accessibleName);cell.appendChild(label);
+ return cell;
+}
+function focusSequenceMove(containerId,attribute,directionAttribute,piece,dir){
+ const buttons=Array.from(el(containerId).querySelectorAll("button"));
+ const preferred=buttons.find(b=>b.getAttribute(attribute)===piece&&b.getAttribute(directionAttribute)===String(dir)&&!b.disabled);
+ const fallback=buttons.find(b=>b.getAttribute(attribute)===piece&&!b.disabled);
+ if(preferred||fallback)(preferred||fallback).focus();
+}
 function renderOrdering(){
  const host=el("orderingChallenge");host.hidden=state.index!==3;if(host.hidden)return;
  const correct=ordering.sequence.join("")==="ACDB";
@@ -110,9 +123,8 @@ function renderOrdering(){
  el("orderingPrompt").textContent=lang==="zh"?"用左右箭头调整作品顺序，使所有条件同时成立，再提交排列。":"Move artworks left or right until every clue is satisfied, then submit the arrangement.";
  const pieces=el("orderingPieces");pieces.replaceChildren();
  ordering.sequence.forEach((piece,i)=>{
-  const cell=document.createElement("div");cell.className="buttons";cell.style.alignItems="center";
-  const position=document.createElement("span");position.className="ordering-position";position.textContent=lang==="zh"?"位置 "+(i+1):"POSITION "+(i+1);cell.appendChild(position);const label=document.createElement("strong");label.className="ordering-tile";label.textContent=piece;label.setAttribute("aria-label",(lang==="zh"?"第"+(i+1)+"位，作品":"Position "+(i+1)+", artwork ")+piece);cell.appendChild(label);
-  [-1,1].forEach(dir=>{const b=document.createElement("button");b.type="button";b.textContent=dir<0?"←":"→";b.setAttribute("aria-label",(lang==="zh"?"将作品":"Move artwork ")+piece+(dir<0?(lang==="zh"?"向左移动":" left"):(lang==="zh"?"向右移动":" right")));b.disabled=ordering.submitted||i+dir<0||i+dir>=4;b.setAttribute("data-artwork",piece);b.setAttribute("data-direction",String(dir));b.addEventListener("click",()=>{if(ordering.submitted)return;const j=i+dir;if(j<0||j>=4)return;orderingUndo=[...ordering.sequence];[ordering.sequence[i],ordering.sequence[j]]=[ordering.sequence[j],ordering.sequence[i]];saveOrdering();renderOrdering();const moved=Array.from(el("orderingPieces").querySelectorAll("button")).find(btn=>btn.getAttribute("data-artwork")===piece&&btn.getAttribute("data-direction")===String(dir)&&!btn.disabled);if(moved)moved.focus();else{const alternative=Array.from(el("orderingPieces").querySelectorAll("button")).find(btn=>btn.getAttribute("data-artwork")===piece&&!btn.disabled);if(alternative)alternative.focus()}el("orderingFeedback").textContent=(lang==="zh"?"已将作品"+piece+"移到第"+(j+1)+"位。当前顺序：":"Moved artwork "+piece+" to position "+(j+1)+". Current order: ")+ordering.sequence.join(" – ")+orderingClueSummary() });cell.appendChild(b)});
+  const cell=sequenceTile(piece,i,lang==="zh"?"位置 "+(i+1):"POSITION "+(i+1),(lang==="zh"?"第"+(i+1)+"位，作品":"Position "+(i+1)+", artwork ")+piece);
+  [-1,1].forEach(dir=>{const b=document.createElement("button");b.type="button";b.textContent=dir<0?"←":"→";b.setAttribute("aria-label",(lang==="zh"?"将作品":"Move artwork ")+piece+(dir<0?(lang==="zh"?"向左移动":" left"):(lang==="zh"?"向右移动":" right")));b.disabled=ordering.submitted||i+dir<0||i+dir>=4;b.setAttribute("data-artwork",piece);b.setAttribute("data-direction",String(dir));b.addEventListener("click",()=>{if(ordering.submitted)return;const j=i+dir;if(j<0||j>=4)return;orderingUndo=[...ordering.sequence];[ordering.sequence[i],ordering.sequence[j]]=[ordering.sequence[j],ordering.sequence[i]];saveOrdering();renderOrdering();focusSequenceMove("orderingPieces","data-artwork","data-direction",piece,dir);el("orderingFeedback").textContent=(lang==="zh"?"已将作品"+piece+"移到第"+(j+1)+"位。当前顺序：":"Moved artwork "+piece+" to position "+(j+1)+". Current order: ")+ordering.sequence.join(" – ")+orderingClueSummary() });cell.appendChild(b)});
   pieces.appendChild(cell)
  });
  const actions=el("orderingActions");actions.replaceChildren();
@@ -133,10 +145,8 @@ function renderRoute(){
  el("routePrompt").textContent=lang==="zh"?"用箭头调整配送顺序。A 必须早于 B，C 也必须早于 B；A 和 C 的先后不受限制。":"Arrange the stops: A and C must each come before B. Either order of A and C is allowed.";
  const pieces=el("routePieces");pieces.replaceChildren();
  seq.forEach((piece,i)=>{
-  const cell=document.createElement("div");cell.className="buttons";
-  const pos=document.createElement("span");pos.className="ordering-position";pos.textContent=lang==="zh"?"站点位置 "+(i+1):"STOP "+(i+1);cell.appendChild(pos);
-  const tile=document.createElement("strong");tile.className="ordering-tile";tile.textContent=piece;tile.setAttribute("aria-label",(lang==="zh"?"第"+(i+1)+"站，":"Stop "+(i+1)+", ")+piece);cell.appendChild(tile);
-  [-1,1].forEach(dir=>{const b=document.createElement("button");b.type="button";b.textContent=dir<0?"←":"→";b.setAttribute("aria-label",(lang==="zh"?"移动站点":"Move stop ")+piece+(dir<0?(lang==="zh"?"向前":" earlier"):(lang==="zh"?"向后":" later")));b.setAttribute("data-stop",piece);b.setAttribute("data-dir",String(dir));b.disabled=routeOrder.submitted||i+dir<0||i+dir>=3;b.addEventListener("click",()=>{if(routeOrder.submitted)return;const j=i+dir;if(j<0||j>=3)return;routeUndo=[...routeOrder.sequence];[routeOrder.sequence[i],routeOrder.sequence[j]]=[routeOrder.sequence[j],routeOrder.sequence[i]];saveRoute();renderRoute();const btn=Array.from(el("routePieces").querySelectorAll("button")).find(x=>x.getAttribute("data-stop")===piece&&x.getAttribute("data-dir")===String(dir)&&!x.disabled)||Array.from(el("routePieces").querySelectorAll("button")).find(x=>x.getAttribute("data-stop")===piece&&!x.disabled);if(btn)btn.focus();el("routeFeedback").textContent=(lang==="zh"?"已将站点"+piece+"移到第"+(j+1)+"位。":"Moved stop "+piece+" to position "+(j+1)+". ")+el("routeFeedback").textContent});cell.appendChild(b)});
+  const cell=sequenceTile(piece,i,lang==="zh"?"站点位置 "+(i+1):"STOP "+(i+1),(lang==="zh"?"第"+(i+1)+"站，":"Stop "+(i+1)+", ")+piece);
+  [-1,1].forEach(dir=>{const b=document.createElement("button");b.type="button";b.textContent=dir<0?"←":"→";b.setAttribute("aria-label",(lang==="zh"?"移动站点":"Move stop ")+piece+(dir<0?(lang==="zh"?"向前":" earlier"):(lang==="zh"?"向后":" later")));b.setAttribute("data-stop",piece);b.setAttribute("data-dir",String(dir));b.disabled=routeOrder.submitted||i+dir<0||i+dir>=3;b.addEventListener("click",()=>{if(routeOrder.submitted)return;const j=i+dir;if(j<0||j>=3)return;routeUndo=[...routeOrder.sequence];[routeOrder.sequence[i],routeOrder.sequence[j]]=[routeOrder.sequence[j],routeOrder.sequence[i]];saveRoute();renderRoute();focusSequenceMove("routePieces","data-stop","data-dir",piece,dir);el("routeFeedback").textContent=(lang==="zh"?"已将站点"+piece+"移到第"+(j+1)+"位。":"Moved stop "+piece+" to position "+(j+1)+". ")+el("routeFeedback").textContent});cell.appendChild(b)});
   pieces.appendChild(cell)
  });
  const actions=el("routeActions");actions.replaceChildren();
