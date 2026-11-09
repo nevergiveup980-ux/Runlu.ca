@@ -23,4 +23,17 @@ const articles=[...html.matchAll(/<article>/g)].length;
 assert.equal(articles,6,'Six categories required');
 for(const language of ['en','zh','fr','es'])assert.match(html,new RegExp('<option value="'+language+'">'));
 for(const file of [policy,principles])assert.ok(file.length>500);
+
+// Accessibility regression contracts (static checks; not a browser audit).
+assert.match(html,/<a class="skip-link" href="#main"[^>]*data-en="Skip to main content"/);
+assert.match(html,/<main id="main">/);
+assert.match(html,/<nav aria-label="Page navigation">/);
+assert.match(html,/<section aria-labelledby="categories">/);
+assert.match(html,/<h2 id="categories"/);
+assert.match(css,/\.skip-link:focus\s*\{/);
+assert.match(css,/:focus-visible\s*\{/);
+assert.match(css,/\.language select\s*\{[^}]*min-height:\s*44px/);
+assert.match(css,/\.top nav\s*\{[^}]*flex-wrap:\s*wrap/);
+assert.doesNotMatch(html,/<a\b[^>]*target="_blank"(?![^>]*rel="[^"]*noopener)/i);
+
 console.log('AI Supermarket foundation static guard PASS: 6 categories, 4 languages, shared selector, noindex, no third-party embeds/API/payment, responsive breakpoints, governance files.');
