@@ -24,3 +24,30 @@ test("clear invalidates cached link on logout",async()=>{
  let calls=0;const p=createMusicPlaybackController({fetchAccess:async()=>({url:"https://example.test/"+(++calls),expires_in:60})});
  await p.getLink("job-1");p.clear();await p.getLink("job-1");assert.equal(calls,2);
 });
+
+test("logout invalidates in-flight access response",async()=>{
+ let release;
+ const pending=new Promise(resolve=>{release=resolve});
+ const p=createMusicPlaybackController({fetchAccess:async()=>{await pending;return {url:"https://example.test/old-user",expires_in:60}}});
+ const request=p.getLink("job-1");
+ p.clear();
+ release();
+ await assert.rejects(request,/PLAYBACK_SESSION_CHANGED/);
+});
+test("new account access is not overwritten by old in-flight response",async()=>{
+ let releaseOld;
+ const oldPending=new Promise(resolve=>{releaseOld=resolve});
+ let calls=0;
+ const p=createMusicPlaybackController({fetchAccess:async()=>{
+   calls++;
+   if(calls===1){await oldPending;return {url:"https://example.test/old",expires_in:60}}
+   return {url:"https://example.test/new",expires_in:60};
+ }});
+ const old=p.getLink("job-1");
+ p.clear();
+ const newer=await p.getLink("job-2");
+ releaseOld();
+ await assert.rejects(old,/PLAYBACK_SESSION_CHANGED/);
+ assert.equal(newer,"https://example.test/new");
+ assert.equal(await p.getLink("job-2"),newer);
+});
