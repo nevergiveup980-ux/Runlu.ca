@@ -27,6 +27,7 @@ export function createMusicService({store,provider,storage}){
       const result=await provider.generate(job.project);
       if(!result||!(result.bytes instanceof Uint8Array)||result.bytes.length===0)throw Error("EMPTY_AUDIO");
       const objectKey=await storage.savePrivate({jobId:id,userId:job.userId,bytes:result.bytes,contentType:result.contentType});
+      if(typeof objectKey!=="string"||objectKey.trim().length===0)throw Error("MISSING_PRIVATE_AUDIO_KEY");
       await store.finish({id,status:nextStatus("running","completed"),objectKey});
       return {processed:true,status:"completed"};
     }catch(error){
