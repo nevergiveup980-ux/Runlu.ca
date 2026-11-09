@@ -8,7 +8,8 @@ Scope: isolated static foundation only; no third-party catalog or sales.
 - Repository multilingual check: passing on PR head (verify latest checks again before approval).
 - Dedicated AI Supermarket static guard: passing on PR head.
 - General repository CI: passing on PR head.
-- These checks do not prove real-browser behavior, accessibility, or legal compliance.
+- Headless Chromium browser acceptance passed on commit e6ea275dacf59c3272d2790188c3b0f34dee3fd1 (GitHub Actions job 129156346160, 2026-11-09): widths 320/375/390/430/768/1280, four language headings, reload persistence, horizontal overflow, page errors, and unexpected external requests. This is an automated local-file browser test, not a real-device or production test.
+- Automated checks do not prove real-device usability, accessibility, or legal compliance.
 
 ## Manual browser acceptance (not yet performed)
 Use an isolated PR preview or local checkout, **not** production:
@@ -37,4 +38,4 @@ Use an isolated PR preview or local checkout, **not** production:
 Before any eventual release, preserve a known-good main commit and verify the hosting platform's rollback path. Do not promise a rollback without testing it.
 
 ## Outstanding evidence
-Actual browser screenshots, device/browser test logs, human accessibility review and deployment/preview configuration have not yet been supplied.
+Actual device screenshots, human accessibility review, Safari/Firefox testing and deployment/preview configuration have not yet been supplied. Chromium CI logs are available at GitHub Actions job 129156346160.
