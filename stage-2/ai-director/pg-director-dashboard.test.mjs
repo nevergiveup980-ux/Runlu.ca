@@ -98,3 +98,22 @@ test('over-budget settled charges retain negative remaining balance and alert',a
  assert.equal(d.alerts.overBudgetCharge,true);
  assert.equal(d.alerts.requiresAttention,true);
 });
+
+test('duplicate persisted attempts cannot silently double count charges',async()=>{
+ const m=mock();const original=m.pool.connect;
+ m.pool.connect=async()=>{const client=await original();const query=client.query;
+  client.query=async(...args)=>{const result=await query(...args);
+   if(args[0].includes('FROM stage_director_attempts a'))return {rows:[...result.rows,...result.rows]};
+   return result;};return client;};
+ await assert.rejects(new PgDirectorDashboard(m.pool).getEpisode({episodeId:'ep1'}),/Invalid stored attempt identity/);
+ assert.equal(m.calls.at(-1).sql,'RELEASE');
+});
+test('settled attempt with null charge fails rather than being treated as zero',async()=>{
+ const m=mock();const original=m.pool.connect;
+ m.pool.connect=async()=>{const client=await original();const query=client.query;
+  client.query=async(...args)=>{const result=await query(...args);
+   if(args[0].includes('FROM stage_director_attempts a'))return {rows:result.rows.map(a=>({...a,charged_cents:null}))};
+   return result;};return client;};
+ await assert.rejects(new PgDirectorDashboard(m.pool).getEpisode({episodeId:'ep1'}),/Invalid stored financial amounts/);
+ assert.equal(m.calls.at(-1).sql,'RELEASE');
+});
