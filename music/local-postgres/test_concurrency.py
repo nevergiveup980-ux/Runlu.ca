@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Real local PostgreSQL concurrent transaction tests. Requires psycopg[binary]."""
 import os, concurrent.futures, uuid
+from urllib.parse import urlparse
 import psycopg
 
 dsn=os.getenv("RUNLU_MUSIC_TEST_DSN","")
-if not dsn or not ("localhost" in dsn or "127.0.0.1" in dsn or "/runlu_music_test" in dsn):
+parsed=urlparse(dsn)
+if parsed.scheme not in ("postgresql","postgres") or parsed.hostname not in ("localhost","127.0.0.1") or parsed.path!="/runlu_music_test":
     raise SystemExit("Set RUNLU_MUSIC_TEST_DSN to a LOCAL disposable PostgreSQL database.")
 u=str(uuid.uuid4())
 def sql(query,params=()):
