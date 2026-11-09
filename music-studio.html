@@ -127,6 +127,7 @@ async function load(reset){
  }catch{message("作品库服务尚未开放，或账户尚未登录。不会产生费用。");more.disabled=true}
  finally{loading=false;refresh.disabled=false}
 }
+window.addEventListener("runlu-music-session-ended",()=>{cursor=null;items.replaceChildren();more.disabled=true;message("登录已失效，已清空账户作品列表。请重新登录。")});
 refresh.addEventListener("click",()=>load(true));
 more.addEventListener("click",()=>load(false));
 </script><script type="module">
@@ -137,6 +138,7 @@ let available=false,busy=false;
 const playback=createMusicPlaybackController({fetchAccess:getSongDownload});
 let activeJobId=null;
 const clearPlayback=()=>{playback.clear();activeJobId=null;player.pause();player.removeAttribute("src");player.load();player.style.display="none";download.removeAttribute("href");download.style.display="none"};
+window.addEventListener("runlu-music-session-ended",()=>{clearPlayback();renew.style.display="none";disable();say("登录已失效，已清除私有试听链接。请重新登录。")});
 player.addEventListener("error",()=>{if(activeJobId)say("试听链接可能已过期。请点击“重新获取试听链接”，无需再次生成或扣费。")});
 const renew=document.createElement("button");renew.type="button";renew.className="secondary";renew.textContent="重新获取试听链接";renew.style.display="none";player.insertAdjacentElement("afterend",renew);
 renew.addEventListener("click",async()=>{if(!activeJobId)return;renew.disabled=true;try{const url=await playback.getLink(activeJobId,{force:true});player.src=url;download.href=url;player.style.display="block";download.style.display="inline-block";say("试听链接已更新。无需再次生成歌曲。")}catch{say("试听链接获取失败，请确认登录状态后重试，不要重复付费生成。")}finally{renew.disabled=false}});
