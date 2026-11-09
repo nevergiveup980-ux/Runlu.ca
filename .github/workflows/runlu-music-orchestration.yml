@@ -5,6 +5,8 @@ on:
       - 'music/job-service.mjs'
       - 'music/job-service.test.mjs'
       - 'music/job-service.stress.test.mjs'
+      - 'music/audio-access.mjs'
+      - 'music/audio-access.test.mjs'
       - 'music/auth-boundary.mjs'
       - 'music/auth-boundary.test.mjs'
       - 'music/private-storage.mjs'
@@ -39,7 +41,7 @@ jobs:
         with:
           node-version: '22'
       - name: Test isolated music service and job contract
-        run: node --test music/job-service.stress.test.mjs music/concurrency-model.test.mjs music/billing-gate.test.mjs music/offline-e2e.test.mjs music/job-service.test.mjs music/auth-boundary.test.mjs music/private-storage.test.mjs music/music-library.test.mjs music-studio-tools/job-contract.test.mjs
+        run: node --test music/audio-access.test.mjs music/job-service.stress.test.mjs music/concurrency-model.test.mjs music/billing-gate.test.mjs music/offline-e2e.test.mjs music/job-service.test.mjs music/auth-boundary.test.mjs music/private-storage.test.mjs music/music-library.test.mjs music-studio-tools/job-contract.test.mjs
 
       - name: Static validation of local PostgreSQL harness (no database or network)
         run: |
