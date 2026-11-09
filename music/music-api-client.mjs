@@ -3,11 +3,11 @@
 const ROOT="/api/music";
 async function request(path,options={}){
   const response=await fetch(ROOT+path,{credentials:"same-origin",cache:"no-store",...options,headers:{"Accept":"application/json",...(options.headers||{})}});
-  let body;try{body=await response.json()}catch{throw new Error("INVALID_SERVER_RESPONSE")}
   if(response.status===401){
     if(typeof window!=="undefined"&&typeof window.dispatchEvent==="function")window.dispatchEvent(new Event("runlu-music-session-ended"));
     throw new Error("UNAUTHENTICATED");
   }
+  let body;try{body=await response.json()}catch{throw new Error("INVALID_SERVER_RESPONSE")}
   if(!response.ok)throw new Error(body?.error_code||"REQUEST_FAILED");
   return body;
 }
