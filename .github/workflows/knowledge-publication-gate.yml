@@ -37,6 +37,8 @@ jobs:
         run: node --test knowledge/validate-publication.test.mjs
       - name: Test four-language editorial preview
         run: node --test knowledge/preview/preview-smoke.test.mjs
+      - name: Test RK-0006 editorial preview safety and four-language completeness
+        run: node --test knowledge/preview/rk-0006-preview.test.mjs
       - name: Audit draft and published knowledge records
         run: node knowledge/validate-publication.mjs
       - name: Generate editorial readiness report
