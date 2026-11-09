@@ -16,7 +16,7 @@ python3 - <<'PY'
 import os
 from urllib.parse import urlparse
 u=urlparse(os.environ['RUNLU_MUSIC_TEST_DSN'])
-if u.scheme not in ('postgresql','postgres') or u.hostname not in ('localhost','127.0.0.1') or u.path!='/runlu_music_test':
+if u.scheme not in ('postgresql','postgres') or u.hostname not in ('localhost','127.0.0.1') or u.path!='/runlu_music_test' or u.query or u.fragment:
     raise SystemExit('BLOCKED: only local database runlu_music_test is permitted')
 print('Local database target validated.')
 PY
