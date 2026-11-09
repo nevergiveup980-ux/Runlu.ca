@@ -28,6 +28,10 @@ export function projectDirectorDashboard(snapshot){
     estimateCents:a.estimateCents,chargedCents:a.chargedCents,
     overBudget:a.overBudget===true};
  });
+ if(new Set(attempts.map(a=>a.attemptId)).size!==attempts.length)throw Error('Duplicate attempt IDs');
+ const shotIds=new Set(shots.map(s=>s.shotId));
+ if(attempts.some(a=>!shotIds.has(a.shotId)))throw Error('Orphan attempt references missing shot');
+ if(attempts.some(a=>a.state==='SETTLED'&&a.chargedCents===null))throw Error('Settled attempt missing charge');
  const unknown=attempts.some(a=>a.state==='UNKNOWN');
  const overcharge=attempts.some(a=>a.overBudget);
  const alert=snapshot.alerts;
