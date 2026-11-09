@@ -46,3 +46,5 @@ The runner refuses remote database hosts, any database name other than
 `runlu_music_test`, and pre-existing `music_test` schemas. It does not
 create, delete, or reset a database automatically. Create a fresh local
 database before each execution; never paste a production connection string.
+
+Security note: connection URI query parameters are rejected, including potential `hostaddr` overrides that could redirect a nominal `localhost` connection to a remote server.
