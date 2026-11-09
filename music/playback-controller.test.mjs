@@ -51,3 +51,18 @@ test("new account access is not overwritten by old in-flight response",async()=>
  assert.equal(newer,"https://example.test/new");
  assert.equal(await p.getLink("job-2"),newer);
 });
+
+test("switching songs invalidates a slower prior link request",async()=>{
+ let releaseOld;
+ const pending=new Promise(resolve=>{releaseOld=resolve});
+ const p=createMusicPlaybackController({fetchAccess:async jobId=>{
+  if(jobId==="old"){await pending;return {url:"https://example.test/old",expires_in:60}}
+  return {url:"https://example.test/new",expires_in:60};
+ }});
+ const old=p.getLink("old");
+ const newer=await p.getLink("new");
+ releaseOld();
+ await assert.rejects(old,/PLAYBACK_SESSION_CHANGED/);
+ assert.equal(newer,"https://example.test/new");
+ assert.equal(await p.getLink("new"),newer);
+});
