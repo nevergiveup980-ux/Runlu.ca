@@ -18,6 +18,12 @@ Scope: isolated static foundation only; no third-party catalog or sales.
 - Visual inspection of the screenshots is still outstanding; upload success is not a visual pass.
 - CI logs contain non-blocking Node.js deprecation warnings from GitHub Actions dependencies. Upgrade action versions in a separate controlled change after checking compatibility.
 
+## Four-language screenshot and geometry evidence (2026-11-09)
+- Commit `398d13cfdede76bafbb50b43883b427028ba3cb2`: all four PR checks passed, including `browser-acceptance` job `129361872828`.
+- Automated Chromium tests passed at 320, 375, 390, 430, 768, and 1280 px across EN/ZH/FR/ES, including translated nodes, persistence, viewport geometry, skip link, overflow and unexpected requests.
+- 24 full-page screenshots generated and uploaded successfully. Artifact ID `13699649584`, 2,172,649 bytes: https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/42677259216/artifacts/13699649584
+- **Not a human visual pass:** screenshots have not been individually reviewed, and headless Chromium does not replace real iPhone Safari, Firefox, or assistive-technology testing.
+
 ## Manual browser acceptance (not yet performed)
 Use an isolated PR preview or local checkout, **not** production:
 - [ ] iPhone Safari narrow portrait (320–430px): no horizontal overflow; readable text; language selector operable.
