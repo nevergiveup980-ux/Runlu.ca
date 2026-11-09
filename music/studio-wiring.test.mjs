@@ -33,3 +33,11 @@ test("manual refresh preserves playback position but never autoplays or generate
  const refresh=html.slice(html.indexOf('renew.addEventListener("click"'),html.indexOf('window.addEventListener("runlu-music-select-song"'));
  assert.doesNotMatch(refresh,/player\.play\(|createSongJob\(/);
 });
+
+test("playback resume callbacks are invalidated on song or account change",()=>{
+ assert.match(html,/playbackEpoch=0/);
+ assert.match(html,/const clearPlayback=\(\)=>\{playbackEpoch\+\+/);
+ assert.match(html,/const requestedEpoch=playbackEpoch/);
+ assert.match(html,/playbackEpoch!==requestedEpoch\)return/);
+ assert.match(html,/playbackEpoch===requestedEpoch&&Number\.isFinite\(player\.duration\)/);
+});
