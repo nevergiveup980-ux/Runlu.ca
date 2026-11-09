@@ -1,0 +1,24 @@
+name: AI Supermarket Browser Acceptance
+on:
+  pull_request:
+    paths:
+      - 'ai-supermarket.html'
+      - 'ai-supermarket.css'
+      - 'runlu-language.js'
+      - 'scripts/check-ai-supermarket-browser.mjs'
+      - '.github/workflows/ai-supermarket-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-package-lock playwright
+      - run: npx playwright install --with-deps chromium
+      - run: node scripts/check-ai-supermarket-browser.mjs
