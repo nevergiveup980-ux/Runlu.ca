@@ -1,0 +1,33 @@
+import { chromium } from 'playwright';
+import assert from 'node:assert/strict';
+import { pathToFileURL } from 'node:url';
+import { resolve } from 'node:path';
+
+const browser=await chromium.launch({headless:true});
+try {
+  for (const width of [320,375,390,430,768,1280]) {
+    const page=await browser.newPage({viewport:{width,height:850},deviceScaleFactor:1});
+    const errors=[];
+    page.on('pageerror',error=>errors.push(error.message));
+    const requests=[];
+    page.on('request',req=>requests.push(req.url()));
+    await page.goto(pathToFileURL(resolve('ai-supermarket.html')).href);
+    await page.locator('#language').waitFor();
+    for (const [lang,heading] of [['en','Find the right AI for a real need.'],['zh','从真实需求出发，寻找合适的 AI 工具。'],['fr','Trouvez la bonne IA pour un besoin réel.'],['es','Encuentra la IA adecuada para una necesidad real.']]) {
+      await page.locator('#language').selectOption(lang);
+      assert.equal(await page.locator('h1').innerText(),heading,'heading '+lang);
+      assert.equal(await page.locator('html').getAttribute('data-runlu-language'),lang);
+      await page.reload();
+      assert.equal(await page.locator('#language').inputValue(),lang,'persist '+lang);
+      assert.equal(await page.locator('h1').innerText(),heading,'reload '+lang);
+      const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);
+      assert.equal(overflow,false,'horizontal overflow at '+width+'px '+lang);
+    }
+    await page.keyboard.press('Tab');
+    assert.equal(await page.locator('.skip-link').count(),1);
+    assert.equal(errors.length,0,'page errors: '+errors.join('; '));
+    assert.ok(requests.every(url=>url.startsWith('file:')),'Unexpected external request: '+requests.join(', '));
+    console.log('PASS browser viewport',width,'four languages, persistence, no overflow, no errors/external requests');
+    await page.close();
+  }
+} finally {await browser.close();}
