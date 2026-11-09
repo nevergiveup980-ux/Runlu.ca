@@ -127,6 +127,7 @@ function focusSequenceMove(containerId,attribute,directionAttribute,piece,dir){
  if(preferred||fallback)(preferred||fallback).focus();
 }
 function renderOrdering(){
+ el("orderingFeedback").setAttribute("aria-live",ordering.submitted?"off":"polite");
  const host=el("orderingChallenge");host.hidden=state.index!==3;if(host.hidden)return;
  const correct=ordering.sequence.join("")==="ACDB";
  el("orderingTitle").textContent=lang==="zh"?"互动排序 · 四件作品":"Interactive ordering · Four artworks";
@@ -134,8 +135,7 @@ function renderOrdering(){
  const pieces=el("orderingPieces");pieces.replaceChildren();
  ordering.sequence.forEach((piece,i)=>{
   const cell=sequenceTile(piece,i,lang==="zh"?"位置 "+(i+1):"POSITION "+(i+1),(lang==="zh"?"第"+(i+1)+"位，作品":"Position "+(i+1)+", artwork ")+piece);
-  [-1,1].forEach(dir=>{const b=document.createElement("button");b.type="button";b.textContent=dir<0?"←":"→";b.setAttribute("aria-label",(lang==="zh"?"将作品":"Move artwork ")+piece+(dir<0?(lang==="zh"?"向左移动":" left"):(lang==="zh"?"向右移动":" right")));b.disabled=ordering.submitted||i+dir<0||i+dir>=4;b.setAttribute("data-artwork",piece);b.setAttribute("data-direction",String(dir));b.addEventListener("click",()=>{if(ordering.submitted)return;const j=i+dir;if(j<0||j>=4)return;orderingUndo=[...ordering.sequence];[ordering.sequence[i],ordering.sequence[j]]=[ordering.sequence[j],ordering.sequence[i]];saveOrdering();renderOrdering();focusSequenceMove("orderingPieces","data-artwork","data-direction",piece,dir);el("orderingFeedback").setAttribute("aria-live",ordering.submitted?"off":"polite");
- el("orderingFeedback").textContent=(lang==="zh"?"已将作品"+piece+"移到第"+(j+1)+"位。当前顺序：":"Moved artwork "+piece+" to position "+(j+1)+". Current order: ")+ordering.sequence.join(" – ")+orderingClueSummary() });cell.appendChild(b)});
+  [-1,1].forEach(dir=>{const b=document.createElement("button");b.type="button";b.textContent=dir<0?"←":"→";b.setAttribute("aria-label",(lang==="zh"?"将作品":"Move artwork ")+piece+(dir<0?(lang==="zh"?"向左移动":" left"):(lang==="zh"?"向右移动":" right")));b.disabled=ordering.submitted||i+dir<0||i+dir>=4;b.setAttribute("data-artwork",piece);b.setAttribute("data-direction",String(dir));b.addEventListener("click",()=>{if(ordering.submitted)return;const j=i+dir;if(j<0||j>=4)return;orderingUndo=[...ordering.sequence];[ordering.sequence[i],ordering.sequence[j]]=[ordering.sequence[j],ordering.sequence[i]];saveOrdering();renderOrdering();focusSequenceMove("orderingPieces","data-artwork","data-direction",piece,dir);el("orderingFeedback").textContent=(lang==="zh"?"已将作品"+piece+"移到第"+(j+1)+"位。当前顺序：":"Moved artwork "+piece+" to position "+(j+1)+". Current order: ")+ordering.sequence.join(" – ")+orderingClueSummary() });cell.appendChild(b)});
   pieces.appendChild(cell)
  });
  const actions=el("orderingActions");actions.replaceChildren();
@@ -149,6 +149,7 @@ let routeOrder=loadSequence(ROUTE_KEY,["A","B","C"],["B","A","C"]);
 let routeUndo=null;
 function saveRoute(){saveSequence(ROUTE_KEY,routeOrder)}
 function renderRoute(){
+ el("routeFeedback").setAttribute("aria-live",routeOrder.submitted?"off":"polite");
  const host=el("routeChallenge");host.hidden=state.index!==7;if(host.hidden)return;
  const seq=routeOrder.sequence,at=x=>seq.indexOf(x),checks=[at("A")<at("B"),at("C")<at("B")],ready=verifiedAnswers[7]!==undefined;
  el("routeTitle").textContent=lang==="zh"?"互动路线 · 三个站点":"Interactive route · Three stops";
@@ -156,8 +157,7 @@ function renderRoute(){
  const pieces=el("routePieces");pieces.replaceChildren();
  seq.forEach((piece,i)=>{
   const cell=sequenceTile(piece,i,lang==="zh"?"站点位置 "+(i+1):"STOP "+(i+1),(lang==="zh"?"第"+(i+1)+"站，":"Stop "+(i+1)+", ")+piece);
-  [-1,1].forEach(dir=>{const b=document.createElement("button");b.type="button";b.textContent=dir<0?"←":"→";b.setAttribute("aria-label",(lang==="zh"?"移动站点":"Move stop ")+piece+(dir<0?(lang==="zh"?"向前":" earlier"):(lang==="zh"?"向后":" later")));b.setAttribute("data-stop",piece);b.setAttribute("data-dir",String(dir));b.disabled=routeOrder.submitted||i+dir<0||i+dir>=3;b.addEventListener("click",()=>{if(routeOrder.submitted)return;const j=i+dir;if(j<0||j>=3)return;routeUndo=[...routeOrder.sequence];[routeOrder.sequence[i],routeOrder.sequence[j]]=[routeOrder.sequence[j],routeOrder.sequence[i]];saveRoute();renderRoute();focusSequenceMove("routePieces","data-stop","data-dir",piece,dir);el("routeFeedback").setAttribute("aria-live",routeOrder.submitted?"off":"polite");
- el("routeFeedback").textContent=(lang==="zh"?"已将站点"+piece+"移到第"+(j+1)+"位。":"Moved stop "+piece+" to position "+(j+1)+". ")+el("routeFeedback").textContent});cell.appendChild(b)});
+  [-1,1].forEach(dir=>{const b=document.createElement("button");b.type="button";b.textContent=dir<0?"←":"→";b.setAttribute("aria-label",(lang==="zh"?"移动站点":"Move stop ")+piece+(dir<0?(lang==="zh"?"向前":" earlier"):(lang==="zh"?"向后":" later")));b.setAttribute("data-stop",piece);b.setAttribute("data-dir",String(dir));b.disabled=routeOrder.submitted||i+dir<0||i+dir>=3;b.addEventListener("click",()=>{if(routeOrder.submitted)return;const j=i+dir;if(j<0||j>=3)return;routeUndo=[...routeOrder.sequence];[routeOrder.sequence[i],routeOrder.sequence[j]]=[routeOrder.sequence[j],routeOrder.sequence[i]];saveRoute();renderRoute();focusSequenceMove("routePieces","data-stop","data-dir",piece,dir);el("routeFeedback").textContent=(lang==="zh"?"已将站点"+piece+"移到第"+(j+1)+"位。":"Moved stop "+piece+" to position "+(j+1)+". ")+el("routeFeedback").textContent});cell.appendChild(b)});
   pieces.appendChild(cell)
  });
  const actions=el("routeActions");actions.replaceChildren();
