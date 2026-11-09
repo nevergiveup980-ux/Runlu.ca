@@ -11,6 +11,8 @@ on:
       - 'music/music-library.mjs'
       - 'music/music-library.test.mjs'
       - 'music/offline-e2e.test.mjs'
+      - 'music/billing-gate.mjs'
+      - 'music/billing-gate.test.mjs'
       - 'music-studio-tools/job-contract.mjs'
       - '.github/workflows/runlu-music-orchestration.yml'
   pull_request:
@@ -30,4 +32,4 @@ jobs:
         with:
           node-version: '22'
       - name: Test isolated music service and job contract
-        run: node --test music/offline-e2e.test.mjs music/job-service.test.mjs music/auth-boundary.test.mjs music/private-storage.test.mjs music/music-library.test.mjs music-studio-tools/job-contract.test.mjs
+        run: node --test music/billing-gate.test.mjs music/offline-e2e.test.mjs music/job-service.test.mjs music/auth-boundary.test.mjs music/private-storage.test.mjs music/music-library.test.mjs music-studio-tools/job-contract.test.mjs
