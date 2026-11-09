@@ -18,3 +18,10 @@ test("private playback state is cleared when session expires",()=>{
  assert.match(html,/runlu-music-session-ended/);
  assert.match(html,/clearPlayback\(\);renew\.style\.display="none"/);
 });
+
+test("near-expired iPhone download link is blocked without paid regeneration",()=>{
+ assert.match(html,/download\.addEventListener\("click",event=>/);
+ assert.match(html,/Date\.now\(\)>=downloadLinkExpiresAt-10000/);
+ assert.match(html,/event\.preventDefault\(\)/);
+ assert.match(html,/downloadLinkExpiresAt=0/);
+});
