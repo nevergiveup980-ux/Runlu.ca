@@ -138,7 +138,7 @@ const check=document.getElementById("checkMusicService"),generate=document.getEl
 let available=false,busy=false;
 const playback=createMusicPlaybackController({fetchAccess:getSongDownload});
 let activeJobId=null,downloadLinkExpiresAt=0;
-const setDownloadLink=url=>{download.href=url;downloadLinkExpiresAt=Date.now()+55000};
+const setDownloadLink=url=>{download.href=url;downloadLinkExpiresAt=playback.getLinkExpiry(activeJobId)};
 download.addEventListener("click",event=>{
  if(!activeJobId||!download.href||Date.now()>=downloadLinkExpiresAt-10000){
   event.preventDefault();
