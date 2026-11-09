@@ -30,3 +30,16 @@ test('accepts negative remaining budget to report overspending',()=>{
  const s=good();s.budget.committedCents=1200;s.budget.remainingCents=-200;
  assert.equal(projectDirectorDashboard(s).budget.remainingCents,-200);
 });
+
+test('rejects duplicate attempt identities',()=>{
+ const s=good();s.attempts.push({...s.attempts[0]});
+ assert.throws(()=>projectDirectorDashboard(s),/Duplicate attempt/);
+});
+test('rejects attempts referring to missing shots',()=>{
+ const s=good();s.attempts[0].shotId='not-present';
+ assert.throws(()=>projectDirectorDashboard(s),/Orphan attempt/);
+});
+test('rejects settled attempts with no charge record',()=>{
+ const s=good();s.attempts[0].chargedCents=null;
+ assert.throws(()=>projectDirectorDashboard(s),/missing charge/);
+});
