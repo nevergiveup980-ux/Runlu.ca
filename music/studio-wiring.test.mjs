@@ -6,7 +6,7 @@ const html=readFileSync(new URL("../music-studio.html",import.meta.url),"utf8");
 test("iPhone saving help is shown for both newly generated and library songs",()=>{
  assert.match(html,/id="musicDownloadHelp"/);
  assert.match(html,/下载生成歌曲|打开 MP3 以保存/);
- assert.match(html,/player\.src=url;player\.style\.display="block";download\.href=url;download\.style\.display="inline-block";downloadHelp\.style\.display="block";\s*say\("已加载音乐库歌曲/);
+ assert.match(html,/player\.src=url;player\.style\.display="block";setDownloadLink\(url\);download\.style\.display="inline-block";downloadHelp\.style\.display="block";\s*say\("已加载音乐库歌曲/);
  assert.match(html,/downloadHelp\.style\.display="none"/);
 });
 test("manual link refresh ignores responses for previously selected songs",()=>{
