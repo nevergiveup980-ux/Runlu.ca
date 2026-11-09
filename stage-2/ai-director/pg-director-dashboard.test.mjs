@@ -63,3 +63,38 @@ test('rollback failure does not conceal original read error and still releases',
  await assert.rejects(new PgDirectorDashboard(pool).getEpisode({episodeId:'ep1'}),/original query failure/);
  assert.equal(calls.at(-1),'RELEASE');
 });
+
+test('mixed settled, pending, and unknown attempts reserve conservative budget',async()=>{
+ const calls=[];const client={query:async sql=>{
+  calls.push(sql);
+  if(sql.includes('FROM stage_director_budgets b'))return {rows:[{episode_id:'ep1',limit_cents:2000,spending_paused:true,pause_reason:'Review unknown outcome',confirmed_by:'owner',reviewer_id:'editor'}]};
+  if(sql.includes('FROM stage_director_shot_jobs'))return {rows:[
+   {shot_id:'s1',state:'SUCCEEDED',attempt_id:'a1'},
+   {shot_id:'s2',state:'RESERVED',attempt_id:'a2'},
+   {shot_id:'s3',state:'UNKNOWN',attempt_id:'a3'}]};
+  if(sql.includes('FROM stage_director_attempts a'))return {rows:[
+   {attempt_id:'a1',shot_id:'s1',state:'SETTLED',estimated_cents:600,charged_cents:450,submission_state:'SUBMITTED',exceeds_approved_budget:false},
+   {attempt_id:'a2',shot_id:'s2',state:'RESERVED',estimated_cents:300,charged_cents:null,submission_state:null,exceeds_approved_budget:false},
+   {attempt_id:'a3',shot_id:'s3',state:'UNKNOWN',estimated_cents:800,charged_cents:null,submission_state:'UNKNOWN',exceeds_approved_budget:false}]};
+  return {rows:[]};
+ },release:()=>calls.push('RELEASE')};
+ const d=await new PgDirectorDashboard({connect:async()=>client}).getEpisode({episodeId:'ep1'});
+ assert.equal(d.budget.committedCents,1550);
+ assert.equal(d.budget.remainingCents,450);
+ assert.equal(d.alerts.unknownProviderOutcome,true);
+ assert.equal(d.alerts.requiresAttention,true);
+ assert.equal(calls.at(-1),'RELEASE');
+});
+test('over-budget settled charges retain negative remaining balance and alert',async()=>{
+ const client={query:async sql=>{
+  if(sql.includes('FROM stage_director_budgets b'))return {rows:[{episode_id:'ep1',limit_cents:500,spending_paused:true,pause_reason:'Overcharge',confirmed_by:'owner',reviewer_id:'editor'}]};
+  if(sql.includes('FROM stage_director_shot_jobs'))return {rows:[{shot_id:'s1',state:'SUCCEEDED',attempt_id:'a1'}]};
+  if(sql.includes('FROM stage_director_attempts a'))return {rows:[{attempt_id:'a1',shot_id:'s1',state:'SETTLED',estimated_cents:400,charged_cents:750,submission_state:'SUBMITTED',exceeds_approved_budget:true}]};
+  return {rows:[]};
+ },release:()=>{}};
+ const d=await new PgDirectorDashboard({connect:async()=>client}).getEpisode({episodeId:'ep1'});
+ assert.equal(d.budget.committedCents,750);
+ assert.equal(d.budget.remainingCents,-250);
+ assert.equal(d.alerts.overBudgetCharge,true);
+ assert.equal(d.alerts.requiresAttention,true);
+});
