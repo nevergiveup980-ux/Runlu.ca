@@ -8,14 +8,14 @@ const stranger="87654321-4321-4321-4321-cba987654321";
 const id="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa";
 const path=musicObjectKey(owner,id);
 
-function harness({status="completed",objectKey=path,stored=true,signError=false}={}){
+function harness({status="completed",objectKey=path,stored=true,signError=false,rotateTokens=false}={}){
  const calls=[];
  const supabase={storage:{from(bucket){
    assert.equal(bucket,MUSIC_BUCKET);
    return {createSignedUrl:async(...args)=>{
      calls.push(args);
      return signError?{data:null,error:{message:"unavailable"}}:
-       {data:{signedUrl:"https://example.test/private?token=short-lived"},error:null};
+       {data:{signedUrl:"https://example.test/private?token="+(rotateTokens?calls.length:"short-lived")},error:null};
    }};
  }}};
  const storage=createPrivateMusicStorage({supabase});
@@ -52,18 +52,11 @@ test("incomplete, missing audio, or provider error never returns URL",async()=>{
 });
 
 test("expired playback link can be refreshed without creating another song or charging",async()=>{
- let signatures=0;
- const h=harness();
- h.storage.createDownload=async ({userId,jobId,storedPath,expiresIn})=>{
-   assert.equal(userId,owner);assert.equal(jobId,id);assert.equal(storedPath,path);
-   assert.equal(expiresIn,60);
-   signatures++;
-   return "https://example.test/private?token=renewed-"+signatures;
- };
+ const h=harness({rotateTokens:true});
  const first=await getMusicAudioAccess({authenticatedUserId:owner,jobId:id,...h});
  const refreshed=await getMusicAudioAccess({authenticatedUserId:owner,jobId:id,...h});
  assert.notEqual(first.url,refreshed.url);
- assert.equal(signatures,2);
+ assert.equal(h.calls.length,2);
  assert.equal(first.expires_in,60);
  assert.equal(refreshed.expires_in,60);
 });
