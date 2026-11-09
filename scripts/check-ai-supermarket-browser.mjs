@@ -2,7 +2,9 @@ import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
+import { mkdir } from 'node:fs/promises';
 
+await mkdir('ai-supermarket-browser-evidence',{recursive:true});
 const browser=await chromium.launch({headless:true});
 try {
   for (const width of [320,375,390,430,768,1280]) {
@@ -24,6 +26,7 @@ try {
       assert.equal(await page.locator('h1').innerText(),heading,'reload '+lang);
       const afterReload=await page.locator('[data-en]').evaluateAll((nodes,language)=>nodes.map(node=>({actual:node.textContent,expected:node.getAttribute('data-'+language)})).filter(x=>x.actual!==x.expected),lang);
       assert.deepEqual(afterReload,[],'all translated nodes after reload '+lang);
+      if (lang==='en'||lang==='zh') await page.screenshot({path:`ai-supermarket-browser-evidence/viewport-${width}-${lang}.png`,fullPage:true});
       const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);
       assert.equal(overflow,false,'horizontal overflow at '+width+'px '+lang);
     }
