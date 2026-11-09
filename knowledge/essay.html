@@ -89,7 +89,22 @@ clear($('sections'));
 doc.sections.forEach(s=>{
 const section=document.createElement('section');
 const heading=document.createElement('h2');heading.textContent=s.heading;section.appendChild(heading);
-s.paragraphs.forEach(p=>{const paragraph=document.createElement('p');paragraph.textContent=p;section.appendChild(paragraph)});
+s.paragraphs.forEach(p=>{const paragraph=document.createElement('p');
+// Render only simple editorial *italics* and **bold** using safe text nodes.
+// All unmatched markers remain literal text; no HTML is interpreted.
+const tokens=/(\*\*[^*\n]+\*\*|\*[^*\n]+\*)/g;
+let cursor=0;
+for(const match of p.matchAll(tokens)){
+  const at=match.index;
+  if(at>cursor)paragraph.appendChild(document.createTextNode(p.slice(cursor,at)));
+  const bold=match[0].startsWith('**');
+  const emphasis=document.createElement(bold?'strong':'em');
+  emphasis.textContent=match[0].slice(bold?2:1,bold?-2:-1);
+  paragraph.appendChild(emphasis);
+  cursor=at+match[0].length;
+}
+if(cursor<p.length||p.length===0)paragraph.appendChild(document.createTextNode(p.slice(cursor)));
+section.appendChild(paragraph)});
 $('sections').appendChild(section);
 });
 $('closing').textContent=typeof doc.closing==='string'?doc.closing:'';

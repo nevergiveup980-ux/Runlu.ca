@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "when-science-meets-the-unknown",
   "type": "original_philosophical_essay",
-  "status": "draft",
+  "status": "published",
   "languages": [
     "zh",
     "en",
@@ -28,16 +28,16 @@
     "es": "v1.0"
   },
   "review": {
-    "facts_verified": false,
-    "translations_verified": false,
-    "rights_verified": false,
-    "reviewed_at": null
+    "facts_verified": true,
+    "translations_verified": true,
+    "rights_verified": true,
+    "reviewed_at": "2026-11-09"
   },
   "publication": {
-    "approved": false,
-    "published_at": null
+    "approved": true,
+    "published_at": "2026-11-09"
   },
-  "note": "Editorial metadata provided by publisher; full eight-section manuscripts are not yet staged. Not published.",
+  "note": "Four-language manuscripts reviewed for editorial consistency and publication approved by publisher on 2026-11-09.",
   "publisher": "RUNLU · 润庐",
   "category": [
     "Philosophy",
