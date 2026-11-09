@@ -81,3 +81,54 @@ baseline comparisons, fixed-seed corpus results and reproduction instructions.
 Load `examples/small-first-win.json` to inspect the synthetic improvement case;
 candidate rows now report allocated SF and SYD alongside waste SF. Results are
 finite heuristic comparisons, not verified real-job savings or global optima.
+
+## CSV order import and field comparison (2026-11-09)
+
+Use **Import order CSV** above the roll editor. Download the two header templates,
+fill one row per roll/piece, then select **both** files and preview. The complete
+files are validated before any order data changes; **Replace order with preview**
+replaces both inventories atomically, recalculates and clears previous reviews
+and trial records. Job reference, reviewer and current cut allowances are retained;
+check those settings before applying. Notes columns are accepted but discarded.
+Files stay in the browser; import does not write to inventory or a database.
+
+Required headers:
+- Rolls: `roll_id,stock_type,width_ft,available_length_ft,dye_lot`
+- Pieces: `piece_id,width_ft,length_ft,dye_lot,allow_rotate`
+- Optional column: `notes`
+
+Headers are case-sensitive and may be reordered. Stock types: `FULL`, `SHORT`,
+`REMNANT`. Rotation: explicit `true` or `false` (case-insensitive); blanks are rejected.
+Dimensions must be positive decimal feet, with a decimal point (no unit suffix,
+thousands separator or scientific notation). IDs must be unique within each file.
+Roll dye lot is required. Blank piece lot remains unconstrained and produces a
+warning; require a common lot explicitly on every relevant piece. UTF-8 BOM,
+CRLF/LF, commas inside quoted fields, doubled quotes and multiline quoted notes
+are supported. Unknown/duplicate headers, malformed quoting, wrong field counts,
+empty datasets and invalid dimensions reject the entire import with a row/header
+error. Limit: 1 MB and 1,000 data rows per file. Preview displays the first 20 rows;
+validation covers all rows. CSV contents are treated as text, not formulas.
+
+Layouts now show roll width and consumed length, top-left origin, X/Y direction,
+numbered cut rectangles and a complete coordinate/dimension/orientation legend.
+All cut dimensions include allowances. Tiny rectangles may omit their in-diagram
+number; the legend and SVG title still include every cut. The diagram covers
+allocated length only, excluding the unused full-width tail.
+
+For a supervised real-order trial, enter job/reviewer, calculate, complete the
+pre-cut checklist, then enter independently expected and actually consumed LF for
+**each** roll (including zero for unused rolls). Independently compare the complete
+piece sheet, directions, lots and geometry, record issues, and compare. The result
+is BLOCKED if required evidence/readings are absent or invalid, FAIL if any roll's
+expected/actual length differs from plan by more than 0.01 LF, otherwise PASS.
+This fixed comparison tolerance is not a physical cutting tolerance. PASS is a
+self-reported comparison result, not installer approval or a release decision.
+Export JSON for **all** statuses to retain inputs, selected strategy, placements,
+UTC timestamp, local pre-cut evidence, raw readings and per-roll differences.
+Changing inputs, reviewer, scenario or trial readings invalidates the previous
+record. Recalculate before entering fresh readings. Project JSON deliberately
+excludes trial records; archive the separate acceptance export. Printed review
+includes the current trial comparison status when present.
+
+No real customer order has been accepted through these automated synthetic tests.
+Continue to use FIELD_ACCEPTANCE_TEMPLATE.md and all release checklist gates.

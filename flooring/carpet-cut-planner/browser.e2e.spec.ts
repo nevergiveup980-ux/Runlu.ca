@@ -234,3 +234,61 @@ test('savings comparison excludes incomplete plans and printing follows selected
  await page.locator('#calculate').click();
  await expect(page.locator('#results table').first()).toContainText('Not comparable');
 });
+
+const rollCSV='roll_id,stock_type,width_ft,available_length_ft,dye_lot,notes\r\nCSV-R,FULL,12,30,A,"synthetic, stock"';
+const pieceCSV='piece_id,width_ft,length_ft,dye_lot,allow_rotate,notes\n"CSV <Room>",6,10,A,false,\nCSV-2,6,10,A,false,';
+async function previewCSV(page:import('@playwright/test').Page,pieceText=pieceCSV){
+ await page.locator('#csvRolls').setInputFiles({name:'rolls.csv',mimeType:'text/csv',buffer:Buffer.from(rollCSV)});
+ await page.locator('#csvPieces').setInputFiles({name:'pieces.csv',mimeType:'text/csv',buffer:Buffer.from(pieceText)});
+ await page.locator('#previewCSV').click();
+}
+test('CSV preview preserves current order until apply and recalculates safe numbered layouts',async({page})=>{
+ await page.setViewportSize({width:390,height:844});await page.goto(pageUrl);
+ await page.locator('#reviewChecklist input').first().check();
+ await previewCSV(page);
+ await expect(page.locator('#csvPreview')).toContainText('1 rolls, 2 pieces');
+ await expect(page.locator('#rollRows input[data-field="id"]').first()).toHaveValue('R1');
+ await page.locator('#applyCSV').click();
+ await expect(page.locator('#rollRows input[data-field="id"]').first()).toHaveValue('CSV-R');
+ await expect(page.locator('#reviewChecklist input').first()).not.toBeChecked();
+ await expect(page.locator('.cutLegend')).toContainText('CSV <Room>');
+ await expect(page.locator('.cutLegend')).toContainText('6.00 × 10.00');
+ await expect(page.locator('#results svg title').first()).toContainText('width 12.00 ft');
+ await expect(page.locator('#results .stat').nth(1)).toContainText('120.00');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+2)).toBe(true);
+ await page.locator('#print').click();await expect(page.locator('.cutLegend')).toContainText('CSV <Room>');
+});
+test('invalid CSV shows row error and leaves the previous order untouched',async({page})=>{
+ await page.goto(pageUrl);await previewCSV(page,pieceCSV.replace('6,10,A,false','6,10,A,maybe'));
+ await expect(page.locator('#csvPreview')).toContainText('line 2');
+ await expect(page.locator('#applyCSV')).toBeDisabled();
+ await expect(page.locator('#rollRows input[data-field="id"]').first()).toHaveValue('R1');
+ await previewCSV(page);await expect(page.locator('#applyCSV')).toBeEnabled();
+ await page.locator('#csvPieces').setInputFiles([]);await expect(page.locator('#applyCSV')).toBeDisabled();
+});
+async function prepareTrial(page:import('@playwright/test').Page){
+ await page.goto(pageUrl);await previewCSV(page,pieceCSV.replace('CSV-2,6,10','CSV-2,6,5'));await page.locator('#applyCSV').click();
+ await page.locator('#jobId').fill('TRIAL-SYNTHETIC');await page.locator('#reviewer').fill('Test reviewer');await page.locator('#calculate').click();
+ for(const box of await page.locator('#reviewChecklist input').all())await box.check();
+ await page.locator('[data-reading="expected"]').fill('10');await page.locator('[data-reading="actual"]').fill('10');await page.locator('#fieldVerified').check();
+}
+test('field comparison exports the selected plan and invalidates on changed inputs',async({page})=>{
+ await prepareTrial(page);await page.locator('#evaluateField').click();
+ await expect(page.locator('#fieldResult')).toContainText('PASS');
+ const downloadPromise=page.waitForEvent('download');await page.locator('#exportField').click();
+ const download=await downloadPromise;const stream=await download.createReadStream();const buffers=[];for await(const chunk of stream!)buffers.push(chunk);
+ const record=JSON.parse(Buffer.concat(buffers).toString());
+ expect(record).toMatchObject({jobId:'TRIAL-SYNTHETIC',comparison:{status:'PASS'},plan:{allocated:120},inputs:{rolls:[{id:'CSV-R'}]}});
+ expect(record.selectedStrategy).toBeTruthy();
+ await page.locator('#print').click();await expect(page.locator('#printAudit')).toContainText('Trial comparison: PASS');
+ await page.locator('#pieceRows input[data-field="l"]').first().fill('9');
+ await expect(page.locator('#exportField')).toBeDisabled();await expect(page.locator('#fieldResult')).toContainText('invalidated');
+});
+test('field comparison blocks unchecked trials and fails differences without hiding them',async({page})=>{
+ await prepareTrial(page);await page.locator('#fieldVerified').uncheck();await page.locator('#evaluateField').click();
+ await expect(page.locator('#fieldResult')).toContainText('BLOCKED');
+ await page.locator('#fieldVerified').check();await page.locator('[data-reading="actual"]').fill('11');await page.locator('#evaluateField').click();
+ await expect(page.locator('#fieldResult')).toContainText('FAIL');await expect(page.locator('#fieldResult')).toContainText('actual − plan 1.00 LF');
+ await page.locator('#scenarioPicker').selectOption('1');await expect(page.locator('#exportField')).toBeDisabled();
+ await expect(page.locator('[data-reading="actual"]').first()).toHaveValue('');
+});

@@ -50,3 +50,19 @@
 - Release decision: BLOCKED until at least three independently verified real jobs and all manual gates pass.
 
 **Limitations:** Rectangular heuristic planning only. This template is not a cutting authorization; seam placement, pattern alignment, nap direction, irregular rooms and site measurement must be verified independently.
+
+## In-app trial procedure
+1. Import roll and piece CSV files via preview, or enter the verified sheet manually.
+2. Record job/reviewer and allowances; calculate and inspect the selected strategy.
+3. Independently verify the numbered coordinate legend against the source sheet.
+4. Complete all pre-cut checks. Enter expected consumed LF per roll independently
+   of the calculator, then actual consumed LF after a supervised authorized trial.
+5. Confirm independent verification; compare and export acceptance JSON even for
+   FAIL/BLOCKED outcomes. Link this export and any defect issue in this record.
+6. Verify the printout includes the selected layout and current trial status.
+7. If inputs or strategy change, discard the old trial comparison and repeat.
+
+A PASS only means required local confirmations are present and each per-roll length
+comparison is within 0.01 LF. It does not verify physical measurements, reusable
+side-offcut quality, authenticated identity, installation approval or release readiness.
+Three independently verified real jobs and the existing release gates remain required.

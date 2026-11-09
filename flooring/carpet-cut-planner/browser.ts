@@ -17,7 +17,7 @@ export function calculateShared(rollInputs:InputRoll[],pieceInputs:InputPiece[],
  const summaries=scenarios.map(s=>{const usedRolls=rollInputs.map(r=>({id:r.id,stockType:r.stockType||'FULL',usedLF:(s.plan.usedLengthByRoll[r.id]||0)/12,usedSF:r.w*(s.plan.usedLengthByRoll[r.id]||0)/12})).filter(r=>r.usedLF>0);return {...s,usedRolls,rollCount:usedRolls.length,remnantCount:usedRolls.filter(r=>r.stockType==='REMNANT').length,shortCount:usedRolls.filter(r=>r.stockType==='SHORT').length,wasteSF:s.plan.wasteAreaSF};});
  const best=scenarios[selected].plan;
  const used=Object.fromEntries(Object.entries(best.usedLengthByRoll).map(([id,v])=>[id,v/12]));
- const placed=best.placements.map(p=>({id:p.pieceId,roll:p.rollId,x:p.xIn/12,y:p.yIn/12,w:p.widthIn/12,h:p.lengthIn/12}));
+ const placed=best.placements.map(p=>({id:p.pieceId,roll:p.rollId,x:p.xIn/12,y:p.yIn/12,w:p.widthIn/12,h:p.lengthIn/12,rotated:p.widthIn!==pieces.find(c=>c.id===p.pieceId)!.widthIn||p.lengthIn!==pieces.find(c=>c.id===p.pieceId)!.lengthIn}));
  const roomAreaSF=pieceInputs.reduce((sum,p)=>sum+p.w*p.l,0);
  const patternAdjustmentSF=pieces.reduce((sum,p,i)=>sum+p.widthIn*(p.lengthIn-(pieceInputs[i].l*12+allowance.lengthIn))/144,0);
  const allowanceAreaSF=pieceInputs.reduce((sum,p)=>sum+((p.w*12+allowance.widthIn)*(p.l*12+allowance.lengthIn)-p.w*12*p.l*12)/144,0);
@@ -29,3 +29,10 @@ export function calculateShared(rollInputs:InputRoll[],pieceInputs:InputPiece[],
 }
 declare global {interface Window {runluCalculateShared?:typeof calculateShared}}
 if(typeof window!=='undefined')window.runluCalculateShared=calculateShared;
+import {importOrderCSV} from './csv';
+import {evaluateAcceptance} from './acceptance';
+declare global {interface Window {runluImportOrderCSV:typeof importOrderCSV;runluEvaluateAcceptance:typeof evaluateAcceptance}}
+if(typeof window!=='undefined'){window.runluImportOrderCSV=importOrderCSV;window.runluEvaluateAcceptance=evaluateAcceptance;}
+import {renderCutLayout} from './layout';
+declare global {interface Window {runluRenderCutLayout:typeof renderCutLayout}}
+if(typeof window!=='undefined')window.runluRenderCutLayout=renderCutLayout;
