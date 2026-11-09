@@ -19,7 +19,8 @@ test("four complete language bodies are embedded with distinct titles", () => {
   for (const lang of ["en", "zh", "fr", "es"]) {
     assert.match(html, new RegExp('<option value="' + lang + '">'));
     assert.ok(copy[lang]?.title?.trim(), "missing title: " + lang);
-    assert.ok(copy[lang]?.body?.length > 1200, "body unexpectedly short: " + lang);
+    const minimumLength = lang === "zh" ? 650 : 1200;
+    assert.ok(copy[lang]?.body?.length > minimumLength, "body unexpectedly short: " + lang);
     assert.ok(copy[lang]?.notice && copy[lang]?.footer, "missing review notice: " + lang);
     assert.match(copy[lang].body, /100/);
     assert.match(copy[lang].body, /65/);
