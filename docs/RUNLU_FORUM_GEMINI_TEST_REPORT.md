@@ -1,6 +1,6 @@
 # RUNLU Forum Gemini 测试报告
 
-日期：2026-11-09（America/Edmonton）。状态：代码与本地验证完成；真实 Gemini 调用尚未验收。
+日期：2026-11-09（America/Edmonton）。状态：代码、本地验证及 PR CI 完成；真实 Gemini 调用尚未验收。
 
 ## 验收结果
 
@@ -13,7 +13,7 @@
 | 连接状态 | 测试确认配置密钥不等于连接成功；真实非空回复与有效 usage 后才可验证 |
 | 错误处理 | 401/402/403/404/429/500、超时、空回复、内容拦截、预算服务不可用均测试通过 |
 | $2.00 服务端限制 | SQL 测试确认旧账本计入、原子预留、额度耗尽拒绝、失败保留额度、跨日计账 |
-| 并发控制 | 本地 SQL 规则通过；20 个独立连接竞态由 PostgreSQL 17 PR CI 执行 |
+| 并发控制 | PostgreSQL 17 PR CI 已通过：20 个独立连接竞争时仅 1 场进入，其余 19 个拒绝 |
 | 前端预算防篡改 | 测试确认 localStorage 预算值不影响服务端预算显示；状态失败显示未知 |
 | 隐私 | 上游错误正文不外传；服务端不存提示词、回复或完整密钥 |
 | 主站 / Music Studio | 无主站、Music Studio、共享 Cloudflare 网关修改；无生产部署、迁移或密钥更改 |
@@ -41,4 +41,10 @@
 
 ## PR CI
 
-等待本次 PR 工作流结果；后续记录独立 PostgreSQL 并发测试的实际结果。
+[Draft PR #454](https://github.com/nevergiveup980-ux/Runlu.ca/pull/454)，验证代码提交 `d6f96796fdd4b1bdfcaa6b71df98eef33302b2c7`。
+
+- [Forum AI safety — 通过](https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/42689587037)：网关与 DOM 34/34；PostgreSQL 17 数据库测试 10/10（含测试容器计数），零跳过；Deno 类型检查通过。
+- 独立数据库并发检查：20 个独立连接同时请求，断言 1 个成功、19 个 `FORUM_BUSY`，通过。
+- [Site integrity — 通过](https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/42689586230)。
+
+CI 使用独立临时 PostgreSQL 服务与明确的厂商响应替身，不使用生产密钥，不执行生产部署。以上不能替代真实 Gemini 和 OpenAI + Gemini 的厂商联调验收。
