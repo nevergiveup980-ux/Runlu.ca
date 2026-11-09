@@ -22,3 +22,11 @@ jobs:
       - run: npm install --no-save --no-package-lock playwright
       - run: npx playwright install --with-deps chromium
       - run: node scripts/check-ai-supermarket-browser.mjs
+      - name: Upload browser screenshot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-supermarket-browser-evidence
+          path: ai-supermarket-browser-evidence/
+          if-no-files-found: warn
+          retention-days: 14
