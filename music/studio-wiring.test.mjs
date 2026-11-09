@@ -25,3 +25,11 @@ test("near-expired iPhone download link is blocked without paid regeneration",()
  assert.match(html,/event\.preventDefault\(\)/);
  assert.match(html,/downloadLinkExpiresAt=0/);
 });
+
+test("manual refresh preserves playback position but never autoplays or generates",()=>{
+ assert.match(html,/const resumeAt=Number\.isFinite\(player\.currentTime\)\?player\.currentTime:0/);
+ assert.match(html,/player\.addEventListener\("loadedmetadata"/);
+ assert.match(html,/player\.currentTime=resumeAt/);
+ const refresh=html.slice(html.indexOf('renew.addEventListener("click"'),html.indexOf('window.addEventListener("runlu-music-select-song"'));
+ assert.doesNotMatch(refresh,/player\.play\(|createSongJob\(/);
+});
