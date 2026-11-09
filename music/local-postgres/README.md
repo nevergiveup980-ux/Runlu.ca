@@ -22,12 +22,12 @@ PostgreSQL role or use a local-only connection URI. Do not commit credentials.
 
 Expected output:
 ```
-PASS: two-connection last-credit race, replay, collision, rollback (LOCAL PostgreSQL)
+PASS: concurrent last-credit race, same-key replay, payload collision, rollback, empty wallet (LOCAL PostgreSQL)
 ```
 
 ## Interpretation
 - Uses **two separate real PostgreSQL connections** to race for the last credit.
-- Verifies replay, payload collision, and injected insert-failure rollback.
+- Verifies simultaneous same-key replay, payload collision, empty-wallet rejection, and injected insert-failure rollback.
 - Does **not** test Supabase Auth/RLS, existing RUNLU credit RPC, payment
   provider, or production concurrency behavior.
 - Test users are random UUIDs and the schema is isolated as `music_test`.
