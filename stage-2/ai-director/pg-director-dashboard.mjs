@@ -28,9 +28,29 @@ export class PgDirectorDashboard {
    await client.query('COMMIT');
    const b=budget.rows[0];
    const limit=Number(b.limit_cents);
-   const committed=attempts.rows.reduce((sum,a)=>sum+
-    Number(a.state==='SETTLED'?a.charged_cents:a.estimated_cents),0);
-   if(!Number.isSafeInteger(limit)||!Number.isSafeInteger(committed)||committed<0)
+   const shotIds=new Set();
+   for(const shot of shots.rows){
+    if(typeof shot.shot_id!=='string'||!ID.test(shot.shot_id)||shotIds.has(shot.shot_id))
+     throw Error('Invalid stored shot identity');
+    shotIds.add(shot.shot_id);
+   }
+   const attemptIds=new Set();
+   let committed=0;
+   for(const attempt of attempts.rows){
+    if(typeof attempt.attempt_id!=='string'||!ID.test(attempt.attempt_id)||
+       attemptIds.has(attempt.attempt_id)||!shotIds.has(attempt.shot_id))
+     throw Error('Invalid stored attempt identity');
+    attemptIds.add(attempt.attempt_id);
+    const estimate=Number(attempt.estimated_cents);
+    const charge=attempt.charged_cents===null?null:Number(attempt.charged_cents);
+    if(!Number.isSafeInteger(estimate)||estimate<0||
+       (charge!==null&&(!Number.isSafeInteger(charge)||charge<0))||
+       (attempt.state==='SETTLED'&&charge===null))
+     throw Error('Invalid stored financial amounts');
+    committed+=attempt.state==='SETTLED'?charge:estimate;
+    if(!Number.isSafeInteger(committed))throw Error('Invalid stored financial amounts');
+   }
+   if(!Number.isSafeInteger(limit)||limit<0||!Number.isSafeInteger(committed)||committed<0)
     throw Error('Invalid stored financial amounts');
    const hasUnknown=attempts.rows.some(a=>a.state==='UNKNOWN'||a.submission_state==='UNKNOWN');
    const hasOvercharge=attempts.rows.some(a=>a.exceeds_approved_budget===true);
