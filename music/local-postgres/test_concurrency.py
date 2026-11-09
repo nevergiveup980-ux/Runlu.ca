@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Real local PostgreSQL concurrent transaction tests. Requires psycopg[binary]."""
-import os, concurrent.futures, uuid
+import os, concurrent.futures, uuid, threading
 from urllib.parse import urlparse
 import psycopg
 
@@ -15,13 +15,16 @@ def sql(query,params=()):
             cur.execute(query,params)
             return cur.fetchall() if cur.description else None
 sql("INSERT INTO music_test.wallets(user_id,credits) VALUES(%s,1)",(u,))
-def reserve(key,payload="lyrics",fail=False):
-    with psycopg.connect(dsn) as c:
+def reserve(key,payload="lyrics",fail=False,barrier=None):
+    with psycopg.connect(dsn, connect_timeout=5) as c:
         with c.cursor() as cur:
+            if barrier is not None:
+                barrier.wait(timeout=10)
             cur.execute("SELECT music_test.reserve(%s,%s,%s,%s)",(u,key,payload,fail))
             return cur.fetchone()[0]
+barrier=threading.Barrier(2)
 with concurrent.futures.ThreadPoolExecutor(max_workers=2) as ex:
-    futures=[ex.submit(reserve,"key-"+str(i).zfill(8)) for i in range(2)]
+    futures=[ex.submit(reserve,"key-"+str(i).zfill(8),barrier=barrier) for i in range(2)]
     outcomes=[]
     for f in futures:
         try: outcomes.append(("ok",f.result()))
@@ -30,6 +33,7 @@ assert len([x for x in outcomes if x[0]=="ok"])==1,outcomes
 assert len([x for x in outcomes if "INSUFFICIENT_CREDITS" in str(x)])==1,outcomes
 assert sql("SELECT credits FROM music_test.wallets WHERE user_id=%s",(u,))[0][0]==0
 assert sql("SELECT count(*) FROM music_test.consumptions WHERE user_id=%s",(u,))[0][0]==1
+assert sql("SELECT count(*) FROM music_test.jobs WHERE user_id=%s",(u,))[0][0]==1
 winner=[x[1] for x in outcomes if x[0]=="ok"][0]
 key=sql("SELECT request_key FROM music_test.jobs WHERE id=%s",(winner,))[0][0]
 assert reserve(key)==winner
@@ -44,4 +48,5 @@ try:
 except psycopg.Error as e: assert "INJECTED_JOB_INSERT_FAILURE" in str(e)
 assert sql("SELECT credits FROM music_test.wallets WHERE user_id=%s",(v,))[0][0]==1
 assert sql("SELECT count(*) FROM music_test.jobs WHERE user_id=%s",(v,))[0][0]==0
+assert sql("SELECT count(*) FROM music_test.consumptions WHERE user_id=%s",(v,))[0][0]==0
 print("PASS: two-connection last-credit race, replay, collision, rollback (LOCAL PostgreSQL)")
