@@ -50,3 +50,34 @@ test("incomplete, missing audio, or provider error never returns URL",async()=>{
   if(!options.signError)assert.equal(h.calls.length,0);
  }
 });
+
+test("expired playback link can be refreshed without creating another song or charging",async()=>{
+ let signatures=0;
+ const h=harness();
+ h.storage.createDownload=async ({userId,jobId,storedPath,expiresIn})=>{
+   assert.equal(userId,owner);assert.equal(jobId,id);assert.equal(storedPath,path);
+   assert.equal(expiresIn,60);
+   signatures++;
+   return "https://example.test/private?token=renewed-"+signatures;
+ };
+ const first=await getMusicAudioAccess({authenticatedUserId:owner,jobId:id,...h});
+ const refreshed=await getMusicAudioAccess({authenticatedUserId:owner,jobId:id,...h});
+ assert.notEqual(first.url,refreshed.url);
+ assert.equal(signatures,2);
+ assert.equal(first.expires_in,60);
+ assert.equal(refreshed.expires_in,60);
+});
+test("refresh requires ownership check again, even after prior access",async()=>{
+ const h=harness();
+ await getMusicAudioAccess({authenticatedUserId:owner,jobId:id,...h});
+ const before=h.calls.length;
+ await assert.rejects(getMusicAudioAccess({authenticatedUserId:stranger,jobId:id,...h}),/NOT_FOUND/);
+ assert.equal(h.calls.length,before);
+});
+test("rejects expiry outside actual storage adapter limits before signing",async()=>{
+ const h=harness();
+ for(const expiresIn of [0,1,29,121,301,1.5,NaN]){
+   await assert.rejects(getMusicAudioAccess({authenticatedUserId:owner,jobId:id,expiresIn,...h}),/INVALID_EXPIRY/);
+ }
+ assert.equal(h.calls.length,0);
+});
