@@ -11,6 +11,13 @@ Scope: isolated static foundation only; no third-party catalog or sales.
 - Headless Chromium browser acceptance passed on commit e6ea275dacf59c3272d2790188c3b0f34dee3fd1 (GitHub Actions job 129156346160, 2026-11-09): widths 320/375/390/430/768/1280, four language headings, reload persistence, horizontal overflow, page errors, and unexpected external requests. This is an automated local-file browser test, not a real-device or production test.
 - Automated checks do not prove real-device usability, accessibility, or legal compliance.
 
+## Screenshot evidence (generated, not yet visually reviewed)
+- GitHub Actions run 42665143020, job 129326703946: six widths passed and 12 EN/ZH full-page screenshots were requested by the test.
+- Artifact upload succeeded: `ai-supermarket-browser-evidence`, artifact ID `13694644999`, 1,049,158 bytes, retained for 14 days.
+- Artifact: https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/42665143020/artifacts/13694644999
+- Visual inspection of the screenshots is still outstanding; upload success is not a visual pass.
+- CI logs contain non-blocking Node.js deprecation warnings from GitHub Actions dependencies. Upgrade action versions in a separate controlled change after checking compatibility.
+
 ## Manual browser acceptance (not yet performed)
 Use an isolated PR preview or local checkout, **not** production:
 - [ ] iPhone Safari narrow portrait (320–430px): no horizontal overflow; readable text; language selector operable.
@@ -38,4 +45,4 @@ Use an isolated PR preview or local checkout, **not** production:
 Before any eventual release, preserve a known-good main commit and verify the hosting platform's rollback path. Do not promise a rollback without testing it.
 
 ## Outstanding evidence
-Actual device screenshots, human accessibility review, Safari/Firefox testing and deployment/preview configuration have not yet been supplied. Chromium CI logs are available at GitHub Actions job 129156346160.
+Human visual review of uploaded screenshots, real-device screenshots, human accessibility review, Safari/Firefox testing and deployment/preview configuration have not yet been supplied. Chromium CI logs are available at GitHub Actions jobs 129156346160 and 129326703946.
