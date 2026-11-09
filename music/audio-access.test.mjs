@@ -4,7 +4,7 @@ import {getMusicAudioAccess} from "./audio-access.mjs";
 const job={id:"song-1",userId:"alice",status:"completed",audioStored:true,objectKey:"private/alice/song-1.mp3"};
 function deps(record=job){
  let signed=0;
- return {store:{get:async()=>record},storage:{createSignedReadUrl:async()=>{signed++;return "https://storage.example.invalid/signed"}}},calls:()=>signed};
+ return {store:{get:async()=>record},storage:{createSignedReadUrl:async()=>{signed++;return "https://storage.example.invalid/signed"}},calls:()=>signed};
 }
 test("owner gets short-lived URL, no raw object key",async()=>{
  const d=deps();const result=await getMusicAudioAccess({authenticatedUserId:"alice",jobId:"song-1",...d});
