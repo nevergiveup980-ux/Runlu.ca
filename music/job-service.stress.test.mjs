@@ -7,7 +7,7 @@ import {createMusicService} from "./job-service.mjs";
 const project={title:"Wind Years",lyrics:"Entirely original song lyrics",voice:"female",style:"nostalgic",language:"en"};
 const owner="stress-user";
 const submit=(service,key,body=project)=>service.submit({authenticatedUserId:owner,body,idempotencyKey:key});
-function fixture({credits=1,providerFailure=false,storageFailure=false}={}){
+function fixture({credits=1,providerFailure=false,storageFailure=false,missingObjectKey=false}={}){
  const jobs=new Map(),keys=new Map();let serial=Promise.resolve(),calls=0,charges=0,uploads=0,seq=0;
  const store={
   reserveAndCreate({userId,key,project:p}){
@@ -38,7 +38,7 @@ function fixture({credits=1,providerFailure=false,storageFailure=false}={}){
   }
  };
  const provider={async generate(){calls++;if(providerFailure)throw Error("TIMEOUT");return {bytes:new Uint8Array([73,68,51,3]),contentType:"audio/mpeg"}}};
- const storage={async savePrivate({jobId}){uploads++;if(storageFailure)throw Error("UPLOAD_FAILED");return "private/"+jobId+".mp3"}};
+ const storage={async savePrivate({jobId}){uploads++;if(storageFailure)throw Error("UPLOAD_FAILED");if(missingObjectKey)return "";return "private/"+jobId+".mp3"}};
  return {service:createMusicService({store,provider,storage}),jobs,metrics:()=>({credits,charges,calls,uploads,jobs:jobs.size})};
 }
 test("1,000 same-key concurrent submissions consume exactly one credit",async()=>{
@@ -74,4 +74,17 @@ test("private storage failure requires review, never auto-generates again",async
  assert.equal(f.jobs.get(job.id).status,"needs_review");
  assert.equal(f.metrics().calls,1);
  assert.equal(f.metrics().uploads,1);
+});
+
+test("missing private audio object key must not mark a song completed",async()=>{
+ const f=fixture({missingObjectKey:true});
+ const job=await submit(f.service,"stress-empty-storage-key-01");
+ const result=await f.service.process({id:job.id});
+ assert.equal(result.status,"needs_review");
+ assert.equal(f.jobs.get(job.id).audioStored,false);
+ assert.equal(f.metrics().calls,1);
+ assert.equal(f.metrics().uploads,1);
+ const again=await f.service.process({id:job.id});
+ assert.equal(again.processed,false);
+ assert.equal(f.metrics().calls,1);
 });
