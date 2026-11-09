@@ -12,9 +12,8 @@ It never contacts Supabase, Stripe or Lyria.
 ## Setup (terminal)
 ```bash
 createdb runlu_music_test
-psql -d runlu_music_test -v ON_ERROR_STOP=1 -f music/local-postgres/schema.sql
 export RUNLU_MUSIC_TEST_DSN='postgresql://localhost/runlu_music_test'
-python3 music/local-postgres/test_concurrency.py
+bash music/local-postgres/run-local.sh
 ```
 
 If local authentication requires a user/password, configure your local
@@ -22,7 +21,7 @@ PostgreSQL role or use a local-only connection URI. Do not commit credentials.
 
 Expected output:
 ```
-PASS: concurrent last-credit race, same-key replay, payload collision, rollback, empty wallet (LOCAL PostgreSQL)
+PASS: concurrent last-credit race, same-key replay, payload collision, rollback, empty wallet (LOCAL PostgreSQL)\nPASS: local PostgreSQL fixture completed. This does not validate production RPC or Supabase RLS.
 ```
 
 ## Interpretation
@@ -41,3 +40,9 @@ Prepared and committed. The assistant runtime did not have PostgreSQL
 binaries or Docker, and package installation timed out; therefore no
 PostgreSQL tests were run here. Never mark this gate passed until an actual
 local test log has been reviewed.
+
+## Guardrails
+The runner refuses remote database hosts, any database name other than
+`runlu_music_test`, and pre-existing `music_test` schemas. It does not
+create, delete, or reset a database automatically. Create a fresh local
+database before each execution; never paste a production connection string.
