@@ -56,7 +56,7 @@ export function planCuts(rolls:Roll[],pieces:Piece[],order: 'area'|'area-asc'|'l
       if(s.h>h)spaces.push({...s,y:s.y+h,h:s.h-h});
     }
   }
-  const usedLengthByRoll:Record<string,number>={};
+  const usedLengthByRoll:Record<string,number>=Object.create(null);
   for(const r of rolls)usedLengthByRoll[r.id]=0;
   for(const p of placements)usedLengthByRoll[p.rollId]=Math.max(usedLengthByRoll[p.rollId],p.yIn+p.lengthIn);
   const usedAreaSF=placements.reduce((a,p)=>a+areaSF(p.widthIn,p.lengthIn),0);

@@ -5,7 +5,7 @@
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "build": "esbuild browser.ts --bundle --format=iife --target=es2020 --outfile=dist/browser.js",
+    "build": "node build.mjs",
     "check:html": "node check-html.mjs",
     "test:e2e": "playwright test",
     "benchmark": "esbuild benchmark-report.ts --bundle --platform=node --format=esm --outfile=dist/benchmark-report.mjs && node dist/benchmark-report.mjs"

@@ -56,3 +56,9 @@ describe("carpet planner engine",()=>{
   expect(result.usedAreaSF+result.wasteAreaSF).toBeCloseTo(result.allocatedAreaSF,8);
  });
 });
+
+it('accounts for arbitrary roll IDs without inherited object keys',()=>{
+ const p=planCuts([{id:'__proto__',widthIn:144,lengthIn:360,dyeLot:'A'}],[{id:'constructor',widthIn:72,lengthIn:120,dyeLot:'A'}]);
+ expect(p.usedLengthByRoll['__proto__']).toBe(120);expect(p.allocatedAreaSF).toBe(120);expect(p.wasteAreaSF).toBe(60);
+ expect(JSON.parse(JSON.stringify(p)).usedLengthByRoll['__proto__']).toBe(120);
+});

@@ -36,3 +36,7 @@ if(typeof window!=='undefined'){window.runluImportOrderCSV=importOrderCSV;window
 import {renderCutLayout} from './layout';
 declare global {interface Window {runluRenderCutLayout:typeof renderCutLayout}}
 if(typeof window!=='undefined')window.runluRenderCutLayout=renderCutLayout;
+
+declare const __BUILD_COMMIT__:string;
+declare global {interface Window {runluBuildCommit:string}}
+if(typeof window!=='undefined')window.runluBuildCommit=typeof __BUILD_COMMIT__==='undefined'?'unknown':__BUILD_COMMIT__;

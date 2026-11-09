@@ -124,7 +124,7 @@ expected/actual length differs from plan by more than 0.01 LF, otherwise PASS.
 This fixed comparison tolerance is not a physical cutting tolerance. PASS is a
 self-reported comparison result, not installer approval or a release decision.
 Export JSON for **all** statuses to retain inputs, selected strategy, placements,
-UTC timestamp, local pre-cut evidence, raw readings and per-roll differences.
+UTC timestamp, build commit, local pre-cut evidence, raw readings and per-roll differences.
 Changing inputs, reviewer, scenario or trial readings invalidates the previous
 record. Recalculate before entering fresh readings. Project JSON deliberately
 excludes trial records; archive the separate acceptance export. Printed review
