@@ -1,0 +1,1 @@
+{"private":true,"type":"module","scripts":{"test":"node --test gateway.test.mjs frontend.test.mjs","test:db":"node --test budget.test.mjs"},"devDependencies":{"@electric-sql/pglite":"0.5.16","pg":"8.23.1","jsdom":"31.0.0"}}

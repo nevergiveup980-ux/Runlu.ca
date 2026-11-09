@@ -9,3 +9,8 @@
 # Temporary/local media working folders
 media-local/
 video-export/
+
+# Forum test dependencies and local secrets
+tests/forum/node_modules/
+.env
+.env.*
