@@ -66,3 +66,16 @@ test("switching songs invalidates a slower prior link request",async()=>{
  assert.equal(newer,"https://example.test/new");
  assert.equal(await p.getLink("new"),newer);
 });
+
+test("download expiry reflects server TTL and clears on logout or song switch",async()=>{
+ let now=1000;
+ const p=createMusicPlaybackController({clock:()=>now,fetchAccess:async jobId=>({url:"https://example.test/"+jobId,expires_in:90})});
+ assert.equal(await p.getLink("song-a"),"https://example.test/song-a");
+ assert.equal(p.getLinkExpiry("song-a"),91000);
+ assert.equal(p.getLinkExpiry("song-b"),0);
+ await p.getLink("song-b");
+ assert.equal(p.getLinkExpiry("song-a"),0);
+ assert.equal(p.getLinkExpiry("song-b"),91000);
+ p.clear();
+ assert.equal(p.getLinkExpiry("song-b"),0);
+});
