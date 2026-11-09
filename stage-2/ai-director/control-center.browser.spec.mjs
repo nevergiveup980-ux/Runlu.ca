@@ -51,3 +51,31 @@ test('mobile layout and controls remain usable',async({page})=>{
  await expect(page.locator('#safety')).toContainText('unknown provider');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
 });
+
+test('authorized read-only snapshot displays real values and hides demo controls',async({page})=>{
+ const data={episodeId:'ep1',budget:{limitCents:2000,committedCents:700,remainingCents:1300,paused:false,pauseReason:null},
+ shots:[{shotId:'S01',state:'SUCCEEDED',outputAssetId:'asset1'}],attempts:[],
+ alerts:{unknownProviderOutcome:false,overBudgetCharge:false,requiresAttention:false}};
+ await page.route('**/api/stage/director/episode?*',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data})}));
+ await page.goto(base+'/stage-2/ai-director/control-center-preview.html');
+ await page.locator('#episode-id').fill('ep1');
+ await page.locator('#load-live').click();
+ await expect(page.locator('#mode-banner')).toContainText('LIVE READ-ONLY');
+ await expect(page.locator('#budget')).toContainText('20.00');
+ await expect(page.locator('#committed')).toContainText('7.00');
+ await expect(page.locator('#completed')).toHaveText('1 / 1');
+ await expect(page.locator('#demo-controls')).toBeHidden();
+ await page.locator('#demo').click();
+ await expect(page.locator('#mode-banner')).toContainText('DEMO MODE');
+ await expect(page.locator('#demo-controls')).toBeVisible();
+});
+test('malformed successful response is rejected and demo remains visible',async({page})=>{
+ const data={episodeId:'ep1',budget:{limitCents:1000,committedCents:100,remainingCents:999,paused:false},shots:[],attempts:[],alerts:{unknownProviderOutcome:false,overBudgetCharge:false,requiresAttention:false}};
+ await page.route('**/api/stage/director/episode?*',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data})}));
+ await page.goto(base+'/stage-2/ai-director/control-center-preview.html');
+ await page.locator('#episode-id').fill('ep1');
+ await page.locator('#load-live').click();
+ await expect(page.locator('#live-status')).toContainText('Live data unavailable');
+ await expect(page.locator('#mode-banner')).toContainText('DEMO MODE');
+ await expect(page.locator('#load-live')).toBeEnabled();
+});
