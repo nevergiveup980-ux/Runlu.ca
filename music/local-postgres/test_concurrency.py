@@ -6,7 +6,7 @@ import psycopg
 
 dsn=os.getenv("RUNLU_MUSIC_TEST_DSN","")
 parsed=urlparse(dsn)
-if parsed.scheme not in ("postgresql","postgres") or parsed.hostname not in ("localhost","127.0.0.1") or parsed.path!="/runlu_music_test":
+if parsed.scheme not in ("postgresql","postgres") or parsed.hostname not in ("localhost","127.0.0.1") or parsed.path!="/runlu_music_test" or parsed.query or parsed.fragment:
     raise SystemExit("Set RUNLU_MUSIC_TEST_DSN to a LOCAL disposable PostgreSQL database.")
 u=str(uuid.uuid4())
 def sql(query,params=()):
