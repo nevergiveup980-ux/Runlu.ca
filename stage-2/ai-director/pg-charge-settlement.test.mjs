@@ -40,3 +40,29 @@ test('audit insertion failure rolls back attempt settlement',async()=>{
  assert.ok(m.calls.some(c=>c.sql==='ROLLBACK'));
  assert.ok(!m.calls.some(c=>c.sql==='COMMIT'));
 });
+
+test('already settled attempt is not charged or audited twice',async()=>{
+ const m=mock({state:'SETTLED'});
+ await assert.rejects(new PgDirectorChargeSettlement(m.pool).settle(input),/not confirmed submitted/);
+ assert.equal(m.calls.filter(c=>c.sql.startsWith('INSERT')).length,0);
+ assert.equal(m.calls.filter(c=>c.sql==='COMMIT').length,0);
+ assert.equal(m.calls.at(-2).sql,'ROLLBACK');
+ assert.equal(m.calls.at(-1).sql,'RELEASE');
+});
+test('unknown provider result never creates charge audit',async()=>{
+ const m=mock({state:'UNKNOWN'});
+ await assert.rejects(new PgDirectorChargeSettlement(m.pool).settle(input),/reconcile/);
+ assert.equal(m.calls.filter(c=>c.sql.startsWith('INSERT')).length,0);
+ assert.equal(m.calls.filter(c=>c.sql.startsWith('UPDATE')).length,0);
+});
+test('inconsistent committed amount below current reservation fails closed',async()=>{
+ const m=mock({used:200,estimate:600});
+ await assert.rejects(new PgDirectorChargeSettlement(m.pool).settle(input),/Invalid stored budget amounts/);
+ assert.equal(m.calls.filter(c=>c.sql.startsWith('INSERT')).length,0);
+ assert.equal(m.calls.at(-2).sql,'ROLLBACK');
+});
+test('settlement arithmetic overflow fails before any audit write',async()=>{
+ const m=mock({limit:Number.MAX_SAFE_INTEGER,used:Number.MAX_SAFE_INTEGER,estimate:600});
+ await assert.rejects(new PgDirectorChargeSettlement(m.pool).settle(input),/Invalid stored budget amounts/);
+ assert.equal(m.calls.filter(c=>c.sql.startsWith('INSERT')).length,0);
+});
