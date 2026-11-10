@@ -25,7 +25,9 @@ const excluded = new Set([
   // Standalone app policy/support pages and a separate book microsite own their locale UI.
   'invest/privacy.html',
   'invest/support.html',
-  'truth-and-lies.html'
+  'truth-and-lies.html',
+  // Standalone offline iPhone acceptance harness; not a localized editorial page.
+  'music-studio-offline-acceptance.html'
 ]);
 const pages = [];
 const languageScript = fs.readFileSync(path.join(root, 'runlu-language.js'), 'utf8');
