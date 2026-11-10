@@ -162,10 +162,13 @@ def test_browser():
             # Browser-level private library smoke test with fake local responses only.
             # Never contact a real account, storage provider, or paid music API.
             song_id = "11111111-1111-4111-8111-111111111111"
-            link_requests = {"count": 0}
+            link_requests = {"count": 0, "paid_posts": 0}
             def fake_music_api(route):
                 request_url = route.request.url
-                if "/api/music/library?" in request_url:
+                if route.request.method == "POST":
+                    link_requests["paid_posts"] += 1
+                    route.fulfill(status=403, content_type="application/json", body='{"error_code":"TEST_BLOCKED"}')
+                elif "/api/music/library?" in request_url:
                     route.fulfill(status=200, content_type="application/json",
                                   body=json.dumps({"items": [{"id": song_id, "title": "Mock private song",
                                   "language": "zh", "voice": "female", "status": "completed",
@@ -201,6 +204,18 @@ def test_browser():
             expect(page.locator("#generatedMusicDownload")).to_have_attribute(
                 "href", "https://example.invalid/private-test-2.mp3")
             assert link_requests["count"] == 2, "Refresh should request one new link only"
+
+            # Re-selecting the same song must leave only the latest link active.
+            # This checks normal sequential re-selection; delayed-response races
+            # remain covered by controller/session regression checks.
+            page.locator("#musicLibraryItems button").click()
+            expect(page.locator("#generatedMusicDownload")).to_have_attribute(
+                "href", "https://example.invalid/private-test-3.mp3")
+            page.locator("#musicLibraryItems button").click()
+            expect(page.locator("#generatedMusicDownload")).to_have_attribute(
+                "href", "https://example.invalid/private-test-4.mp3")
+            assert link_requests["count"] == 4, "Each selection should request one access link"
+            assert link_requests["paid_posts"] == 0, "Listening must never submit a paid job"
 
             # Simulated session expiry must remove private media and library rows.
             page.evaluate("() => window.dispatchEvent(new Event('runlu-music-session-ended'))")
