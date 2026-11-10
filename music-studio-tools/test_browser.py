@@ -348,6 +348,17 @@ def test_browser():
             expect(page.locator("#musicLibraryItems")).not_to_contain_text("Account A private")
             assert page.evaluate("window.__accountRequests") == 2
             page.evaluate("() => { window.fetch = window.__accountFetch; }")
+            # A real API-client 401 response must emit session-ended and clear
+            # private library and playback state; not merely a synthetic event.
+            page.route("**/api/music/library?**",
+                       lambda route: route.fulfill(status=401, content_type="application/json",
+                                                   body='{"error_code":"UNAUTHENTICATED"}'))
+            page.locator("#refreshMusicLibrary").click()
+            expect(page.locator("#musicLibraryStatus")).to_contain_text("登录已失效")
+            expect(page.locator("#musicLibraryItems li")).to_have_count(0)
+            expect(page.locator("#generatedMusicDownload")).to_be_hidden()
+            assert not page.locator("#generatedMusicPlayer").get_attribute("src")
+            page.unroute("**/api/music/library?**")
             page.unroute("**/api/music/**")
             assert page.locator("body").evaluate("(el) => el.scrollWidth <= window.innerWidth + 1"), "Mobile horizontal overflow"
             assert not errors, f"Browser JavaScript errors: {errors}"
