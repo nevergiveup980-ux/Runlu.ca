@@ -1,0 +1,39 @@
+name: RUNLU Music - full song (manual)
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_paid:
+        description: "Type YES to authorize one billable Lyria 3.5 request"
+        required: true
+        default: "NO"
+        type: choice
+        options: ["NO", "YES"]
+permissions:
+  contents: read
+jobs:
+  generate:
+    if: ${{ inputs.confirm_paid == 'YES' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate exactly one full song
+        env:
+          RUNLU_MUSIC_GEMINI_API_KEY: ${{ secrets.RUNLU_MUSIC_GEMINI_API_KEY }}
+        run: |
+          mkdir -p output
+          python music-studio-tools/generate_full_song.py \
+            --project music-studio-tools/sample-project.json \
+            --output output/runlu-wind-years-full.mp3 \
+            --confirm-paid
+      - name: Upload generated song
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runlu-wind-years-full
+          path: output/runlu-wind-years-full.mp3
+          if-no-files-found: error
+          retention-days: 14

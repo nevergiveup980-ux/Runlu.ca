@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RUNLU MUSIC Studio · 创作室</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,sans-serif;background:#0d1420;color:#f2f4f8}*{box-sizing:border-box}body{margin:0}main{max-width:1040px;margin:auto;padding:28px 18px 70px}header{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:30px}.brand{letter-spacing:.13em;font-weight:800;color:#e4bc77}.tag{font-size:12px;color:#a8b5c8}.hero{padding:25px;border:1px solid #344158;border-radius:20px;background:linear-gradient(135deg,#202d43,#101725)}h1{font-size:clamp(28px,5vw,44px);margin:10px 0}p{color:#aebbcf;line-height:1.6}.grid{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-top:20px}.panel{border:1px solid #334156;border-radius:16px;padding:20px;background:#151f2f}label{display:block;font-size:14px;margin:14px 0 6px;color:#d8e0ed}input,select,textarea{width:100%;border:1px solid #45526a;background:#0d1522;color:white;border-radius:10px;padding:12px;font:inherit}textarea{min-height:250px;resize:vertical}button{border:0;border-radius:10px;background:#e0b876;color:#1a2332;padding:12px 16px;font-weight:700;cursor:pointer}button.secondary{background:#2b3b53;color:#eaf0f8}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #e0b876;outline-offset:2px}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.status{padding:12px;border:1px solid #4a5261;border-radius:10px;margin-top:14px;font-size:14px;color:#e6d3a9}.muted{font-size:13px;color:#aab8cb}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;background:#0a111d;border-radius:10px;padding:14px;color:#dce6f4;max-height:300px;overflow:auto}a{color:#eac68e}@media(max-width:740px){.grid{grid-template-columns:1fr}main{padding:16px 12px 40px}header{flex-wrap:wrap;gap:10px}.brand{flex:1 1 100%}header .tag{flex:1 1 150px}header select{flex:0 0 132px}.panel{padding:16px}.actions button{flex:1 1 170px;min-height:44px}}
+</style></head><body><main><header><div class="brand">RUNLU / MUSIC</div><div class="tag" data-en="STUDIO 1.0 · Local songwriting workspace" data-zh="STUDIO 1.0 · 本地创作工作台" data-fr="STUDIO 1.0 · Atelier musical local" data-es="STUDIO 1.0 · Taller musical local">STUDIO 1.0 · 本地创作工作台</div><select id="languageToggle" data-runlu-language-select aria-label="Choose site language" style="max-width:132px"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select></header>
+<section class="hero"><div class="tag" data-en="ORIGINAL MUSIC WORKSPACE" data-zh="原创音乐创作室" data-fr="ATELIER DE MUSIQUE ORIGINALE" data-es="ESTUDIO DE MÚSICA ORIGINAL">ORIGINAL MUSIC WORKSPACE</div><h1 data-en="Every song has a story." data-zh="让每一首歌，都有自己的故事。" data-fr="Chaque chanson a son histoire." data-es="Cada canción tiene su historia.">让每一首歌，都有自己的故事。</h1><p data-en="From lyrics and voices to music films. Plan your song now; audio generation is not connected yet." data-zh="从歌词、声音到音乐微电影。先完成创作方案，待生成服务接入后再制作真正的音频。" data-fr="Des paroles et des voix aux clips musicaux. Préparez votre projet ; la génération audio n’est pas encore connectée." data-es="De la letra y las voces al videoclip. Prepara tu proyecto; la generación de audio aún no está conectada.">从歌词、声音到音乐微电影。先完成创作方案，待生成服务接入后再制作真正的音频。</p></section>
+<div class="grid"><section class="panel"><h2 data-en="Songwriting" data-zh="歌曲创作" data-fr="Création musicale" data-es="Composición musical">歌曲创作</h2><label for="title" data-en="Song title" data-zh="作品名称" data-fr="Titre" data-es="Título">作品名称</label><input id="title" value="风吹过的那些年" maxlength="120"><label for="lyrics" data-en="Original lyrics" data-zh="原创歌词" data-fr="Paroles originales" data-es="Letra original">原创歌词</label><textarea id="lyrics" placeholder="在这里输入原创歌词……">风吹过那些年
+吹白了岁月，吹远了从前
+多少名字藏在心里面
+想起来，还是那么亲切
+
+风吹过那些年
+吹散了聚散，吹不散思念
+如果时光还能慢一点
+我想再陪你走过那条街</textarea><label for="songLanguage" data-en="Singing language" data-zh="演唱语言" data-fr="Langue du chant" data-es="Idioma de la canción">演唱语言</label><select id="songLanguage"><option value="zh">中文 · Mandarin</option><option value="en">English</option><option value="fr">Français</option><option value="es">Español</option></select><label for="voice" data-en="Vocal" data-zh="演唱人声" data-fr="Voix" data-es="Voz">演唱人声</label><select id="voice"><option value="female" data-en="Mature warm female vocal" data-zh="成熟温暖女声" data-fr="Voix féminine chaleureuse" data-es="Voz femenina cálida">成熟温暖女声</option><option value="male" data-en="Mature husky male vocal" data-zh="成熟沧桑男声" data-fr="Voix masculine grave" data-es="Voz masculina grave">成熟沧桑男声</option><option value="instrumental" data-en="Instrumental only" data-zh="纯器乐" data-fr="Instrumental uniquement" data-es="Solo instrumental">纯器乐</option></select><label for="style" data-en="Music style" data-zh="曲风" data-fr="Style musical" data-es="Estilo musical">曲风</label><select id="style"><option value="nostalgic" data-en="Nostalgic cinematic folk" data-zh="怀旧电影民谣" data-fr="Folk cinématographique nostalgique" data-es="Folk cinematográfico nostálgico">怀旧电影民谣</option><option value="folk" data-en="Acoustic storytelling folk" data-zh="原声叙事民谣" data-fr="Folk acoustique narratif" data-es="Folk acústico narrativo">原声叙事民谣</option><option value="piano" data-en="Emotional piano ballad" data-zh="钢琴抒情" data-fr="Ballade au piano" data-es="Balada emotiva de piano">钢琴抒情</option><option value="cinematic" data-en="Cinematic strings" data-zh="电影感弦乐" data-fr="Cordes cinématographiques" data-es="Cuerdas cinematográficas">电影感弦乐</option></select><label for="notes" data-en="Creative direction" data-zh="创作补充要求" data-fr="Consignes créatives" data-es="Indicaciones creativas">创作补充要求</label><textarea id="notes" style="min-height:100px" placeholder="例如：自然换气、柔和弦乐、不要机械唱腔">自然的中文咬字和换气，克制而有感染力的情绪，原创旋律，避免模仿现有歌曲和歌手。</textarea><div class="actions"><button class="secondary" id="import" data-en="Import JSON draft" data-zh="导入 JSON 草稿" data-fr="Importer un brouillon JSON" data-es="Importar borrador JSON">导入 JSON 草稿</button><input type="file" id="importfile" accept=".json,application/json" hidden><button id="save" data-en="Save local draft" data-zh="保存本机草稿" data-fr="Enregistrer le brouillon" data-es="Guardar borrador">保存本机草稿</button><button class="secondary" id="export" data-en="Export project JSON" data-zh="导出制作方案 JSON" data-fr="Exporter le projet JSON" data-es="Exportar proyecto JSON">导出制作方案 JSON</button><button class="secondary" id="copy" data-en="Copy generation prompt" data-zh="复制生成提示词" data-fr="Copier la consigne" data-es="Copiar instrucciones">复制生成提示词</button><button class="secondary" id="exportprompt" data-en="Download prompt TXT" data-zh="下载生成指令 TXT" data-fr="Télécharger la consigne TXT" data-es="Descargar instrucciones TXT">下载生成指令 TXT</button><button class="secondary" id="stage" data-en="Export STAGE storyboard" data-zh="导出 STAGE 分镜" data-fr="Exporter le storyboard STAGE" data-es="Exportar guion STAGE">导出 STAGE 分镜</button></div><div id="status" class="status" role="status" aria-live="polite" data-en="Songwriting workspace only; paid music generation is not connected." data-zh="当前为创作工作台，尚未接入付费音乐生成接口。" data-fr="Atelier de création uniquement ; génération payante non connectée." data-es="Solo espacio de composición; generación de pago no conectada.">当前为创作工作台，尚未接入付费音乐生成接口。</div></section>
+<section class="panel" style="margin-top:18px" aria-labelledby="generation-heading">
+<h2 id="generation-heading" data-en="Generate your song" data-zh="一键生成歌曲" data-fr="Générer votre chanson" data-es="Generar tu canción">一键生成歌曲</h2>
+<p data-en="Private beta: server availability and credits must be confirmed before generation. No charge is made by opening this page." data-zh="内测功能：必须先确认安全服务与账户额度，才能生成歌曲。打开本页不会产生费用。" data-fr="Bêta privée : le serveur et les crédits doivent être confirmés avant toute génération." data-es="Beta privada: comprueba el servidor y los créditos antes de generar.">内测功能：必须先确认安全服务与账户额度，才能生成歌曲。打开本页不会产生费用。</p>
+<div class="actions"><button class="secondary" type="button" id="checkMusicService" data-en="Check generation service" data-zh="检查生成服务" data-fr="Vérifier le service" data-es="Comprobar el servicio">检查生成服务</button><button type="button" id="generateSong" disabled data-en="Generate song (not connected)" data-zh="生成歌曲（尚未连接）" data-fr="Générer (non connecté)" data-es="Generar (sin conexión)">生成歌曲（尚未连接）</button></div>
+<div id="musicServiceStatus" class="status" role="status" aria-live="polite">生成服务尚未检查；不会自动扣费。</div>
+<audio id="generatedMusicPlayer" controls preload="none" style="display:none;width:100%;margin-top:12px"></audio>
+<a id="generatedMusicDownload" style="display:none" href="#" target="_blank" rel="noopener noreferrer" data-en="Open MP3 for saving" data-zh="打开 MP3 以保存" data-fr="Ouvrir le MP3 pour enregistrer" data-es="Abrir MP3 para guardar">打开 MP3 以保存</a>
+<p id="musicDownloadHelp" style="display:none;font-size:.9rem" role="status">iPhone：点击上方链接打开音频，然后使用 Safari 分享菜单 → 存储到“文件”。若链接失效，请先点“重新获取试听链接”，不会再次扣除生成额度。</p>
+</section><section class="panel" aria-labelledby="library-heading" style="margin-top:18px">
+<h2 id="library-heading" data-en="My Music Library" data-zh="我的音乐库" data-fr="Ma bibliothèque musicale" data-es="Mi biblioteca musical">我的音乐库</h2>
+<p data-en="Your private songs will appear here after the secure service is connected." data-zh="安全服务接通后，这里将显示账户下已保存的歌曲。" data-fr="Vos chansons privées apparaîtront ici une fois le service connecté." data-es="Tus canciones privadas aparecerán aquí cuando se conecte el servicio.">安全服务接通后，这里将显示账户下已保存的歌曲。</p>
+<div class="actions"><button type="button" class="secondary" id="refreshMusicLibrary" data-en="Refresh my songs" data-zh="刷新我的歌曲" data-fr="Actualiser mes chansons" data-es="Actualizar mis canciones">刷新我的歌曲</button><button type="button" class="secondary" id="moreMusicLibrary" disabled data-en="Load more" data-zh="加载更多" data-fr="Afficher plus" data-es="Cargar más">加载更多</button></div>
+<div id="musicLibraryStatus" class="status" role="status" aria-live="polite">尚未连接云端作品库。</div>
+<ul id="musicLibraryItems" style="list-style:none;padding:0;display:grid;gap:12px"></ul>
+</section><aside class="panel"><h2 data-en="Music production brief" data-zh="音乐制作说明" data-fr="Guide de production musicale" data-es="Guía de producción musical">音乐制作说明</h2><p data-en="Choose a vocal and style to build an English music-generation prompt." data-zh="选择不同人声和曲风，右侧将自动整理成可用于后续音乐模型的英文提示词。" data-fr="Choisissez une voix et un style pour préparer une consigne en anglais." data-es="Elige voz y estilo para preparar instrucciones en inglés.">选择不同人声和曲风，右侧将自动整理成可用于后续音乐模型的英文提示词。</p><pre id="prompt"></pre><h3 data-en="Production workflow" data-zh="制作流程" data-fr="Étapes de production" data-es="Flujo de producción">制作流程</h3><p><span data-en="① Save lyrics and direction" data-zh="① 保存歌词与创作要求" data-fr="① Enregistrer les paroles et consignes" data-es="① Guardar letra e indicaciones">① 保存歌词与创作要求</span><br><span data-en="② Audition original audio" data-zh="② 试听原创音乐生成结果" data-fr="② Écouter la musique originale" data-es="② Escuchar música original">② 试听原创音乐生成结果</span><br><span data-en="③ Approve melody and vocals" data-zh="③ 验收旋律与人声" data-fr="③ Valider mélodie et voix" data-es="③ Aprobar melodía y voz">③ 验收旋律与人声</span><br><span data-en="④ Create visuals in RUNLU STAGE" data-zh="④ 交给 RUNLU STAGE 制作动态画面" data-fr="④ Créer les visuels dans RUNLU STAGE" data-es="④ Crear imágenes en RUNLU STAGE">④ 交给 RUNLU STAGE 制作动态画面</span></p><h3 data-en="Audition existing audio" data-zh="试听已有音频" data-fr="Écouter un fichier audio" data-es="Escuchar audio existente">试听已有音频</h3><label for="audiofile" data-en="Select local MP3 / WAV / M4A" data-zh="选择本机 MP3 / WAV / M4A" data-fr="Choisir un fichier MP3 / WAV / M4A" data-es="Elegir archivo MP3 / WAV / M4A">选择本机 MP3 / WAV / M4A</label><input type="file" id="audiofile" accept="audio/*,.mp3,.wav,.m4a"><audio id="audioplayer" controls preload="none" style="width:100%;margin-top:12px"></audio><button class="secondary" id="clearaudio" style="margin-top:8px" data-en="Clear audio" data-zh="清除试听音频" data-fr="Effacer l’audio" data-es="Borrar audio">清除试听音频</button><p class="muted" data-en="Audio stays on this device. Select it again after reloading." data-zh="试听只在本机进行，不会上传；刷新页面后需重新选择音频。" data-fr="L’audio reste sur cet appareil. Sélectionnez-le à nouveau après rechargement." data-es="El audio permanece en este dispositivo. Vuelve a seleccionarlo tras recargar.">试听只在本机进行，不会上传；刷新页面后需重新选择音频。</p><div class="status" data-en="Music generation is not connected. This page does not charge or upload lyrics." data-zh="尚未接入音乐生成 API；本页不会收费，也不会上传歌词。" data-fr="La génération musicale n’est pas connectée. Cette page ne facture rien et n’envoie pas les paroles." data-es="La generación musical no está conectada. Esta página no cobra ni sube letras.">尚未接入音乐生成 API；本页不会收费，也不会上传歌词。</div><p class="muted" data-en="Drafts are stored in this browser. Export JSON backups regularly; avoid saving private lyrics on shared devices." data-zh="草稿保存在当前浏览器的 localStorage 中。清除浏览器数据可能丢失，请定期导出 JSON 备份。公共或共享设备不建议保存私人歌词。" data-fr="Les brouillons sont enregistrés dans ce navigateur. Exportez des sauvegardes JSON et évitez les appareils partagés." data-es="Los borradores se guardan en este navegador. Exporta copias JSON y evita dispositivos compartidos.">草稿保存在当前浏览器的 localStorage 中。清除浏览器数据可能丢失，请定期导出 JSON 备份。公共或共享设备不建议保存私人歌词。</p></aside></div></main>
+<script>
+(function(){'use strict';
+const ids=['title','lyrics','songLanguage','voice','style','notes'],els=Object.fromEntries(ids.map(id=>[id,document.getElementById(id)]));
+const styles={nostalgic:'nostalgic cinematic folk ballad',folk:'intimate acoustic storytelling folk',piano:'emotional piano ballad',cinematic:'cinematic strings and acoustic guitar'};
+const voices={female:'mature expressive female voice',male:'mature warm slightly husky male baritone',instrumental:'instrumental only, no vocals'};
+function data(){const d=Object.fromEntries(ids.map(id=>[id,els[id].value]));return {...d,language:d.songLanguage}}
+function prompt(){const d=data(),instrumental=d.voice==='instrumental',songLanguage=({zh:'Mandarin Chinese',en:'English',fr:'French',es:'Spanish'})[d.songLanguage]||'Mandarin Chinese';return [instrumental?'Compose an entirely original instrumental piece.':'Create an entirely original '+songLanguage+'-language song.','Working title: '+d.title+'.','Style: '+(styles[d.style]||styles.nostalgic)+'.','Voice: '+(voices[d.voice]||voices.female)+'.','Structure: a clear opening, developing verse, memorable emotional peak, and a resolved ending.','Arrangement: preserve space for the main melody, avoid clutter, build dynamics naturally.',instrumental?'No singing, spoken words, vocal samples, or synthetic choir.':'Vocal direction: natural phrasing, expressive dynamics, believable breathing, clear '+songLanguage+' diction, and restrained vibrato.','Originality: compose a new melody and arrangement; do not imitate existing recordings, copyrighted melodies, or identifiable artist voices.','Production: balanced mix, no clipping, no abrupt cutoff, export clean full-length audio when supported.',d.notes.trim()?'Additional direction: '+d.notes.trim():null,instrumental?'Instrumental theme inspiration (not to be sung):\n'+d.lyrics:'Original lyrics (sing only the provided words; do not add invented lines):\n'+d.lyrics].filter(Boolean).join('\n')}
+function refresh(){document.getElementById('prompt').textContent=prompt()}
+const statusMessages={
+  "JSON 文件过大，已拒绝导入。":{en:"JSON file too large; import rejected.",fr:"Fichier JSON trop volumineux ; import refusé.",es:"Archivo JSON demasiado grande; importación rechazada."},
+  "草稿已导入，请检查内容并保存。":{en:"Draft imported. Review and save.",fr:"Brouillon importé. Vérifiez puis enregistrez.",es:"Borrador importado. Revísalo y guárdalo."},
+  "导入失败：请选择 RUNLU MUSIC Studio 导出的 JSON 文件。":{en:"Import failed. Select a RUNLU MUSIC Studio JSON file.",fr:"Échec de l’import. Choisissez un fichier JSON RUNLU MUSIC Studio.",es:"Falló la importación. Selecciona un JSON de RUNLU MUSIC Studio."},
+  "已载入本机音频，可点击播放试听。":{en:"Local audio loaded; press play to audition.",fr:"Audio local chargé ; lancez la lecture.",es:"Audio local cargado; pulsa reproducir."},
+  "请选择 MP3、WAV 或 M4A 音频文件。":{en:"Choose an MP3, WAV or M4A audio file.",fr:"Choisissez un fichier audio MP3, WAV ou M4A.",es:"Elige un archivo de audio MP3, WAV o M4A."},
+  "音频文件过大（上限 50 MB）。":{en:"Audio file too large (50 MB limit).",fr:"Fichier audio trop volumineux (limite 50 Mo).",es:"Archivo de audio demasiado grande (límite 50 MB)."},
+  "已清除试听音频。":{en:"Audio cleared.",fr:"Audio effacé.",es:"Audio borrado."},
+  "草稿已保存在此浏览器。":{en:"Draft saved in this browser.",fr:"Brouillon enregistré dans ce navigateur.",es:"Borrador guardado en este navegador."},
+  "无法保存草稿，请使用导出功能。":{en:"Unable to save; use Export instead.",fr:"Enregistrement impossible ; utilisez Exporter.",es:"No se pudo guardar; usa Exportar."},
+  "生成指令 TXT 已导出。":{en:"Generation prompt TXT downloaded.",fr:"Consigne TXT téléchargée.",es:"Instrucciones TXT descargadas."},
+  "制作方案已导出。":{en:"Project exported.",fr:"Projet exporté.",es:"Proyecto exportado."},
+  "STAGE 分镜草稿已导出。请在拿到真实音频后重新校准镜头时间。":{en:"STAGE storyboard exported. Retiming is required after real audio is available.",fr:"Storyboard STAGE exporté. Recalibrez les plans après réception de l’audio.",es:"Guion STAGE exportado. Ajusta los tiempos cuando tengas el audio."},
+  "生成提示词已复制。":{en:"Generation prompt copied.",fr:"Consigne copiée.",es:"Instrucciones copiadas."},
+  "复制失败，请手动选择右侧提示词。":{en:"Copy failed. Select the prompt manually.",fr:"Copie impossible. Sélectionnez la consigne manuellement.",es:"No se pudo copiar. Selecciona las instrucciones manualmente."},
+  "本机旧草稿无法读取，请重新保存。":{en:"Saved draft unreadable; save again.",fr:"Ancien brouillon illisible ; enregistrez à nouveau.",es:"No se puede leer el borrador; vuelve a guardarlo."}
+};
+let lastStatus=null;
+function status(s){lastStatus=s;const lang=window.RUNLULanguage?.get?.()||'zh';document.getElementById('status').textContent=statusMessages[s]?.[lang]||s}
+const placeholders={
+  lyrics:{en:'Enter original lyrics here…',zh:'在这里输入原创歌词……',fr:'Saisissez vos paroles originales…',es:'Escribe aquí tu letra original…'},
+  notes:{en:'E.g. natural breathing, gentle strings, no robotic vocals',zh:'例如：自然换气、柔和弦乐、不要机械唱腔',fr:'Ex. respiration naturelle, cordes douces, voix non robotique',es:'Ej.: respiración natural, cuerdas suaves, voz no robótica'}
+};
+function updatePlaceholders(){const lang=window.RUNLULanguage?.get?.()||'zh';for(const id of Object.keys(placeholders))els[id].placeholder=placeholders[id][lang]||placeholders[id].en}
+window.addEventListener('runlu:languagechange',()=>{updatePlaceholders();if(lastStatus)status(lastStatus)});
+ids.forEach(id=>els[id].addEventListener('input',refresh));
+document.getElementById('import').addEventListener('click',()=>document.getElementById('importfile').click());
+document.getElementById('importfile').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;if(file.size>1000000){status('JSON 文件过大，已拒绝导入。');return;}try{const obj=JSON.parse(await file.text());if(!obj||typeof obj!=='object'||Array.isArray(obj)||!ids.some(id=>typeof obj[id]==='string'))throw Error('invalid');ids.forEach(id=>{if(typeof obj[id]==='string'){if(els[id].tagName==='SELECT'){if([...els[id].options].some(o=>o.value===obj[id]))els[id].value=obj[id]}else els[id].value=obj[id].slice(0,id==='lyrics'?30000:(id==='title'?120:5000))}});if(typeof obj.language==='string'&&['zh','en','fr','es'].includes(obj.language))els.songLanguage.value=obj.language;refresh();status('草稿已导入，请检查内容并保存。')}catch(err){status('导入失败：请选择 RUNLU MUSIC Studio 导出的 JSON 文件。')}finally{e.target.value=''}});
+let audioURL=null;
+document.getElementById('audiofile').addEventListener('change',e=>{const file=e.target.files?.[0];if(!file)return;if(!/\.(mp3|wav|m4a)$/i.test(file.name)){e.target.value='';status('请选择 MP3、WAV 或 M4A 音频文件。');return}if(file.size>50*1024*1024){e.target.value='';status('音频文件过大（上限 50 MB）。');return}if(audioURL)URL.revokeObjectURL(audioURL);audioURL=URL.createObjectURL(file);const player=document.getElementById('audioplayer');player.src=audioURL;player.load();status('已载入本机音频，可点击播放试听。')});
+document.getElementById('clearaudio').addEventListener('click',()=>{const player=document.getElementById('audioplayer');player.pause();player.removeAttribute('src');player.load();if(audioURL){URL.revokeObjectURL(audioURL);audioURL=null}document.getElementById('audiofile').value='';status('已清除试听音频。')});
+document.getElementById('save').addEventListener('click',()=>{try{localStorage.setItem('runlu-music-studio-v1',JSON.stringify(data()));status('草稿已保存在此浏览器。')}catch(e){status('无法保存草稿，请使用导出功能。')}});
+document.getElementById('export').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({schema:'runlu-music-studio-v1',...data(),prompt:prompt()},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='runlu-music-project.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status('制作方案已导出。')});
+document.getElementById('exportprompt').addEventListener('click',()=>{const blob=new Blob(['\uFEFF'+prompt()],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='runlu-music-generation-prompt.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status('生成指令 TXT 已导出。')});
+document.getElementById('stage').addEventListener('click',()=>{
+const d=data();
+const storyboard={
+schema:'runlu-stage-storyboard-v1',
+project:d.title,
+source:'RUNLU MUSIC Studio',
+status:'draft-not-rendered',
+format:{aspect_ratio:'9:16',resolution:'1080x1920',fps:24},
+audio:{status:'awaiting-approved-audio',filename:null,lyrics:d.lyrics},
+character_bible:{subject:'fictional adult woman',wardrobe:'muted vintage coat and knitted hat',prop:'woven basket',continuity:'consistent fictional character, wardrobe, season, and cinematic film palette'},
+shots:[
+{id:'S01',start:0,end:6,visual:'misty rural road, moving leaves',camera:'slow dolly forward'},
+{id:'S02',start:6,end:13,visual:'woman with woven basket glances back',camera:'gentle medium close-up'},
+{id:'S03',start:13,end:20,visual:'old photograph beside a rainy window',camera:'slow pan'},
+{id:'S04',start:20,end:26,visual:'woman walks away on the same road',camera:'wide tracking shot'},
+{id:'S05',start:26,end:30,visual:'empty road under a warm evening sky',camera:'static, slow fade'}
+],
+notes:['Shot times are provisional and must be retimed to the actual song','Do not render or charge automatically','Use original imagery and licensed audio only','No fake lip-sync']
+};
+const blob=new Blob([JSON.stringify(storyboard,null,2)],{type:'application/json'});
+const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='runlu-stage-storyboard.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status('STAGE 分镜草稿已导出。请在拿到真实音频后重新校准镜头时间。');
+});
+document.getElementById('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(prompt());status('生成提示词已复制。')}catch(e){status('复制失败，请手动选择右侧提示词。')}});
+try{const saved=JSON.parse(localStorage.getItem('runlu-music-studio-v1')||'null');if(saved&&typeof saved==='object'&&!Array.isArray(saved)){if(!saved.songLanguage&&['zh','en','fr','es'].includes(saved.language))saved.songLanguage=saved.language;ids.forEach(id=>{if(typeof saved[id]!=='string')return;const field=els[id];if(field.tagName==='SELECT'){if([...field.options].some(option=>option.value===saved[id]))field.value=saved[id]}else{const limit=id==='lyrics'?30000:(id==='title'?120:5000);field.value=saved[id].slice(0,limit)}})}}catch(e){status('本机旧草稿无法读取，请重新保存。')}
+refresh();updatePlaceholders();
+})();
+</script><script type="module">
+import {listMySongs} from "./music/music-api-client.mjs";
+const refresh=document.getElementById("refreshMusicLibrary"),more=document.getElementById("moreMusicLibrary"),status=document.getElementById("musicLibraryStatus"),items=document.getElementById("musicLibraryItems");
+let cursor=null,loading=false,libraryEpoch=0;
+const seenSongIds=new Set(),seenCursors=new Set();
+function message(t){status.textContent=t}
+async function load(reset){
+ if(loading)return;loading=true;const requestEpoch=libraryEpoch;refresh.disabled=true;more.disabled=true;
+ if(reset){cursor=null;items.replaceChildren();seenSongIds.clear();seenCursors.clear()}
+ message("正在读取账户作品库…");
+ try{
+  const data=await listMySongs({limit:20,before:cursor});
+  if(requestEpoch!==libraryEpoch)return;
+  if(!Array.isArray(data.items))throw Error("INVALID_LIBRARY_RESPONSE");
+  for(const song of data.items){
+   const songId=String(song.id||"");if(!/^[0-9a-f-]{36}$/i.test(songId)||seenSongIds.has(songId))continue;
+   seenSongIds.add(songId);
+   const li=document.createElement("li");li.style.cssText="border:1px solid #344158;border-radius:10px;padding:12px";
+   const title=document.createElement("strong");title.textContent=String(song.title||"Untitled");li.append(title);
+   const meta=document.createElement("p");meta.style.margin="6px 0";meta.textContent=[song.language||"",song.voice||"",song.status||""].join(" · ");li.append(meta);
+   if(song.audio_available){
+    const btn=document.createElement("button");btn.type="button";btn.className="secondary";btn.textContent="试听 / 下载";
+    btn.addEventListener("click",()=>{
+      window.dispatchEvent(new CustomEvent("runlu-music-select-song",{detail:{jobId:String(song.id)}}));
+      message("正在主播放器中打开所选歌曲…");
+    });
+    li.append(btn);
+   }
+   items.append(li);
+  }
+  const next=data.has_more?data.next_cursor:null;
+  if(next!==null&&(typeof next!=="string"||!next||next.length>128||next===cursor||seenCursors.has(next))){cursor=null;more.disabled=true;message("作品库分页信息异常，已停止继续加载。请刷新重试。");return}
+  if(cursor)seenCursors.add(cursor);
+  cursor=next;
+  more.disabled=!cursor;
+  message(items.children.length?"已加载 "+items.children.length+" 首作品。":"暂无云端歌曲，或尚未生成作品。");
+ }catch{if(requestEpoch===libraryEpoch){message("作品库服务尚未开放，或账户尚未登录。不会产生费用。");more.disabled=true}}
+ finally{if(requestEpoch===libraryEpoch){loading=false;refresh.disabled=false}}
+}
+window.addEventListener("runlu-music-session-ended",()=>{libraryEpoch++;loading=false;cursor=null;seenSongIds.clear();seenCursors.clear();items.replaceChildren();refresh.disabled=false;more.disabled=true;message("登录已失效，已清空账户作品列表。请重新登录。")});
+refresh.addEventListener("click",()=>load(true));
+more.addEventListener("click",()=>load(false));
+</script><script type="module">
+import {getCredits,createSongJob,getSongJob,getSongDownload} from "./music/music-api-client.mjs";
+import {createMusicPlaybackController} from "./music/playback-controller.mjs";
+const check=document.getElementById("checkMusicService"),generate=document.getElementById("generateSong"),out=document.getElementById("musicServiceStatus"),player=document.getElementById("generatedMusicPlayer"),download=document.getElementById("generatedMusicDownload"),downloadHelp=document.getElementById("musicDownloadHelp");
+let available=false,busy=false;
+const playback=createMusicPlaybackController({fetchAccess:getSongDownload});
+let activeJobId=null,downloadLinkExpiresAt=0,playbackEpoch=0;
+const setDownloadLink=url=>{download.href=url;downloadLinkExpiresAt=playback.getLinkExpiry(activeJobId)};
+download.addEventListener("click",event=>{
+ if(!activeJobId||!download.href||Date.now()>=downloadLinkExpiresAt-10000){
+  event.preventDefault();
+  say("下载链接即将过期。请先点“重新获取试听链接”，然后再次点击保存。不会重新生成歌曲或扣费。");
+ }
+});
+const clearPlayback=()=>{playbackEpoch++;playback.clear();activeJobId=null;player.pause();player.removeAttribute("src");player.load();player.style.display="none";download.removeAttribute("href");downloadLinkExpiresAt=0;download.style.display="none";downloadHelp.style.display="none"};
+window.addEventListener("runlu-music-session-ended",()=>{clearPlayback();renew.style.display="none";disable();say("登录已失效，已清除私有试听链接。请重新登录。")});
+player.addEventListener("error",()=>{if(activeJobId)say("试听链接可能已过期。请点击“重新获取试听链接”，无需再次生成或扣费。")});
+const renew=document.createElement("button");renew.type="button";renew.className="secondary";renew.textContent="重新获取试听链接";renew.style.display="none";player.insertAdjacentElement("afterend",renew);
+renew.addEventListener("click",async()=>{if(!activeJobId)return;const requestedJobId=activeJobId;const requestedEpoch=playbackEpoch;const resumeAt=Number.isFinite(player.currentTime)?player.currentTime:0;renew.disabled=true;try{const url=await playback.getLink(requestedJobId,{force:true});if(activeJobId!==requestedJobId||playbackEpoch!==requestedEpoch)return;player.pause();player.src=url;player.load();if(resumeAt>0){player.addEventListener("loadedmetadata",()=>{if(activeJobId===requestedJobId&&playbackEpoch===requestedEpoch&&Number.isFinite(player.duration)&&resumeAt<player.duration){try{player.currentTime=resumeAt}catch{}}},{once:true})}setDownloadLink(url);player.style.display="block";download.style.display="inline-block";downloadHelp.style.display="block";say("试听链接已更新。可手动继续播放，无需再次生成歌曲。")}catch{if(activeJobId===requestedJobId&&playbackEpoch===requestedEpoch)say("试听链接获取失败，请确认登录状态后重试，不要重复付费生成。")}finally{renew.disabled=false}});
+window.addEventListener("runlu-music-select-song",async event=>{
+ const jobId=event.detail?.jobId;
+ if(typeof jobId!=="string"||!/^[0-9a-f-]{36}$/i.test(jobId))return;
+ clearPlayback();activeJobId=jobId;const selectedEpoch=playbackEpoch;renew.style.display="inline-block";
+ try{
+  const url=await playback.getLink(jobId);
+  if(activeJobId!==jobId||playbackEpoch!==selectedEpoch)return;
+  player.src=url;player.style.display="block";setDownloadLink(url);download.style.display="inline-block";downloadHelp.style.display="block";
+  say("已加载音乐库歌曲。点击播放即可试听，链接过期可重新获取。");
+ }catch{
+  if(activeJobId===jobId&&playbackEpoch===selectedEpoch)say("无法打开所选歌曲。请确认登录状态或重新获取试听链接。");
+ }
+});
+const say=message=>{out.textContent=message};
+const disable=()=>{available=false;generate.disabled=true;generate.textContent="生成歌曲（尚未连接）"};
+const project=()=>({title:document.getElementById("title").value.trim(),lyrics:document.getElementById("lyrics").value,language:document.getElementById("songLanguage").value,voice:document.getElementById("voice").value,style:document.getElementById("style").value,notes:document.getElementById("notes").value});
+check.addEventListener("click",async()=>{disable();check.disabled=true;say("正在检查登录状态与账户额度…");try{const credits=await getCredits();if(!Number.isFinite(credits.available)||credits.available<1){say("服务已连接，但账户没有可用生成额度。");return}available=true;generate.disabled=false;generate.textContent="Generate Song · 使用 1 个额度";say("生成服务已连接，可用额度："+credits.available+"。生成会消耗 1 个额度。")}catch{say("安全生成服务尚未开放或需要登录。目前不会提交任务或扣费。")}finally{check.disabled=false}});
+generate.addEventListener("click",async()=>{if(!available||busy)return;const p=project();if(!p.title||(!p.lyrics.trim()&&p.voice!=="instrumental")){say("请填写歌曲名称及歌词。");return}if(!confirm("确定使用 1 个生成额度制作《"+p.title+"》吗？请勿重复点击。"))return;busy=true;generate.disabled=true;check.disabled=true;clearPlayback();renew.style.display="none";const key=Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,"0")).join("");try{const created=await createSongJob(p,key);if(!created?.id)throw Error("MISSING_JOB_ID");say("任务已提交，正在等待生成。任务编号："+created.id);let finished=false;for(let i=0;i<90;i++){await new Promise(resolve=>setTimeout(resolve,4000));const job=await getSongJob(created.id);if(job.status==="completed"&&job.audio_available){activeJobId=created.id;renew.style.display="inline-block";try{const url=await playback.getLink(created.id);player.src=url;player.style.display="block";setDownloadLink(url);download.style.display="inline-block";downloadHelp.style.display="block";say("歌曲已完成，可以试听和下载。")}catch{say("歌曲已完成，但试听链接暂时无法获取。请点击重新获取试听链接，不要重复付费生成。")}finished=true;break}if(["failed","needs_review"].includes(job.status)){say(job.status==="needs_review"?"生成状态需要人工核对，切勿再次付费提交。":"生成失败，请核实额度后再决定是否重试。");finished=true;break}say("生成中："+job.status+"。请勿重复提交。")}if(!finished)say("等待超时，任务可能仍在运行。请先核对任务状态，勿重复付费。")}catch(err){say("请求未能完成或状态未知（"+err.message+"）。请勿重复点击，先核对账户任务和费用。")}finally{busy=false;check.disabled=false;disable()}});
+</script><script src="runlu-language.js"></script></body></html>

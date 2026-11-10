@@ -1,0 +1,75 @@
+// Offline HTML wiring regression checks. These are static checks, not browser E2E.
+import test from "node:test";
+import assert from "node:assert/strict";
+import {readFileSync} from "node:fs";
+const html=readFileSync(new URL("../music-studio.html",import.meta.url),"utf8");
+test("iPhone saving help is shown for both newly generated and library songs",()=>{
+ assert.match(html,/id="musicDownloadHelp"/);
+ assert.match(html,/下载生成歌曲|打开 MP3 以保存/);
+ assert.match(html,/player\.src=url;player\.style\.display="block";setDownloadLink\(url\);download\.style\.display="inline-block";downloadHelp\.style\.display="block";\s*say\("已加载音乐库歌曲/);
+ assert.match(html,/downloadHelp\.style\.display="none"/);
+});
+test("manual link refresh ignores responses for previously selected songs",()=>{
+ assert.match(html,/const requestedJobId=activeJobId/);
+ assert.match(html,/playback\.getLink\(requestedJobId,\{force:true\}\)/);
+ assert.match(html,/if\(activeJobId!==requestedJobId\|\|playbackEpoch!==requestedEpoch\)return/);
+});
+test("private playback state is cleared when session expires",()=>{
+ assert.match(html,/runlu-music-session-ended/);
+ assert.match(html,/clearPlayback\(\);renew\.style\.display="none"/);
+});
+
+test("near-expired iPhone download link is blocked without paid regeneration",()=>{
+ assert.match(html,/download\.addEventListener\("click",event=>/);
+ assert.match(html,/Date\.now\(\)>=downloadLinkExpiresAt-10000/);
+ assert.match(html,/event\.preventDefault\(\)/);
+ assert.match(html,/downloadLinkExpiresAt=0/);
+});
+
+test("manual refresh preserves playback position but never autoplays or generates",()=>{
+ assert.match(html,/const resumeAt=Number\.isFinite\(player\.currentTime\)\?player\.currentTime:0/);
+ assert.match(html,/player\.addEventListener\("loadedmetadata"/);
+ assert.match(html,/player\.currentTime=resumeAt/);
+ const refresh=html.slice(html.indexOf('renew.addEventListener("click"'),html.indexOf('window.addEventListener("runlu-music-select-song"'));
+ assert.doesNotMatch(refresh,/player\.play\(|createSongJob\(/);
+});
+
+test("playback resume callbacks are invalidated on song or account change",()=>{
+ assert.match(html,/playbackEpoch=0/);
+ assert.match(html,/const clearPlayback=\(\)=>\{playbackEpoch\+\+/);
+ assert.match(html,/const requestedEpoch=playbackEpoch/);
+ assert.match(html,/playbackEpoch!==requestedEpoch\)return/);
+ assert.match(html,/playbackEpoch===requestedEpoch&&Number\.isFinite\(player\.duration\)/);
+});
+
+test("reselecting the same library song invalidates the earlier async response",()=>{
+ const start=html.indexOf('window.addEventListener("runlu-music-select-song"');
+ const end=html.indexOf('const say=message=>',start);
+ assert.ok(start>=0&&end>start);
+ const selection=html.slice(start,end);
+ assert.match(selection,/clearPlayback\(\);activeJobId=jobId;const selectedEpoch=playbackEpoch/);
+ assert.match(selection,/if\(activeJobId!==jobId\|\|playbackEpoch!==selectedEpoch\)return/);
+ assert.match(selection,/activeJobId===jobId&&playbackEpoch===selectedEpoch/);
+});
+
+test("library pages deduplicate song ids and reject repeated cursors",()=>{
+ assert.match(html,/const seenSongIds=new Set\(\),seenCursors=new Set\(\)/);
+ assert.match(html,/seenSongIds\.has\(songId\)/);
+ assert.match(html,/next===cursor\|\|seenCursors\.has\(next\)/);
+ assert.match(html,/seenSongIds\.clear\(\);seenCursors\.clear\(\)/);
+});
+
+test("API client dispatches session-ended on 401 but not 403",async()=>{
+ const {listMySongs}=await import("./music-api-client.mjs");
+ const oldFetch=globalThis.fetch,oldWindow=globalThis.window;
+ const events=[];
+ globalThis.window={dispatchEvent:event=>{events.push(event.type);return true}};
+ try{
+  globalThis.fetch=async()=>new Response(JSON.stringify({error_code:"UNAUTHENTICATED"}),{status:401,headers:{"Content-Type":"application/json"}});
+  await assert.rejects(listMySongs(),/UNAUTHENTICATED/);
+  assert.deepEqual(events,["runlu-music-session-ended"]);
+  globalThis.fetch=async()=>new Response(JSON.stringify({error_code:"FORBIDDEN"}),{status:403,headers:{"Content-Type":"application/json"}});
+  await assert.rejects(listMySongs(),/FORBIDDEN/);
+  assert.deepEqual(events,["runlu-music-session-ended"],"403 must not clear the user session");
+ }finally{globalThis.fetch=oldFetch;globalThis.window=oldWindow}
+});

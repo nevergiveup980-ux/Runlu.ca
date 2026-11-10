@@ -1,0 +1,10 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import {validateCreateRequest,validateIdempotencyKey,nextStatus,publicJobView} from "./job-contract.mjs";
+const good={title:"风吹过的那些年",lyrics:"风吹过那些年",voice:"female",style:"nostalgic",language:"zh"};
+test("validates complete original song request",()=>assert.equal(validateCreateRequest(good).title,good.title));
+test("rejects empty vocal lyrics",()=>assert.throws(()=>validateCreateRequest({...good,lyrics:""}),/LYRICS_REQUIRED/));
+test("rejects invalid input",()=>assert.throws(()=>validateCreateRequest({...good,voice:"admin"}),/INVALID_VOICE/));
+test("validates idempotency key",()=>{assert.equal(validateIdempotencyKey("abcdefghijklmnop"),"abcdefghijklmnop");assert.throws(()=>validateIdempotencyKey("short"),/INVALID/);});
+test("terminal jobs cannot silently retry",()=>{assert.equal(nextStatus("queued","running"),"running");assert.throws(()=>nextStatus("needs_review","running"),/INVALID_TRANSITION/);});
+test("prevents cross-account job disclosure",()=>{const job={id:"j1",userId:"owner",status:"completed",audioStored:true};assert.throws(()=>publicJobView(job,"other"),/NOT_FOUND/);assert.equal(publicJobView(job,"owner").audio_available,true);});

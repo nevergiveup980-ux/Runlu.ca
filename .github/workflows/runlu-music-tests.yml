@@ -1,0 +1,45 @@
+name: RUNLU MUSIC offline checks
+on:
+  push:
+    branches:
+      - feature/runlu-music-studio-mvp
+    paths:
+      - 'music-studio-tools/**'
+      - 'music/**'
+      - 'music-studio.html'
+      - '.github/workflows/runlu-music-tests.yml'
+  pull_request:
+    paths:
+      - 'music-studio-tools/**'
+      - 'music/**'
+      - 'music-studio.html'
+      - '.github/workflows/runlu-music-tests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-validation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install browser test dependency
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Compile Python files
+        run: python -m compileall -q music-studio-tools
+      - name: Check Studio JavaScript and required controls
+        run: node music-studio-tools/check_studio.cjs
+      - name: Run music API and Studio wiring tests
+        run: node --test music/studio-wiring.test.mjs
+      - name: Run unit tests without API credentials
+        run: python -m unittest discover -s music-studio-tools -p 'test_*.py' -v
+      - name: Test real Chromium interactions at mobile viewport
+        run: python music-studio-tools/test_browser.py
+      - name: Assert no provider key is needed
+        run: |
+          env -u GEMINI_API_KEY python music-studio-tools/generate_preview.py --project music-studio-tools/sample-project.json

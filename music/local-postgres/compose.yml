@@ -1,0 +1,19 @@
+# Local-only PostgreSQL service for RUNLU MUSIC concurrency acceptance.
+# Runs on your own Docker host; does not provision cloud resources.
+# Bind only loopback to avoid exposing the disposable database.
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: runlu_test
+      POSTGRES_PASSWORD: local_test_only
+      POSTGRES_DB: runlu_music_test
+    ports:
+      - "127.0.0.1:55432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U runlu_test -d runlu_music_test"]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+    tmpfs:
+      - /var/lib/postgresql/data
