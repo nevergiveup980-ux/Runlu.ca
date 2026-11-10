@@ -36,6 +36,11 @@ Scope: isolated static foundation only; no third-party catalog or sales.
 - Browser evidence ZIP `ai-supermarket-browser-evidence`, artifact ID `13782460911`, 2,171,459 bytes: https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/42854150897/artifacts/13782460911
 - Both artifacts are currently present and not expired; workflow retention is 14 days. These are downloadable CI attachments, **not** a hosted iPhone Safari preview. No human visual review has been performed.
 
+## Screenshot visual review (2026-11-10)
+- Downloaded and extracted GitHub Actions artifact `13782460911`: confirmed **24 PNG screenshots** (6 widths × EN/ZH/FR/ES), not just an upload-status claim.
+- Reviewed a 24-image contact sheet and a full-resolution 320px French screenshot. At this level of review, no obvious horizontal clipping, overlapping header, missing category card or broken trust panel was observed. At 320px the header wraps to two rows, which is intentional and appears legible.
+- **Limited visual review only:** a contact sheet cannot establish detailed readability for every image. No iPhone Safari, VoiceOver, enlarged-text or touch testing was performed. These remain open release blockers.
+
 ## Manual browser acceptance (not yet performed)
 Use an isolated PR preview or local checkout, **not** production:
 - [ ] iPhone Safari narrow portrait (320–430px): no horizontal overflow; readable text; language selector operable.
