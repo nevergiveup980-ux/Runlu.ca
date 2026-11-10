@@ -286,6 +286,33 @@ def test_browser():
             expect(page.locator("#musicLibraryItems li")).to_have_count(0)
             expect(page.locator("#musicLibraryStatus")).to_contain_text("登录已失效")
             page.evaluate("() => { window.fetch = window.__libraryFetch; }")
+            # Browser pagination: deduplicate overlapping pages and stop a cursor loop.
+            page.evaluate("""() => {
+              window.__paginationFetch = window.fetch;
+              window.__paginationCalls = 0;
+              window.fetch = (input, options) => {
+                if (!String(input).includes('/api/music/library?'))
+                  return window.__paginationFetch(input, options);
+                const n = ++window.__paginationCalls;
+                const song = id => ({id,title:'Test '+id,status:'completed',audio_available:true});
+                const a = '66666666-6666-4666-8666-666666666666';
+                const b = '77777777-7777-4777-8777-777777777777';
+                const payload = n === 1
+                  ? {items:[song(a)],has_more:true,next_cursor:'cursor-one'}
+                  : {items:[song(a),song(b)],has_more:true,next_cursor:'cursor-one'};
+                return Promise.resolve(new Response(JSON.stringify(payload),
+                  {status:200,headers:{'Content-Type':'application/json'}}));
+              };
+            }""")
+            page.locator("#refreshMusicLibrary").click()
+            expect(page.locator("#musicLibraryItems li")).to_have_count(1)
+            expect(page.locator("#moreMusicLibrary")).to_be_enabled()
+            page.locator("#moreMusicLibrary").click()
+            expect(page.locator("#musicLibraryItems li")).to_have_count(2)
+            expect(page.locator("#moreMusicLibrary")).to_be_disabled()
+            expect(page.locator("#musicLibraryStatus")).to_contain_text("分页信息异常")
+            assert page.evaluate("window.__paginationCalls") == 2
+            page.evaluate("() => { window.fetch = window.__paginationFetch; }")
             page.unroute("**/api/music/**")
             assert page.locator("body").evaluate("(el) => el.scrollWidth <= window.innerWidth + 1"), "Mobile horizontal overflow"
             assert not errors, f"Browser JavaScript errors: {errors}"
