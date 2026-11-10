@@ -63,7 +63,7 @@ try {
     assert.equal(await page.locator('.grid article h3').count(),6,'six category headings');
     assert.equal(await page.locator('img:not([alt])').count(),0,'all images have alt attributes');
     const controls=await page.locator('.top a, .top select').evaluateAll(nodes=>nodes.map(el=>{const r=el.getBoundingClientRect();return {name:el.textContent.trim(),width:r.width,height:r.height}}));
-    for(const control of controls) assert.ok(control.height>=24&&control.width>=24,'small navigation target '+JSON.stringify(control)+' at '+width);
+    for(const control of controls) assert.ok(control.height>=44&&control.width>=24,'undersized navigation target '+JSON.stringify(control)+' at '+width);
     await page.locator('#language').focus();
     assert.equal(await page.evaluate(()=>document.activeElement?.id),'language','language selector can receive keyboard focus');
     assert.equal(await page.locator('#language').evaluate(el=>getComputedStyle(el).outlineStyle!=='none'),true,'language selector has visible focus outline');
