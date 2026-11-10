@@ -54,6 +54,14 @@ try {
     await page.keyboard.press('Enter');
     assert.equal(new URL(page.url()).hash,'#main','skip link targets main content');
     assert.equal(await page.locator('.grid article').count(),6,'six category cards');
+    assert.equal(await page.locator('main').count(),1,'one main landmark');
+    assert.equal(await page.locator('header nav[aria-label]').count(),1,'labeled navigation landmark');
+    assert.equal(await page.locator('h1').count(),1,'one page heading');
+    assert.equal(await page.locator('#language').evaluate(el=>el.labels?.length),1,'language selector has one visible label');
+    assert.equal(await page.locator('section[aria-labelledby="categories"] #categories').count(),1,'categories section has a heading');
+    assert.equal(await page.locator('#trust h2').count(),1,'trust section has a heading');
+    assert.equal(await page.locator('.grid article h3').count(),6,'six category headings');
+    assert.equal(await page.locator('img:not([alt])').count(),0,'all images have alt attributes');
     assert.equal(errors.length,0,'page errors: '+errors.join('; '));
     assert.ok(requests.every(url=>url.startsWith('file:')),'Unexpected external request: '+requests.join(', '));
     console.log('PASS browser viewport',width,'all translations, geometry, 4-language screenshots, persistence, keyboard skip link, no overflow, no errors/external requests');
