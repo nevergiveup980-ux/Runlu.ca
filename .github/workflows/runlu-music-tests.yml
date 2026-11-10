@@ -5,11 +5,14 @@ on:
       - feature/runlu-music-studio-mvp
     paths:
       - 'music-studio-tools/**'
+      - 'music/**'
       - 'music-studio.html'
       - '.github/workflows/runlu-music-tests.yml'
   pull_request:
     paths:
       - 'music-studio-tools/**'
+      - 'music/**'
+      - 'music-studio.html'
       - '.github/workflows/runlu-music-tests.yml'
   workflow_dispatch:
 permissions:
