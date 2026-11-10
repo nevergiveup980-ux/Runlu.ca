@@ -30,6 +30,12 @@ Scope: isolated static foundation only; no third-party catalog or sales.
 - These are automated assertions, not evidence of actual iPhone touch comfort, Safari rendering, screen-reader usability, or human visual review.
 - Do not mark manual acceptance complete on the basis of CI alone.
 
+## Verified offline preview artifacts (2026-11-10)
+- Commit `e3eb8e5a2b4a25080a79558444e87783476f86ab`: four checks succeeded; browser workflow run `42854150897`.
+- Offline preview ZIP `ai-supermarket-offline-preview`, artifact ID `13780784782`, 11,619 bytes: https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/42854150897/artifacts/13780784782
+- Browser evidence ZIP `ai-supermarket-browser-evidence`, artifact ID `13782460911`, 2,171,459 bytes: https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/42854150897/artifacts/13782460911
+- Both artifacts are currently present and not expired; workflow retention is 14 days. These are downloadable CI attachments, **not** a hosted iPhone Safari preview. No human visual review has been performed.
+
 ## Manual browser acceptance (not yet performed)
 Use an isolated PR preview or local checkout, **not** production:
 - [ ] iPhone Safari narrow portrait (320–430px): no horizontal overflow; readable text; language selector operable.
