@@ -264,6 +264,28 @@ def test_browser():
             expect(page.locator("#musicLibraryItems li")).to_have_count(0)
             expect(page.locator("#generatedMusicDownload")).to_be_hidden()
             assert not page.locator("#generatedMusicPlayer").get_attribute("src")
+            # A delayed library page must never repopulate rows after logout.
+            page.evaluate("""() => {
+              window.__libraryFetch = window.fetch;
+              window.__resolveLibrary = null;
+              window.fetch = (input, options) => {
+                if (String(input).includes('/api/music/library?'))
+                  return new Promise(resolve => { window.__resolveLibrary = () => resolve(
+                    new Response(JSON.stringify({items:[{id:'55555555-5555-4555-8555-555555555555',
+                      title:'Old account private song',status:'completed',audio_available:true}],
+                      has_more:false,next_cursor:null}),{status:200,
+                      headers:{'Content-Type':'application/json'}})); });
+                return window.__libraryFetch(input, options);
+              };
+            }""")
+            page.locator("#refreshMusicLibrary").click()
+            page.wait_for_function("Boolean(window.__resolveLibrary)")
+            page.evaluate("() => window.dispatchEvent(new Event('runlu-music-session-ended'))")
+            page.evaluate("() => window.__resolveLibrary()")
+            page.wait_for_timeout(100)
+            expect(page.locator("#musicLibraryItems li")).to_have_count(0)
+            expect(page.locator("#musicLibraryStatus")).to_contain_text("登录已失效")
+            page.evaluate("() => { window.fetch = window.__libraryFetch; }")
             page.unroute("**/api/music/**")
             assert page.locator("body").evaluate("(el) => el.scrollWidth <= window.innerWidth + 1"), "Mobile horizontal overflow"
             assert not errors, f"Browser JavaScript errors: {errors}"
