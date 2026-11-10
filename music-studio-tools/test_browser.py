@@ -197,7 +197,7 @@ def test_browser():
             assert page.evaluate("window.__blockedMusicDownload")
             assert "重新获取试听链接" in page.locator("#musicServiceStatus").inner_text()
             page.evaluate("() => { Date.now = window.__musicOriginalNow; }")
-            page.locator("#renewMusicLink").click()
+            page.get_by_role("button", name="重新获取试听链接").click()
             expect(page.locator("#musicServiceStatus")).to_contain_text("试听链接已更新")
             assert link_requests["count"] == 2, "Refresh should request one new link only"
 
