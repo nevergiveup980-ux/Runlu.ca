@@ -25,7 +25,6 @@ export class PgDirectorDashboard {
      LEFT JOIN stage_director_submission_outbox o ON o.attempt_id=a.attempt_id
      LEFT JOIN stage_director_charge_audit c ON c.attempt_id=a.attempt_id
      WHERE a.episode_id=$1 ORDER BY a.created_at,a.attempt_id`,[episodeId]);
-   await client.query('COMMIT');
    const b=budget.rows[0];
    const limit=Number(b.limit_cents);
    const shotIds=new Set();
@@ -54,7 +53,7 @@ export class PgDirectorDashboard {
     throw Error('Invalid stored financial amounts');
    const hasUnknown=attempts.rows.some(a=>a.state==='UNKNOWN'||a.submission_state==='UNKNOWN');
    const hasOvercharge=attempts.rows.some(a=>a.exceeds_approved_budget===true);
-   return {
+   const snapshot={
     episodeId,approvedBy:b.reviewer_id,budgetConfirmedBy:b.confirmed_by,
     budget:{limitCents:limit,committedCents:committed,remainingCents:limit-committed,
       paused:b.spending_paused===true,pauseReason:b.pause_reason??null},
@@ -67,6 +66,8 @@ export class PgDirectorDashboard {
       submissionState:a.submission_state??null,providerTaskId:a.provider_task_id??null,
       overBudget:a.exceeds_approved_budget===true}))
    };
+   await client.query('COMMIT');
+   return snapshot;
   }catch(e){try{await client.query('ROLLBACK')}catch{}throw e}
   finally{client.release()}
  }
