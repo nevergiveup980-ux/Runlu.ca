@@ -313,6 +313,41 @@ def test_browser():
             expect(page.locator("#musicLibraryStatus")).to_contain_text("分页信息异常")
             assert page.evaluate("window.__paginationCalls") == 2
             page.evaluate("() => { window.fetch = window.__paginationFetch; }")
+            # Simulate an account boundary: old A response arrives after B loads.
+            # Uses an explicit session-ended event, not real authentication.
+            page.evaluate("""() => {
+              window.__accountFetch = window.fetch;
+              window.__accountPendingA = null;
+              window.__accountRequests = 0;
+              window.fetch = (input, options) => {
+                if (!String(input).includes('/api/music/library?'))
+                  return window.__accountFetch(input, options);
+                const n = ++window.__accountRequests;
+                const makeSong = (id,title) => ({id,title,status:'completed',audio_available:true});
+                if (n === 1) return new Promise(resolve => {
+                  window.__accountPendingA = () => resolve(new Response(JSON.stringify({
+                    items:[makeSong('88888888-8888-4888-8888-888888888888','Account A private')],
+                    has_more:false,next_cursor:null}),{status:200,
+                    headers:{'Content-Type':'application/json'}}));
+                });
+                return Promise.resolve(new Response(JSON.stringify({
+                  items:[makeSong('99999999-9999-4999-8999-999999999999','Account B private')],
+                  has_more:false,next_cursor:null}),{status:200,
+                  headers:{'Content-Type':'application/json'}}));
+              };
+            }""")
+            page.locator("#refreshMusicLibrary").click()
+            page.wait_for_function("Boolean(window.__accountPendingA)")
+            page.evaluate("() => window.dispatchEvent(new Event('runlu-music-session-ended'))")
+            page.locator("#refreshMusicLibrary").click()
+            expect(page.locator("#musicLibraryItems li")).to_have_count(1)
+            expect(page.locator("#musicLibraryItems")).to_contain_text("Account B private")
+            page.evaluate("() => window.__accountPendingA()")
+            page.wait_for_timeout(100)
+            expect(page.locator("#musicLibraryItems li")).to_have_count(1)
+            expect(page.locator("#musicLibraryItems")).not_to_contain_text("Account A private")
+            assert page.evaluate("window.__accountRequests") == 2
+            page.evaluate("() => { window.fetch = window.__accountFetch; }")
             page.unroute("**/api/music/**")
             assert page.locator("body").evaluate("(el) => el.scrollWidth <= window.innerWidth + 1"), "Mobile horizontal overflow"
             assert not errors, f"Browser JavaScript errors: {errors}"
