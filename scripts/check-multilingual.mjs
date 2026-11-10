@@ -6,7 +6,7 @@ const root = process.cwd();
 // legal/privacy policies are applications/support pages rather than editorial
 // site pages. They own their localization and must not be made to load the
 // public website's language switcher.
-const excludedPrefixes = ['flooring/','flooring-u2-lab/','flooring-u3-preview/'];
+const excludedPrefixes = ['flooring/','flooring-u2-lab/','flooring-u3-preview/','knowledge/preview/'];
 const excluded = new Set([
   'health-view-006-humid-heat.html',
   'health-view-007-staree-statins.html',
@@ -27,7 +27,8 @@ const excluded = new Set([
   'invest/support.html',
   'truth-and-lies.html',
   // Standalone offline iPhone acceptance harness; not a localized editorial page.
-  'music-studio-offline-acceptance.html'
+  'music-studio-offline-acceptance.html',
+  'music-living-visuals-test.html'
 ]);
 const pages = [];
 const languageScript = fs.readFileSync(path.join(root, 'runlu-language.js'), 'utf8');
@@ -99,6 +100,19 @@ for (const file of pages) {
         if (selfEdition ? !(hasLink || hasCurrent) : !hasLink) failures.push(`${rel}: missing language navigation ${target}`);
     }
     if (!edition.includes(`rel="canonical" href="https://runlu.ca/${rel}"`)) failures.push(`${rel}: missing self canonical`);
+    continue;
+  }
+  // Season Three has four independent, linked language editions, not an in-page switcher.
+  if (/^wellness-season-03-\d{2}(?:-(?:en|fr|es))?\.html$/.test(rel)) {
+    const edition = fs.readFileSync(file, 'utf8');
+    for (const [lang, suffix] of [['zh-Hans',''],['en','-en'],['fr','-fr'],['es','-es']]) {
+      const target = rel.replace(/-(?:en|fr|es)\.html$/, '.html').replace(/\.html$/, '') + suffix + '.html';
+      if (!fs.existsSync(path.join(root, target))) failures.push(`${rel}: missing edition ${target}`);
+      if (!edition.includes(`hreflang="${lang}" href="https://runlu.ca/${target}"`)) failures.push(`${rel}: missing alternate ${target}`);
+      if (target !== rel && !edition.includes(`href="${target}"`)) failures.push(`${rel}: missing language navigation ${target}`);
+    }
+    if (!edition.includes(`rel="canonical" href="https://runlu.ca/${rel}"`)) failures.push(`${rel}: missing self canonical`);
+    if (!edition.includes('aria-current="page"')) failures.push(`${rel}: missing current-language marker`);
     continue;
   }
   // The Wellness Twelve articles are four separate, canonical language editions.
