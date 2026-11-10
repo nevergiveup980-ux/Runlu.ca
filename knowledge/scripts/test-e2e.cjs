@@ -7,7 +7,9 @@ const assert=(ok,msg)=>{if(!ok)throw Error(msg)};
 try{
  fs.mkdirSync(path.join(tmp,"scripts"),{recursive:true});fs.mkdirSync(path.join(tmp,"data"),{recursive:true});
  for(const name of ["allocate.cjs","archive.cjs","validate.cjs","check-publication.cjs"])fs.copyFileSync(path.join(source,"scripts",name),path.join(tmp,"scripts",name));
- for(const name of ["records.json","published.json"])fs.copyFileSync(path.join(source,"data",name),path.join(tmp,"data",name));
+ for(const name of ["validate-publication.mjs","internal-review.mjs","schema-validation.mjs","internal-review-fixtures.mjs"])fs.copyFileSync(path.join(source,name),path.join(tmp,name));
+ fs.cpSync(path.join(source,"editorial"),path.join(tmp,"editorial"),{recursive:true});
+ for(const name of ["records.json","published.json","schema.json","internal-reviews.json","internal-review-schema.json"])fs.copyFileSync(path.join(source,"data",name),path.join(tmp,"data",name));
  assert(run("validate.cjs").status===0,"Baseline validation failed");
  const sample=JSON.parse(fs.readFileSync(path.join(tmp,"data","records.json"),"utf8"))[0];
  sample.id="RK-0000";sample.status="inbox";
@@ -26,6 +28,13 @@ try{
  assert(run("archive.cjs",[allocated,"Duplicate","Fixture reviewer"]).status!==0,"Duplicate archive was accepted");
  const publicData=JSON.parse(fs.readFileSync(path.join(tmp,"data","published.json"),"utf8"));
  record.status="published";record.sources[0].license_status="permitted";
+ record.sources[0].rights_basis="Synthetic fixture: original expression";
+ record.sources[0].rights_evidence="test://evidence";
+ record.review.evidence_ref="test://evidence";
+ record.review.translation_reviewer="Synthetic language editor";
+ const makeReviews=cp.spawnSync(process.execPath,['--input-type=module','-e',`import {fixtureReviews} from ${JSON.stringify(require('node:url').pathToFileURL(path.join(tmp,'internal-review-fixtures.mjs')).href)}; console.log(JSON.stringify(fixtureReviews(${JSON.stringify(record)})))`],{encoding:'utf8'});
+ assert(!makeReviews.error && makeReviews.status===0,'Fixture signoff generation failed: '+makeReviews.stderr);
+ fs.writeFileSync(path.join(tmp,'data/internal-reviews.json'),JSON.stringify({version:1,entries:JSON.parse(makeReviews.stdout)}));
  publicData.entries=[record];
  fs.writeFileSync(path.join(tmp,"data","published.json"),JSON.stringify(publicData));
  assert(run("check-publication.cjs").status===0,"Publication gate rejected reviewed fixture");

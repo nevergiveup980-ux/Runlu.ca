@@ -32,3 +32,12 @@ This is a **RUNLU website section**, not a separate app. Prototype branch only; 
 - Prepare first real source-backed records as drafts; verify source access, claims, licensing and all four translations before approving.
 - Test search, region filters, four languages and mobile accessibility.
 - Verify rights and factual accuracy before public launch.
+
+## Internal review v1.0
+
+The legacy approval booleans are necessary but insufficient. Before any public export,
+record separate human signoffs for facts, practice, EN/ZH/FR/ES and every source's
+rights in the version-bound internal ledger. Follow [INTERNAL_REVIEW_V1.md](INTERNAL_REVIEW_V1.md)
+and [the reusable worksheet](reviews/INTERNAL-REVIEW-TEMPLATE.md). AI assistance must
+be disclosed and cannot sign or claim external expert review. These read-only tools
+never promote, publish or deploy records.
