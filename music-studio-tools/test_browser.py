@@ -247,7 +247,7 @@ def test_browser():
             # A private signed-link response arriving after logout must be ignored.
             race_logout = "44444444-4444-4444-8444-444444444444"
             page.evaluate("(jobId) => window.dispatchEvent(new CustomEvent('runlu-music-select-song',{detail:{jobId}}))", race_logout)
-            page.wait_for_function("(id) => Boolean(window.__musicPending[id])", race_logout)
+            page.wait_for_function("(id) => Boolean(window.__musicPending[id])", arg=race_logout)
             page.evaluate("() => window.dispatchEvent(new Event('runlu-music-session-ended'))")
             expect(page.locator("#generatedMusicDownload")).to_be_hidden()
             page.evaluate("(id) => window.__musicPending[id]()", race_logout)
