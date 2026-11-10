@@ -41,3 +41,13 @@ test("playback resume callbacks are invalidated on song or account change",()=>{
  assert.match(html,/playbackEpoch!==requestedEpoch\)return/);
  assert.match(html,/playbackEpoch===requestedEpoch&&Number\.isFinite\(player\.duration\)/);
 });
+
+test("reselecting the same library song invalidates the earlier async response",()=>{
+ const start=html.indexOf('window.addEventListener("runlu-music-select-song"');
+ const end=html.indexOf('const say=message=>',start);
+ assert.ok(start>=0&&end>start);
+ const selection=html.slice(start,end);
+ assert.match(selection,/clearPlayback\(\);activeJobId=jobId;const selectedEpoch=playbackEpoch/);
+ assert.match(selection,/if\(activeJobId!==jobId\|\|playbackEpoch!==selectedEpoch\)return/);
+ assert.match(selection,/activeJobId===jobId&&playbackEpoch===selectedEpoch/);
+});
