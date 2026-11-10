@@ -153,14 +153,14 @@ renew.addEventListener("click",async()=>{if(!activeJobId)return;const requestedJ
 window.addEventListener("runlu-music-select-song",async event=>{
  const jobId=event.detail?.jobId;
  if(typeof jobId!=="string"||!/^[0-9a-f-]{36}$/i.test(jobId))return;
- clearPlayback();activeJobId=jobId;renew.style.display="inline-block";
+ clearPlayback();activeJobId=jobId;const selectedEpoch=playbackEpoch;renew.style.display="inline-block";
  try{
   const url=await playback.getLink(jobId);
-  if(activeJobId!==jobId)return;
+  if(activeJobId!==jobId||playbackEpoch!==selectedEpoch)return;
   player.src=url;player.style.display="block";setDownloadLink(url);download.style.display="inline-block";downloadHelp.style.display="block";
   say("已加载音乐库歌曲。点击播放即可试听，链接过期可重新获取。");
  }catch{
-  if(activeJobId===jobId)say("无法打开所选歌曲。请确认登录状态或重新获取试听链接。");
+  if(activeJobId===jobId&&playbackEpoch===selectedEpoch)say("无法打开所选歌曲。请确认登录状态或重新获取试听链接。");
  }
 });
 const say=message=>{out.textContent=message};
