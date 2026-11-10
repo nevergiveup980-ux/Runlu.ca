@@ -57,6 +57,16 @@
 
 **Acceptance rule:** Record failures and fix them on the draft branch. Only mark M01–M08 PASS after actual testing with reproducible evidence. L06 remains NOT CHECKED until the required real-device/browser checks are documented.
 
+## Editorial handoff and release decision — PENDING
+
+**Automated checks (2026-11-10):** Three checks succeeded on commit `65f9ee766b893ad77de03676082cf995e3e9ffa1`: Site integrity, RUNLU Knowledge validation, RUNLU Knowledge Publication Gate. This confirms only the automated scope, not manual or independent acceptance.
+
+**Branch integration:** This draft branch has diverged from `main`. Latest comparison shows 13 commits ahead and 21 behind, with no overlapping changed file paths reported. GitHub's mergeability flag was false at last inspection; do not assume a clean merge or override protections. Sync and rerun CI only when ready, without modifying production content.
+
+**Release blockers:** T01–T08, S01–S05, L01–L06 and M01–M08 remain NOT CHECKED. Reviewer identity, evidence, review dates, rights approval, and editorial authorization are absent. No public publication approval is implied.
+
+**Handoff sequence:** (1) Assign independent subject-matter and language reviewers; (2) record evidence against the existing checklist; (3) correct all four manuscripts and preview together; (4) complete real iPhone/browser testing; (5) synchronize branch and rerun CI; (6) seek an explicit editorial release decision. Keep `knowledge/data/published.json` unchanged until authorized.
+
 ## Reviewer record
 - Reviewer name / role: **not assigned**
 - Review date: **not reviewed**
