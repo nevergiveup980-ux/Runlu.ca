@@ -99,14 +99,15 @@ refresh();updatePlaceholders();
 </script><script type="module">
 import {listMySongs} from "./music/music-api-client.mjs";
 const refresh=document.getElementById("refreshMusicLibrary"),more=document.getElementById("moreMusicLibrary"),status=document.getElementById("musicLibraryStatus"),items=document.getElementById("musicLibraryItems");
-let cursor=null,loading=false;
+let cursor=null,loading=false,libraryEpoch=0;
 function message(t){status.textContent=t}
 async function load(reset){
- if(loading)return;loading=true;refresh.disabled=true;more.disabled=true;
+ if(loading)return;loading=true;const requestEpoch=libraryEpoch;refresh.disabled=true;more.disabled=true;
  if(reset){cursor=null;items.replaceChildren()}
  message("正在读取账户作品库…");
  try{
   const data=await listMySongs({limit:20,before:cursor});
+  if(requestEpoch!==libraryEpoch)return;
   if(!Array.isArray(data.items))throw Error("INVALID_LIBRARY_RESPONSE");
   for(const song of data.items){
    const li=document.createElement("li");li.style.cssText="border:1px solid #344158;border-radius:10px;padding:12px";
@@ -125,10 +126,10 @@ async function load(reset){
   cursor=data.has_more?data.next_cursor:null;
   more.disabled=!cursor;
   message(items.children.length?"已加载 "+items.children.length+" 首作品。":"暂无云端歌曲，或尚未生成作品。");
- }catch{message("作品库服务尚未开放，或账户尚未登录。不会产生费用。");more.disabled=true}
- finally{loading=false;refresh.disabled=false}
+ }catch{if(requestEpoch===libraryEpoch){message("作品库服务尚未开放，或账户尚未登录。不会产生费用。");more.disabled=true}}
+ finally{if(requestEpoch===libraryEpoch){loading=false;refresh.disabled=false}}
 }
-window.addEventListener("runlu-music-session-ended",()=>{cursor=null;items.replaceChildren();more.disabled=true;message("登录已失效，已清空账户作品列表。请重新登录。")});
+window.addEventListener("runlu-music-session-ended",()=>{libraryEpoch++;loading=false;cursor=null;items.replaceChildren();refresh.disabled=false;more.disabled=true;message("登录已失效，已清空账户作品列表。请重新登录。")});
 refresh.addEventListener("click",()=>load(true));
 more.addEventListener("click",()=>load(false));
 </script><script type="module">
