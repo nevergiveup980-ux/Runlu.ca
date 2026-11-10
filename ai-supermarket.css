@@ -6,3 +6,8 @@
 .top nav a,.brand{display:inline-block;padding:.4rem 0}
 .language select{min-height:44px;max-width:100%}
 @media(max-width:430px){.top{gap:.7rem}.top nav{gap:.75rem;flex-wrap:wrap}.trust{padding:1.25rem}.hero h1{overflow-wrap:anywhere}}
+
+/* Comfortable touch targets for mobile and keyboard users. */
+.top nav a,.brand{min-height:44px;display:inline-flex;align-items:center}
+.top nav a{padding:.65rem .35rem}
+.language select{min-height:44px}
