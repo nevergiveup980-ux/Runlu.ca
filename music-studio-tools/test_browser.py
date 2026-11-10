@@ -217,6 +217,36 @@ def test_browser():
             assert link_requests["count"] == 4, "Each selection should request one access link"
             assert link_requests["paid_posts"] == 0, "Listening must never submit a paid job"
 
+            # Deterministic out-of-order completion: select A then B, resolve B first.
+            # No network request or paid generation is made by this simulated fetch.
+            page.evaluate("""() => {
+              window.__musicOriginalFetch = window.fetch;
+              window.__musicPending = {};
+              window.fetch = (input, options) => {
+                const path = String(input);
+                const match = path.match(/\\/api\\/music\\/jobs\\/([0-9a-f-]{36})\\/download$/i);
+                if (!match) return window.__musicOriginalFetch(input, options);
+                return new Promise(resolve => {
+                  window.__musicPending[match[1]] = () => resolve(new Response(
+                    JSON.stringify({url:'https://example.invalid/race-'+match[1]+'.mp3',expires_in:90}),
+                    {status:200,headers:{'Content-Type':'application/json'}}));
+                });
+              };
+            }""")
+            race_a = "22222222-2222-4222-8222-222222222222"
+            race_b = "33333333-3333-4333-8333-333333333333"
+            page.evaluate("(ids) => { for(const jobId of ids) window.dispatchEvent(new CustomEvent('runlu-music-select-song',{detail:{jobId}})); }", [race_a, race_b])
+            expect.poll(lambda: page.evaluate("Object.keys(window.__musicPending).length")).to_be(2)
+            page.evaluate("(id) => window.__musicPending[id]()", race_b)
+            expect(page.locator("#generatedMusicDownload")).to_have_attribute(
+                "href", "https://example.invalid/race-"+race_b+".mp3")
+            page.evaluate("(id) => window.__musicPending[id]()", race_a)
+            page.wait_for_timeout(100)
+            expect(page.locator("#generatedMusicDownload")).to_have_attribute(
+                "href", "https://example.invalid/race-"+race_b+".mp3")
+            page.evaluate("() => { window.fetch = window.__musicOriginalFetch; delete window.__musicPending; }")
+            assert link_requests["paid_posts"] == 0
+
             # Simulated session expiry must remove private media and library rows.
             page.evaluate("() => window.dispatchEvent(new Event('runlu-music-session-ended'))")
             expect(page.locator("#musicLibraryItems li")).to_have_count(0)
