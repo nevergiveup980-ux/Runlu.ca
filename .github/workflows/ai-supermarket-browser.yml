@@ -22,6 +22,20 @@ jobs:
       - run: npm install --no-save --no-package-lock playwright
       - run: npx playwright install --with-deps chromium
       - run: node scripts/check-ai-supermarket-browser.mjs
+      - name: Package offline foundation preview (not deployed)
+        if: success()
+        run: |
+          mkdir -p ai-supermarket-offline-preview
+          cp ai-supermarket.html ai-supermarket.css runlu-language.js ai-supermarket-offline-preview/
+          printf '%s\n' 'RUNLU AI SUPERMARKET — OFFLINE FOUNDATION PREVIEW' 'Open ai-supermarket.html locally on a computer browser.' 'This ZIP is NOT a public website or an iPhone Safari-hosted preview.' 'The Home link points to index.html on the real site and will not work offline.' 'No third-party integrations, payments, tracking, or deployment.' > ai-supermarket-offline-preview/README.txt
+      - name: Upload offline foundation preview bundle
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-supermarket-offline-preview
+          path: ai-supermarket-offline-preview/
+          if-no-files-found: error
+          retention-days: 14
       - name: Upload browser screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
