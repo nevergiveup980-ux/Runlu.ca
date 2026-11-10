@@ -37,6 +37,7 @@ test("language control updates visible content, document language and URL", () =
   assert.match(html, /data-runlu-language-select/);
   assert.match(html, /document\.documentElement\.lang=lang/);
   assert.match(html, /document\.title=c\.title/);
+  assert.match(html, /document\.getElementById\("content"\)\.lang=lang/);
   assert.match(html, /select\.addEventListener\("change"/);
   assert.match(html, /searchParams\.set\("lang",select\.value\)/);
   for (const id of ["title", "notice", "content", "footer"]) assert.ok(html.includes('id="' + id + '"'));
@@ -46,4 +47,6 @@ test("editorial references are linked and mobile layout is present", () => {
   assert.match(html, /RK-0006-RESEARCH-BRIEF\.md/);
   assert.match(html, /RK-0006-INDEPENDENT-REVIEW-PACKET\.md/);
   assert.match(html, /@media\(max-width:480px\)/);
+  assert.match(html, /:focus-visible/);
+  assert.match(html, /aria-live="polite"/);
 });
