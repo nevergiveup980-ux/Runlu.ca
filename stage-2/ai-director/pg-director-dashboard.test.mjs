@@ -106,7 +106,9 @@ test('duplicate persisted attempts cannot silently double count charges',async()
    if(args[0].includes('FROM stage_director_attempts a'))return {rows:[...result.rows,...result.rows]};
    return result;};return client;};
  await assert.rejects(new PgDirectorDashboard(m.pool).getEpisode({episodeId:'ep1'}),/Invalid stored attempt identity/);
+ assert.equal(m.calls.at(-2).sql,'ROLLBACK');
  assert.equal(m.calls.at(-1).sql,'RELEASE');
+ assert.equal(m.calls.some(c=>c.sql==='COMMIT'),false);
 });
 test('settled attempt with null charge fails rather than being treated as zero',async()=>{
  const m=mock();const original=m.pool.connect;
@@ -115,5 +117,7 @@ test('settled attempt with null charge fails rather than being treated as zero',
    if(args[0].includes('FROM stage_director_attempts a'))return {rows:result.rows.map(a=>({...a,charged_cents:null}))};
    return result;};return client;};
  await assert.rejects(new PgDirectorDashboard(m.pool).getEpisode({episodeId:'ep1'}),/Invalid stored financial amounts/);
+ assert.equal(m.calls.at(-2).sql,'ROLLBACK');
  assert.equal(m.calls.at(-1).sql,'RELEASE');
+ assert.equal(m.calls.some(c=>c.sql==='COMMIT'),false);
 });
