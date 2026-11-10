@@ -1,6 +1,6 @@
+import { queryHistory, errorResponse, AnalyticsError } from "./cloudflare.js";
 import cleanWorker from "./index-clean.js";
 
-const GRAPHQL_ENDPOINT = "https://api.cloudflare.com/client/v4/graphql";
 const DEFAULT_HISTORY_EPOCH = "2026-08-01T00:00:00.000Z";
 
 const LIFETIME_QUERY = `
@@ -15,7 +15,7 @@ query RunluPulseLifetime($accountTag: string!, $start: Time!, $end: Time!, $host
         limit: 500
         orderBy: [count_DESC]
         filter: { datetime_geq: $start, datetime_leq: $end, requestHost: $host, bot: 0 }
-      ) { count dimensions { requestPath } }
+      ) { count sum { visits } dimensions { requestPath } }
       firstSeen: rumPageloadEventsAdaptiveGroups(
         limit: 1
         orderBy: [date_ASC]
@@ -35,8 +35,7 @@ export default {
         const data = await fetchLifetime(env);
         return json(data, 200, { "Cache-Control": "private, max-age=60" });
       } catch (error) {
-        console.error("RUNLU Pulse lifetime analytics error", error);
-        return json({ error: "Lifetime analytics query failed" }, 502, { "Cache-Control": "no-store" });
+        return errorResponse(error);
       }
     }
 
@@ -55,38 +54,12 @@ export default {
 };
 
 async function fetchLifetime(env) {
-  if (!env.CF_ANALYTICS_TOKEN) throw new Error("Missing CF_ANALYTICS_TOKEN secret");
-  if (!env.CF_ACCOUNT_ID) throw new Error("Missing CF_ACCOUNT_ID secret");
-
   const host = env.RUNLU_HOST || "runlu.ca";
   const start = new Date(env.RUNLU_HISTORY_EPOCH || DEFAULT_HISTORY_EPOCH);
   const end = new Date();
-  if (Number.isNaN(start.getTime())) throw new Error("Invalid RUNLU_HISTORY_EPOCH");
+  if (Number.isNaN(start.getTime()) || start > end) throw new AnalyticsError("CONFIGURATION_ERROR", "RUNLU_HISTORY_EPOCH must be a valid date in the past.", 503);
 
-  const response = await fetch(GRAPHQL_ENDPOINT, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.CF_ANALYTICS_TOKEN}`,
-      "Content-Type": "application/json",
-      Accept: "application/json"
-    },
-    body: JSON.stringify({
-      query: LIFETIME_QUERY,
-      variables: {
-        accountTag: env.CF_ACCOUNT_ID,
-        start: start.toISOString(),
-        end: end.toISOString(),
-        host
-      }
-    })
-  });
-
-  const payload = await response.json();
-  if (!response.ok) throw new Error(`Cloudflare GraphQL returned HTTP ${response.status}`);
-  if (payload.errors?.length) throw new Error(payload.errors.map((item) => item.message).join("; "));
-
-  const account = payload?.data?.viewer?.accounts?.[0];
-  if (!account) throw new Error("No Cloudflare analytics account data returned");
+  const {account, coverage} = await queryHistory(env, LIFETIME_QUERY, start, end);
 
   const totalRow = account.totals?.[0] || {};
   const rawPageViews = number(totalRow.count);
@@ -100,6 +73,8 @@ async function fetchLifetime(env) {
   return {
     meta: {
       host,
+      coverage,
+      empty: rawPageViews === 0,
       historyEpoch: start.toISOString(),
       firstSeen,
       generatedAt: new Date().toISOString(),
@@ -149,17 +124,17 @@ function injectLifetimePanel(html) {
     try{
       var res=await fetch('/api/lifetime',{headers:{'Accept':'application/json'}});
       var data=await res.json();
-      if(!res.ok)throw new Error(data.error||'Request failed');
+      if(!res.ok)throw new Error(data.message||data.error||'Request failed');
       setText('lifeViews',fmt(data.summary.pageViews));
       setText('lifeVisits',fmt(data.summary.visits));
       setText('lifePpv',Number(data.summary.pagesPerVisit||0).toFixed(2));
       var p=dateParts(data.meta.firstSeen);
       setText('lifeSince',p.main);
       setText('lifeSinceSub',p.sub);
-      setText('lifeNote',data.note||'');
+      setText('lifeNote',(data.meta.empty?'No analytics data in available history. ': '')+(data.meta.coverage.retentionLimited?'History begins '+data.meta.coverage.start+' due to Cloudflare retention. ': '')+(data.note||''));
     }catch(err){
       setText('lifeViews','—');setText('lifeVisits','—');setText('lifePpv','—');setText('lifeSince','—');
-      setText('lifeNote','Lifetime total is temporarily unavailable.');
+      setText('lifeNote',err.message);
     }
   }
   window.addEventListener('load',loadLifetime);

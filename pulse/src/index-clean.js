@@ -1,6 +1,6 @@
+import { queryHistory, errorResponse, AnalyticsError } from "./cloudflare.js";
 import baseWorker from "./index.js";
 
-const GRAPHQL_ENDPOINT = "https://api.cloudflare.com/client/v4/graphql";
 const ALLOWED_RANGES = new Set([1, 7, 30]);
 const DEFAULT_TIME_ZONE = "America/Edmonton";
 
@@ -59,16 +59,12 @@ export default {
       const data = await fetchAnalytics(env, days);
       return json(data, 200, { "Cache-Control": "private, max-age=60" });
     } catch (error) {
-      console.error("RUNLU Pulse analytics error", error);
-      return json({ error: "Analytics query failed" }, 502, { "Cache-Control": "no-store" });
+      return errorResponse(error);
     }
   }
 };
 
 async function fetchAnalytics(env, days) {
-  if (!env.CF_ANALYTICS_TOKEN) throw new Error("Missing CF_ANALYTICS_TOKEN secret");
-  if (!env.CF_ACCOUNT_ID) throw new Error("Missing CF_ACCOUNT_ID secret");
-
   const host = env.RUNLU_HOST || "runlu.ca";
   const homeCountry = env.RUNLU_HOME_COUNTRY || "CA";
   const timeZone = env.RUNLU_TIME_ZONE || DEFAULT_TIME_ZONE;
@@ -77,25 +73,7 @@ async function fetchAnalytics(env, days) {
   const end = new Date();
   const start = startOfLocalDay(end, timeZone, days - 1);
 
-  const response = await fetch(GRAPHQL_ENDPOINT, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.CF_ANALYTICS_TOKEN}`,
-      "Content-Type": "application/json",
-      Accept: "application/json"
-    },
-    body: JSON.stringify({
-      query: ANALYTICS_QUERY,
-      variables: { accountTag: env.CF_ACCOUNT_ID, start: start.toISOString(), end: end.toISOString(), host }
-    })
-  });
-
-  const payload = await response.json();
-  if (!response.ok) throw new Error(`Cloudflare GraphQL returned HTTP ${response.status}`);
-  if (payload.errors?.length) throw new Error(payload.errors.map((item) => item.message).join("; "));
-
-  const account = payload?.data?.viewer?.accounts?.[0];
-  if (!account) throw new Error("No Cloudflare analytics account data returned");
+  const {account, coverage} = await queryHistory(env, ANALYTICS_QUERY, start, end);
 
   const totalRow = account.totals?.[0] || {};
   const rawPageViews = number(totalRow.count);
@@ -134,6 +112,8 @@ async function fetchAnalytics(env, days) {
   return {
     meta: {
       host,
+      coverage,
+      empty: rawPageViews === 0,
       days,
       timeZone,
       start: start.toISOString(),
@@ -265,7 +245,7 @@ function assertTimeZone(timeZone) {
   try {
     new Intl.DateTimeFormat("en", { timeZone }).format(new Date());
   } catch {
-    throw new Error(`Invalid RUNLU_TIME_ZONE: ${timeZone}`);
+    throw new AnalyticsError("CONFIGURATION_ERROR", "Configure a valid RUNLU_TIME_ZONE.", 503);
   }
 }
 

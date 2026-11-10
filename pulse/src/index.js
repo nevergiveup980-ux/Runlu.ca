@@ -334,7 +334,7 @@ const DASHBOARD_HTML = `<!doctype html>
       <div class="hero-copy">A private, read-only view of RUNLU traffic. Built on Cloudflare Web Analytics, with bots excluded and no visitor identity exposed.<div class="status"><span class="dot"></span><span>Analytics read only</span></div></div>
     </section>
     <div class="controls">
-      <div class="ranges"><button class="range" data-days="1">Today</button><button class="range active" data-days="7">7 days</button><button class="range" data-days="30">30 days</button></div>
+      <div class="ranges"><button class="range" data-days="1">Today</button><button class="range active" data-days="7">7 days</button><button class="range" data-days="30">30 days</button><button class="range" data-days="0">All Time</button></div>
       <div class="updated" id="updated">Loading…</div>
       <button class="refresh" id="refresh">Refresh</button>
     </div>
@@ -355,16 +355,21 @@ const DASHBOARD_HTML = `<!doctype html>
   function fmt(value){return new Intl.NumberFormat().format(Number(value||0))}
   function shortDate(value){var d=new Date(value+'T00:00:00Z');return d.toLocaleDateString(undefined,{month:'short',day:'numeric',timeZone:'UTC'})}
 
+  var loadVersion=0;
   async function load(days){
+    var version=++loadVersion;
     app.innerHTML='<div class="loading">Reading Cloudflare Web Analytics…</div>';
     updated.textContent='Refreshing…';
     try{
-      var res=await fetch('/api/analytics?days='+days,{headers:{'Accept':'application/json'}});
+      var res=await fetch(days===0?'/api/lifetime':'/api/analytics?days='+days,{headers:{'Accept':'application/json'}});
+      if((res.headers.get('Content-Type')||'').indexOf('application/json')<0)throw new Error('Session expired or unexpected server response. Sign in again and retry.');
       var data=await res.json();
-      if(!res.ok)throw new Error(data.message||data.error||'Request failed');
-      render(data);
+      if(version!==loadVersion)return;
+      if(!res.ok)throw new Error((data.error?data.error+': ':'')+(data.message||'Request failed')+(data.upstreamStatus?' (Cloudflare HTTP '+data.upstreamStatus+')':''));
+      if(days===0)renderLifetime(data);else render(data);
       updated.textContent='Updated '+new Date(data.meta.generatedAt).toLocaleString();
     }catch(err){
+      if(version!==loadVersion)return;
       app.innerHTML='<div class="error">Pulse could not read analytics.<br><small>'+esc(err.message)+'</small></div>';
       updated.textContent='Update failed';
     }
@@ -380,10 +385,18 @@ const DASHBOARD_HTML = `<!doctype html>
     var bars=data.map(function(row){var h=Math.max(2,Math.round(row.views/max*170));return '<div class="bar-wrap"><div class="bar-value">'+fmt(row.views)+'</div><div class="bar" style="height:'+h+'px"></div><div class="bar-label">'+esc(shortDate(row.date))+'</div></div>'}).join('');
     return '<section class="panel wide"><h2>Daily rhythm</h2><div class="panel-note">Page views by day</div><div class="chart">'+bars+'</div></section>';
   }
+  function coverage(data){
+    var c=data.meta.coverage;
+    return '<div class="panel-note">'+(data.meta.empty?'No analytics data for this range. ':'')+(c?'Available range: '+esc(c.start)+' to '+esc(c.end)+(c.retentionLimited?' · Earlier history is outside Cloudflare retention.':''):'')+'</div>';
+  }
+  function renderLifetime(data){
+    var s=data.summary;
+    app.innerHTML=coverage(data)+'<section class="metrics">'+metric('Page views',s.pageViews,'All available history')+metric('Visits',s.visits,'Cloudflare host-level visits')+metric('Pages / visit',s.pagesPerVisit,'Public-facing views ÷ visits')+'</section><div class="panel-note">'+esc(data.note)+'</div>';
+  }
   function render(data){
     var s=data.summary;
     var possible=s.possibleExternalVisits;
-    var html='<section class="metrics">'+
+    var html=coverage(data)+'<section class="metrics">'+
       metric('Page views',s.pageViews,data.meta.days+' day window')+
       metric('Visits',s.visits,'Cloudflare privacy-preserving visit metric')+
       metric('Pages / visit',s.pagesPerVisit,'Simple engagement signal')+
