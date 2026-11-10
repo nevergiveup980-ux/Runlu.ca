@@ -24,6 +24,12 @@ Scope: isolated static foundation only; no third-party catalog or sales.
 - 24 full-page screenshots generated and uploaded successfully. Artifact ID `13699649584`, 2,172,649 bytes: https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/42677259216/artifacts/13699649584
 - **Not a human visual pass:** screenshots have not been individually reviewed, and headless Chromium does not replace real iPhone Safari, Firefox, or assistive-technology testing.
 
+## Latest touch-target and semantic regression evidence (2026-11-10)
+- PR head `5f53463341ce413af44f98bea1e372c4f6c418d6`: all four GitHub checks completed successfully; browser-acceptance job `129920815014`.
+- Chromium regression includes 44px minimum navigation-control height, keyboard-focus outline and selector focusability, landmark/heading checks, 6 viewport widths and 4 languages. The navigation-control width check remains 24px; this is **not** a blanket claim of 44x44px WCAG compliance.
+- These are automated assertions, not evidence of actual iPhone touch comfort, Safari rendering, screen-reader usability, or human visual review.
+- Do not mark manual acceptance complete on the basis of CI alone.
+
 ## Manual browser acceptance (not yet performed)
 Use an isolated PR preview or local checkout, **not** production:
 - [ ] iPhone Safari narrow portrait (320–430px): no horizontal overflow; readable text; language selector operable.
