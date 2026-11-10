@@ -159,6 +159,35 @@ def test_browser():
             page.locator("#clearaudio").click()
             expect(page.locator("#audioplayer")).not_to_have_attribute("src", re.compile(r"^blob:"))
             assert page.evaluate("window.__audioUrls.created.length === 3 && window.__audioUrls.revoked.length === 3")
+            # Browser-level private library smoke test with fake local responses only.
+            # Never contact a real account, storage provider, or paid music API.
+            song_id = "11111111-1111-4111-8111-111111111111"
+            def fake_music_api(route):
+                request_url = route.request.url
+                if "/api/music/library?" in request_url:
+                    route.fulfill(status=200, content_type="application/json",
+                                  body=json.dumps({"items": [{"id": song_id, "title": "Mock private song",
+                                  "language": "zh", "voice": "female", "status": "completed",
+                                  "audio_available": True}], "has_more": False, "next_cursor": None}))
+                elif request_url.endswith("/download"):
+                    route.fulfill(status=200, content_type="application/json",
+                                  body=json.dumps({"url": "https://example.invalid/private-test.mp3",
+                                                   "expires_in": 90}))
+                else:
+                    route.fulfill(status=401, content_type="text/plain", body="Unauthorized")
+            page.route("**/api/music/**", fake_music_api)
+            page.locator("#refreshMusicLibrary").click()
+            expect(page.locator("#musicLibraryItems li")).to_have_count(1)
+            page.locator("#musicLibraryItems button").click()
+            expect(page.locator("#generatedMusicDownload")).to_have_attribute(
+                "href", "https://example.invalid/private-test.mp3")
+            expect(page.locator("#musicDownloadHelp")).to_be_visible()
+            # Simulated session expiry must remove private media and library rows.
+            page.evaluate("() => window.dispatchEvent(new Event('runlu-music-session-ended'))")
+            expect(page.locator("#musicLibraryItems li")).to_have_count(0)
+            expect(page.locator("#generatedMusicDownload")).to_be_hidden()
+            assert not page.locator("#generatedMusicPlayer").get_attribute("src")
+            page.unroute("**/api/music/**")
             assert page.locator("body").evaluate("(el) => el.scrollWidth <= window.innerWidth + 1"), "Mobile horizontal overflow"
             assert not errors, f"Browser JavaScript errors: {errors}"
             print("PASS: Chromium mobile viewport, language switching, save/reload, export/import, invalid JSON, decodable WAV playback, audio validation/cleanup, no JS errors")
