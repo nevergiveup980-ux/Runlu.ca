@@ -174,7 +174,7 @@ def test_browser():
                     link_requests["count"] += 1
                     ttl = 30 if link_requests["count"] == 1 else 90
                     route.fulfill(status=200, content_type="application/json",
-                                  body=json.dumps({"url": "https://example.invalid/private-test.mp3",
+                                  body=json.dumps({"url": "https://example.invalid/private-test-%d.mp3" % link_requests["count"],
                                                    "expires_in": ttl}))
                 else:
                     route.fulfill(status=401, content_type="text/plain", body="Unauthorized")
@@ -183,7 +183,7 @@ def test_browser():
             expect(page.locator("#musicLibraryItems li")).to_have_count(1)
             page.locator("#musicLibraryItems button").click()
             expect(page.locator("#generatedMusicDownload")).to_have_attribute(
-                "href", "https://example.invalid/private-test.mp3")
+                "href", "https://example.invalid/private-test-1.mp3")
             expect(page.locator("#musicDownloadHelp")).to_be_visible()
             # A near-expired signed link must not navigate away or trigger paid generation.
             page.evaluate("""() => {
@@ -198,7 +198,8 @@ def test_browser():
             assert "重新获取试听链接" in page.locator("#musicServiceStatus").inner_text()
             page.evaluate("() => { Date.now = window.__musicOriginalNow; }")
             page.get_by_role("button", name="重新获取试听链接").click()
-            expect(page.locator("#musicServiceStatus")).to_contain_text("试听链接已更新")
+            expect(page.locator("#generatedMusicDownload")).to_have_attribute(
+                "href", "https://example.invalid/private-test-2.mp3")
             assert link_requests["count"] == 2, "Refresh should request one new link only"
 
             # Simulated session expiry must remove private media and library rows.
