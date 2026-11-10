@@ -244,6 +244,18 @@ def test_browser():
             page.wait_for_timeout(100)
             expect(page.locator("#generatedMusicDownload")).to_have_attribute(
                 "href", "https://example.invalid/race-"+race_b+".mp3")
+            # A private signed-link response arriving after logout must be ignored.
+            race_logout = "44444444-4444-4444-8444-444444444444"
+            page.evaluate("(jobId) => window.dispatchEvent(new CustomEvent('runlu-music-select-song',{detail:{jobId}}))", race_logout)
+            page.wait_for_function("(id) => Boolean(window.__musicPending[id])", race_logout)
+            page.evaluate("() => window.dispatchEvent(new Event('runlu-music-session-ended'))")
+            expect(page.locator("#generatedMusicDownload")).to_be_hidden()
+            page.evaluate("(id) => window.__musicPending[id]()", race_logout)
+            page.wait_for_timeout(100)
+            expect(page.locator("#generatedMusicDownload")).to_be_hidden()
+            assert not page.locator("#generatedMusicDownload").get_attribute("href")
+            assert not page.locator("#generatedMusicPlayer").get_attribute("src")
+            assert link_requests["paid_posts"] == 0, "Logout must not regenerate music"
             page.evaluate("() => { window.fetch = window.__musicOriginalFetch; delete window.__musicPending; }")
             assert link_requests["paid_posts"] == 0
 
