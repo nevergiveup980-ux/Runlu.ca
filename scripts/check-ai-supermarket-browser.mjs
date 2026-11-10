@@ -21,7 +21,7 @@ try {
       const translations=await page.locator('[data-en]').evaluateAll((nodes,language)=>nodes.map(node=>({actual:node.textContent,expected:node.getAttribute('data-'+language)})).filter(x=>x.actual!==x.expected),lang);
       assert.deepEqual(translations,[],'all translated nodes '+lang);
       assert.equal(await page.locator('html').getAttribute('data-runlu-language'),lang);
-      assert.equal(await page.locator('html').getAttribute('lang'),lang,'document language '+lang);
+      assert.equal(await page.locator('html').getAttribute('lang'),lang==='zh'?'zh-CN':lang,'document language '+lang);
       const label=await page.locator('.language span').innerText();
       assert.equal(await page.locator('#language').evaluate(el=>el.labels?.[0]?.querySelector('span')?.textContent),label,'localized visible label names selector '+lang);
       await page.reload();
