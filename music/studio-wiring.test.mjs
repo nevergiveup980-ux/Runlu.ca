@@ -12,7 +12,7 @@ test("iPhone saving help is shown for both newly generated and library songs",()
 test("manual link refresh ignores responses for previously selected songs",()=>{
  assert.match(html,/const requestedJobId=activeJobId/);
  assert.match(html,/playback\.getLink\(requestedJobId,\{force:true\}\)/);
- assert.match(html,/if\(activeJobId!==requestedJobId\)return/);
+ assert.match(html,/if\(activeJobId!==requestedJobId\|\|playbackEpoch!==requestedEpoch\)return/);
 });
 test("private playback state is cleared when session expires",()=>{
  assert.match(html,/runlu-music-session-ended/);
