@@ -26,6 +26,8 @@ export class PgDirectorChargeSettlement {
    const estimate=Number(attempt.rows[0].estimated_cents);
    if(![limit,used,estimate].every(Number.isSafeInteger)||limit<=0||used<0||estimate<0)
     throw Error('Invalid stored budget amounts');
+   if(used<estimate||!Number.isSafeInteger(used-estimate+chargedCents))
+    throw Error('Invalid stored budget amounts');
    const exceedsApprovedBudget=used-estimate+chargedCents>limit;
    await client.query(
     `INSERT INTO stage_director_charge_audit(attempt_id,provider_charge_reference,charged_cents,recorded_by,exceeds_approved_budget,reconciliation_note)
