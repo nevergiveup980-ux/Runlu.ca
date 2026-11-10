@@ -51,3 +51,10 @@ test("reselecting the same library song invalidates the earlier async response",
  assert.match(selection,/if\(activeJobId!==jobId\|\|playbackEpoch!==selectedEpoch\)return/);
  assert.match(selection,/activeJobId===jobId&&playbackEpoch===selectedEpoch/);
 });
+
+test("library pages deduplicate song ids and reject repeated cursors",()=>{
+ assert.match(html,/const seenSongIds=new Set\(\),seenCursors=new Set\(\)/);
+ assert.match(html,/seenSongIds\.has\(songId\)/);
+ assert.match(html,/next===cursor\|\|seenCursors\.has\(next\)/);
+ assert.match(html,/seenSongIds\.clear\(\);seenCursors\.clear\(\)/);
+});
