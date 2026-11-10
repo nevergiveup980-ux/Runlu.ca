@@ -172,7 +172,7 @@ def test_browser():
                                   "audio_available": True}], "has_more": False, "next_cursor": None}))
                 elif request_url.endswith("/download"):
                     link_requests["count"] += 1
-                    ttl = 1 if link_requests["count"] == 1 else 90
+                    ttl = 30 if link_requests["count"] == 1 else 90
                     route.fulfill(status=200, content_type="application/json",
                                   body=json.dumps({"url": "https://example.invalid/private-test.mp3",
                                                    "expires_in": ttl}))
@@ -191,10 +191,13 @@ def test_browser():
                 document.querySelector("#generatedMusicDownload").addEventListener("click",
                     e => { window.__blockedMusicDownload = e.defaultPrevented; });
             }""")
+            # Advance only the page clock; keep the server TTL within its valid 30–120s contract.
+            page.evaluate("() => { window.__musicOriginalNow = Date.now; Date.now = () => window.__musicOriginalNow() + 25000; }")
             page.locator("#generatedMusicDownload").click()
             assert page.evaluate("window.__blockedMusicDownload")
             assert "重新获取试听链接" in page.locator("#musicServiceStatus").inner_text()
-            page.get_by_role("button", name="重新获取试听链接").click()
+            page.evaluate("() => { Date.now = window.__musicOriginalNow; }")
+            page.locator("#renewMusicLink").click()
             expect(page.locator("#musicServiceStatus")).to_contain_text("试听链接已更新")
             assert link_requests["count"] == 2, "Refresh should request one new link only"
 
