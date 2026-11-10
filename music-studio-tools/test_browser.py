@@ -162,6 +162,7 @@ def test_browser():
             # Browser-level private library smoke test with fake local responses only.
             # Never contact a real account, storage provider, or paid music API.
             song_id = "11111111-1111-4111-8111-111111111111"
+            link_requests = {"count": 0}
             def fake_music_api(route):
                 request_url = route.request.url
                 if "/api/music/library?" in request_url:
@@ -170,9 +171,11 @@ def test_browser():
                                   "language": "zh", "voice": "female", "status": "completed",
                                   "audio_available": True}], "has_more": False, "next_cursor": None}))
                 elif request_url.endswith("/download"):
+                    link_requests["count"] += 1
+                    ttl = 1 if link_requests["count"] == 1 else 90
                     route.fulfill(status=200, content_type="application/json",
                                   body=json.dumps({"url": "https://example.invalid/private-test.mp3",
-                                                   "expires_in": 90}))
+                                                   "expires_in": ttl}))
                 else:
                     route.fulfill(status=401, content_type="text/plain", body="Unauthorized")
             page.route("**/api/music/**", fake_music_api)
@@ -182,6 +185,19 @@ def test_browser():
             expect(page.locator("#generatedMusicDownload")).to_have_attribute(
                 "href", "https://example.invalid/private-test.mp3")
             expect(page.locator("#musicDownloadHelp")).to_be_visible()
+            # A near-expired signed link must not navigate away or trigger paid generation.
+            page.evaluate("""() => {
+                window.__blockedMusicDownload = false;
+                document.querySelector("#generatedMusicDownload").addEventListener("click",
+                    e => { window.__blockedMusicDownload = e.defaultPrevented; });
+            }""")
+            page.locator("#generatedMusicDownload").click()
+            assert page.evaluate("window.__blockedMusicDownload")
+            assert "重新获取试听链接" in page.locator("#musicServiceStatus").inner_text()
+            page.get_by_role("button", name="重新获取试听链接").click()
+            expect(page.locator("#musicServiceStatus")).to_contain_text("试听链接已更新")
+            assert link_requests["count"] == 2, "Refresh should request one new link only"
+
             # Simulated session expiry must remove private media and library rows.
             page.evaluate("() => window.dispatchEvent(new Event('runlu-music-session-ended'))")
             expect(page.locator("#musicLibraryItems li")).to_have_count(0)
