@@ -58,3 +58,18 @@ test("library pages deduplicate song ids and reject repeated cursors",()=>{
  assert.match(html,/next===cursor\|\|seenCursors\.has\(next\)/);
  assert.match(html,/seenSongIds\.clear\(\);seenCursors\.clear\(\)/);
 });
+
+test("API client dispatches session-ended on 401 but not 403",async()=>{
+ const {listMySongs}=await import("./music-api-client.mjs");
+ const oldFetch=globalThis.fetch,oldWindow=globalThis.window;
+ const events=[];
+ globalThis.window={dispatchEvent:event=>{events.push(event.type);return true}};
+ try{
+  globalThis.fetch=async()=>new Response(JSON.stringify({error_code:"UNAUTHENTICATED"}),{status:401,headers:{"Content-Type":"application/json"}});
+  await assert.rejects(listMySongs(),/UNAUTHENTICATED/);
+  assert.deepEqual(events,["runlu-music-session-ended"]);
+  globalThis.fetch=async()=>new Response(JSON.stringify({error_code:"FORBIDDEN"}),{status:403,headers:{"Content-Type":"application/json"}});
+  await assert.rejects(listMySongs(),/FORBIDDEN/);
+  assert.deepEqual(events,["runlu-music-session-ended"],"403 must not clear the user session");
+ }finally{globalThis.fetch=oldFetch;globalThis.window=oldWindow}
+});
