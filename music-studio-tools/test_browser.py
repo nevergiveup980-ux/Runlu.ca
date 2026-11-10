@@ -236,7 +236,7 @@ def test_browser():
             race_a = "22222222-2222-4222-8222-222222222222"
             race_b = "33333333-3333-4333-8333-333333333333"
             page.evaluate("(ids) => { for(const jobId of ids) window.dispatchEvent(new CustomEvent('runlu-music-select-song',{detail:{jobId}})); }", [race_a, race_b])
-            expect.poll(lambda: page.evaluate("Object.keys(window.__musicPending).length")).to_be(2)
+            page.wait_for_function("Object.keys(window.__musicPending).length === 2")
             page.evaluate("(id) => window.__musicPending[id]()", race_b)
             expect(page.locator("#generatedMusicDownload")).to_have_attribute(
                 "href", "https://example.invalid/race-"+race_b+".mp3")
