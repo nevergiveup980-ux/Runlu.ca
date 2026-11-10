@@ -63,6 +63,6 @@ test('inconsistent committed amount below current reservation fails closed',asyn
 });
 test('settlement arithmetic overflow fails before any audit write',async()=>{
  const m=mock({limit:Number.MAX_SAFE_INTEGER,used:Number.MAX_SAFE_INTEGER,estimate:600});
- await assert.rejects(new PgDirectorChargeSettlement(m.pool).settle(input),/Invalid stored budget amounts/);
+ await assert.rejects(new PgDirectorChargeSettlement(m.pool).settle({...input,chargedCents:800}),/Invalid stored budget amounts/);
  assert.equal(m.calls.filter(c=>c.sql.startsWith('INSERT')).length,0);
 });
