@@ -12,7 +12,7 @@ node ios/RUNLUTwist/Scripts/test-game-logic.cjs
 python3 ios/RUNLUTwist/Scripts/verify-package.py
 ```
 
-`sync-game.py` applies the native styling, offline policy, local privacy/support links, allowlisted native storage and text-only sharing. Do not hand-edit the bundled gameplay copy. Native backup covers all five gameplay/language keys. Build 2's canonical bundle-path fix remains.
+`sync-game.py` applies the native styling, offline policy, local privacy/support links, allowlisted native storage and text-only sharing. Do not hand-edit the bundled gameplay copy. Native backup covers the legacy key plus v6 gameplay, language, reasoning, reflections, Studio, verified answers, ordering, route ordering and the classic-content migration marker. Both the JavaScript allowlist and Swift bridge must remain aligned. Build 2's canonical bundle-path fix remains.
 
 Run Xcode's Product > Test for actual WKWebView and touch regressions. `-twist-qa-suite` and `-twist-qa-corrupt` are DEBUG-only test launch arguments; they alter simulator test data. The full suite executes real game JavaScript inside WKWebView, then UI tests verify relaunch, navigation and native controls. Node tests use a DOM stub and do not prove browser layout or VoiceOver. `Scripts/test-remediation.cjs` is an optional Playwright browser suite requiring separately installed Playwright and browser runtimes.
 
@@ -21,3 +21,7 @@ See `../../docs/TWIST-11-IOS-ACCEPTANCE.md` for current evidence and unresolved 
 ## Build 4 final engineering acceptance
 
 See `../../docs/TWIST-BUILD4-FINAL-ACCEPTANCE.md`. Code commit `107ec9d` passed the final nine-test iOS 26.5 run, including accessibility and largest Dynamic Type. A locally signed Release archive and development IPA were exported on 2026-10-29; no upload or review submission occurred. Real iPhone installation remains blocked by Developer Mode and full physical-device acceptance is pending.
+
+## Source integrity automation
+
+The `.github/workflows/twist-ios-source-integrity.yml` workflow checks on relevant PRs and branch pushes that `sync-game.py` regenerates **exactly** the committed iOS gameplay bundle, then runs Node logic regressions and `verify-package.py`. A red workflow means the bundle or logic must be corrected before review. A green workflow proves **source/package consistency only**; it does not compile Swift, install on an iPhone, run VoiceOver, produce a signed IPA, or authorize App Store resubmission. See `../../TWIST_IOS_QA_GATE.md` for the real-device release gate.
