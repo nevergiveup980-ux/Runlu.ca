@@ -2,6 +2,12 @@
 
 **Status: REQUESTED / NOT SIGNED.** This packet is a review instrument, not proof that a review occurred. Do not set review flags to true or publish until evidence is recorded.
 
+## Author professional scenario confirmation — 2026-11-11
+
+**Decision recorded:** The RUNLU author explicitly confirmed in conversation that the three proposed warehouse scenarios and their decision principles match practical flooring-warehouse experience. Scope: RK-0005's two 12 ft × 12.5 ft remnants (300 ft² total) cannot independently supply a single continuous 12 ft × 20 ft cut (240 ft²) without an approved joining approach; RK-0006's illustrative 100 LF − 65 LF = 35 LF, and 80 LF − 30 LF restricted − 20 LF separately committed = 30 LF under non-overlapping assumptions.
+
+**Evidence:** Author's explicit response “确认” to the question listing all three cases and asking whether their judgments fit actual warehouse practice, 2026-11-11 (conversation). This is **author practitioner confirmation of the scenario principles**, not independent verification of real customer transactions, universal ERP rules, installation permissions, source rights, four-language translations, mobile testing or overall publication approval. Do not mark other checklist items complete on this basis.
+
 ## Author-led internal review assignment — 2026-11-10
 
 The RUNLU author has agreed to act as the **final professional-content reviewer** for RK-0005 and RK-0006. The assistant supports evidence gathering, technical checks, four-language consistency and release preparation. This replaces the proposed external-review staffing model for these two articles only; it does **not** establish that any technical claim, source rights, language edition, or release has been approved.
