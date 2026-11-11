@@ -21,6 +21,8 @@ def test_offline_acceptance():
             expect(page.locator("#toggle")).to_be_disabled()
             expect(page.locator("#scene")).to_be_visible()
             expect(page.locator("#fullscreen")).to_be_visible()
+            expect(page.locator("#scene-file")).to_have_attribute("accept", "image/jpeg,image/png,image/webp,image/heic,image/heif")
+            expect(page.locator("#reset-scene")).to_be_visible()
             page.locator("#fullscreen").click()
             expect(page.locator("#scene")).to_have_class("expanded")
             expect(page.locator("#close-scene")).to_be_visible()
