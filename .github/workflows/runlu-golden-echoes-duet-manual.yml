@@ -24,7 +24,7 @@ jobs:
       - name: Checkout reviewed test commit, not production content
         uses: actions/checkout@v4
         with:
-          ref: 0ccd2cc7275e2a5f7869311d30a3db4add8d1f01
+          ref: f1dda51d96a4524bdc2c148b751c45df994d5665
           persist-credentials: false
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -40,6 +40,8 @@ jobs:
           python music-studio-tools/generate_full_song.py \
             --project music-studio-tools/when-the-lights-go-down-duet.json \
             --output output/when-the-lights-go-down-duet.mp3
+      - name: Offline audio-response regression tests — no API calls
+        run: python music-studio-tools/test_golden_echoes_offline.py
       - name: Generate one original duet — no retries
         env:
           RUNLU_MUSIC_GEMINI_API_KEY: ${{ secrets.RUNLU_MUSIC_GEMINI_API_KEY }}
