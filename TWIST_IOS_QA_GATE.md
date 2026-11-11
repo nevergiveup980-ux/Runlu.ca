@@ -40,3 +40,9 @@ Scope: `twist.html` and the **separately packaged iOS app**. Web source updates 
 - [ ] Archive tested build number, commit SHA, screenshots and tester sign-off before resubmission.
 
 **Release gate:** No merge, build-complete claim, device-pass claim, or Apple resubmission claim without recorded evidence. Apple acceptance remains Apple's decision.
+
+## Automated/simulated regression evidence (2026-11-10)
+
+The JavaScript DOM simulation passed **14/14 checks** across puzzle #4 and #8: EN/中文 switching before submission, persisted submission, Chinese correct-result rendering after submission, live-region disabled after submission, locked controls after reopening, and preserved sequence on reopening. This is **not** an iPhone, WKWebView, VoiceOver, or TestFlight result. The actual device checkboxes above remain unchecked.
+
+When executing the real-device test, record the exact commit and app build; do not infer packaged app behavior from the website's current GitHub branch.
