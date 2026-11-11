@@ -7,7 +7,7 @@ import { mkdir } from 'node:fs/promises';
 await mkdir('ai-supermarket-browser-evidence',{recursive:true});
 const browser=await chromium.launch({headless:true});
 try {
-  for (const width of [320,375,390,430,768,1280]) {
+  for (const width of [320,375,390,430,440,480,568,640,768,1280]) {
     const page=await browser.newPage({viewport:{width,height:850},deviceScaleFactor:1});
     const errors=[];
     page.on('pageerror',error=>errors.push(error.message));
@@ -45,6 +45,8 @@ try {
         assert.ok(r.width>0&&r.height>0&&r.left>=-1&&r.right<=width+1,'off-screen card '+i+' at '+width+' '+lang);
       }
       assert.ok(geometry.rects['.top nav'].bottom<=geometry.rects['.hero h1'].top,'header overlaps hero at '+width+' '+lang);
+      const header=await page.locator('.top').evaluate(el=>{const h=el.getBoundingClientRect();return [...el.querySelectorAll('.brand, nav, .language')].map(n=>{const r=n.getBoundingClientRect();return {name:n.className||n.tagName,left:r.left,right:r.right,top:r.top,bottom:r.bottom,headerBottom:h.bottom}})});
+      for(const part of header){assert.ok(part.left>=-1&&part.right<=width+1,'header element clipped '+JSON.stringify(part)+' at '+width);assert.ok(part.bottom<=part.headerBottom+1,'header element outside header '+JSON.stringify(part)+' at '+width)}
       const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);
       assert.equal(overflow,false,'horizontal overflow at '+width+'px '+lang);
     }
