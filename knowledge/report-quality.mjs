@@ -23,6 +23,8 @@ const explain=code=>{
  if(code.startsWith("source-use-prohibited-"))return "Prohibited source use";
  if(code.startsWith("missing-source-rights-basis-"))return "Documented rights basis";
  if(code.startsWith("missing-source-rights-evidence-"))return "Rights evidence reference";
+ if(code.startsWith("internal-review-required-"))return "Human dimension signoff: "+code.slice("internal-review-required-".length);
+ if(code.startsWith("invalid-review-"))return "Invalid dimension evidence: "+code.slice("invalid-review-".length);
  return labels[code]??code;
 };
 const rows=audit.draftReadiness.map(r=>({

@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RUNLU internal review ledger v1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "entries"
+  ],
+  "properties": {
+    "version": {
+      "enum": [
+        1
+      ]
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "review_id",
+          "record_id",
+          "content_digest",
+          "reviewer_id",
+          "reviewer_name",
+          "role",
+          "summary",
+          "record_version",
+          "dimension",
+          "reviewer_type",
+          "relationship",
+          "decision",
+          "reviewed_at",
+          "evidence",
+          "ai_assistance"
+        ],
+        "properties": {
+          "review_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "record_id": {
+            "type": "string",
+            "pattern": "^RK-[0-9]{4,}$"
+          },
+          "content_digest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "reviewer_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reviewer_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          },
+          "attestation_ref": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1
+          },
+          "record_version": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "source_index": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "dimension": {
+            "enum": [
+              "facts",
+              "practice",
+              "language:en",
+              "language:zh",
+              "language:fr",
+              "language:es",
+              "source_rights"
+            ]
+          },
+          "reviewer_type": {
+            "enum": [
+              "human",
+              "ai"
+            ]
+          },
+          "relationship": {
+            "enum": [
+              "internal",
+              "external"
+            ]
+          },
+          "decision": {
+            "enum": [
+              "pending",
+              "pass",
+              "changes_requested",
+              "rejected"
+            ]
+          },
+          "reviewed_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "ref",
+                "locator",
+                "finding"
+              ],
+              "properties": {
+                "ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "locator": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "finding": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "ai_assistance": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

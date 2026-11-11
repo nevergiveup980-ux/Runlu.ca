@@ -3,21 +3,11 @@ name: RUNLU Knowledge Publication Gate
 on:
   push:
     paths:
-      - "knowledge/data/**"
-      - "knowledge/editorial/**"
-      - "knowledge/reviews/**"
-      - "knowledge/validate-publication*.mjs"
-      - "knowledge/report-quality.mjs"
-      - "knowledge/preview/**"
+      - "knowledge/**"
       - ".github/workflows/knowledge-publication-gate.yml"
   pull_request:
     paths:
-      - "knowledge/data/**"
-      - "knowledge/editorial/**"
-      - "knowledge/reviews/**"
-      - "knowledge/validate-publication*.mjs"
-      - "knowledge/report-quality.mjs"
-      - "knowledge/preview/**"
+      - "knowledge/**"
       - ".github/workflows/knowledge-publication-gate.yml"
   workflow_dispatch:
 
@@ -34,7 +24,7 @@ jobs:
         with:
           node-version: "22"
       - name: Test publication eligibility rules
-        run: node --test knowledge/validate-publication.test.mjs
+        run: node --test knowledge/validate-publication.test.mjs knowledge/internal-review.test.mjs
       - name: Test four-language editorial preview
         run: node --test knowledge/preview/preview-smoke.test.mjs
       - name: Audit draft and published knowledge records
