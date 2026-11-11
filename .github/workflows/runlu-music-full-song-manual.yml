@@ -20,6 +20,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Offline duet preflight — zero API calls
+        run: python music-studio-tools/preflight_golden_echoes.py
       - name: Generate exactly one full song
         env:
           RUNLU_MUSIC_GEMINI_API_KEY: ${{ secrets.RUNLU_MUSIC_GEMINI_API_KEY }}
