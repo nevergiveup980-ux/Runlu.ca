@@ -43,13 +43,15 @@ The S01–S04 PASS labels below are limited to assistant-performed verification 
 **Disposition: PRELIMINARY / OPEN.** Publication rights gate remains HOLD.
 
 ## Language and reader usability
+
+**Cross-language audit scope (2026-11-11):** Assistant compared the four editorial language sections for numbers, stated assumptions, central inventory distinctions, cut-geometry caveat and workflow cautions. The L05 result is not a native-language proofreading certificate; L01–L04 remain NOT CHECKED until a complete editorial language review is documented.
 | ID | Required check | Result | Evidence / reviewer note |
 |---|---|---|---|
 | L01 | English: clarity, accurate terminology, accessible reading level. | NOT CHECKED | |
 | L02 | Chinese: natural phrasing; consistent LF / 色批 / 预留 / 承诺 / ATP. | NOT CHECKED | |
 | L03 | French: native proofreading of stock/engagement/ATP terminology. | NOT CHECKED | |
 | L04 | Spanish: native proofreading of existencias/asignación/ATP terminology. | NOT CHECKED | |
-| L05 | Confirm all four versions describe the same assumptions and calculations. | NOT CHECKED | |
+| L05 | Confirm all four versions describe the same assumptions and calculations. | ASSISTANT CROSS-CHECK PASS; independent proofreading pending | Compared EN/ZH/FR/ES manuscript on 2026-11-11: all state 100 LF on hand, 65 LF committed, 35 LF remainder and 50 LF new request; all state 80 LF physical, 30 LF blocked, 20 LF separately committed, 30 LF remainder with non-overlap; all distinguish allocation from continuous-cut suitability and caution against treating ERP formulas as universal. This is semantic consistency review only, not native-speaker proofreading or final language approval. |
 | L06 | Confirm accessibility and mobile behavior only after an actual browser preview is built and tested. | NOT CHECKED | |
 
 
