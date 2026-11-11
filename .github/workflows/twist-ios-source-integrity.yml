@@ -1,0 +1,40 @@
+name: TWIST iOS source integrity
+
+on:
+  pull_request:
+    paths:
+      - 'twist.html'
+      - 'ios/RUNLUTwist/**'
+      - '.github/workflows/twist-ios-source-integrity.yml'
+  push:
+    branches:
+      - feature/twist-apple-review-remediation
+    paths:
+      - 'twist.html'
+      - 'ios/RUNLUTwist/**'
+      - '.github/workflows/twist-ios-source-integrity.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Confirm bundled iOS gameplay matches authoritative source
+        run: |
+          python3 ios/RUNLUTwist/Scripts/sync-game.py
+          git diff --exit-code -- ios/RUNLUTwist/RUNLUTwist/Web/twist.html ios/RUNLUTwist/RUNLUTwist/Web/qa-suite.js
+      - name: Run game logic regression tests
+        run: node ios/RUNLUTwist/Scripts/test-game-logic.cjs
+      - name: Verify offline package and native persistence contract
+        run: python3 ios/RUNLUTwist/Scripts/verify-package.py
