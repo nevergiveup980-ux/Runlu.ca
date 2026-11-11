@@ -1,0 +1,26 @@
+name: RUNLU MUSIC — Golden Echoes free preflight
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  free-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout reviewed music test revision
+        uses: actions/checkout@v4
+        with:
+          ref: 0ccd2cc7275e2a5f7869311d30a3db4add8d1f01
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate original duet without API key or billing
+        run: python music-studio-tools/preflight_golden_echoes.py
+      - name: Check generator command without contacting provider
+        run: |
+          python music-studio-tools/generate_full_song.py \
+            --project music-studio-tools/when-the-lights-go-down-duet.json \
+            --output output/when-the-lights-go-down-duet.mp3
