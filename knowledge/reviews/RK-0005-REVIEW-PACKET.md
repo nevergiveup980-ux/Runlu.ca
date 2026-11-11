@@ -2,6 +2,18 @@
 
 **Status: REQUESTED / NOT SIGNED.** This packet is a review instrument, not proof that a review occurred. Do not set review flags to true or publish until evidence is recorded.
 
+## Author professional scenario confirmation — 2026-11-11
+
+**Decision recorded:** The RUNLU author explicitly confirmed in conversation that the three proposed warehouse scenarios and their decision principles match practical flooring-warehouse experience. Scope: RK-0005's two 12 ft × 12.5 ft remnants (300 ft² total) cannot independently supply a single continuous 12 ft × 20 ft cut (240 ft²) without an approved joining approach; RK-0006's illustrative 100 LF − 65 LF = 35 LF, and 80 LF − 30 LF restricted − 20 LF separately committed = 30 LF under non-overlapping assumptions.
+
+**Evidence:** Author's explicit response “确认” to the question listing all three cases and asking whether their judgments fit actual warehouse practice, 2026-11-11 (conversation). This is **author practitioner confirmation of the scenario principles**, not independent verification of real customer transactions, universal ERP rules, installation permissions, source rights, four-language translations, mobile testing or overall publication approval. Do not mark other checklist items complete on this basis.
+
+## Author-led internal review assignment — 2026-11-10
+
+The RUNLU author has agreed to act as the **final professional-content reviewer** for RK-0005 and RK-0006. The assistant supports evidence gathering, technical checks, four-language consistency and release preparation. This replaces the proposed external-review staffing model for these two articles only; it does **not** establish that any technical claim, source rights, language edition, or release has been approved.
+
+**Current outcome: PENDING.** Reviewer identity/signature, item-level technical verdicts, supporting evidence, language review results and explicit publication authorization must be recorded before changing publication flags. Do not infer approval from the agreement to review. No customer or proprietary warehouse data should be included in evidence.
+
 **Working manuscript:** [RK-0005-INVENTORY-FULFILLMENT.md](../editorial/RK-0005-INVENTORY-FULFILLMENT.md)  
 **Structured draft:** [records.json](../data/records.json), record RK-0005 v1  
 **Proposed title (EN):** Why enough carpet inventory may still fail an order
@@ -10,9 +22,9 @@
 
 | Claim or example | Verification task | Result |
 | --- | --- | --- |
-| Two 12 ft × 12.5 ft remnants total 300 ft² | Recalculate 2 × 12 × 12.5 = 300 | Pending reviewer |
-| One continuous 12 ft × 20 ft piece requires 240 ft² | Recalculate 12 × 20 = 240 and confirm neither 12.5 ft remnant provides 20 ft continuous length | Pending reviewer |
-| Sufficient total area is not sufficient for a continuous-piece allocation | Verify under stated no-seam scenario; do not generalize to every installation | Pending reviewer |
+| Two 12 ft × 12.5 ft remnants total 300 ft² | Recalculate 2 × 12 × 12.5 = 300 | Arithmetic verified; author scenario confirmed 2026-11-11; full review pending |
+| One continuous 12 ft × 20 ft piece requires 240 ft² | Recalculate 12 × 20 = 240 and confirm neither 12.5 ft remnant provides 20 ft continuous length | Arithmetic verified; author scenario confirmed 2026-11-11; full review pending |
+| Sufficient total area is not sufficient for a continuous-piece allocation | Verify under stated no-seam scenario; do not generalize to every installation | Author confirmed stated scenario principle 2026-11-11; full review pending |
 | Seam feasibility is project-specific | Check whether customer-approved layout, manufacturer instructions, pattern and pile direction permit the proposed seam | Pending reviewer |
 | Reserved / damaged / unverified stock should not be counted as freely allocatable | Review as a RUNLU operational recommendation, not as a claim mandated by CRI | Pending reviewer |
 | Six-checkpoint triage is actionable | Walk through one anonymized realistic order and note any missing decision or exception | Pending reviewer |
