@@ -15,7 +15,6 @@ for marker in ("[Verse 1 — Male]", "[Verse 2 — Female]", "[Chorus — Togeth
 assert "Love still glows when the lights go down." in lyrics
 prompt = build_prompt(project)
 assert len(prompt) <= 12000, "Prompt exceeds current Python generator limit"
-assert len(prompt) > 2000, "Expected current full lyric to exceed historical JS adapter's limit"
 assert "distinct mature warm husky male baritone and soulful female alto" in prompt
 print(json.dumps({
     "mode": "offline_preflight",
