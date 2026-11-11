@@ -20,6 +20,7 @@ def test_offline_acceptance():
             expect(page.locator("#audio-empty")).to_be_visible()
             expect(page.locator("#toggle")).to_be_disabled()
             expect(page.locator("#scene")).to_be_visible()
+            expect(page.locator("#fullscreen")).to_be_visible()
             expect(page.locator("#style")).to_have_value("folk")
             page.locator("#style").select_option("neon")
             expect(page.locator("#scene")).to_have_class("neon")
