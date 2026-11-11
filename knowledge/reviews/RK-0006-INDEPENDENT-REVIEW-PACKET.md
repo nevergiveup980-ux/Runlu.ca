@@ -21,12 +21,14 @@
 | T08 | Does this article avoid duplicating RK-0005's cut-geometry focus? | NOT CHECKED | |
 
 ## Sources and rights
+
+The S01–S04 PASS labels below are limited to assistant-performed verification of publicly accessible official documentation on 2026-11-11. They do **not** signify independent human source review, licensing approval, or final editorial authorization. S05 remains NOT CHECKED.
 | ID | Required check | Result | Evidence / reviewer note |
 |---|---|---|---|
-| S01 | Confirm Oracle NetSuite on-hand/committed/available definitions at the cited official URL. | NOT CHECKED | |
-| S02 | Confirm Microsoft Dynamics 365 physical inventory / physical reserved / available physical definitions at the cited official URL. | NOT CHECKED | |
-| S03 | Confirm Oracle NetSuite ATP scope, timing and configuration caveats. | NOT CHECKED | |
-| S04 | Confirm Oracle NetSuite inventory-status commitment restrictions. | NOT CHECKED | |
+| S01 | Confirm Oracle NetSuite on-hand/committed/available definitions at the cited official URL. | PASS — official source checked 2026-11-11 | Oracle Assessing Stock Levels: available = on hand − committed; on hand includes committed. https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2262573.html |
+| S02 | Confirm Microsoft Dynamics 365 physical inventory / physical reserved / available physical definitions at the cited official URL. | PASS — official source checked 2026-11-11 | Microsoft On-hand list: Available physical = Physical inventory − Physical reserved; dimensions and filters affect aggregation. https://learn.microsoft.com/en-us/dynamics365/supply-chain/inventory/inventory-on-hand-list |
+| S03 | Confirm Oracle NetSuite ATP scope, timing and configuration caveats. | PASS — official source checked 2026-11-11 | Oracle ATP describes projected receipt/ship dates, expected supply and demand; Demand Planning prerequisite noted. https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2300269.html |
+| S04 | Confirm Oracle NetSuite inventory-status commitment restrictions. | PASS — official source checked 2026-11-11 | Oracle Inventory Status: quantities can remain on hand while excluded from commitment based on status. https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1515696627.html |
 | S05 | Check links, attribution, quotation/reuse rights and any version-specific qualifications. | NOT CHECKED | |
 
 ## Language and reader usability
