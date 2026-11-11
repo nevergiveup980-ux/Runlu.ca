@@ -26,14 +26,14 @@ jobs:
         run: |
           mkdir -p output
           python music-studio-tools/generate_full_song.py \
-            --project music-studio-tools/sample-project.json \
-            --output output/runlu-wind-years-full.mp3 \
+            --project music-studio-tools/when-the-lights-go-down-duet.json \
+            --output output/when-the-lights-go-down-duet.mp3 \
             --confirm-paid
       - name: Upload generated song
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: runlu-wind-years-full
-          path: output/runlu-wind-years-full.mp3
+          name: runlu-when-the-lights-go-down-duet-private
+          path: output/when-the-lights-go-down-duet.mp3
           if-no-files-found: error
           retention-days: 14
