@@ -2,6 +2,12 @@
 
 **Status: REQUESTED / NOT SIGNED.** This packet is a review instrument, not proof that a review occurred. Do not set review flags to true or publish until evidence is recorded.
 
+## Author-led internal review assignment — 2026-11-10
+
+The RUNLU author has agreed to act as the **final professional-content reviewer** for RK-0005 and RK-0006. The assistant supports evidence gathering, technical checks, four-language consistency and release preparation. This replaces the proposed external-review staffing model for these two articles only; it does **not** establish that any technical claim, source rights, language edition, or release has been approved.
+
+**Current outcome: PENDING.** Reviewer identity/signature, item-level technical verdicts, supporting evidence, language review results and explicit publication authorization must be recorded before changing publication flags. Do not infer approval from the agreement to review. No customer or proprietary warehouse data should be included in evidence.
+
 **Working manuscript:** [RK-0005-INVENTORY-FULFILLMENT.md](../editorial/RK-0005-INVENTORY-FULFILLMENT.md)  
 **Structured draft:** [records.json](../data/records.json), record RK-0005 v1  
 **Proposed title (EN):** Why enough carpet inventory may still fail an order
