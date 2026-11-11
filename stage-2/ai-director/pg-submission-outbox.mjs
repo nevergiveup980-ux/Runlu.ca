@@ -16,17 +16,32 @@ export class PgDirectorSubmissionOutbox {
  }
  async claim({attemptId}){
   if(!ID.test(attemptId??''))throw Error('Invalid attempt');
-  const r=await this.pool.query(
-   `UPDATE stage_director_submission_outbox SET state='DISPATCHING',updated_at=now()
-    WHERE attempt_id=$1 AND state='PENDING'
-      AND EXISTS (
-       SELECT 1 FROM stage_director_attempts a
-       JOIN stage_director_budgets b ON b.episode_id=a.episode_id
-       WHERE a.attempt_id=$1 AND a.state='RESERVED' AND b.spending_paused=false
-      )
-    RETURNING attempt_id,state`,[attemptId]);
-  if(r.rows.length!==1)throw Error('Submission already claimed, spending paused, or uncertain');
-  return r.rows[0];
+  if(typeof this.pool.connect!=='function')throw Error('Transactional PostgreSQL pool required');
+  const client=await this.pool.connect();
+  try{
+   await client.query('BEGIN');
+   // Lock the episode budget first, matching reservation and charge settlement.
+   // This serializes a pause with a new dispatch claim.
+   const budget=await client.query(
+    `SELECT b.episode_id,b.spending_paused
+     FROM stage_director_budgets b
+     JOIN stage_director_attempts a ON a.episode_id=b.episode_id
+     WHERE a.attempt_id=$1 FOR UPDATE OF b`,[attemptId]);
+   if(budget.rows.length!==1||budget.rows[0].spending_paused!==false)
+    throw Error('Submission blocked: spending paused or budget missing');
+   const r=await client.query(
+    `UPDATE stage_director_submission_outbox o
+     SET state='DISPATCHING',updated_at=now()
+     WHERE o.attempt_id=$1 AND o.state='PENDING'
+       AND EXISTS (SELECT 1 FROM stage_director_attempts a
+                   WHERE a.attempt_id=$1 AND a.state='RESERVED'
+                     AND a.episode_id=$2)
+     RETURNING o.attempt_id,o.state`,[attemptId,budget.rows[0].episode_id]);
+   if(r.rows.length!==1)throw Error('Submission already claimed or uncertain');
+   await client.query('COMMIT');
+   return r.rows[0];
+  }catch(e){try{await client.query('ROLLBACK')}catch{}throw e}
+  finally{client.release()}
  }
  async markSubmitted({attemptId,providerTaskId}){
   if(!ID.test(attemptId??'')||!ID.test(providerTaskId??''))throw Error('Invalid provider identity');
