@@ -18,8 +18,14 @@ export class PgDirectorSubmissionOutbox {
   if(!ID.test(attemptId??''))throw Error('Invalid attempt');
   const r=await this.pool.query(
    `UPDATE stage_director_submission_outbox SET state='DISPATCHING',updated_at=now()
-    WHERE attempt_id=$1 AND state='PENDING' RETURNING attempt_id,state`,[attemptId]);
-  if(r.rows.length!==1)throw Error('Submission already claimed or uncertain');
+    WHERE attempt_id=$1 AND state='PENDING'
+      AND EXISTS (
+       SELECT 1 FROM stage_director_attempts a
+       JOIN stage_director_budgets b ON b.episode_id=a.episode_id
+       WHERE a.attempt_id=$1 AND a.state='RESERVED' AND b.spending_paused=false
+      )
+    RETURNING attempt_id,state`,[attemptId]);
+  if(r.rows.length!==1)throw Error('Submission already claimed, spending paused, or uncertain');
   return r.rows[0];
  }
  async markSubmitted({attemptId,providerTaskId}){
