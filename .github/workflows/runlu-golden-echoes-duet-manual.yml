@@ -1,0 +1,54 @@
+name: RUNLU MUSIC — Golden Echoes duet (manual)
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_paid:
+        description: 'Authorize exactly one potentially billable Lyria 3.5 request (YES required)'
+        required: true
+        type: choice
+        default: 'NO'
+        options:
+          - 'NO'
+          - 'YES'
+permissions:
+  contents: read
+jobs:
+  generate-duet:
+    if: ${{ inputs.confirm_paid == 'YES' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: runlu-golden-echoes-duet-once
+      cancel-in-progress: false
+    steps:
+      - name: Checkout reviewed test commit, not production content
+        uses: actions/checkout@v4
+        with:
+          ref: 71d707be7b821ca45438c5430b07c3ef56bebc69
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify generation input exists
+        run: |
+          test -s music-studio-tools/when-the-lights-go-down-duet.json
+          test -s music-studio-tools/generate_full_song.py
+      - name: Generate one original duet — no retries
+        env:
+          RUNLU_MUSIC_GEMINI_API_KEY: ${{ secrets.RUNLU_MUSIC_GEMINI_API_KEY }}
+        run: |
+          test -n "$RUNLU_MUSIC_GEMINI_API_KEY" || { echo "Missing API secret; no request sent"; exit 2; }
+          mkdir -p output
+          python music-studio-tools/generate_full_song.py \
+            --project music-studio-tools/when-the-lights-go-down-duet.json \
+            --output output/when-the-lights-go-down-duet.mp3 \
+            --confirm-paid
+      - name: Save MP3 privately for review
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runlu-when-the-lights-go-down-duet-private
+          path: output/when-the-lights-go-down-duet.mp3
+          if-no-files-found: error
+          retention-days: 1
