@@ -11,6 +11,8 @@ test('claim is atomic and only from PENDING',async()=>{
  const p=pool([{attempt_id:'a1',state:'DISPATCHING'}]);
  await new PgDirectorSubmissionOutbox(p).claim({attemptId:'a1'});
  assert.match(p.calls[0].sql,/state='PENDING'/);
+ assert.match(p.calls[0].sql,/b.spending_paused=false/);
+ assert.match(p.calls[0].sql,/a.state='RESERVED'/);
 });
 test('uncertain dispatches are queried for reconciliation, not replayed',async()=>{
  const p=pool([{attempt_id:'a1',state:'UNKNOWN'}]);
@@ -25,4 +27,12 @@ test('duplicate claim and invalid provider identity fail closed',async()=>{
  await assert.rejects(o.claim({attemptId:'a1'}));
  await assert.rejects(o.markSubmitted({attemptId:'a1',providerTaskId:''}));
  assert.equal(p.calls.length,1);
+});
+
+test('paused or non-reserved attempt cannot be dispatched',async()=>{
+ const p=pool([]),o=new PgDirectorSubmissionOutbox(p);
+ await assert.rejects(o.claim({attemptId:'a1'}),/spending paused/);
+ assert.equal(p.calls.length,1);
+ assert.match(p.calls[0].sql,/JOIN stage_director_budgets/);
+ assert.match(p.calls[0].sql,/b.spending_paused=false/);
 });
