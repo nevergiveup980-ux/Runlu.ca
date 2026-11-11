@@ -1,5 +1,9 @@
 """Mobile Chromium acceptance of the standalone, no-cost music demo."""
 from playwright.sync_api import sync_playwright, expect
+import io
+import math
+import struct
+import wave
 from test_browser import serve
 
 def test_offline_acceptance():
@@ -75,6 +79,26 @@ def test_offline_acceptance():
             page.locator("#reset").click()
             expect(page.locator("#download")).to_be_disabled()
             expect(page.locator("#status")).to_contain_text("Ready")
+            buffer = io.BytesIO()
+            with wave.open(buffer, "wb") as wav:
+                wav.setnchannels(1)
+                wav.setsampwidth(2)
+                wav.setframerate(8000)
+                wav.writeframes(b"".join(struct.pack("<h", int(3000 * math.sin(2 * math.pi * 220 * i / 8000))) for i in range(8000 * 12)))
+            page.locator("#local-files").set_input_files({"name": "local-test.wav", "mimeType": "audio/wav", "buffer": buffer.getvalue()})
+            expect(page.locator("#track-name")).to_contain_text("local-test.wav")
+            expect(page.locator("#toggle")).to_be_enabled()
+            page.wait_for_function("document.querySelector('#player').duration >= 11.9")
+            page.locator("#forward").click()
+            assert page.locator("#player").evaluate("(el) => el.currentTime") >= 9.5
+            page.locator("#back").click()
+            assert page.locator("#player").evaluate("(el) => el.currentTime") <= 0.5
+            page.locator("#seek").fill("6")
+            assert 5.5 <= page.locator("#player").evaluate("(el) => el.currentTime") <= 6.5
+            expect(page.locator("#playlist li")).to_have_count(1)
+            page.locator("#playlist .remove").click()
+            expect(page.locator("#playlist li")).to_have_count(0)
+            expect(page.locator("#player")).to_be_hidden()
             assert not errors, errors
         finally:
             browser.close()
