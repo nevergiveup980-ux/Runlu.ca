@@ -31,6 +31,17 @@ The S01–S04 PASS labels below are limited to assistant-performed verification 
 | S04 | Confirm Oracle NetSuite inventory-status commitment restrictions. | PASS — official source checked 2026-11-11 | Oracle Inventory Status: quantities can remain on hand while excluded from commitment based on status. https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1515696627.html |
 | S05 | Check links, attribution, quotation/reuse rights and any version-specific qualifications. | NOT CHECKED | |
 
+## S05 preliminary source-use assessment — 2026-11-11
+
+**Scope:** Editorial risk assessment of RK-0006's four vendor documentation references; **not** a vendor permission grant, legal opinion, or completed rights signoff.
+
+- The manuscript presents original hypothetical warehouse arithmetic and paraphrases functional ERP concepts, rather than copying Oracle/Microsoft screenshots, diagrams, tables, or substantial passages. The four source URLs identify the publishers and enable verification.
+- Factual concepts and independently authored explanations generally differ from copying protected source expression. Nonetheless, vendor-specific terminology, licensing terms, and trademarks must not be presented as endorsed or licensed by Oracle or Microsoft.
+- Keep the vendor names in factual attribution only. No vendor logos, branded screenshots, or copied manuals should be added without separate rights checks.
+- Before changing S05 to PASS: recheck each page's applicable terms of use and version context; verify that the final four-language article still contains no protected passages or visual assets; record the responsible editor's rights decision and date. No blanket claim of permission is supported by this assessment.
+
+**Disposition: PRELIMINARY / OPEN.** Publication rights gate remains HOLD.
+
 ## Language and reader usability
 | ID | Required check | Result | Evidence / reviewer note |
 |---|---|---|---|
