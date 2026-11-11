@@ -11,7 +11,7 @@ jobs:
       - name: Checkout reviewed music test revision
         uses: actions/checkout@v4
         with:
-          ref: 0ccd2cc7275e2a5f7869311d30a3db4add8d1f01
+          ref: f1dda51d96a4524bdc2c148b751c45df994d5665
           persist-credentials: false
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -19,6 +19,8 @@ jobs:
           python-version: '3.12'
       - name: Validate original duet without API key or billing
         run: python music-studio-tools/preflight_golden_echoes.py
+      - name: Run offline provider-response regression tests
+        run: python music-studio-tools/test_golden_echoes_offline.py
       - name: Check generator command without contacting provider
         run: |
           python music-studio-tools/generate_full_song.py \
