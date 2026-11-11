@@ -41,6 +41,13 @@ Scope: isolated static foundation only; no third-party catalog or sales.
 - Reviewed a 24-image contact sheet and a full-resolution 320px French screenshot. At this level of review, no obvious horizontal clipping, overlapping header, missing category card or broken trust panel was observed. At 320px the header wraps to two rows, which is intentional and appears legible.
 - **Limited visual review only:** a contact sheet cannot establish detailed readability for every image. No iPhone Safari, VoiceOver, enlarged-text or touch testing was performed. These remain open release blockers.
 
+## Founder iPhone visual acceptance (2026-11-10)
+- Founder explicitly confirmed **acceptance passed** after supplying three iPhone screenshots of the isolated Vercel test site: simplified Chinese, English, and French.
+- Screenshots show brand and language selector, translated navigation, hero, status message, and visible category cards without obvious clipping or overlap. This is an **observed three-language portrait visual/switching acceptance**, not complete ten-case Safari acceptance.
+- Spanish on-device, landscape, page-bottom, VoiceOver, enlarged text, network inspection, and full keyboard interactions remain unverified unless separately evidenced.
+- The screenshots show a browser UI overlay near the bottom; it is not proof of page overlap.
+- Independent test deployment remains separate from the RUNLU main website; PR #450 stays Draft and unmerged.
+
 ## Manual browser acceptance (not yet performed)
 Use an isolated PR preview or local checkout, **not** production:
 - [ ] iPhone Safari narrow portrait (320–430px): no horizontal overflow; readable text; language selector operable.
