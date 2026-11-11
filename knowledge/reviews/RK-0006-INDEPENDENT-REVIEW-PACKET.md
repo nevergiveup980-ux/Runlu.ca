@@ -13,8 +13,8 @@
 |---|---|---|---|
 | T01 | Is the distinction between physical on-hand, current available, and date-specific ATP accurate for the named ERP products? | NOT CHECKED | |
 | T02 | Are any ERP-specific definitions incorrectly presented as universal? | NOT CHECKED | |
-| T03 | Does Scenario A correctly show 100 LF − 65 LF = 35 LF, with no implied continuous-cut guarantee? | NOT CHECKED | |
-| T04 | Does Scenario B clearly state non-overlap and avoid double-counting 30 LF restricted and 20 LF committed? | NOT CHECKED | |
+| T03 | Does Scenario A correctly show 100 LF − 65 LF = 35 LF, with no implied continuous-cut guarantee? | AUTHOR SCENARIO CONFIRMED; full review pending | Author explicitly confirmed scenario arithmetic and practical principle on 2026-11-11; no continuous-cut guarantee asserted. |
+| T04 | Does Scenario B clearly state non-overlap and avoid double-counting 30 LF restricted and 20 LF committed? | AUTHOR SCENARIO CONFIRMED; full review pending | Author explicitly confirmed the conditional 80 − 30 − 20 = 30 scenario on 2026-11-11; source/translation reviews remain open. |
 | T05 | Is it clear that inventory holds/reservations must not be overridden without authorization? | NOT CHECKED | |
 | T06 | Are dye lot, roll/remnant identity, usable dimensions, and quality status treated as separate checks? | NOT CHECKED | |
 | T07 | Are future expected receipts distinguished from stock physically received? | NOT CHECKED | |
@@ -75,7 +75,7 @@
 
 ## Author-led internal review assignment — 2026-11-10
 
-The RUNLU author agreed to serve as final professional-content reviewer for RK-0005 and RK-0006, supported by assistant-led technical/source checks, language-consistency review and publication preparation. This is a reviewer **assignment only**, not a technical PASS, rights clearance, completed four-language proofreading, or permission to publish. Preserve the individual T/S/L/M checklist items as NOT CHECKED until evidence exists. Record a real reviewer name or signature, review date, verdict, and evidence before any approval. No paid external review is required by this chosen workflow, but no source-rights or factual requirement is waived.
+The RUNLU author agreed to serve as final professional-content reviewer for RK-0005 and RK-0006, supported by assistant-led technical/source checks, language-consistency review and publication preparation. This is a reviewer **assignment only**, not a technical PASS, rights clearance, completed four-language proofreading, or permission to publish. Preserve all unverified T/S/L/M checklist items as NOT CHECKED; T03/T04 record only the limited author scenario confirmation, not a full independent technical PASS. Record a real reviewer name or signature, review date, verdict, and evidence before any approval. No paid external review is required by this chosen workflow, but no source-rights or factual requirement is waived.
 
 ## Reviewer record
 - Reviewer name / role: **not assigned**
