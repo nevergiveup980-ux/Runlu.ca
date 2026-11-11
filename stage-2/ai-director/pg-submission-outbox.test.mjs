@@ -26,7 +26,9 @@ test('duplicate claim and invalid provider identity fail closed',async()=>{
  const p=pool([]),o=new PgDirectorSubmissionOutbox(p);
  await assert.rejects(o.claim({attemptId:'a1'}));
  await assert.rejects(o.markSubmitted({attemptId:'a1',providerTaskId:''}));
- assert.equal(p.calls.filter(c=>c.sql.includes('UPDATE stage_director_submission_outbox')).length,0);
+ assert.equal(p.calls.filter(c=>c.sql.includes('UPDATE stage_director_submission_outbox')).length,1);
+ assert.equal(p.calls.at(-2).sql,'ROLLBACK');
+ assert.equal(p.calls.at(-1).sql,'RELEASE');
 });
 
 test('paused or non-reserved attempt cannot be dispatched',async()=>{
