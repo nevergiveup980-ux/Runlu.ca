@@ -7,12 +7,14 @@ on:
       - 'music-studio-tools/**'
       - 'music/**'
       - 'music-studio.html'
+      - 'music-studio-offline-acceptance.html'
       - '.github/workflows/runlu-music-tests.yml'
   pull_request:
     paths:
       - 'music-studio-tools/**'
       - 'music/**'
       - 'music-studio.html'
+      - 'music-studio-offline-acceptance.html'
       - '.github/workflows/runlu-music-tests.yml'
   workflow_dispatch:
 permissions:
@@ -39,7 +41,9 @@ jobs:
       - name: Run unit tests without API credentials
         run: python -m unittest discover -s music-studio-tools -p 'test_*.py' -v
       - name: Test real Chromium interactions at mobile viewport
-        run: python music-studio-tools/test_browser.py
+        run: |
+          python music-studio-tools/test_browser.py
+          python music-studio-tools/test_offline_acceptance.py
       - name: Assert no provider key is needed
         run: |
           env -u GEMINI_API_KEY python music-studio-tools/generate_preview.py --project music-studio-tools/sample-project.json
