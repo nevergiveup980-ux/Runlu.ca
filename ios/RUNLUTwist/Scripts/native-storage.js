@@ -1,6 +1,6 @@
 // Native cache survives denied/evicted WebKit storage and mirrors only local game keys.
 const nativeBridge=window.webkit?.messageHandlers?.twist;
-const storedKeys=["runlu-twist-node001-v1","twist-lang","twist-reasoning-v1","twist-reflections-v1","twist-studio-v1"];
+const storedKeys=["runlu-twist-node001-v1","runlu-twist-node001-v6","twist-lang","twist-reasoning-v1","twist-reflections-v1","twist-studio-v1","twist-verified-pilot-v1","twist-ordering-v1","twist-route-order-v1","twist-classic-content-v6-migrated"];
 const nativeCache={};
 for(const k of storedKeys){
   const snapshot=window.__twistNativeSnapshot?.[k];
