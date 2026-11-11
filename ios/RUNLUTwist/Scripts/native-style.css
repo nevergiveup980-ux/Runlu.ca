@@ -19,3 +19,31 @@
 
 /* Form controls do not inherit Dynamic Type automatically in WebKit. */
 select{font:inherit;max-width:100%}
+
+/* TWIST sequencing layouts: synchronized from root twist.html. */
+/* Shared responsive tiles for the two original sequencing challenges. */
+#orderingPieces,#routePieces{display:grid;gap:10px;margin:14px 0}
+#orderingPieces{grid-template-columns:repeat(4,minmax(0,1fr))}
+#routePieces{grid-template-columns:repeat(3,minmax(0,1fr))}
+#orderingPieces>.buttons,#routePieces>.buttons{min-width:0;display:flex;flex-direction:column;align-items:stretch;gap:6px;padding:8px 5px;border:1px solid #ccd8e8;border-radius:12px;background:linear-gradient(160deg,#fff,#f0f5fd);box-shadow:0 2px 7px #1b2d4b12}
+#orderingPieces .ordering-position,#routePieces .ordering-position{font-size:.7rem;letter-spacing:.04em;font-weight:750;color:#52647d;text-align:center;white-space:normal;overflow-wrap:anywhere}
+#orderingPieces .ordering-tile,#routePieces .ordering-tile{display:flex;align-items:center;justify-content:center;min-height:52px;border-radius:10px;background:#e2ecfc;color:#173c79;font-size:clamp(1.4rem,5vw,2rem);border:1px solid #b7ccec}
+#orderingPieces button,#routePieces button,#orderingActions button,#routeActions button{min-height:44px;min-width:0;touch-action:manipulation}
+#orderingPieces button,#routePieces button{padding:9px 3px;font-size:1.2rem}
+#orderingPieces button:not(:disabled):active,#routePieces button:not(:disabled):active{background:#dceafa;transform:translateY(1px)}
+#orderingActions,#routeActions{margin-top:12px}
+#orderingFeedback,#routeFeedback{overflow-wrap:anywhere}
+#orderingFeedback:focus,#routeFeedback:focus{outline:3px solid #f1a51d;outline-offset:3px;border-radius:4px}
+@media(max-width:390px){
+ main{padding:0 12px}.card{padding:16px}
+ #orderingPieces{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #routePieces{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+ #orderingActions button,#routeActions button{flex:1 1 135px}
+}
+/* At 320px and with enlarged text, three route columns can become cramped. */
+@media(max-width:350px){
+ #routePieces{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ #routePieces>.buttons:last-child{grid-column:1/-1;width:calc(50% - 4px);justify-self:center}
+ #orderingPieces .ordering-position,#routePieces .ordering-position{font-size:.75rem}
+}
+@media(prefers-reduced-motion:reduce){#orderingPieces button,#routePieces button{transform:none!important}}
