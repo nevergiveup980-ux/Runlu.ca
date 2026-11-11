@@ -93,7 +93,7 @@ def test_offline_acceptance():
             assert page.locator("#player").evaluate("(el) => el.currentTime") >= 9.5
             page.locator("#back").click()
             assert page.locator("#player").evaluate("(el) => el.currentTime") <= 0.5
-            page.locator("#seek").fill("6")
+            page.locator("#seek").evaluate("(el) => { el.value = 6; el.dispatchEvent(new Event(\'input\', {bubbles:true})); }")
             assert 5.5 <= page.locator("#player").evaluate("(el) => el.currentTime") <= 6.5
             expect(page.locator("#playlist li")).to_have_count(1)
             page.locator("#playlist .remove").click()
