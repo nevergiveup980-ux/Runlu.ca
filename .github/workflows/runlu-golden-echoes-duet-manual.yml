@@ -24,7 +24,7 @@ jobs:
       - name: Checkout reviewed test commit, not production content
         uses: actions/checkout@v4
         with:
-          ref: 71d707be7b821ca45438c5430b07c3ef56bebc69
+          ref: 0ccd2cc7275e2a5f7869311d30a3db4add8d1f01
           persist-credentials: false
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -34,6 +34,12 @@ jobs:
         run: |
           test -s music-studio-tools/when-the-lights-go-down-duet.json
           test -s music-studio-tools/generate_full_song.py
+      - name: Zero-cost preflight before any paid call
+        run: |
+          python music-studio-tools/preflight_golden_echoes.py
+          python music-studio-tools/generate_full_song.py \
+            --project music-studio-tools/when-the-lights-go-down-duet.json \
+            --output output/when-the-lights-go-down-duet.mp3
       - name: Generate one original duet — no retries
         env:
           RUNLU_MUSIC_GEMINI_API_KEY: ${{ secrets.RUNLU_MUSIC_GEMINI_API_KEY }}
