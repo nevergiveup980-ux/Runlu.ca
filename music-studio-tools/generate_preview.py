@@ -16,8 +16,8 @@ ALLOWED = ("lyria-3-clip-preview", "lyria-3.5")
 MAX_PROMPT_CHARS = 12000
 MAX_PROJECT_BYTES = 100_000
 MAX_AUDIO_BYTES = 50 * 1024 * 1024
-VALID_VOICES = {"female", "male", "instrumental"}
-VALID_STYLES = {"nostalgic", "folk", "piano", "cinematic"}
+VALID_VOICES = {"female", "male", "duet", "instrumental"}
+VALID_STYLES = {"nostalgic", "folk", "piano", "cinematic", "blues_pop"}
 
 def validate_project(project):
     if not isinstance(project, dict):
@@ -41,11 +41,13 @@ def build_prompt(project):
     instrumental = voice_key == "instrumental"
     voice = {"female": "mature expressive female voice",
              "male": "mature warm slightly husky male baritone",
+             "duet": "distinct mature warm husky male baritone and soulful female alto; follow [Male], [Female] and [Together] singer cues strictly",
              "instrumental": "instrumental only, no vocals"}[voice_key]
     style = {"nostalgic": "nostalgic cinematic folk ballad",
              "folk": "intimate acoustic storytelling folk",
              "piano": "emotional piano ballad",
-             "cinematic": "cinematic strings and acoustic guitar"}[project.get("style", "nostalgic")]
+             "cinematic": "cinematic strings and acoustic guitar",
+             "blues_pop": "emotional modern blues-pop ballad with expressive electric blues guitar, warm piano, subtle Hammond organ, melodic bass and restrained live drums"}[project.get("style", "nostalgic")]
     notes = project.get("notes", "").strip()
     language = project.get("language", "zh")
     if language not in ("zh", "en", "fr", "es"):
