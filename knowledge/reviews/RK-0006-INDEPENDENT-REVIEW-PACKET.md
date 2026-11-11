@@ -67,6 +67,12 @@
 
 **Handoff sequence:** (1) Assign independent subject-matter and language reviewers; (2) record evidence against the existing checklist; (3) correct all four manuscripts and preview together; (4) complete real iPhone/browser testing; (5) synchronize branch and rerun CI; (6) seek an explicit editorial release decision. Keep `knowledge/data/published.json` unchanged until authorized.
 
+## Author professional scenario confirmation — 2026-11-11
+
+**Decision recorded:** The RUNLU author explicitly confirmed in conversation that the three proposed warehouse scenarios and their decision principles match practical flooring-warehouse experience. Scope: RK-0005's two 12 ft × 12.5 ft remnants (300 ft² total) cannot independently supply a single continuous 12 ft × 20 ft cut (240 ft²) without an approved joining approach; RK-0006's illustrative 100 LF − 65 LF = 35 LF, and 80 LF − 30 LF restricted − 20 LF separately committed = 30 LF under non-overlapping assumptions.
+
+**Evidence:** Author's explicit response “确认” to the question listing all three cases and asking whether their judgments fit actual warehouse practice, 2026-11-11 (conversation). This is **author practitioner confirmation of the scenario principles**, not independent verification of real customer transactions, universal ERP rules, installation permissions, source rights, four-language translations, mobile testing or overall publication approval. Do not mark other checklist items complete on this basis.
+
 ## Author-led internal review assignment — 2026-11-10
 
 The RUNLU author agreed to serve as final professional-content reviewer for RK-0005 and RK-0006, supported by assistant-led technical/source checks, language-consistency review and publication preparation. This is a reviewer **assignment only**, not a technical PASS, rights clearance, completed four-language proofreading, or permission to publish. Preserve the individual T/S/L/M checklist items as NOT CHECKED until evidence exists. Record a real reviewer name or signature, review date, verdict, and evidence before any approval. No paid external review is required by this chosen workflow, but no source-rights or factual requirement is waived.
