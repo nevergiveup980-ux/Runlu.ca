@@ -48,8 +48,10 @@ def main():
     try:
         with urllib.request.urlopen(request, timeout=240) as response:
             raw = response.read(MAX_RESPONSE + 1)
+    except urllib.error.HTTPError as exc:
+        raise SystemExit(f"Provider HTTP error {exc.code}; billing status unknown. No automatic retry.") from exc
     except (urllib.error.URLError, TimeoutError) as exc:
-        raise SystemExit("Provider request failed or timed out; billing may have occurred. No automatic retry.") from exc
+        raise SystemExit(f"Provider transport error ({type(exc).__name__}); billing status unknown. No automatic retry.") from exc
     if len(raw) > MAX_RESPONSE:
         raise SystemExit("Provider response too large")
     payload = extract_audio(json.loads(raw))
