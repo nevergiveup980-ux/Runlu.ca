@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {PgDirectorSubmissionOutbox} from './pg-submission-outbox.mjs';
-function pool(rows=[{attempt_id:'a1',state:'PENDING'}]){const calls=[];const query=async(sql,args)=>{calls.push({sql,args});if(sql.includes('FROM stage_director_budgets b'))return {rows:[{episode_id:'e1',spending_paused:rows.length>0}]};return {rows}};return {calls,query,connect:async()=>({query,release:()=>calls.push({sql:'RELEASE'})})};}
+function pool(rows=[{attempt_id:'a1',state:'PENDING'}],paused=false){const calls=[];const query=async(sql,args)=>{calls.push({sql,args});if(sql.includes('FROM stage_director_budgets b'))return {rows:[{episode_id:'e1',spending_paused:paused}]};return {rows}};return {calls,query,connect:async()=>({query,release:()=>calls.push({sql:'RELEASE'})})};}
 test('create outbox only for reserved attempt',async()=>{
  const p=pool();await new PgDirectorSubmissionOutbox(p).create({attemptId:'a1'});
  assert.match(p.calls[0].sql,/state='RESERVED'/);
@@ -30,7 +30,7 @@ test('duplicate claim and invalid provider identity fail closed',async()=>{
 });
 
 test('paused or non-reserved attempt cannot be dispatched',async()=>{
- const p=pool([]),o=new PgDirectorSubmissionOutbox(p);
+ const p=pool([],true),o=new PgDirectorSubmissionOutbox(p);
  await assert.rejects(o.claim({attemptId:'a1'}),/spending paused/);
  assert.match(p.calls[1].sql,/FOR UPDATE OF b/);
  assert.equal(p.calls.some(c=>c.sql.includes('UPDATE stage_director_submission_outbox')),false);
