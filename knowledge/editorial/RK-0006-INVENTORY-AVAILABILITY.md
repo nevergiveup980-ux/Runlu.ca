@@ -70,7 +70,7 @@ Le système indique qu’un rouleau de moquette est en stock. Pourtant, l’entr
 
 ### Trois notions à distinguer
 
-**Stock physique (on-hand) :** quantité enregistrée comme présente. **Stock disponible :** quantité qui peut être affectée immédiatement selon les règles de réservation et de statut du système. **Disponible à promettre (ATP) :** quantité pouvant être promise pour une date donnée, en tenant compte, selon la configuration, des besoins et réceptions attendues. Les définitions opérationnelles varient d’un logiciel à l’autre.
+**Stock physique (on-hand) :** quantité enregistrée comme présente. **Stock disponible :** quantité qui peut être affectée immédiatement selon les règles de réservation et de statut du système. **Disponible à promettre (ATP) :** quantité pouvant être promise pour une date donnée, en tenant compte, selon la configuration, des besoins et réceptions attendues. Les définitions opérationnelles varient d’un logiciel à l’autre. Une réception prévue ne constitue pas du stock physiquement reçu aujourd’hui.
 
 ### Exemple A — stock déjà engagé
 
@@ -98,7 +98,7 @@ El sistema muestra alfombra en el almacén, pero eso no significa que pueda prom
 
 ### Tres conceptos diferentes
 
-**Existencias físicas (on-hand):** cantidad registrada como presente. **Cantidad disponible:** parte que puede asignarse ahora según las reglas de reservas y estados del sistema. **Disponible para prometer (ATP):** cantidad que podría prometerse para una fecha determinada teniendo en cuenta, según la configuración, la demanda y las entradas previstas. Los sistemas no utilizan necesariamente las mismas fórmulas.
+**Existencias físicas (on-hand):** cantidad registrada como presente. **Cantidad disponible:** parte que puede asignarse ahora según las reglas de reservas y estados del sistema. **Disponible para prometer (ATP):** cantidad que podría prometerse para una fecha determinada teniendo en cuenta, según la configuración, la demanda y las entradas previstas. Los sistemas no utilizan necesariamente las mismas fórmulas. Una recepción prevista no equivale a existencias físicamente recibidas hoy.
 
 ### Ejemplo A: material comprometido
 
