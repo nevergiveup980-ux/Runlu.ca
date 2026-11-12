@@ -115,6 +115,19 @@ Use this worksheet with **one real, anonymized warehouse order** before signing 
 
 **Result: PARTIAL SOURCE-SCOPE VERIFIED; final rights and source signoff remain PENDING.**
 
+## CRI 104/105 specific-section cross-check — 2026-11-11
+
+**Official primary documents (PDF):**
+- CRI 104 commercial installation standard, CRI-hosted PDF: https://carpet-rug.org/wp-content/uploads/2019/03/CRI-104-STANDARD-For-INSTALLATION-of-COMMERCIAL-CARPET.pdf
+- CRI 105 residential installation standard, CRI-hosted PDF: https://carpet-rug.org/wp-content/uploads/2019/03/CRI-105-STANDARD-For-INSTALLATION-of-RESIDENTIAL-CARPET.pdf
+- CRI official standards index: https://carpet-rug.org/resources/installation-standards/
+
+**Verified narrow reference:** CRI 105 section **5.1 (Seams)** addresses minimizing and locating seams; section **5.2 (Pile Direction)** addresses orientation of adjacent broadloom pieces; section **5.3 (Layout and Trimming)** requires following the seaming diagram and accounting for trimming and pattern matching. These are **residential installation** provisions; do not attribute them to CRI 104 without an independent section check. The CRI standards index identifies 104 as commercial and 105 as residential; the official standards PDFs hosted at the paths above bear a 2019 copyright notice. The CRI resources page also refers to the September 2015 edition; distinguish publication/release date from PDF copyright date.
+
+**Editorial mapping:** RK-0005's caution that a seam or pile/pattern issue depends on the approved project layout is compatible with the above CRI 105 provisions. The specific hypothetical no-seam cut (12 ft × 20 ft from two 12 ft × 12.5 ft remnants) is an independent mathematical example, **not** a quoted CRI rule. Do not assert that joining carpet is universally prohibited or that CRI mandates RUNLU's warehouse reservation/sales workflow. Do not reproduce the standards' protected prose, tables, figures, or branding in the article.
+
+**Verification status:** CRI 105 sections 5.1–5.3 checked against the official PDF's indexed text; CRI 104 section-level claim mapping remains unverified, as does the complete-manuscript final rights approval. This source check is not a license grant or named editorial signoff.
+
 ## Assistant four-language core-case consistency check — 2026-11-11
 
 **Scope and method:** Compared the opening EN, 中文, Français and Español sections of the editorial manuscript `knowledge/editorial/RK-0005-INVENTORY-FULFILLMENT.md` for the hypothetical remnant geometry, units, no-guarantee caveat and decision workflow; separately compared the four-language practitioner-reported example. This is an editorial semantic cross-check, **not** complete line-by-line proofreading or a signed native-speaker language approval.
