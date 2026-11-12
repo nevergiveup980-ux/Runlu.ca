@@ -15,8 +15,8 @@
 | T02 | Are any ERP-specific definitions incorrectly presented as universal? | NOT CHECKED | |
 | T03 | Does Scenario A correctly show 100 LF − 65 LF = 35 LF, with no implied continuous-cut guarantee? | AUTHOR SCENARIO CONFIRMED; full review pending | Author explicitly confirmed scenario arithmetic and practical principle on 2026-11-11; no continuous-cut guarantee asserted. |
 | T04 | Does Scenario B clearly state non-overlap and avoid double-counting 30 LF restricted and 20 LF committed? | AUTHOR SCENARIO CONFIRMED; full review pending | Author explicitly confirmed the conditional 80 − 30 − 20 = 30 scenario on 2026-11-11; source/translation reviews remain open. |
-| T05 | Is it clear that inventory holds/reservations must not be overridden without authorization? | NOT CHECKED | |
-| T06 | Are dye lot, roll/remnant identity, usable dimensions, and quality status treated as separate checks? | NOT CHECKED | |
+| T05 | Is it clear that inventory holds/reservations must not be overridden without authorization? | ASSISTANT MANUSCRIPT CHECK PASS; final technical signoff pending | EN explicitly requires responsible authority review; ZH requires authorized approval; FR/ES warn against unauthorized release. This checks manuscript wording, not implementation of warehouse permissions. |
+| T06 | Are dye lot, roll/remnant identity, usable dimensions, and quality status treated as separate checks? | ASSISTANT MANUSCRIPT CHECK PASS; final technical signoff pending | EN/ZH/FR/ES distinguish inventory allocation from roll identity, usable continuous cut, dye lot, condition and installation constraints. |
 | T07 | Are future expected receipts distinguished from stock physically received? | NOT CHECKED | |
 | T08 | Does this article avoid duplicating RK-0005's cut-geometry focus? | NOT CHECKED | |
 
