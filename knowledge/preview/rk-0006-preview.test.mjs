@@ -50,3 +50,16 @@ test("editorial references are linked and mobile layout is present", () => {
   assert.match(html, /:focus-visible/);
   assert.match(html, /aria-live="polite"/);
 });
+
+test("all four languages distinguish future receipts from today's physical stock", () => {
+  assert.ok(copy, "localized content missing");
+  const warnings = {
+    en: /future expected delivery[^<]*does not mean[^<]*physically present today/i,
+    zh: /预计未来到货[^<]*不能当作今天已经入库的现货/,
+    fr: /Une réception prévue ne constitue pas du stock physiquement reçu aujourd’hui/,
+    es: /Una recepción prevista no equivale a existencias físicamente recibidas hoy/
+  };
+  for (const [lang, warning] of Object.entries(warnings)) {
+    assert.match(copy[lang].body.replace(/<[^>]+>/g, ""), warning, "missing future-receipts warning: " + lang);
+  }
+});
