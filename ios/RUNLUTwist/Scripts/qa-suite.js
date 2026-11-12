@@ -4,6 +4,7 @@ function runTwistQA(){
  const assert=(v,msg)=>{if(!v)throw Error(msg||'assertion failed')};
  const button=(id,n)=>document.getElementById(id).children[n];
  const click=id=>document.getElementById(id).click();
+ const unlockVerified=()=>{if(verifiedCases[state.index]&&verifiedAnswers[state.index]===undefined&&!state.completed.includes(state.index))button('verifiedChoices',verifiedCases[state.index].answer).click();};
  // Independently derive solutions from each case's constraints, not the stored answer index.
  const lampOrders=['ABC','ACB','BAC','BCA','CAB','CBA'].filter(x=>x.indexOf('C')===x.indexOf('A')+1&&x.indexOf('B')===1);
  const expected=[['RED','BLUE','GREEN'].indexOf(['RED','BLUE','GREEN'].find(x=>x!=='RED'&&x!=='GREEN')),
@@ -33,7 +34,7 @@ function runTwistQA(){
   for(let i=0;i<20;i++){
    assert(el('reflection').hidden);assert(el('question').textContent===(lang==='en'?puzzles:zh)[i][0]);
    button('reasoningChoices',i%3).click();assert(reasoningSelections[i]===i%3&&el('reasoningFeedback').textContent.length>10);
-   if(i===0)click('hintBtn');click('answerBtn');assert(!el('reflection').hidden);
+   if(i===0)click('hintBtn');unlockVerified();click('answerBtn');assert(!el('reflection').hidden);
    button('reflectionChoices',i%3).click();click('gotBtn');assert(reflectionSelections[i]===i%3);if(i<19)click('nextBtn');
   }
   assert(el('points').textContent.endsWith('195'));assert(el('correct').textContent.includes('20 / 20'));assert(el('nextBtn').disabled);click('reviewBtn');assert(state.index===0);click('nextBtn');click('prevBtn');assert(state.index===0);assert(Object.keys(readSelections('twist-reasoning-v1')).length===20);
