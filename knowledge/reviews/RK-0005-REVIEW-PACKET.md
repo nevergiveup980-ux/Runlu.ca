@@ -103,6 +103,19 @@ Use this worksheet with **one real, anonymized warehouse order** before signing 
 4. Keep warehouse reservation and synchronization advice explicitly attributed to RUNLU's original operational synthesis, not to CRI.
 5. Record reviewer, date, exact source URL, accessible edition and claim-to-section mapping. A prior editorial note alone is not independent signoff.
 
+## Assistant four-language core-case consistency check — 2026-11-11
+
+**Scope and method:** Compared the opening EN, 中文, Français and Español sections of the editorial manuscript `knowledge/editorial/RK-0005-INVENTORY-FULFILLMENT.md` for the hypothetical remnant geometry, units, no-guarantee caveat and decision workflow; separately compared the four-language practitioner-reported example. This is an editorial semantic cross-check, **not** complete line-by-line proofreading or a signed native-speaker language approval.
+
+| Check | Result | Evidence / limitation |
+| --- | --- | --- |
+| Two remnants each 12 ft × 12.5 ft total 300 ft² | CONSISTENT in EN/ZH/FR/ES | All opening language sections preserve dimensions and total area |
+| Required one continuous 12 ft × 20 ft piece totals 240 ft² | CONSISTENT in EN/ZH/FR/ES | None of the individual remnants has 20 ft continuous length; joining is conditional on approved layout and customer/project requirements |
+| Inventory quantity alone does not guarantee order fulfillment | CONSISTENT in EN/ZH/FR/ES | All describe reservations, damage, usable dimensions, dye lot/pile/pattern or manufacturer constraints |
+| Practitioner account distinguishes warehouse report from sales revision | CONSISTENT in EN/ZH/FR/ES | None claims unreported customer authorization, final delivery, or independently verified transaction |
+
+**Disposition:** Core-case semantic consistency checked; full four-language editorial review, regional terminology acceptance and named signoff remain PENDING. Do not set `translations_verified=true` or publish based on this check.
+
 ## Four-language editorial review
 
 For each language, check **meaning, trade terminology, measurement units, limitations and reader-facing caution**, not just spelling.
