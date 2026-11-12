@@ -103,6 +103,18 @@ Use this worksheet with **one real, anonymized warehouse order** before signing 
 4. Keep warehouse reservation and synchronization advice explicitly attributed to RUNLU's original operational synthesis, not to CRI.
 5. Record reviewer, date, exact source URL, accessible edition and claim-to-section mapping. A prior editorial note alone is not independent signoff.
 
+## CRI official-source scope check — 2026-11-11
+
+**Method:** Assistant checked CRI's publicly indexed official installation standards page and official installation guidance. This is a source-scope check, **not** a full section-by-section verification of CRI 104/105, an independent human signoff, or a copyright license.
+
+- CRI identifies **104 as commercial carpet installation** and **105 as residential carpet installation**; its official installation standards landing page links both standards: https://carpet-rug.org/resources/installation-standards/ .
+- CRI's installation information states that an installation plan should include accurate measurements and seam placement and show approved locations for seams and carpet direction: https://carpet-rug.org/carpet-for-business/carpet-installation-information/ . This supports a narrow caution to consult the approved layout; it does **not** prove every seam is prohibited or that a particular warehouse allocation is mandated by CRI.
+- CRI's publicly available installation tips also refer readers to manufacturer instructions and seam considerations: https://carpet-rug.org/carpet-for-homes/installation-tips/ .
+- The RK-0005 two-remnant calculation, six-checkpoint warehouse allocation workflow and practitioner-reported sales communication are RUNLU editorial examples and operational synthesis, **not** CRI rules or certified customer transactions. No CRI table, image, diagram or protected paragraph is reproduced in the reviewed opening sections.
+- **Outstanding:** Inspect the applicable current CRI standard's edition and exact sections if any future wording attributes a specific requirement to CRI; perform final whole-manuscript rights check and record named editor's decision. The official landing page timed out on direct retrieval in this session; corroborating indexed official CRI pages were accessible via search, so do not mark full-source review PASS.
+
+**Result: PARTIAL SOURCE-SCOPE VERIFIED; final rights and source signoff remain PENDING.**
+
 ## Assistant four-language core-case consistency check — 2026-11-11
 
 **Scope and method:** Compared the opening EN, 中文, Français and Español sections of the editorial manuscript `knowledge/editorial/RK-0005-INVENTORY-FULFILLMENT.md` for the hypothetical remnant geometry, units, no-guarantee caveat and decision workflow; separately compared the four-language practitioner-reported example. This is an editorial semantic cross-check, **not** complete line-by-line proofreading or a signed native-speaker language approval.
