@@ -18,7 +18,7 @@ article h2{font-size:1.45rem;line-height:1.35}#status{line-height:1.7}footer{col
 </style>
 </head>
 <body>
-<header><div class="controls"><a class="brand" href="./">RUNLU KNOWLEDGE · 润庐</a>
+<header><nav aria-label="Site navigation" style="margin-bottom:18px"><a href="../" id="homeLink">← RUNLU Home</a> · <a href="./" id="knowledgeLink">RUNLU KNOWLEDGE</a></nav><div class="controls"><a class="brand" href="./">RUNLU KNOWLEDGE · 润庐</a>
 <label><span id="language-label">Language</span>
 <select id="language" data-runlu-language-select aria-label="Article language">
 <option value="zh">中文</option><option value="en">English</option><option value="fr">Français</option><option value="es">Español</option>
@@ -38,6 +38,7 @@ fr:{label:'Langue',loading:'Chargement de l’article…',missing:'L’article c
 es:{label:'Idioma',loading:'Cargando el artículo…',missing:'El artículo completo aún no está disponible en este idioma.',error:'No se puede cargar el artículo.',invalid:'Dirección del artículo no válida.'}
 };
 const $=id=>document.getElementById(id);
+const navLabels={zh:['← 返回润庐主页','知识库'],en:['← RUNLU Home','Knowledge'],fr:['← Accueil RUNLU','Bibliothèque'],es:['← Inicio RUNLU','Biblioteca']};
 const query=new URLSearchParams(location.search);
 const id=query.get('id')||'';
 const validId=/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)&&id.length<=100;
@@ -50,6 +51,7 @@ function clear(node){while(node.firstChild)node.removeChild(node.firstChild)}
 async function load(){
 const lang=$('language').value,serial=++request,t=messages[lang];
 document.documentElement.lang=lang==='zh'?'zh-Hans':lang;
+$('homeLink').textContent=navLabels[lang][0];$('knowledgeLink').textContent=navLabels[lang][1];
 $('language-label').textContent=t.label;
 if(!validId){status(t.invalid);return}
 status(t.loading);
