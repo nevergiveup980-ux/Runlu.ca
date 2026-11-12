@@ -17,8 +17,8 @@
 | T04 | Does Scenario B clearly state non-overlap and avoid double-counting 30 LF restricted and 20 LF committed? | AUTHOR SCENARIO CONFIRMED; full review pending | Author explicitly confirmed the conditional 80 − 30 − 20 = 30 scenario on 2026-11-11; source/translation reviews remain open. |
 | T05 | Is it clear that inventory holds/reservations must not be overridden without authorization? | ASSISTANT MANUSCRIPT CHECK PASS; final technical signoff pending | EN explicitly requires responsible authority review; ZH requires authorized approval; FR/ES warn against unauthorized release. This checks manuscript wording, not implementation of warehouse permissions. |
 | T06 | Are dye lot, roll/remnant identity, usable dimensions, and quality status treated as separate checks? | ASSISTANT MANUSCRIPT CHECK PASS; final technical signoff pending | EN/ZH/FR/ES distinguish inventory allocation from roll identity, usable continuous cut, dye lot, condition and installation constraints. |
-| T07 | Are future expected receipts distinguished from stock physically received? | NOT CHECKED | |
-| T08 | Does this article avoid duplicating RK-0005's cut-geometry focus? | NOT CHECKED | |
+| T07 | Are future expected receipts distinguished from stock physically received? | ASSISTANT CHECK PARTIAL; language harmonization pending | EN/ZH explicitly say expected deliveries are not physically present today; FR/ES describe expected receipts in ATP but should also explicitly warn against treating them as received stock. |
+| T08 | Does this article avoid duplicating RK-0005's cut-geometry focus? | ASSISTANT MANUSCRIPT CHECK PASS; final editorial signoff pending | All four versions identify RK-0005 as cut-geometry article; RK-0006 focuses on commitments, restricted stock and date-specific promise. |
 
 ## Sources and rights
 
