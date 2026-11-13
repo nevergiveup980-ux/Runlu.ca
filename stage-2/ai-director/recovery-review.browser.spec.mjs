@@ -55,3 +55,33 @@ test('malformed success and network failure fail closed',async({page})=>{
  await expect(page.locator('#message')).toContainText('unavailable');
  await expect(page.locator('.item')).toHaveCount(0);
 });
+
+test('changing episode invalidates prior records and blocks late stale response',async({page})=>{
+ let release;
+ await page.route('**/api/stage/director/recovery?*',async route=>{
+  await new Promise(resolve=>{release=resolve});
+  try{await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{episodeId:'ep1',items:[{attemptId:'old',shotId:'s1',state:'UNKNOWN',retryAllowed:false,requiresManualReconciliation:true}]}})})}
+  catch{} // aborted request is expected
+ });
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');await page.locator('#load').click();
+ await expect.poll(()=>typeof release).toBe('function');
+ await page.locator('#episode').fill('ep2');
+ await expect(page.locator('#message')).toContainText('Episode changed');
+ await expect(page.locator('.item')).toHaveCount(0);
+ release();
+ await expect(page.locator('.item')).toHaveCount(0);
+ await expect(page.locator('#load')).toBeEnabled();
+});
+test('returning to demo aborts pending live request',async({page})=>{
+ let release;
+ await page.route('**/api/stage/director/recovery?*',async route=>{
+  await new Promise(resolve=>{release=resolve});
+  try{await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{episodeId:'ep1',items:[]}})})}catch{}
+ });
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');await page.locator('#load').click();
+ await expect.poll(()=>typeof release).toBe('function');
+ await page.locator('#demo').click();
+ release();
+ await expect(page.locator('#message')).toContainText('DEMO ONLY');
+ await expect(page.locator('.item')).toHaveCount(2);
+});
