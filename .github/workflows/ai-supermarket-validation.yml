@@ -1,0 +1,22 @@
+name: AI Supermarket Validation Prototypes
+on:
+  pull_request:
+    paths:
+      - 'validation-directory.html'
+      - 'validation-guided.html'
+      - 'validation-prototype.css'
+      - 'scripts/check-ai-supermarket-validation.mjs'
+      - '.github/workflows/ai-supermarket-validation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validation-static:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/check-ai-supermarket-validation.mjs
