@@ -46,3 +46,13 @@ Scope: `twist.html` and the **separately packaged iOS app**. Web source updates 
 The JavaScript DOM simulation passed **14/14 checks** across puzzle #4 and #8: EN/中文 switching before submission, persisted submission, Chinese correct-result rendering after submission, live-region disabled after submission, locked controls after reopening, and preserved sequence on reopening. This is **not** an iPhone, WKWebView, VoiceOver, or TestFlight result. The actual device checkboxes above remain unchecked.
 
 When executing the real-device test, record the exact commit and app build; do not infer packaged app behavior from the website's current GitHub branch.
+
+## CI green checkpoint — commit 230b6b74 (verified 2026-11-12)
+
+All three GitHub Actions runs for commit `230b6b7437c6e7acbcca9cf872cc14189229bb7d` completed successfully:
+
+- Browser tests #109: https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/43358666355 — Chromium browser regression.
+- iOS source integrity #11: https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/43358666349 — generated bundle diff, Node game logic and package verification.
+- iOS package #83: https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/43358666472 — offline bundle Playwright in Chromium and WebKit; unsigned `xcodebuild` targeting generic iOS succeeded.
+
+**Remaining release blockers:** a signed, installable build (TestFlight or device distribution), recorded real-iPhone QA including VoiceOver, and evidence-based review of the Apple 4.3 / 4.2.6 rejection response. This CI checkpoint is not a device test, App Store submission, or Apple approval.
