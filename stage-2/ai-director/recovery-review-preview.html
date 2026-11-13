@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RUNLU STAGE · Recovery Review</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color-scheme:dark;background:#0b1324;color:#f4f7ff}
+*{box-sizing:border-box}body{margin:0}.wrap{max-width:780px;margin:auto;padding:24px 16px 60px}
+h1{font-size:clamp(1.5rem,5vw,2.2rem)}.muted{color:#b2c2d9}.panel{background:#15233a;border:1px solid #34435c;border-radius:16px;padding:18px;margin:14px 0}
+label{display:block;margin:12px 0 6px}input,button{font:inherit;border-radius:10px;padding:12px;border:1px solid #7185a5;background:#253957;color:white}
+input{width:100%}button{margin-top:12px;min-height:44px;cursor:pointer}button:disabled{opacity:.5}
+button:focus-visible,input:focus-visible{outline:3px solid #9ec5ff}
+.status{display:inline-block;border-radius:8px;padding:5px 9px;background:#624928;color:#ffe8bb}
+.item{border-top:1px solid #34435c;padding:16px 0;overflow-wrap:anywhere}.item:first-child{border:0}
+strong{font-weight:750}small{display:block;color:#b2c2d9;margin-top:7px}
+</style></head><body><main class="wrap">
+<p class="muted">RUNLU / STAGE / AI DIRECTOR</p><h1>Recovery review</h1>
+<p class="muted">Read-only safety preview. No paid provider requests or retry controls.</p>
+<section class="panel"><label for="episode">Episode ID</label><input id="episode" maxlength="100" value="glass-throne-pilot" autocomplete="off">
+<button id="load" type="button">Load authorized recovery list</button>
+<button id="demo" type="button">Show demo</button>
+<p id="message" role="status" aria-live="polite"></p></section>
+<section class="panel"><h2>Tasks requiring manual review</h2><div id="items"></div></section>
+<p class="muted">DISPATCHING and UNKNOWN do not prove that a provider did or did not charge. Check provider records before taking further action.</p>
+</main><script type="module">
+import {projectDirectorRecovery} from './director-recovery-contract.mjs';
+const $=id=>document.getElementById(id);
+let controller=null;
+function render(items){
+ const root=$('items');root.replaceChildren();
+ if(!items.length){const p=document.createElement('p');p.textContent='No aged uncertain tasks in this snapshot.';root.append(p);return}
+ for(const item of items){
+  const div=document.createElement('article');div.className='item';
+  const title=document.createElement('strong');title.textContent='Shot '+item.shotId+' · Attempt '+item.attemptId;
+  const state=document.createElement('p');const tag=document.createElement('span');tag.className='status';tag.textContent=item.state;state.append(tag);
+  const detail=document.createElement('p');detail.textContent=item.label;
+  const provider=document.createElement('small');provider.textContent='Provider task: '+(item.providerTaskId??'Not confirmed');
+  const note=document.createElement('small');note.textContent='Manual reconciliation required · Automatic retry disabled';
+  div.append(title,state,detail,provider,note);root.append(div);
+ }
+}
+function showDemo(){
+ controller?.abort();controller=null;$('load').disabled=false;
+ render(projectDirectorRecovery([{attemptId:'demo_1',shotId:'S02',state:'DISPATCHING',providerTaskId:null,retryAllowed:false,requiresManualReconciliation:true},{attemptId:'demo_2',shotId:'S03',state:'UNKNOWN',providerTaskId:'demo_provider_2',retryAllowed:false,requiresManualReconciliation:true}]));
+ $('message').textContent='DEMO ONLY · These are invented sample records.';
+}
+async function load(){
+ controller?.abort();const active=new AbortController();controller=active;
+ $('load').disabled=true;$('message').textContent='Loading authorized read-only records…';
+ try{
+  const episodeId=$('episode').value.trim();
+  if(!/^[a-zA-Z0-9_-]{1,100}$/.test(episodeId))throw Error('invalid_episode');
+  const response=await fetch('/api/stage/director/recovery?episodeId='+encodeURIComponent(episodeId),{method:'GET',credentials:'same-origin',cache:'no-store',signal:active.signal});
+  if(!response.ok)throw Error(response.status===403?'access_denied':'unavailable');
+  const json=await response.json();
+  if(json?.data?.episodeId!==episodeId)throw Error('invalid_response');
+  const items=projectDirectorRecovery(json.data.items);
+  if(controller!==active)return;
+  render(items);$('message').textContent='Authorized read-only recovery snapshot.';
+ }catch(e){
+  if(controller!==active)return;
+  render([]);$('message').textContent=e.message==='access_denied'?'Access denied.':'Recovery endpoint unavailable or response invalid. No real data shown.';
+ }finally{if(controller===active){controller=null;$('load').disabled=false}}
+}
+$('load').addEventListener('click',load);$('demo').addEventListener('click',showDemo);showDemo();
+</script></body></html>
