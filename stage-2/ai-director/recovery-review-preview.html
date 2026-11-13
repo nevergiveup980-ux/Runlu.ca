@@ -60,5 +60,10 @@ async function load(){
   render([]);$('message').textContent=e.message==='access_denied'?'Access denied.':'Recovery endpoint unavailable or response invalid. No real data shown.';
  }finally{if(controller===active){controller=null;$('load').disabled=false}}
 }
+$('episode').addEventListener('input',()=>{
+ // A changed episode invalidates both the in-flight response and any prior display.
+ controller?.abort();controller=null;$('load').disabled=false;
+ render([]);$('message').textContent='Episode changed. Load to view its authorized recovery records.';
+});
 $('load').addEventListener('click',load);$('demo').addEventListener('click',showDemo);showDemo();
 </script></body></html>
