@@ -12,7 +12,7 @@ button:focus-visible,input:focus-visible{outline:3px solid #9ec5ff}
 .item{border-top:1px solid #34435c;padding:16px 0;overflow-wrap:anywhere}.item:first-child{border:0}
 strong{font-weight:750}small{display:block;color:#b2c2d9;margin-top:7px}
 </style></head><body><main class="wrap">
-<p class="muted">RUNLU / STAGE / AI DIRECTOR</p><h1>Recovery review</h1>
+<p class="muted">RUNLU / STAGE / AI DIRECTOR</p><label for="languageToggle">Language</label><select id="languageToggle" class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select><h1>Recovery review</h1>
 <p class="muted">Read-only safety preview. No paid provider requests or retry controls.</p>
 <section class="panel"><label for="episode">Episode ID</label><input id="episode" maxlength="100" value="glass-throne-pilot" autocomplete="off">
 <button id="load" type="button">Load authorized recovery list</button>
@@ -20,7 +20,7 @@ strong{font-weight:750}small{display:block;color:#b2c2d9;margin-top:7px}
 <p id="message" role="status" aria-live="polite"></p></section>
 <section class="panel"><h2>Tasks requiring manual review</h2><div id="items"></div></section>
 <p class="muted">DISPATCHING and UNKNOWN do not prove that a provider did or did not charge. Check provider records before taking further action.</p>
-</main><script type="module">
+</main><script src="../../runlu-language.js?v=2.2"></script><script type="module">
 import {projectDirectorRecovery} from './director-recovery-contract.mjs';
 const $=id=>document.getElementById(id);
 let controller=null;
