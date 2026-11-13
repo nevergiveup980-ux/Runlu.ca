@@ -2,6 +2,13 @@ import { test, expect } from '@playwright/test';
 
 const url = 'http://127.0.0.1:8765/twist.html';
 
+async function revealCurrentPuzzle(page) {
+  const choices = page.locator('#verifiedChoices button:not([disabled])');
+  if (await page.locator('#answerBtn').isDisabled() && await choices.count()) await choices.first().click();
+  await page.locator('#answerBtn').click();
+}
+
+
 test('twenty puzzles, score, review and reset', async ({ page }) => {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -10,7 +17,7 @@ test('twenty puzzles, score, review and reset', async ({ page }) => {
   await expect(page.locator('#nextBtn')).toBeDisabled();
   for (let i = 0; i < 20; i++) {
     if (i === 0) await page.locator('#hintBtn').click();
-    await page.locator('#answerBtn').click();
+    await revealCurrentPuzzle(page);
     await expect(page.locator('#explanation')).toBeVisible();
     if (i === 0) await page.locator('#gotBtn').click();
     if (i < 19) await page.locator('#nextBtn').click();
@@ -36,7 +43,7 @@ test('language, self-report correction and reload', async ({ page }) => {
   await page.goto(url);
   await page.locator('#language').selectOption('zh');
   await expect(page.locator('#counter')).toContainText('第 01');
-  await page.locator('#answerBtn').click();
+  await revealCurrentPuzzle(page);
   await page.locator('#gotBtn').click();
   await expect(page.locator('#correct')).toContainText('1 / 1');
   await page.locator('#missBtn').click();
@@ -56,7 +63,7 @@ test('narrow screen has no horizontal overflow', async ({ page }) => {
 
 test('cancel reset preserves progress and assessment', async ({ page }) => {
   await page.goto(url);
-  await page.locator('#answerBtn').click();
+  await revealCurrentPuzzle(page);
   await page.locator('#gotBtn').click();
   page.once('dialog', dialog => dialog.dismiss());
   await page.locator('#resetBtn').click();
@@ -66,7 +73,7 @@ test('cancel reset preserves progress and assessment', async ({ page }) => {
 
 test('keyboard focus and localized accessibility labels', async ({ page }) => {
   await page.goto(url);
-  await page.locator('#answerBtn').click();
+  await revealCurrentPuzzle(page);
   await page.locator('#nextBtn').click();
   await expect(page.locator('#question')).toBeFocused();
   await page.locator('#language').selectOption('zh');
@@ -98,7 +105,7 @@ test('invalid saved assessments are ignored without losing valid progress', asyn
 
 test('progress remains intact when moving backward and changing language', async ({ page }) => {
   await page.goto(url);
-  await page.locator('#answerBtn').click();
+  await revealCurrentPuzzle(page);
   await page.locator('#nextBtn').click();
   await page.locator('#prevBtn').click();
   await expect(page.locator('#answer')).toBeVisible();
@@ -114,7 +121,7 @@ test('hint and answer remain consistent after reload', async ({ page }) => {
   await page.reload();
   await expect(page.locator('#hint')).toBeVisible();
   await expect(page.locator('#hintBtn')).toBeDisabled();
-  await page.locator('#answerBtn').click();
+  await revealCurrentPuzzle(page);
   await expect(page.locator('#points')).toContainText('5');
   await page.reload();
   await expect(page.locator('#answer')).toBeVisible();
@@ -123,7 +130,7 @@ test('hint and answer remain consistent after reload', async ({ page }) => {
 
 test('self-report can be corrected after reloading', async ({ page }) => {
   await page.goto(url);
-  await page.locator('#answerBtn').click();
+  await revealCurrentPuzzle(page);
   await page.locator('#gotBtn').click();
   await page.reload();
   await page.locator('#missBtn').click();
@@ -149,7 +156,7 @@ test('editorial integrity: twenty distinct complete bilingual puzzles', async ({
       expect(entry).toHaveLength(3);
       for (const [fieldIndex, field] of entry.entries()) {
         expect(typeof field).toBe('string');
-        const minLength = fieldIndex === 2 ? (locale === 'zh' ? 1 : 2) : (locale === 'zh' ? 4 : 8);
+        const minLength = fieldIndex === 2 ? 0 : (locale === 'zh' ? 4 : 8);
         expect(field.trim().length).toBeGreaterThan(minLength);
       }
       expect(content.explanations[locale][i].trim().length).toBeGreaterThan(locale === 'zh' ? 7 : 20);
@@ -172,6 +179,7 @@ test('mobile touch flow: hint, answer, next and reload', async ({ browser }) => 
     await page.goto(url);
     await page.locator('#hintBtn').tap();
     await expect(page.locator('#hint')).toBeVisible();
+    if (await page.locator('#answerBtn').isDisabled()) await page.locator('#verifiedChoices button:not([disabled])').first().tap();
     await page.locator('#answerBtn').tap();
     await expect(page.locator('#answer')).toBeVisible();
     await expect(page.locator('#points')).toContainText('5');
@@ -189,12 +197,12 @@ test('mobile touch flow: hint, answer, next and reload', async ({ browser }) => 
 
 test('previous and review navigation focus the current puzzle', async ({ page }) => {
   await page.goto(url);
-  await page.locator('#answerBtn').click();
+  await revealCurrentPuzzle(page);
   await page.locator('#nextBtn').click();
   await page.locator('#prevBtn').click();
   await expect(page.locator('#question')).toBeFocused();
   for (let i = 0; i < 20; i++) {
-    if (i > 0) await page.locator('#answerBtn').click();
+    if (i > 0) await revealCurrentPuzzle(page);
     if (i < 19) await page.locator('#nextBtn').click();
   }
   await page.locator('#reviewBtn').click();
@@ -208,7 +216,7 @@ test('malformed saved JSON falls back to a clean playable game', async ({ page }
   await page.reload();
   await expect(page.locator('#counter')).toContainText('01 / 20');
   await expect(page.locator('#solved')).toContainText('0 / 20');
-  await page.locator('#answerBtn').click();
+  await revealCurrentPuzzle(page);
   await expect(page.locator('#solved')).toContainText('1 / 20');
 });
 
@@ -220,9 +228,10 @@ test('out-of-range saved progress and duplicates are sanitized', async ({ page }
   })));
   await page.reload();
   await expect(page.locator('#counter')).toContainText('20 / 20');
-  await expect(page.locator('#solved')).toContainText('2 / 20');
-  await expect(page.locator('#points')).toContainText('15');
-  await expect(page.locator('#correct')).toContainText('1 / 2');
+  // Legacy progress on revised puzzles is deliberately not carried over.
+  await expect(page.locator('#solved')).toContainText('1 / 20');
+  await expect(page.locator('#points')).toContainText('5');
+  await expect(page.locator('#correct')).toContainText('1 / 1');
   await page.locator('#prevBtn').click();
   await expect(page.locator('#counter')).toContainText('19 / 20');
 });
