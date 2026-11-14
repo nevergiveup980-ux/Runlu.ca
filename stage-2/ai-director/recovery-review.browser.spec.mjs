@@ -142,3 +142,31 @@ test('mobile recovery cards distinguish unknown and dispatching with prominent r
  await expect(page.locator('.item .review-warning')).toHaveCount(2);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
 });
+
+test('mobile state filters operate locally and preserve total counts',async({page})=>{
+ await page.setViewportSize({width:375,height:812});
+ let apiCalls=0;
+ await page.route('**/api/stage/director/recovery?*',route=>{apiCalls++;return route.abort()});
+ await page.goto(pageUrl());
+ await expect(page.locator('#counts')).toContainText('Total 2 · Unknown 1 · Dispatching 1');
+ await page.getByRole('button',{name:'Unknown',exact:true}).click();
+ await expect(page.locator('.item')).toHaveCount(1);
+ await expect(page.locator('.status')).toHaveText('UNKNOWN');
+ await expect(page.locator('#counts')).toContainText('Total 2');
+ await page.getByRole('button',{name:'Dispatching',exact:true}).click();
+ await expect(page.locator('.item')).toHaveCount(1);
+ await expect(page.locator('.status')).toHaveText('DISPATCHING');
+ await page.getByRole('button',{name:'All',exact:true}).click();
+ await expect(page.locator('.item')).toHaveCount(2);
+ expect(apiCalls).toBe(0);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
+});
+test('filter empty state differs from empty snapshot',async({page})=>{
+ const data={episodeId:'ep1',items:[{attemptId:'a1',shotId:'s1',state:'UNKNOWN',providerTaskId:null,retryAllowed:false,requiresManualReconciliation:true}]};
+ await page.route('**/api/stage/director/recovery?*',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data})}));
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');await page.locator('#load').click();
+ await expect(page.locator('#counts')).toContainText('Total 1');
+ await page.getByRole('button',{name:'Dispatching',exact:true}).click();
+ await expect(page.locator('#items')).toContainText('No tasks match this filter');
+ await expect(page.locator('#counts')).toContainText('Unknown 1');
+});
