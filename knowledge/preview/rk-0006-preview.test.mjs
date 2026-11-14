@@ -44,8 +44,8 @@ test("language control updates visible content, document language and URL", () =
 });
 
 test("editorial references are linked and mobile layout is present", () => {
-  assert.match(html, /RK-0006-RESEARCH-BRIEF\.md/);
-  assert.match(html, /RK-0006-INDEPENDENT-REVIEW-PACKET\.md/);
+  assert.match(html, /https:\/\/github\.com\/nevergiveup980-ux\/Runlu\.ca\/blob\/editorial\/rk-0006-main-sync-20261114\/knowledge\/reviews\/RK-0006-RESEARCH-BRIEF\.md/);
+  assert.match(html, /https:\/\/github\.com\/nevergiveup980-ux\/Runlu\.ca\/blob\/editorial\/rk-0006-main-sync-20261114\/knowledge\/reviews\/RK-0006-INDEPENDENT-REVIEW-PACKET\.md/);
   assert.match(html, /@media\(max-width:480px\)/);
   assert.match(html, /:focus-visible/);
   assert.match(html, /aria-live="polite"/);
