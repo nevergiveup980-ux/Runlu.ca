@@ -30,8 +30,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--confirm-paid', action='store_true')
+    parser.add_argument('--variants', choices=('ABC', 'A', 'B', 'C'), default='ABC')
     args = parser.parse_args()
-    prompts = {v: (ROOT / f'{v}.prompt.txt').read_text() for v in 'ABC'}
+    prompts = {v: (ROOT / f'{v}.prompt.txt').read_text() for v in args.variants}
     for v, prompt in prompts.items():
         if not prompt.strip() or len(prompt) > 12000:
             raise SystemExit('Invalid prompt; no requests sent')
@@ -86,6 +87,13 @@ def main():
             entry.update(state='needs_review_no_retry', error_type=type(error).__name__)
             if isinstance(error, urllib.error.HTTPError):
                 entry['http_status'] = error.code
+                # Retain bounded provider diagnostics privately; never print secrets.
+                try:
+                    detail = json.loads(error.read(16384)).get('error', {})
+                    entry['provider_error'] = {k: str(detail[k]).replace(key, '[REDACTED]')[:2000]
+                                               for k in ('status', 'message') if k in detail}
+                except Exception:
+                    entry['provider_error'] = {'status': 'unavailable'}
             record()
             raise SystemExit(f'{variant}: {type(error).__name__}; stopped, billing unverified; no retry') from None
 

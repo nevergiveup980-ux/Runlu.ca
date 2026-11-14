@@ -1,9 +1,9 @@
-name: RUNLU MUSIC V3 — Beyond the City Lights (single batch)
+name: RUNLU MUSIC V3 — Beyond the City Lights (C only — single request)
 on:
   workflow_dispatch:
     inputs:
       confirm_paid:
-        description: 'Authorize V3 A/B/C once each, listed total USD 0.24; no retries'
+        description: 'Authorize V3 C only once, listed USD 0.08; no retries'
         required: true
         type: choice
         default: 'NO'
@@ -29,20 +29,20 @@ jobs:
       - name: Offline V3 validation and dry run
         run: |
           python music/v3/beyond-city-lights/verify.py
-          python music/v3/beyond-city-lights/generate_once.py --output media-local/v3-output
+          python music/v3/beyond-city-lights/generate_once.py --variants C --output media-local/v3-c-output
       - name: Install decoder before generating
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y ffmpeg
-      - name: Generate A then B then C once — stop on failure
+      - name: Generate C only once — stop on failure
         env:
           RUNLU_MUSIC_GEMINI_API_KEY: ${{ secrets.RUNLU_MUSIC_GEMINI_API_KEY }}
-        run: python music/v3/beyond-city-lights/generate_once.py --output media-local/v3-output --confirm-paid
+        run: python music/v3/beyond-city-lights/generate_once.py --variants C --output media-local/v3-c-output --confirm-paid
       - name: Preserve audio and billing-uncertainty ledger for review
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
           name: runlu-beyond-city-lights-v3-${{ github.run_id }}
-          path: media-local/v3-output/
+          path: media-local/v3-c-output/
           if-no-files-found: warn
           retention-days: 14
