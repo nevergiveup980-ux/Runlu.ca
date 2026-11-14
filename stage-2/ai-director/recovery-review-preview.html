@@ -24,9 +24,9 @@ strong{font-weight:750}small{display:block;color:#b2c2d9;margin-top:7px}
 import {projectDirectorRecovery} from './director-recovery-contract.mjs';
 const $=id=>document.getElementById(id);
 let controller=null;
-function render(items){
+function render(items,{emptyMessage='No aged uncertain tasks in this snapshot.'}={}){
  const root=$('items');root.replaceChildren();
- if(!items.length){const p=document.createElement('p');p.textContent='No aged uncertain tasks in this snapshot.';root.append(p);return}
+ if(!items.length){const p=document.createElement('p');p.textContent=emptyMessage;root.append(p);return}
  for(const item of items){
   const div=document.createElement('article');div.className='item';
   const title=document.createElement('strong');title.textContent='Shot '+item.shotId+' · Attempt '+item.attemptId;
@@ -38,13 +38,14 @@ function render(items){
  }
 }
 function showDemo(){
- controller?.abort();controller=null;$('load').disabled=false;
+ controller?.abort();controller=null;$('load').disabled=false;$('load').textContent='Load authorized recovery list';
  render(projectDirectorRecovery([{attemptId:'demo_1',shotId:'S02',state:'DISPATCHING',providerTaskId:null,retryAllowed:false,requiresManualReconciliation:true},{attemptId:'demo_2',shotId:'S03',state:'UNKNOWN',providerTaskId:'demo_provider_2',retryAllowed:false,requiresManualReconciliation:true}]));
  $('message').textContent='DEMO ONLY · These are invented sample records.';
 }
 async function load(){
  controller?.abort();const active=new AbortController();controller=active;
- $('load').disabled=true;$('message').textContent='Loading authorized read-only records…';
+ render([],{emptyMessage:'Loading recovery records…'});
+ $('load').disabled=true;$('load').textContent='Loading…';$('message').textContent='Loading authorized read-only records…';
  try{
   const episodeId=$('episode').value.trim();
   if(!/^[a-zA-Z0-9_-]{1,100}$/.test(episodeId))throw Error('invalid_episode');
@@ -57,8 +58,8 @@ async function load(){
   render(items);$('message').textContent='Authorized read-only recovery snapshot.';
  }catch(e){
   if(controller!==active)return;
-  render([]);$('message').textContent=e.message==='sign_in_required'?'Session expired. Sign in again to view recovery records.':e.message==='access_denied'?'Access denied for this episode.':e.message==='invalid_episode'?'Enter a valid episode ID (letters, numbers, underscore or hyphen).':e.message==='invalid_response'?'Server returned a mismatched episode. No records displayed.':'Recovery endpoint unavailable or response invalid. No real data shown.';
- }finally{if(controller===active){controller=null;$('load').disabled=false}}
+  render([],{emptyMessage:'No recovery records displayed because loading failed.'});$('message').textContent=e.message==='sign_in_required'?'Session expired. Sign in again to view recovery records.':e.message==='access_denied'?'Access denied for this episode.':e.message==='invalid_episode'?'Enter a valid episode ID (letters, numbers, underscore or hyphen).':e.message==='invalid_response'?'Server returned a mismatched episode. No records displayed.':'Recovery endpoint unavailable or response invalid. No real data shown.';
+ }finally{if(controller===active){controller=null;$('load').disabled=false;$('load').textContent='Load authorized recovery list'}}
 }
 $('episode').addEventListener('input',()=>{
  // A changed episode invalidates both the in-flight response and any prior display.
