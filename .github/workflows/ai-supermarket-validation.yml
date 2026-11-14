@@ -5,6 +5,7 @@ on:
       - 'validation-directory.html'
       - 'validation-guided.html'
       - 'validation-fusion.html'
+      - 'validation-fusion.js'
       - 'validation-prototype.css'
       - 'scripts/check-ai-supermarket-validation.mjs'
       - '.github/workflows/ai-supermarket-validation.yml'
