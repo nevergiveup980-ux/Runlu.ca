@@ -40,3 +40,5 @@ if(typeof window!=='undefined')window.runluRenderCutLayout=renderCutLayout;
 declare const __BUILD_COMMIT__:string;
 declare global {interface Window {runluBuildCommit:string}}
 if(typeof window!=='undefined')window.runluBuildCommit=typeof __BUILD_COMMIT__==='undefined'?'unknown':__BUILD_COMMIT__;
+
+import './demos';
