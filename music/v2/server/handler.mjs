@@ -39,6 +39,7 @@ export function createMusicHandler({backend,allowedOrigins=[]}) {
       if(range&&!/^bytes=(?:\d+-\d*|-\d+)$/.test(range))throw Error('INVALID_REQUEST');
       const upstream=await backend.audio(row,token,range),headers=new Headers({'Cache-Control':'no-store','Content-Type':'audio/mpeg','X-Content-Type-Options':'nosniff','Accept-Ranges':'bytes'});
       for(const key of ['content-range','content-length'])if(upstream.headers.has(key))headers.set(key,upstream.headers.get(key));
+      if(upstream.status===416){headers.delete('content-length');return new Response(null,{status:416,headers});}
       headers.set('Content-Disposition',`${download?'attachment':'inline'}; filename="runlu-${row.version}.mp3"; filename*=UTF-8''${encodeURIComponent(filename(row.title,row.version)).replace(/['()*]/g,c=>'%'+c.charCodeAt(0).toString(16))}`);
       return new Response(upstream.body,{status:upstream.status,headers});
     }catch(error){const code=codes[error.message]?error.message:'BACKEND_UNAVAILABLE';return json({error_code:code},codes[code]||503);}

@@ -4,11 +4,11 @@ export const isUUID=value=>typeof value==='string'&&UUID.test(value);
 export function createSupabaseBackend({url,publishableKey,fetchImpl=fetch}) {
   const origin=new URL(url).origin;
   if(!/^https:/.test(origin)||!publishableKey)throw Error('INVALID_CONFIG');
-  async function request(path,token,options={}) {
+  async function request(path,token,options={},acceptedStatuses=[]) {
     let response;
     try {response=await fetchImpl(origin+path,{...options,redirect:'error',signal:AbortSignal.timeout(15000),headers:{apikey:publishableKey,Authorization:`Bearer ${token}`,...options.headers}});}
     catch {throw Error('BACKEND_UNAVAILABLE');}
-    if(!response.ok){const error=Error((response.status===401||(path==='/auth/v1/user'&&[400,403].includes(response.status)))?'UNAUTHENTICATED':response.status===404?'NOT_FOUND':'BACKEND_UNAVAILABLE');throw error;}
+    if(!response.ok&&!acceptedStatuses.includes(response.status)){const error=Error((response.status===401||(path==='/auth/v1/user'&&[400,403].includes(response.status)))?'UNAUTHENTICATED':response.status===404?'NOT_FOUND':'BACKEND_UNAVAILABLE');throw error;}
     return response;
   }
   async function rows(query,token){return (await request('/rest/v1/runlu_music_versions?'+query,token)).json();}
@@ -44,7 +44,7 @@ export function createSupabaseBackend({url,publishableKey,fetchImpl=fetch}) {
     },
     async audio(row,token,range) {
       if(row.object_key!==`${row.owner_id}/${row.version_id}.mp3`)throw Error('AUDIO_NOT_READY');
-      const response=await request('/storage/v1/object/authenticated/runlu-music-private/'+row.object_key,token,{headers:range?{Range:range}:{}});
+      const response=await request('/storage/v1/object/authenticated/runlu-music-private/'+row.object_key,token,{headers:range?{Range:range}:{}},[416]);
       return response;
     }
   };

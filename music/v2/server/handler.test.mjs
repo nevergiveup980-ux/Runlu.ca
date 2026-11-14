@@ -46,3 +46,10 @@ test('Supabase backend uses user JWT for ownership-filtered list and signer; val
  const unsafe=createSupabaseBackend({url:'https://project.supabase.co',publishableKey:'public',fetchImpl:async()=>new Response(JSON.stringify({signedURL:'https://evil.test/steal'}))});
  await assert.rejects(unsafe.sign(row,'user-token'),/AUDIO_NOT_READY/);
 });
+test('out-of-bounds byte ranges preserve Storage 416 and Content-Range',async()=>{
+ const backend=createSupabaseBackend({url:'https://project.supabase.co',publishableKey:'public',fetchImpl:async()=>new Response(null,{status:416,headers:{'Content-Range':'bytes */100','Content-Length':'50'}})});
+ const upstream=await backend.audio(row,'user-token','bytes=1000-');assert.equal(upstream.status,416);
+ const {handle}=fixture({audio:async()=>upstream});
+ const response=await handle(request(`songs/${id}/audio`,{Range:'bytes=1000-'}));
+ assert.equal(response.status,416);assert.equal(response.headers.get('content-length'),null);assert.equal(response.headers.get('content-range'),'bytes */100');assert.equal(await response.text(),'');
+});

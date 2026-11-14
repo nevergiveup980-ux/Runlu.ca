@@ -14,10 +14,11 @@ async function api(path){
  return data;
 }
 function addSong(row){
- const card=document.createElement('article'),heading=document.createElement('h3'),meta=document.createElement('small'),audio=document.createElement('audio'),play=document.createElement('button'),download=document.createElement('button'),note=document.createElement('p');
+ const card=document.createElement('article'),heading=document.createElement('h3'),meta=document.createElement('small'),audio=document.createElement('audio'),play=document.createElement('button'),download=document.createElement('button'),saveLink=document.createElement('a'),note=document.createElement('p');
  heading.textContent=`${row.title} · ${row.version}`;
  meta.textContent=`${new Date(row.created_at).toLocaleString()} · ${row.duration?Math.round(row.duration)+' 秒':'等待音频'} · ${row.status}`;
  audio.controls=true;audio.preload='metadata';audio.setAttribute('aria-label',heading.textContent);
+ saveLink.hidden=true;saveLink.textContent='未开始下载？点此打开或保存 MP3';saveLink.target='_blank';saveLink.rel='noopener';
  play.textContent='试听 / 刷新播放链接';download.textContent='Download MP3';play.disabled=download.disabled=!row.audio_available;note.setAttribute('role','status');
  audio.onplay=()=>document.querySelectorAll('audio').forEach(other=>{if(other!==audio)other.pause();});
  audio.onerror=()=>{note.textContent='播放链接可能已过期，点击“刷新播放链接”重新获取，无需重新生成。';};
@@ -35,11 +36,11 @@ function addSong(row){
    if(!response.ok)throw Error('下载失败或链接已过期，请重试。');
    const blob=await response.blob();if(ticket!==epoch)return;if(!blob.size||!/^audio\/mpeg/.test(blob.type))throw Error('未返回有效 MP3。');
    const url=URL.createObjectURL(blob);urls.add(url);const a=document.createElement('a');
-   a.href=url;const {filename}=await import('./library.mjs');a.download=filename(row.title,row.version);document.body.append(a);a.click();a.remove();
+   a.href=url;const {filename}=await import('./library.mjs');if(ticket!==epoch){URL.revokeObjectURL(url);urls.delete(url);return;}a.download=filename(row.title,row.version);saveLink.href=url;saveLink.download=a.download;saveLink.hidden=false;document.body.append(a);a.click();a.remove();
    note.textContent='已发起下载。Safari 如显示预览，可分享并存储到“文件”；请确认已保存。';
   }catch(error){note.textContent=error.message;}finally{download.disabled=false;}
  };
- card.append(heading,meta,play,audio,download,note);$('cloud-songs').append(card);
+ card.append(heading,meta,play,audio,download,saveLink,note);$('cloud-songs').append(card);
 }
 async function load(more=false){
  const ticket=epoch,sequence=++listSequence;$('cloud-more').disabled=true;

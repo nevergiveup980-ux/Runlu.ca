@@ -19,18 +19,22 @@ def main():
     Thread(target=server.serve_forever,daemon=True).start()
     try:
         with sync_playwright() as pw, TemporaryDirectory() as temp:
-            browser=pw.chromium.launch(headless=True)
-            context=browser.new_context(accept_downloads=True)
+            engine=os.environ.get('RUNLU_TEST_ENGINE','chromium')
+            if engine not in ('chromium','webkit'): raise ValueError('Unsupported test engine')
+            browser=getattr(pw,engine).launch(headless=True)
+            device=pw.devices['iPhone 13'] if engine=='webkit' else {}
+            context=browser.new_context(accept_downloads=True,**device)
             page=context.new_page()
             calls=[]
-            state={'expired':False,'unavailable':True}
+            state={'expired':False,'unavailable':True,'download_failed':False}
             def auth(route):
                 if '/auth/v1/token' in route.request.url:
                     route.fulfill(json={'access_token':'fake-test-token','expires_in':3600,'user':{'is_anonymous':False}})
                 elif '/auth/v1/logout' in route.request.url:
                     route.fulfill(json={})
                 elif '/storage/v1/' in route.request.url:
-                    route.fulfill(body=audio,content_type='audio/mpeg')
+                    if state['download_failed']: route.fulfill(status=403,json={'error':'expired'})
+                    else: route.fulfill(body=audio,content_type='audio/mpeg')
                 else:
                     raise AssertionError('Unexpected external request: '+route.request.url)
             page.route(PROJECT+'/**',auth)
@@ -62,12 +66,20 @@ def main():
             page.wait_for_function("() => document.querySelector('#cloud-songs audio').readyState>=1")
             page.locator('#cloud-songs audio').evaluate('(a)=>a.play()')
             page.wait_for_function("() => document.querySelector('#cloud-songs audio').currentTime>0")
+            state['download_failed']=True
+            page.locator('#cloud-songs button').last.click()
+            page.wait_for_function("() => document.querySelector('#cloud-songs article p').textContent.includes('下载失败或链接已过期')")
+            assert page.locator('#cloud-songs button').last.is_enabled()
+            state['download_failed']=False
             with page.expect_download() as pending:
                 page.locator('#cloud-songs button').last.click()
             downloaded=pending.value
             assert downloaded.suggested_filename=='When the Lights Go Down-V1.mp3'
             target=Path(temp)/'cloud.mp3';downloaded.save_as(target)
             assert hashlib.sha256(target.read_bytes()).digest()==hashlib.sha256(audio).digest()
+            fallback=page.get_by_role('link',name='未开始下载？点此打开或保存 MP3')
+            assert fallback.is_visible()
+            assert fallback.get_attribute('download')=='When the Lights Go Down-V1.mp3'
             assert page.evaluate('localStorage.length')==0
             state['expired']=True
             page.locator('#cloud-refresh').click()
@@ -75,7 +87,7 @@ def main():
             assert page.locator('#cloud-songs article').count()==0
             assert not errors,errors
             browser.close()
-            print('PASS: mocked cloud login, no auto requests, not-ready error, refreshed link playback, named byte-identical download, no persisted token, 401 clears private media. Not live JWT/storage/iPhone.')
+            print(engine + ': PASS: mocked cloud login, no auto requests, not-ready error, refreshed link playback, named byte-identical download, no persisted token, 401 clears private media. Not live JWT/storage/iPhone.')
     finally:
         server.shutdown();server.server_close()
 

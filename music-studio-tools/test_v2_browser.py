@@ -22,8 +22,11 @@ def main():
             options = {'headless': True}
             if os.environ.get('RUNLU_TEST_BROWSER'):
                 options['executable_path'] = os.environ['RUNLU_TEST_BROWSER']
-            browser = pw.chromium.launch(**options)
-            context = browser.new_context(accept_downloads=True)
+            engine = os.environ.get('RUNLU_TEST_ENGINE','chromium')
+            if engine not in ('chromium','webkit'): raise ValueError('Unsupported test engine')
+            browser = getattr(pw,engine).launch(**options)
+            device = pw.devices['iPhone 13'] if engine=='webkit' else {}
+            context = browser.new_context(accept_downloads=True,**device)
             page = context.new_page()
             errors = []
             page.on('pageerror', lambda e: errors.append(str(e)))
@@ -31,12 +34,14 @@ def main():
             page.wait_for_function("() => document.querySelector('#status').textContent.includes('已就绪')")
             page.locator('#file').set_input_files(str(source))
             page.locator('#save').click()
+            page.wait_for_function("() => !document.querySelector('#save').disabled")
+            assert page.locator('article audio').count(), page.locator('#status').inner_text()
             page.wait_for_selector('article audio')
             decoded = page.evaluate('''async () => {
-              const {openLibrary,transact}=await import('/music/v2/library.mjs');
+              const {openLibrary,transact,storedAudioBlob}=await import('/music/v2/library.mjs');
               const db=await openLibrary();const rows=await transact(db,'readonly',s=>s.getAll());
               const context=new AudioContext();
-              try { const audio=await context.decodeAudioData(await rows[0].audio.arrayBuffer());
+              try { const audio=await context.decodeAudioData(await storedAudioBlob(rows[0].audio).arrayBuffer());
                 return {duration:audio.duration,channels:audio.numberOfChannels};
               } finally {await context.close();db.close();}
             }''')
@@ -54,6 +59,9 @@ def main():
             assert download.suggested_filename == 'When the Lights Go Down-V1.mp3'
             target = Path(temp)/'download.mp3'
             download.save_as(target)
+            fallback=page.get_by_role('link',name='未开始下载？点此打开或保存 MP3')
+            assert fallback.is_visible()
+            assert fallback.get_attribute('download')=='When the Lights Go Down-V1.mp3'
             assert hashlib.sha256(target.read_bytes()).digest() == hashlib.sha256(source.read_bytes()).digest()
             page.locator('#version').select_option('V2')
             page.locator('#file').set_input_files(str(source))
@@ -75,7 +83,7 @@ def main():
             assert other.locator('article').count() == 0
             assert not errors, errors
             browser.close()
-            print('PASS: real V1 playback/pause/seek, refresh persistence, byte-identical named download, V1/V2 coexistence, invalid-file rejection, mobile layout, separate-browser isolation. Not real iPhone or hosted RLS.')
+            print(engine + ': PASS: real V1 playback/pause/seek, refresh persistence, byte-identical named download, V1/V2 coexistence, invalid-file rejection, mobile layout, separate-browser isolation. Not real iPhone or hosted RLS.')
     finally:
         server.shutdown()
         server.server_close()

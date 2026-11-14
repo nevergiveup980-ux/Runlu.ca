@@ -33,3 +33,11 @@ export async function validateAudio(file) {
     return duration;
   } finally {audio.removeAttribute('src');audio.load();URL.revokeObjectURL(url);}
 }
+
+// Safari private/ephemeral IndexedDB may not support persisted File/Blob objects.
+// Keep compatibility with earlier records while storing new MP3 bytes as ArrayBuffer.
+export function storedAudioBlob(value) {
+  if(value instanceof Blob)return value;
+  if(value instanceof ArrayBuffer&&value.byteLength)return new Blob([value],{type:'audio/mpeg'});
+  throw Error('歌曲文件不可用，请重新导入。');
+}
