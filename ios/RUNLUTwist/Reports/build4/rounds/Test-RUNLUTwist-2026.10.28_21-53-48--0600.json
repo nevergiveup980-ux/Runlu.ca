@@ -1,0 +1,52 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "7A72E438-8893-441A-A008-961E04D9A5C3",
+        "deviceName" : "iPhone 17e",
+        "modelName" : "iPhone 17e",
+        "osBuildNumber" : "23F77",
+        "osVersion" : "26.5",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 1,
+      "passedTests" : 0,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "RUNLUTwist · Built with macOS 26.6.2",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1793246052.288,
+  "passedTests" : 0,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793246028.587,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Hit area is too small",
+      "targetName" : "RUNLUTwistUITests",
+      "testIdentifier" : 1,
+      "testIdentifierString" : "AccessibilityUITests/testEnglishAndChineseAccessibilityAudit()",
+      "testIdentifierURL" : "test://com.apple.xcode/RUNLUTwist/RUNLUTwistUITests/AccessibilityUITests/testEnglishAndChineseAccessibilityAudit",
+      "testName" : "testEnglishAndChineseAccessibilityAudit()"
+    }
+  ],
+  "title" : "Test - RUNLUTwist",
+  "topInsights" : [
+
+  ],
+  "totalTestCount" : 1
+}

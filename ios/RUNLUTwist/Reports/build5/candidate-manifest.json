@@ -1,0 +1,27 @@
+{
+  "version": "1.1",
+  "build": "5",
+  "scope": "local development candidate; no upload",
+  "htmlSHA256": "4aff2be687bfd13d7c8daab592bc34501142f3bf60eabfa0c73e559e7761cadf",
+  "ipaSHA256": "dbd605a04aa3edf2355de506383e762b9b7706b1ae66d1e9f8652c31b6eee443",
+  "archiveSignature": "PASS",
+  "ipaSignature": "PASS",
+  "vm": {
+    "passed": 18,
+    "failed": 0
+  },
+  "ui": {
+    "device": "iPhone 17e Simulator",
+    "iOS": "26.5 (23F77)",
+    "passed": 9,
+    "failed": 0
+  },
+  "physical": {
+    "device": "iPhone 16 Pro Max",
+    "iOS": "27.2",
+    "result": "NOT TESTED",
+    "blocker": "Device Hub currently reports Enable Developer Mode"
+  },
+  "uploaded": false,
+  "submitted": false
+}

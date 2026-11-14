@@ -1,0 +1,60 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "7A72E438-8893-441A-A008-961E04D9A5C3",
+        "deviceName" : "iPhone 17e",
+        "modelName" : "iPhone 17e",
+        "osBuildNumber" : "23F77",
+        "osVersion" : "26.5",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 2,
+      "passedTests" : 0,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "RUNLUTwist · Built with macOS 26.6.2",
+  "expectedFailures" : 0,
+  "failedTests" : 2,
+  "finishTime" : 1793243864.621,
+  "passedTests" : 0,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793243633.184,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "XCTAssertTrue failed",
+      "targetName" : "RUNLUTwistUITests",
+      "testIdentifier" : 1,
+      "testIdentifierString" : "RemediationUITests/testActualWKFullGameplayAndNativeRecovery()",
+      "testIdentifierURL" : "test://com.apple.xcode/RUNLUTwist/RUNLUTwistUITests/RemediationUITests/testActualWKFullGameplayAndNativeRecovery",
+      "testName" : "testActualWKFullGameplayAndNativeRecovery()"
+    },
+    {
+      "failureText" : "Testing was canceled",
+      "targetName" : "RUNLUTwistUITests",
+      "testIdentifier" : 2,
+      "testIdentifierString" : "RemediationUITests/testCorruptedNativeSaveLaunchesAndAcceptsNewChoices()",
+      "testIdentifierURL" : "test://com.apple.xcode/RUNLUTwist/RUNLUTwistUITests/RemediationUITests/testCorruptedNativeSaveLaunchesAndAcceptsNewChoices",
+      "testName" : "testCorruptedNativeSaveLaunchesAndAcceptsNewChoices()"
+    }
+  ],
+  "title" : "Test - RUNLUTwist",
+  "topInsights" : [
+
+  ],
+  "totalTestCount" : 2
+}

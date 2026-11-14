@@ -1,0 +1,37 @@
+{
+  "result": "PASS",
+  "scope": "new candidate Web resources, not historical archives/documents",
+  "old_riddle_hits": [],
+  "negative_test_markers": [
+    {
+      "file": "Web/qa-suite.js",
+      "match": "房间号"
+    }
+  ],
+  "test_marker_note": "qa-suite.js rejects the old explanation; marker is not a game question",
+  "files": [
+    {
+      "file": "Web/qa-suite.js",
+      "bytes": 5680,
+      "sha256": "0285ca11b624f4cb495c0de74cf20db06e5d7117e49473ed7d0ad888346d798d"
+    },
+    {
+      "file": "Web/twist-privacy.html",
+      "bytes": 1453,
+      "sha256": "415cbbfa5660aa4a46c232d377d7e35e8ddfbf393611592b45e5145c7baa053d"
+    },
+    {
+      "file": "Web/twist-support.html",
+      "bytes": 1191,
+      "sha256": "4056cea1ad07dc6b950ea871f1af2aef648e62f198c7c403d15141f0ed52f9c0"
+    },
+    {
+      "file": "Web/twist.html",
+      "bytes": 37878,
+      "sha256": "4aff2be687bfd13d7c8daab592bc34501142f3bf60eabfa0c73e559e7761cadf"
+    }
+  ],
+  "first_answer_en": "A conversation. You can open or close a conversation and share it without dividing it.",
+  "first_answer_zh": "一段对话。我们可以开启、结束或分享对话，却不需要钥匙，也不必把它分开。",
+  "remaining_classics_rights": "19 UNKNOWN, not cleared"
+}
