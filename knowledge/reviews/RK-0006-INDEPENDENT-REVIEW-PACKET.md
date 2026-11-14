@@ -61,8 +61,8 @@ The S01–S04 PASS labels below are limited to assistant-performed verification 
 
 | ID | Hands-on action | Expected result | Result | Evidence |
 |---|---|---|---|---|
-| M01 | Open the RK-0006 preview at a narrow iPhone viewport. | No horizontal scrolling; headings, notice and examples remain readable. | PARTIAL PASS — visible EN/ZH viewport only | Author's two 2026-11-14 iPhone screenshots show readable headings and opening body; full-page scroll and examples not yet inspected. |
-| M02 | Switch English → 中文 → Français → Español → English. | Heading, full body, editorial notice and HOLD footer all change; browser tab title follows. | PARTIAL PASS — EN/ZH only | Author's two 2026-11-14 iPhone screenshots show localized EN/ZH banner, language label, title, notice and opening body; FR/ES, footer and browser title not evidenced by these images. |
+| M01 | Open the RK-0006 preview at a narrow iPhone viewport. | No horizontal scrolling; headings, notice and examples remain readable. | PARTIAL PASS — visible EN/ZH/FR/ES sections | Author's five 2026-11-14 iPhone screenshots show readable four-language upper sections and Spanish footer; full-page scroll and examples in all languages not yet inspected. |
+| M02 | Switch English → 中文 → Français → Español → English. | Heading, full body, editorial notice and HOLD footer all change; browser tab title follows. | PARTIAL PASS — all four upper sections visually evidenced | Author's 2026-11-14 screenshots show EN/ZH/FR/ES localized banner, selector label, title, notice and opening body; full switch sequence, document title and every footer not yet evidenced. |
 | M03 | Select 中文, refresh, then use the copied `?lang=zh` URL. | Chinese remains selected; page language is set to zh. | NOT CHECKED | |
 | M04 | Load `?lang=invalid` and then use the selector. | Safe English fallback; selector still works. | NOT CHECKED | |
 | M05 | Inspect both worked examples in each language. | 100 − 65 = 35 and 80 − 30 − 20 = 30, with non-overlap and cut-geometry caveats intact. | NOT CHECKED | |
@@ -75,6 +75,10 @@ The S01–S04 PASS labels below are limited to assistant-performed verification 
 ## Live website visual acceptance — 2026-11-14
 
 Author supplied two iPhone screenshots of `runlu.ca` RK-0006 live preview showing English and Chinese. **PASS (limited visual scope):** both languages render readable title, review banner, language label, editorial notice and beginning of body; Chinese banner and language label are localized. No visible overflow in captured portions. This supports only the pictured portion of M01 and the EN↔ZH portion of M02. **NOT CHECKED:** full-page scroll/overflow, French and Spanish in this screenshot pair, refresh/query persistence, both worked examples, research links, assistive technology, and page source/index audit. Earlier screen recording was described as showing Spanish switching, but it is not a substitute for all remaining checks. No screenshot is uploaded to the repository in this change; evidence resides in the author's 2026-11-14 chat attachments. Do not mark M01–M08 collectively PASS or lift HOLD.
+
+## Additional author iPhone visual evidence — 2026-11-14
+
+The author supplied three more screenshots from the live `runlu.ca` RK-0006 page: French upper page, Spanish upper page, and Spanish footer. **PASS for visible scope:** FR/ES localized banner, language label, title, notice and opening body render legibly; Spanish lower article, editorial note, footer and research/review link labels render with no visible horizontal overflow. **Remaining checks:** complete four-language footer switching, two numerical examples in all languages, actual link navigation, query/refresh persistence, keyboard/screen-reader, full page/source checks. The Spanish footer still starts with English `HOLD`; this is a localization polish item, not evidence of publication approval. The screenshot shows link text, not a successful click-through. Images remain in the author's chat attachments; do not claim they are repository artifacts.
 
 ## Editorial handoff and release decision — PENDING
 
