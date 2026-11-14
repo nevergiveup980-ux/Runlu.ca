@@ -32,7 +32,8 @@ for(const id of ['01','02','03'])test(`iPhone Safari engine: DEMO ${id} load, ca
  expect(errors).toEqual([]);
 });
 test('direct demo links and touch target size',async({page})=>{
- await page.goto(url+'#demo=02');await expect(page.locator('#demoNotice')).toContainText('DEMO 02');
+ const response=await page.goto(url+'#demo=02');if(url.startsWith('https:')){expect(response?.status()).toBe(200);expect(response?.headers()['content-security-policy']).toContain("connect-src 'none'");expect(response?.headers()['x-robots-tag']).toContain('noindex');}
+ await expect(page.locator('#demoNotice')).toContainText('DEMO 02');
  const targets=await page.locator('[data-demo]').evaluateAll(els=>els.map(el=>el.getBoundingClientRect().height));expect(targets.every(h=>h>=44)).toBe(true);
 });
 

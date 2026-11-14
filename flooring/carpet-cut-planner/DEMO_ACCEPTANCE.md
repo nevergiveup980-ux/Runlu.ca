@@ -3,6 +3,10 @@
 This preview is synthetic-only: **DEMO DATA — NOT FOR PRODUCTION CUTTING**.
 No login, application install, backend, inventory write or production database connection.
 
+## Live isolated preview
+
+https://runlu-carpet-iphone-demo-d0sc141ir-runlu.vercel.app
+
 ## Three entries
 
 - `#demo=01` — Standard Carpet Job: complete rectangular allocation and waste.
@@ -40,8 +44,11 @@ planner retains these features. All demo calculations stay in browser memory.
 `npm run build:demo` emits only the planner's static entry and bundled engine to
 `dist/demo/`. It does not include the RUNLU root site, databases or credentials.
 The separate Vercel project is `runlu-carpet-iphone-demo`, project ID
-`prj_VEEMUfDJEEZ7qUR7RZJ1wra9yIXL`, with no Git link, production domains or environment
-variables. Deploy the emitted static files with **preview** target only. Response
+`prj_VEEMUfDJEEZ7qUR7RZJ1wra9yIXL`, with no Git link, RUNLU production domains or environment
+variables. Vercel automatically initializes a new project with a production-labelled
+first deployment; that initialization also contains only this synthetic demo. The
+delivered deployment is a separate preview (`target: null` in the API). On this API,
+omit `target` for subsequent preview deployments; the string `preview` is rejected. Response
 headers disable indexing and network connections (`connect-src 'none'`). No main
 branch merge or RUNLU production deployment is part of this workflow.
 
