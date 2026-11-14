@@ -72,6 +72,10 @@ The S01–S04 PASS labels below are limited to assistant-performed verification 
 
 **Acceptance rule:** Record failures and fix them on the draft branch. Only mark M01–M08 PASS after actual testing with reproducible evidence. L06 remains NOT CHECKED until the required real-device/browser checks are documented.
 
+## Live website visual acceptance — 2026-11-14
+
+Author supplied two iPhone screenshots of `runlu.ca` RK-0006 live preview showing English and Chinese. **PASS (limited visual scope):** both languages render readable title, review banner, language label, editorial notice and beginning of body; Chinese banner and language label are localized. No visible overflow in captured portions. This supports only the pictured portion of M01 and the EN↔ZH portion of M02. **NOT CHECKED:** full-page scroll/overflow, French and Spanish in this screenshot pair, refresh/query persistence, both worked examples, research links, assistive technology, and page source/index audit. Earlier screen recording was described as showing Spanish switching, but it is not a substitute for all remaining checks. No screenshot is uploaded to the repository in this change; evidence resides in the author's 2026-11-14 chat attachments. Do not mark M01–M08 collectively PASS or lift HOLD.
+
 ## Editorial handoff and release decision — PENDING
 
 **Automated checks (2026-11-14):** On PR #475, latest verified commit `5698408c329b27571239d4998fd3a6db34b032e3`, all three checks completed successfully: Site integrity (run 43633245773), RUNLU Knowledge validation (run 43633245776), and RUNLU Knowledge Publication Gate (run 43633245819). Four-language scenario safeguards and standalone-safe GitHub review URLs have automated assertions. The publication-gate run produced `rk-0006-editorial-preview-html` (artifact ID `14128992459`, expires 2026-11-28) and `knowledge-editorial-quality-report` (artifact ID `14129092168`, expires 2026-12-14). Download preview from the run's Artifacts section for actual iPhone acceptance. These establish automated checks and artifact presence only, not human language/rights approval or actual browser acceptance.
