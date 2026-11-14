@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RUNLU STAGE · Recovery Review</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color-scheme:dark;background:#0b1324;color:#f4f7ff}
+*{box-sizing:border-box}body{margin:0}.wrap{max-width:780px;margin:auto;padding:24px 16px 60px}
+h1{font-size:clamp(1.5rem,5vw,2.2rem)}.muted{color:#b2c2d9}.panel{background:#15233a;border:1px solid #34435c;border-radius:16px;padding:18px;margin:14px 0}
+label{display:block;margin:12px 0 6px}input,button{font:inherit;border-radius:10px;padding:12px;border:1px solid #7185a5;background:#253957;color:white}
+input,select{width:100%}button{margin-top:12px;min-height:44px;cursor:pointer}button:disabled{opacity:.5}
+button:focus-visible,input:focus-visible{outline:3px solid #9ec5ff}
+.status{display:inline-block;border-radius:8px;padding:5px 9px;background:#624928;color:#ffe8bb}
+.item{border-top:1px solid #34435c;padding:18px 0;overflow-wrap:anywhere}.item:first-child{border:0}.item-title{display:block;font-size:1.12rem;line-height:1.45}.item .status{font-weight:700;letter-spacing:.02em}.item .status[data-state='UNKNOWN']{background:#60353a;color:#ffe0e0}.item .status[data-state='DISPATCHING']{background:#624928;color:#ffe8bb}.review-warning{display:block;margin-top:12px;padding:10px 12px;border-left:3px solid #e9b46a;background:#283346;border-radius:5px;color:#fff}
+strong{font-weight:750}small{display:block;color:#b2c2d9;margin-top:7px}.filter-row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.filter-row button{margin:0;min-height:44px}.filter-row button[aria-pressed='true']{background:#d9e8ff;color:#101d32;border-color:#d9e8ff;font-weight:750}.count{font-variant-numeric:tabular-nums;color:#c8d7ec}
+</style></head><body><main class="wrap">
+<p class="muted">RUNLU / STAGE / AI DIRECTOR</p><label for="languageToggle">Language</label><select id="languageToggle" class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select><h1>Recovery review</h1>
+<p class="muted">Read-only safety preview. No paid provider requests or retry controls.</p>
+<section class="panel"><label for="episode">Episode ID</label><input id="episode" maxlength="100" value="glass-throne-pilot" autocomplete="off">
+<button id="load" type="button">Load authorized recovery list</button>
+<button id="demo" type="button">Show demo</button>
+<p id="message" role="status" aria-live="polite"></p></section>
+<section class="panel"><h2>Tasks requiring manual review</h2><p id="counts" class="count" aria-live="polite">No snapshot loaded</p><label for="taskSearch">Find shot or attempt</label><input id="taskSearch" type="search" placeholder="Shot ID or attempt ID" autocomplete="off"><label for="taskSort">Sort tasks</label><select id="taskSort" aria-label="Sort recovery tasks"><option value="shot-asc">Shot ID A–Z</option><option value="shot-desc">Shot ID Z–A</option><option value="state">State (Unknown first)</option></select><div class="filter-row" role="group" aria-label="Filter recovery tasks"><button type="button" data-filter="ALL" aria-pressed="true">All</button><button type="button" data-filter="UNKNOWN" aria-pressed="false">Unknown</button><button type="button" data-filter="DISPATCHING" aria-pressed="false">Dispatching</button></div><div id="items"></div></section>
+<p class="muted">DISPATCHING and UNKNOWN do not prove that a provider did or did not charge. Check provider records before taking further action.</p>
+</main><script src="../../runlu-language.js?v=2.2"></script><script type="module">
+import {projectDirectorRecovery} from './director-recovery-contract.mjs';
+const $=id=>document.getElementById(id);
+let controller=null;
+let currentItems=[];let currentFilter='ALL';let currentEmptyMessage='No aged uncertain tasks in this snapshot.';
+function applyFilter(){
+ for(const button of document.querySelectorAll('[data-filter]'))button.setAttribute('aria-pressed',String(button.dataset.filter===currentFilter));
+ const unknown=currentItems.filter(item=>item.state==='UNKNOWN').length;
+ const dispatching=currentItems.filter(item=>item.state==='DISPATCHING').length;
+ $('counts').textContent='Total '+currentItems.length+' · Unknown '+unknown+' · Dispatching '+dispatching;
+ const query=$('taskSearch').value.trim().toLocaleLowerCase();
+ const filtered=(currentFilter==='ALL'?currentItems:currentItems.filter(item=>item.state===currentFilter))
+  .filter(item=>!query||String(item.shotId).toLocaleLowerCase().includes(query)||String(item.attemptId).toLocaleLowerCase().includes(query));
+ const sort=$('taskSort').value;
+ filtered.sort((a,b)=>sort==='state'?(Number(b.state==='UNKNOWN')-Number(a.state==='UNKNOWN')||String(a.shotId).localeCompare(String(b.shotId),undefined,{numeric:true})):sort==='shot-desc'?String(b.shotId).localeCompare(String(a.shotId),undefined,{numeric:true}):String(a.shotId).localeCompare(String(b.shotId),undefined,{numeric:true}));
+ drawItems(filtered,{emptyMessage:currentItems.length?'No tasks match the current search or filter.':currentEmptyMessage});
+}
+function render(items,{emptyMessage='No aged uncertain tasks in this snapshot.'}={}){
+ currentItems=items;currentEmptyMessage=emptyMessage;applyFilter();
+}
+function drawItems(items,{emptyMessage='No aged uncertain tasks in this snapshot.'}={}){
+ const root=$('items');root.replaceChildren();
+ if(!items.length){const p=document.createElement('p');p.textContent=emptyMessage;root.append(p);return}
+ for(const item of items){
+  const div=document.createElement('article');div.className='item';
+  const title=document.createElement('strong');title.className='item-title';title.textContent='Shot '+item.shotId+' · Attempt '+item.attemptId;
+  const state=document.createElement('p');const tag=document.createElement('span');tag.className='status';tag.dataset.state=item.state;tag.textContent=item.state;state.append(tag);
+  const detail=document.createElement('p');detail.textContent=item.label;
+  const provider=document.createElement('small');provider.textContent='Provider task: '+(item.providerTaskId??'Not confirmed');
+  const note=document.createElement('small');note.className='review-warning';note.textContent='Manual reconciliation required · Automatic retry disabled';
+  div.append(title,state,detail,provider,note);root.append(div);
+ }
+}
+function showDemo(){
+ controller?.abort();controller=null;$('load').disabled=false;$('load').textContent='Load authorized recovery list';
+ render(projectDirectorRecovery([{attemptId:'demo_1',shotId:'S02',state:'DISPATCHING',providerTaskId:null,retryAllowed:false,requiresManualReconciliation:true},{attemptId:'demo_2',shotId:'S03',state:'UNKNOWN',providerTaskId:'demo_provider_2',retryAllowed:false,requiresManualReconciliation:true}]));
+ $('message').textContent='DEMO ONLY · These are invented sample records.';
+}
+async function load(){
+ controller?.abort();const active=new AbortController();controller=active;
+ render([],{emptyMessage:'Loading recovery records…'});
+ $('load').disabled=true;$('load').textContent='Loading…';$('message').textContent='Loading authorized read-only records…';
+ try{
+  const episodeId=$('episode').value.trim();
+  if(!/^[a-zA-Z0-9_-]{1,100}$/.test(episodeId))throw Error('invalid_episode');
+  const response=await fetch('/api/stage/director/recovery?episodeId='+encodeURIComponent(episodeId),{method:'GET',credentials:'same-origin',cache:'no-store',signal:active.signal});
+  if(!response.ok)throw Error(response.status===401?'sign_in_required':response.status===403?'access_denied':'unavailable');
+  const json=await response.json();
+  if(json?.data?.episodeId!==episodeId)throw Error('invalid_response');
+  const items=projectDirectorRecovery(json.data.items);
+  if(controller!==active)return;
+  render(items);$('message').textContent='Authorized read-only recovery snapshot.';
+ }catch(e){
+  if(controller!==active)return;
+  render([],{emptyMessage:'No recovery records displayed because loading failed.'});$('message').textContent=e.message==='sign_in_required'?'Session expired. Sign in again to view recovery records.':e.message==='access_denied'?'Access denied for this episode.':e.message==='invalid_episode'?'Enter a valid episode ID (letters, numbers, underscore or hyphen).':e.message==='invalid_response'?'Server returned a mismatched episode. No records displayed.':'Recovery endpoint unavailable or response invalid. No real data shown.';
+ }finally{if(controller===active){controller=null;$('load').disabled=false;$('load').textContent='Load authorized recovery list'}}
+}
+$('episode').addEventListener('input',()=>{
+ // A changed episode invalidates both the in-flight response and any prior display.
+ controller?.abort();controller=null;$('load').disabled=false;
+ render([]);$('message').textContent='Episode changed. Load to view its authorized recovery records.';
+});
+for(const button of document.querySelectorAll('[data-filter]'))button.addEventListener('click',()=>{currentFilter=button.dataset.filter;applyFilter()});
+$('taskSearch').addEventListener('input',applyFilter);$('taskSort').addEventListener('change',applyFilter);
+$('load').addEventListener('click',load);$('demo').addEventListener('click',showDemo);showDemo();
+</script></body></html>

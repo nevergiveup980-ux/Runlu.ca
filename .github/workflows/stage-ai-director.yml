@@ -1,0 +1,26 @@
+name: RUNLU STAGE AI Director Tests
+on:
+  push:
+    branches: [stage-2-engine-prototype]
+    paths:
+      - 'stage-2/ai-director/**'
+      - '.github/workflows/stage-ai-director.yml'
+  pull_request:
+    paths:
+      - 'stage-2/ai-director/**'
+      - '.github/workflows/stage-ai-director.yml'
+  workflow_dispatch:
+jobs:
+  novel-parser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run AI Director parser tests
+        run: node --test stage-2/ai-director/*.test.mjs
+      - name: Install browser test runner
+        run: npm install --no-save --no-package-lock @playwright/test@1.56.1
+      - name: Install Chromium for browser smoke test
+        run: npx playwright install --with-deps chromium
+      - name: Run real browser interaction tests
+        run: npx playwright test stage-2/ai-director/control-center.browser.spec.mjs stage-2/ai-director/recovery-review.browser.spec.mjs --browser chromium --workers 1 --reporter line
