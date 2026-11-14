@@ -1,0 +1,13 @@
+:root{color-scheme:light;font-family:Inter,system-ui,-apple-system,"Noto Sans SC",sans-serif;color:#202c32;background:#f7f5f0}*{box-sizing:border-box}body{margin:0}a{color:inherit}.top{display:flex;align-items:center;gap:1.5rem;justify-content:space-between;padding:1rem max(1.25rem,calc((100vw - 1120px)/2));border-bottom:1px solid #e4e3dc;background:#fff}.brand{text-decoration:none;font-weight:750;letter-spacing:.08em}.brand span{font-weight:400}.top nav{display:flex;gap:1rem}.top nav a{text-decoration:none;font-size:.9rem}.language{font-size:.85rem;display:flex;align-items:center;gap:.4rem}select{font:inherit;padding:.45rem;border:1px solid #cbd3d0;border-radius:.4rem;background:white}main{max-width:1120px;margin:auto;padding:0 1.25rem}.hero{padding:5rem 0 3.5rem;max-width:760px}.eyebrow{color:#356c69;font-size:.8rem;letter-spacing:.15em;font-weight:700}h1{font-size:clamp(2rem,5vw,3.8rem);line-height:1.13;margin:.7rem 0 1rem}.hero>p:not(.eyebrow){font-size:1.13rem;line-height:1.75;color:#526269}.status{display:inline-block;padding:.55rem .8rem;border-radius:1rem;background:#e5eeea;color:#285f51;font-size:.85rem}h2{font-size:1.55rem}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1.5rem 0 3rem}.grid article{background:white;border:1px solid #e3e8e3;border-radius:1rem;padding:1.6rem;min-height:135px}.grid article span{color:#3d8178;font-size:1.5rem}.grid h3{font-size:1rem;margin:1rem 0 0}.trust{background:#e9efeb;border-radius:1rem;padding:1.7rem 2rem;margin:1rem 0 4rem}.trust p{line-height:1.8;max-width:800px}footer{text-align:center;padding:2rem;color:#61706b;border-top:1px solid #e4e3dc}@media(max-width:740px){.top{flex-wrap:wrap}.top nav{order:3;width:100%;justify-content:space-between}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding:3rem 0 2rem}}@media(max-width:430px){.grid{grid-template-columns:1fr}.language{margin-left:auto}}
+/* Accessible keyboard navigation and compact-screen controls. */
+.skip-link{position:absolute;left:1rem;top:-5rem;z-index:10;background:#fff;color:#173f3c;padding:.7rem 1rem;border:2px solid #28665d;border-radius:.5rem}
+.skip-link:focus{top:.75rem}
+:focus-visible{outline:3px solid #28665d;outline-offset:3px}
+.top nav a,.brand{display:inline-block;padding:.4rem 0}
+.language select{min-height:44px;max-width:100%}
+@media(max-width:430px){.top{gap:.7rem}.top nav{gap:.75rem;flex-wrap:wrap}.trust{padding:1.25rem}.hero h1{overflow-wrap:anywhere}}
+
+/* Comfortable touch targets for mobile and keyboard users. */
+.top nav a,.brand{min-height:44px;display:inline-flex;align-items:center}
+.top nav a{padding:.65rem .35rem}
+.language select{min-height:44px}
