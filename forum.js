@@ -1,6 +1,5 @@
 const $=id=>document.getElementById(id);
 const STORAGE='runlu_forum_prototype_posts_v01';
-const BUDGET='runlu_forum_prototype_budget_v01';
 const dynamic={
  fr:{'AI & Humanity':'IA et humanité','Building with AI':"Créer avec l’IA",'Model Roundtable':'Table ronde des modèles','Ideas Worth Keeping':'Idées à préserver','Human Only':'Humains seulement','Invite One AI':'Inviter une IA','AI Roundtable':"Table ronde d’IA",'Demo discussion':'Discussion de démonstration','You':'Vous','replies':'réponses','AI invited':'IA invitée','No discussions here yet.':'Aucune discussion ici pour le moment.','None':'Aucun','Reply':'Répondre','CONVERSATION':'CONVERSATION','No replies yet. A real version would allow members to join this thread.':"Aucune réponse pour le moment. Une version réelle permettrait aux membres de participer.",'Demo transcript · Every reply below is illustrative interface content only. No person or commercial AI model participated in this conversation.':"Transcription de démonstration · Les réponses ci-dessous illustrent uniquement l’interface. Aucune personne ni IA commerciale n’a participé.",'Invite AI':"Inviter l’IA",'Seats configured for this thread':'Sièges configurés pour cette discussion','This prototype does not call external APIs.':"Ce prototype n’appelle aucune API externe.",'Start Roundtable':'Lancer la table ronde','Invite':'Inviter','Demo participant':'Participant de démonstration','Demo sample':'Exemple de démonstration','Demo AI response':'Réponse IA de démonstration','Demo human response':'Réponse humaine de démonstration','Demo':'Démo','RUNLU Forum demo':'Démonstration du Forum RUNLU',
  'Should AI assistants remember more about us — or less?':"Les assistants IA devraient-ils se souvenir davantage de nous — ou moins ?",'Memory makes an assistant more useful, but it also changes the relationship between convenience, privacy, and autonomy. Where should the boundary be?':"La mémoire rend un assistant plus utile, mais transforme l’équilibre entre commodité, vie privée et autonomie. Où placer la limite ?",'One useful boundary is purpose-specific memory: remember only what clearly improves the user’s chosen workflow, make it visible, and let the user remove it easily.':"Une limite utile est la mémoire liée à un objectif : ne retenir que ce qui améliore clairement le travail choisi, le rendre visible et facile à supprimer.",'The harder question is not simply how much memory exists, but whether the user can understand when memory is being used and why it changed an answer.':"La question difficile n’est pas seulement la quantité de mémoire, mais la possibilité de comprendre quand elle est utilisée et pourquoi elle change une réponse.",'I would rather have less memory with excellent controls than a huge memory I cannot inspect.':"Je préfère moins de mémoire avec d’excellents contrôles qu’une mémoire immense que je ne peux examiner.",
@@ -136,8 +135,14 @@ function closeThread(){openThreadId=null;$('threadModal').classList.add('hidden'
 $('closeThread').onclick=closeThread;$('threadModal').addEventListener('click',e=>{if(e.target===$('threadModal'))closeThread()});
 
 
-function renderBudget(){
- const spent=Number(localStorage.getItem(BUDGET)||0),max=2;
- $('budgetValue').textContent=`$${spent.toFixed(2)} / $${max.toFixed(2)}`;$('budgetBig').textContent='$'+spent.toFixed(2);$('budgetBar').style.width=Math.min(100,spent/max*100)+'%'
+let serverBudget = null;
+function renderBudget(value = serverBudget){
+ serverBudget=value;
+ const spent=Number(value?.reserved_usd),max=2;
+ const valid=value && Number.isFinite(spent) && spent>=0;
+ $('budgetValue').textContent=valid?`$${spent.toFixed(2)} / $2.00`:'— / $2.00';
+ $('budgetBig').textContent=valid?'$'+spent.toFixed(2):'—';
+ $('budgetBar').style.width=valid?Math.min(100,spent/max*100)+'%':'0%';
+ $('budgetBig').title='Server reservations · USD · UTC. Includes failed and timed-out calls.';
 }
 syncLanguageUI();renderBudget();updateSeatChooser();

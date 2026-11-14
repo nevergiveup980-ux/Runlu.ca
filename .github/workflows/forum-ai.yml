@@ -1,0 +1,36 @@
+name: Forum AI safety
+on:
+  pull_request:
+    paths: ['forum*', 'supabase/**', 'tests/forum/**', '.github/workflows/forum-ai.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: forum-test-only
+          POSTGRES_DB: forum_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 5s
+          --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: tests/forum/package-lock.json
+      - run: npm ci --prefix tests/forum --ignore-scripts
+      - run: node --check forum.js && node --check forum-live-ai.js
+      - run: npm test --prefix tests/forum
+      - run: npm run test:db --prefix tests/forum
+        env:
+          TEST_DATABASE_URL: postgresql://postgres:forum-test-only@127.0.0.1:5432/forum_test
+      - name: Type-check Deno entrypoint
+        run: npx --yes deno@2.9.6 check supabase/functions/runlu-forum-ai/index.ts
