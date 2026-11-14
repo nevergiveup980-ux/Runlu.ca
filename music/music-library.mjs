@@ -14,6 +14,9 @@ function cleanJob(job,owner){
    voice:typeof job.project?.voice==="string"?job.project.voice:"instrumental",
    status:job.status,
    audio_available:job.status==="completed"&&!!job.objectKey,
+   version:job.project?.version === "V2" ? "V2" : "V1",
+   duration: Number.isFinite(job.duration) ? job.duration : null,
+   download_status:job.status==="completed"&&job.objectKey?"available":"unavailable",
    created_at:job.createdAt
  });
 }
@@ -38,7 +41,7 @@ export function createMusicLibrary({store,storage}){
      const job=await store.getOwned({userId:owner,id:safeId});
      if(!job||job.userId!==owner)throw Error("NOT_FOUND");
      if(job.status!=="completed"||!job.objectKey)throw Error("AUDIO_NOT_READY");
-     return storage.createDownload({userId:owner,jobId:safeId,storedPath:job.objectKey,expiresIn:120});
+     return storage.createDownload({userId:owner,jobId:safeId,storedPath:job.objectKey,expiresIn:120,title:cleanJob(job,owner).title,version:cleanJob(job,owner).version});
    }
  });
 }

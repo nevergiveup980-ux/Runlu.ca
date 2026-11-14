@@ -10,7 +10,7 @@ export async function getMusicAudioAccess({authenticatedUserId,jobId,store,stora
  if(!job||job.userId!==authenticatedUserId)throw Error("NOT_FOUND");
  if(job.status!=="completed"||job.audioStored!==true||typeof job.objectKey!=="string"||!job.objectKey.trim())throw Error("AUDIO_NOT_READY");
  // The object key comes from the trusted job record, never the browser.
- const signed=await storage.createDownload({userId:authenticatedUserId,jobId,storedPath:job.objectKey,expiresIn});
+ const signed=await storage.createDownload({userId:authenticatedUserId,jobId,storedPath:job.objectKey,expiresIn,...(typeof job.project?.title==="string"?{title:job.project.title,version:job.project.version==="V2"?"V2":"V1"}:{})});
  if(typeof signed!=="string"||!signed.startsWith("https://"))throw Error("AUDIO_LINK_UNAVAILABLE");
  return Object.freeze({url:signed,expires_in:expiresIn});
 }

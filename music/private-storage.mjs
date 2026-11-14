@@ -1,3 +1,4 @@
+import {filename} from "./v2/library.mjs";
 // RUNLU MUSIC: private audio storage adapter. Server/worker only.
 // The injected bucket must be private; do not expose the service-role key.
 export const MUSIC_BUCKET="runlu-music-private";
@@ -24,11 +25,11 @@ export function createPrivateMusicStorage({supabase,bucket=MUSIC_BUCKET}){
       if(error)throw Error("PRIVATE_UPLOAD_FAILED");
       return path;
     },
-    async createDownload({userId,jobId,storedPath,expiresIn=120}){
+    async createDownload({userId,jobId,storedPath,expiresIn=120,title,version="V1"}){
       const expected=musicObjectKey(userId,jobId);
       if(storedPath!==expected)throw Error("STORAGE_OWNERSHIP_MISMATCH");
       if(!Number.isInteger(expiresIn)||expiresIn<30||expiresIn>300)throw Error("INVALID_EXPIRY");
-      const {data,error}=await storage.createSignedUrl(expected,expiresIn,{download:"runlu-music-"+jobId+".mp3"});
+      const {data,error}=await storage.createSignedUrl(expected,expiresIn,{download:typeof title==="string"?filename(title,version):"runlu-music-"+jobId+".mp3"});
       if(error||!data?.signedUrl)throw Error("DOWNLOAD_UNAVAILABLE");
       return data.signedUrl;
     }
