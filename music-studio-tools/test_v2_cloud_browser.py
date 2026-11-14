@@ -26,9 +26,13 @@ def main():
             context=browser.new_context(accept_downloads=True,**device)
             page=context.new_page()
             calls=[]
-            state={'expired':False,'unavailable':True,'download_failed':False}
+            state={'expired':False,'unavailable':True,'download_failed':False,'auth_error':True,'auth_network':False}
             def auth(route):
                 if '/auth/v1/token' in route.request.url:
+                    if state['auth_network']:
+                        route.abort();return
+                    if state['auth_error']:
+                        route.fulfill(status=400,json={'code':'invalid_credentials'});return
                     route.fulfill(json={'access_token':'fake-test-token','expires_in':3600,'user':{'is_anonymous':False}})
                 elif '/auth/v1/logout' in route.request.url:
                     route.fulfill(json={})
@@ -58,7 +62,15 @@ def main():
             page.locator('#cloud-email').fill('fixture@example.test')
             page.locator('#cloud-password').fill('fake-test-password')
             page.locator('#cloud-submit').click()
+            page.wait_for_function("() => document.querySelector('#cloud-status').textContent.includes('密码不正确')")
+            assert page.locator('#cloud-login').is_visible()
+            assert not calls
+            state['auth_error']=False
+            page.locator('#cloud-password').fill('fake-test-password')
+            page.locator('#cloud-submit').click()
             page.wait_for_selector('#cloud-songs article')
+            assert not page.locator('#cloud-login').is_visible()
+            assert page.locator('#cloud-account').inner_text()=='已登录：fixture@example.test'
             page.get_by_role('button',name='试听 / 刷新播放链接').click()
             page.wait_for_function("() => document.querySelector('#cloud-songs article p').textContent.includes('尚未保存')")
             state['unavailable']=False
@@ -85,6 +97,13 @@ def main():
             page.locator('#cloud-refresh').click()
             page.wait_for_function("() => document.querySelector('#cloud-status').textContent.includes('登录已失效')")
             assert page.locator('#cloud-songs article').count()==0
+            assert page.locator('#cloud-login').is_visible()
+            assert not page.locator('#cloud-account').is_visible()
+            state['auth_network']=True
+            page.locator('#cloud-password').fill('fake-test-password')
+            page.locator('#cloud-submit').click()
+            page.wait_for_function("() => document.querySelector('#cloud-status').textContent.includes('无法连接 RUNLU 账号服务')")
+            assert page.locator('#cloud-submit').is_enabled()
             assert not errors,errors
             browser.close()
             print(engine + ': PASS: mocked cloud login, no auto requests, not-ready error, refreshed link playback, named byte-identical download, no persisted token, 401 clears private media. Not live JWT/storage/iPhone.')
