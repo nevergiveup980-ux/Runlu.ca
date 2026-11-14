@@ -6,7 +6,7 @@
 - Full four-language editorial manuscript: [RK-0006-INVENTORY-AVAILABILITY.md](../editorial/RK-0006-INVENTORY-AVAILABILITY.md)
 - Research and source register: [RK-0006-RESEARCH-BRIEF.md](RK-0006-RESEARCH-BRIEF.md)
 - Tracking issue: https://github.com/nevergiveup980-ux/Runlu.ca/issues/448
-- Editorial PR: https://github.com/nevergiveup980-ux/Runlu.ca/pull/449
+- Editorial PR: https://github.com/nevergiveup980-ux/Runlu.ca/pull/475 (current); historical draft: https://github.com/nevergiveup980-ux/Runlu.ca/pull/449
 
 ## Independent technical review: record PASS / REVISE / NOT CHECKED for each
 | ID | Verification question | Result | Evidence / reviewer note |
@@ -74,11 +74,11 @@ The S01–S04 PASS labels below are limited to assistant-performed verification 
 
 ## Editorial handoff and release decision — PENDING
 
-**Automated checks (2026-11-10):** Three checks succeeded on commit `65f9ee766b893ad77de03676082cf995e3e9ffa1`: Site integrity, RUNLU Knowledge validation, RUNLU Knowledge Publication Gate. This confirms only the automated scope, not manual or independent acceptance.
+**Automated checks (2026-11-14):** On the main-synchronized editorial PR #475, commit `647ef8cef2fae5aa11cb921b31c5004215912ab2`, all three checks completed successfully: Site integrity (run 43619805428), RUNLU Knowledge validation (run 43619805500), and RUNLU Knowledge Publication Gate (run 43619805447). These establish only automated checks, not human language/rights approval or actual iPhone/browser acceptance.
 
-**Branch integration:** This draft branch has diverged from `main`. Latest comparison shows 13 commits ahead and 21 behind, with no overlapping changed file paths reported. GitHub's mergeability flag was false at last inspection; do not assume a clean merge or override protections. Sync and rerun CI only when ready, without modifying production content.
+**Branch integration:** PR #475 was created from current `main` after wellness language-check fix #470 and carries the six RK-0006 editorial/research/preview/workflow files from draft #449. GitHub reported mergeable=false on inspection; draft status remains. The previous ahead/behind counts for #449 are historical and must not be used as the current #475 branch status.
 
-**Release blockers:** T01–T08, S01–S05, L01–L06 and M01–M08 remain NOT CHECKED. Reviewer identity, evidence, review dates, rights approval, and editorial authorization are absent. No public publication approval is implied.
+**Release blockers:** Final technical signoff, source rights/version review (S05), full EN/ZH/FR/ES proofreading (L01–L04), actual iPhone/browser checks (L06/M01–M08), reviewer/date evidence and editorial authorization remain open. Assistant checks and author scenario confirmations are recorded above with limited scope; do not downgrade them to NOT CHECKED or upgrade them to independent approval. No public publication approval is implied.
 
 **Handoff sequence:** (1) Assign independent subject-matter and language reviewers; (2) record evidence against the existing checklist; (3) correct all four manuscripts and preview together; (4) complete real iPhone/browser testing; (5) synchronize branch and rerun CI; (6) seek an explicit editorial release decision. Keep `knowledge/data/published.json` unchanged until authorized.
 
