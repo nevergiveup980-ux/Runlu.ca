@@ -106,3 +106,28 @@ test('mismatched episode response never renders another episode records',async({
  await expect(page.locator('#message')).toContainText('mismatched episode');
  await expect(page.locator('.item')).toHaveCount(0);
 });
+
+test('loading state is visible, disables duplicate click and clears old demo data',async({page})=>{
+ let release;let calls=0;
+ await page.route('**/api/stage/director/recovery?*',async route=>{
+  calls++;await new Promise(resolve=>{release=resolve});
+  try{await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{episodeId:'ep1',items:[]}})})}catch{}
+ });
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');await page.locator('#load').click();
+ await expect.poll(()=>typeof release).toBe('function');
+ await expect(page.locator('#load')).toBeDisabled();
+ await expect(page.locator('#load')).toHaveText('Loading…');
+ await expect(page.locator('#items')).toContainText('Loading recovery records');
+ await expect(page.locator('.item')).toHaveCount(0);
+ release();
+ await expect(page.locator('#load')).toBeEnabled();
+ await expect(page.locator('#items')).toContainText('No aged uncertain tasks');
+ expect(calls).toBe(1);
+});
+test('failed loading shows failure state instead of false empty-success state',async({page})=>{
+ await page.route('**/api/stage/director/recovery?*',route=>route.abort());
+ await page.goto(pageUrl());await page.locator('#load').click();
+ await expect(page.locator('#items')).toContainText('loading failed');
+ await expect(page.locator('#items')).not.toContainText('No aged uncertain tasks');
+ await expect(page.locator('#load')).toBeEnabled();
+});
