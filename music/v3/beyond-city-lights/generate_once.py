@@ -30,9 +30,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--confirm-paid', action='store_true')
-    parser.add_argument('--variants', choices=('ABC', 'A', 'B', 'C'), default='ABC')
+    parser.add_argument('--variants', choices=('ABC', 'A', 'B', 'C', 'C-EN'), default='ABC')
     args = parser.parse_args()
-    prompts = {v: (ROOT / f'{v}.prompt.txt').read_text() for v in args.variants}
+    selected = ('A', 'B', 'C') if args.variants == 'ABC' else (args.variants,)
+    prompts = {v: (ROOT / f'{v}.prompt.txt').read_text() for v in selected}
     for v, prompt in prompts.items():
         if not prompt.strip() or len(prompt) > 12000:
             raise SystemExit('Invalid prompt; no requests sent')
