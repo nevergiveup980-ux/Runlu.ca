@@ -6,7 +6,7 @@
 *{box-sizing:border-box}body{margin:0}.wrap{max-width:780px;margin:auto;padding:24px 16px 60px}
 h1{font-size:clamp(1.5rem,5vw,2.2rem)}.muted{color:#b2c2d9}.panel{background:#15233a;border:1px solid #34435c;border-radius:16px;padding:18px;margin:14px 0}
 label{display:block;margin:12px 0 6px}input,button{font:inherit;border-radius:10px;padding:12px;border:1px solid #7185a5;background:#253957;color:white}
-input{width:100%}button{margin-top:12px;min-height:44px;cursor:pointer}button:disabled{opacity:.5}
+input,select{width:100%}button{margin-top:12px;min-height:44px;cursor:pointer}button:disabled{opacity:.5}
 button:focus-visible,input:focus-visible{outline:3px solid #9ec5ff}
 .status{display:inline-block;border-radius:8px;padding:5px 9px;background:#624928;color:#ffe8bb}
 .item{border-top:1px solid #34435c;padding:18px 0;overflow-wrap:anywhere}.item:first-child{border:0}.item-title{display:block;font-size:1.12rem;line-height:1.45}.item .status{font-weight:700;letter-spacing:.02em}.item .status[data-state='UNKNOWN']{background:#60353a;color:#ffe0e0}.item .status[data-state='DISPATCHING']{background:#624928;color:#ffe8bb}.review-warning{display:block;margin-top:12px;padding:10px 12px;border-left:3px solid #e9b46a;background:#283346;border-radius:5px;color:#fff}
@@ -18,7 +18,7 @@ strong{font-weight:750}small{display:block;color:#b2c2d9;margin-top:7px}.filter-
 <button id="load" type="button">Load authorized recovery list</button>
 <button id="demo" type="button">Show demo</button>
 <p id="message" role="status" aria-live="polite"></p></section>
-<section class="panel"><h2>Tasks requiring manual review</h2><p id="counts" class="count" aria-live="polite">No snapshot loaded</p><div class="filter-row" role="group" aria-label="Filter recovery tasks"><button type="button" data-filter="ALL" aria-pressed="true">All</button><button type="button" data-filter="UNKNOWN" aria-pressed="false">Unknown</button><button type="button" data-filter="DISPATCHING" aria-pressed="false">Dispatching</button></div><div id="items"></div></section>
+<section class="panel"><h2>Tasks requiring manual review</h2><p id="counts" class="count" aria-live="polite">No snapshot loaded</p><label for="taskSearch">Find shot or attempt</label><input id="taskSearch" type="search" placeholder="Shot ID or attempt ID" autocomplete="off"><label for="taskSort">Sort tasks</label><select id="taskSort" aria-label="Sort recovery tasks"><option value="shot-asc">Shot ID A–Z</option><option value="shot-desc">Shot ID Z–A</option><option value="state">State (Unknown first)</option></select><div class="filter-row" role="group" aria-label="Filter recovery tasks"><button type="button" data-filter="ALL" aria-pressed="true">All</button><button type="button" data-filter="UNKNOWN" aria-pressed="false">Unknown</button><button type="button" data-filter="DISPATCHING" aria-pressed="false">Dispatching</button></div><div id="items"></div></section>
 <p class="muted">DISPATCHING and UNKNOWN do not prove that a provider did or did not charge. Check provider records before taking further action.</p>
 </main><script src="../../runlu-language.js?v=2.2"></script><script type="module">
 import {projectDirectorRecovery} from './director-recovery-contract.mjs';
@@ -30,8 +30,12 @@ function applyFilter(){
  const unknown=currentItems.filter(item=>item.state==='UNKNOWN').length;
  const dispatching=currentItems.filter(item=>item.state==='DISPATCHING').length;
  $('counts').textContent='Total '+currentItems.length+' · Unknown '+unknown+' · Dispatching '+dispatching;
- const filtered=currentFilter==='ALL'?currentItems:currentItems.filter(item=>item.state===currentFilter);
- drawItems(filtered,{emptyMessage:currentItems.length?'No tasks match this filter.':currentEmptyMessage});
+ const query=$('taskSearch').value.trim().toLocaleLowerCase();
+ const filtered=(currentFilter==='ALL'?currentItems:currentItems.filter(item=>item.state===currentFilter))
+  .filter(item=>!query||String(item.shotId).toLocaleLowerCase().includes(query)||String(item.attemptId).toLocaleLowerCase().includes(query));
+ const sort=$('taskSort').value;
+ filtered.sort((a,b)=>sort==='state'?(Number(b.state==='UNKNOWN')-Number(a.state==='UNKNOWN')||String(a.shotId).localeCompare(String(b.shotId),undefined,{numeric:true})):sort==='shot-desc'?String(b.shotId).localeCompare(String(a.shotId),undefined,{numeric:true}):String(a.shotId).localeCompare(String(b.shotId),undefined,{numeric:true}));
+ drawItems(filtered,{emptyMessage:currentItems.length?'No tasks match the current search or filter.':currentEmptyMessage});
 }
 function render(items,{emptyMessage='No aged uncertain tasks in this snapshot.'}={}){
  currentItems=items;currentEmptyMessage=emptyMessage;applyFilter();
@@ -79,5 +83,6 @@ $('episode').addEventListener('input',()=>{
  render([]);$('message').textContent='Episode changed. Load to view its authorized recovery records.';
 });
 for(const button of document.querySelectorAll('[data-filter]'))button.addEventListener('click',()=>{currentFilter=button.dataset.filter;applyFilter()});
+$('taskSearch').addEventListener('input',applyFilter);$('taskSort').addEventListener('change',applyFilter);
 $('load').addEventListener('click',load);$('demo').addEventListener('click',showDemo);showDemo();
 </script></body></html>
