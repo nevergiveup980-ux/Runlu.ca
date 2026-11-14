@@ -55,14 +55,14 @@ The S01–S04 PASS labels below are limited to assistant-performed verification 
 | L06 | Confirm accessibility and mobile behavior only after an actual browser preview is built and tested. | NOT CHECKED | |
 
 
-## Mobile/browser acceptance script — NOT YET EXECUTED
+## Mobile/browser acceptance script — PARTIALLY EXECUTED (2026-11-14)
 
 **Scope:** Preview-only; do not merge or publish to satisfy this checklist. Record device, browser, date, tester, screenshot/video evidence, and PASS / FAIL / NOT CHECKED for each item. A CI success is not a substitute for visual testing.
 
 | ID | Hands-on action | Expected result | Result | Evidence |
 |---|---|---|---|---|
-| M01 | Open the RK-0006 preview at a narrow iPhone viewport. | No horizontal scrolling; headings, notice and examples remain readable. | NOT CHECKED | |
-| M02 | Switch English → 中文 → Français → Español → English. | Heading, full body, editorial notice and HOLD footer all change; browser tab title follows. | NOT CHECKED | |
+| M01 | Open the RK-0006 preview at a narrow iPhone viewport. | No horizontal scrolling; headings, notice and examples remain readable. | PARTIAL PASS — visible EN/ZH viewport only | Author's two 2026-11-14 iPhone screenshots show readable headings and opening body; full-page scroll and examples not yet inspected. |
+| M02 | Switch English → 中文 → Français → Español → English. | Heading, full body, editorial notice and HOLD footer all change; browser tab title follows. | PARTIAL PASS — EN/ZH only | Author's two 2026-11-14 iPhone screenshots show localized EN/ZH banner, language label, title, notice and opening body; FR/ES, footer and browser title not evidenced by these images. |
 | M03 | Select 中文, refresh, then use the copied `?lang=zh` URL. | Chinese remains selected; page language is set to zh. | NOT CHECKED | |
 | M04 | Load `?lang=invalid` and then use the selector. | Safe English fallback; selector still works. | NOT CHECKED | |
 | M05 | Inspect both worked examples in each language. | 100 − 65 = 35 and 80 − 30 − 20 = 30, with non-overlap and cut-geometry caveats intact. | NOT CHECKED | |
@@ -70,7 +70,7 @@ The S01–S04 PASS labels below are limited to assistant-performed verification 
 | M07 | Inspect accessibility with keyboard and screen reader, where available. | Selector has an accessible label and focus is visible; no content inaccessible by keyboard. | NOT CHECKED | |
 | M08 | Inspect page source and public knowledge index. | Preview is marked `noindex,nofollow`, clearly HOLD; RK-0006 is absent from the published index. | NOT CHECKED | |
 
-**Acceptance rule:** Record failures and fix them on the draft branch. Only mark M01–M08 PASS after actual testing with reproducible evidence. L06 remains NOT CHECKED until the required real-device/browser checks are documented.
+**Acceptance rule:** Record failures and fix them on the draft branch. Partial screenshot evidence may be recorded as PARTIAL PASS; only mark each M01–M08 PASS after its entire expected result has been verified with reproducible evidence. L06 remains NOT CHECKED until the required real-device/browser checks are documented.
 
 ## Live website visual acceptance — 2026-11-14
 
