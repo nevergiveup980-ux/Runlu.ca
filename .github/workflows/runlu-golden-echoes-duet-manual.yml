@@ -1,0 +1,48 @@
+name: RUNLU MUSIC V3 — Beyond the City Lights (C English only — single request)
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_paid:
+        description: 'Authorize V3 C English only once, listed USD 0.08; no retries'
+        required: true
+        type: choice
+        default: 'NO'
+        options: ['NO', 'YES']
+permissions:
+  contents: read
+concurrency:
+  group: runlu-music-v3-beyond-city-lights
+  cancel-in-progress: false
+jobs:
+  generate-v3:
+    if: ${{ inputs.confirm_paid == 'YES' && github.run_attempt == 1 && github.ref == 'refs/heads/feature/runlu-music-v3-beyond-city-lights' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Offline V3 validation and dry run
+        run: |
+          python music/v3/beyond-city-lights/verify.py
+          python music/v3/beyond-city-lights/generate_once.py --variants C-EN --output media-local/v3-c-en-output
+      - name: Install decoder before generating
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+      - name: Generate C English only once — stop on failure
+        env:
+          RUNLU_MUSIC_GEMINI_API_KEY: ${{ secrets.RUNLU_MUSIC_GEMINI_API_KEY }}
+        run: python music/v3/beyond-city-lights/generate_once.py --variants C-EN --output media-local/v3-c-en-output --confirm-paid
+      - name: Preserve audio and billing-uncertainty ledger for review
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: runlu-beyond-city-lights-v3-${{ github.run_id }}
+          path: media-local/v3-c-en-output/
+          if-no-files-found: warn
+          retention-days: 14

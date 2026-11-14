@@ -1,0 +1,46 @@
+COMPOSITION BRIEF — NOT GENERATED AUDIO — V3 C
+Create an entirely original Mandarin romantic lyrical rock duet: 灯火之外，仍有你 (Beyond the City Lights). About 70 BPM, G minor, 4/4, about 171 seconds, 50 bars. Mature warm male voice and clear deeply expressive female voice. Integrated dramatic arc with a distinct syncopated hook; intimate verses, widening choruses, clean-to-overdrive guitar, warm piano, melodic bass and live drums. Unite tenderness and release without pasting A and B recordings.
+Structure in bars: intro 1–4; male verse 5–12; female verse 13–20; alternating prechorus 21–24; duet chorus 25–32; electric guitar solo 33–36; alternating bridge 37–40; final duet chorus 41–48; resolved outro 49–50.
+Compose memorable singable vocal melody and equally lyrical electric guitar answers. Use the attached written score as a musical target, not as a claim of exact API note control. No artist imitation. Do not sing section labels. Clear Mandarin, natural breathing, no added English lyrics. Solo quotes the vocal hook then resolves into the bridge. Keep guitar below lead voice while singing; answer in phrase gaps. Finish naturally, no abrupt cut.
+Original lyrics (sing only these words; repeat only the written final chorus):
+[verse1 — Male]
+末班车灯划过长街
+我把疲惫藏进黑夜
+窗上雨滴慢慢倾斜
+像你轻声说的理解
+
+[verse2 — Female]
+我在窗前留盏暖灯
+等你走过风雨一程
+不用把话说得完整
+你的沉默我也会懂
+
+[pre — Alternating]
+男：若这城市忘了姓名
+女：我用心跳给你回应
+
+[chorus — Together]
+灯火之外仍然有你
+接住我所有的孤寂
+让风吹散昨日叹息
+我把明天轻放手心
+
+[bridge — Alternating]
+男：不必成为耀眼星辰
+女：平凡也能彼此照明
+
+[final — Together]
+灯火之外仍然有你
+陪我走过漫长雨季
+当第一缕晨光升起
+我们就是家的意义
+
+Vocal note targets: each row is two bars, one note per Chinese syllable.
+verse1: G3 D4 C4 Bb3 A3 Bb3 D4 C4 / Bb3 F4 Eb4 D4 C4 D4 F4 D4 / C4 G4 F4 Eb4 D4 C4 A3 C4 / Bb3 D4 C4 A3 G3 A3 F#3 G3
+verse2: D4 G4 F4 Eb4 D4 Eb4 G4 F4 / Eb4 A4 G4 F4 Eb4 F4 A4 G4 / D4 G4 A4 G4 F4 Eb4 D4 C4 / D4 Eb4 F#4 A4 G4 F#4 E4 D4
+pre: C4 Eb4 D4 F4 Eb4 G4 F4 A4 / D4 F#4 A4 G4 Bb4 A4 F#4 A4
+chorus: D4 G4 Bb4 A4 G4 A4 C5 Bb4 / F4 A4 C5 Bb4 A4 G4 F4 A4 / Eb4 G4 Bb4 A4 G4 F4 Eb4 G4 / D4 F#4 A4 G4 F#4 Eb4 D4 G4
+bridge: G3 Bb3 C4 Eb4 D4 C4 Bb3 D4 / Eb4 G4 F#4 A4 G4 Bb4 A4 F#4
+final: D4 G4 Bb4 A4 G4 A4 C5 Bb4 / F4 A4 C5 Bb4 A4 G4 F4 A4 / Eb4 G4 Bb4 A4 G4 F4 Eb4 G4 / D4 F#4 A4 G4 F#4 Eb4 D4 G4
+Guitar intro four-bar pitch:beat targets: D5:1 G5:1 Bb5:0.5 A5:0.5 G5:1 | F5:1 A5:1 C6:1 Bb5:1 | Eb5:1 G5:1 F5:1 Eb5:1 | D5:1 A4:0.5 F#4:0.5 G4:2
+Guitar solo four-bar pitch:beat targets: D5:1 G5:0.5 Bb5:1 A5:1.5 | G5:0.5 A5:1 C6:0.5 Bb5:2 | Eb5:1 G5:0.5 Bb5:1 A5:1.5 | D5:0.5 A4:1 F#4:0.5 R:2

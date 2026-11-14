@@ -1,0 +1,1397 @@
+{
+  "schema": "runlu-music-creative-v3",
+  "id": "beyond-city-lights-v3-b",
+  "title": "灯火之外，仍有你",
+  "englishTitle": "Beyond the City Lights",
+  "variant": "B",
+  "status": "composition_draft_not_generated",
+  "audio_available": false,
+  "audio": null,
+  "bpm": 70,
+  "key": "G minor",
+  "meter": "4/4",
+  "bars": [
+    {
+      "number": 1,
+      "section": "intro",
+      "chord": "Gm",
+      "guitar": [
+        {
+          "pitch": "G4",
+          "beats": 0.5
+        },
+        {
+          "pitch": "D5",
+          "beats": 0.5
+        },
+        {
+          "pitch": "C5",
+          "beats": 1.0
+        },
+        {
+          "pitch": "Bb4",
+          "beats": 1.0
+        },
+        {
+          "pitch": "A4",
+          "beats": 1.0
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "section": "intro",
+      "chord": "Bb/F",
+      "guitar": [
+        {
+          "pitch": "F5",
+          "beats": 1.0
+        },
+        {
+          "pitch": "Eb5",
+          "beats": 0.5
+        },
+        {
+          "pitch": "D5",
+          "beats": 0.5
+        },
+        {
+          "pitch": "C5",
+          "beats": 1.0
+        },
+        {
+          "pitch": "R",
+          "beats": 1.0
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "section": "intro",
+      "chord": "Eb",
+      "guitar": [
+        {
+          "pitch": "Eb5",
+          "beats": 1.0
+        },
+        {
+          "pitch": "D5",
+          "beats": 1.0
+        },
+        {
+          "pitch": "Bb4",
+          "beats": 1.0
+        },
+        {
+          "pitch": "G4",
+          "beats": 1.0
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "section": "intro",
+      "chord": "D",
+      "guitar": [
+        {
+          "pitch": "A4",
+          "beats": 1.0
+        },
+        {
+          "pitch": "F#4",
+          "beats": 1.0
+        },
+        {
+          "pitch": "D5",
+          "beats": 1.0
+        },
+        {
+          "pitch": "G5",
+          "beats": 1.0
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "section": "verse1",
+      "singer": "Male",
+      "line": "末班车灯划过长街",
+      "chord": "Gm",
+      "vocal": [
+        {
+          "pitch": "D4",
+          "beats": 0.5,
+          "syllable": "末"
+        },
+        {
+          "pitch": "Bb3",
+          "beats": 0.5,
+          "syllable": "班"
+        },
+        {
+          "pitch": "G3",
+          "beats": 1,
+          "syllable": "车"
+        },
+        {
+          "pitch": "Bb3",
+          "beats": 2,
+          "syllable": "灯"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "section": "verse1",
+      "singer": "Male",
+      "line": "末班车灯划过长街",
+      "chord": "Bb/F",
+      "vocal": [
+        {
+          "pitch": "D4",
+          "beats": 0.5,
+          "syllable": "划"
+        },
+        {
+          "pitch": "F4",
+          "beats": 0.5,
+          "syllable": "过"
+        },
+        {
+          "pitch": "Eb4",
+          "beats": 1,
+          "syllable": "长"
+        },
+        {
+          "pitch": "D4",
+          "beats": 2,
+          "syllable": "街"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "section": "verse1",
+      "singer": "Male",
+      "line": "我把疲惫藏进黑夜",
+      "chord": "Eb",
+      "vocal": [
+        {
+          "pitch": "F4",
+          "beats": 0.5,
+          "syllable": "我"
+        },
+        {
+          "pitch": "D4",
+          "beats": 0.5,
+          "syllable": "把"
+        },
+        {
+          "pitch": "Bb3",
+          "beats": 1,
+          "syllable": "疲"
+        },
+        {
+          "pitch": "C4",
+          "beats": 2,
+          "syllable": "惫"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "section": "verse1",
+      "singer": "Male",
+      "line": "我把疲惫藏进黑夜",
+      "chord": "D",
+      "vocal": [
+        {
+          "pitch": "D4",
+          "beats": 0.5,
+          "syllable": "藏"
+        },
+        {
+          "pitch": "Eb4",
+          "beats": 0.5,
+          "syllable": "进"
+        },
+        {
+          "pitch": "C4",
+          "beats": 1,
+          "syllable": "黑"
+        },
+        {
+          "pitch": "Bb3",
+          "beats": 2,
+          "syllable": "夜"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "section": "verse1",
+      "singer": "Male",
+      "line": "窗上雨滴慢慢倾斜",
+      "chord": "Gm",
+      "vocal": [
+        {
+          "pitch": "Eb4",
+          "beats": 0.5,
+          "syllable": "窗"
+        },
+        {
+          "pitch": "C4",
+          "beats": 0.5,
+          "syllable": "上"
+        },
+        {
+          "pitch": "A3",
+          "beats": 1,
+          "syllable": "雨"
+        },
+        {
+          "pitch": "C4",
+          "beats": 2,
+          "syllable": "滴"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "section": "verse1",
+      "singer": "Male",
+      "line": "窗上雨滴慢慢倾斜",
+      "chord": "Bb/F",
+      "vocal": [
+        {
+          "pitch": "Eb4",
+          "beats": 0.5,
+          "syllable": "慢"
+        },
+        {
+          "pitch": "G4",
+          "beats": 0.5,
+          "syllable": "慢"
+        },
+        {
+          "pitch": "F4",
+          "beats": 1,
+          "syllable": "倾"
+        },
+        {
+          "pitch": "Eb4",
+          "beats": 2,
+          "syllable": "斜"
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "section": "verse1",
+      "singer": "Male",
+      "line": "像你轻声说的理解",
+      "chord": "Eb",
+      "vocal": [
+        {
+          "pitch": "D4",
+          "beats": 0.5,
+          "syllable": "像"
+        },
+        {
+          "pitch": "C4",
+          "beats": 0.5,
+          "syllable": "你"
+        },
+        {
+          "pitch": "Bb3",
+          "beats": 1,
+          "syllable": "轻"
+        },
+        {
+          "pitch": "A3",
+          "beats": 2,
+          "syllable": "声"
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "section": "verse1",
+      "singer": "Male",
+      "line": "像你轻声说的理解",
+      "chord": "D",
+      "vocal": [
+        {
+          "pitch": "C4",
+          "beats": 0.5,
+          "syllable": "说"
+        },
+        {
+          "pitch": "A3",
+          "beats": 0.5,
+          "syllable": "的"
+        },
+        {
+          "pitch": "F#3",
+          "beats": 1,
+          "syllable": "理"
+        },
+        {
+          "pitch": "G3",
+          "beats": 2,
+          "syllable": "解"
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "section": "verse2",
+      "singer": "Female",
+      "line": "我在窗前留盏暖灯",
+      "chord": "Gm",
+      "vocal": [
+        {
+          "pitch": "G4",
+          "beats": 0.5,
+          "syllable": "我"
+        },
+        {
+          "pitch": "D4",
+          "beats": 0.5,
+          "syllable": "在"
+        },
+        {
+          "pitch": "Bb3",
+          "beats": 1,
+          "syllable": "窗"
+        },
+        {
+          "pitch": "D4",
+          "beats": 2,
+          "syllable": "前"
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "section": "verse2",
+      "singer": "Female",
+      "line": "我在窗前留盏暖灯",
+      "chord": "Bb/F",
+      "vocal": [
+        {
+          "pitch": "G4",
+          "beats": 0.5,
+          "syllable": "留"
+        },
+        {
+          "pitch": "A4",
+          "beats": 0.5,
+          "syllable": "盏"
+        },
+        {
+          "pitch": "F4",
+          "beats": 1,
+          "syllable": "暖"
+        },
+        {
+          "pitch": "D4",
+          "beats": 2,
+          "syllable": "灯"
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "section": "verse2",
+      "singer": "Female",
+      "line": "等你走过风雨一程",
+      "chord": "Eb",
+      "vocal": [
+        {
+          "pitch": "A4",
+          "beats": 0.5,
+          "syllable": "等"
+        },
+        {
+          "pitch": "F4",
+          "beats": 0.5,
+          "syllable": "你"
+        },
+        {
+          "pitch": "D4",
+          "beats": 1,
+          "syllable": "走"
+        },
+        {
+          "pitch": "F4",
+          "beats": 2,
+          "syllable": "过"
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "section": "verse2",
+      "singer": "Female",
+      "line": "等你走过风雨一程",
+      "chord": "D",
+      "vocal": [
+        {
+          "pitch": "A4",
+          "beats": 0.5,
+          "syllable": "风"
+        },
+        {
+          "pitch": "G4",
+          "beats": 0.5,
+          "syllable": "雨"
+        },
+        {
+          "pitch": "F4",
+          "beats": 1,
+          "syllable": "一"
+        },
+        {
+          "pitch": "Eb4",
+          "beats": 2,
+          "syllable": "程"
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "section": "verse2",
+      "singer": "Female",
+      "line": "不用把话说得完整",
+      "chord": "Gm",
+      "vocal": [
+        {
+          "pitch": "G4",
+          "beats": 0.5,
+          "syllable": "不"
+        },
+        {
+          "pitch": "Eb4",
+          "beats": 0.5,
+          "syllable": "用"
+        },
+        {
+          "pitch": "C4",
+          "beats": 1,
+          "syllable": "把"
+        },
+        {
+          "pitch": "Eb4",
+          "beats": 2,
+          "syllable": "话"
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "section": "verse2",
+      "singer": "Female",
+      "line": "不用把话说得完整",
+      "chord": "Bb/F",
+      "vocal": [
+        {
+          "pitch": "G4",
+          "beats": 0.5,
+          "syllable": "说"
+        },
+        {
+          "pitch": "A4",
+          "beats": 0.5,
+          "syllable": "得"
+        },
+        {
+          "pitch": "F4",
+          "beats": 1,
+          "syllable": "完"
+        },
+        {
+          "pitch": "Eb4",
+          "beats": 2,
+          "syllable": "整"
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "section": "verse2",
+      "singer": "Female",
+      "line": "你的沉默我也会懂",
+      "chord": "Eb",
+      "vocal": [
+        {
+          "pitch": "F#4",
+          "beats": 0.5,
+          "syllable": "你"
+        },
+        {
+          "pitch": "A4",
+          "beats": 0.5,
+          "syllable": "的"
+        },
+        {
+          "pitch": "G4",
+          "beats": 1,
+          "syllable": "沉"
+        },
+        {
+          "pitch": "F#4",
+          "beats": 2,
+          "syllable": "默"
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "section": "verse2",
+      "singer": "Female",
+      "line": "你的沉默我也会懂",
+      "chord": "D",
+      "vocal": [
+        {
+          "pitch": "E4",
+          "beats": 0.5,
+          "syllable": "我"
+        },
+        {
+          "pitch": "D4",
+          "beats": 0.5,
+          "syllable": "也"
+        },
+        {
+          "pitch": "C4",
+          "beats": 1,
+          "syllable": "会"
+        },
+        {
+          "pitch": "D4",
+          "beats": 2,
+          "syllable": "懂"
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "section": "pre",
+      "singer": "Male",
+      "line": "若这城市忘了姓名",
+      "chord": "Gm",
+      "vocal": [
+        {
+          "pitch": "Eb4",
+          "beats": 0.5,
+          "syllable": "若"
+        },
+        {
+          "pitch": "G4",
+          "beats": 0.5,
+          "syllable": "这"
+        },
+        {
+          "pitch": "A4",
+          "beats": 1,
+          "syllable": "城"
+        },
+        {
+          "pitch": "Bb4",
+          "beats": 2,
+          "syllable": "市"
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "section": "pre",
+      "singer": "Male",
+      "line": "若这城市忘了姓名",
+      "chord": "Bb/F",
+      "vocal": [
+        {
+          "pitch": "A4",
+          "beats": 0.5,
+          "syllable": "忘"
+        },
+        {
+          "pitch": "G4",
+          "beats": 0.5,
+          "syllable": "了"
+        },
+        {
+          "pitch": "F4",
+          "beats": 1,
+          "syllable": "姓"
+        },
+        {
+          "pitch": "Eb4",
+          "beats": 2,
+          "syllable": "名"
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "section": "pre",
+      "singer": "Female",
+      "line": "我用心跳给你回应",
+      "chord": "Eb",
+      "vocal": [
+        {
+          "pitch": "G4",
+          "beats": 0.5,
+          "syllable": "我"
+        },
+        {
+          "pitch": "A4",
+          "beats": 0.5,
+          "syllable": "用"
+        },
+        {
+          "pitch": "Bb4",
+          "beats": 1,
+          "syllable": "心"
+        },
+        {
+          "pitch": "C5",
+          "beats": 2,
+          "syllable": "跳"
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "section": "pre",
+      "singer": "Female",
+      "line": "我用心跳给你回应",
+      "chord": "D",
+      "vocal": [
+        {
+          "pitch": "Bb4",
+          "beats": 0.5,
+          "syllable": "给"
+        },
+        {
+          "pitch": "A4",
+          "beats": 0.5,
+          "syllable": "你"
+        },
+        {
+          "pitch": "F#4",
+          "beats": 1,
+          "syllable": "回"
+        },
+        {
+          "pitch": "A4",
+          "beats": 2,
+          "syllable": "应"
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "section": "chorus",
+      "singer": "Together",
+      "line": "灯火之外仍然有你",
+      "chord": "Gm",
+      "vocal": [
+        {
+          "pitch": "G4",
+          "beats": 0.5,
+          "syllable": "灯"
+        },
+        {
+          "pitch": "D5",
+          "beats": 0.5,
+          "syllable": "火"
+        },
+        {
+          "pitch": "C5",
+          "beats": 1,
+          "syllable": "之"
+        },
+        {
+          "pitch": "Bb4",
+          "beats": 2,
+          "syllable": "外"
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "section": "chorus",
+      "singer": "Together",
+      "line": "灯火之外仍然有你",
+      "chord": "Bb/F",
+      "vocal": [
+        {
+          "pitch": "A4",
+          "beats": 0.5,
+          "syllable": "仍"
+        },
+        {
+          "pitch": "Bb4",
+          "beats": 0.5,
+          "syllable": "然"
+        },
+        {
+          "pitch": "G4",
+          "beats": 1,
+          "syllable": "有"
+        },
+        {
+          "pitch": "A4",
+          "beats": 2,
+          "syllable": "你"
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "section": "chorus",
+      "singer": "Together",
+      "line": "接住我所有的孤寂",
+      "chord": "Eb",
+      "vocal": [
+        {
+          "pitch": "F4",
+          "beats": 0.5,
+          "syllable": "接"
+        },
+        {
+          "pitch": "C5",
+          "beats": 0.5,
+          "syllable": "住"
+        },
+        {
+          "pitch": "Bb4",
+          "beats": 1,
+          "syllable": "我"
+        },
+        {
+          "pitch": "A4",
+          "beats": 2,
+          "syllable": "所"
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "section": "chorus",
+      "singer": "Together",
+      "line": "接住我所有的孤寂",
+      "chord": "D",
+      "vocal": [
+        {
+          "pitch": "G4",
+          "beats": 0.5,
+          "syllable": "有"
+        },
+        {
+          "pitch": "A4",
+          "beats": 0.5,
+          "syllable": "的"
+        },
+        {
+          "pitch": "F4",
+          "beats": 1,
+          "syllable": "孤"
+        },
+        {
+          "pitch": "G4",
+          "beats": 2,
+          "syllable": "寂"
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "section": "chorus",
+      "singer": "Together",
+      "line": "让风吹散昨日叹息",
+      "chord": "Gm",
+      "vocal": [
+        {
+          "pitch": "Eb4",
+          "beats": 0.5,
+          "syllable": "让"
+        },
+        {
+          "pitch": "Bb4",
+          "beats": 0.5,
+          "syllable": "风"
+        },
+        {
+          "pitch": "A4",
+          "beats": 1,
+          "syllable": "吹"
+        },
+        {
+          "pitch": "G4",
+          "beats": 2,
+          "syllable": "散"
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "section": "chorus",
+      "singer": "Together",
+      "line": "让风吹散昨日叹息",
+      "chord": "Bb/F",
+      "vocal": [
+        {
+          "pitch": "F4",
+          "beats": 0.5,
+          "syllable": "昨"
+        },
+        {
+          "pitch": "G4",
+          "beats": 0.5,
+          "syllable": "日"
+        },
+        {
+          "pitch": "Eb4",
+          "beats": 1,
+          "syllable": "叹"
+        },
+        {
+          "pitch": "F4",
+          "beats": 2,
+          "syllable": "息"
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "section": "chorus",
+      "singer": "Together",
+      "line": "我把明天轻放手心",
+      "chord": "Eb",
+      "vocal": [
+        {
+          "pitch": "D4",
+          "beats": 0.5,
+          "syllable": "我"
+        },
+        {
+          "pitch": "A4",
+          "beats": 0.5,
+          "syllable": "把"
+        },
+        {
+          "pitch": "G4",
+          "beats": 1,
+          "syllable": "明"
+        },
+        {
+          "pitch": "F#4",
+          "beats": 2,
+          "syllable": "天"
+        }
+      ]
+    },
+    {
+      "number": 32,
+      "section": "chorus",
+      "singer": "Together",
+      "line": "我把明天轻放手心",
+      "chord": "D",
+      "vocal": [
+        {
+          "pitch": "Eb4",
+          "beats": 0.5,
+          "syllable": "轻"
+        },
+        {
+          "pitch": "D4",
+          "beats": 0.5,
+          "syllable": "放"
+        },
+        {
+          "pitch": "F#4",
+          "beats": 1,
+          "syllable": "手"
+        },
+        {
+          "pitch": "G4",
+          "beats": 2,
+          "syllable": "心"
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "section": "solo",
+      "chord": "Gm",
+      "guitar": [
+        {
+          "pitch": "G4",
+          "beats": 0.5
+        },
+        {
+          "pitch": "D5",
+          "beats": 0.5
+        },
+        {
+          "pitch": "C5",
+          "beats": 1.0
+        },
+        {
+          "pitch": "Bb4",
+          "beats": 2.0
+        }
+      ]
+    },
+    {
+      "number": 34,
+      "section": "solo",
+      "chord": "Bb/F",
+      "guitar": [
+        {
+          "pitch": "F5",
+          "beats": 0.5
+        },
+        {
+          "pitch": "C6",
+          "beats": 0.5
+        },
+        {
+          "pitch": "Bb5",
+          "beats": 1.0
+        },
+        {
+          "pitch": "A5",
+          "beats": 1.0
+        },
+        {
+          "pitch": "G5",
+          "beats": 1.0
+        }
+      ]
+    },
+    {
+      "number": 35,
+      "section": "solo",
+      "chord": "Eb",
+      "guitar": [
+        {
+          "pitch": "Eb5",
+          "beats": 0.5
+        },
+        {
+          "pitch": "G5",
+          "beats": 0.5
+        },
+        {
+          "pitch": "Bb5",
+          "beats": 1.0
+        },
+        {
+          "pitch": "A5",
+          "beats": 1.0
+        },
+        {
+          "pitch": "F5",
+          "beats": 1.0
+        }
+      ]
+    },
+    {
+      "number": 36,
+      "section": "solo",
+      "chord": "D",
+      "guitar": [
+        {
+          "pitch": "D5",
+          "beats": 1.0
+        },
+        {
+          "pitch": "A4",
+          "beats": 1.0
+        },
+        {
+          "pitch": "F#4",
+          "beats": 1.0
+        },
+        {
+          "pitch": "R",
+          "beats": 1.0
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "section": "bridge",
+      "singer": "Male",
+      "line": "不必成为耀眼星辰",
+      "chord": "Gm",
+      "vocal": [
+        {
+          "pitch": "G3",
+          "beats": 0.5,
+          "syllable": "不"
+        },
+        {
+          "pitch": "Bb3",
+          "beats": 0.5,
+          "syllable": "必"
+        },
+        {
+          "pitch": "D4",
+          "beats": 1,
+          "syllable": "成"
+        },
+        {
+          "pitch": "F4",
+          "beats": 2,
+          "syllable": "为"
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "section": "bridge",
+      "singer": "Male",
+      "line": "不必成为耀眼星辰",
+      "chord": "Bb/F",
+      "vocal": [
+        {
+          "pitch": "Eb4",
+          "beats": 0.5,
+          "syllable": "耀"
+        },
+        {
+          "pitch": "C4",
+          "beats": 0.5,
+          "syllable": "眼"
+        },
+        {
+          "pitch": "A3",
+          "beats": 1,
+          "syllable": "星"
+        },
+        {
+          "pitch": "Bb3",
+          "beats": 2,
+          "syllable": "辰"
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "section": "bridge",
+      "singer": "Female",
+      "line": "平凡也能彼此照明",
+      "chord": "Eb",
+      "vocal": [
+        {
+          "pitch": "C4",
+          "beats": 0.5,
+          "syllable": "平"
+        },
+        {
+          "pitch": "Eb4",
+          "beats": 0.5,
+          "syllable": "凡"
+        },
+        {
+          "pitch": "G4",
+          "beats": 1,
+          "syllable": "也"
+        },
+        {
+          "pitch": "Bb4",
+          "beats": 2,
+          "syllable": "能"
+        }
+      ]
+    },
+    {
+      "number": 40,
+      "section": "bridge",
+      "singer": "Female",
+      "line": "平凡也能彼此照明",
+      "chord": "D",
+      "vocal": [
+        {
+          "pitch": "A4",
+          "beats": 0.5,
+          "syllable": "彼"
+        },
+        {
+          "pitch": "G4",
+          "beats": 0.5,
+          "syllable": "此"
+        },
+        {
+          "pitch": "F#4",
+          "beats": 1,
+          "syllable": "照"
+        },
+        {
+          "pitch": "A4",
+          "beats": 2,
+          "syllable": "明"
+        }
+      ]
+    },
+    {
+      "number": 41,
+      "section": "final",
+      "singer": "Together",
+      "line": "灯火之外仍然有你",
+      "chord": "Gm",
+      "vocal": [
+        {
+          "pitch": "G4",
+          "beats": 0.5,
+          "syllable": "灯"
+        },
+        {
+          "pitch": "D5",
+          "beats": 0.5,
+          "syllable": "火"
+        },
+        {
+          "pitch": "C5",
+          "beats": 1,
+          "syllable": "之"
+        },
+        {
+          "pitch": "Bb4",
+          "beats": 2,
+          "syllable": "外"
+        }
+      ]
+    },
+    {
+      "number": 42,
+      "section": "final",
+      "singer": "Together",
+      "line": "灯火之外仍然有你",
+      "chord": "Bb/F",
+      "vocal": [
+        {
+          "pitch": "A4",
+          "beats": 0.5,
+          "syllable": "仍"
+        },
+        {
+          "pitch": "Bb4",
+          "beats": 0.5,
+          "syllable": "然"
+        },
+        {
+          "pitch": "G4",
+          "beats": 1,
+          "syllable": "有"
+        },
+        {
+          "pitch": "A4",
+          "beats": 2,
+          "syllable": "你"
+        }
+      ]
+    },
+    {
+      "number": 43,
+      "section": "final",
+      "singer": "Together",
+      "line": "陪我走过漫长雨季",
+      "chord": "Eb",
+      "vocal": [
+        {
+          "pitch": "F4",
+          "beats": 0.5,
+          "syllable": "陪"
+        },
+        {
+          "pitch": "C5",
+          "beats": 0.5,
+          "syllable": "我"
+        },
+        {
+          "pitch": "Bb4",
+          "beats": 1,
+          "syllable": "走"
+        },
+        {
+          "pitch": "A4",
+          "beats": 2,
+          "syllable": "过"
+        }
+      ]
+    },
+    {
+      "number": 44,
+      "section": "final",
+      "singer": "Together",
+      "line": "陪我走过漫长雨季",
+      "chord": "D",
+      "vocal": [
+        {
+          "pitch": "G4",
+          "beats": 0.5,
+          "syllable": "漫"
+        },
+        {
+          "pitch": "A4",
+          "beats": 0.5,
+          "syllable": "长"
+        },
+        {
+          "pitch": "F4",
+          "beats": 1,
+          "syllable": "雨"
+        },
+        {
+          "pitch": "G4",
+          "beats": 2,
+          "syllable": "季"
+        }
+      ]
+    },
+    {
+      "number": 45,
+      "section": "final",
+      "singer": "Together",
+      "line": "当第一缕晨光升起",
+      "chord": "Gm",
+      "vocal": [
+        {
+          "pitch": "Eb4",
+          "beats": 0.5,
+          "syllable": "当"
+        },
+        {
+          "pitch": "Bb4",
+          "beats": 0.5,
+          "syllable": "第"
+        },
+        {
+          "pitch": "A4",
+          "beats": 1,
+          "syllable": "一"
+        },
+        {
+          "pitch": "G4",
+          "beats": 2,
+          "syllable": "缕"
+        }
+      ]
+    },
+    {
+      "number": 46,
+      "section": "final",
+      "singer": "Together",
+      "line": "当第一缕晨光升起",
+      "chord": "Bb/F",
+      "vocal": [
+        {
+          "pitch": "F4",
+          "beats": 0.5,
+          "syllable": "晨"
+        },
+        {
+          "pitch": "G4",
+          "beats": 0.5,
+          "syllable": "光"
+        },
+        {
+          "pitch": "Eb4",
+          "beats": 1,
+          "syllable": "升"
+        },
+        {
+          "pitch": "F4",
+          "beats": 2,
+          "syllable": "起"
+        }
+      ]
+    },
+    {
+      "number": 47,
+      "section": "final",
+      "singer": "Together",
+      "line": "我们就是家的意义",
+      "chord": "Eb",
+      "vocal": [
+        {
+          "pitch": "D4",
+          "beats": 0.5,
+          "syllable": "我"
+        },
+        {
+          "pitch": "A4",
+          "beats": 0.5,
+          "syllable": "们"
+        },
+        {
+          "pitch": "G4",
+          "beats": 1,
+          "syllable": "就"
+        },
+        {
+          "pitch": "F#4",
+          "beats": 2,
+          "syllable": "是"
+        }
+      ]
+    },
+    {
+      "number": 48,
+      "section": "final",
+      "singer": "Together",
+      "line": "我们就是家的意义",
+      "chord": "D",
+      "vocal": [
+        {
+          "pitch": "Eb4",
+          "beats": 0.5,
+          "syllable": "家"
+        },
+        {
+          "pitch": "D4",
+          "beats": 0.5,
+          "syllable": "的"
+        },
+        {
+          "pitch": "F#4",
+          "beats": 1,
+          "syllable": "意"
+        },
+        {
+          "pitch": "G4",
+          "beats": 2,
+          "syllable": "义"
+        }
+      ]
+    },
+    {
+      "number": 49,
+      "section": "outro",
+      "chord": "Dsus4/D",
+      "guitar": [
+        {
+          "pitch": "F#4",
+          "beats": 4
+        }
+      ]
+    },
+    {
+      "number": 50,
+      "section": "outro",
+      "chord": "Gm(add9)",
+      "guitar": [
+        {
+          "pitch": "G4",
+          "beats": 4
+        }
+      ]
+    }
+  ]
+}
