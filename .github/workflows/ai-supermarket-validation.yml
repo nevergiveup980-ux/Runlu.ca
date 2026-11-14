@@ -4,6 +4,7 @@ on:
     paths:
       - 'validation-directory.html'
       - 'validation-guided.html'
+      - 'validation-fusion.html'
       - 'validation-prototype.css'
       - 'scripts/check-ai-supermarket-validation.mjs'
       - '.github/workflows/ai-supermarket-validation.yml'
