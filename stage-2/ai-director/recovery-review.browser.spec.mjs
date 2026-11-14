@@ -167,7 +167,7 @@ test('filter empty state differs from empty snapshot',async({page})=>{
  await page.goto(pageUrl());await page.locator('#episode').fill('ep1');await page.locator('#load').click();
  await expect(page.locator('#counts')).toContainText('Total 1');
  await page.getByRole('button',{name:'Dispatching',exact:true}).click();
- await expect(page.locator('#items')).toContainText('No tasks match this filter');
+ await expect(page.locator('#items')).toContainText('No tasks match the current search or filter');
  await expect(page.locator('#counts')).toContainText('Unknown 1');
 });
 
