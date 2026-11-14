@@ -131,3 +131,14 @@ test('failed loading shows failure state instead of false empty-success state',a
  await expect(page.locator('#items')).not.toContainText('No aged uncertain tasks');
  await expect(page.locator('#load')).toBeEnabled();
 });
+
+test('mobile recovery cards distinguish unknown and dispatching with prominent review warning',async({page})=>{
+ await page.setViewportSize({width:375,height:812});
+ await page.goto(pageUrl());
+ await expect(page.locator('.item')).toHaveCount(2);
+ await expect(page.locator('.item .item-title')).toHaveCount(2);
+ await expect(page.locator('.item .status[data-state="DISPATCHING"]')).toHaveCount(1);
+ await expect(page.locator('.item .status[data-state="UNKNOWN"]')).toHaveCount(1);
+ await expect(page.locator('.item .review-warning')).toHaveCount(2);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
+});
