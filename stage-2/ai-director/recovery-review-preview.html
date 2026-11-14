@@ -9,7 +9,7 @@ label{display:block;margin:12px 0 6px}input,button{font:inherit;border-radius:10
 input{width:100%}button{margin-top:12px;min-height:44px;cursor:pointer}button:disabled{opacity:.5}
 button:focus-visible,input:focus-visible{outline:3px solid #9ec5ff}
 .status{display:inline-block;border-radius:8px;padding:5px 9px;background:#624928;color:#ffe8bb}
-.item{border-top:1px solid #34435c;padding:16px 0;overflow-wrap:anywhere}.item:first-child{border:0}
+.item{border-top:1px solid #34435c;padding:18px 0;overflow-wrap:anywhere}.item:first-child{border:0}.item-title{display:block;font-size:1.12rem;line-height:1.45}.item .status{font-weight:700;letter-spacing:.02em}.item .status[data-state='UNKNOWN']{background:#60353a;color:#ffe0e0}.item .status[data-state='DISPATCHING']{background:#624928;color:#ffe8bb}.review-warning{display:block;margin-top:12px;padding:10px 12px;border-left:3px solid #e9b46a;background:#283346;border-radius:5px;color:#fff}
 strong{font-weight:750}small{display:block;color:#b2c2d9;margin-top:7px}
 </style></head><body><main class="wrap">
 <p class="muted">RUNLU / STAGE / AI DIRECTOR</p><label for="languageToggle">Language</label><select id="languageToggle" class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select><h1>Recovery review</h1>
@@ -29,11 +29,11 @@ function render(items,{emptyMessage='No aged uncertain tasks in this snapshot.'}
  if(!items.length){const p=document.createElement('p');p.textContent=emptyMessage;root.append(p);return}
  for(const item of items){
   const div=document.createElement('article');div.className='item';
-  const title=document.createElement('strong');title.textContent='Shot '+item.shotId+' · Attempt '+item.attemptId;
-  const state=document.createElement('p');const tag=document.createElement('span');tag.className='status';tag.textContent=item.state;state.append(tag);
+  const title=document.createElement('strong');title.className='item-title';title.textContent='Shot '+item.shotId+' · Attempt '+item.attemptId;
+  const state=document.createElement('p');const tag=document.createElement('span');tag.className='status';tag.dataset.state=item.state;tag.textContent=item.state;state.append(tag);
   const detail=document.createElement('p');detail.textContent=item.label;
   const provider=document.createElement('small');provider.textContent='Provider task: '+(item.providerTaskId??'Not confirmed');
-  const note=document.createElement('small');note.textContent='Manual reconciliation required · Automatic retry disabled';
+  const note=document.createElement('small');note.className='review-warning';note.textContent='Manual reconciliation required · Automatic retry disabled';
   div.append(title,state,detail,provider,note);root.append(div);
  }
 }
