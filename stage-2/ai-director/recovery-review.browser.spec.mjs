@@ -170,3 +170,28 @@ test('filter empty state differs from empty snapshot',async({page})=>{
  await expect(page.locator('#items')).toContainText('No tasks match this filter');
  await expect(page.locator('#counts')).toContainText('Unknown 1');
 });
+
+test('search matches shot or attempt without network calls',async({page})=>{
+ let calls=0;await page.route('**/api/stage/director/recovery?*',route=>{calls++;return route.abort()});
+ await page.goto(pageUrl());
+ await page.locator('#taskSearch').fill('s03');
+ await expect(page.locator('.item')).toHaveCount(1);
+ await expect(page.locator('.item')).toContainText('S03');
+ await page.locator('#taskSearch').fill('demo_1');
+ await expect(page.locator('.item')).toHaveCount(1);
+ await expect(page.locator('.item')).toContainText('S02');
+ await page.locator('#taskSearch').fill('no-such-task');
+ await expect(page.locator('#items')).toContainText('No tasks match');
+ expect(calls).toBe(0);
+});
+test('sorting is deterministic and search combines with state filters',async({page})=>{
+ await page.goto(pageUrl());
+ await page.locator('#taskSort').selectOption('shot-desc');
+ await expect(page.locator('.item .item-title').first()).toContainText('S03');
+ await page.locator('#taskSort').selectOption('shot-asc');
+ await expect(page.locator('.item .item-title').first()).toContainText('S02');
+ await page.getByRole('button',{name:'Unknown',exact:true}).click();
+ await page.locator('#taskSearch').fill('S02');
+ await expect(page.locator('#items')).toContainText('No tasks match');
+ await expect(page.locator('#counts')).toContainText('Total 2');
+});
