@@ -32,3 +32,15 @@ assert.doesNotMatch(c,/<form\b|<iframe\b|<input\b|<button\b|https?:\/\/|fetch\s*
 for(const lang of ['en','zh','fr','es'])assert.match(c,new RegExp('data-'+lang+'='));
 assert.match(css,/@media\(max-width:700px\)\{\.category-grid\{grid-template-columns:repeat\(2/);
 console.log('simple-first C safeguards PASS');
+
+/* Translation coverage: every C heading, paragraph, and disclosure label must carry all four locales. */
+const cVisible=[...c.matchAll(/<(h1|h2|p|summary|div)\b([^>]*)>([^<]+)<\/\1>/g)];
+for(const [,tag,attrs,value] of cVisible){
+  if(tag==='div'&&!attrs.includes('class="brand"'))continue;
+  if(tag==='p'&&!value.trim())continue;
+  for(const lang of ['en','zh','fr','es'])assert.match(attrs,new RegExp('data-'+lang+'="[^"]+"'),tag+' missing '+lang+': '+value.slice(0,45));
+}
+assert.ok(cVisible.length>=15,'C translation coverage includes all visible headings and descriptions');
+assert.equal((c.match(/<script\b/g)||[]).length,1,'C uses only shared language script');
+assert.doesNotMatch(c,/<details[^>]*\sopen(?:\s|>)/i,'C disclosure starts closed');
+console.log('C four-language coverage and progressive disclosure PASS');
