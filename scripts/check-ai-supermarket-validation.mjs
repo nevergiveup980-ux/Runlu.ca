@@ -47,3 +47,9 @@ assert.equal((c.match(/class="category-choice"/g)||[]).length,6);
 assert.doesNotMatch(cjs,/fetch\s*\(|XMLHttpRequest|localStorage|sessionStorage|https?:\/\//i);
 assert.doesNotMatch(c,/<details[^>]*\sopen(?:\s|>)/i,'C disclosure starts closed');
 console.log('C four-language coverage and progressive disclosure PASS');
+
+for(let i=0;i<3;i++){assert.match(c,new RegExp('id="comparison-title-'+i+'"'));assert.match(c,new RegExp('id="comparison-desc-'+i+'"'));}
+for(const key of ['writing','documents','research','audio','design','automation'])assert.match(cjs,new RegExp('"'+key+'":\\[\\{"title"'));
+assert.match(cjs,/comparisons\[key\]\.forEach/);
+assert.doesNotMatch(cjs,/fetch\s*\(|XMLHttpRequest|localStorage|sessionStorage|https?:\/\//i);
+console.log('Six task-specific four-language comparisons PASS');
