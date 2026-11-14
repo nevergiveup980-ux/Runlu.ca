@@ -56,3 +56,9 @@ All three GitHub Actions runs for commit `230b6b7437c6e7acbcca9cf872cc14189229bb
 - iOS package #83: https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/43358666472 — offline bundle Playwright in Chromium and WebKit; unsigned `xcodebuild` targeting generic iOS succeeded.
 
 **Remaining release blockers:** a signed, installable build (TestFlight or device distribution), recorded real-iPhone QA including VoiceOver, and evidence-based review of the Apple 4.3 / 4.2.6 rejection response. This CI checkpoint is not a device test, App Store submission, or Apple approval.
+
+## Historical physical-device evidence reconciled (2026-11-13)
+
+The earlier Build 4 report confirms **Developer Mode was enabled on 2026-11-01** and signed **RUNLU TWIST 1.1 (4)** (commit `107ec9dd29b48a261b66e95988d27eedb7182f79`) was installed and launched on a physical **iPhone 16 Pro Max / iOS 27.2**. Limited smoke checks passed: language switch, Reasoning Lab, classic reveal/reflection, Logic Studio answer branches, and background/reopen. Source: `docs/TWIST-BUILD4-IPHONE-SMOKE-2026-11-01.md`. The earlier Developer Mode block is historical and **not** a current known blocker.
+
+The Xcode project currently declares **1.1 (5)**; CI has passed unsigned iOS build and bundled gameplay checks for the newer branch. **No evidence of a signed Build 5 IPA, Build 5 physical-device installation, or full physical-device acceptance is recorded here.** Build 4 smoke results cannot be transferred to Build 5. The exact new candidate commit and signed build must be established before the checkboxes above can be marked passed.
