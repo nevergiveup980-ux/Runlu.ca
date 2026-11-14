@@ -30,3 +30,15 @@
 - 本地文件：`media-local/beyond-city-lights-v3-C-43651493379/beyond-city-lights-v3-C.mp3`（git忽略，不提交音频）。
 
 现在A/B/C都有真实音频；未完成听感、逐字歌词/双声部分配/旋律品质验收。该额外单次请求标价0.08美元，实际账单未核实。未合并main、未部署、未覆盖旧歌。上述“C无音频”是首次批次历史，最新状态以本节为准。
+
+## C 英文版 — 新增单次生成与本地下载
+
+用户要求给C制作英文版。新写完整可唱英文歌词及C-EN.prompt.txt；保留原曲意象、男女对唱、70 BPM/G小调与吉他呼应方向。按英文重音重新演绎，不承诺逐音复制中文录音。
+
+- 运行：https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/43653727553 ，生成提交08963ef；只发送一次C-EN请求，无自动重试，未重做A/B/中文C。
+- C-EN真实MP3：171.441583秒、4,122,316 bytes、44.1kHz立体声、约192kbps。
+- SHA-256：`e98a7619e242ecb1a4025bc13c45a4b7a2a8740708cd59c74412f93e6445923b`。
+- 远端ffprobe/ffmpeg完整解码通过；本地下载字节数/哈希通过，afinfo识别时长与格式一致。
+- 本地：`media-local/beyond-city-lights-v3-C-EN-43653727553/beyond-city-lights-v3-C-EN.mp3`，未提交音频到公开源码。
+- dry run验证仅选择C-EN，ABC原选项仍正确选择A/B/C；提交空白检查通过。工作流artifact保留14天。
+- 英文发音、逐字歌词、男女声分配、旋律/吉他听感尚待验收。单次官方标价0.08美元，实际账单未核实；无合并main或部署。
