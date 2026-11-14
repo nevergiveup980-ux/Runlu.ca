@@ -14,3 +14,6 @@ video-export/
 tests/forum/node_modules/
 .env
 .env.*
+
+# Persistent local live-smoke reservation ledger
+tests/forum/.live-budget/

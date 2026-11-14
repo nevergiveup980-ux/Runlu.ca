@@ -81,3 +81,30 @@ Without `TEST_DATABASE_URL`, SQL tests use PGlite (PostgreSQL WASM) and explicit
 - [Official OpenAI documentation: GPT-4.1 mini](https://developers.openai.com/api/docs/models/gpt-4.1-mini) and [Chat Completions parameters](https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create).
 - [Claude Sonnet 4.6](https://platform.claude.com/docs/en/models/sonnet-4-6/overview).
 - [Supabase Edge Function secrets](https://supabase.com/docs/guides/functions/secrets) and [changelog](https://supabase.com/changelog).
+
+
+## 本地真实验收（无需 Pro，2026-11-14 新增）
+
+当前 Supabase 套餐不支持开发分支。可以先在本机验证真实厂商调用，不升级套餐、不操作生产数据。
+
+1. 在仓库根目录通过本机编辑器建立 `.env.forum-test`，将 `GEMINI_API_KEY` 填入该本地文件；双模型还需 `OPENAI_API_KEY`。该路径已被 `.gitignore` 排除。不要把该文件发送到聊天、Git 或前端，也不要把密钥放进终端命令参数。
+2. 使用 Node.js 22 或以上版本；在仓库根目录执行：
+
+```sh
+npm ci --prefix tests/forum --ignore-scripts
+node --env-file=.env.forum-test tests/forum/live-smoke.mjs
+```
+
+验证 Gemini 成功后，再显式运行双模型验收：
+
+```sh
+node --env-file=.env.forum-test tests/forum/live-smoke.mjs --dual
+```
+
+默认一次 Gemini 调用，预留 $0.05；`--dual` 一次运行包括 Gemini 独立调用加双模型四次调用，共预留 $0.25。实际 API 消耗按厂商账户计费。缺失任一必需变量时不发送任何厂商请求。
+
+入口复用 `createHandler` 与同一预算 SQL；本地账本存于 `tests/forum/.live-budget/`，跨运行保留，失败额度也保留。该账本与生产账本隔离，不能把本地 $2.00 上限当作厂商账户或生产与本地合计的费用上限。不要在测试期间并行运行生产推理。不要为重试而删除账本。
+
+输出仅包含通过/失败、模型、轮次、Token 用量、估计费用和预留额度，不输出完整请求、回复或任何密钥。该入口没有自动重试或自动降级，CI 不运行真实调用。
+
+Supabase Secrets 的值不会自动同步到本机；请在本机安全配置。此入口通过后仍需独立非生产 Supabase 环境的部署验收，不能据此宣称生产接入完成。

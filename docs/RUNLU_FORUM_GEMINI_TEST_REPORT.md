@@ -48,3 +48,16 @@
 - [Site integrity — 通过](https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/42689586230)。
 
 CI 使用独立临时 PostgreSQL 服务与明确的厂商响应替身，不使用生产密钥，不执行生产部署。以上不能替代真实 Gemini 和 OpenAI + Gemini 的厂商联调验收。
+
+
+## 2026-11-14 继续验收记录
+
+- 用户已在 Supabase 配置 Gemini 密钥。此前论坛页面真实测试已识别 Gemini 配置，但调用返回 Google 错误：`gemini-2.5-flash` 不再向新用户开放；未收到模型回复，不能记为连接成功。
+- 本次只读核对：生产 `runlu-forum-ai` 为 v8，源码默认仍为 `gemini-2.5-flash`，没有 v2 预算 RPC 调用。没有读取或导出密钥值，也没有更改生产配置。
+- PR #454 保持 Draft；GitHub 原始状态核对为可合并、无冲突。本次没有合并。
+- 尝试创建非生产分支 `forum-gemini-pr-454`，Supabase 返回 `Branching is supported only on the Pro plan or above`。分支未创建，没有升级套餐或支付费用。现有另一个项目为 Health OS，未挪用为论坛测试。
+- 新增 `tests/forum/live-smoke.mjs`：仅用户显式运行时才调用厂商。默认验证 Gemini 独立回复；`--dual` 再验证 OpenAI + Gemini 两轮。使用同一模型调用代码和本地 PostgreSQL 预算 SQL，持久化本地预留账本，不连接生产 Supabase。不打印请求/回复正文、密钥或栈信息。
+- 本次本地自动测试 36/36 通过（含两个新增验收入口安全检查）；预算 SQL 9 通过、1 独立连接用例按本地环境显式跳过。先前独立 PostgreSQL CI 结果保留，不冒充本次 CI 结果。
+- 本地验收入口尚未进行真实厂商调用：本机未配置 `GEMINI_API_KEY`，双模型还缺本机 `OPENAI_API_KEY`。Supabase Secrets 中的密钥不会自动同步到本机。
+
+本地测试不需要 Pro。安全配置步骤见接入说明的“本地真实验收”。该测试可验证真实厂商调用和本地预算链路，但不能代替未部署版本的 Supabase 端到端验收。生产不合并、不部署的限制继续有效。
