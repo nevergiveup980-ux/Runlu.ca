@@ -195,3 +195,23 @@ test('sorting is deterministic and search combines with state filters',async({pa
  await expect(page.locator('#items')).toContainText('No tasks match');
  await expect(page.locator('#counts')).toContainText('Total 2');
 });
+
+test('narrow mobile layout keeps search, sort and filters usable with many records',async({page})=>{
+ const items=Array.from({length:150},(_,i)=>({attemptId:'attempt_'+String(i+1).padStart(3,'0'),shotId:'S'+String(i+1).padStart(3,'0'),state:i%3===0?'UNKNOWN':'DISPATCHING',providerTaskId:null,retryAllowed:false,requiresManualReconciliation:true}));
+ let calls=0;
+ await page.route('**/api/stage/director/recovery?*',route=>{calls++;return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{episodeId:'ep1',items}})})});
+ await page.setViewportSize({width:320,height:720});
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');await page.locator('#load').click();
+ await expect(page.locator('.item')).toHaveCount(150);
+ await expect(page.locator('#counts')).toContainText('Total 150 · Unknown 50 · Dispatching 100');
+ await page.locator('#taskSearch').fill('S150');
+ await expect(page.locator('.item')).toHaveCount(1);
+ await expect(page.locator('.item')).toContainText('S150');
+ await page.locator('#taskSearch').fill('');
+ await page.locator('#taskSort').selectOption('shot-desc');
+ await expect(page.locator('.item .item-title').first()).toContainText('S150');
+ await page.getByRole('button',{name:'Unknown',exact:true}).click();
+ await expect(page.locator('.item')).toHaveCount(50);
+ expect(calls).toBe(1);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
+});
