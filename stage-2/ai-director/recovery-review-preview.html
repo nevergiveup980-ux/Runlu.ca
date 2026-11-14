@@ -10,7 +10,7 @@ input{width:100%}button{margin-top:12px;min-height:44px;cursor:pointer}button:di
 button:focus-visible,input:focus-visible{outline:3px solid #9ec5ff}
 .status{display:inline-block;border-radius:8px;padding:5px 9px;background:#624928;color:#ffe8bb}
 .item{border-top:1px solid #34435c;padding:18px 0;overflow-wrap:anywhere}.item:first-child{border:0}.item-title{display:block;font-size:1.12rem;line-height:1.45}.item .status{font-weight:700;letter-spacing:.02em}.item .status[data-state='UNKNOWN']{background:#60353a;color:#ffe0e0}.item .status[data-state='DISPATCHING']{background:#624928;color:#ffe8bb}.review-warning{display:block;margin-top:12px;padding:10px 12px;border-left:3px solid #e9b46a;background:#283346;border-radius:5px;color:#fff}
-strong{font-weight:750}small{display:block;color:#b2c2d9;margin-top:7px}
+strong{font-weight:750}small{display:block;color:#b2c2d9;margin-top:7px}.filter-row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.filter-row button{margin:0;min-height:44px}.filter-row button[aria-pressed='true']{background:#d9e8ff;color:#101d32;border-color:#d9e8ff;font-weight:750}.count{font-variant-numeric:tabular-nums;color:#c8d7ec}
 </style></head><body><main class="wrap">
 <p class="muted">RUNLU / STAGE / AI DIRECTOR</p><label for="languageToggle">Language</label><select id="languageToggle" class="lang-toggle language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select><h1>Recovery review</h1>
 <p class="muted">Read-only safety preview. No paid provider requests or retry controls.</p>
@@ -18,13 +18,25 @@ strong{font-weight:750}small{display:block;color:#b2c2d9;margin-top:7px}
 <button id="load" type="button">Load authorized recovery list</button>
 <button id="demo" type="button">Show demo</button>
 <p id="message" role="status" aria-live="polite"></p></section>
-<section class="panel"><h2>Tasks requiring manual review</h2><div id="items"></div></section>
+<section class="panel"><h2>Tasks requiring manual review</h2><p id="counts" class="count" aria-live="polite">No snapshot loaded</p><div class="filter-row" role="group" aria-label="Filter recovery tasks"><button type="button" data-filter="ALL" aria-pressed="true">All</button><button type="button" data-filter="UNKNOWN" aria-pressed="false">Unknown</button><button type="button" data-filter="DISPATCHING" aria-pressed="false">Dispatching</button></div><div id="items"></div></section>
 <p class="muted">DISPATCHING and UNKNOWN do not prove that a provider did or did not charge. Check provider records before taking further action.</p>
 </main><script src="../../runlu-language.js?v=2.2"></script><script type="module">
 import {projectDirectorRecovery} from './director-recovery-contract.mjs';
 const $=id=>document.getElementById(id);
 let controller=null;
+let currentItems=[];let currentFilter='ALL';let currentEmptyMessage='No aged uncertain tasks in this snapshot.';
+function applyFilter(){
+ for(const button of document.querySelectorAll('[data-filter]'))button.setAttribute('aria-pressed',String(button.dataset.filter===currentFilter));
+ const unknown=currentItems.filter(item=>item.state==='UNKNOWN').length;
+ const dispatching=currentItems.filter(item=>item.state==='DISPATCHING').length;
+ $('counts').textContent='Total '+currentItems.length+' · Unknown '+unknown+' · Dispatching '+dispatching;
+ const filtered=currentFilter==='ALL'?currentItems:currentItems.filter(item=>item.state===currentFilter);
+ drawItems(filtered,{emptyMessage:currentItems.length?'No tasks match this filter.':currentEmptyMessage});
+}
 function render(items,{emptyMessage='No aged uncertain tasks in this snapshot.'}={}){
+ currentItems=items;currentEmptyMessage=emptyMessage;applyFilter();
+}
+function drawItems(items,{emptyMessage='No aged uncertain tasks in this snapshot.'}={}){
  const root=$('items');root.replaceChildren();
  if(!items.length){const p=document.createElement('p');p.textContent=emptyMessage;root.append(p);return}
  for(const item of items){
@@ -66,5 +78,6 @@ $('episode').addEventListener('input',()=>{
  controller?.abort();controller=null;$('load').disabled=false;
  render([]);$('message').textContent='Episode changed. Load to view its authorized recovery records.';
 });
+for(const button of document.querySelectorAll('[data-filter]'))button.addEventListener('click',()=>{currentFilter=button.dataset.filter;applyFilter()});
 $('load').addEventListener('click',load);$('demo').addEventListener('click',showDemo);showDemo();
 </script></body></html>
