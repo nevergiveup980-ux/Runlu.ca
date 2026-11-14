@@ -1,4 +1,6 @@
-# RUNLU MUSIC STUDIO V2 — 开发交付与配置审批
+# RUNLU MUSIC STUDIO V2 — 首轮开发交付与配置审批
+
+> 此文保留首轮记录。批准后的实际配置与当前阻塞见 [CONFIGURED.md](CONFIGURED.md)。
 
 本次是独立免费验收版本，入口 `music-studio-v2.html`。未上线、未合并、未调用收费生成。
 
