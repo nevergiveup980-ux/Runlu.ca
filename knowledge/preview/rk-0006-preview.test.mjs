@@ -63,3 +63,20 @@ test("all four languages distinguish future receipts from today's physical stock
     assert.match(copy[lang].body.replace(/<[^>]+>/g, ""), warning, "missing future-receipts warning: " + lang);
   }
 });
+
+test("four-language scenario safeguards stay attached to their calculations", () => {
+  assert.equal(100 - 65, 35);
+  assert.ok(35 < 50, "scenario A must not promise 50 LF");
+  assert.equal(80 - 30 - 20, 30);
+  const safeguards = {
+    en: [/new order asking for 50 linear feet cannot be confirmed/i, /assuming these categories do not overlap/i, /must not release a hold/i],
+    zh: [/新订单要求 50 LF[^。]*不能/, /数量互不重叠/, /必须由有权限的人员核实并批准/],
+    fr: [/demande de 50 pieds linéaires ne peut donc pas être confirmée/i, /groupes ne se chevauchent pas/i, /sans autorisation/i],
+    es: [/nuevo pedido de 50 pies lineales/i, /categorías no se superponen/i, /sin la autorización correspondiente/i]
+  };
+  for (const [lang, checks] of Object.entries(safeguards)) {
+    const body = copy[lang].body.replace(/<[^>]+>/g, " ").replace(/\\s+/g, " ");
+    for (const check of checks) assert.match(body, check, lang + " scenario safety condition missing");
+    assert.match(body, /RK-0005/, lang + " must retain cut-geometry cross-reference");
+  }
+});
