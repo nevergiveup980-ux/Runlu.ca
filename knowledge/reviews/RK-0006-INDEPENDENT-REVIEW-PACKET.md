@@ -74,7 +74,7 @@ The S01–S04 PASS labels below are limited to assistant-performed verification 
 
 ## Editorial handoff and release decision — PENDING
 
-**Automated checks (2026-11-14):** On the main-synchronized editorial PR #475, commit `647ef8cef2fae5aa11cb921b31c5004215912ab2`, all three checks completed successfully: Site integrity (run 43619805428), RUNLU Knowledge validation (run 43619805500), and RUNLU Knowledge Publication Gate (run 43619805447). These establish only automated checks, not human language/rights approval or actual iPhone/browser acceptance.
+**Automated checks (2026-11-14):** On the main-synchronized editorial PR #475, latest verified commit `7f189de6ed12169865d8450b56f52eca61893bda`, all three checks completed successfully: Site integrity (run 43631750460), RUNLU Knowledge validation (run 43631750466), and RUNLU Knowledge Publication Gate (run 43631750581). This revision adds four-language regression assertions for both scenario calculations, non-overlap assumptions, hold authorization, and RK-0005 cut-geometry reference. Automated tests are not a substitute for human language/rights approval or actual iPhone/browser acceptance.
 
 **Branch integration:** PR #475 was created from current `main` after wellness language-check fix #470 and carries the six RK-0006 editorial/research/preview/workflow files from draft #449. GitHub reported mergeable=false on inspection; draft status remains. The previous ahead/behind counts for #449 are historical and must not be used as the current #475 branch status.
 
