@@ -85,3 +85,24 @@ test('returning to demo aborts pending live request',async({page})=>{
  await expect(page.locator('#message')).toContainText('DEMO ONLY');
  await expect(page.locator('.item')).toHaveCount(2);
 });
+
+test('expired session prompts sign-in without showing prior demo records',async({page})=>{
+ await page.route('**/api/stage/director/recovery?*',route=>route.fulfill({status:401,contentType:'application/json',body:'{"error":"unauthorized"}'}));
+ await page.goto(pageUrl());await page.locator('#load').click();
+ await expect(page.locator('#message')).toContainText('Sign in again');
+ await expect(page.locator('.item')).toHaveCount(0);
+});
+test('invalid episode is rejected locally with helpful error',async({page})=>{
+ let calls=0;
+ await page.route('**/api/stage/director/recovery?*',route=>{calls++;return route.abort()});
+ await page.goto(pageUrl());await page.locator('#episode').fill('invalid episode');
+ await page.locator('#load').click();
+ await expect(page.locator('#message')).toContainText('Enter a valid episode ID');
+ expect(calls).toBe(0);
+});
+test('mismatched episode response never renders another episode records',async({page})=>{
+ await page.route('**/api/stage/director/recovery?*',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{episodeId:'different',items:[]}})}));
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');await page.locator('#load').click();
+ await expect(page.locator('#message')).toContainText('mismatched episode');
+ await expect(page.locator('.item')).toHaveCount(0);
+});
