@@ -63,8 +63,8 @@ The S01–S04 PASS labels below are limited to assistant-performed verification 
 |---|---|---|---|---|
 | M01 | Open the RK-0006 preview at a narrow iPhone viewport. | No horizontal scrolling; headings, notice and examples remain readable. | PARTIAL PASS — visible EN/ZH/FR/ES sections | Author's five 2026-11-14 iPhone screenshots show readable four-language upper sections and Spanish footer; full-page scroll and examples in all languages not yet inspected. |
 | M02 | Switch English → 中文 → Français → Español → English. | Heading, full body, editorial notice and HOLD footer all change; browser tab title follows. | PARTIAL PASS — all four upper sections visually evidenced | Author's 2026-11-14 screenshots show EN/ZH/FR/ES localized banner, selector label, title, notice and opening body; full switch sequence, document title and every footer not yet evidenced. |
-| M03 | Select 中文, refresh, then use the copied `?lang=zh` URL. | Chinese remains selected; page language is set to zh. | NOT CHECKED | |
-| M04 | Load `?lang=invalid` and then use the selector. | Safe English fallback; selector still works. | NOT CHECKED | |
+| M03 | Select 中文, refresh, then use the copied `?lang=zh` URL. | Chinese remains selected; page language is set to zh. | AUTHOR PASS | Author reported all requested M03/M04 phone checks passed on 2026-11-15, including Chinese deep-link refresh. |
+| M04 | Load `?lang=invalid` and then use the selector. | Safe English fallback; selector still works. | AUTHOR PASS | Author reported all requested M03/M04 phone checks passed on 2026-11-15, including English fallback and selector operation. |
 | M05 | Inspect both worked examples in each language. | 100 − 65 = 35 and 80 − 30 − 20 = 30, with non-overlap and cut-geometry caveats intact. | NOT CHECKED | |
 | M06 | Follow research and independent-review reference links. | Both open the intended source/review files; no broken paths. | AUTHOR PASS — both iPhone links open | Author confirmed 2026-11-15 that both Research Materials and Review Checklist links open successfully and lead to GitHub repository pages, not RUNLU-branded pages. Source targets were independently fetched via GitHub. No claim of independent visual review of the rendered GitHub pages. |
 | M07 | Inspect accessibility with keyboard and screen reader, where available. | Selector has an accessible label and focus is visible; no content inaccessible by keyboard. | NOT CHECKED | |
@@ -143,6 +143,10 @@ Read the three `href` targets in the `main` preview source. The research link re
 ## M06 author acceptance — 2026-11-15
 
 The author explicitly confirmed that **both** `研究资料` (Research Materials) and `审核清单` (Review Checklist) links open successfully when tapped on their phone. The author also observed that both links lead to GitHub repository-file pages rather than RUNLU-branded pages. **M06 link-opening acceptance: AUTHOR PASS.** The GitHub destination is expected for the present editorial review workflow; these materials are not approved for formal public publishing. Consider a RUNLU-branded, appropriately access-controlled review interface in a future iteration only if needed; do not expose internal review material as a public-facing article. No new publishing permission is implied, and RK-0006 remains HOLD.
+
+## M03/M04 author acceptance and regression protection — 2026-11-15
+
+After receiving direct instructions to test Chinese `?lang=zh` refresh and invalid `?lang=invalid` fallback with subsequent selector switching, the author replied **“全部验收过关”**. Record **M03 AUTHOR PASS** and **M04 AUTHOR PASS** based on that explicit report, not independent device observation. PR #487 added source-contract regression assertions; all three GitHub workflows succeeded, and PR #487 was squash-merged to `main` at `a2e97ed6f8566d05a6a8a0c139523384298af037`. M01/M02 full scroll/title/footer details, M05 full examples, M07 accessibility, M08 live HTTP verification and editorial rights/language approvals remain distinct outstanding gates. Formal publication stays HOLD.
 
 ## Editorial handoff and release decision — PENDING
 
