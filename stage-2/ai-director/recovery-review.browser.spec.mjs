@@ -215,3 +215,12 @@ test('narrow mobile layout keeps search, sort and filters usable with bounded in
  expect(calls).toBe(1);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
 });
+
+test('oversized inventory fails closed without rendering partial records',async({page})=>{
+ const items=Array.from({length:101},(_,i)=>({attemptId:'a'+i,shotId:'S'+i,state:'UNKNOWN',providerTaskId:null,retryAllowed:false,requiresManualReconciliation:true}));
+ await page.route('**/api/stage/director/recovery?*',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{episodeId:'ep1',items}})}));
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');await page.locator('#load').click();
+ await expect(page.locator('#message')).toContainText('response invalid');
+ await expect(page.locator('.item')).toHaveCount(0);
+ await expect(page.locator('#items')).toContainText('loading failed');
+});
