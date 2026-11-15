@@ -54,3 +54,14 @@ test("live four-language examples preserve arithmetic and operational safeguards
     assert.match(body, /RK-0005/, lang + " must distinguish cut geometry");
   }
 });
+
+
+test("language deep link survives refresh and unsupported codes fall back to English", () => {
+  // Source-level contract: render() uses the query parameter on every page load.
+  assert.match(html, /const params=new URLSearchParams\(location\.search\)/);
+  assert.match(html, /render\(copy\[params\.get\("lang"\)\]\?params\.get\("lang"\):"en"\)/);
+  assert.match(html, /document\.documentElement\.lang=lang/);
+  assert.match(html, /select\.value=lang/);
+  assert.match(html, /history\.replaceState\(null,"",u\)/);
+  assert.match(html, /searchParams\.set\("lang",select\.value\)/);
+});
