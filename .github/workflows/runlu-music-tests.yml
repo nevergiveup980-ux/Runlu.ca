@@ -3,10 +3,12 @@ on:
   push:
     branches:
       - feature/runlu-music-studio-mvp
+      - feature/runlu-music-studio-v2
     paths:
       - 'music-studio-tools/**'
       - 'music/**'
       - 'music-studio.html'
+      - 'music-studio-v2.html'
       - 'music-studio-offline-acceptance.html'
       - '.github/workflows/runlu-music-tests.yml'
   pull_request:
@@ -14,6 +16,7 @@ on:
       - 'music-studio-tools/**'
       - 'music/**'
       - 'music-studio.html'
+      - 'music-studio-v2.html'
       - 'music-studio-offline-acceptance.html'
       - '.github/workflows/runlu-music-tests.yml'
   workflow_dispatch:
@@ -37,9 +40,13 @@ jobs:
       - name: Check Studio JavaScript and required controls
         run: node music-studio-tools/check_studio.cjs
       - name: Run music API and Studio wiring tests
-        run: node --test music/studio-wiring.test.mjs
+        run: node --test music/*.test.mjs music/v2/*.test.mjs music/v2/server/*.test.mjs music-studio-tools/job-contract.test.mjs
       - name: Run unit tests without API credentials
-        run: python -m unittest discover -s music-studio-tools -p 'test_*.py' -v
+        run: |
+          python -m unittest discover -s music-studio-tools -p 'test_*.py' -v
+          python -m unittest discover -s music/v2/server -p 'test_*.py' -v
+          python music-studio-tools/preflight_golden_echoes.py
+          python music-studio-tools/generate_full_song.py --project music-studio-tools/when-the-lights-go-down-v2.json --output /tmp/runlu-v2-dry-run.mp3
       - name: Test real Chromium interactions at mobile viewport
         run: |
           python music-studio-tools/test_browser.py

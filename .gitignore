@@ -9,3 +9,10 @@
 # Temporary/local media working folders
 media-local/
 video-export/
+
+# Private local configuration and Python caches
+.env
+.env.*
+!.env.example
+__pycache__/
+*.pyc

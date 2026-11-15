@@ -35,3 +35,11 @@ test("rejects invalid pagination and identifiers",async()=>{
  await assert.rejects(lib.list({authenticatedUserId:owner,limit:500}),/INVALID_LIMIT/);
  await assert.rejects(lib.download({authenticatedUserId:owner,id:"../escape"}),/INVALID_JOB_ID/);
 });
+test("V2 metadata and song title are used without exposing storage keys",async()=>{
+ const {lib,row,calls}=fixture();row.project.version='V2';row.duration=182.4;
+ const result=await lib.list({authenticatedUserId:owner});
+ assert.equal(result.items[0].version,'V2');assert.equal(result.items[0].duration,182.4);
+ assert.equal(result.items[0].download_status,'available');
+ await lib.download({authenticatedUserId:owner,id});
+ assert.equal(calls.at(-1)[1].title,'Wind Years');assert.equal(calls.at(-1)[1].version,'V2');
+});

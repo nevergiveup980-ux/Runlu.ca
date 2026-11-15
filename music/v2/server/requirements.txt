@@ -1,0 +1,2 @@
+# Complete MP3 decoding for the offline/trusted publisher only.
+miniaudio==1.61
