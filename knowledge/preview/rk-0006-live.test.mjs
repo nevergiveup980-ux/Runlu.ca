@@ -38,3 +38,19 @@ test("live preview localizes status, language label, links and HOLD footer", () 
   assert.match(html, /document\.documentElement\.lang=lang/);
   assert.match(html, /searchParams\.set\("lang",select\.value\)/);
 });
+
+test("live four-language examples preserve arithmetic and operational safeguards", () => {
+  assert.equal(100 - 65, 35);
+  assert.equal(80 - 30 - 20, 30);
+  const patterns = {
+    en: [/100 linear feet/i, /65 linear feet/i, /35 linear feet/i, /50 linear feet/i, /80 linear feet/i, /30 linear feet/i, /20 linear feet/i, /categories do not overlap/i, /must not release a hold/i],
+    zh: [/100 线性英尺/, /65 LF/, /35 LF/, /50 LF/, /80 LF/, /30 LF/, /20 LF/, /互不重叠/, /有权限的人员/],
+    fr: [/100 pieds linéaires/, /65 déjà engagés/, /35 pieds linéaires/, /50 pieds linéaires/, /80 pieds linéaires/, /30 sont exclus/, /20 autres pieds linéaires/, /ne se chevauchent pas/, /sans autorisation/],
+    es: [/100 pies lineales/, /65 pies lineales/, /35 pies lineales/, /50 pies lineales/, /80 pies lineales/, /30 pies lineales/, /20 pies lineales/, /no se superponen/, /sin la autorización correspondiente/]
+  };
+  for (const [lang, checks] of Object.entries(patterns)) {
+    const body = copy[lang].body.replace(/<[^>]*>/g, " ").replace(/\\s+/g, " ");
+    for (const pattern of checks) assert.match(body, pattern, lang + " scenario condition");
+    assert.match(body, /RK-0005/, lang + " must distinguish cut geometry");
+  }
+});
