@@ -29,7 +29,7 @@ A warehouse can physically hold material that it cannot promise to a new custome
 ## Language titles (provisional; require human proofreading)
 - EN: Why On-Hand Stock Is Not the Same as Available-to-Promise Inventory
 - ZH: 为什么账面有库存，却不能承诺给新订单？
-- FR: Pourquoi le stock en main n’est pas toujours disponible à la commande
+- FR: Pourquoi un stock physiquement présent n’est pas toujours disponible pour une nouvelle commande
 - ES: Por qué las existencias físicas no siempre están disponibles para un nuevo pedido
 
 ## Publication blockers
