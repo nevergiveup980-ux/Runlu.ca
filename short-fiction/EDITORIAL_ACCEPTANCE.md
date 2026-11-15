@@ -25,3 +25,12 @@ Prior research surfaced a potentially similar story titled *Seven Minutes Slow* 
 
 ## Publication gate
 Keep PR in draft. Do not merge, remove noindex, or advertise a public story URL before technical mobile acceptance and editorial risk review. Do not interpret passing CI as physical-device acceptance.
+
+## Originality research update — 2026-11-15
+
+Public discovery (non-exhaustive):
+- Tony Doan, *Seven Minutes Slow*: https://novelplus.net/novel/seven-minutes-slow — deceased father, daughter, clockmaker, intentionally seven-minutes-slow timepiece; its family-conspiracy/mystery trajectory differs from our quieter domestic story.
+- *Seven Minutes Late*: https://note.com/sophia0fp/n/n5f4473f47191?hl=en — bereavement and seven-minutes-slow wall clock.
+- Reader-preview example: https://maliangwriter.com/en/tools/reader-preview/ — clockmaker, absent father, seven-minutes-slow clock.
+
+Assessment: **HIGH editorial distinctiveness concern, NOT an infringement determination.** Repeated motif convergence means changing the title alone is insufficient. Recommend replacing the central seven-minute clock premise and materially reworking the plot around a new original dramatic mechanism before publication. Keep existing V12 only as a restricted editorial archive. No publication authorization granted.
