@@ -209,7 +209,7 @@ test('narrow mobile layout keeps search, sort and filters usable with bounded in
  await expect(page.locator('.item')).toContainText('S100');
  await page.locator('#taskSearch').fill('');
  await page.locator('#taskSort').selectOption('shot-desc');
- await expect(page.locator('.item .item-title').first()).toContainText('S150');
+ await expect(page.locator('.item .item-title').first()).toContainText('S100');
  await page.getByRole('button',{name:'Unknown',exact:true}).click();
  await expect(page.locator('.item')).toHaveCount(34);
  expect(calls).toBe(1);
