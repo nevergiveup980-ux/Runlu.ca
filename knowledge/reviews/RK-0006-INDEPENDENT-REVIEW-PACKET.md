@@ -68,7 +68,7 @@ The S01–S04 PASS labels below are limited to assistant-performed verification 
 | M05 | Inspect both worked examples in each language. | 100 − 65 = 35 and 80 − 30 − 20 = 30, with non-overlap and cut-geometry caveats intact. | NOT CHECKED | |
 | M06 | Follow research and independent-review reference links. | Both open the intended source/review files; no broken paths. | NOT CHECKED | |
 | M07 | Inspect accessibility with keyboard and screen reader, where available. | Selector has an accessible label and focus is visible; no content inaccessible by keyboard. | NOT CHECKED | |
-| M08 | Inspect page source and public knowledge index. | Preview is marked `noindex,nofollow`, clearly HOLD; RK-0006 is absent from the published index. | NOT CHECKED | |
+| M08 | Inspect page source and public knowledge index. | Preview is marked `noindex,nofollow`, clearly HOLD; RK-0006 is absent from the published index. | SOURCE AUDIT PASS; live HTTP/browser verification pending | GitHub `main` inspected 2026-11-15: preview has robots noindex,nofollow and explicit public-review/HOLD notices; `knowledge/data/published.json` contains `entries: []`; `knowledge/index.html` has no RK-0006 entry. This is repository-source evidence, not a live browser or HTTP header audit. |
 
 **Acceptance rule:** Record failures and fix them on the draft branch. Partial screenshot evidence may be recorded as PARTIAL PASS; only mark each M01–M08 PASS after its entire expected result has been verified with reproducible evidence. L06 remains NOT CHECKED until the required real-device/browser checks are documented.
 
@@ -131,6 +131,10 @@ Draft manuscript commit `67b9f5fdff5bc4714944d1dbbf526cfe835349d4` changes the F
 ## Author four-language switching acceptance — 2026-11-15
 
 The author explicitly reported **four-language switching accepted** in chat on 2026-11-15. This is user-reported functional acceptance of switching, not independent confirmation of all eight M01–M08 mobile checks, all four full article scrolls, screen-reader accessibility or complete native-language proofreading. PR #485 (FR/ES copy sync) passed RUNLU Knowledge validation, RUNLU Knowledge Publication Gate and Site integrity, then was squash-merged to `main` as `56c9f335db6615d186d902f0bf08448c6800707a`. Record the switching portion of M02 as **AUTHOR PASS**, retaining M02's full footer/tab-title checks as not independently evidenced. Formal publication remains HOLD.
+
+## M08 repository-source audit — 2026-11-15
+
+Inspected current `main` versions of `knowledge/preview/RK-0006.html` (blob `2caebf7fa7e6493aefe9539afff568dad1583772`), `knowledge/data/published.json` (blob `4f30a2fd2628029e8971c455f304f03356968ea6`) and `knowledge/index.html` (blob `5979694d17a9a1804a9a3c117bb18904a2b92e0f`). The preview source includes `<meta name="robots" content="noindex,nofollow">` and review-only HOLD wording. The published dataset has an empty `entries` array, and the public index source does not contain RK-0006. **Result: M08 source audit PASS; actual deployed HTTP/browser verification still pending.** No change to publication status.
 
 ## Editorial handoff and release decision — PENDING
 
