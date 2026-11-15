@@ -164,6 +164,24 @@ PR #488 corrected the language selector's accessible-name source by removing the
 
 The author explicitly stated that VoiceOver will not be used. Treat screen-reader device testing as **out of the user's manual acceptance scope**, not as failed or passed. Retain the source-level accessibility fix, focus-visible styling and automated checks; do not solicit VoiceOver testing again. Keyboard-only operation remains untested. M01 evidence was reconciled with the author's subsequent M05 acceptance: all four languages' worked examples were reported fully visible without truncation, but a full-page horizontal overflow and every localized footer were not independently confirmed. This record updates review scope and evidence only; it is not publication approval. RK-0006 remains HOLD.
 
+## Four-language terminology desk review — 2026-11-15
+
+**Method:** Assistant inspected the exact four-language editorial manuscript and research brief on the editorial branch; this is a text-level terminology and consistency check, **not** independent native-speaker proofreading or an external professional review. No content was invented from external source material.
+
+| Concept | EN | ZH | FR | ES | Editorial finding |
+|---|---|---|---|---|---|
+| Physical stock | on hand | 账面现存数量 | stock physique | existencias físicas | Consistent distinction from allocatable stock; ZH makes clear it is system-recorded physical quantity. |
+| Current allocatable quantity | available | 当前可用数量 | stock disponible | cantidad disponible | Consistent; system-specific reservation and status rules are explicit. |
+| Date-specific promise | available to promise (ATP) | 可承诺数量（ATP） | disponible à promettre (ATP) | disponible para prometer (ATP) | Meaning aligned, but FR/ES naturalness and specific ERP locale terminology still need native/product review. |
+| Carpet length | linear feet | 线性英尺（LF） | pieds linéaires | pies lineales | Figures align; target-market preference for imperial LF should be confirmed. |
+| Dye lot | dye lot | 色批（Dyelot） | lot de teinture | lote de teñido (Dyelot) | Operational meaning aligned; recommended editorial glossary spelling **dye lot** (two words) in English and consistent use of `dye lot`/`Dyelot` only when explicitly referencing a system field. No content change yet. |
+| Physical roll/remnant | roll or remnant | 卷号、余料 | rouleau | rollo | FR/ES refer to roll but do not explicitly name a remnant in their final checklists. Optional completeness edit, not a contradiction. |
+| Hold authorization | responsible authority | 有权限的人员 | sans autorisation | autorización correspondiente | All prohibit unauthorized release; approval authority should remain determined by local procedure. |
+
+**Source register correction:** The research brief's provisional FR title lagged behind the manuscript and public preview. Synchronized it to `Pourquoi un stock physiquement présent n’est pas toujours disponible pour une nouvelle commande` in commit `d7f3d9226d29d0cbd3ec0d0bcb5c3a6af39eb7dc`.
+
+**Open language issues:** (1) confirm FR/ES ATP terminology against actual target-market ERP user language; (2) decide whether to standardize English `dye lot` vs UI field `Dyelot`; (3) consider explicit `remnant` equivalents in FR/ES for completeness. L01–L04 remain NOT CHECKED for independent proofreading. S05 rights approval remains pending. Publication remains HOLD.
+
 ## Editorial handoff and release decision — PENDING
 
 **Automated checks (2026-11-14):** On PR #475, latest verified commit `5698408c329b27571239d4998fd3a6db34b032e3`, all three checks completed successfully: Site integrity (run 43633245773), RUNLU Knowledge validation (run 43633245776), and RUNLU Knowledge Publication Gate (run 43633245819). Four-language scenario safeguards and standalone-safe GitHub review URLs have automated assertions. The publication-gate run produced `rk-0006-editorial-preview-html` (artifact ID `14128992459`, expires 2026-11-28) and `knowledge-editorial-quality-report` (artifact ID `14129092168`, expires 2026-12-14). Download preview from the run's Artifacts section for actual iPhone acceptance. These establish automated checks and artifact presence only, not human language/rights approval or actual browser acceptance.
