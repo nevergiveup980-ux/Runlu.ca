@@ -66,7 +66,7 @@ The S01–S04 PASS labels below are limited to assistant-performed verification 
 | M03 | Select 中文, refresh, then use the copied `?lang=zh` URL. | Chinese remains selected; page language is set to zh. | NOT CHECKED | |
 | M04 | Load `?lang=invalid` and then use the selector. | Safe English fallback; selector still works. | NOT CHECKED | |
 | M05 | Inspect both worked examples in each language. | 100 − 65 = 35 and 80 − 30 − 20 = 30, with non-overlap and cut-geometry caveats intact. | NOT CHECKED | |
-| M06 | Follow research and independent-review reference links. | Both open the intended source/review files; no broken paths. | NOT CHECKED | |
+| M06 | Follow research and independent-review reference links. | Both open the intended source/review files; no broken paths. | REPOSITORY TARGETS PASS; live click-through pending | The live-preview HTML in `main` links to both files at the explicit editorial branch `editorial/rk-0006-main-sync-20261114`. GitHub connector fetched both exact target paths successfully on 2026-11-15. No claim of successful iPhone tap, GitHub authentication state or browser navigation. |
 | M07 | Inspect accessibility with keyboard and screen reader, where available. | Selector has an accessible label and focus is visible; no content inaccessible by keyboard. | NOT CHECKED | |
 | M08 | Inspect page source and public knowledge index. | Preview is marked `noindex,nofollow`, clearly HOLD; RK-0006 is absent from the published index. | SOURCE AUDIT PASS; live HTTP/browser verification pending | GitHub `main` inspected 2026-11-15: preview has robots noindex,nofollow and explicit public-review/HOLD notices; `knowledge/data/published.json` contains `entries: []`; `knowledge/index.html` has no RK-0006 entry. This is repository-source evidence, not a live browser or HTTP header audit. |
 
@@ -135,6 +135,10 @@ The author explicitly reported **four-language switching accepted** in chat on 2
 ## M08 repository-source audit — 2026-11-15
 
 Inspected current `main` versions of `knowledge/preview/RK-0006.html` (blob `2caebf7fa7e6493aefe9539afff568dad1583772`), `knowledge/data/published.json` (blob `4f30a2fd2628029e8971c455f304f03356968ea6`) and `knowledge/index.html` (blob `5979694d17a9a1804a9a3c117bb18904a2b92e0f`). The preview source includes `<meta name="robots" content="noindex,nofollow">` and review-only HOLD wording. The published dataset has an empty `entries` array, and the public index source does not contain RK-0006. **Result: M08 source audit PASS; actual deployed HTTP/browser verification still pending.** No change to publication status.
+
+## M06 research and review links — repository target verification, 2026-11-15
+
+Read the three `href` targets in the `main` preview source. The research link resolves to `knowledge/reviews/RK-0006-RESEARCH-BRIEF.md` on the named editorial branch (GitHub blob `cb164d7a1e9ff56926693ee11bc7af38e780caf0`), and the independent-review link resolves to `knowledge/reviews/RK-0006-INDEPENDENT-REVIEW-PACKET.md` (blob `48362a36892ccabcb034b9d60397c8ea9c8a3d77`); both exact files were fetched successfully through GitHub. The third `../` link is a relative return to `/knowledge/` when the preview is hosted at `/knowledge/preview/RK-0006.html`. **Result: source-link target check PASS, live browser tap/redirect/accessibility still NOT CHECKED.** Do not claim the author clicked either link.
 
 ## Editorial handoff and release decision — PENDING
 
