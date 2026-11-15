@@ -1,6 +1,6 @@
 # El reloj que se adelantaba
 
-**RUNLU SHORT FICTION · Relato 001 · Traducción literaria al español · Secciones I–VI de X**
+**RUNLU SHORT FICTION · Relato 001 · Traducción literaria al español · Secciones I–X de X**
 
 Obra original: RUNLU · Texto de referencia: *The Clock That Ran Ahead* (inglés).
 
@@ -179,3 +179,161 @@ Antes de colgar, Margaret preguntó por la vieja casa. Claire reconoció que hab
 Después de la llamada, Claire abrió el frigorífico. Arthur había dejado un tarro de mostaza a medio gastar y un cartón de leche que había caducado antes de su muerte. Los tiró. Aquella tarea corriente la serenó.
 
 Luego escribió las palabras de su madre en el reverso de un sobre. No porque necesitara permiso, sino porque estaba cansada de tomar decisiones como si cada una fuera una sentencia.
+
+## VII. La caja con el nombre de Claire
+
+El domingo por la mañana encontró una caja de cartón en el estante más alto del armario del pasillo. CLAIRE estaba escrito en grandes letras negras.
+
+Dentro había fotografías escolares, un certificado de natación, el programa de su graduación y un recorte de periódico sobre su primer ascenso. Arthur había subrayado su nombre a lápiz. También había una foto de la bicicleta azul. Claire aparecía junto a ella, con una mano en el manillar y un hueco enorme donde deberían haber estado los dientes delanteros.
+
+En el fondo encontró un sobre pequeño con tres fotografías que nunca había visto. En una, Arthur estaba sentado entre el público de su concierto de secundaria, con las manos cruzadas sobre las rodillas. En otra, aparecía en el borde de la multitud durante su graduación universitaria, medio oculto detrás de un hombre más alto. En la tercera sostenía torpemente al pequeño Ethan contra el hombro, con la cara vuelta hacia otro lado, como si prestara atención a algún sonido.
+
+Recordaba aquella graduación. Había creído que Arthur se había marchado temprano. Él le había dicho que al día siguiente empezaba a trabajar a primera hora. Ahora veía que se había quedado lo suficiente para presenciar la ceremonia, lo suficiente para observar desde atrás.
+
+En el sobre había también el programa de una obra escolar en la que Claire había interpretado a un árbol. Su padre se había perdido la primera función y ella lo había acusado de preocuparse más por otra reparación que por su hija. Recordaba haberlo visto la segunda noche cerca de la salida, todavía con la chaqueta de trabajo puesta. Cuando cayó el telón, ella apartó la mirada. El programa estaba doblado por la mitad; el pliegue se había ablandado de tanto abrirlo.
+
+Las fotografías no lo resolvían todo. No sustituían las palabras que ella había querido escuchar. Pero añadían habitaciones a la casa que creía conocer.
+
+Su teléfono se iluminó.
+
+**Ethan:** ¿Cómo va todo?
+
+**Claire:** Muchas cajas. Encontré una foto tuya con el abuelo.
+
+**Ethan:** ¿La que salgo llorando?
+
+Claire sonrió.
+
+**Claire:** Otra distinta. ¿Qué tal tu semana?
+
+Pasaron varios minutos antes de que respondiera.
+
+**Ethan:** Bien. Saqué 84 en matemáticas.
+
+**Claire:** ¡Qué bien! Estoy orgullosa de ti.
+
+**Ethan:** Gracias. ¿Vuelves esta noche?
+
+Empezó a escribir: *Si consigo terminarlo todo.* Entonces miró las pilas de cajas y borró la frase.
+
+**Claire:** Sí. Estaré en casa para cenar.
+
+## VIII. Once minutos
+
+Antes de marcharse, Claire descolgó el reloj de la pared. Pesaba más de lo que esperaba. Lo llevó al taller y lo dejó sobre el banco, junto a su teléfono.
+
+Durante la hora siguiente, el reloj avanzó al mismo ritmo que el teléfono. El segundero se movía con regularidad, sin perder un solo compás. Claire había puesto las agujas a la hora de su teléfono cuando llegó el viernes, y desde entonces había marcado la hora exacta. Aquellos once minutos de adelanto no se debían a un fallo mecánico.
+
+Examinó la parte trasera en busca de alguna fecha de reparación. Solo encontró una etiqueta descolorida del fabricante y un precio escrito a lápiz. Nada más. Ninguna explicación para los once minutos. Aquella ausencia le molestó más de lo razonable.
+
+Podía imaginar a Arthur adelantando las agujas después de que Margaret se marchara. También podía imaginar que una mañana el reloj había dado mal la hora y él había decidido no molestarse en corregirlo. Ninguna de las dos posibilidades era un hecho. Le había estado pidiendo a la casa que explicara a un hombre que rara vez se había explicado a sí mismo mientras vivía.
+
+En el banco encontró un paquete de tornillos de repuesto que su padre nunca había abierto. En el sobre, con su letra de imprenta cuidadosa, había anotado el tamaño de los tornillos y el nombre del proveedor. No había escrito para qué los necesitaba. Claire guardó el paquete en el cajón donde lo había encontrado. Algunas cosas del taller eran simplemente trabajos inacabados, y no tenía por qué convertir cada una en un mensaje.
+
+Puso el reloj en posición vertical y abrió la puerta de cristal. Antes de envolverlo, adelantó once minutos la aguja de los minutos. Así era como recordaba aquella habitación, y todavía no estaba preparada para perder esa pequeña rareza. No necesitaba saber por qué su padre lo había dejado así.
+
+Envolvió el reloj en una manta y lo colocó en el asiento trasero del coche. No tenía ninguna prueba de que aquellos once minutos hubieran significado algo para Arthur. Conservarlo sería una decisión suya, no un descubrimiento sobre él.
+
+La casa podía venderse. El reloj se iría con ella.
+
+Recorrió una vez más las habitaciones antes de cerrar con llave. En el pasillo, unas marcas de lápiz junto al marco de una puerta indicaban su estatura a los doce, trece y catorce años. Arthur había escrito las fechas con números diminutos. No había ninguna marca del año en que ella se fue a la universidad. Claire tocó la raya más alta y se apartó. La casa estaba llena de registros, pero no todo lo importante había sido medido.
+
+## IX. La cocina
+
+Michael la ayudó a entrar las cajas en su casa de Calgary después del anochecer. Ethan apareció en lo alto de la escalera y bajó al ver el reloj.
+
+—El reloj raro del abuelo —dijo.
+
+—Ese mismo.
+
+—¿Sigue adelantado?
+
+—Once minutos.
+
+—¿Por qué?
+
+Claire miró la caja de nogal.
+
+—Él siempre lo dejaba así.
+
+Ethan aceptó la respuesta con la naturalidad de quien había conocido a Arthur sobre todo como un abuelo que reparaba juguetes rotos y siempre llevaba caramelos de menta en el bolsillo del abrigo.
+
+Colgaron el reloj en la cocina, junto a la ventana. Michael consultó su reloj de pulsera.
+
+—¿Quieres que lo ponga en hora?
+
+—Déjalo así por ahora —respondió Claire.
+
+El lunes volvió al trabajo. Tenía correos que contestar, un informe para un cliente que revisar y una reunión que se alargó veinte minutos. Al anochecer estaba cansada y de mal humor. Cuando Ethan empezó a contarle una discusión entre los jugadores de su equipo de hockey, lo escuchó a medias mientras miraba el teléfono.
+
+—¿Mamá?
+
+Ella levantó la vista.
+
+—No has oído nada de lo que he dicho, ¿verdad?
+
+—Lo siento. Empieza otra vez.
+
+Él la miró con desconfianza. Claire dejó el teléfono boca abajo sobre la encimera. Esta vez escuchó la historia entera. No era nada especialmente importante: dos jugadores se habían peleado por decidir quién debía lanzar un tiro de penalti. A Ethan todo le había parecido ridículo. Claire se rio en el momento justo, no porque se lo hubiera propuesto, sino porque de verdad lo había escuchado.
+
+Más tarde, mientras Ethan buscaba el calendario de hockey, Claire vio el cuaderno azul sobre la encimera. Lo había traído sin decidir si se lo quedaría. Ethan pasó unas páginas y preguntó por qué el abuelo había escrito tantos nombres.
+
+—Eran personas que confiaban en él para arreglar lo que había dejado de funcionar —dijo ella.
+
+Ethan asintió, como si aquello bastara para explicarlo todo. No preguntó nada sobre septiembre. Claire se sintió aliviada y después vagamente decepcionada, y ambas reacciones la sorprendieron.
+
+Ethan dejó el calendario de hockey sobre la encimera.
+
+Encima de la ventana, el reloj seguía haciendo tictac, once minutos adelantado.
+
+Ninguno de los dos lo miró.
+
+## X. Un sábado cualquiera
+
+Tres semanas después, Margaret fue a Calgary de visita. Se quedó de pie en la cocina, todavía con el abrigo puesto, y miró el reloj.
+
+—El de Arthur —dijo.
+
+—Sí.
+
+—Antes daba la hora exacta —comentó Margaret—. Arthur era muy meticuloso con eso.
+
+—No sé cuándo empezó a dejarlo adelantado —dijo Claire.
+
+Margaret observó las agujas durante un momento.
+
+—Yo tampoco.
+
+Prepararon té. Margaret le habló de una vecina que había plantado tulipanes demasiado pronto y de un curso de acuarela al que estaba asistiendo. Había traído fotografías de sus últimos trabajos. Claire las extendió sobre la mesa y, por una vez, no sintió la necesidad de hacer otra pregunta sobre 2001.
+
+—¿Vas a seguir dejándolo adelantado? —preguntó Margaret mientras guardaba las fotografías.
+
+—No lo sé.
+
+—Puedes ponerlo en hora, ¿sabes? A él no le importaría.
+
+Claire miró el reloj.
+
+—Creo que ahora lo sé.
+
+Ethan entró desde el garaje preguntando si alguien había visto sus guantes. Margaret le dijo que mirara en los bolsillos de la chaqueta. Él respondió que ya había mirado. Ella le dijo que volviera a hacerlo. Los encontró allí.
+
+Los tres se echaron a reír, y Claire volvió a poner la tetera al fuego.
+
+Margaret se quitó por fin el abrigo y se sentó a la mesa. Ethan empezó a describir un proyecto escolar. Quería construir una pequeña maqueta de un puente y ya había decidido qué materiales fallarían. Claire se ofreció a ayudarlo a probarlos.
+
+—No hace falta —dijo él sin levantar la vista.
+
+—Lo sé —respondió ella—. Pero me gustaría.
+
+Ethan lo pensó un instante y le acercó su cuaderno de bocetos.
+
+Los tres se inclinaron sobre la página. Margaret señaló que los soportes parecían demasiado delgados. Ethan protestó: solo era un dibujo. Claire tomó un lápiz.
+
+Su teléfono de trabajo se iluminó junto al cuaderno. Claire vio el nombre de quien llamaba y dejó el aparato boca abajo sin contestar.
+
+—Prueba con una base más ancha —dijo.
+
+Ethan movió la regla. Margaret sujetó el papel.
+
+Encima de la ventana, el reloj siguió haciendo tictac, once minutos adelantado.
