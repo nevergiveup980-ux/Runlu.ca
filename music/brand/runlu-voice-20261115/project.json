@@ -1,0 +1,225 @@
+{
+  "schema": "runlu-brand-music-v1",
+  "collection": "润庐之声",
+  "date": "2026-11-15",
+  "brand_basis": [
+    "patience",
+    "nourishing abode",
+    "growth from within",
+    "respect and continuity"
+  ],
+  "bpm": 74,
+  "meter": "4/4",
+  "key": "D major with B minor shading",
+  "target_bars": 54,
+  "target_seconds": 175.13513513513513,
+  "written_identity_theme": [
+    {
+      "pitch": "D4",
+      "beats": 0.5
+    },
+    {
+      "pitch": "E4",
+      "beats": 0.5
+    },
+    {
+      "pitch": "F#4",
+      "beats": 0.5
+    },
+    {
+      "pitch": "G4",
+      "beats": 0.5
+    },
+    {
+      "pitch": "A4",
+      "beats": 2
+    },
+    {
+      "pitch": "F#4",
+      "beats": 1
+    },
+    {
+      "pitch": "E4",
+      "beats": 1
+    },
+    {
+      "pitch": "D4",
+      "beats": 2
+    }
+  ],
+  "identity_sung_line": "有光的地方就是家",
+  "theme_note": "first five syllables fill bar one, final three fill bar two; score is a soft target, not a guaranteed generated melody",
+  "human_listening_approved": false,
+  "tracks": [
+    {
+      "id": "runlu-voice-instrumental",
+      "title": "润庐之声",
+      "status": "composition_input_audio_recorded_separately",
+      "sections": [
+        {
+          "section": "opening",
+          "from_bar": 1,
+          "bars": 4,
+          "lead": "piano",
+          "target_start_seconds": 0.0,
+          "target_end_seconds": 12.972972972972974
+        },
+        {
+          "section": "theme_A",
+          "from_bar": 5,
+          "bars": 8,
+          "lead": "piano then guitar answer",
+          "target_start_seconds": 12.972972972972974,
+          "target_end_seconds": 38.91891891891892
+        },
+        {
+          "section": "theme_A_development",
+          "from_bar": 13,
+          "bars": 8,
+          "lead": "guitar then piano answer",
+          "target_start_seconds": 38.91891891891892,
+          "target_end_seconds": 64.86486486486487
+        },
+        {
+          "section": "theme_B",
+          "from_bar": 21,
+          "bars": 8,
+          "lead": "cello with piano",
+          "target_start_seconds": 64.86486486486487,
+          "target_end_seconds": 90.8108108108108
+        },
+        {
+          "section": "quiet_bridge",
+          "from_bar": 29,
+          "bars": 6,
+          "lead": "piano and guitar harmonics",
+          "target_start_seconds": 90.8108108108108,
+          "target_end_seconds": 110.27027027027027
+        },
+        {
+          "section": "guitar_solo",
+          "from_bar": 35,
+          "bars": 8,
+          "lead": "lyrical guitar development",
+          "target_start_seconds": 110.27027027027027,
+          "target_end_seconds": 136.21621621621622
+        },
+        {
+          "section": "theme_A_reprise",
+          "from_bar": 43,
+          "bars": 8,
+          "lead": "piano and guitar in dialogue",
+          "target_start_seconds": 136.21621621621622,
+          "target_end_seconds": 162.16216216216216
+        },
+        {
+          "section": "coda",
+          "from_bar": 51,
+          "bars": 4,
+          "lead": "piano, gentle resolved D major",
+          "target_start_seconds": 162.16216216216216,
+          "target_end_seconds": 175.13513513513513
+        }
+      ],
+      "harmonic_palette": [
+        "D(add9)",
+        "A/C#",
+        "Bm7",
+        "Gmaj7",
+        "D/F#",
+        "Em7",
+        "G/A",
+        "D(add9)"
+      ]
+    },
+    {
+      "id": "where-the-light-is-home",
+      "title": "有光的地方，就是家",
+      "status": "composition_input_audio_recorded_separately",
+      "sections": [
+        {
+          "section": "intro",
+          "from_bar": 1,
+          "bars": 4,
+          "lead": "instrumental",
+          "target_start_seconds": 0.0,
+          "target_end_seconds": 12.972972972972974
+        },
+        {
+          "section": "verse1",
+          "from_bar": 5,
+          "bars": 8,
+          "lead": "Male",
+          "target_start_seconds": 12.972972972972974,
+          "target_end_seconds": 38.91891891891892
+        },
+        {
+          "section": "verse2",
+          "from_bar": 13,
+          "bars": 8,
+          "lead": "Female",
+          "target_start_seconds": 38.91891891891892,
+          "target_end_seconds": 64.86486486486487
+        },
+        {
+          "section": "pre",
+          "from_bar": 21,
+          "bars": 4,
+          "lead": "Alternating",
+          "target_start_seconds": 64.86486486486487,
+          "target_end_seconds": 77.83783783783784
+        },
+        {
+          "section": "chorus",
+          "from_bar": 25,
+          "bars": 8,
+          "lead": "Together",
+          "target_start_seconds": 77.83783783783784,
+          "target_end_seconds": 103.78378378378379
+        },
+        {
+          "section": "guitar_solo",
+          "from_bar": 33,
+          "bars": 8,
+          "lead": "instrumental",
+          "target_start_seconds": 103.78378378378379,
+          "target_end_seconds": 129.72972972972974
+        },
+        {
+          "section": "bridge",
+          "from_bar": 41,
+          "bars": 4,
+          "lead": "Alternating",
+          "target_start_seconds": 129.72972972972974,
+          "target_end_seconds": 142.7027027027027
+        },
+        {
+          "section": "final_chorus",
+          "from_bar": 45,
+          "bars": 8,
+          "lead": "Together",
+          "target_start_seconds": 142.7027027027027,
+          "target_end_seconds": 168.64864864864865
+        },
+        {
+          "section": "outro",
+          "from_bar": 53,
+          "bars": 2,
+          "lead": "instrumental",
+          "target_start_seconds": 168.64864864864865,
+          "target_end_seconds": 175.13513513513513
+        }
+      ],
+      "harmonic_palette": [
+        "D(add9)",
+        "A/C#",
+        "Bm7",
+        "Gmaj7",
+        "D/F#",
+        "Em7",
+        "G/A",
+        "D(add9)"
+      ]
+    }
+  ]
+}
