@@ -18,7 +18,6 @@ for track in p['tracks']:
     assert '175 seconds' in prompt
     print(track['id'], 'PASS: 54 bars, target 175.14 seconds, prompt',len(prompt),'characters')
 lyrics=(r/'LYRICS.md').read_text()
-lines=[line for line in lyrics.splitlines() if line and not line.startswith(('#','[','润庐之声','歌词是'))]
 # Alternating singer cues are stripped, while their lines are retained.
 lines=[line.split('] ',1)[-1] for line in lyrics.splitlines() if line and (line.startswith(('[Male] ','[Female] ')) or not line.startswith(('#','[','润庐之声','歌词是')))]
 assert len(lines)==20,lines
