@@ -101,6 +101,29 @@ GitHub PR #483 merged into `main` (squash commit `ae55db564ca8e6a9b3642eb45f535d
 
 **Editorial control:** Continue using original explanations, independently invented warehouse examples and source hyperlinks; do not import, translate or reproduce vendor manuals, screenshots, tables, logos or substantial passages. Verify source applicability to specific ERP versions before making vendor-specific operational promises. The final four-language manuscript must be screened for copied material, and a responsible editor must record a dated rights decision. S05 remains OPEN; do not mark rights approved or lift HOLD.
 
+## Four-language paragraph-level editorial audit — 2026-11-15 (assistant review; not native proofreading)
+
+**Material inspected:** the full EN/ZH/FR/ES text in `knowledge/editorial/RK-0006-INVENTORY-AVAILABILITY.md` on the draft branch, and the branch's embedded preview article bodies. **Scope:** terminology, semantic alignment, original expression and editorial caution. This is not a claim that L01–L04 are independently signed off.
+
+| Section | Cross-language result | Editorial finding |
+|---|---|---|
+| Opening / physical presence | ALIGNED | All four versions separate physical stock from allocation permission; EN additionally names quarantine/damage, while FR/ES group restrictions more briefly. No substantive contradiction. |
+| On-hand / available / ATP | ALIGNED WITH CAVEAT | All four distinguish present inventory, current allocation, and date-specific promise. Keep the ERP-specific caveat. Avoid translating ATP as a guarantee of delivery. |
+| Scenario A | ALIGNED | EN/ZH/FR/ES retain 100 LF, 65 committed, 35 remainder and new 50 LF request; all identify example as hypothetical. |
+| Scenario B | ALIGNED | EN/ZH/FR/ES retain 80 LF, 30 restricted, 20 separately committed, 30 conditional remainder, non-overlap and prohibition on unauthorized hold release. |
+| Cut geometry and dye lot | ALIGNED | Each version separates available quantity from continuous usable cut and RK-0005. ZH has additional installation detail; not an incompatible claim. |
+| Confirmation workflow | ALIGNED | All versions require checking product/unit, reservations, roll/lot, usable dimensions, future receipts, authority and discrepancy handling. |
+| Editorial caution | ALIGNED WITH STYLE DIFFERENCE | EN/ZH explicitly defer to contracts/company/manufacturer rules; FR/ES state non-universal formula and installation caveat but are less explicit about precedence. Consider adding equivalent priority-of-rules language during native proofreading. |
+
+**Targeted terminology suggestions (not automatically applied):**
+- EN: Keep `on hand`, `available` and `ATP` separate; do not claim every ERP uses the illustrative subtraction.
+- ZH: Prefer consistent `现存数量` / `当前可用数量` / `可承诺数量（ATP）`; verify whether `色批` or `染色批次` best matches RUNLU's glossary.
+- FR: Review `stock en main` (literal anglicism) versus `stock physique` / `stock disponible`; check `disponible à promettre` and `pieds linéaires` with a qualified French-language editor.
+- ES: Review `disponible para prometer` against industry terminology `disponible para compromiso`; check `pies lineales`, `lote de teñido` and `alfombra` for target market.
+- The draft-branch preview file is older than the live `main` preview (which has four-language localized status, links and HOLD footer). **Before any future PR that merges preview HTML, reconcile it against `main` to avoid undoing accepted localization.**
+
+**Result:** Assistant paragraph-level semantic audit complete; L01–L04 remain **NOT CHECKED for independent/native proofreading**, L06 and real-device M03–M08 remain open. No publication approval granted.
+
 ## Editorial handoff and release decision — PENDING
 
 **Automated checks (2026-11-14):** On PR #475, latest verified commit `5698408c329b27571239d4998fd3a6db34b032e3`, all three checks completed successfully: Site integrity (run 43633245773), RUNLU Knowledge validation (run 43633245776), and RUNLU Knowledge Publication Gate (run 43633245819). Four-language scenario safeguards and standalone-safe GitHub review URLs have automated assertions. The publication-gate run produced `rk-0006-editorial-preview-html` (artifact ID `14128992459`, expires 2026-11-28) and `knowledge-editorial-quality-report` (artifact ID `14129092168`, expires 2026-12-14). Download preview from the run's Artifacts section for actual iPhone acceptance. These establish automated checks and artifact presence only, not human language/rights approval or actual browser acceptance.
