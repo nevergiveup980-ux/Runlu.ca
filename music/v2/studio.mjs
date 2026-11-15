@@ -46,3 +46,21 @@ $('import').onsubmit=async event=>{
  }catch(error){status(error.message);}finally{$('save').disabled=false;}
 };
 try{db=await openLibrary();await render();status('本机歌曲库已就绪 · 免费测试模式');}catch(error){status(error.message);$('save').disabled=true;}
+
+// Read-only V2 recipe integration; never creates a job or calls a provider.
+$('recipe-load').onclick=async()=>{
+ $('recipe-load').disabled=true;$('recipe-status').textContent='正在载入 V2 配置…';
+ try {
+  const response=await fetch('/music-studio-tools/when-the-lights-go-down-v2.json',{cache:'no-store',signal:AbortSignal.timeout(10000)});
+  if(!response.ok)throw Error('配置文件暂不可用，请稍后重试。');
+  const project=await response.json();
+  if(project.version!=='V2'||project.voice!=='duet'||project.style!=='blues_pop'||project.language!=='en'
+    ||typeof project.title!=='string'||project.title.length>120||typeof project.lyrics!=='string'||project.lyrics.length>10000
+    ||typeof project.notes!=='string'||project.notes.length>2000)throw Error('V2 配置不完整，未载入。');
+  $('recipe-meta').textContent=project.title+' · V2 · English · 男中低音 / 女中音对唱';
+  $('recipe-lyrics').textContent=project.lyrics;$('recipe-notes').textContent=project.notes;
+  $('recipe-view').hidden=false;$('recipe-view').open=true;
+  $('recipe-status').textContent='V2 配置已载入，仅供查看；未生成音频，不会覆盖 V1。';
+ }catch(error){$('recipe-view').hidden=true;$('recipe-status').textContent='载入失败：'+error.message;}
+ finally{$('recipe-load').disabled=false;}
+};

@@ -81,6 +81,11 @@ def main():
             other.goto(page.url)
             other.wait_for_function("() => document.querySelector('#status').textContent.includes('已就绪')")
             assert other.locator('article').count() == 0
+            page.locator('#recipe-load').click()
+            page.wait_for_function("() => document.querySelector('#recipe-status').textContent.includes('配置已载入')")
+            assert 'Love still glows when the lights go down.' in page.locator('#recipe-lyrics').inner_text()
+            assert '180–210 seconds' in page.locator('#recipe-notes').inner_text()
+            assert page.locator('article').count() == 2
             assert not errors, errors
             browser.close()
             print(engine + ': PASS: real V1 playback/pause/seek, refresh persistence, byte-identical named download, V1/V2 coexistence, invalid-file rejection, mobile layout, separate-browser isolation. Not real iPhone or hosted RLS.')
