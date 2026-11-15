@@ -34,3 +34,11 @@ Public discovery (non-exhaustive):
 - Reader-preview example: https://maliangwriter.com/en/tools/reader-preview/ — clockmaker, absent father, seven-minutes-slow clock.
 
 Assessment: **HIGH editorial distinctiveness concern, NOT an infringement determination.** Repeated motif convergence means changing the title alone is insufficient. Recommend replacing the central seven-minute clock premise and materially reworking the plot around a new original dramatic mechanism before publication. Keep existing V12 only as a restricted editorial archive. No publication authorization granted.
+
+## V12 preservation and revised Story 001 — 2026-11-15
+
+Decision: preserve the ten-section V12 emotional arc and characters. The current preview is a **revised candidate**, *The Clock That Ran Ahead*, with Arthur as a municipal fleet maintenance worker and the household clock eleven minutes fast. Workbench, notebook, neighbour conversation, and related references have been revised; this is not a wholesale rejection of the original draft. The alternate manuscript *The Things She Didn't Take* remains a separate unpublished draft, not a replacement for Story 001.
+
+Editorial status: the prior seven-minute-clockmaker similarity flag prompted changes, but **no comprehensive independent similarity review or legal clearance has been completed**. The current version still uses a bereaved daughter and a mis-set clock; review the whole combination, not only the title and numbers. The prior recommendation to discard V12 is superseded. Do not interpret this note as approval to publish.
+
+Technical status: the older CI successes listed above applied to earlier commits, **not** to the newest revision. Re-run current checks and perform actual iPhone Safari acceptance. Before publication, also check the landing-page synopsis, clock mechanics, occupational references, preview banners, and public discoverability. Keep PR draft/noindex until accepted.
