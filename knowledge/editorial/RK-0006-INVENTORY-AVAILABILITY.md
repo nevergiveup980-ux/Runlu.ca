@@ -64,7 +64,7 @@ Confirm the product and units; inspect reservations and restrictions; identify t
 
 ---
 
-## FR — Pourquoi le stock en main n’est pas toujours disponible à la commande
+## FR — Pourquoi un stock physiquement présent n’est pas toujours disponible pour une nouvelle commande
 
 Le système indique qu’un rouleau de moquette est en stock. Pourtant, l’entrepôt ne peut pas nécessairement le promettre à un nouveau client. **La présence physique ne signifie pas que la marchandise est libre d’affectation.** Une partie peut être réservée, engagée pour une commande antérieure ou soumise à une restriction de qualité ou de statut.
 
@@ -88,7 +88,7 @@ Il faut également vérifier le segment continu utilisable, le lot de teinture, 
 
 Contrôler la référence et l’unité de mesure, les réservations, les restrictions, le rouleau et son lot, les dimensions utilisables, ainsi que la différence entre réception attendue et réception effective. Faire valider la décision par la personne responsable et conserver une trace. En cas d’écart, suspendre la promesse jusqu’à clarification.
 
-**Note éditoriale :** cadre de décision pratique, non formule universelle de gestion des stocks ni norme de pose. Traduction et terminologie à réviser.
+**Note éditoriale :** ce cadre pratique ne constitue ni une formule universelle de gestion des stocks ni une autorisation de découpe ou de pose. Les procédures internes, les conditions contractuelles et les instructions du fabricant applicables prévalent. Terminologie à vérifier avant publication.
 
 ---
 
@@ -116,7 +116,7 @@ También hay que comprobar la longitud continua aprovechable, el lote de teñido
 
 Verificar el producto y la unidad, revisar reservas y restricciones, identificar el rollo y el lote, comprobar las dimensiones útiles, distinguir una recepción prevista de una ya realizada y registrar la decisión con el responsable de ventas o inventario. Si hay discrepancias, detener la promesa hasta aclararlas.
 
-**Nota editorial:** marco práctico, no fórmula universal de ERP ni norma de instalación. Pendiente de revisión técnica y lingüística.
+**Nota editorial:** este marco práctico no es una fórmula universal de ERP ni una autorización de corte o instalación. Deben prevalecer los procedimientos internos, las condiciones contractuales y las instrucciones aplicables del fabricante. Terminología pendiente de revisión antes de la publicación.
 
 ---
 
