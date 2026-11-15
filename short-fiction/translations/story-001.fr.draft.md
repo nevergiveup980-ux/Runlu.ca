@@ -1,6 +1,6 @@
 # L’Horloge qui avançait
 
-**RUNLU SHORT FICTION · Nouvelle 001 · Traduction littéraire française · Sections I–VI sur X**
+**RUNLU SHORT FICTION · Nouvelle 001 · Traduction littéraire française · Sections I–X sur X**
 
 Œuvre originale : RUNLU · Texte de référence : *The Clock That Ran Ahead* (anglais).
 
@@ -173,3 +173,155 @@ Avant de raccrocher, Margaret lui demanda des nouvelles de la vieille maison. Cl
 Après l’appel, Claire ouvrit le réfrigérateur. Arthur y avait laissé un pot de moutarde à moitié entamé et un carton de lait périmé avant même sa mort. Elle les jeta. Ce geste banal l’apaisa.
 
 Puis elle nota les paroles de sa mère au dos d’une enveloppe. Non qu’elle eût besoin d’une permission, mais elle était lasse de prendre chaque décision comme si elle prononçait un jugement.
+
+## VII. La boîte au nom de Claire
+
+Le dimanche matin, elle trouva une boîte en carton sur l’étagère supérieure du placard de l’entrée. CLAIRE était écrit dessus au marqueur noir.
+
+À l’intérieur se trouvaient des photographies d’école, un certificat de natation, le programme de sa remise de diplôme et une coupure de presse annonçant sa première promotion. Arthur avait souligné son nom au crayon. Il y avait aussi une photo du vélo bleu. Claire se tenait à côté, une main sur le guidon, avec un immense espace là où auraient dû se trouver ses dents de devant.
+
+Au fond, une petite enveloppe contenait trois photographies qu’elle n’avait jamais vues. Sur la première, Arthur était assis dans le public lors de son concert au secondaire, les mains croisées sur les genoux. Sur la deuxième, il se tenait au bord de la foule à sa remise de diplôme universitaire, à moitié caché par un homme plus grand. Sur la troisième, il portait maladroitement le petit Ethan contre son épaule, le visage tourné hors du champ, comme s’il écoutait quelque chose.
+
+Elle se souvenait de cette remise de diplôme. Elle avait cru qu’Arthur était parti tôt. Il lui avait dit qu’il commençait son quart de travail de bonne heure le lendemain. Elle comprenait maintenant qu’il était resté assez longtemps pour assister à la cérémonie, pour regarder depuis le fond de la salle.
+
+L’enveloppe contenait aussi le programme d’une pièce scolaire dans laquelle Claire avait joué le rôle d’un arbre. Son père avait manqué la première représentation. Elle l’avait accusé de préférer une réparation supplémentaire à sa propre fille. Le deuxième soir, elle se rappelait l’avoir aperçu près de la sortie, encore vêtu de son manteau de travail. Quand le rideau était tombé, elle avait détourné les yeux. Le programme était plié en deux, et son pli, assoupli par de nombreuses manipulations, montrait qu’on l’avait ouvert plus d’une fois.
+
+Ces images ne réglaient pas tout. Elles ne remplaçaient pas les paroles qu’elle avait tant voulu entendre. Mais elles ajoutaient des pièces à la maison qu’elle croyait connaître.
+
+Son téléphone s’alluma.
+
+**Ethan :** Ça va là-bas ?
+
+**Claire :** Des boîtes partout. J’ai trouvé une photo de toi avec grand-papa.
+
+**Ethan :** Celle où je pleure ?
+
+Claire sourit.
+
+**Claire :** Une autre. Ta semaine s’est bien passée ?
+
+Plusieurs minutes s’écoulèrent avant la réponse.
+
+**Ethan :** Oui. J’ai eu 84 en maths.
+
+**Claire :** C’est super. Je suis fière de toi.
+
+**Ethan :** Merci. Tu rentres ce soir ?
+
+Elle commença à écrire : *Si j’arrive à tout terminer.* Puis elle regarda les piles de boîtes et effaça sa phrase.
+
+**Claire :** Oui. Je serai là pour le souper.
+
+## VIII. Onze minutes
+
+Avant de partir, Claire décrocha l’horloge du mur. Elle était plus lourde qu’elle ne l’avait imaginé. Elle la transporta jusqu’à l’atelier et la posa sur l’établi, près de son téléphone.
+
+Pendant l’heure qui suivit, l’horloge avança exactement au même rythme que le téléphone. La trotteuse progressait régulièrement, sans manquer un battement. Claire avait réglé les aiguilles sur son téléphone en arrivant le vendredi, et depuis, l’horloge avait conservé l’heure juste. Ses onze minutes d’avance n’étaient pas dues à une défaillance mécanique.
+
+Elle examina le dos, cherchant une date de réparation. Il n’y avait qu’une étiquette de fabricant décolorée et un prix noté au crayon. Rien de plus. Aucune explication pour les onze minutes. Cette absence l’irritait plus qu’elle ne l’aurait voulu.
+
+Elle pouvait imaginer Arthur avançant les aiguilles après le départ de Margaret. Elle pouvait tout aussi bien imaginer qu’un matin l’horloge avait indiqué une mauvaise heure et qu’il n’avait pas jugé utile de la corriger. Aucune de ces possibilités n’était un fait. Elle demandait à la maison d’expliquer un homme qui, de son vivant, s’était rarement expliqué lui-même.
+
+Sur l’établi, elle trouva un sachet de vis de rechange jamais ouvert. Sur l’enveloppe, Arthur avait inscrit, de son écriture appliquée en capitales, la taille des vis et le nom du fournisseur. Il n’avait pas indiqué à quoi elles devaient servir. Claire remit le sachet dans son tiroir. Certaines choses, dans cet atelier, n’étaient que des travaux inachevés. Elle n’avait pas à transformer chacune d’elles en message.
+
+Elle redressa l’horloge et ouvrit sa porte vitrée. Avant de l’emballer, elle avança l’aiguille des minutes de onze minutes. C’était ainsi qu’elle se souvenait de la pièce, et elle n’était pas prête à perdre cette étrange particularité. Elle n’avait pas besoin de savoir pourquoi son père l’avait conservée.
+
+Elle enveloppa l’horloge dans une couverture et la déposa sur la banquette arrière de sa voiture. Rien ne prouvait que ces onze minutes avaient jamais eu une signification particulière pour Arthur. La garder serait son choix à elle, pas une révélation sur lui.
+
+La maison pouvait être vendue. L’horloge, elle l’emporterait.
+
+Avant de fermer la porte à clé, elle parcourut une dernière fois les pièces. Dans le couloir, des traits de crayon sur le montant d’une porte marquaient sa taille à douze, treize et quatorze ans. Arthur avait inscrit les dates en tout petits chiffres. Il n’y avait pas de marque pour l’année de son départ à l’université. Elle toucha le trait le plus haut, puis recula. La maison était pleine de traces et de mesures, mais tout ce qui comptait n’avait pas été mesuré.
+
+## IX. La cuisine
+
+Après la tombée de la nuit, Michael l’aida à rentrer les boîtes dans leur maison de Calgary. Ethan apparut en haut de l’escalier et descendit lorsqu’il aperçut l’horloge.
+
+« La drôle d’horloge de grand-papa », dit-il.
+
+« C’est bien elle. »
+
+« Elle avance encore ? »
+
+« De onze minutes. »
+
+« Pourquoi ? »
+
+Claire regarda le boîtier en noyer. « Il l’a toujours laissée comme ça. »
+
+Ethan accepta cette réponse sans difficulté. Il avait surtout connu Arthur comme un grand-père qui réparait les jouets cassés et gardait toujours des bonbons à la menthe dans la poche de son manteau.
+
+Ils accrochèrent l’horloge dans la cuisine, près de la fenêtre. Michael consulta sa montre.
+
+« Tu veux que je la règle ? »
+
+« Laisse-la comme ça pour l’instant », répondit Claire.
+
+Le lundi, elle reprit le travail. Il y avait des courriels auxquels répondre, un rapport client à revoir et une réunion qui se prolongea de vingt minutes. Le soir, elle était fatiguée et irritable. Quand Ethan commença à lui raconter une dispute dans son équipe de hockey, elle ne l’écouta que d’une oreille, les yeux sur son téléphone.
+
+« Maman ? »
+
+Elle leva la tête.
+
+« Tu n’as rien écouté, hein ? »
+
+« Excuse-moi. Recommence. »
+
+Il la regarda avec méfiance. Elle posa son téléphone, écran contre le comptoir. Cette fois, il raconta toute l’histoire. Elle n’avait rien de particulièrement important : deux joueurs s’étaient disputés pour savoir lequel tirerait un lancer de pénalité. Ethan trouvait la scène ridicule. Claire rit au bon moment, non parce qu’elle l’avait prévu, mais parce qu’elle l’avait réellement écouté.
+
+Plus tard, pendant qu’Ethan cherchait son horaire de hockey, Claire remarqua le carnet bleu sur le comptoir. Elle l’avait rapporté sans avoir décidé si elle le garderait. Il en feuilleta quelques pages et demanda pourquoi grand-papa avait écrit tant de noms.
+
+« C’étaient des gens qui lui faisaient confiance pour réparer ce qui ne fonctionnait plus », répondit-elle.
+
+Ethan hocha la tête, comme si cela suffisait à tout expliquer. Il ne posa aucune question sur septembre. Claire en éprouva d’abord du soulagement, puis une vague déception. Les deux sentiments la surprirent.
+
+Ethan laissa son horaire de hockey sur le comptoir.
+
+Au-dessus de la fenêtre, l’horloge continuait de battre, avec onze minutes d’avance.
+
+Ni l’un ni l’autre ne la regarda.
+
+## X. Un samedi ordinaire
+
+Trois semaines plus tard, Margaret vint rendre visite à Claire à Calgary. Elle resta debout dans la cuisine, encore vêtue de son manteau, et aperçut l’horloge.
+
+« Celle d’Arthur », dit-elle.
+
+« Oui. »
+
+« Elle donnait l’heure parfaitement, autrefois, dit Margaret. Arthur y tenait beaucoup. »
+
+« Je ne sais pas quand il a commencé à la laisser avancer », répondit Claire.
+
+Margaret observa les aiguilles un instant. « Moi non plus. »
+
+Elles préparèrent du thé. Margaret parla d’une voisine qui avait planté ses tulipes trop tôt et d’un cours d’aquarelle qu’elle suivait. Elle avait apporté des photographies de ses dernières peintures. Claire les étala sur la table et, pour une fois, ne ressentit pas le besoin de poser une autre question sur l’année 2001.
+
+« Tu vas continuer à la laisser avancer ? » demanda Margaret en rangeant les photographies.
+
+« Je ne sais pas. »
+
+« Tu peux la remettre à l’heure, tu sais. Il ne t’en voudra pas. »
+
+Claire regarda l’horloge. « Je crois que je le sais, maintenant. »
+
+Ethan entra du garage et demanda si quelqu’un avait vu ses gants. Margaret lui dit de regarder dans les poches de son manteau. Il répondit qu’il l’avait déjà fait. Elle lui dit de vérifier encore. Il les y trouva.
+
+Tous les trois éclatèrent de rire, et Claire remit la bouilloire à chauffer.
+
+Margaret enleva enfin son manteau et s’installa à la table. Ethan se mit à décrire un projet scolaire. Il voulait construire un petit pont miniature et avait déjà décidé quels matériaux ne tiendraient pas. Claire proposa de l’aider à les tester.
+
+« Tu n’es pas obligée », dit-il sans lever les yeux.
+
+« Je sais, répondit-elle. Mais j’en ai envie. »
+
+Il y réfléchit, puis poussa son carnet de croquis vers elle.
+
+Ils se penchèrent tous les trois sur la page. Margaret fit remarquer que les supports semblaient trop fins. Ethan protesta : ce n’était encore qu’un dessin. Claire prit un crayon.
+
+Son téléphone professionnel s’alluma près du carnet. Claire vit le nom de la personne qui appelait, puis retourna l’appareil sans répondre.
+
+« Essaie une base plus large », dit-elle.
+
+Ethan déplaça sa règle. Margaret maintint la feuille en place.
+
+Au-dessus de la fenêtre, l’horloge continuait de battre, avec onze minutes d’avance.
