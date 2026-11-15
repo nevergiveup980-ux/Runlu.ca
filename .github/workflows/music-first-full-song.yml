@@ -47,3 +47,34 @@ jobs:
           path: media-local/runlu-voice-output/
           if-no-files-found: warn
           retention-days: 14
+  package-existing-audio:
+    if: ${{ inputs.execute_paid_generation == 'NO' && github.run_attempt == 1 && github.ref == 'refs/heads/feature/runlu-voice-brand-music-20261115' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download previously generated pair, no provider access
+        uses: actions/download-artifact@v4
+        with:
+          name: runlu-voice-brand-pair-43751796017
+          path: media-local/existing-brand-pair/
+          run-id: 43751796017
+          github-token: ${{ github.token }}
+      - name: Verify source hashes and package existing files only
+        run: python music/brand/runlu-voice-20261115/package_review.py --source media-local/existing-brand-pair --output media-local/runlu-voice-listening-pack-v1
+      - name: Save phone-friendly listening pack
+        uses: actions/upload-artifact@v4
+        with:
+          name: runlu-voice-listening-pack-v1-${{ github.run_id }}
+          path: media-local/runlu-voice-listening-pack-v1/RUNLU-Voice-Listening-Pack-v1.zip
+          if-no-files-found: error
+          retention-days: 14
