@@ -1,6 +1,6 @@
 # L’Horloge qui avançait
 
-**RUNLU SHORT FICTION · Nouvelle 001 · Traduction littéraire française · Sections I–III sur X**
+**RUNLU SHORT FICTION · Nouvelle 001 · Traduction littéraire française · Sections I–VI sur X**
 
 Œuvre originale : RUNLU · Texte de référence : *The Clock That Ran Ahead* (anglais).
 
@@ -79,3 +79,97 @@ Trois jours après son départ, Margaret prit un autocar vers l’ouest. On anno
 Arthur ne contesta jamais cette version.
 
 Il y eut ensuite des visites à Noël, d’abord embarrassées, puis presque ordinaires. Margaret envoyait des cartes. Arthur postait des chèques lorsque la voiture de Claire avait besoin de réparations. Le jour du mariage de leur fille, ils se tinrent aux deux extrémités de la photographie de famille et réussirent à échanger quelques propos courtois sur le temps qu’il faisait. Claire cherchait parfois à déchiffrer leur ancien mariage dans leurs expressions, comme si une seule photographie pouvait expliquer ce que deux êtres avaient vécu ensemble. Ni l’un ni l’autre ne l’y encourageait. Elle continuait malgré tout.
+
+## IV. L’établi
+
+Le samedi, Claire s’occupa de la petite pièce étroite derrière la cuisine. L’établi d’Arthur se trouvait sous une fenêtre orientée au nord. Sur les tiroirs, des étiquettes en lettres capitales : CONNECTEURS, FUSIBLES, BOULONS, JOINTS. Un multimètre cabossé reposait près d’un rouleau de ruban isolant, et une vieille lampe d’inspection était posée sur un carré de feutre.
+
+Elle souleva la lampe, constata que l’interrupteur résistait, puis la reposa. Elle en savait assez pour comprendre qu’en insistant, elle risquait seulement de l’abîmer davantage.
+
+Sous une pile de catalogues de matériel, elle découvrit un carnet bleu. La plupart des pages contenaient des notes ordinaires : numéros de véhicules, bons de travail, pièces remplacées, pannes qui réapparaissaient par temps froid. Vers la fin figuraient des rappels domestiques, tout aussi sobres : *Appeler le plombier. Renouveler l’assurance. Anniversaire de Claire.*
+
+Son anniversaire était souligné. À côté, Arthur avait écrit : *Lui demander des nouvelles de son nouveau poste.* Claire ne se souvenait plus s’il l’avait fait. Elle se rappelait en revanche son irritation lorsqu’il avait voulu connaître son nouveau salaire, comme si c’était la seule chose qu’il comprenait de ce changement.
+
+Elle tourna une page. Des mesures y étaient notées pour des étagères qu’il avait promis de fabriquer dans son premier appartement. Il les avait construites. Elles se trouvaient toujours dans son sous-sol, chargées de pots de peinture et d’une lampe cassée.
+
+Claire s’assit sur le tabouret. Elle était venue trier les objets : ceux qu’elle garderait et ceux qu’elle donnerait. Ce carnet rendait soudain la distinction bien plus difficile.
+
+Elle se souvint du coup de téléphone de son père, le soir du départ de Margaret. Il lui avait demandé si la résidence universitaire était suffisamment chauffée et si elle avait trouvé une place pour se garer. Il n’avait pas dit que sa femme était partie.
+
+Pendant des années, elle avait pris cette omission pour une preuve d’indifférence. Devant ses listes, elle se demanda s’il n’avait pas simplement été incapable de dire l’essentiel, même lorsque cela occupait toutes ses pensées.
+
+## V. Le garage de Thomas
+
+Thomas Miller habitait deux maisons plus loin. Il ouvrit à Claire vêtu d’un vieux chandail de hockey délavé, une tasse de café à la main. Derrière lui, le garage sentait la sciure et les pneus d’hiver.
+
+« Ton père me disait toujours que je gardais trop de choses, lança Thomas en dégageant une chaise. Venant d’Arthur, c’était assez fort. »
+
+Claire avait apporté la vieille lampe d’inspection, espérant qu’il saurait si elle méritait d’être conservée. Il examina le cordon effiloché, puis la posa.
+
+« Elle venait du dépôt, je crois. Il trouvait toujours moyen de se charger d’un travail de plus. »
+
+Ils parlèrent du dépôt, des anciens collègues qui continuaient d’appeler Arthur après sa retraite officielle, des hivers où le chauffage tombait en panne et où les hommes travaillaient en manteau.
+
+« Est-ce qu’il t’a déjà parlé du départ de maman ? » demanda Claire.
+
+Thomas posa sa tasse sur l’établi. « Pas d’une manière qui t’aurait satisfaite. »
+
+« Il a essayé de la retenir ? »
+
+« Ce jour-là, il est allé au dépôt. Ça, je le sais. Il est passé chez moi ensuite. »
+
+« Ils se sont vus ? »
+
+« Je n’en sais rien. Il ne me l’a pas dit. »
+
+Elle attendit une suite, mais Thomas se contenta de faire glisser son pouce sur l’anse de sa tasse.
+
+« Il essayait de parler, finit-il par dire. Seulement, il tournait sans cesse autour de ce qu’il voulait vraiment dire. »
+
+Claire était venue chercher une certitude. Thomas refusait de lui en inventer une.
+
+« Il savait être un très bon ami, reprit-il. Mais il pouvait aussi être si têtu qu’on avait envie de lui lancer une clé anglaise. Ne laisse personne en faire un saint sous prétexte qu’il n’est plus là. »
+
+Claire éclata de rire, à sa propre surprise. C’était la première fois depuis les funérailles que rire ne lui donnait pas l’impression de manquer de loyauté envers son père.
+
+## VI. La vie de Margaret
+
+Ce soir-là, Claire appela sa mère depuis la cuisine. Margaret habitait près de Victoria avec son second mari, Daniel, un bibliothécaire à la retraite qui préparait des petits-déjeuners élaborés et oubliait sans cesse où il avait posé ses lunettes.
+
+« Thomas m’a dit que papa était allé au dépôt le jour où tu es partie, dit Claire. Je ne l’avais jamais su. »
+
+Un silence. « Oui. Il m’a appelée ce soir-là. »
+
+« Pourquoi tu ne me l’as pas dit ? »
+
+« Parce que tu avais dix-neuf ans. Et parce que le fait qu’il soit allé au dépôt n’expliquait pas notre mariage. »
+
+Claire suivit du doigt une fissure dans la table de la cuisine.
+
+« Il t’a demandé de revenir ? »
+
+« Plus tard. Nous avons passé un week-end ensemble cet hiver-là. Nous nous sommes promenés près du port. Pour la première fois depuis longtemps, nous avons vraiment parlé. »
+
+« Et alors ? »
+
+« Après, nous étions toujours les mêmes. »
+
+Claire attendit.
+
+« Je voulais reprendre des études, dit Margaret. Je voulais un emploi qui ne soit pas temporaire, et un endroit où recommencer. Arthur voulait garder son travail familier, sa rue, ses habitudes. Aucun de ces désirs n’était mauvais. Mais nous avions passé des années à considérer le désir de l’autre comme une critique du nôtre. »
+
+« Tu étais heureuse avec lui ? »
+
+« Parfois, très heureuse. Parfois, terriblement seule. C’est ce qui est difficile quand on a longtemps vécu ensemble : plusieurs vérités peuvent coexister. »
+
+À l’autre bout du fil, Daniel demanda à Margaret si elle voulait du thé.
+
+« Dans une minute », répondit-elle avant de revenir à Claire. « Je sais que tu pensais devoir choisir entre nous. Tu n’avais pas à le faire. Et tu n’as toujours pas à le faire. »
+
+Avant de raccrocher, Margaret lui demanda des nouvelles de la vieille maison. Claire avoua avoir accepté le conseil de l’agente immobilière de vendre rapidement, sans avoir encore rien signé.
+
+« Tu n’es pas obligée de garder une maison pour garder ton père avec toi, dit Margaret. Et tu n’es pas obligée de la vendre pour prouver que tu es passée à autre chose. »
+
+Après l’appel, Claire ouvrit le réfrigérateur. Arthur y avait laissé un pot de moutarde à moitié entamé et un carton de lait périmé avant même sa mort. Elle les jeta. Ce geste banal l’apaisa.
+
+Puis elle nota les paroles de sa mère au dos d’une enveloppe. Non qu’elle eût besoin d’une permission, mais elle était lasse de prendre chaque décision comme si elle prononçait un jugement.
