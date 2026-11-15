@@ -124,6 +124,10 @@ GitHub PR #483 merged into `main` (squash commit `ae55db564ca8e6a9b3642eb45f535d
 
 **Result:** Assistant paragraph-level semantic audit complete; L01–L04 remain **NOT CHECKED for independent/native proofreading**, L06 and real-device M03–M08 remain open. No publication approval granted.
 
+## Targeted FR/ES editorial amendments — 2026-11-15
+
+Draft manuscript commit `67b9f5fdff5bc4714944d1dbbf526cfe835349d4` changes the French heading to describe physically present stock rather than the literal anglicism `stock en main`, and aligns FR/ES closing cautions with EN/ZH by explicitly deferring to applicable internal procedures, contractual conditions and manufacturer instructions. **Editorial changes only:** no vendor language was copied, arithmetic and scenarios were unchanged. FR/ES terminology still requires independent/native proofreading. The public `main` preview has **not** been updated by this manuscript-only commit; reconcile preview bodies and localized UI before asking the author to visually accept these new phrases. Publication remains HOLD.
+
 ## Editorial handoff and release decision — PENDING
 
 **Automated checks (2026-11-14):** On PR #475, latest verified commit `5698408c329b27571239d4998fd3a6db34b032e3`, all three checks completed successfully: Site integrity (run 43633245773), RUNLU Knowledge validation (run 43633245776), and RUNLU Knowledge Publication Gate (run 43633245819). Four-language scenario safeguards and standalone-safe GitHub review URLs have automated assertions. The publication-gate run produced `rk-0006-editorial-preview-html` (artifact ID `14128992459`, expires 2026-11-28) and `knowledge-editorial-quality-report` (artifact ID `14129092168`, expires 2026-12-14). Download preview from the run's Artifacts section for actual iPhone acceptance. These establish automated checks and artifact presence only, not human language/rights approval or actual browser acceptance.
