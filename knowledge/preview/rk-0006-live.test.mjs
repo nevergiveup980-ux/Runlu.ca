@@ -65,3 +65,12 @@ test("language deep link survives refresh and unsupported codes fall back to Eng
   assert.match(html, /history\.replaceState\(null,"",u\)/);
   assert.match(html, /searchParams\.set\("lang",select\.value\)/);
 });
+
+
+test("language selector accessible name follows its translated visible label", () => {
+  assert.match(html, /<label id="langLabel" for="lang">/);
+  assert.match(html, /<select id="lang" data-runlu-language-select>/);
+  assert.doesNotMatch(html, /<select id="lang"[^>]*aria-label=/);
+  assert.match(html, /document\.getElementById\("langLabel"\)\.textContent=labels\.language/);
+  assert.match(html, /select:focus-visible,a:focus-visible/);
+});
