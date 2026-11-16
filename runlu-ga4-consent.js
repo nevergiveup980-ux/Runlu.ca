@@ -49,13 +49,30 @@
     panel.setAttribute('role', 'region'); panel.setAttribute('aria-label', tr().settings);
     panel.style.cssText = 'position:fixed;z-index:2147483000;bottom:12px;left:12px;right:12px;max-width:540px;margin:auto;background:#fdfcf8;color:#182b3b;border:1px solid #a6adb1;border-radius:12px;padding:16px;box-shadow:0 4px 24px #0003;font:15px/1.5 system-ui,sans-serif';
     var p = document.createElement('p'); p.style.margin = '0 0 12px';
-    p.textContent = tr().description;
+    p.textContent = tr().description; p.setAttribute('data-ga4-description', '');
     var links = document.createElement('div'); links.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;align-items:center';
     function choose(v) { saveChoice(v); panel.remove(); if (v === 'granted') loadAnalytics(); else revokeAnalytics(); }
-    links.appendChild(makeButton(tr().accept, function () { choose('granted'); }));
-    links.appendChild(makeButton(tr().reject, function () { choose('denied'); }));
-    var policy = document.createElement('a'); policy.href = '/privacy.html'; policy.textContent = tr().privacy; policy.style.color = '#174c91'; links.appendChild(policy);
+    var acceptButton = makeButton(tr().accept, function () { choose('granted'); });
+    acceptButton.setAttribute('data-ga4-accept', ''); links.appendChild(acceptButton);
+    var rejectButton = makeButton(tr().reject, function () { choose('denied'); });
+    rejectButton.setAttribute('data-ga4-reject', ''); links.appendChild(rejectButton);
+    var policy = document.createElement('a'); policy.href = '/privacy.html'; policy.textContent = tr().privacy; policy.setAttribute('data-ga4-privacy', ''); policy.style.color = '#174c91'; links.appendChild(policy);
     panel.appendChild(p); panel.appendChild(links); document.body.appendChild(panel);
+  }
+  function refreshLanguage() {
+    var button = document.getElementById('runlu-analytics-settings');
+    if (button) button.textContent = tr().settings;
+    var panel = document.getElementById('runlu-analytics-consent');
+    if (!panel) return;
+    panel.setAttribute('aria-label', tr().settings);
+    var description = panel.querySelector('[data-ga4-description]');
+    if (description) description.textContent = tr().description;
+    var accept = panel.querySelector('[data-ga4-accept]');
+    if (accept) accept.textContent = tr().accept;
+    var reject = panel.querySelector('[data-ga4-reject]');
+    if (reject) reject.textContent = tr().reject;
+    var policy = panel.querySelector('[data-ga4-privacy]');
+    if (policy) policy.textContent = tr().privacy;
   }
   function addSettings() {
     var footer = document.querySelector('footer'); if (!footer || document.getElementById('runlu-analytics-settings')) return;
@@ -64,6 +81,10 @@
   }
   function init() {
     addSettings();
+    var observer = new MutationObserver(function (changes) {
+      if (changes.some(function (change) { return change.attributeName === 'lang'; })) refreshLanguage();
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
     if (getChoice() === 'granted') loadAnalytics();
     else { window['ga-disable-' + ID] = true; if (getChoice() !== 'denied') renderBanner(); }
   }
