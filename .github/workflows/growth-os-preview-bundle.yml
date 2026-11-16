@@ -1,5 +1,12 @@
 name: RUNLU Growth OS isolated preview bundle
 on:
+  pull_request:
+    paths:
+      - '.github/workflows/growth-os-preview-bundle.yml'
+      - 'index.html'
+      - 'privacy.html'
+      - 'runlu-ga4-consent.js'
+      - 'tests/runlu-ga4-consent.test.cjs'
   workflow_dispatch:
 permissions:
   contents: read
