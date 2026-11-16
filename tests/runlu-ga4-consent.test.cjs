@@ -42,3 +42,5 @@ test('reject without prior grant does not reload the page',()=>{const x=fixture(
 test('reopening settings after denial does not load GA',()=>{const x=fixture('denied');x.footer.children[0].onclick();assert.ok(x.banner());assert.equal(x.appendedScripts.length,0);});
 test('reopening settings after grant does not duplicate GA script',()=>{const x=fixture('granted');x.footer.children[0].onclick();assert.ok(x.banner());assert.equal(x.appendedScripts.length,1);});
 test('revoke stores denial before reload',()=>{const x=fixture('granted');x.footer.children[0].onclick();x.click('Reject');assert.equal(x.store.get('runlu_analytics_consent_v1'),'denied');assert.equal(x.appendedScripts.length,1);});
+
+test('consent banner respects iPhone safe area and viewport width',()=>{const x=fixture();assert.match(x.banner().style.cssText,/safe-area-inset-bottom/);assert.match(x.banner().style.cssText,/box-sizing:border-box/);});
