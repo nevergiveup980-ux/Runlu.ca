@@ -54,7 +54,7 @@ Confirm the product and units; inspect reservations and restrictions; identify t
 
 ### 数量可用，还要检查能不能真正使用
 
-即使系统显示数量足够，也不代表一定能裁出项目要求的连续整块地毯。卷材长度、实际可用幅宽、色批（Dye lot；部分旧系统字段写作 Dyelot）、材料状态、接缝方案和施工要求都可能改变结论。RK-0005 重点讨论连续裁切问题；本文讨论的是**库存分配和交付承诺**，二者应分别核对。
+即使系统显示数量足够，也不代表一定能裁出项目要求的连续整块地毯。卷材长度、实际可用幅宽、色批（Dye lot；部分系统字段写作 Dyelot）、材料状态、接缝方案和施工要求都可能改变结论。RK-0005 重点讨论连续裁切问题；本文讨论的是**库存分配和交付承诺**，二者应分别核对。
 
 ### 销售与库房如何确认？
 
@@ -110,7 +110,7 @@ Supongamos 80 pies lineales físicamente presentes. En este ejemplo, 30 pies lin
 
 ### Disponible no siempre significa utilizable
 
-También hay que comprobar la longitud continua aprovechable, el lote de teñido (Dye lot; algunos sistemas antiguos muestran Dyelot), el estado del material y las condiciones de instalación. RK-0005 trata por separado la geometría de corte. Aquí hablamos de **asignación de inventario y compromisos de entrega**, no de autorización para cortar.
+También hay que comprobar la longitud continua aprovechable, el lote de teñido (Dye lot; algunos sistemas muestran Dyelot), el estado del material y las condiciones de instalación. RK-0005 trata por separado la geometría de corte. Aquí hablamos de **asignación de inventario y compromisos de entrega**, no de autorización para cortar.
 
 ### Antes de prometer un pedido
 
