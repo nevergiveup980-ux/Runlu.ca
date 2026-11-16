@@ -37,3 +37,8 @@ test('existing grant: loads without prompting',()=>{const x=fixture('granted');a
 test('existing denial: does not load or prompt',()=>{const x=fixture('denied');assert.equal(x.banner(),undefined);assert.equal(x.appendedScripts.length,0);});
 test('revoke after grant: disables analytics and reloads',()=>{const x=fixture('granted');const settings=x.footer.children[0];settings.onclick();x.click('Reject');assert.equal(x.window['ga-disable-G-KVRWEFJMCR'],true);assert.equal(x.reloads(),1);});
 test('grant after prior denial: enables analytics',()=>{const x=fixture('denied');x.footer.children[0].onclick();x.click('Accept');assert.equal(x.window['ga-disable-G-KVRWEFJMCR'],false);assert.equal(x.appendedScripts.length,1);});
+
+test('reject without prior grant does not reload the page',()=>{const x=fixture();x.click('Reject');assert.equal(x.reloads(),0);assert.equal(x.window['ga-disable-G-KVRWEFJMCR'],true);});
+test('reopening settings after denial does not load GA',()=>{const x=fixture('denied');x.footer.children[0].onclick();assert.ok(x.banner());assert.equal(x.appendedScripts.length,0);});
+test('reopening settings after grant does not duplicate GA script',()=>{const x=fixture('granted');x.footer.children[0].onclick();assert.ok(x.banner());assert.equal(x.appendedScripts.length,1);});
+test('revoke stores denial before reload',()=>{const x=fixture('granted');x.footer.children[0].onclick();x.click('Reject');assert.equal(x.store.get('runlu_analytics_consent_v1'),'denied');assert.equal(x.appendedScripts.length,1);});
