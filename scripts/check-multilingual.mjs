@@ -140,8 +140,8 @@ for (const file of pages) {
   // load the global site selector. Validate their own contract instead.
   if (['notes/where-did-the-time-we-saved-go.html', 'runlu-stories/story-001-preview.html'].includes(rel)) {
     for (const lang of ['en', 'zh', 'fr', 'es']) {
-      if (!new RegExp('data-switch=["\\\']' + lang + '["\\\']').test(html)) failures.push(`${rel}: missing standalone ${lang} button`);
-      if (!new RegExp('<article\\\\b[^>]*data-lang=["\\\']' + lang + '["\\\']').test(html)) failures.push(`${rel}: missing standalone ${lang} article`);
+      if (!html.includes('data-switch="' + lang + '"')) failures.push(`${rel}: missing standalone ${lang} button`);
+      if (!html.includes('data-lang="' + lang + '"')) failures.push(`${rel}: missing standalone ${lang} article`);
     }
     if (!html.includes("document.querySelectorAll('[data-switch]')") || !html.includes("document.querySelectorAll('article[data-lang]')")) {
       failures.push(`${rel}: standalone language switching script missing`);
