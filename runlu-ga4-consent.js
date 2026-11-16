@@ -47,7 +47,7 @@
     if (document.getElementById('runlu-analytics-consent')) return;
     var panel = document.createElement('section'); panel.id = 'runlu-analytics-consent';
     panel.setAttribute('role', 'region'); panel.setAttribute('aria-label', tr().settings);
-    panel.style.cssText = 'position:fixed;z-index:2147483000;bottom:12px;left:12px;right:12px;max-width:540px;margin:auto;background:#fdfcf8;color:#182b3b;border:1px solid #a6adb1;border-radius:12px;padding:16px;box-shadow:0 4px 24px #0003;font:15px/1.5 system-ui,sans-serif';
+    panel.style.cssText = 'position:fixed;z-index:2147483000;bottom:calc(12px + env(safe-area-inset-bottom, 0px));left:12px;right:12px;max-width:540px;box-sizing:border-box;margin:auto;background:#fdfcf8;color:#182b3b;border:1px solid #a6adb1;border-radius:12px;padding:16px;box-shadow:0 4px 24px #0003;font:15px/1.5 system-ui,sans-serif';
     var p = document.createElement('p'); p.style.margin = '0 0 12px';
     p.textContent = tr().description; p.setAttribute('data-ga4-description', '');
     var links = document.createElement('div'); links.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;align-items:center';
