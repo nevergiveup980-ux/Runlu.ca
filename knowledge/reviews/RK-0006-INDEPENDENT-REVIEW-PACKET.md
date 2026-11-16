@@ -225,3 +225,26 @@ The RUNLU author agreed to serve as final professional-content reviewer for RK-0
 - The two preview blobs differ. Do not overwrite the newer main preview with the editorial branch's older preview. Reconcile localized controls, footer, links, and `noindex,nofollow` protections before preview updates.
 - GitHub's commit-workflow lookup returned no pull-request-triggered workflow runs for commit `1fe43986`; this is **not** evidence of a successful or failed test. PR #475 was open when checked.
 - **Next gate:** prepare a minimal preview-content synchronization against the current main version, rerun applicable checks, and obtain the remaining independent language and S05 rights decisions. **Publication remains HOLD.**
+
+## PR #493 preview-only regression and language desk review — 2026-11-16
+
+**Reviewer:** ChatGPT assistant (source/linguistic desk review; not independent native-language certification). **Date:** 2026-11-16. **Verdict:** PREVIEW SOURCE + AUTOMATED CHECKS PASS; editorial language and rights approval PENDING; publication HOLD.
+
+- PR [#493](https://github.com/nevergiveup980-ux/Runlu.ca/pull/493) was created as **draft**, based on current `main`, with only `knowledge/preview/RK-0006.html` changed (commit `48614c502f797e3047ab6c3678036b2daf5ac7bf`). It syncs the five targeted editorial text changes from manuscript commit `1fe43986`, without replacing the newer localized UI.
+- Three GitHub Actions runs completed successfully on that PR head commit: RUNLU Knowledge validation `43903442344`, RUNLU Knowledge Publication Gate `43903441955`, Site integrity `43903442052`. This proves only the checks implemented by those workflows; it is not a publication approval.
+- Direct preview-source inspection confirmed `noindex,nofollow`, public-review wording, localized label `langLabel`, research/review links, URL language selection, and the new ZH/FR/ES terminology strings. It does **not** prove live iPhone rendering of the new text.
+
+### Four-language editorial desk findings (not L01–L04 signoff)
+
+| Language | Text-level finding | Disposition |
+|---|---|---|
+| EN | Distinguishes physical stock, allocatable stock and date-specific ATP; explicit roll/remnant, dye lot, and hold authority. No new change in PR #493. | ASSISTANT DESK CHECK ONLY; L01 independent proofread pending |
+| ZH | `色批（Dye lot；部分旧系统字段写作 Dyelot）` clarifies glossary spelling and legacy field; `可用余料` preserves inventory context. Verify whether “旧系统” is supported by actual RUNLU field history rather than asserting age of third-party systems. | REVISE wording if unsupported; L02 independent proofread pending |
+| FR | `chute réutilisable` is understandable for a reusable offcut; validate with Canadian/French flooring practitioners because `chute`, `reste de rouleau`, and `fin de rouleau` can differ by context. `disponible à promettre (ATP)` remains product-locale dependent. | TERMINOLOGY OPEN; L03 independent proofread pending |
+| ES | `retal reutilizable` is intelligible but regional; `remanente`, `sobrante` or `retazo aprovechable` may suit different markets. `disponible para prometer (ATP)` also requires target-locale confirmation. | TERMINOLOGY OPEN; L04 independent proofread pending |
+
+**Editorial risk:** The phrase “some old systems” / `algunos sistemas antiguos` is not substantiated by a verified product/version history in the source register. Prefer the neutral `部分系统字段写作 Dyelot` / `algunos sistemas muestran Dyelot` in both manuscript and preview, pending actual field provenance. This is a proposed correction, not yet applied by this review record.
+
+**S05:** The documented source-use assessment is preliminary. No additional vendor permission, legal clearance, or rights signoff was obtained in this checkpoint. Do not mark S05 PASS.
+
+**Release:** Both PR #475 and PR #493 must remain under review; do not merge for publication or add RK-0006 to `knowledge/data/published.json` without explicit authorization.
