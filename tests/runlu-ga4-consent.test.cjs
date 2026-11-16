@@ -15,7 +15,7 @@ function fixture(initialChoice = null) {
       removeChild(child) { this.children = this.children.filter(x=>x!==child); child.parentNode = null; },
       addEventListener(k,cb) { this['on'+k] = cb; },
       remove() { if (this.parentNode) this.parentNode.removeChild(this); if (this.id) elements.delete(this.id); },
-      querySelector(sel) { const key=sel.match(/^\\[([^\\]]+)\\]$/)?.[1]; return this.children.flatMap(function walk(x) { return [x, ...x.children.flatMap(walk)]; }).find(x=>Object.prototype.hasOwnProperty.call(x.attrs,key)); }
+      querySelector(sel) { const key = sel.startsWith('[') && sel.endsWith(']') ? sel.slice(1,-1) : ''; return this.children.flatMap(function walk(x) { return [x, ...x.children.flatMap(walk)]; }).find(x=>Object.prototype.hasOwnProperty.call(x.attrs,key)); }
     };
     Object.defineProperty(el,'id',{get(){return this._id;},set(v){this._id=v;elements.set(v,this);}});
     return el;
