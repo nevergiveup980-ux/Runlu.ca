@@ -135,6 +135,19 @@ for (const file of pages) {
     const duplicate=names.find((name,index)=>names.indexOf(name)!==index);
     if(duplicate) failures.push(`${rel}: duplicate ${duplicate} attribute`);
   }
+  // Self-contained four-language editorial pages use their own accessible button
+  // selector and language-specific article blocks; they intentionally do not
+  // load the global site selector. Validate their own contract instead.
+  if (['notes/where-did-the-time-we-saved-go.html', 'runlu-stories/story-001-preview.html'].includes(rel)) {
+    for (const lang of ['en', 'zh', 'fr', 'es']) {
+      if (!new RegExp('data-switch=["\\\']' + lang + '["\\\']').test(html)) failures.push(`${rel}: missing standalone ${lang} button`);
+      if (!new RegExp('<article\\\\b[^>]*data-lang=["\\\']' + lang + '["\\\']').test(html)) failures.push(`${rel}: missing standalone ${lang} article`);
+    }
+    if (!html.includes("document.querySelectorAll('[data-switch]')") || !html.includes("document.querySelectorAll('article[data-lang]')")) {
+      failures.push(`${rel}: standalone language switching script missing`);
+    }
+    continue;
+  }
   const selectors = [...html.matchAll(/<select\b[^>]*data-runlu-language-select[^>]*>([\s\S]*?)<\/select>/gi)];
   if (!selectors.length) failures.push(`${rel}: missing standard language selector`);
   for (const [, options] of selectors) {
