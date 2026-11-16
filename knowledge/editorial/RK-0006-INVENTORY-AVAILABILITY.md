@@ -54,11 +54,11 @@ Confirm the product and units; inspect reservations and restrictions; identify t
 
 ### 数量可用，还要检查能不能真正使用
 
-即使系统显示数量足够，也不代表一定能裁出项目要求的连续整块地毯。卷材长度、实际可用幅宽、色批（Dyelot）、材料状态、接缝方案和施工要求都可能改变结论。RK-0005 重点讨论连续裁切问题；本文讨论的是**库存分配和交付承诺**，二者应分别核对。
+即使系统显示数量足够，也不代表一定能裁出项目要求的连续整块地毯。卷材长度、实际可用幅宽、色批（Dye lot；部分旧系统字段写作 Dyelot）、材料状态、接缝方案和施工要求都可能改变结论。RK-0005 重点讨论连续裁切问题；本文讨论的是**库存分配和交付承诺**，二者应分别核对。
 
 ### 销售与库房如何确认？
 
-先核对产品型号和计量单位，再核查已预留、已承诺和受限制的数量；确认实际卷号、余料及色批；检查可用尺寸；将预计到货与已入库材料区分开；最后由负责的销售或库存管理人员确认并留下记录。遇到数字不一致时，应暂停承诺、查清原因，而不是直接覆盖既有预留。
+先核对产品型号和计量单位，再核查已预留、已承诺和受限制的数量；确认实际卷号、可用余料及色批；检查可用尺寸；将预计到货与已入库材料区分开；最后由负责的销售或库存管理人员确认并留下记录。遇到数字不一致时，应暂停承诺、查清原因，而不是直接覆盖既有预留。
 
 **编辑提示：** 本文是实际工作中的判断框架，不是所有库存软件通用的计算公式，也不是裁切或安装许可。具体操作应以企业授权流程、产品要求和合同条件为准。
 
@@ -86,7 +86,7 @@ Il faut également vérifier le segment continu utilisable, le lot de teinture, 
 
 ### Vérification avant de confirmer
 
-Contrôler la référence et l’unité de mesure, les réservations, les restrictions, le rouleau et son lot, les dimensions utilisables, ainsi que la différence entre réception attendue et réception effective. Faire valider la décision par la personne responsable et conserver une trace. En cas d’écart, suspendre la promesse jusqu’à clarification.
+Contrôler la référence et l’unité de mesure, les réservations, les restrictions, le rouleau ou la chute réutilisable, le lot de teinture et les dimensions utilisables, ainsi que la différence entre réception attendue et réception effective. Faire valider la décision par la personne responsable et conserver une trace. En cas d’écart, suspendre la promesse jusqu’à clarification.
 
 **Note éditoriale :** ce cadre pratique ne constitue ni une formule universelle de gestion des stocks ni une autorisation de découpe ou de pose. Les procédures internes, les conditions contractuelles et les instructions du fabricant applicables prévalent. Terminologie à vérifier avant publication.
 
@@ -110,11 +110,11 @@ Supongamos 80 pies lineales físicamente presentes. En este ejemplo, 30 pies lin
 
 ### Disponible no siempre significa utilizable
 
-También hay que comprobar la longitud continua aprovechable, el lote de teñido (Dyelot), el estado del material y las condiciones de instalación. RK-0005 trata por separado la geometría de corte. Aquí hablamos de **asignación de inventario y compromisos de entrega**, no de autorización para cortar.
+También hay que comprobar la longitud continua aprovechable, el lote de teñido (Dye lot; algunos sistemas antiguos muestran Dyelot), el estado del material y las condiciones de instalación. RK-0005 trata por separado la geometría de corte. Aquí hablamos de **asignación de inventario y compromisos de entrega**, no de autorización para cortar.
 
 ### Antes de prometer un pedido
 
-Verificar el producto y la unidad, revisar reservas y restricciones, identificar el rollo y el lote, comprobar las dimensiones útiles, distinguir una recepción prevista de una ya realizada y registrar la decisión con el responsable de ventas o inventario. Si hay discrepancias, detener la promesa hasta aclararlas.
+Verificar el producto y la unidad, revisar reservas y restricciones, identificar el rollo o retal reutilizable y el lote, comprobar las dimensiones útiles, distinguir una recepción prevista de una ya realizada y registrar la decisión con el responsable de ventas o inventario. Si hay discrepancias, detener la promesa hasta aclararlas.
 
 **Nota editorial:** este marco práctico no es una fórmula universal de ERP ni una autorización de corte o instalación. Deben prevalecer los procedimientos internos, las condiciones contractuales y las instrucciones aplicables del fabricante. Terminología pendiente de revisión antes de la publicación.
 
