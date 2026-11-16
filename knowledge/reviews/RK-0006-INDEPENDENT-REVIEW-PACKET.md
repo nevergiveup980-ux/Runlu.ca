@@ -215,3 +215,13 @@ The RUNLU author agreed to serve as final professional-content reviewer for RK-0
 2. Keep RK-0006 out of `knowledge/data/published.json` while any blocker is pending.
 3. If a reviewer changes a claim, update all four language versions and rerun checks.
 4. Only an explicit editorial decision may change HOLD to approved.
+
+## RK-0006 preview synchronization checkpoint — 2026-11-16
+
+**Scope:** GitHub source comparison only; not a deployed-browser test, CI pass or editorial release approval.
+
+- The four-language editorial manuscript was amended in commit `1fe43986cb48f397ec87a31185ebffb8579a215d` to clarify the English `Dye lot` spelling versus legacy `Dyelot` field names and explicitly name reusable remnants in the workflow. These are editorial suggestions pending language review.
+- Fetched `knowledge/preview/RK-0006.html` on both the editorial branch (blob `4baeae3e9262e6d0d3bf8845d1c838a5cd507ff4`) and `main` (blob `fcb42dd7f5eadbce91db6d39fc23c9406e325da2`). Neither contains the new Spanish `retal reutilizable` wording. The preview is not synchronized to the amended manuscript.
+- The two preview blobs differ. Do not overwrite the newer main preview with the editorial branch's older preview. Reconcile localized controls, footer, links, and `noindex,nofollow` protections before preview updates.
+- GitHub's commit-workflow lookup returned no pull-request-triggered workflow runs for commit `1fe43986`; this is **not** evidence of a successful or failed test. PR #475 was open when checked.
+- **Next gate:** prepare a minimal preview-content synchronization against the current main version, rerun applicable checks, and obtain the remaining independent language and S05 rights decisions. **Publication remains HOLD.**
