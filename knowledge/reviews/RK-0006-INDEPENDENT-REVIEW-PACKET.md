@@ -260,3 +260,17 @@ The RUNLU author agreed to serve as final professional-content reviewer for RK-0
 - The ZH/ES age claim about `Dyelot` was removed from both manuscript commit `496e1a9ca51b8d3d9172cea14183feb4833721d7` and preview commit `e2ec9becc87b681527074797c1f1c614d9440b54`.
 
 **Release verdict: HOLD.** CI PASS is not native-language proofread, technical reviewer signature, copyright clearance, mobile acceptance, or editorial publication authorization.
+
+## S02–S04 primary-source recheck — 2026-11-17
+
+**Reviewer / method:** ChatGPT assistant, direct reading of official vendor documentation, 2026-11-17. This is source-to-claim verification, **not** independent technical signoff, legal clearance, or publication approval.
+
+| ID | Official source and evidence | Finding / scope |
+|---|---|---|
+| S02 | Microsoft Dynamics 365 Supply Chain Management, [Inventory on-hand list](https://learn.microsoft.com/en-us/dynamics365/supply-chain/inventory/inventory-on-hand-list). Its `Available physical` field equals `Physical inventory − Physical reserved`; `Available for reservation` may include expected receipts depending on configuration. Dimensions and aggregation affect displayed values. | **Source-to-claim PASS:** supports distinctions among physical, reserved, and available quantities; calculations and views are product/configuration-specific. |
+| S03 | Oracle NetSuite, [Available to Promise](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2300269.html). ATP considers expected receipt dates for purchase/work/transfer orders and expected fulfillment dates for sales/transfer orders to estimate dated availability. | **Source-to-claim PASS:** supports date-dependent promises, not treating expected receipts as physically present today. |
+| S04 | Oracle NetSuite, [Inventory Status](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1515696627.html). The `Make Inventory Available for Commitment` setting can exclude stock from commitment while retaining it in on-hand quantities; a separate allocation setting may apply. | **Source-to-claim PASS:** supports restricted on-hand stock; example B is hypothetical and assumes blocked and separately committed quantities do not overlap. |
+
+**Limitations:** These are vendor-specific descriptions, not a universal formula or a validation of a real warehouse transaction. S02–S04 official pages were directly opened and checked on the date above; no external professional or native-language review was performed. **S05 rights/licensing remains PENDING.** Do not infer reproduction permission from publicly accessible documentation. The article uses independently written explanatory text and invented arithmetic examples, with source links retained; still confirm no source passages, figures, trademarks or third-party assets require separate permission before release.
+
+**Publication verdict: HOLD.** Neither PR #475 nor PR #493 is authorized for publication by this source check.
