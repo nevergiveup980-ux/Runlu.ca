@@ -274,3 +274,19 @@ The RUNLU author agreed to serve as final professional-content reviewer for RK-0
 **Limitations:** These are vendor-specific descriptions, not a universal formula or a validation of a real warehouse transaction. S02–S04 official pages were directly opened and checked on the date above; no external professional or native-language review was performed. **S05 rights/licensing remains PENDING.** Do not infer reproduction permission from publicly accessible documentation. The article uses independently written explanatory text and invented arithmetic examples, with source links retained; still confirm no source passages, figures, trademarks or third-party assets require separate permission before release.
 
 **Publication verdict: HOLD.** Neither PR #475 nor PR #493 is authorized for publication by this source check.
+
+## S05 vendor documentation terms — preliminary rights-risk assessment, 2026-11-17
+
+**Reviewer:** ChatGPT assistant. **Method:** Direct review of current publicly available vendor terms and legal notices. **Decision:** SOURCE TERMS REVIEWED / RIGHTS SIGNOFF NOT GRANTED / HOLD. This is an editorial risk assessment, not legal advice or a formal permission from either vendor.
+
+| Source | Directly checked terms | Editorial implication |
+|---|---|---|
+| Oracle site | [Oracle Web Sites Terms of Use](https://www.oracle.com/legal/terms/), sections 1, 3, 5: site Materials have personal/informational/noncommercial use limits, no modification or redistribution under general permission, and specific-content terms may override. | Do not copy, translate, republish or bundle Oracle documentation into RUNLU products without an applicable license or legal basis. Linking to official source and independently explaining technical facts is lower-risk than reproducing its expression. |
+| Oracle documentation | [Oracle Legal Notices](https://docs.oracle.com/en/dcommon/html/cpyr.htm), License Restrictions and Trademark Notice: documentation reproduction, translation, publication and distribution are restricted unless expressly licensed or permitted by law. | Avoid Oracle diagrams, screenshots, tables and extended text quotations; use accurate source attribution and no implication of Oracle endorsement. |
+| Microsoft Learn | [Microsoft Learn Terms of Use](https://learn.microsoft.com/en-us/legal/termsofuse), Personal and Non-Commercial Use Limitation and Notice Specific to Documents: commercial reproduction is restricted and some documents have specific license terms. | Do not assume public accessibility grants permission for commercial reuse of Learn content. Check the particular page's explicit license, if any, before any reuse beyond independent factual paraphrase. |
+
+**Observed manuscript posture:** The RK-0006 research brief describes the two arithmetic scenarios as original hypotheticals and states that vendor content was independently paraphrased, with links to the original documentation. The assistant has not completed a line-by-line copyright similarity audit against all vendor pages or confirmed any separate page-specific license. This is **not** a legal conclusion that the manuscript is noninfringing.
+
+**Conservative release conditions:** (1) retain independently written four-language text and original examples; (2) keep the vendor URLs as attribution, avoid vendor logos and endorsement claims; (3) do not reproduce vendor screenshots, tables, diagrams or substantial passages; (4) verify any intended quotation or third-party asset under applicable license/law; (5) obtain the responsible RUNLU editorial rights decision with dated reviewer evidence. If a proposed commercial use depends on copying vendor material, secure permission or remove that material before approval.
+
+**S05 state: PARTIAL — terms examined, clearance PENDING.** No legal approval, vendor permission, or publication authorization is claimed. PRs remain draft; `knowledge/data/published.json` must remain unchanged. 
