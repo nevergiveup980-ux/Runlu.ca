@@ -248,3 +248,15 @@ The RUNLU author agreed to serve as final professional-content reviewer for RK-0
 **S05:** The documented source-use assessment is preliminary. No additional vendor permission, legal clearance, or rights signoff was obtained in this checkpoint. Do not mark S05 PASS.
 
 **Release:** Both PR #475 and PR #493 must remain under review; do not merge for publication or add RK-0006 to `knowledge/data/published.json` without explicit authorization.
+
+## Latest preview CI and NetSuite source spot-check — 2026-11-16
+
+**Reviewer / method:** ChatGPT assistant, GitHub metadata plus direct Oracle documentation page read, 2026-11-16. Not an independent legal or language review.
+
+- Preview-only PR #493 head `e2ec9becc87b681527074797c1f1c614d9440b54` passed three pull-request GitHub Actions workflows: RUNLU Knowledge validation run `43945728015`, Site integrity run `43945727978`, and RUNLU Knowledge Publication Gate run `43945728308` (all completed/success). This supersedes the prior note that the latest commit's CI was unobserved.
+- Both PR #493 and PR #475 were open and draft; GitHub reported `mergeable=false` for each when checked. Do not assume the cause is a merge conflict: draft status, pending merge computation or repository rules may contribute. No merge attempted.
+- Source S01 spot-check: Oracle NetSuite *Assessing Stock Levels*, https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2262573.html, read directly on 2026-11-16. It defines Quantity Available as Quantity On Hand less Quantity Committed; on-hand includes committed. It also states available quantity is never tracked negative, so the manuscript's 100 − 65 = 35 illustration is consistent with this specific positive case. This **does not** make that formula universal across ERP systems. S02–S04 were not rechecked in this pass.
+- Rights note: this check used a paraphrased factual definition, not a copied source table or graphic. **S05 remains pending**; reading an accessible source does not constitute rights permission or legal signoff.
+- The ZH/ES age claim about `Dyelot` was removed from both manuscript commit `496e1a9ca51b8d3d9172cea14183feb4833721d7` and preview commit `e2ec9becc87b681527074797c1f1c614d9440b54`.
+
+**Release verdict: HOLD.** CI PASS is not native-language proofread, technical reviewer signature, copyright clearance, mobile acceptance, or editorial publication authorization.
