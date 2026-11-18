@@ -13,7 +13,7 @@ a{color:#236c61;overflow-wrap:anywhere}footer{font-size:.85rem;color:#5a695f}.ho
 </style></head><body><header><a class="home-nav" href="../" id="homeLink">← RUNLU · Home / 返回主页</a><div class="eyebrow">RUNLU · 润庐 / Knowledge in progress</div><h1>RUNLU KNOWLEDGE<span style="font-size:.5em;vertical-align:top">™</span></h1>
 <p id="intro">Global knowledge. Local relevance.</p><label for="languageToggle">Language / 语言</label> <select id="languageToggle" class="language-select" data-runlu-language-select aria-label="Choose site language"><option value="en">English</option><option value="zh">中文</option><option value="fr">Français</option><option value="es">Español</option></select></header>
 <main><div class="controls"><input id="search" type="search" placeholder="Search knowledge..." aria-label="Search"><select id="region" aria-label="Region"></select><select id="category" aria-label="Category"></select></div>
-<p id="count" role="status"></p><section id="results" class="cards" aria-label="Knowledge entries"></section><section id="editorial" aria-label="Published editorial essays" hidden><h2 id="editorial-heading"></h2><div id="editorial-results" class="cards"></div></section></main>
+<section id="guides" aria-label="Practical guides"><h2 id="guides-heading"></h2><div class="cards" id="guides-results"></div></section><p id="count" role="status"></p><section id="results" class="cards" aria-label="Knowledge entries"></section><section id="editorial" aria-label="Published editorial essays" hidden><h2 id="editorial-heading"></h2><div id="editorial-results" class="cards"></div></section></main>
 <footer><p id="notice">RUNLU KNOWLEDGE publishes reviewed original summaries and factual references. Reuse of protected third-party content requires an appropriate rights basis.</p></footer>
 <script>
 const UI={
@@ -41,6 +41,12 @@ async function loadPublished(){
   console.error("RUNLU Knowledge dataset error",err);
  }
 }
+const GUIDE={
+en:{heading:"Practical warehouse guides",title:"Why on-hand stock cannot always be promised to a new order",summary:"A practical guide to committed, restricted and available carpet inventory.",read:"Read guide"},
+zh:{heading:"地材与库房实用指南",title:"为什么账面有库存，却不能承诺给新订单？",summary:"分清现存库存、已承诺数量、受限材料与真正可用的库存。",read:"阅读文章"},
+fr:{heading:"Guides pratiques de l’entrepôt",title:"Pourquoi un stock physiquement présent n’est pas toujours disponible pour une nouvelle commande",summary:"Distinguer stock physique, engagements, restrictions et disponibilité.",read:"Lire l’article"},
+es:{heading:"Guías prácticas de almacén",title:"Por qué las existencias físicas no siempre están disponibles para un nuevo pedido",summary:"Distinguir existencias físicas, compromisos, restricciones y disponibilidad.",read:"Leer artículo"}};
+function renderGuides(lang,q){const t=GUIDE[lang];$("guides-heading").textContent=t.heading;const section=$("guides"),list=$("guides-results");const matches=!q||(t.title+" "+t.summary+" RK-0006").toLocaleLowerCase().includes(q);section.hidden=!matches;list.replaceChildren();if(!matches)return;const card=document.createElement("article"),h=document.createElement("h2"),p=document.createElement("p"),a=document.createElement("a");h.textContent=t.title;p.textContent=t.summary;a.textContent=t.read;a.href="./articles/RK-0006.html?lang="+encodeURIComponent(lang);card.append(h,p,a);list.appendChild(card)}
 const EDITORIAL_ID="when-science-meets-the-unknown";
 let editorialManifest=null;
 async function loadEditorial(){try{const response=await fetch("./essays/"+EDITORIAL_ID+"/manifest.json",{cache:"no-store"});if(!response.ok)throw new Error("Manifest unavailable");const m=await response.json();if(m.id===EDITORIAL_ID&&m.status==="published"&&m.publication?.approved===true&&m.review?.facts_verified===true&&m.review?.translations_verified===true&&m.review?.rights_verified===true&&["zh","en","fr","es"].every(l=>Boolean(m.titles?.[l]&&m.subtitles?.[l])))editorialManifest=m;}catch(err){console.warn("Editorial catalog unavailable",err)}render();}
@@ -56,7 +62,7 @@ $("homeLink").textContent=homeLabels[lang];$("intro").textContent=t.intro;$("sea
 const setOptions=(id,all,map,selected)=>{$(id).innerHTML='<option value="">'+safe(all)+'</option>'+Object.keys(map).map(k=>'<option value="'+safe(k)+'">'+safe(map[k][lang])+'</option>').join("");$(id).value=selected};
 setOptions("region",t.allRegions,regions,region);setOptions("category",t.allCategories,categories,category);
 if(loadError){$("count").textContent="Unable to load published knowledge records."; $("results").textContent="Knowledge data could not be loaded. Please try again later.";return}
-renderEditorial(lang,q);
+renderEditorial(lang,q);renderGuides(lang,q);
 const hits=entries.filter(e=>(!region||e.scope?.type==="global"&&region==="global"||e.scope?.codes?.includes(region))&&(!category||e.category===category)&&(!q||Object.values(e.titles||{}).concat(Object.values(e.summaries||{}),e.id).join(" ").toLocaleLowerCase().includes(q)));
 $("count").textContent=t.count(hits.length);
 $("results").innerHTML=!entries.length?'<p>'+safe(({en:"The knowledge library is being prepared. No reviewed records have been published yet.",zh:"知识库正在建设中，目前尚无完成审核并公开发布的知识条目。",fr:"La bibliothèque est en préparation. Aucune fiche vérifiée n’a encore été publiée.",es:"La biblioteca está en preparación. Aún no se han publicado fichas verificadas."})[lang])+'</p>':hits.length?hits.map(e=>'<article><div class="meta">'+safe(e.id)+'</div><h2>'+safe(e.titles[lang]||e.titles.en)+'</h2><div class="meta"><span class="tag">'+safe(categories[e.category]?.[lang]||e.category)+'</span><span class="tag">'+safe(e.scope?.type==="global"?regions.global[lang]:(e.scope?.codes||[]).join(", "))+'</span></div><p>'+safe(e.summaries[lang]||e.summaries.en)+'</p><a href="'+safe(e.sources[0].url)+'" target="_blank" rel="noopener noreferrer">'+safe(t.source)+'</a></article>').join(""):'<p>'+safe(t.empty)+'</p>';
