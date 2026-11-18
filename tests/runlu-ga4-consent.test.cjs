@@ -44,3 +44,7 @@ test('reopening settings after grant does not duplicate GA script',()=>{const x=
 test('revoke stores denial before reload',()=>{const x=fixture('granted');x.footer.children[0].onclick();x.click('Reject');assert.equal(x.store.get('runlu_analytics_consent_v1'),'denied');assert.equal(x.appendedScripts.length,1);});
 
 test('consent banner respects iPhone safe area and viewport width',()=>{const x=fixture();assert.match(x.banner().style.cssText,/safe-area-inset-bottom/);assert.match(x.banner().style.cssText,/box-sizing:border-box/);});
+
+test('no analytics commands are queued before a consent choice',()=>{const x=fixture();assert.equal(x.window.gtag,undefined);assert.equal(x.window.dataLayer,undefined);assert.equal(x.appendedScripts.length,0);});
+test('denied revisit has no analytics commands or script',()=>{const x=fixture('denied');assert.equal(x.window.gtag,undefined);assert.equal(x.window.dataLayer,undefined);assert.equal(x.appendedScripts.length,0);assert.equal(x.window['ga-disable-G-KVRWEFJMCR'],true);});
+test('revoke marks GA disabled and removes injected script before reload',()=>{const x=fixture('granted');const script=x.appendedScripts[0];assert.equal(script.parentNode,x.head);x.footer.children[0].onclick();x.click('Reject');assert.equal(script.parentNode,null);assert.equal(x.window['ga-disable-G-KVRWEFJMCR'],true);assert.equal(x.store.get('runlu_analytics_consent_v1'),'denied');assert.equal(x.reloads(),1);});
