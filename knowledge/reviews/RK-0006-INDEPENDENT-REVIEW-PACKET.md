@@ -289,4 +289,14 @@ The RUNLU author agreed to serve as final professional-content reviewer for RK-0
 
 **Conservative release conditions:** (1) retain independently written four-language text and original examples; (2) keep the vendor URLs as attribution, avoid vendor logos and endorsement claims; (3) do not reproduce vendor screenshots, tables, diagrams or substantial passages; (4) verify any intended quotation or third-party asset under applicable license/law; (5) obtain the responsible RUNLU editorial rights decision with dated reviewer evidence. If a proposed commercial use depends on copying vendor material, secure permission or remove that material before approval.
 
-**S05 state: PARTIAL — terms examined, clearance PENDING.** No legal approval, vendor permission, or publication authorization is claimed. PRs remain draft; `knowledge/data/published.json` must remain unchanged. 
+**S05 state: PARTIAL — terms examined, clearance PENDING.** No legal approval, vendor permission, or publication authorization is claimed. PRs remain draft; `knowledge/data/published.json` must remain unchanged.
+
+## Author editorial closeout decision — 2026-11-17
+
+**Author instruction:** The author explicitly requested to finish RK-0006 after repeated editorial passes. Treat the four-language manuscript as **CONTENT FROZEN**; no more cosmetic wording iterations without a substantive error. This is an editorial stop-work decision, not proof of completed rights, native-language or technical signoff.
+
+**Release distinction:** The currently inspected main `knowledge/data/published.json` has `entries: []`; the preview HTML still says `PUBLIC REVIEW PREVIEW — NOT A VERIFIED KNOWLEDGE ENTRY` and has `noindex,nofollow`. PR #475 and #493 were open drafts and GitHub reported `mergeable=false`. Therefore **the article is not yet publicly released** and should not be described as published.
+
+**Practical next action:** Prepare one consolidated production publication change with correct RUNLU KNOWLEDGE routing and metadata, remove preview-only messaging only from a production copy, validate the four-language page and CI, then verify the live URL. Avoid merging draft preview changes blindly or publishing a placeholder entry. No new substantive editorial review cycle is requested.
+
+**Status:** CONTENT FROZEN / RELEASE IMPLEMENTATION PENDING. Do not claim live publication until a verified deployment succeeds. No fees or third-party permissions were obtained by this note.
