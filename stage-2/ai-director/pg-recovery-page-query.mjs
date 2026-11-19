@@ -6,7 +6,7 @@ export function buildRecoveryPageQuery({episodeId,olderThanSeconds=300,pageSize=
  if(!ID.test(episodeId??'')||!Number.isInteger(olderThanSeconds)||olderThanSeconds<30||
     !Number.isInteger(pageSize)||pageSize<1||pageSize>100)throw Error('Invalid recovery page query');
  if(after!==null&&(!after||!ID.test(after.attemptId??'')||
-    typeof after.updatedAt!=='string'||!/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$/.test(after.updatedAt)||
+    typeof after.updatedAt!=='string'||!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?Z$/.test(after.updatedAt)||
     !Number.isFinite(Date.parse(after.updatedAt))))throw Error('Invalid recovery keyset');
  const values=[episodeId,olderThanSeconds,pageSize+1];
  let keyset='';
