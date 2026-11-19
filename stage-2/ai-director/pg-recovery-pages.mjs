@@ -7,7 +7,7 @@ export class PgDirectorRecoveryPages {
   if(!ID.test(episodeId??'')||!Number.isInteger(pageSize)||pageSize<1||pageSize>100||
     !Number.isInteger(olderThanSeconds)||olderThanSeconds<30||
     (after!==null&&(!after||!ID.test(after.attemptId??'')||
-      typeof after.updatedAt!=='string'||!/^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d(?:\\.\\d{1,6})?Z$/.test(after.updatedAt)||
+      typeof after.updatedAt!=='string'||!/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,6})?Z$/.test(after.updatedAt)||
       !Number.isFinite(Date.parse(after.updatedAt)))))throw Error('Invalid recovery page query');
   const result=await this.pool.query(
    `SELECT o.attempt_id,o.state,o.provider_task_id,o.updated_at,
