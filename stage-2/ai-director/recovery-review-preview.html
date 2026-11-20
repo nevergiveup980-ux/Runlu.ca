@@ -23,8 +23,8 @@ strong{font-weight:750}small{display:block;color:#b2c2d9;margin-top:7px}.filter-
 </main><script src="../../runlu-language.js?v=2.2"></script><script type="module">
 import {projectDirectorRecovery} from './director-recovery-contract.mjs';
 const $=id=>document.getElementById(id);
-let controller=null;let nextCursor=null;let pagedEpisode=null;let pageCount=0;
-function resetPages(){nextCursor=null;pagedEpisode=null;pageCount=0;$('nextPage').hidden=true;$('pageInfo').textContent='';}
+let controller=null;let nextCursor=null;let pagedEpisode=null;let pageCount=0;let seenPageCursors=new Set();
+function resetPages(){nextCursor=null;pagedEpisode=null;pageCount=0;seenPageCursors.clear();$('nextPage').hidden=true;$('pageInfo').textContent='';}
 let currentItems=[];let currentFilter='ALL';let currentEmptyMessage='No aged uncertain tasks in this snapshot.';
 function applyFilter(){
  for(const button of document.querySelectorAll('[data-filter]'))button.setAttribute('aria-pressed',String(button.dataset.filter===currentFilter));
@@ -106,8 +106,10 @@ async function loadPage({next=false}={}){
     (data.nextCursor!==null&&(typeof data.nextCursor!=='string'||data.nextCursor.length>512||!/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(data.nextCursor))))
    throw Error('invalid_response');
   const items=projectDirectorRecovery(data.items);
+  if(data.hasMore&&(!items.length||data.nextCursor===cursor||seenPageCursors.has(data.nextCursor)))throw Error('invalid_response');
   if(next&&items.some(item=>currentItems.some(old=>old.attemptId===item.attemptId)))throw Error('invalid_response');
   if(controller!==active)return;
+  if(cursor)seenPageCursors.add(cursor);
   pagedEpisode=episodeId;nextCursor=data.nextCursor;pageCount++;
   render(next?[...currentItems,...items]:items);
   $('nextPage').hidden=!data.hasMore;
