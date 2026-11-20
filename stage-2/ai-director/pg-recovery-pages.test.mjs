@@ -8,7 +8,7 @@ test('uses parameterized keyset query and fetches one extra row',async()=>{
  const page=await pages.inspectPage({episodeId:'ep1',pageSize:2});
  assert.equal(page.items.length,2);assert.equal(page.hasMore,true);
  assert.deepEqual(page.nextKey,{updatedAt:'2026-01-01T00:00:00.123456Z',attemptId:'a2'});
- assert.deepEqual(captured.args,['ep1',300,null,null,3]);
+ assert.deepEqual(captured.args,['ep1',300,null,null,3,null]);
  assert.match(captured.sql,/cursor_updated_at/);
  assert.match(captured.sql,/ORDER BY o.updated_at,o.attempt_id LIMIT \$5/);
  assert.equal(page.items[0].retryAllowed,false);
@@ -19,7 +19,7 @@ test('validated keyset is passed as SQL values, not interpolated',async()=>{
  const after={updatedAt:'2026-01-01T00:00:00.000Z',attemptId:'a2'};
  const page=await pages.inspectPage({episodeId:'ep1',after});
  assert.equal(page.hasMore,false);assert.equal(page.nextKey,null);
- assert.deepEqual(args,['ep1',300,after.updatedAt,'a2',51]);
+ assert.deepEqual(args,['ep1',300,after.updatedAt,'a2',51,null]);
 });
 test('rejects invalid cursors and oversized limits before querying',async()=>{
  let calls=0;const pages=new PgDirectorRecoveryPages({query:async()=>{calls++;return {rows:[]}}});
@@ -27,4 +27,12 @@ test('rejects invalid cursors and oversized limits before querying',async()=>{
   await assert.rejects(pages.inspectPage(options));
  }
  assert.equal(calls,0);
+});
+
+test('fixed cutoff is passed as SQL parameter, not recomputed per page',async()=>{
+ let sql,args;
+ const pages=new PgDirectorRecoveryPages({query:async(s,p)=>{sql=s;args=p;return {rows:[]}}});
+ await pages.inspectPage({episodeId:'ep1',asOf:1763630000000});
+ assert.equal(args[5],1763630000000);
+ assert.match(sql,/LEAST\(now\(\),COALESCE\(to_timestamp\(\$6/);
 });
