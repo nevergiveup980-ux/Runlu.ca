@@ -37,5 +37,5 @@ export function verifyRecoveryCursor({token,episodeId,secret,now=Date.now(),maxA
  const after={updatedAt:value?.t,attemptId:value?.a};
  if(value?.v!==1||value.e!==episodeId||!validTuple(after)||!Number.isSafeInteger(value.i)||
   value.i>now||now-value.i>maxAgeMs)throw Error('Expired or mismatched cursor');
- return Object.freeze(after);
+ return Object.freeze({...after,issuedAt:value.i});
 }
