@@ -260,3 +260,27 @@ test('paged preview clears records on invalid next-page response',async({page})=
  await expect(page.locator('.item')).toHaveCount(0);
  await expect(page.locator('#message')).toContainText('response invalid');
 });
+
+test('paged preview refuses a repeated cursor and clears stale records',async({page})=>{
+ let calls=0;
+ await page.route('**/api/stage/director/recovery/pages?*',route=>{
+  calls++;
+  const n=calls;
+  const data={episodeId:'ep1',pageSize:50,items:[{attemptId:'a'+n,shotId:'S'+n,state:'UNKNOWN',retryAllowed:false,requiresManualReconciliation:true}],hasMore:true,nextCursor:'abc.def'};
+  return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data})});
+ });
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');await page.locator('#paged').click();
+ await expect(page.locator('#nextPage')).toBeVisible();
+ await page.locator('#nextPage').click();
+ await expect(page.locator('#message')).toContainText('response invalid');
+ await expect(page.locator('.item')).toHaveCount(0);
+ await expect(page.locator('#nextPage')).toBeHidden();
+ expect(calls).toBe(2);
+});
+test('paged preview rejects an empty page that claims more records',async({page})=>{
+ await page.route('**/api/stage/director/recovery/pages?*',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{episodeId:'ep1',pageSize:50,items:[],hasMore:true,nextCursor:'abc.def'}})}));
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');await page.locator('#paged').click();
+ await expect(page.locator('#message')).toContainText('response invalid');
+ await expect(page.locator('#nextPage')).toBeHidden();
+ await expect(page.locator('.item')).toHaveCount(0);
+});
