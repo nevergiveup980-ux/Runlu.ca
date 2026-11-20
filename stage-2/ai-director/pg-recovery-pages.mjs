@@ -3,9 +3,9 @@
 const ID=/^[a-zA-Z0-9_-]{1,100}$/;
 export class PgDirectorRecoveryPages {
  constructor(pool){if(typeof pool?.query!=='function')throw Error('PostgreSQL pool required');this.pool=pool;}
- async inspectPage({episodeId,pageSize=50,olderThanSeconds=300,after=null}={}){
+ async inspectPage({episodeId,pageSize=50,olderThanSeconds=300,after=null,asOf=null}={}){
   if(!ID.test(episodeId??'')||!Number.isInteger(pageSize)||pageSize<1||pageSize>100||
-    !Number.isInteger(olderThanSeconds)||olderThanSeconds<30||
+    !Number.isInteger(olderThanSeconds)||olderThanSeconds<30||\n    (asOf!==null&&(!Number.isSafeInteger(asOf)||asOf<0))||
     (after!==null&&(!after||!ID.test(after.attemptId??'')||
       typeof after.updatedAt!=='string'||!/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,6})?Z$/.test(after.updatedAt)||
       !Number.isFinite(Date.parse(after.updatedAt)))))throw Error('Invalid recovery page query');
@@ -18,10 +18,10 @@ export class PgDirectorRecoveryPages {
     JOIN stage_director_shot_jobs s ON s.episode_id=a.episode_id
        AND s.shot_id=a.shot_id AND s.attempt_id=a.attempt_id
     WHERE a.episode_id=$1 AND o.state IN ('DISPATCHING','UNKNOWN')
-      AND o.updated_at < now()-($2::int * interval '1 second')
+      AND o.updated_at < LEAST(now(),COALESCE(to_timestamp($6::double precision / 1000.0),now()))-($2::int * interval '1 second')
       AND ($3::timestamptz IS NULL OR (o.updated_at,o.attempt_id)>($3::timestamptz,$4::text))
     ORDER BY o.updated_at,o.attempt_id LIMIT $5`,
-   [episodeId,olderThanSeconds,after?.updatedAt??null,after?.attemptId??null,pageSize+1]);
+   [episodeId,olderThanSeconds,after?.updatedAt??null,after?.attemptId??null,pageSize+1,asOf]);
   if(!Array.isArray(result.rows))throw Error('Invalid recovery page result');
   const rows=result.rows;
   if(rows.length>pageSize+1)throw Error('Oversized recovery page result');
