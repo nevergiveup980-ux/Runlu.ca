@@ -6,7 +6,7 @@ const after={updatedAt:'2026-11-19T12:00:00.000Z',attemptId:'attempt_2'};
 const args={episodeId:'episode_a',secret};
 test('signed recovery cursor roundtrips only for its episode',()=>{
  const token=signRecoveryCursor({...args,after,issuedAt:1000});
- assert.deepEqual(verifyRecoveryCursor({...args,token,now:2000}),after);
+ assert.deepEqual(verifyRecoveryCursor({...args,token,now:2000}),{...after,issuedAt:1000});
  assert.throws(()=>verifyRecoveryCursor({...args,episodeId:'episode_b',token,now:2000}));
 });
 test('tampered and expired cursors fail closed',()=>{
