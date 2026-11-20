@@ -224,3 +224,39 @@ test('oversized inventory fails closed without rendering partial records',async(
  await expect(page.locator('.item')).toHaveCount(0);
  await expect(page.locator('#items')).toContainText('loading failed');
 });
+
+test('mobile signed-cursor preview loads two pages and filters only loaded records',async({page})=>{
+ const item=n=>({attemptId:'a'+n,shotId:'S'+n,state:n===2?'UNKNOWN':'DISPATCHING',providerTaskId:null,retryAllowed:false,requiresManualReconciliation:true});
+ let calls=0;
+ await page.route('**/api/stage/director/recovery/pages?*',route=>{
+  calls++;
+  const url=new URL(route.request().url());
+  const next=url.searchParams.get('cursor');
+  const data={episodeId:'ep1',pageSize:50,items:next?[item(3)]:[item(1),item(2)],hasMore:!next,nextCursor:next?null:'abc.def'};
+  return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data})});
+ });
+ await page.setViewportSize({width:320,height:720});
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');await page.locator('#paged').click();
+ await expect(page.locator('.item')).toHaveCount(2);
+ await expect(page.locator('#nextPage')).toBeVisible();
+ await page.locator('#nextPage').click();
+ await expect(page.locator('.item')).toHaveCount(3);
+ await expect(page.locator('#nextPage')).toBeHidden();
+ await expect(page.locator('#pageInfo')).toContainText('Loaded 2 page(s)');
+ await page.getByRole('button',{name:'Unknown',exact:true}).click();
+ await expect(page.locator('.item')).toHaveCount(1);
+ expect(calls).toBe(2);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
+});
+test('paged preview clears records on invalid next-page response',async({page})=>{
+ await page.route('**/api/stage/director/recovery/pages?*',route=>{
+  const next=new URL(route.request().url()).searchParams.has('cursor');
+  const data={episodeId:'ep1',pageSize:50,items:[{attemptId:'a1',shotId:'S1',state:'UNKNOWN',retryAllowed:false,requiresManualReconciliation:true}],hasMore:!next,nextCursor:next?null:'abc.def'};
+  return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data})});
+ });
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');await page.locator('#paged').click();
+ await expect(page.locator('.item')).toHaveCount(1);
+ await page.locator('#nextPage').click();
+ await expect(page.locator('.item')).toHaveCount(0);
+ await expect(page.locator('#message')).toContainText('response invalid');
+});
