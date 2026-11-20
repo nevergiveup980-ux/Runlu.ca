@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createDirectorRecoveryPagedHandler} from './director-recovery-paged-http.mjs';
 const secret='private-test-secret-with-at-least-32-bytes';
-const rows=[1,2,3].map(n=>({attempt_id:'a'+n,shot_id:'S'+n,state:'UNKNOWN',provider_task_id:null,updated_at:new Date('2026-11-01T00:00:0'+n+'.000Z')}));
+const rows=[1,2,3].map(n=>({attempt_id:'a'+n,shot_id:'S'+n,state:'UNKNOWN',provider_task_id:null,updated_at:new Date('2026-11-01T00:00:0'+n+'.000Z'),cursor_updated_at:'2026-11-01T00:00:0'+n+'.123456Z'}));
 const make=(authorizeEpisode=async()=>true)=>{
  let queries=0;
  const handler=createDirectorRecoveryPagedHandler({pool:{query:async(_sql,params)=>{queries++;return {rows:params[2]?rows.filter(r=>r.attempt_id>params[3]).slice(0,params[4]):rows.slice(0,params[4])}}},resolvePrincipal:async()=>({verifiedByServer:true,subject:'reviewer'}),authorizeEpisode,cursorSecret:secret});
