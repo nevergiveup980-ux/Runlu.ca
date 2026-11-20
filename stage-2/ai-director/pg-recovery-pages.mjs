@@ -10,7 +10,7 @@ export class PgDirectorRecoveryPages {
       typeof after.updatedAt!=='string'||!/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,6})?Z$/.test(after.updatedAt)||
       !Number.isFinite(Date.parse(after.updatedAt)))))throw Error('Invalid recovery page query');
   const result=await this.pool.query(
-   `SELECT o.attempt_id,o.state,o.provider_task_id,o.updated_at,
+   `SELECT o.attempt_id,o.state,o.provider_task_id,o.updated_at,\n           to_char(o.updated_at AT TIME ZONE 'UTC','YYYY-MM-DD\"T\"HH24:MI:SS.US\"Z\"') AS cursor_updated_at,
            a.shot_id,a.state AS attempt_state,s.state AS shot_state
     FROM stage_director_submission_outbox o
     JOIN stage_director_attempts a ON a.attempt_id=o.attempt_id
@@ -32,8 +32,8 @@ export class PgDirectorRecoveryPages {
      providerTaskId:row.provider_task_id??null,retryAllowed:false,requiresManualReconciliation:true});
   });
   const last=visible.at(-1);
-  const updatedAt=last?.updated_at instanceof Date?last.updated_at.toISOString():last?.updated_at;
-  if(rows.length>pageSize&&(!last||typeof updatedAt!=='string'||!Number.isFinite(Date.parse(updatedAt))))
+  // PostgreSQL microseconds must survive the roundtrip; JS Date truncates to milliseconds.\n  const updatedAt=last?.cursor_updated_at;
+  if(rows.length>pageSize&&(!last||typeof updatedAt!=='string'||!/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{6}Z$/.test(updatedAt)||!Number.isFinite(Date.parse(updatedAt))))
    throw Error('Invalid recovery cursor source');
   return Object.freeze({items,hasMore:rows.length>pageSize,
     nextKey:rows.length>pageSize?Object.freeze({updatedAt,attemptId:last.attempt_id}):null});
