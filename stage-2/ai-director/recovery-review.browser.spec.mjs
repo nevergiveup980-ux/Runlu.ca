@@ -243,6 +243,7 @@ test('mobile signed-cursor preview loads two pages and filters only loaded recor
  await expect(page.locator('.item')).toHaveCount(3);
  await expect(page.locator('#nextPage')).toBeHidden();
  await expect(page.locator('#pageInfo')).toContainText('Loaded 2 page(s)');
+ await expect(page.locator('#pageInfo')).toContainText('not a point-in-time snapshot');
  await page.getByRole('button',{name:'Unknown',exact:true}).click();
  await expect(page.locator('.item')).toHaveCount(1);
  expect(calls).toBe(2);
