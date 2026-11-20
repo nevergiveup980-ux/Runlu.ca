@@ -5,7 +5,8 @@ export class PgDirectorRecoveryPages {
  constructor(pool){if(typeof pool?.query!=='function')throw Error('PostgreSQL pool required');this.pool=pool;}
  async inspectPage({episodeId,pageSize=50,olderThanSeconds=300,after=null,asOf=null}={}){
   if(!ID.test(episodeId??'')||!Number.isInteger(pageSize)||pageSize<1||pageSize>100||
-    !Number.isInteger(olderThanSeconds)||olderThanSeconds<30||\n    (asOf!==null&&(!Number.isSafeInteger(asOf)||asOf<0))||
+    !Number.isInteger(olderThanSeconds)||olderThanSeconds<30||
+    (asOf!==null&&(!Number.isSafeInteger(asOf)||asOf<0))||
     (after!==null&&(!after||!ID.test(after.attemptId??'')||
       typeof after.updatedAt!=='string'||!/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,6})?Z$/.test(after.updatedAt)||
       !Number.isFinite(Date.parse(after.updatedAt)))))throw Error('Invalid recovery page query');
