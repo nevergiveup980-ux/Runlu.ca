@@ -24,13 +24,13 @@ export function createDirectorRecoveryPagedHandler({pool,resolvePrincipal,author
     return respond(403,{error:'access_denied'});
    if(await authorizeEpisode({subject:principal.subject,episodeId:input.episodeId,permission:'director:read'})!==true)
     return respond(403,{error:'access_denied'});
-   let after=null;
+   let after=null;\n   const asOf=Date.now();
    try{
     if(input.cursor)after=verifyRecoveryCursor({token:input.cursor,episodeId:input.episodeId,secret:cursorSecret});
    }catch{return respond(400,{error:'invalid_or_expired_cursor'})}
-   const result=await pages.inspectPage({episodeId:input.episodeId,pageSize:input.pageSize,after});
+   const result=await pages.inspectPage({episodeId:input.episodeId,pageSize:input.pageSize,after,asOf:after?.issuedAt??asOf});
    const items=projectDirectorRecovery(result.items);
-   const nextCursor=result.nextKey?signRecoveryCursor({episodeId:input.episodeId,after:result.nextKey,secret:cursorSecret}):null;
+   const nextCursor=result.nextKey?signRecoveryCursor({episodeId:input.episodeId,after:result.nextKey,secret:cursorSecret,issuedAt:after?.issuedAt??asOf}):null;
    return respond(200,{data:projectRecoveryPage({episodeId:input.episodeId,items,pageSize:input.pageSize,nextCursor})});
   }catch{return respond(500,{error:'internal_error'})}
  };
