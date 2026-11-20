@@ -113,8 +113,8 @@ async function loadPage({next=false}={}){
   pagedEpisode=episodeId;nextCursor=data.nextCursor;pageCount++;
   render(next?[...currentItems,...items]:items);
   $('nextPage').hidden=!data.hasMore;
-  $('pageInfo').textContent='Loaded '+pageCount+' page(s) · '+currentItems.length+' records. Search and filters apply only to loaded records.';
-  $('message').textContent='Authorized paged read-only snapshot.';
+  $('pageInfo').textContent='Loaded '+pageCount+' page(s) · '+currentItems.length+' records. This is not a point-in-time snapshot; tasks may change between pages. Search and filters apply only to loaded records.';
+  $('message').textContent='Authorized paged read-only view. Verify current provider state before acting.';
  }catch(e){
   if(controller!==active)return;
   resetPages();render([],{emptyMessage:'No recovery records displayed because loading failed.'});
