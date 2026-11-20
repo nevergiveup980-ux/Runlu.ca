@@ -9,7 +9,8 @@ test('uses parameterized keyset query and fetches one extra row',async()=>{
  assert.equal(page.items.length,2);assert.equal(page.hasMore,true);
  assert.deepEqual(page.nextKey,{updatedAt:'2026-01-01T00:00:00.123456Z',attemptId:'a2'});
  assert.deepEqual(captured.args,['ep1',300,null,null,3]);
- assert.match(captured.sql,/cursor_updated_at/);\n assert.match(captured.sql,/ORDER BY o.updated_at,o.attempt_id LIMIT \$5/);
+ assert.match(captured.sql,/cursor_updated_at/);
+ assert.match(captured.sql,/ORDER BY o.updated_at,o.attempt_id LIMIT \$5/);
  assert.equal(page.items[0].retryAllowed,false);
 });
 test('validated keyset is passed as SQL values, not interpolated',async()=>{
