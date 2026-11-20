@@ -24,7 +24,8 @@ export function createDirectorRecoveryPagedHandler({pool,resolvePrincipal,author
     return respond(403,{error:'access_denied'});
    if(await authorizeEpisode({subject:principal.subject,episodeId:input.episodeId,permission:'director:read'})!==true)
     return respond(403,{error:'access_denied'});
-   let after=null;\n   const asOf=Date.now();
+   let after=null;
+   const asOf=Date.now();
    try{
     if(input.cursor)after=verifyRecoveryCursor({token:input.cursor,episodeId:input.episodeId,secret:cursorSecret});
    }catch{return respond(400,{error:'invalid_or_expired_cursor'})}
