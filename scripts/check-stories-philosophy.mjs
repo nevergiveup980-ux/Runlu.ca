@@ -28,8 +28,9 @@ for (const lang of ['en','zh','fr','es']) {
     const escaped = heading.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
     assert.ok(html.includes('<h2>' + escaped + '</h2>'), lang + ' missing heading: ' + heading);
   }
-    const expectedParagraphs = source.split(/^---$/m)[0].split(/\\r?\\n/)
-    .map(line => line.trim()).filter(line => line && !line.startsWith('#') && !line.startsWith('**Editorial') && !line.startsWith('**Statut') && !line.startsWith('**Estado') && !line.startsWith('RUNLU STORIES'));
+  const articleText = source.slice(source.indexOf('## ')).split(/^---$/m)[0];
+  const expectedParagraphs = articleText.split(/\r?\n/)
+    .map(line => line.trim()).filter(line => line && !line.startsWith('## '));
   assert.equal((html.match(/<p>/g) || []).length, expectedParagraphs.length,
     lang + ' paragraph count differs between manuscript and page');
 
