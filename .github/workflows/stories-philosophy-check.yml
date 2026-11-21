@@ -1,0 +1,29 @@
+name: RUNLU Stories Philosophy Article Checks
+
+on:
+  pull_request:
+    paths:
+      - 'notes.html'
+      - 'notes/life-is-a-quiet-struggle-against-disorder.html'
+      - 'docs/philosophy-life-against-disorder-*.md'
+      - 'scripts/check-stories-philosophy.mjs'
+      - 'sitemap.xml'
+      - '.github/workflows/stories-philosophy-check.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  philosophy-article:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out PR source
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate four-language article
+        run: node scripts/check-stories-philosophy.mjs
