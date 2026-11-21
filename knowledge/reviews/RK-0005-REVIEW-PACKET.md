@@ -2,6 +2,18 @@
 
 **Status: REQUESTED / NOT SIGNED.** This packet is a review instrument, not proof that a review occurred. Do not set review flags to true or publish until evidence is recorded.
 
+## Author professional scenario confirmation — 2026-11-11
+
+**Decision recorded:** The RUNLU author explicitly confirmed in conversation that the three proposed warehouse scenarios and their decision principles match practical flooring-warehouse experience. Scope: RK-0005's two 12 ft × 12.5 ft remnants (300 ft² total) cannot independently supply a single continuous 12 ft × 20 ft cut (240 ft²) without an approved joining approach; RK-0006's illustrative 100 LF − 65 LF = 35 LF, and 80 LF − 30 LF restricted − 20 LF separately committed = 30 LF under non-overlapping assumptions.
+
+**Evidence:** Author's explicit response “确认” to the question listing all three cases and asking whether their judgments fit actual warehouse practice, 2026-11-11 (conversation). This is **author practitioner confirmation of the scenario principles**, not independent verification of real customer transactions, universal ERP rules, installation permissions, source rights, four-language translations, mobile testing or overall publication approval. Do not mark other checklist items complete on this basis.
+
+## Author-led internal review assignment — 2026-11-10
+
+The RUNLU author has agreed to act as the **final professional-content reviewer** for RK-0005 and RK-0006. The assistant supports evidence gathering, technical checks, four-language consistency and release preparation. This replaces the proposed external-review staffing model for these two articles only; it does **not** establish that any technical claim, source rights, language edition, or release has been approved.
+
+**Current outcome: PENDING.** Reviewer identity/signature, item-level technical verdicts, supporting evidence, language review results and explicit publication authorization must be recorded before changing publication flags. Do not infer approval from the agreement to review. No customer or proprietary warehouse data should be included in evidence.
+
 **Working manuscript:** [RK-0005-INVENTORY-FULFILLMENT.md](../editorial/RK-0005-INVENTORY-FULFILLMENT.md)  
 **Structured draft:** [records.json](../data/records.json), record RK-0005 v1  
 **Proposed title (EN):** Why enough carpet inventory may still fail an order
@@ -10,9 +22,9 @@
 
 | Claim or example | Verification task | Result |
 | --- | --- | --- |
-| Two 12 ft × 12.5 ft remnants total 300 ft² | Recalculate 2 × 12 × 12.5 = 300 | Pending reviewer |
-| One continuous 12 ft × 20 ft piece requires 240 ft² | Recalculate 12 × 20 = 240 and confirm neither 12.5 ft remnant provides 20 ft continuous length | Pending reviewer |
-| Sufficient total area is not sufficient for a continuous-piece allocation | Verify under stated no-seam scenario; do not generalize to every installation | Pending reviewer |
+| Two 12 ft × 12.5 ft remnants total 300 ft² | Recalculate 2 × 12 × 12.5 = 300 | Arithmetic verified; author scenario confirmed 2026-11-11; full review pending |
+| One continuous 12 ft × 20 ft piece requires 240 ft² | Recalculate 12 × 20 = 240 and confirm neither 12.5 ft remnant provides 20 ft continuous length | Arithmetic verified; author scenario confirmed 2026-11-11; full review pending |
+| Sufficient total area is not sufficient for a continuous-piece allocation | Verify under stated no-seam scenario; do not generalize to every installation | Author confirmed stated scenario principle 2026-11-11; full review pending |
 | Seam feasibility is project-specific | Check whether customer-approved layout, manufacturer instructions, pattern and pile direction permit the proposed seam | Pending reviewer |
 | Reserved / damaged / unverified stock should not be counted as freely allocatable | Review as a RUNLU operational recommendation, not as a claim mandated by CRI | Pending reviewer |
 | Six-checkpoint triage is actionable | Walk through one anonymized realistic order and note any missing decision or exception | Pending reviewer |
@@ -90,6 +102,44 @@ Use this worksheet with **one real, anonymized warehouse order** before signing 
 3. Verify that the article does not copy protected CRI wording, tables or diagrams.
 4. Keep warehouse reservation and synchronization advice explicitly attributed to RUNLU's original operational synthesis, not to CRI.
 5. Record reviewer, date, exact source URL, accessible edition and claim-to-section mapping. A prior editorial note alone is not independent signoff.
+
+## CRI official-source scope check — 2026-11-11
+
+**Method:** Assistant checked CRI's publicly indexed official installation standards page and official installation guidance. This is a source-scope check, **not** a full section-by-section verification of CRI 104/105, an independent human signoff, or a copyright license.
+
+- CRI identifies **104 as commercial carpet installation** and **105 as residential carpet installation**; its official installation standards landing page links both standards: https://carpet-rug.org/resources/installation-standards/ .
+- CRI's installation information states that an installation plan should include accurate measurements and seam placement and show approved locations for seams and carpet direction: https://carpet-rug.org/carpet-for-business/carpet-installation-information/ . This supports a narrow caution to consult the approved layout; it does **not** prove every seam is prohibited or that a particular warehouse allocation is mandated by CRI.
+- CRI's publicly available installation tips also refer readers to manufacturer instructions and seam considerations: https://carpet-rug.org/carpet-for-homes/installation-tips/ .
+- The RK-0005 two-remnant calculation, six-checkpoint warehouse allocation workflow and practitioner-reported sales communication are RUNLU editorial examples and operational synthesis, **not** CRI rules or certified customer transactions. No CRI table, image, diagram or protected paragraph is reproduced in the reviewed opening sections.
+- **Outstanding:** Inspect the applicable current CRI standard's edition and exact sections if any future wording attributes a specific requirement to CRI; perform final whole-manuscript rights check and record named editor's decision. The official landing page timed out on direct retrieval in this session; corroborating indexed official CRI pages were accessible via search, so do not mark full-source review PASS.
+
+**Result: PARTIAL SOURCE-SCOPE VERIFIED; final rights and source signoff remain PENDING.**
+
+## CRI 104/105 specific-section cross-check — 2026-11-11
+
+**Official primary documents (PDF):**
+- CRI 104 commercial installation standard, CRI-hosted PDF: https://carpet-rug.org/wp-content/uploads/2019/03/CRI-104-STANDARD-For-INSTALLATION-of-COMMERCIAL-CARPET.pdf
+- CRI 105 residential installation standard, CRI-hosted PDF: https://carpet-rug.org/wp-content/uploads/2019/03/CRI-105-STANDARD-For-INSTALLATION-of-RESIDENTIAL-CARPET.pdf
+- CRI official standards index: https://carpet-rug.org/resources/installation-standards/
+
+**Verified narrow reference:** CRI 105 section **5.1 (Seams)** addresses minimizing and locating seams; section **5.2 (Pile Direction)** addresses orientation of adjacent broadloom pieces; section **5.3 (Layout and Trimming)** requires following the seaming diagram and accounting for trimming and pattern matching. These are **residential installation** provisions; do not attribute them to CRI 104 without an independent section check. The CRI standards index identifies 104 as commercial and 105 as residential; the official standards PDFs hosted at the paths above bear a 2019 copyright notice. The CRI resources page also refers to the September 2015 edition; distinguish publication/release date from PDF copyright date.
+
+**Editorial mapping:** RK-0005's caution that a seam or pile/pattern issue depends on the approved project layout is compatible with the above CRI 105 provisions. The specific hypothetical no-seam cut (12 ft × 20 ft from two 12 ft × 12.5 ft remnants) is an independent mathematical example, **not** a quoted CRI rule. Do not assert that joining carpet is universally prohibited or that CRI mandates RUNLU's warehouse reservation/sales workflow. Do not reproduce the standards' protected prose, tables, figures, or branding in the article.
+
+**Verification status:** CRI 105 sections 5.1–5.3 checked against the official PDF's indexed text; CRI 104 section-level claim mapping remains unverified, as does the complete-manuscript final rights approval. This source check is not a license grant or named editorial signoff.
+
+## Assistant four-language core-case consistency check — 2026-11-11
+
+**Scope and method:** Compared the opening EN, 中文, Français and Español sections of the editorial manuscript `knowledge/editorial/RK-0005-INVENTORY-FULFILLMENT.md` for the hypothetical remnant geometry, units, no-guarantee caveat and decision workflow; separately compared the four-language practitioner-reported example. This is an editorial semantic cross-check, **not** complete line-by-line proofreading or a signed native-speaker language approval.
+
+| Check | Result | Evidence / limitation |
+| --- | --- | --- |
+| Two remnants each 12 ft × 12.5 ft total 300 ft² | CONSISTENT in EN/ZH/FR/ES | All opening language sections preserve dimensions and total area |
+| Required one continuous 12 ft × 20 ft piece totals 240 ft² | CONSISTENT in EN/ZH/FR/ES | None of the individual remnants has 20 ft continuous length; joining is conditional on approved layout and customer/project requirements |
+| Inventory quantity alone does not guarantee order fulfillment | CONSISTENT in EN/ZH/FR/ES | All describe reservations, damage, usable dimensions, dye lot/pile/pattern or manufacturer constraints |
+| Practitioner account distinguishes warehouse report from sales revision | CONSISTENT in EN/ZH/FR/ES | None claims unreported customer authorization, final delivery, or independently verified transaction |
+
+**Disposition:** Core-case semantic consistency checked; full four-language editorial review, regional terminology acceptance and named signoff remain PENDING. Do not set `translations_verified=true` or publish based on this check.
 
 ## Four-language editorial review
 
