@@ -31,12 +31,12 @@ for (const lang of ['en','zh','fr','es']) {
   const articleText = source.slice(source.indexOf('## ')).split(/^---$/m)[0];
   const expectedParagraphs = articleText.split(/\r?\n/)
     .map(line => line.trim()).filter(line => line && !line.startsWith('## '));
-  const htmlParagraphs = [...html.matchAll(/<p>([\\s\\S]*?)<\\/p>/g)].map(match => match[1]);
+  const htmlParagraphs = [...html.matchAll(/<p>([\s\S]*?)<\/p>/g)].map(match => match[1]);
   assert.equal(htmlParagraphs.length, expectedParagraphs.length,
     lang + ' paragraph count differs between manuscript and page');
   const escapeHtml = value => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;').replaceAll('"', '&quot;')
-    .replace(/\\*\\*(.+?)\\*\\*/g, '<strong>$1</strong>');
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
   expectedParagraphs.forEach((paragraph, index) => {
     assert.equal(htmlParagraphs[index], escapeHtml(paragraph),
       lang + ' paragraph ' + (index + 1) + ' differs from its manuscript');
