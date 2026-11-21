@@ -35,3 +35,11 @@ Target path: notes/life-is-a-quiet-struggle-against-disorder.html
 ## Release gate
 
 Keep PR #504 in draft until editorial and real-device checks are approved. Do not merge or publish merely because static source checks pass.
+
+## Additional source verification — 2026-11-21
+
+- [x] Independently evaluated 16 assertions against freshly fetched branch files (all 16 passed): four eight-section manuscripts, four article language blocks, 32 total HTML section headings, shared language script and selector, category return link, filtered index card, filtering code, CSS language rule, sitemap entry.
+- [ ] Execute the checked-in Node script in a CI/checkout environment. The 16 equivalent assertions above were evaluated against fetched source; **this is not a claim that Node ran in GitHub Actions**.
+- [ ] Complete actual Safari/WebKit device rendering and accessibility tests.
+
+Release remains blocked on editorial and real-device review.
