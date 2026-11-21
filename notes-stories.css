@@ -1,0 +1,20 @@
+/* Keep the Stories controls within the viewport, including iPhone safe areas. */
+.field-page .section-nav {
+  top: 76px;
+  max-width: 100%;
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+  scroll-padding-inline: 16px;
+}
+.field-page .section-nav a[aria-current="true"] {
+  background: var(--forest-deep);
+  border-color: var(--forest-deep);
+  color: white;
+}
+.field-page [hidden] { display: none !important; }
+.stories-empty { padding-block: 24px; color: var(--muted); }
+.stories-empty h3 { color: var(--ink); overflow-wrap: anywhere; }
+
+@media (max-width: 480px) {
+  .field-page .section-nav { top: 72px; }
+}
