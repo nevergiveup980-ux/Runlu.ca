@@ -1,0 +1,3 @@
+[functions.runlu-forum-ai]
+verify_jwt = true
+entrypoint = "./functions/runlu-forum-ai/index.ts"
