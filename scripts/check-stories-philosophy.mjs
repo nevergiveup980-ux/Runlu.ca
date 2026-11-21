@@ -48,6 +48,22 @@ const mobileStyles = read('notes/philosophy-essay.css');
 assert.ok(page.includes('philosophy-essay.css?v=1'), 'Mobile reading stylesheet must be linked');
 assert.ok(page.includes('class="field-page philosophy-essay"'), 'Mobile reading styles must be scoped to article');
 assert.ok(mobileStyles.includes('@media (max-width: 600px)'), 'Mobile breakpoint must be present');
+const languageScript = read('runlu-language.js');
+const languageMap = {en: 'en', zh: 'zh-CN', fr: 'fr', es: 'es'};
+for (const [language, htmlLanguage] of Object.entries(languageMap)) {
+  assert.ok(page.includes('class="copy-' + language + '" lang="' + htmlLanguage + '"'),
+    language + ' article body must declare the correct HTML language');
+  assert.ok(styles.includes('html[lang="' + htmlLanguage + '"] .copy-' + language),
+    language + ' article body must have a language visibility rule');
+}
+assert.ok(languageScript.includes("document.documentElement.lang=HTML_LANG[current]"),
+  'Shared language script must update document language');
+assert.equal((page.match(/data-runlu-language-select/g) || []).length, 1,
+  'Article must expose one language selector');
+assert.equal((page.match(/<h1>/g) || []).length, 4,
+  'Each language version must have exactly one primary heading');
+assert.ok(mobileStyles.includes('overflow-wrap: anywhere'),
+  'Mobile headings must be able to wrap long text');
 assert.ok(page.includes('../runlu-language.js'), 'Shared language script is required');
 assert.ok(page.includes('data-runlu-language-select'), 'Shared language selector is required');
 assert.ok(page.includes('../notes.html#' + category), 'Return link must retain category filter');
