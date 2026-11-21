@@ -66,3 +66,27 @@ test('tampered signed page cursor is rejected before database access',async()=>{
  assert.equal(response.status,400);
  assert.equal(server.queries,1);
 });
+
+test('state transitions between pages are explicitly non-atomic and never authorize retry',async()=>{
+ let calls=0;
+ const handler=createDirectorRecoveryPagedHandler({
+  pool:{query:async(_sql,params)=>{
+   calls++;
+   // The first page sees an uncertain task which is reconciled before page two.
+   // Keyset pagination must not claim that both pages are a transaction snapshot.
+   return {rows:params[2]?[{...rows[2],state:'DISPATCHING'}]:rows};
+  }},
+  resolvePrincipal:async()=>({verifiedByServer:true,subject:'reviewer'}),
+  authorizeEpisode:async()=>true,cursorSecret:secret
+ });
+ const first=JSON.parse((await handler(get('ep1'))).body).data;
+ const second=JSON.parse((await handler(get('ep1','&cursor='+encodeURIComponent(first.nextCursor)))).body).data;
+ assert.equal(calls,2);
+ assert.equal(first.consistency,'live_non_atomic');
+ assert.equal(second.consistency,'live_non_atomic');
+ assert.equal(first.requiresRefreshBeforeAction,true);
+ assert.equal(second.requiresRefreshBeforeAction,true);
+ assert.equal(second.items[0].state,'DISPATCHING');
+ assert.equal(second.items[0].retryAllowed,false);
+ assert.equal(second.items[0].requiresManualReconciliation,true);
+});
