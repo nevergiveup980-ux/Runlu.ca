@@ -1,0 +1,41 @@
+name: Carpet Planner Checks
+on:
+  push:
+    branches: [feature/carpet-cut-planner-mvp]
+    paths:
+      - 'flooring/carpet-cut-planner/**'
+      - '.github/workflows/carpet-planner-ci.yml'
+  pull_request:
+    paths:
+      - 'flooring/carpet-cut-planner/**'
+      - '.github/workflows/carpet-planner-ci.yml'
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: flooring/carpet-cut-planner
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npm run check:html
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm run build:demo
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run test:e2e
+      - name: Verify isolated HTTPS demo with iPhone WebKit
+        run: npm run test:e2e -- --project=iphone-webkit
+        env:
+          DEMO_BASE_URL: https://runlu-carpet-iphone-demo-d0sc141ir-runlu.vercel.app
+      - uses: actions/upload-artifact@v4
+        with:
+          name: carpet-planner-preview
+          path: |
+            flooring/carpet-cut-planner/index.html
+            flooring/carpet-cut-planner/dist/browser.js
+            flooring/carpet-cut-planner/dist/demo/
