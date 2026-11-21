@@ -18,6 +18,21 @@ for (const lang of ['en','zh','fr','es']) {
   assert.equal(page.split(marker).length - 1, 1, 'Article should contain exactly one '+lang+' body');
   const source = read('docs/philosophy-life-against-disorder-' + lang + '.md');
   assert.equal((source.match(/^## /gm) || []).length, 8, lang+' manuscript must contain eight sections');
+  // Compare every heading and paragraph in the reviewed Markdown with the
+  // corresponding HTML language block, so truncated translations cannot pass.
+  const section = page.match(new RegExp('<section class="copy-' + lang + '"[^>]*>([\\s\\S]*?)<\\/section>'));
+  assert.ok(section, lang + ' article section must exist');
+  const html = section[1];
+  const headings = [...source.matchAll(/^## (.+)$/gm)].map(match => match[1].trim());
+  for (const heading of headings) {
+    const escaped = heading.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+    assert.ok(html.includes('<h2>' + escaped + '</h2>'), lang + ' missing heading: ' + heading);
+  }
+    const expectedParagraphs = source.split(/^---$/m)[0].split(/\\r?\\n/)
+    .map(line => line.trim()).filter(line => line && !line.startsWith('#') && !line.startsWith('**Editorial') && !line.startsWith('**Statut') && !line.startsWith('**Estado') && !line.startsWith('RUNLU STORIES'));
+  assert.equal((html.match(/<p>/g) || []).length, expectedParagraphs.length,
+    lang + ' paragraph count differs between manuscript and page');
+
 }
 assert.equal((page.match(/<h2>/g) || []).length, 32, 'Four language bodies should contain 32 section headings');
 assert.ok(page.includes('../runlu-language.js'), 'Shared language script is required');
