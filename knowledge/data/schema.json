@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "RUNLU Knowledge Record v0.1",
+  "title": "RUNLU Knowledge Record v1.0",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -13,7 +13,8 @@
     "sources",
     "created_at",
     "updated_at",
-    "review"
+    "review",
+    "version"
   ],
   "properties": {
     "id": {
@@ -103,6 +104,25 @@
           },
           "notes": {
             "type": "string"
+          },
+          "use_type": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "factual_reference",
+              "quotation",
+              "adaptation",
+              "reproduction",
+              "original"
+            ]
+          },
+          "rights_basis": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rights_evidence": {
+            "type": "string",
+            "minLength": 1
           }
         },
         "additionalProperties": false
@@ -139,6 +159,14 @@
         "reviewed_at": {
           "type": "string",
           "format": "date"
+        },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "translation_reviewer": {
+          "type": "string",
+          "minLength": 1
         }
       },
       "additionalProperties": false

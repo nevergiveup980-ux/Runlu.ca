@@ -1,9 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { inspectRecord, auditKnowledge } from "./validate-publication.mjs";
+import { inspectRecord as inspect, auditKnowledge as audit } from "./validate-publication.mjs";
 
+import { fixtureReviews } from './internal-review-fixtures.mjs';
+const inspectRecord = (r, options={}) => inspect(r,{...options,reviews:fixtureReviews(r)});
+const auditKnowledge = (drafts,published) => audit(drafts,published,{reviews:[...drafts,...published.entries].flatMap(fixtureReviews).filter((r,i,a)=>a.findIndex(x=>x.review_id===r.review_id)===i)});
 const good = () => ({
- id:"RK-TEST",status:"published",category:"construction",scope:{type:"global",codes:[]},version:1,
+ id:"RK-9999",created_at:"2026-11-01",updated_at:"2026-11-01",status:"published",category:"construction",scope:{type:"global",codes:[]},version:1,
  titles:{en:"a",zh:"甲",fr:"a",es:"a"},summaries:{en:"b",zh:"乙",fr:"b",es:"b"},
  sources:[{url:"https://example.org/source",publisher:"Example",license_status:"permitted",checked_at:"2026-11-01",rights_basis:"independently authored facts",rights_evidence:"knowledge/reviews/fixture.md"}],
  review:{facts_verified:true,license_verified:true,translations_verified:true,reviewer:"Editor",reviewed_at:"2026-11-01",evidence_ref:"knowledge/reviews/fixture.md",translation_reviewer:"Language editor"}

@@ -5,6 +5,10 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
+import { validateSchema } from './schema-validation.mjs';
+import { reviewBlockers, inspectReview, validateLedger } from './internal-review.mjs';
+const ledger = JSON.parse(readFileSync(new URL('./data/internal-reviews.json', import.meta.url), 'utf8'));
+if (validateLedger(ledger).length) throw new Error('Invalid review ledger: '+validateLedger(ledger).join('; '));
 const LANGUAGES = ["en", "zh", "fr", "es"];
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const nonblank = x => typeof x === "string" && x.trim().length > 0;
@@ -12,14 +16,16 @@ const validDate = x => DATE.test(x ?? "") && !Number.isNaN(Date.parse(x + "T00:0
   new Date(x + "T00:00:00Z").toISOString().slice(0,10) === x;
 const httpsUrl = x => { try { return new URL(x).protocol === "https:"; } catch { return false; } };
 
-export function inspectRecord(r, { forPublication = false } = {}) {
+export function inspectRecord(r, { forPublication = false, reviews = ledger.entries, artifacts } = {}) {
   const problems = [];
   if (!r || typeof r !== "object" || Array.isArray(r)) return ["invalid-record"];
+  problems.push(...validateSchema(r));
   if (!nonblank(r.id)) problems.push("missing-id");
   if (!nonblank(r.category)) problems.push("missing-category");
-  if (!r.scope || !["global", "regional", "national", "local"].includes(r.scope.type)) problems.push("invalid-scope");
+  if (!r.scope || !["global", "regional", "country", "subnational"].includes(r.scope.type)) problems.push("invalid-scope");
+  if (r.scope?.type !== "global" && (!Array.isArray(r.scope?.codes) || !r.scope.codes.length)) problems.push("missing-region-codes");
   if (!Number.isInteger(r.version) || r.version < 1) problems.push("invalid-version");
-  for (const lang of LANGUAGES) {
+  for (const lang of forPublication ? LANGUAGES : ["en"]) {
     if (!nonblank(r.titles?.[lang])) problems.push("missing-title-" + lang);
     if (!nonblank(r.summaries?.[lang])) problems.push("missing-summary-" + lang);
   }
@@ -37,6 +43,7 @@ export function inspectRecord(r, { forPublication = false } = {}) {
     if (forPublication && !nonblank(s?.rights_evidence)) problems.push("missing-source-rights-evidence-" + i);
   });
   if (forPublication) {
+    problems.push(...reviewBlockers(r, reviews, artifacts));
     if (r.status !== "published") problems.push("not-published");
     for (const key of ["facts_verified", "license_verified", "translations_verified"]) {
       if (r.review?.[key] !== true) problems.push("review-incomplete-" + key);
@@ -49,23 +56,37 @@ export function inspectRecord(r, { forPublication = false } = {}) {
   return problems;
 }
 
-export function auditKnowledge(drafts, published) {
+export function auditKnowledge(drafts, published, { reviews = ledger.entries } = {}) {
   if (!Array.isArray(drafts) || !published || !Array.isArray(published.entries)) {
     throw new TypeError("expected draft array and published dataset with entries");
   }
   const seen = new Set(), findings = [], draftReadiness = [];
+  if (!Array.isArray(reviews)) throw new TypeError('expected review ledger entries array');
+  const reviewIds = new Set();
+  for (const row of reviews) {
+    const errors = inspectReview(row);
+    if (reviewIds.has(row?.review_id)) errors.push('duplicate-review-id');
+    reviewIds.add(row?.review_id);
+    if (![...drafts,...published.entries].some(r=>r.id===row?.record_id && r.version>=row?.record_version)) errors.push('orphan-review');
+    for (const ref of Array.isArray(row?.ai_assistance) ? row.ai_assistance : []) {
+      if (!reviews.some(ai=>ai?.review_id===ref && ai.reviewer_type==='ai' && ai.record_id===row.record_id && ai.record_version===row.record_version && ai.content_digest===row.content_digest)) errors.push('invalid-ai-assistance-reference');
+    }
+    const target=[...drafts,...published.entries].find(r=>r.id===row?.record_id && r.version===row?.record_version);
+    if (target && row.dimension==='source_rights' && row.source_index >= target.sources.length) errors.push('invalid-source-index');
+    if (errors.length) findings.push({id:row?.record_id,source:'review',problems:errors});
+  }
   for (const [source, entries] of [["draft", drafts], ["published", published.entries]]) {
     for (const record of entries) {
       const id = record?.id ?? "(missing)";
       const key = source + ":" + id;
       if (seen.has(key)) findings.push({id,source,problems:["duplicate-id"]});
       seen.add(key);
-      const problems = inspectRecord(record,{forPublication:source==="published"});
+      const problems = inspectRecord(record,{forPublication:source==="published",reviews});
       if (source === "published" && drafts.some(d=>d?.id===id && d?.version===record?.version)) problems.push("published-version-still-in-drafts");
       if (source === "draft") {
         // Preview publication blockers without modifying the draft or declaring it published.
         const candidate = {...record, status:"published"};
-        const blockers = inspectRecord(candidate,{forPublication:true});
+        const blockers = inspectRecord(candidate,{forPublication:true,reviews});
         draftReadiness.push({id,readyForEditorialDecision:blockers.length===0,blockers});
       }
       if (problems.length) findings.push({id,source,problems});
@@ -76,7 +97,7 @@ export function auditKnowledge(drafts, published) {
     published: published.entries.length,
     findings,
     draftReadiness,
-    publicationSafe: findings.every(f => f.source !== "published"),
+    publicationSafe: findings.every(f => f.source === "draft"),
     draftIssues: findings.filter(f=>f.source==="draft").length
   };
 }
@@ -86,5 +107,5 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const published = JSON.parse(readFileSync(new URL("./data/published.json",import.meta.url),"utf8"));
   const result = auditKnowledge(drafts,published);
   process.stdout.write(JSON.stringify(result,null,2)+"\n");
-  if (!result.publicationSafe) process.exitCode = 1;
+  if (result.findings.length) process.exitCode = 1;
 }

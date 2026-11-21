@@ -46,3 +46,13 @@ Produce one independently authored, four-language flooring entry (candidate RK-0
 - Independent Publishing
 
 Taxonomy additions are proposals, not live categories. Each category needs a clear scope, source-quality policy, reviewer and maintenance cadence.
+
+## Internal review v1.0 implementation
+
+The operational gate now requires separate version-bound human records for facts,
+practice, each of EN/ZH/FR/ES, and each source's rights, in addition to legacy flags.
+Use [the v1.0 procedure](INTERNAL_REVIEW_V1.md). Internal review is not external expert
+endorsement. AI assistance cannot approve a dimension or claim external status.
+The factual-reference exception follows SOURCE_RIGHTS_POLICY v0.2; all other
+third-party reproduction still requires documented permission. Nothing here
+approves RK-0005, changes the public export or authorizes deployment.
