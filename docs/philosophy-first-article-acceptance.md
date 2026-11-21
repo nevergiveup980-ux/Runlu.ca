@@ -39,7 +39,18 @@ Keep PR #504 in draft until editorial and real-device checks are approved. Do no
 ## Additional source verification — 2026-11-21
 
 - [x] Independently evaluated 16 assertions against freshly fetched branch files (all 16 passed): four eight-section manuscripts, four article language blocks, 32 total HTML section headings, shared language script and selector, category return link, filtered index card, filtering code, CSS language rule, sitemap entry.
-- [ ] Execute the checked-in Node script in a CI/checkout environment. The 16 equivalent assertions above were evaluated against fetched source; **this is not a claim that Node ran in GitHub Actions**.
+- [x] Execute the checked-in Node script in GitHub Actions. Latest confirmed success: run 44958249512 (2026-11-21), including four-language paragraph fidelity, language semantics, and scoped mobile stylesheet wiring.
 - [ ] Complete actual Safari/WebKit device rendering and accessibility tests.
 
 Release remains blocked on editorial and real-device review.
+
+## Latest release-gate snapshot — 2026-11-21
+
+- [x] Philosophy article's dedicated GitHub Actions workflow passed: https://github.com/nevergiveup980-ux/Runlu.ca/actions/runs/44958249512
+- [x] Chinese entropy passage now explicitly states the comparison is a metaphor; both manuscript and HTML updated and paragraph parity rechecked.
+- [x] Scoped mobile typography CSS committed and checked by dedicated CI.
+- [ ] Human editorial review, originality comparison with the source video, and final publication sign-off remain open.
+- [ ] Real iPhone Safari rendering and language/return navigation tests remain open. Source checks cannot certify real-device behavior.
+- [ ] Repository-wide Site integrity and RUNLU Publication QA remain failing on unrelated Frontiers/VIEW material; resolve or document an approved exception before merging under the repository's release policy.
+
+**Decision: HOLD draft PR #504; no merge or production publication authorized yet.**
