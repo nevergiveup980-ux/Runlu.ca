@@ -232,7 +232,7 @@ test('mobile signed-cursor preview loads two pages and filters only loaded recor
   calls++;
   const url=new URL(route.request().url());
   const next=url.searchParams.get('cursor');
-  const data={episodeId:'ep1',pageSize:50,items:next?[item(3)]:[item(1),item(2)],hasMore:!next,nextCursor:next?null:'abc.def'};
+  const data={episodeId:'ep1',pageSize:50,consistency:'live_non_atomic',requiresRefreshBeforeAction:true,items:next?[item(3)]:[item(1),item(2)],hasMore:!next,nextCursor:next?null:'abc.def'};
   return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data})});
  });
  await page.setViewportSize({width:320,height:720});
@@ -243,7 +243,7 @@ test('mobile signed-cursor preview loads two pages and filters only loaded recor
  await expect(page.locator('.item')).toHaveCount(3);
  await expect(page.locator('#nextPage')).toBeHidden();
  await expect(page.locator('#pageInfo')).toContainText('Loaded 2 page(s)');
- await expect(page.locator('#pageInfo')).toContainText('not a point-in-time snapshot');
+ await expect(page.locator('#pageInfo')).toContainText('Live, non-atomic pages');
  await page.getByRole('button',{name:'Unknown',exact:true}).click();
  await expect(page.locator('.item')).toHaveCount(1);
  expect(calls).toBe(2);
@@ -252,7 +252,7 @@ test('mobile signed-cursor preview loads two pages and filters only loaded recor
 test('paged preview clears records on invalid next-page response',async({page})=>{
  await page.route('**/api/stage/director/recovery/pages?*',route=>{
   const next=new URL(route.request().url()).searchParams.has('cursor');
-  const data={episodeId:'ep1',pageSize:50,items:[{attemptId:'a1',shotId:'S1',state:'UNKNOWN',retryAllowed:false,requiresManualReconciliation:true}],hasMore:!next,nextCursor:next?null:'abc.def'};
+  const data={episodeId:'ep1',pageSize:50,consistency:'live_non_atomic',requiresRefreshBeforeAction:true,items:[{attemptId:'a1',shotId:'S1',state:'UNKNOWN',retryAllowed:false,requiresManualReconciliation:true}],hasMore:!next,nextCursor:next?null:'abc.def'};
   return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data})});
  });
  await page.goto(pageUrl());await page.locator('#episode').fill('ep1');await page.locator('#paged').click();
@@ -267,7 +267,7 @@ test('paged preview refuses a repeated cursor and clears stale records',async({p
  await page.route('**/api/stage/director/recovery/pages?*',route=>{
   calls++;
   const n=calls;
-  const data={episodeId:'ep1',pageSize:50,items:[{attemptId:'a'+n,shotId:'S'+n,state:'UNKNOWN',retryAllowed:false,requiresManualReconciliation:true}],hasMore:true,nextCursor:'abc.def'};
+  const data={episodeId:'ep1',pageSize:50,consistency:'live_non_atomic',requiresRefreshBeforeAction:true,items:[{attemptId:'a'+n,shotId:'S'+n,state:'UNKNOWN',retryAllowed:false,requiresManualReconciliation:true}],hasMore:true,nextCursor:'abc.def'};
   return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data})});
  });
  await page.goto(pageUrl());await page.locator('#episode').fill('ep1');await page.locator('#paged').click();
@@ -279,7 +279,7 @@ test('paged preview refuses a repeated cursor and clears stale records',async({p
  expect(calls).toBe(2);
 });
 test('paged preview rejects an empty page that claims more records',async({page})=>{
- await page.route('**/api/stage/director/recovery/pages?*',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{episodeId:'ep1',pageSize:50,items:[],hasMore:true,nextCursor:'abc.def'}})}));
+ await page.route('**/api/stage/director/recovery/pages?*',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{episodeId:'ep1',pageSize:50,consistency:'live_non_atomic',requiresRefreshBeforeAction:true,items:[],hasMore:true,nextCursor:'abc.def'}})}));
  await page.goto(pageUrl());await page.locator('#episode').fill('ep1');await page.locator('#paged').click();
  await expect(page.locator('#message')).toContainText('response invalid');
  await expect(page.locator('#nextPage')).toBeHidden();
@@ -290,7 +290,7 @@ test('switching to demo during a pending paged fetch restores the load control',
  let release;
  await page.route('**/api/stage/director/recovery/pages?*',async route=>{
   await new Promise(resolve=>{release=resolve});
-  try{await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{episodeId:'ep1',pageSize:50,items:[],hasMore:false,nextCursor:null}})})}catch{}
+  try{await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{episodeId:'ep1',pageSize:50,consistency:'live_non_atomic',requiresRefreshBeforeAction:true,items:[],hasMore:false,nextCursor:null}})})}catch{}
  });
  await page.goto(pageUrl());await page.locator('#episode').fill('ep1');
  await page.locator('#paged').click();
@@ -316,4 +316,14 @@ test('changing episode during pending paged fetch unlocks preview button',async(
  await expect(page.locator('#paged')).toBeEnabled();
  await expect(page.locator('.item')).toHaveCount(0);
  release();
+});
+
+test('paged preview fails closed if API omits mandatory non-atomic safety declaration',async({page})=>{
+ await page.route('**/api/stage/director/recovery/pages?*',route=>route.fulfill({
+  status:200,contentType:'application/json',
+  body:JSON.stringify({data:{episodeId:'ep1',pageSize:50,items:[{attemptId:'a1',shotId:'S1',state:'UNKNOWN',retryAllowed:false,requiresManualReconciliation:true}],hasMore:false,nextCursor:null}})
+ }));
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');await page.locator('#paged').click();
+ await expect(page.locator('#message')).toContainText('response invalid');
+ await expect(page.locator('.item')).toHaveCount(0);
 });
