@@ -14,6 +14,7 @@ test('authorized paged endpoint follows signed cursor with no duplicate attempts
  const first=await server.handler(get('ep1'));assert.equal(first.status,200);
  const a=JSON.parse(first.body).data;
  assert.deepEqual(a.items.map(x=>x.attemptId),['a1','a2']);assert.equal(a.hasMore,true);
+ assert.equal(a.consistency,'live_non_atomic');assert.equal(a.requiresRefreshBeforeAction,true);
  const second=await server.handler(get('ep1','&cursor='+encodeURIComponent(a.nextCursor)));
  assert.equal(second.status,200);
  const z=JSON.parse(second.body).data;
