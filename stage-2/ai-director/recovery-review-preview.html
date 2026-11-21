@@ -55,12 +55,12 @@ function drawItems(items,{emptyMessage='No aged uncertain tasks in this snapshot
  }
 }
 function showDemo(){
- resetPages();controller?.abort();controller=null;$('load').disabled=false;$('load').textContent='Load authorized recovery list';
+ resetPages();controller?.abort();controller=null;$('load').disabled=false;$('load').textContent='Load authorized recovery list';$('paged').disabled=false;$('nextPage').disabled=false;
  render(projectDirectorRecovery([{attemptId:'demo_1',shotId:'S02',state:'DISPATCHING',providerTaskId:null,retryAllowed:false,requiresManualReconciliation:true},{attemptId:'demo_2',shotId:'S03',state:'UNKNOWN',providerTaskId:'demo_provider_2',retryAllowed:false,requiresManualReconciliation:true}]));
  $('message').textContent='DEMO ONLY · These are invented sample records.';
 }
 async function load(){
- resetPages();controller?.abort();const active=new AbortController();controller=active;
+ resetPages();controller?.abort();$('paged').disabled=false;$('nextPage').disabled=false;const active=new AbortController();controller=active;
  render([],{emptyMessage:'Loading recovery records…'});
  $('load').disabled=true;$('load').textContent='Loading…';$('message').textContent='Loading authorized read-only records…';
  try{
@@ -80,7 +80,7 @@ async function load(){
 }
 $('episode').addEventListener('input',()=>{
  // A changed episode invalidates both the in-flight response and any prior display.
- resetPages();controller?.abort();controller=null;$('load').disabled=false;
+ resetPages();controller?.abort();controller=null;$('load').disabled=false;$('load').textContent='Load authorized recovery list';$('paged').disabled=false;$('nextPage').disabled=false;
  render([]);$('message').textContent='Episode changed. Load to view its authorized recovery records.';
 });
 for(const button of document.querySelectorAll('[data-filter]'))button.addEventListener('click',()=>{currentFilter=button.dataset.filter;applyFilter()});
