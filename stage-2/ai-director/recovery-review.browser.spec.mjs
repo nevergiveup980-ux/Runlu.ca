@@ -285,3 +285,35 @@ test('paged preview rejects an empty page that claims more records',async({page}
  await expect(page.locator('#nextPage')).toBeHidden();
  await expect(page.locator('.item')).toHaveCount(0);
 });
+
+test('switching to demo during a pending paged fetch restores the load control',async({page})=>{
+ let release;
+ await page.route('**/api/stage/director/recovery/pages?*',async route=>{
+  await new Promise(resolve=>{release=resolve});
+  try{await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{episodeId:'ep1',pageSize:50,items:[],hasMore:false,nextCursor:null}})})}catch{}
+ });
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');
+ await page.locator('#paged').click();
+ await expect.poll(()=>typeof release).toBe('function');
+ await expect(page.locator('#paged')).toBeDisabled();
+ await page.locator('#demo').click();
+ await expect(page.locator('#paged')).toBeEnabled();
+ await expect(page.locator('#message')).toContainText('DEMO ONLY');
+ release();
+ await expect(page.locator('.item')).toHaveCount(2);
+});
+test('changing episode during pending paged fetch unlocks preview button',async({page})=>{
+ let release;
+ await page.route('**/api/stage/director/recovery/pages?*',async route=>{
+  await new Promise(resolve=>{release=resolve});
+  try{await route.abort()}catch{}
+ });
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');
+ await page.locator('#paged').click();
+ await expect.poll(()=>typeof release).toBe('function');
+ await expect(page.locator('#paged')).toBeDisabled();
+ await page.locator('#episode').fill('ep2');
+ await expect(page.locator('#paged')).toBeEnabled();
+ await expect(page.locator('.item')).toHaveCount(0);
+ release();
+});
