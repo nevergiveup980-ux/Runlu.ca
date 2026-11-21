@@ -1,0 +1,23 @@
+name: AI Supermarket Foundation Guard
+on:
+  pull_request:
+    paths:
+      - 'ai-supermarket.html'
+      - 'ai-supermarket.css'
+      - 'runlu-language.js'
+      - 'docs/ai-supermarket/**'
+      - 'scripts/check-ai-supermarket.mjs'
+      - '.github/workflows/ai-supermarket-foundation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  static-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check scripts/check-ai-supermarket.mjs
+      - run: node scripts/check-ai-supermarket.mjs
