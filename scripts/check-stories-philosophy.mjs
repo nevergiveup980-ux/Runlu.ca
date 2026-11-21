@@ -53,8 +53,13 @@ const languageMap = {en: 'en', zh: 'zh-CN', fr: 'fr', es: 'es'};
 for (const [language, htmlLanguage] of Object.entries(languageMap)) {
   assert.ok(page.includes('class="copy-' + language + '" lang="' + htmlLanguage + '"'),
     language + ' article body must declare the correct HTML language');
-  assert.ok(styles.includes('html[lang="' + htmlLanguage + '"] .copy-' + language),
-    language + ' article body must have a language visibility rule');
+  if (language !== 'en') {
+    assert.ok(styles.includes('html[lang="' + htmlLanguage + '"] .copy-' + language),
+      language + ' article body must have a language visibility rule');
+  } else {
+    assert.ok(styles.includes('.copy-zh,.copy-fr,.copy-es{display:none}'),
+      'English must be the default visible language');
+  }
 }
 assert.ok(languageScript.includes("document.documentElement.lang=HTML_LANG[current]"),
   'Shared language script must update document language');
