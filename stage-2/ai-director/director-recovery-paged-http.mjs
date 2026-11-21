@@ -32,7 +32,7 @@ export function createDirectorRecoveryPagedHandler({pool,resolvePrincipal,author
    const result=await pages.inspectPage({episodeId:input.episodeId,pageSize:input.pageSize,after,asOf:after?.issuedAt??asOf});
    const items=projectDirectorRecovery(result.items);
    const nextCursor=result.nextKey?signRecoveryCursor({episodeId:input.episodeId,after:result.nextKey,secret:cursorSecret,issuedAt:after?.issuedAt??asOf}):null;
-   return respond(200,{data:projectRecoveryPage({episodeId:input.episodeId,items,pageSize:input.pageSize,nextCursor})});
+   return respond(200,{data:{...projectRecoveryPage({episodeId:input.episodeId,items,pageSize:input.pageSize,nextCursor}),consistency:'live_non_atomic',requiresRefreshBeforeAction:true}});
   }catch{return respond(500,{error:'internal_error'})}
  };
 }
