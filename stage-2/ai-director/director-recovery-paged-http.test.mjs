@@ -35,3 +35,33 @@ test('rejects writes and invalid page sizes without queries',async()=>{
  assert.equal((await server.handler({method:'GET',url:'https://stage.invalid/api/stage/director/recovery/pages?episodeId=ep1&pageSize=101'})).status,400);
  assert.equal(server.queries,0);
 });
+
+test('all pages retain the first request cutoff rather than advancing the clock',async()=>{
+ const cutoffs=[];
+ const handler=createDirectorRecoveryPagedHandler({
+  pool:{query:async(_sql,params)=>{
+   cutoffs.push(params[5]);
+   return {rows:params[2]?rows.slice(2):rows};
+  }},
+  resolvePrincipal:async()=>({verifiedByServer:true,subject:'reviewer'}),
+  authorizeEpisode:async()=>true,cursorSecret:secret
+ });
+ const first=await handler(get('ep1'));
+ assert.equal(first.status,200);
+ const cursor=JSON.parse(first.body).data.nextCursor;
+ assert.ok(cursor);
+ const second=await handler(get('ep1','&cursor='+encodeURIComponent(cursor)));
+ assert.equal(second.status,200);
+ assert.equal(cutoffs.length,2);
+ assert.equal(cutoffs[0],cutoffs[1]);
+ assert.ok(Number.isSafeInteger(cutoffs[0]));
+});
+test('tampered signed page cursor is rejected before database access',async()=>{
+ const server=make();
+ const first=JSON.parse((await server.handler(get('ep1'))).body).data;
+ const parts=first.nextCursor.split('.');
+ const altered=parts[0].slice(0,-1)+(parts[0].at(-1)==='A'?'B':'A')+'.'+parts[1];
+ const response=await server.handler(get('ep1','&cursor='+encodeURIComponent(altered)));
+ assert.equal(response.status,400);
+ assert.equal(server.queries,1);
+});
