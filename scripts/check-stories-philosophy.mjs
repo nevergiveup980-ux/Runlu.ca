@@ -44,6 +44,10 @@ for (const lang of ['en','zh','fr','es']) {
 
 }
 assert.equal((page.match(/<h2>/g) || []).length, 32, 'Four language bodies should contain 32 section headings');
+const mobileStyles = read('notes/philosophy-essay.css');
+assert.ok(page.includes('philosophy-essay.css?v=1'), 'Mobile reading stylesheet must be linked');
+assert.ok(page.includes('class="field-page philosophy-essay"'), 'Mobile reading styles must be scoped to article');
+assert.ok(mobileStyles.includes('@media (max-width: 600px)'), 'Mobile breakpoint must be present');
 assert.ok(page.includes('../runlu-language.js'), 'Shared language script is required');
 assert.ok(page.includes('data-runlu-language-select'), 'Shared language selector is required');
 assert.ok(page.includes('../notes.html#' + category), 'Return link must retain category filter');
