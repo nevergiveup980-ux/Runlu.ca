@@ -1,0 +1,15 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {authorizeAssetDelivery} from "./delivery-auth.mjs";
+const hash="a".repeat(64);
+const job={id:"STAGE-100",ownerId:"owner-1",status:"COMPLETED"};
+const asset={id:"asset_12345",jobId:job.id,ownerId:job.ownerId,state:"VERIFIED",sha256:hash,storageKey:"stage/private/STAGE-100/"+hash+".mp4"};
+const grant=(changes={},requesterId="owner-1",jobChanges={})=>authorizeAssetDelivery({asset:{...asset,...changes},requesterId,job:{...job,...jobChanges}});
+test("owner can authorize verified completed MP4",()=>assert.equal(grant().authorized,true));
+test("another user cannot access private asset",()=>assert.throws(()=>grant({},"owner-2"),/denied/));
+test("asset job mismatch denied",()=>assert.throws(()=>grant({jobId:"STAGE-101"}),/denied/));
+test("asset owner mismatch denied",()=>assert.throws(()=>grant({ownerId:"owner-2"}),/denied/));
+test("unverified asset denied",()=>assert.throws(()=>grant({state:"INGESTING"}),/not ready/));
+test("unfinished job denied",()=>assert.throws(()=>grant({},"owner-1",{status:"RUNNING"}),/not ready/));
+test("public or traversal storage path denied",()=>assert.throws(()=>grant({storageKey:"../public/secret.mp4"}),/Invalid private storage key/));
+test("mismatched storage digest denied",()=>assert.throws(()=>grant({sha256:"b".repeat(64)}),/hash mismatch/));

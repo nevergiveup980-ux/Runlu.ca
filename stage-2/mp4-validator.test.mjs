@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {verifyMp4} from './mp4-validator.mjs';
+const bytes=Buffer.alloc(32);bytes.write('ftyp',4,'ascii');
+const probe=async()=>({duration:'5.0',streams:[{codec_type:'video',codec_name:'h264',width:1280,height:720}]});
+test('accepts plausible probed MP4',async()=>{const r=await verifyMp4({bytes,probe});assert.equal(r.valid,true);assert.equal(r.durationSeconds,5);});
+test('rejects missing MP4 signature',async()=>{await assert.rejects(verifyMp4({bytes:Buffer.alloc(32),probe}),/signature/);});
+test('rejects oversized media',async()=>{await assert.rejects(verifyMp4({bytes,probe,maxBytes:20}),/size/);});
+test('rejects missing video stream',async()=>{await assert.rejects(verifyMp4({bytes,probe:async()=>({duration:5,streams:[]})}),/validation/);});
+test('rejects excessive duration',async()=>{await assert.rejects(verifyMp4({bytes,probe,maxSeconds:4}),/validation/);});
+test('rejects unapproved codec',async()=>{await assert.rejects(verifyMp4({bytes,probe:async()=>({duration:5,streams:[{codec_type:'video',codec_name:'unknown',width:1280,height:720}]})}),/validation/);});
+test('requires media probe',async()=>{await assert.rejects(verifyMp4({bytes}),/probe/);});
