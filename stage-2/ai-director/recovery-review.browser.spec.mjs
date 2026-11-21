@@ -327,3 +327,40 @@ test('paged preview fails closed if API omits mandatory non-atomic safety declar
  await expect(page.locator('#message')).toContainText('response invalid');
  await expect(page.locator('.item')).toHaveCount(0);
 });
+
+test('expired next-page cursor clears old records and permits safe first-page reload',async({page})=>{
+ let calls=0;
+ const item={attemptId:'a1',shotId:'S1',state:'UNKNOWN',providerTaskId:null,retryAllowed:false,requiresManualReconciliation:true};
+ await page.route('**/api/stage/director/recovery/pages?*',route=>{
+  calls++;
+  const cursor=new URL(route.request().url()).searchParams.get('cursor');
+  if(cursor)return route.fulfill({status:400,contentType:'application/json',body:JSON.stringify({error:'invalid_or_expired_cursor'})});
+  const data={episodeId:'ep1',pageSize:50,consistency:'live_non_atomic',requiresRefreshBeforeAction:true,items:[item],hasMore:true,nextCursor:'abc.def'};
+  return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data})});
+ });
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');
+ await page.locator('#paged').click();
+ await expect(page.locator('.item')).toHaveCount(1);
+ await page.locator('#nextPage').click();
+ await expect(page.locator('#message')).toContainText('cursor expired or invalid');
+ await expect(page.locator('.item')).toHaveCount(0);
+ await expect(page.locator('#nextPage')).toBeHidden();
+ await expect(page.locator('#paged')).toBeEnabled();
+ await page.locator('#paged').click();
+ await expect(page.locator('.item')).toHaveCount(1);
+ expect(calls).toBe(3);
+});
+test('denied next-page access clears previously displayed records',async({page})=>{
+ const item={attemptId:'a1',shotId:'S1',state:'UNKNOWN',retryAllowed:false,requiresManualReconciliation:true};
+ await page.route('**/api/stage/director/recovery/pages?*',route=>{
+  const next=new URL(route.request().url()).searchParams.has('cursor');
+  if(next)return route.fulfill({status:403,contentType:'application/json',body:'{}'});
+  return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{episodeId:'ep1',pageSize:50,consistency:'live_non_atomic',requiresRefreshBeforeAction:true,items:[item],hasMore:true,nextCursor:'abc.def'}})});
+ });
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');
+ await page.locator('#paged').click();await expect(page.locator('.item')).toHaveCount(1);
+ await page.locator('#nextPage').click();
+ await expect(page.locator('#message')).toContainText('Access denied');
+ await expect(page.locator('.item')).toHaveCount(0);
+ await expect(page.locator('#nextPage')).toBeHidden();
+});
