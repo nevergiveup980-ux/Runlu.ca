@@ -102,6 +102,7 @@ async function loadPage({next=false}={}){
   if(!response.ok)throw Error(response.status===401?'sign_in_required':response.status===403?'access_denied':response.status===400?'invalid_cursor':'unavailable');
   const json=await response.json();const data=json?.data;
   if(data?.episodeId!==episodeId||data.pageSize!==50||!Array.isArray(data.items)||typeof data.hasMore!=='boolean'||
+    data.consistency!=='live_non_atomic'||data.requiresRefreshBeforeAction!==true||
     (data.hasMore!==Boolean(data.nextCursor))||
     (data.nextCursor!==null&&(typeof data.nextCursor!=='string'||data.nextCursor.length>512||!/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(data.nextCursor))))
    throw Error('invalid_response');
@@ -113,7 +114,7 @@ async function loadPage({next=false}={}){
   pagedEpisode=episodeId;nextCursor=data.nextCursor;pageCount++;
   render(next?[...currentItems,...items]:items);
   $('nextPage').hidden=!data.hasMore;
-  $('pageInfo').textContent='Loaded '+pageCount+' page(s) · '+currentItems.length+' records. This is not a point-in-time snapshot; tasks may change between pages. Search and filters apply only to loaded records.';
+  $('pageInfo').textContent='Loaded '+pageCount+' page(s) · '+currentItems.length+' records. Live, non-atomic pages: tasks may change or disappear between requests. Refresh and reconcile with the provider before any action. Search and filters apply only to loaded records.';
   $('message').textContent='Authorized paged read-only view. Verify current provider state before acting.';
  }catch(e){
   if(controller!==active)return;
