@@ -42,7 +42,8 @@ function repoChecks() {
     requireText(page, 'name="viewport"', `VIEW ${e.n} mobile viewport`);
     for (const lang of ['en','zh','fr','es']) requireText(page, `data-lang="${lang}"`, `VIEW ${e.n}`);
     if (Number(e.n) >= 23) {
-      requireText(page, 'evidence', `VIEW ${e.n} evidence/limits block`);
+      // Article headings can use sentence case without changing their meaning.
+      requireText(page.toLowerCase(), 'evidence', `VIEW ${e.n} evidence/limits block`);
       requireText(page, 'sources', `VIEW ${e.n} sources block`);
     }
     requireText(sitemap, `<loc>${canonical}</loc>`, `VIEW ${e.n} sitemap`);

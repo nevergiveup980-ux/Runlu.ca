@@ -148,6 +148,21 @@ for (const file of pages) {
     }
     continue;
   }
+  // These archived editorial previews use self-contained language tabs, not
+  // public navigation. Keep validating them without rewriting draft content.
+  if (/^drafts\/frontiers-season-05-06-four-language-editorial-preview-v0[1-4]\.html$/.test(rel)) {
+    const buttons = [...html.matchAll(/<button\b[^>]*\bdata-lang="([^"]+)"[^>]*>/gi)];
+    const articles = [...html.matchAll(/<article\b[^>]*\bid="article-([^"]+)"[^>]*>/gi)];
+    if (buttons.length !== 4 || articles.length !== 4) failures.push(`${rel}: expected four draft language buttons and articles`);
+    for (const lang of ['en', 'zh', 'fr', 'es']) {
+      const button = buttons.find(([, code]) => code === lang)?.[0];
+      const article = articles.find(([, code]) => code === lang)?.[0];
+      if (!button || !article?.includes(` lang="${lang}"`)) failures.push(`${rel}: missing draft language button or article for ${lang}`);
+    }
+    if (!/<meta\b[^>]*name="robots"[^>]*content="noindex,nofollow"/i.test(html)) failures.push(`${rel}: draft noindex/nofollow missing`);
+    if (!html.includes('button[data-lang]') && !html.includes('[role="tab"]')) failures.push(`${rel}: standalone draft language switching script missing`);
+    continue;
+  }
   const selectors = [...html.matchAll(/<select\b[^>]*data-runlu-language-select[^>]*>([\s\S]*?)<\/select>/gi)];
   if (!selectors.length) failures.push(`${rel}: missing standard language selector`);
   for (const [, options] of selectors) {
