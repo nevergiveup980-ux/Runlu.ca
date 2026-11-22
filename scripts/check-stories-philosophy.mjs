@@ -1,22 +1,22 @@
 #!/usr/bin/env node
-// RUNLU STORIES: second Philosophy in Everyday Life article, source-level acceptance.
+// RUNLU STORIES: first Philosophy in Everyday Life article, source-level acceptance.
 // Run: node scripts/check-stories-philosophy.mjs
 import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 
 const read = path => readFileSync(new URL('../' + path, import.meta.url), 'utf8');
-const page = read('notes/true-wealth-is-the-freedom-to-choose.html');
+const page = read('notes/life-is-a-quiet-struggle-against-disorder.html');
 const index = read('notes.html');
 const sitemap = read('sitemap.xml');
 const filter = read('notes-stories.js');
 const styles = read('styles.css');
-const slug = 'true-wealth-is-the-freedom-to-choose';
+const slug = 'life-is-a-quiet-struggle-against-disorder';
 const category = 'philosophy-in-everyday-life';
 
 for (const lang of ['en','zh','fr','es']) {
   const marker = 'class="copy-' + lang + '"';
   assert.equal(page.split(marker).length - 1, 1, 'Article should contain exactly one '+lang+' body');
-  const source = read('docs/philosophy-true-wealth-freedom-' + lang + '.md');
+  const source = read('docs/philosophy-life-against-disorder-' + lang + '.md');
   assert.equal((source.match(/^## /gm) || []).length, 8, lang+' manuscript must contain eight sections');
   // Compare every heading and paragraph in the reviewed Markdown with the
   // corresponding HTML language block, so truncated translations cannot pass.
