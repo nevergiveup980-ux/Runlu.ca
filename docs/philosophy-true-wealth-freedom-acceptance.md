@@ -30,3 +30,20 @@
 - Final user approval; then mark PR ready and merge. Do not claim public deployment until verified.
 
 **Status:** Content parity and dedicated source-level checks passed. Human and device acceptance outstanding. Not published.
+
+## 2026-11-21 — Latest automated acceptance
+
+- Commit `f1e9521c9562a739e585a7da1faf71c7e23a4074`: `RUNLU Stories Philosophy Article Checks` **success**, run `44985049200`.
+- This run includes both essay regression scripts plus source-level mobile viewport, language selector, return-navigation, and article-card assertions.
+- `Site integrity` and `RUNLU Publication QA` remain failing in the same commit; their earlier diagnosed issues concern Frontiers drafts and VIEW 048/049, not the philosophy article.
+- **No public browser preview is established for this unmerged branch.** Do not instruct the reviewer to test the production URL as though essay 02 were published.
+
+### iPhone Safari final acceptance (after a safe preview URL is available)
+
+1. Open the **preview URL**, not the production article URL. Check portrait and landscape: no sideways page overflow, headings wrap, body remains readable.
+2. Change English → 中文 → Français → Español → English; verify title, all eight section headings, and body text switch consistently.
+3. Use the article's back-to-category link and confirm both philosophy cards appear in the filtered Stories list.
+4. Return to essay 01 and verify its language selector still works.
+5. Confirm no accidental external navigation, broken links, or empty language blocks.
+
+**Release gate:** require safe preview URL, reviewer sign-off, and explicit merge approval. Do not bypass the two unrelated site-wide failing checks without an approved remediation.
