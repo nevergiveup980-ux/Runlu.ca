@@ -5,7 +5,9 @@ on:
     paths:
       - 'notes.html'
       - 'notes/life-is-a-quiet-struggle-against-disorder.html'
+      - 'notes/true-wealth-is-the-freedom-to-choose.html'
       - 'docs/philosophy-life-against-disorder-*.md'
+      - 'docs/philosophy-true-wealth-freedom-*.md'
       - 'scripts/check-stories-philosophy.mjs'
       - 'sitemap.xml'
       - '.github/workflows/stories-philosophy-check.yml'
