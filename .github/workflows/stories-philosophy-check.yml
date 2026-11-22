@@ -9,6 +9,7 @@ on:
       - 'docs/philosophy-life-against-disorder-*.md'
       - 'docs/philosophy-true-wealth-freedom-*.md'
       - 'scripts/check-stories-philosophy.mjs'
+      - 'scripts/check-stories-philosophy-02.mjs'
       - 'sitemap.xml'
       - '.github/workflows/stories-philosophy-check.yml'
   workflow_dispatch:
@@ -28,4 +29,6 @@ jobs:
         with:
           node-version: '22'
       - name: Validate four-language article
-        run: node scripts/check-stories-philosophy.mjs
+        run: |
+          node scripts/check-stories-philosophy.mjs
+          node scripts/check-stories-philosophy-02.mjs
