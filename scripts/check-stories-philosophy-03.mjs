@@ -92,7 +92,7 @@ for (const language of ['en', 'zh', 'fr', 'es']) {
   assert.ok(block && block[1].includes('../notes.html#philosophy-in-everyday-life'),
     language + ' must return to the philosophy category');
 }
-assert.ok(index.includes('PHILOSOPHY · 03'), 'Second essay category card must be numbered 02');
+assert.ok(index.includes('PHILOSOPHY · 03'), 'Third essay category card must be numbered 03');
 assert.ok(index.includes('data-stories-category="philosophy-in-everyday-life" href="notes/' + slug + '.html"'),
-  'Second essay card must be filterable');
+  'Third essay card must be filterable');
 console.log('PASS: static mobile viewport, four-language selector, category navigation, and card checks.');
