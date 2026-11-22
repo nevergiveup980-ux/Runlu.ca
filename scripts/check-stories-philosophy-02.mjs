@@ -78,3 +78,21 @@ assert.ok(styles.includes('html[lang="fr"] .copy-fr'), 'Four-language CSS switch
 assert.ok(sitemap.includes('https://runlu.ca/notes/' + slug + '.html'), 'Article URL must be in sitemap');
 console.log('PASS: four-language manuscripts, page structure, index filter, shared language UI, and sitemap.');
 console.log('NOTE: source-level checks only. Browser, accessibility, editorial and human review remain outstanding.');
+
+
+/* Static mobile/navigation acceptance: browser/device QA remains separate. */
+assert.ok(page.includes('name="viewport" content="width=device-width,initial-scale=1"'),
+  'Mobile viewport declaration is required');
+assert.equal((page.match(/<select[^>]*data-runlu-language-select/g) || []).length, 1,
+  'Exactly one shared language selector is required');
+for (const language of ['en', 'zh', 'fr', 'es']) {
+  assert.ok(page.includes('<option value="' + language + '">'),
+    language + ' must be selectable');
+  const block = page.match(new RegExp('<section class="copy-' + language + '"[^>]*>([\\s\\S]*?)<\\/section>'));
+  assert.ok(block && block[1].includes('../notes.html#philosophy-in-everyday-life'),
+    language + ' must return to the philosophy category');
+}
+assert.ok(index.includes('PHILOSOPHY · 02'), 'Second essay category card must be numbered 02');
+assert.ok(index.includes('data-stories-category="philosophy-in-everyday-life" href="notes/' + slug + '.html"'),
+  'Second essay card must be filterable');
+console.log('PASS: static mobile viewport, four-language selector, category navigation, and card checks.');
