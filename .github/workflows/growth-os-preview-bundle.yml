@@ -1,0 +1,42 @@
+name: RUNLU Growth OS isolated preview bundle
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/growth-os-preview-bundle.yml'
+      - 'index.html'
+      - 'privacy.html'
+      - 'runlu-ga4-consent.js'
+      - 'tests/runlu-ga4-consent.test.cjs'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preview-bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify required preview files
+        run: |
+          test -f index.html
+          test -f privacy.html
+          test -f runlu-ga4-consent.js
+          node --check runlu-ga4-consent.js
+          node --test tests/runlu-ga4-consent.test.cjs
+      - name: Package minimal offline review files
+        run: |
+          mkdir -p preview
+          cp index.html privacy.html runlu-ga4-consent.js preview/
+          cat > preview/README.txt <<'EOF'
+          RUNLU GROWTH OS — OFFLINE REVIEW BUNDLE
+          This ZIP is NOT an HTTPS preview deployment.
+          It includes the three GA4 pilot files only; linked assets and navigation may not work offline.
+          Do not treat file:// testing as proof of GA4 network behavior or Safari acceptance.
+          No domain settings, CNAME, production branch, or Pages configuration are changed.
+          See docs/growth-os-ga4-safari-acceptance-v1.md for actual HTTPS device testing.
+          EOF
+      - uses: actions/upload-artifact@v4
+        with:
+          name: runlu-growth-os-offline-review
+          path: preview/
+          retention-days: 7

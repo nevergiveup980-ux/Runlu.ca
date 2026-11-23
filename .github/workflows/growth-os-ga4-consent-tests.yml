@@ -1,0 +1,23 @@
+name: RUNLU Growth OS GA4 consent tests
+on:
+  pull_request:
+    paths:
+      - 'runlu-ga4-consent.js'
+      - 'tests/runlu-ga4-consent.test.cjs'
+      - '.github/workflows/growth-os-ga4-consent-tests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  consent-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: JavaScript syntax validation
+        run: node --check runlu-ga4-consent.js
+      - name: Consent regression tests
+        run: node --test tests/runlu-ga4-consent.test.cjs
