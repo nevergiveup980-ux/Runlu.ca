@@ -49,7 +49,7 @@ Soltar no consiste en decir «me da igual», ni en fingir que el dolor no existe
 
 Tampoco significa aceptar el maltrato. Hay límites que debemos defender y responsabilidades que debemos asumir. Podemos dejar de alimentar una batalla emocional interminable y, al mismo tiempo, actuar de manera concreta para resolver lo que está mal.
 
-Quizá soltar consista en apartar poco a poco de nuestras discusiones diarias aquello que ya no podemos cambiar, para reservar fuerzas a la vida sobre la que todavía podemos actuar.
+Quizá soltar consista en apartar poco a poco de nuestras discusiones diarias aquello que ya no podemos cambiar, para reservar fuerzas a aquello que todavía está en nuestras manos.
 
 ## 5. Aprender a hacer espacio
 
