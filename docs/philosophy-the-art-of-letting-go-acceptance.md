@@ -44,3 +44,10 @@
 - GitHub Actions `RUNLU Stories Philosophy Article Checks` passed again on commit `a09664c4f5d95aa97cd8a6c5edf123309dc7160f` (after both editorial corrections).
 - Site-wide `RUNLU Publication QA` and `Site integrity` remain failed. No new claim of whole-site acceptance is made.
 - Actual iPhone Safari, desktop-browser, accessibility and final literary human review remain pending.
+
+## User iPhone preview acceptance — 2026-11-22
+
+- The owner explicitly reported **“验收过关”** after opening the isolated four-language iPhone preview.
+- Preview path: `https://nevergiveup980-ux.github.io/runlu-growth-preview/editorial/the-art-of-letting-go/`.
+- This approval covers the isolated preview reading experience, not a verified live production deployment.
+- Production merge and publication are still pending an explicit release decision; unrelated site-wide CI failures remain visible.
