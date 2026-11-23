@@ -35,3 +35,12 @@
 ## Release rule
 
 **Status: prepared for human acceptance; not published.** A successful source-level CI run is not a substitute for browser or editorial acceptance. No changes to the production branch are authorized by this record.
+
+## Post-edit verification — 2026-11-22
+
+- Chinese wording refined: “自我解释” → “对自己的理解”.
+- Spanish wording refined: “a la vida sobre la que todavía podemos actuar” → “a aquello que todavía está en nuestras manos”.
+- Both changes were applied to their manuscript and corresponding HTML paragraph.
+- GitHub Actions `RUNLU Stories Philosophy Article Checks` passed again on commit `a09664c4f5d95aa97cd8a6c5edf123309dc7160f` (after both editorial corrections).
+- Site-wide `RUNLU Publication QA` and `Site integrity` remain failed. No new claim of whole-site acceptance is made.
+- Actual iPhone Safari, desktop-browser, accessibility and final literary human review remain pending.
