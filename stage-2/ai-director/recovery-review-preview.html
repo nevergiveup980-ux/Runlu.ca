@@ -87,6 +87,8 @@ for(const button of document.querySelectorAll('[data-filter]'))button.addEventLi
 $('taskSearch').addEventListener('input',applyFilter);$('taskSort').addEventListener('change',applyFilter);
 
 async function loadPage({next=false}={}){
+ // Ignore reentrant clicks while a paged request is in flight; do not abort and restart it.
+ if(controller&&$('paged').disabled)return;
  if(next&&(!nextCursor||pagedEpisode!==$('episode').value.trim()))return;
  controller?.abort();const active=new AbortController();controller=active;
  const episodeId=$('episode').value.trim();
