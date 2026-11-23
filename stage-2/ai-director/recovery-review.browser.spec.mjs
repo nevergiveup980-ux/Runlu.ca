@@ -364,3 +364,38 @@ test('denied next-page access clears previously displayed records',async({page})
  await expect(page.locator('.item')).toHaveCount(0);
  await expect(page.locator('#nextPage')).toBeHidden();
 });
+
+test('network failure on next page clears partial records and unlocks reload',async({page})=>{
+ let calls=0;
+ const item={attemptId:'a1',shotId:'S1',state:'UNKNOWN',retryAllowed:false,requiresManualReconciliation:true};
+ await page.route('**/api/stage/director/recovery/pages?*',route=>{
+  calls++;
+  if(new URL(route.request().url()).searchParams.has('cursor'))return route.abort();
+  return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{episodeId:'ep1',pageSize:50,consistency:'live_non_atomic',requiresRefreshBeforeAction:true,items:[item],hasMore:true,nextCursor:'abc.def'}})});
+ });
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');
+ await page.locator('#paged').click();await expect(page.locator('.item')).toHaveCount(1);
+ await page.locator('#nextPage').click();
+ await expect(page.locator('#items')).toContainText('loading failed');
+ await expect(page.locator('.item')).toHaveCount(0);
+ await expect(page.locator('#nextPage')).toBeHidden();
+ await expect(page.locator('#paged')).toBeEnabled();
+ expect(calls).toBe(2);
+});
+test('reentrant paged load cannot duplicate a pending first-page request',async({page})=>{
+ let release;let calls=0;
+ await page.route('**/api/stage/director/recovery/pages?*',async route=>{
+  calls++;
+  await new Promise(resolve=>{release=resolve});
+  try{await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:{episodeId:'ep1',pageSize:50,consistency:'live_non_atomic',requiresRefreshBeforeAction:true,items:[],hasMore:false,nextCursor:null}})})}catch{}
+ });
+ await page.goto(pageUrl());await page.locator('#episode').fill('ep1');
+ await page.locator('#paged').click();
+ await expect.poll(()=>typeof release).toBe('function');
+ await expect(page.locator('#paged')).toBeDisabled();
+ await page.evaluate(()=>document.querySelector('#paged').click());
+ expect(calls).toBe(1);
+ release();
+ await expect(page.locator('#paged')).toBeEnabled();
+ expect(calls).toBe(1);
+});
