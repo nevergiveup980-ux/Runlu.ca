@@ -7,12 +7,15 @@ on:
       - 'notes/life-is-a-quiet-struggle-against-disorder.html'
       - 'notes/true-wealth-is-the-freedom-to-choose.html'
       - 'notes/the-art-of-letting-go.html'
+      - 'notes/the-goodbyes-we-never-notice.html'
       - 'docs/philosophy-life-against-disorder-*.md'
       - 'docs/philosophy-true-wealth-freedom-*.md'
       - 'docs/philosophy-the-art-of-letting-go-*.md'
+      - 'docs/philosophy-the-goodbyes-we-never-notice-*.md'
       - 'scripts/check-stories-philosophy.mjs'
       - 'scripts/check-stories-philosophy-02.mjs'
       - 'scripts/check-stories-philosophy-03.mjs'
+      - 'scripts/check-stories-philosophy-04.mjs'
       - 'sitemap.xml'
       - '.github/workflows/stories-philosophy-check.yml'
   workflow_dispatch:
@@ -36,3 +39,4 @@ jobs:
           node scripts/check-stories-philosophy.mjs
           node scripts/check-stories-philosophy-02.mjs
           node scripts/check-stories-philosophy-03.mjs
+          node scripts/check-stories-philosophy-04.mjs
