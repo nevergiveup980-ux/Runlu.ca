@@ -24,3 +24,14 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Run real browser interaction tests
         run: npx playwright test stage-2/ai-director/control-center.browser.spec.mjs stage-2/ai-director/recovery-review.browser.spec.mjs --browser chromium --workers 1 --reporter line
+  pilot-render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install offline media tools
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Render and validate 180-second pilot
+        env:
+          RUNLU_STAGE_STRESS: '1'
+        run: node --test stage-2/ai-director/pilot-render.test.mjs
