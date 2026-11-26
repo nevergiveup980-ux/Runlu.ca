@@ -34,4 +34,12 @@ jobs:
       - name: Render and validate 180-second pilot
         env:
           RUNLU_STAGE_STRESS: '1'
+          RUNLU_PILOT_OUTPUT: ${{ runner.temp }}/runlu-pilot-180s.mp4
         run: node --test stage-2/ai-director/pilot-render.test.mjs
+      - name: Upload validated engineering pilot
+        uses: actions/upload-artifact@v4
+        with:
+          name: runlu-stage-engineering-pilot-180s
+          path: ${{ runner.temp }}/runlu-pilot-180s.mp4
+          if-no-files-found: error
+          retention-days: 7
