@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
-import {mkdtemp,readFile,rm} from 'node:fs/promises';
+import {mkdtemp,readFile,rm,writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {createDramaEpisodePlan} from './episode-plan.mjs';
@@ -28,5 +28,6 @@ test('offline 180-second director pilot produces actual MP4',{skip:process.env.R
  const assets=new Map(plan.shots.map(s=>[s.id,{video:v,lines:[{wav:a,start:1,end:2}]}]));
  const bytes=await renderDirectorPilot({plan,assets});
  assert.ok(bytes.length>1000);
+ if(process.env.RUNLU_PILOT_OUTPUT)await writeFile(process.env.RUNLU_PILOT_OUTPUT,bytes,{flag:'wx'});
  }finally{await rm(dir,{recursive:true,force:true});}
 });
