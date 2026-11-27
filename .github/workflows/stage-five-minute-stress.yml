@@ -1,0 +1,41 @@
+name: RUNLU STAGE Five-Minute Render Stress
+on:
+  push:
+    branches: [stage-2-engine-prototype]
+    paths:
+      - '.github/workflows/stage-five-minute-stress.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/stage-five-minute-stress.yml'
+      - 'stage-2/stage-montage-stress.test.mjs'
+      - 'stage-2/stage-hd-render-smoke.test.mjs'
+      - 'stage-2/stage-hd-five-minute.test.mjs'
+      - 'stage-2/stage-montage-render.mjs'
+  workflow_dispatch:
+jobs:
+  five-minute-render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install FFmpeg and FFprobe
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+      - name: Check FFmpeg and Node
+        run: |
+          node --version
+          ffmpeg -version | head -n 1
+          ffprobe -version | head -n 1
+      - name: Render full 300-second narrated and captioned MP4
+        env:
+          RUNLU_STAGE_STRESS: '1'
+        run: node --test --test-reporter=tap stage-2/stage-montage-stress.test.mjs
+      - name: Render moving 720p 24fps video with narration and captions
+        env:
+          RUNLU_STAGE_STRESS: '1'
+        run: node --test --test-reporter=tap stage-2/stage-hd-render-smoke.test.mjs
+      - name: Render full five-minute 720p moving montage
+        env:
+          RUNLU_STAGE_STRESS: '1'
+        run: node --test --test-reporter=tap stage-2/stage-hd-five-minute.test.mjs
