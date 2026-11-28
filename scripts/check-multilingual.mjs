@@ -148,6 +148,21 @@ for (const file of pages) {
     }
     continue;
   }
+  // Frontiers V06 uses the owner-accepted accessible tab interface.
+  // Validate its actual controls and panels instead of the unrelated global selector.
+  if (rel === 'frontiers-season-05-06.html') {
+    for (const lang of ['en', 'zh', 'fr', 'es']) {
+      const tab = [...html.matchAll(/<button\b[^>]*>/gi)].map(m => m[0]).filter(t => t.includes('id="tab-' + lang + '"'));
+      const panel = [...html.matchAll(/<article\b[^>]*>/gi)].map(m => m[0]).filter(t => t.includes('id="article-' + lang + '"'));
+      if (tab.length !== 1 || !['role="tab"', 'data-lang="' + lang + '"', 'aria-controls="article-' + lang + '"', 'aria-selected="' + (lang === 'en') + '"'].every(x => tab[0].includes(x))) failures.push(rel + ': invalid ' + lang + ' tab');
+      if (panel.length !== 1 || !['role="tabpanel"', 'aria-labelledby="tab-' + lang + '"', 'lang="' + lang + '"'].every(x => panel[0].includes(x)) || (/\bhidden\b/.test(panel[0]) !== (lang !== 'en'))) failures.push(rel + ': invalid ' + lang + ' panel');
+    }
+    for (const fragment of ["document.querySelectorAll('[role=\"tab\"]')", "getElementById('article-'+t.dataset.lang).hidden=!active", "t.setAttribute('aria-selected',String(active))", "document.documentElement.lang=tab.dataset.lang", "t.addEventListener('click',()=>choose(t))", "t.addEventListener('keydown'"]) {
+      if (!html.includes(fragment)) failures.push(rel + ': missing tab behavior ' + fragment);
+    }
+    if ((html.match(/class="backlink" href="https:\/\/runlu\.ca\/frontiers\.html"/g) || []).length !== 2) failures.push(rel + ': expected two Frontiers return links');
+    continue;
+  }
   const selectors = [...html.matchAll(/<select\b[^>]*data-runlu-language-select[^>]*>([\s\S]*?)<\/select>/gi)];
   if (!selectors.length) failures.push(`${rel}: missing standard language selector`);
   for (const [, options] of selectors) {
