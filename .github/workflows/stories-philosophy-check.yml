@@ -9,16 +9,19 @@ on:
       - 'notes/the-art-of-letting-go.html'
       - 'notes/the-goodbyes-we-never-notice.html'
       - 'notes/an-ordinary-life-is-not-a-failed-life.html'
+      - 'notes/something-to-love-something-to-live-for.html'
       - 'docs/philosophy-life-against-disorder-*.md'
       - 'docs/philosophy-true-wealth-freedom-*.md'
       - 'docs/philosophy-the-art-of-letting-go-*.md'
       - 'docs/philosophy-the-goodbyes-we-never-notice-*.md'
       - 'docs/philosophy-an-ordinary-life-is-not-a-failed-life-*.md'
+      - 'docs/philosophy-something-to-love-something-to-live-for-*.md'
       - 'scripts/check-stories-philosophy.mjs'
       - 'scripts/check-stories-philosophy-02.mjs'
       - 'scripts/check-stories-philosophy-03.mjs'
       - 'scripts/check-stories-philosophy-04.mjs'
       - 'scripts/check-stories-philosophy-05.mjs'
+      - 'scripts/check-stories-philosophy-06.mjs'
       - 'sitemap.xml'
       - '.github/workflows/stories-philosophy-check.yml'
   workflow_dispatch:
@@ -44,3 +47,4 @@ jobs:
           node scripts/check-stories-philosophy-03.mjs
           node scripts/check-stories-philosophy-04.mjs
           node scripts/check-stories-philosophy-05.mjs
+          node scripts/check-stories-philosophy-06.mjs
