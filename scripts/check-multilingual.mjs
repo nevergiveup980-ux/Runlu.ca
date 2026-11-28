@@ -160,7 +160,7 @@ for (const file of pages) {
     for (const fragment of ["document.querySelectorAll('[role=\"tab\"]')", "getElementById('article-'+t.dataset.lang).hidden=!active", "t.setAttribute('aria-selected',String(active))", "document.documentElement.lang=tab.dataset.lang", "t.addEventListener('click',()=>choose(t))", "t.addEventListener('keydown'"]) {
       if (!html.includes(fragment)) failures.push(rel + ': missing tab behavior ' + fragment);
     }
-    if ((html.match(/class="backlink" href="https:\/\/runlu\.ca\/frontiers\.html"/g) || []).length !== 2) failures.push(rel + ': expected two Frontiers return links');
+    if ((html.match(/class="backlink" href="https:\/\/runlu\.ca\/frontiers-season-05\.html"/g) || []).length !== 2) failures.push(rel + ': expected two Frontiers return links');
     continue;
   }
   const selectors = [...html.matchAll(/<select\b[^>]*data-runlu-language-select[^>]*>([\s\S]*?)<\/select>/gi)];
