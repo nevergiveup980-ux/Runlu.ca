@@ -1,0 +1,9 @@
+# RK-0009 preliminary research — 2026-11-27
+Exact English working-title search returned no exact-match result among surfaced results; not exhaustive clearance. Other language titles and trademarks not checked.
+## Sources inspected
+- BDC, Business owners' adaptation to change and workload, November 2024, p.4: https://www.bdc.ca/globalassets/digizuite/53730-business-owner-workload-report-november-2024.pdf — reported average 50 hours/week, 57% work stress, 53% poor work-life balance, 42% overwhelmed, 42% work interference. Survey findings, not universal population estimates; check methodology before publication.
+- BDC, July 17 2026: https://www.bdc.ca/en/articles-tools/blog/how-to-use-one-on-one-meetings-to-better-delegate-and-free-up-your-time — delegation barriers, training and oversight.
+- BDC, October 4 2022: https://www.bdc.ca/en/articles-tools/entrepreneurial-skills/be-effective-leader/leadership-skills-9-ways-delegate-effectively — workload measurement and limits of delegation.
+- Adjacent content: https://www.acumenconsulting.ca/insights/productivity-and-time-management-tips-for-small-business-owners — operational bottlenecks; https://kevos.com/reados/publications/small-business-operating-handbook/owner-capacity-and-resilience/ — workload and owner dependence. Do not reproduce structure, examples or wording.
+## Original approach
+Use the previously committed fictional 38-to-50-hour scenario, explicitly model supervision and distinguish owner's freed hours from total labor. Provide solo-operator options, service-quality guardrails and a capacity decision based on a personally selected planning ceiling. No promises of savings or medical outcomes. Cite factual background in own words; no copied charts or third-party graphics. Publication and independent rights review remain pending.
